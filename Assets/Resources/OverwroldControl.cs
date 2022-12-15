@@ -23,6 +23,7 @@ public class OverwroldControl : ScriptableObject
     public List<string> owTextsSave;
     public string menuAndSettingAsset;
     public List<string> menuAndSettingSave;
+    public string safeText;
     public bool isSetting;
     public List<KeyCode> keyCodes, keyCodesBack1, keyCodesBack2;//“¿’’…Ë÷√À≥–Ú
 

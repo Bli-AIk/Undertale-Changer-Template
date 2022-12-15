@@ -466,8 +466,12 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Undertale:Changer\u662F\u57FA\u4E8EUnity Engine\n\u6240\u5236\u4F5C\u7684Undertale\u540C\u4EBA\u6E38\u620F\u6A21\u677F\u3002\n\u5F3A\u70C8\u5EFA\u8BAE\u60A8\u5728\u4F7F\u7528\u6B64\u6A21\u677F\u524D\u8BBF\u95EE\nundertale.com\u4EE5\u8D2D\u4E70\u5E76\u6E38\u73A9\u539F\u4F5C\u3002\n\n\u672C\u6A21\u677F\u5728Gamejolt\u4E0EGithub\u5E73\u53F0\u4F9D\u636E\nGNU
-    General Public License v3.0\u5F00\u6E90\u3002\n\u4E25\u7981\u5C06\u6B64\u6A21\u677F\u4E0E\u5176\u4FEE\u6539\u540E\u7684\u7248\u672C\u4E0E\u57FA\u4E8E\u6A21\u677F\n\u5236\u4F5C\u7684\u6E38\u620F\u4EE5\u4EFB\u4F55\u5F62\u5F0F\u552E\u5356\u3002"
+  m_text: "Undertale:Changer is based \non Unity Engine produced \nUndertale fan
+    game template.\nIt is strongly recommended that \nyou visit undertale.com to
+    purchase\nand play the original game.\nThis template is open source\non Gamejolt
+    and Github according to\nGNU General Public License v3.0.\nIt is strictly prohibited
+    to sell\nthis template, its modified version\nand games made based on the template\nin
+    any form."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3c24208bcb2fde7488b42e2ffe8c922a, type: 2}
   m_sharedMaterial: {fileID: -4624251736400588842, guid: 3c24208bcb2fde7488b42e2ffe8c922a,
