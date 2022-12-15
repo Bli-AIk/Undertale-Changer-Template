@@ -1,0 +1,17 @@
+/*Save conversation messages in a single round.
+Format:
+(xxx,xxx)\(xxx,xxx)\Monster name\Boolean value with bubbles pointing left or right\Arrow relative y value\Text;
+The first bracket is the bubble size scale, followed by the relative offset coordinate. Enter a name search for the role, false on the left and true on the right. The default is to press Z from top to bottom.
+
+Some of the dialogue messages are implemented in the battle, and a single text is required.
+
+The relative ordinate is used to adjust the arrow up/down. Notice that the center is - 1.5.
+
+The pivot point is the upper left corner.
+
+It is generally not recommended to change the bubble size ratio (unless the word size is too large). Set it above (2,2) to prevent pixel distortion caused by too small
+*/
+
+(4,3)\(2,1.5)\NPC1\false\-1.5\WTF!;
+(4,3)\(2,1.5)\NPC1\false\-1.5\What are you???;
+(4,3)\(-6,1.5)\NPC2\true\-1.5\Get the hell out</enter>of here.;

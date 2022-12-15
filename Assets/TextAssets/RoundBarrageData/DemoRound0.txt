@@ -1,0 +1,168 @@
+/*
+回合系统分为两种文本包储存，本包将设置一个回合内的弹幕运作。
+
+(x,y)坐标格式 例：(1,1) (1.1,1.1)
+
+(x1Rx2,y1Ry2)随机坐标格式 R可为小写 例：(1R2,3R4)
+注：所有坐标格式内的数据都可以这么玩
+
+嵌套动画：
+Nest\设定名称\此处与标准弹幕动画填写保持一致;
+会储存一个嵌套物体，此物体可以储存一套动画并进行二次动画修改(仅限位置旋转缩放)
+两个动画的设定名称若填写相同，则会将两个动画存储在一个嵌套内。
+务必将嵌套统一写在最上方，因为嵌套需要使用Summon来生成。
+一个标准的Nest需要包括：生成物体 和 物体动画
+销毁Nest后其内的所有物体也均会被销毁。
+Nest中物体的坐标均为相对坐标，Nest与其内的物体为父子级关系。
+
+除弹幕、挡板与嵌套外的通用生成格式：
+Summon\种类\数据名称\设定名称\图层\起始坐标\生成时间;
+
+挡板：种类为Board时为挡板，数据名称填写true为跟随挡板，false为不跟随。
+
+弹幕需要额外设定其属性颜色（白蓝橙弹幕），如下。
+弹幕默认会有一个(0.4,0.4,0.4)的缩放。
+Summon\Bullet\数据名称\设定名称\图层\颜色\起始坐标\起始旋转\起始缩放\生成时间;
+
+设定方式：
+white 普通弹幕
+blue 蓝色弹幕（玩家静止免伤
+orange 橙色弹幕（玩家移动免伤
+
+
+嵌套则需按以下格式设定，Nest中物体的生成时间将会与Summon生成时间相加：
+Summon\Nest\设定名称\生成时间;
+
+在自定义设定名称时请避免使用以下模板自带的设定名称：
+Frame 战斗框本体。
+FramePointLU 战斗框左上点
+FramePointRU 战斗框右上点
+FramePointLD 战斗框左下点
+FramePointRD 战斗框右下点
+Player 玩家本体，可用于改玩家坐标或给玩家加牵制力。注意别把玩家坐标扔到框外面去
+Curtain 纯色幕布，可用于切黑场等，一般来说就别改它的缩放了（。
+
+战斗框由四个点组成，想要一条边移动，就给两个点同时设动画。若整体移动，建议用本体动画。最好别用本体缩放，因为碰撞是不会跟着改的。
+战斗点默认坐标（我方回合 矩形）参考：X:-11.86 <-> 11.86  Y:-0.54 <->-6.14 宽5.6长23.72
+此外，战斗点不能旋转：你转一个点有啥用嘛？！
+这些设定名称可以直接应用于动画/直接更改数据。
+
+设定名称用于获取并设置动画 不要重复设定同一个名称
+同一个物件可以后面加数字 例如obj1 obj2
+
+直接更改数据（瞬移 直接变向 等）：
+ChangeData\设定名称\动画类型\更改数据\更改时间;
+动画类型见下，但是在这里是瞬移而不会启用动画，如果你的动画没有动画那就别用动画。
+在动画类型所有的类型之外，遮罩类型若为Mask，则更改遮罩模式（None无 In框内遮罩 Out框外遮罩）
+如果给挡板改数据，可以把动画类型设置为 Type 以更改其 是否为跟随板。
+
+
+
+更改弹幕/玩家属性颜色
+Color\Player\颜色\更改时间;
+Color\Bullet\设定名称\颜色\更改时间;
+
+动画：
+动画类型\设定名称\出发数值\目的数值\缓动种类\持续时间长度\循环次数\LoopType\动画设定名称\生成时间;
+动画类型：LocalPosition(相对位置) LocalRotation(相对旋转 度数，直接输入即可 不必写成坐标) Scale(相对缩放或延伸)  ColorAnim(r,g,b,a)(若属性颜色影响 一般不建议更改rgb)
+		  Position(绝对位置) Rotation(绝对旋转 度数，直接输入即可 不必写成坐标) Size(设定弹幕尺寸，一般应用于骨头等可以延伸的弹幕上。对骨头的参考是(0.5,y))
+
+出发数值若填写为null则从此时的数值处继续。
+若物体正在进行动画，此时又设定了新的动画，旧的动画将被强行终止。
+若无循环动画，请在循环次数处填写0或1
+若无限循环，填-1(慎)
+
+LoopType处：
+Restart 第一次动画播放后，下一次动画将会正常播放。
+Yoyo 第一次动画播放后，下一次动画将会倒放。请注意，倒放的动画也算作一次循环。
+如果循环是0，那你随便填一个吧，不能空着）
+缓动种类：具体参考https://easings.net/cn        (填写时不要写ease前缀 大小写保持一致) Linear为线性 Flash, InFlash, OutFlash, InOutFlash为闪烁(线性 缓入 缓出 缓动)
+
+若不需要继承动画，强烈建议在动画设定名称处填null。
+不能同时存在两个设定名称，否则会出问题。错开时间是可行的。
+
+
+继承动画：
+Inherit\动画类型\设定名称\出发坐标\目的地坐标\缓动种类\持续时间长度\循环次数\LoopType\动画设定名称\继承的动画设定名称\与继承动画相一致的初始时间;
+会在“继承的动画”播放结束后立即播放此动画。
+建议写在继承动画的下一行。
+该动画的设定名称可以与继承动画一致。
+
+删除物体：
+Delete\种类\设定名称\删除时间\与继承动画相一致的初始时间;
+字面意思，此外，请及时删除不需要的物体，它们会消耗游戏性能（废话），而游戏内的所有弹幕是不会自行删除的。
+同时建议尽可能的多重复利用一些弹幕（虽说我写对象池了
+注意：删除Nest后其包含的所有物体均将销毁。
+
+继承删除：
+Inherit\Delete\设定名称\继承的动画名称;
+将在继承的动画播放结束后，删除该物体。
+需要注意：设定名称是该物体的设定名称，而非动画设定名称。
+
+
+
+
+
+回合停止：
+EndRound\停止时间;
+
+插入FX：
+FX\FX组\FX编号\循环次数\循环间隔\插入时间;
+FX组处可填写：UI 或 Battle以对应AudioControl内FX组
+显而易见的是循环次数绝对不能是负数——为0即为不循环
+
+时间建议按照顺序写（当然已经内置顺序转换了 但也没准有不灵的情况 但是没出问题就没事（） 只能写秒数 可以写小数
+另外不要把两个注释连着写 至少隔3字符 否则报错
+请不要给物体命名为East，Color等名称，可能导致识别错误。
+-----------------------------------------------------------------
+*/
+
+Nest\DN\Summon\Bullet\DemoBullet\DMB\50\blue\(-5,0)\90\(O,O)\0;
+Nest\DN\Summon\Bullet\DemoBullet\DMB2\50\orange\(5,0)\-90\(O,O)\0;
+
+Summon\Bullet\DemoBullet\DMB3\50\white\(-5r5,-5r5)\45\(O,O)\0;
+
+LocalPosition\FramePointLU\null\(-2.8,O)\OutCubic\0.5\0\Yoyo\null\0;
+LocalPosition\FramePointLD\null\(-2.8,O)\OutCubic\0.5\0\Yoyo\null\0;
+LocalPosition\FramePointRU\null\(2.8,O)\OutCubic\0.5\0\Yoyo\null\0;
+LocalPosition\FramePointRD\null\(2.8,O)\OutCubic\0.5\0\Yoyo\null\0;
+
+ChangeData\DMB3\LocalPosition\(-3r3,-3r3)\0;
+
+FX\Battle\3\10\0.1\0;
+FX\Battle\4\10\0.25\0;
+
+ChangeData\DMB3\LocalPosition\(-3r3,-3r3)\0.5;
+ChangeData\DMB3\LocalPosition\(-3r3,-3r3)\1;
+ChangeData\DMB3\LocalPosition\(-3r3,-3r3)\1.5;
+ChangeData\DMB3\LocalPosition\(-3r3,-3r3)\2;
+ChangeData\DMB3\LocalPosition\(-3r3,-3r3)\2.5;
+Position\DMB3\(-5r5,-5r5)\(-5r5,-5r5)\OutSine\2\0\Restart\DMBAnim\3;
+Inherit\Position\DMB3\(-5r5,-5r5)\(-5r5,-5r5)\InSine\3\0\Restart\DMBAnim\DMBAnim\3;
+Inherit\Delete\DMB3\DMBAnim\3;
+
+Summon\Board\true\b1\50\(-5,0)\90\(1,1)\0;
+LocalPosition\b1\(-5r5,-5r5)\(-5r5,-5r5)\Linear\2\0\Restart\null\0;
+LocalRotation\b1\0\360\Linear\0.25\-1\Restart\null\0;
+
+Nest\DN\LocalRotation\DMB\90\-90\InOutBack\2\-1\Yoyo\null\0;
+Nest\DN\LocalRotation\DMB2\-90\90\InOutBack\2\-1\Yoyo\null\0;
+
+Nest\DN\LocalPosition\DMB\null\(5,0)\InOutBack\2\-1\Yoyo\null\0;
+Nest\DN\LocalPosition\DMB2\null\(-5,0)\InOutBack\2\-1\Yoyo\null\0;
+
+ChangeData\b1\Type\false\5;
+
+
+LocalRotation\DN\0\360\InOutExpo\5\-1\Yoyo\null\0;
+
+FX\Battle\2\0\0\5;
+
+LocalPosition\FramePointLU\null\(-11.86,O)\OutCubic\0.5\0\Yoyo\null\9.5;
+LocalPosition\FramePointLD\null\(-11.86,O)\OutCubic\0.5\0\Yoyo\null\9.5;
+LocalPosition\FramePointRU\null\(11.86,O)\OutCubic\0.5\0\Yoyo\null\9.5;
+LocalPosition\FramePointRD\null\(11.86,O)\OutCubic\0.5\0\Yoyo\null\9.5;
+
+Delete\Nest\DN\9.5;
+Delete\Board\b1\9.5;
+EndRound\10;

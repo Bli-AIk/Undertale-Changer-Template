@@ -1,0 +1,146 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6df06c9cc6c2324428586fbc07a9f007, type: 3}
+  m_Name: ItemControl
+  m_EditorClassIdentifier: 
+  itemData: {fileID: 4900000, guid: 010263540dd33434585e682b9f5c6950, type: 3}
+  itemText: {fileID: 4900000, guid: 806b9af15c2d9474bbb9d1464d470fd7, type: 3}
+  itemMax:
+  - baaaaaaaaaaaaaaaa\Foods\@bang\11;
+  - bang\Foods\@Null\11;
+  - pia1\Arms\123\null;
+  - pia2\Arms\456\null;
+  - tatata1\Armors\789\null;
+  - tatata2\Armors\100\null;
+  itemTextMax:
+  - "Item\\baaaaaaaaaaaaaaaa\\\u8FD9\u51E0\u628A\u5565\u73A9\u610F\u554A\\</autoFoodFull>\\</autoCheckFood></enter>*
+    \u4E0D\u53EF\u540D\u72B6...\\</autoLoseFood>;"
+  - "Item\\bang\\\u8FD9\u5565\u73A9\u610F\u554A\\* \u4F60\u5C1D\u4E86\u4E00\u53E3\u8FD9\u5269\u4E0B\u7684\u73A9\u610F\u513F</enter></autoFood>\\</autoCheckFood></enter>*
+    \u4ECD\u65E7\u4E0D\u53EF\u540D\u72B6...\\</autoLoseFood>;"
+  - "Item\\pia1\\\u567C\u91CC\u556A\u55661\\</autoArm>\\</autoCheckArm>\\</autoLoseArm>;"
+  - "Item\\pia2\\\u567C\u91CC\u556A\u55662\\</autoArm>\\</autoCheckArm>\\</autoLoseArm>;"
+  - "Item\\tatata1\\\u584C\u584C\u584C\u584C\u584C\\</autoArmor>\\</autoCheckArmor>\\</autoLoseArmor>;"
+  - "Item\\tatata2\\\u5854\u5854\u5854\u5854\u5854\\</autoArmor>\\</autoCheckArmor>\\</autoLoseArmor>;"
+  - "Data\\\u7269\u54C1</enter>\u72B6\u6001;"
+  - "Data\\\u653B\u51FB;"
+  - "Data\\\u9632\u5FA1;"
+  - "Data\\ \u8FD8\u9700;"
+  - "Data\\\u6B66\u5668:;"
+  - "Data\\\u9632\u5177:;"
+  - "Data\\\u91D1\u94B1:;"
+  - "Data\\\u6D4B\u8BD5;"
+  - "Data\\\u4F7F\u7528;"
+  - "Data\\\u8BF4\u660E;"
+  - "Data\\\u4E22\u5F03;"
+  - "Data\\* \u4F60\u5403\u6389\u4E86</itemNameFood>\u3002;"
+  - "Data\\* \u4F60\u56DE\u590D\u4E86</itemHp>HP\uFF01;"
+  - "Data\\* \u201C</itemNameFood>\u201D-\u6CBB\u6108 </itemHp> HP;"
+  - "Data\\* \u4F60\u88C5\u5907\u4E86</itemNameArm>\u3002;"
+  - "Data\\* \u4F60\u88C5\u5907\u4E86</itemNameArmor>\u3002;"
+  - "Data\\* \u201C</itemNameArm>\u201D-\u6B66\u5668 AT </itemAtk>;"
+  - "Data\\* \u201C</itemNameArmor>\u201D-\u9632\u5177 DF </itemDef>;"
+  - "Data\\* </itemNameFood>\u88AB\u4F60\u6254\u6389\u4E86\u3002;"
+  - "Data\\* </itemNameArm>\u88AB\u4F60\u6254\u6389\u4E86\u3002;"
+  - "Data\\* </itemNameArmor>\u88AB\u4F60\u6254\u6389\u4E86\u3002;"
+  - "Data\\* </itemNameOther>\u88AB\u4F60\u6254\u6389\u4E86\u3002;"
+  - "Data\\* \u4F60\u7684HP\u5DF2\u6EE1\u3002;"
+  itemTextMaxItem:
+  - "baaaaaaaaaaaaaaaa\\\u8FD9\u51E0\u628A\u5565\u73A9\u610F\u554A\\* \u4F60\u5403\u6389\u4E86\u8FD9\u51E0\u628A\u5565\u73A9\u610F\u554A\u3002\n\u9F49\\*
+    \u201C\u8FD9\u51E0\u628A\u5565\u73A9\u610F\u554A\u201D-\u6CBB\u6108 11 HP\n*
+    \u4E0D\u53EF\u540D\u72B6...\\* \u8FD9\u51E0\u628A\u5565\u73A9\u610F\u554A\u88AB\u4F60\u6254\u6389\u4E86\u3002;"
+  - "bang\\\u8FD9\u5565\u73A9\u610F\u554A\\* \u4F60\u5C1D\u4E86\u4E00\u53E3\u8FD9\u5269\u4E0B\u7684\u73A9\u610F\u513F\n\u9F49\\*
+    \u201C\u8FD9\u5565\u73A9\u610F\u554A\u201D-\u6CBB\u6108 11 HP\n* \u4ECD\u65E7\u4E0D\u53EF\u540D\u72B6...\\*
+    \u8FD9\u5565\u73A9\u610F\u554A\u88AB\u4F60\u6254\u6389\u4E86\u3002;"
+  - "pia1\\\u567C\u91CC\u556A\u55661\\* \u4F60\u88C5\u5907\u4E86\u567C\u91CC\u556A\u55661\u3002\\*
+    \u201C\u567C\u91CC\u556A\u55661\u201D-\u6B66\u5668 AT 123\\* \u567C\u91CC\u556A\u55661\u88AB\u4F60\u6254\u6389\u4E86\u3002;"
+  - "pia2\\\u567C\u91CC\u556A\u55662\\* \u4F60\u88C5\u5907\u4E86\u567C\u91CC\u556A\u55662\u3002\\*
+    \u201C\u567C\u91CC\u556A\u55662\u201D-\u6B66\u5668 AT 456\\* \u567C\u91CC\u556A\u55662\u88AB\u4F60\u6254\u6389\u4E86\u3002;"
+  - "tatata1\\\u584C\u584C\u584C\u584C\u584C\\* \u4F60\u88C5\u5907\u4E86\u584C\u584C\u584C\u584C\u584C\u3002\\*
+    \u201C\u584C\u584C\u584C\u584C\u584C\u201D-\u9632\u5177 DF 789\\* \u584C\u584C\u584C\u584C\u584C\u88AB\u4F60\u6254\u6389\u4E86\u3002;"
+  - "tatata2\\\u5854\u5854\u5854\u5854\u5854\\* \u4F60\u88C5\u5907\u4E86\u5854\u5854\u5854\u5854\u5854\u3002\\*
+    \u201C\u5854\u5854\u5854\u5854\u5854\u201D-\u9632\u5177 DF 100\\* \u5854\u5854\u5854\u5854\u5854\u88AB\u4F60\u6254\u6389\u4E86\u3002;"
+  itemTextMaxItemSon:
+  - baaaaaaaaaaaaaaaa
+  - "\u8FD9\u51E0\u628A\u5565\u73A9\u610F\u554A"
+  - "* \u4F60\u5403\u6389\u4E86\u8FD9\u51E0\u628A\u5565\u73A9\u610F\u554A\u3002\n\u9F49"
+  - "* \u201C\u8FD9\u51E0\u628A\u5565\u73A9\u610F\u554A\u201D-\u6CBB\u6108 11 HP\n*
+    \u4E0D\u53EF\u540D\u72B6..."
+  - "* \u8FD9\u51E0\u628A\u5565\u73A9\u610F\u554A\u88AB\u4F60\u6254\u6389\u4E86\u3002"
+  - bang
+  - "\u8FD9\u5565\u73A9\u610F\u554A"
+  - "* \u4F60\u5C1D\u4E86\u4E00\u53E3\u8FD9\u5269\u4E0B\u7684\u73A9\u610F\u513F\n\u9F49"
+  - "* \u201C\u8FD9\u5565\u73A9\u610F\u554A\u201D-\u6CBB\u6108 11 HP\n* \u4ECD\u65E7\u4E0D\u53EF\u540D\u72B6..."
+  - "* \u8FD9\u5565\u73A9\u610F\u554A\u88AB\u4F60\u6254\u6389\u4E86\u3002"
+  - pia1
+  - "\u567C\u91CC\u556A\u55661"
+  - "* \u4F60\u88C5\u5907\u4E86\u567C\u91CC\u556A\u55661\u3002"
+  - "* \u201C\u567C\u91CC\u556A\u55661\u201D-\u6B66\u5668 AT 123"
+  - "* \u567C\u91CC\u556A\u55661\u88AB\u4F60\u6254\u6389\u4E86\u3002"
+  - pia2
+  - "\u567C\u91CC\u556A\u55662"
+  - "* \u4F60\u88C5\u5907\u4E86\u567C\u91CC\u556A\u55662\u3002"
+  - "* \u201C\u567C\u91CC\u556A\u55662\u201D-\u6B66\u5668 AT 456"
+  - "* \u567C\u91CC\u556A\u55662\u88AB\u4F60\u6254\u6389\u4E86\u3002"
+  - tatata1
+  - "\u584C\u584C\u584C\u584C\u584C"
+  - "* \u4F60\u88C5\u5907\u4E86\u584C\u584C\u584C\u584C\u584C\u3002"
+  - "* \u201C\u584C\u584C\u584C\u584C\u584C\u201D-\u9632\u5177 DF 789"
+  - "* \u584C\u584C\u584C\u584C\u584C\u88AB\u4F60\u6254\u6389\u4E86\u3002"
+  - tatata2
+  - "\u5854\u5854\u5854\u5854\u5854"
+  - "* \u4F60\u88C5\u5907\u4E86\u5854\u5854\u5854\u5854\u5854\u3002"
+  - "* \u201C\u5854\u5854\u5854\u5854\u5854\u201D-\u9632\u5177 DF 100"
+  - "* \u5854\u5854\u5854\u5854\u5854\u88AB\u4F60\u6254\u6389\u4E86\u3002"
+  itemTextMaxData:
+  - "\u7269\u54C1\n\u72B6\u6001;"
+  - "\u653B\u51FB;"
+  - "\u9632\u5FA1;"
+  - " \u8FD8\u9700;"
+  - "\u6B66\u5668:;"
+  - "\u9632\u5177:;"
+  - "\u91D1\u94B1:;"
+  - "\u6D4B\u8BD5;"
+  - "\u4F7F\u7528;"
+  - "\u8BF4\u660E;"
+  - "\u4E22\u5F03;"
+  - "* \u4F60\u5403\u6389\u4E86</itemNameFood>\u3002;"
+  - "* \u4F60\u56DE\u590D\u4E86</itemHp>HP\uFF01;"
+  - "* \u201C</itemNameFood>\u201D-\u6CBB\u6108 </itemHp> HP;"
+  - "* \u4F60\u88C5\u5907\u4E86</itemNameArm>\u3002;"
+  - "* \u4F60\u88C5\u5907\u4E86</itemNameArmor>\u3002;"
+  - "* \u201C</itemNameArm>\u201D-\u6B66\u5668 AT </itemAtk>;"
+  - "* \u201C</itemNameArmor>\u201D-\u9632\u5177 DF </itemDef>;"
+  - "* </itemNameFood>\u88AB\u4F60\u6254\u6389\u4E86\u3002;"
+  - "* </itemNameArm>\u88AB\u4F60\u6254\u6389\u4E86\u3002;"
+  - "* </itemNameArmor>\u88AB\u4F60\u6254\u6389\u4E86\u3002;"
+  - "* </itemNameOther>\u88AB\u4F60\u6254\u6389\u4E86\u3002;"
+  - "* \u4F60\u7684HP\u5DF2\u6EE1\u3002;"
+  itemFoods:
+  - baaaaaaaaaaaaaaaa
+  - '@bang'
+  - 11
+  - bang
+  - '@Null'
+  - 11
+  itemArms:
+  - pia1
+  - 123
+  - pia2
+  - 456
+  itemArmors:
+  - tatata1
+  - 789
+  - tatata2
+  - 100
+  itemOthers: []
+  itemBox1: 
+  itemBox2: 

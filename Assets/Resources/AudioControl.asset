@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3c08356e096c1e4dad5a50bfe5f03d2, type: 3}
+  m_Name: AudioControl
+  m_EditorClassIdentifier: 
+  bgmClip: []
+  fxClipUI:
+  - {fileID: 8300000, guid: 1f81fb3dfe91f2f4f98ef5e136cbe3b5, type: 3}
+  - {fileID: 8300000, guid: 36ca1ecab2d402c4489630bcfed943e0, type: 3}
+  - {fileID: 8300000, guid: a37b6df3ef981e34c8fbb28bb477235d, type: 3}
+  - {fileID: 8300000, guid: 3a279aa9b3d686e49803cd097d717e76, type: 3}
+  - {fileID: 8300000, guid: 16eb0a7c4ff5a784a89c8b096ebe6d26, type: 3}
+  - {fileID: 8300000, guid: 91c33b479bcdc91449549306224934f1, type: 3}
+  - {fileID: 8300000, guid: 5b7686592e3b4ec4496bb90bf197d44a, type: 3}
+  - {fileID: 8300000, guid: 81d2c120c1865994b9f114926be6a6e2, type: 3}
+  - {fileID: 8300000, guid: 5de9c7d7e50ec9645bbdebffabcdfa2e, type: 3}
+  - {fileID: 8300000, guid: d0e1dffb71674914083f89ef22d912b6, type: 3}
+  - {fileID: 8300000, guid: 6855e055d39e08147b377b32d5a0ce7e, type: 3}
+  - {fileID: 8300000, guid: 39c857b261c543e4bb037f0aae775047, type: 3}
+  fxClipType:
+  - {fileID: 8300000, guid: c07dbf7b874d8fd4eb8e857020e37bfb, type: 3}
+  - {fileID: 8300000, guid: 9fac4480efb59c149b9b251a63a6b7ee, type: 3}
+  - {fileID: 8300000, guid: e6a0b5e03a41eeb4dab8ecefc62011e1, type: 3}
+  - {fileID: 8300000, guid: 4561a7744d07e9e468e457a91a5f6c71, type: 3}
+  - {fileID: 8300000, guid: 4cd9d27e6dad99846855d74020e7e403, type: 3}
+  fxClipBattle:
+  - {fileID: 8300000, guid: c2bda3de4be27a5498bea48914f9d986, type: 3}
+  - {fileID: 8300000, guid: 34872d7e24d412642aa30edb230c5483, type: 3}
+  - {fileID: 8300000, guid: 7bc8bb004e7e9e04c8c715f2e9ffd829, type: 3}
+  - {fileID: 8300000, guid: 8a4e197853bbe1044ad726deabaae190, type: 3}
+  - {fileID: 8300000, guid: 75d4eda6b288a7343879acd468101d2a, type: 3}
+  fxClipWalk:
+  - {fileID: 8300000, guid: 1f0199a4c6005ec4abbb302f71bc036d, type: 3}
+  - {fileID: 8300000, guid: 53e2adf2ac488ef46bb2b4074de9e363, type: 3}
+  - {fileID: 8300000, guid: a03a96c5d1e99b4409ddd79098abd9ab, type: 3}
+  - {fileID: 8300000, guid: 7187dc81f98b8be4eb97bfc4dd9a5abf, type: 3}
+  - {fileID: 8300000, guid: e3cfcb32689b274419ac73380ea96888, type: 3}
+  - {fileID: 8300000, guid: 314d37dfb74502a4094b835d0e0d6c23, type: 3}
+  - {fileID: 8300000, guid: f0f794c67e9233d468a38d165590d253, type: 3}
+  - {fileID: 8300000, guid: 1a7741daba5446e46a40f8074aae75dc, type: 3}
+  - {fileID: 8300000, guid: 0bc66974c41ff8c4fa15f46d21ad3548, type: 3}

@@ -1,0 +1,11 @@
+/*
+配置语言包信息
+*/
+LanguagePackName\简体中文(内置);
+
+/* 建议在此处标明各人员及职位 如xxx(原始文本),xxx(翻译),xxx(校对)等。 */
+LanguagePackAuthor\作者：AIk(原始文本);
+
+LanguagePackInformation\已启用内置简体中文语言包。;
+
+/*因debug调试原因，全半角设定在MenuAndSetting.txt里设置*/

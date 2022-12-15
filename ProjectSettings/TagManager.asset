@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 2
+  tags:
+  - bullet
+  - frame
+  - board
+  - owObjTrigger
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - CanvasUI
+  - Water
+  - UI
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Tilemap
+    uniqueID: 1212127259
+    locked: 0
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  - name: Columns
+    uniqueID: 695157325
+    locked: 0
+  - name: Shadow
+    uniqueID: 1156365445
+    locked: 0
+  - name: UI
+    uniqueID: 3159946757
+    locked: 0
