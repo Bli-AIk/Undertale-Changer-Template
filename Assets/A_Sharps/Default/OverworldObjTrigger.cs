@@ -51,6 +51,7 @@ public class OverworldObjTrigger : MonoBehaviour
         {
             typeWritter.endString = "";
             talkUI.transform.localPosition = new Vector3(talkUI.transform.localPosition.x, talkUI.transform.localPosition.y, -50);
+            Debug.Log(talkUI.transform.localPosition.z);
             MainControl.instance.PlayerControl.canMove = true;
             MainControl.instance.OverwroldControl.pause = false;
 
@@ -69,6 +70,7 @@ public class OverworldObjTrigger : MonoBehaviour
         if (talkUI.transform.localPosition.z < 0)
         {
             talkUI.transform.localPosition = new Vector3(talkUI.transform.localPosition.x, talkUI.transform.localPosition.y, 5);
+            Debug.Log(talkUI.transform.localPosition.z);
         }
         talkUI.isUp = isUp;
         typeWritter.TypeOpen(MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.owTextsSave, text), false, 0, 0);

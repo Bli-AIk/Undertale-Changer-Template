@@ -204,12 +204,14 @@ public class BackpackBehaviour : MonoBehaviour
                                     if (!typeWritter.isTyping)
                                     {
                                         BackpackExit();
+                                        break;
 
                                     }
                                     if (talkUI.transform.localPosition.z < 0)
                                     {
                                         talkUI.Change();
                                         talkUI.transform.localPosition = new Vector3(talkUI.transform.localPosition.x, talkUI.transform.localPosition.y, 5);
+                                        Debug.LogWarning(talkUI.transform.localPosition.z);
                                     }
                                     break;
                             }
@@ -373,7 +375,9 @@ public class BackpackBehaviour : MonoBehaviour
         selent = 0;
         backpack.gameObject.SetActive(false);
         BackpackUILeft.transform.parent.localPosition = new Vector3(BackpackUILeft.transform.parent.localPosition.x, BackpackUILeft.transform.parent.localPosition.y, -50);
+        typeWritter.TypeStop();
         talkUI.transform.localPosition = new Vector3(talkUI.transform.localPosition.x, talkUI.transform.localPosition.y, -50);
+        Debug.Log(talkUI.transform.localPosition.z);
         sonUse = 0;
         sonSelent = 0;
 
