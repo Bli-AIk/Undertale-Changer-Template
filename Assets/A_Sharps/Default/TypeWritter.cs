@@ -112,7 +112,9 @@ public class TypeWritter : MonoBehaviour
                         originString += " ";
                         break;
                     }
+                    fix0 = true;
                 }
+
             }
 
             while (originString[i] == 'ôÐ')//Ìø×Ö
