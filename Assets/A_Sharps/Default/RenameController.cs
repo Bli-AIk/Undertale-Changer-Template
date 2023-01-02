@@ -8,8 +8,8 @@ using UnityEngine.Rendering;
 public class RenameController : MonoBehaviour
 {
     public List<TextMeshPro> tmps;
-    public int selent;
-    public bool selentMax;
+    public int select;
+    public bool selectMax;
     public string setName;
     public int mode;
     Tween animMove, animScale;
@@ -28,17 +28,17 @@ public class RenameController : MonoBehaviour
 
 
     }
-    string Alphabet(int selentNum)
+    string Alphabet(int selectNum)
     {
         string bet = "A B C D E F G\nH I J K L M N\nO P Q R S T U\nV W X Y Z\na b c d e f g\nh i j k l m n\no p q r s t u\nv w x y z";
         string final = "";
         for (int i = 0; i < bet.Length; i++)
         {
-            if (i == selentNum * 2)
+            if (i == selectNum * 2)
             {
                 final += "<color=yellow>";
             }
-            else if (i == selentNum * 2 + 1)
+            else if (i == selectNum * 2 + 1)
             {
                 final += "</color>";
             }
@@ -47,17 +47,17 @@ public class RenameController : MonoBehaviour
 
         return final;
     }
-    void Selentbet(int selentNum)
+    void Selectbet(int selectNum)
     {
         List<string> strings = new List<string>();
         /*
-        if (!(selentNum >= 52 && selentNum <= 54))
+        if (!(selectNum >= 52 && selectNum <= 54))
             return;
         */
-        int selenter = selentNum - 52;
+        int selecter = selectNum - 52;
         for (int i = 0; i < 3; i++)
         {
-            if(i == selenter)
+            if(i == selecter)
                 strings.Add("<color=yellow>");
             else strings.Add("");
         }
@@ -77,18 +77,18 @@ strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.Overwro
                 bool breaker = false;
                 if ((MainControl.instance.KeyArrowToControl(KeyCode.Z)) && setName.Length <= 6)
                 {
-                    if (selent < 52)
+                    if (select < 52)
                     {
                         if (setName.Length < 6)
-                            setName += "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[selent];
+                            setName += "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[select];
                     }
                     else
-                        switch (selent)
+                        switch (select)
                         {
                             case 52:
                                 if (MainControl.instance.PlayerControl.playerName != "")
                                 {
-                                    MainControl.instance.OutBlack("Menu");
+                                    MainControl.instance.OutBlack("Menu", Color.black);
                                     mode = 0;
                                 }
                                 else
@@ -101,7 +101,7 @@ strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.Overwro
                             case 54:
                                 if (setName != "")
                                 {
-                                    selent = 0;
+                                    select = 0;
                                     mode = 2;
                                     List<string> list = MainControl.instance.ScreenMaxToAllSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "RenameSp");
                                     tmps[0].text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Rename");
@@ -109,7 +109,7 @@ strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.Overwro
                                         tmps[3].text = "<size=0>wwww</size><color=yellow>" + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "No") + "</color>    " + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Yes");
                                     else
                                         tmps[3].text = "<size=2><color=#00000000>wwww</color></size><color=yellow>" + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "No") + "</color>    <color=#00000000><size=5>wwwwwwwww</size></color>" + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Yes");
-                                    selentMax = true;
+                                    selectMax = true;
                                     foreach (var item in list)
                                     {
                                         List<string> lister = new List<string>();
@@ -122,7 +122,7 @@ strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.Overwro
                                                 tmps[0].text = lister[3];
                                             if (!bool.Parse(lister[1]))
                                             {
-                                                selentMax = false;
+                                                selectMax = false;
                                                 if (MainControl.instance.OverwroldControl.textWidth)
                                                     tmps[3].text = "<size=0>wwww</size><color=yellow>"+ MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "GoBack") + "</color>";
                                             else
@@ -158,94 +158,94 @@ strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.Overwro
                 if (breaker) break;
                 if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow))
                 {
-                    if (selent >= 31 && selent <= 32)
+                    if (select >= 31 && select <= 32)
                     {
-                        selent -= 12;
+                        select -= 12;
                     }
-                    else if (selent < 26 || (selent > 32 && selent < 52))
-                        selent -= 7;
-                    else if (selent >= 52 && selent <= 54)
+                    else if (select < 26 || (select > 32 && select < 52))
+                        select -= 7;
+                    else if (select >= 52 && select <= 54)
                     {
-                        switch (selent)
+                        switch (select)
                         {
                             case 52:
-                                selent = 47;
+                                select = 47;
                                 break;
                             case 53:
-                                selent = 49;
+                                select = 49;
                                 break;
                             case 54:
-                                selent = 45;
+                                select = 45;
                                 break;
                         }
                     }
-                    else selent -= 5;
+                    else select -= 5;
 
-                    if (selent < 0)
-                        selent = 54;
+                    if (select < 0)
+                        select = 54;
                     
                 }
                 else if (MainControl.instance.KeyArrowToControl(KeyCode.DownArrow))
                 {
-                    if (selent >= 19 && selent <= 20)
+                    if (select >= 19 && select <= 20)
                     {
-                        selent += 12;
+                        select += 12;
                     }
-                    else if (selent < 21 || (selent > 25 && selent < 45))
-                        selent += 7;
-                    else if (selent >= 45)
+                    else if (select < 21 || (select > 25 && select < 45))
+                        select += 7;
+                    else if (select >= 45)
                     {
-                        if (selent <= 46)
-                            selent = 54;
-                        else if (selent <= 48)
-                            selent = 52;
-                        else if (selent <= 51)
-                            selent = 53;
-                        else switch (selent)
+                        if (select <= 46)
+                            select = 54;
+                        else if (select <= 48)
+                            select = 52;
+                        else if (select <= 51)
+                            select = 53;
+                        else switch (select)
                             {
                                 case 52:
-                                    selent = 0;
+                                    select = 0;
                                     break;
                                 case 53:
-                                    selent = 2;
+                                    select = 2;
                                     break;
                                 case 54:
-                                    selent = 5;
+                                    select = 5;
                                     break;
                             }
                     }
-                    else selent += 5;
+                    else select += 5;
 
-                    if (selent > 54)
-                        selent = 0;
+                    if (select > 54)
+                        select = 0;
                     
                 }
                 if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow))
                 {
-                    selent -= 1;
-                    if (selent < 0)
-                        selent = 54;
+                    select -= 1;
+                    if (select < 0)
+                        select = 54;
                     
                 }
                 else if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow))
                 {
-                    selent += 1;
-                    if (selent > 54)
-                        selent = 0;
+                    select += 1;
+                    if (select > 54)
+                        select = 0;
 
 
                 }
                 tmps[0].text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Rename0");
                 tmps[1].text = setName;
-                tmps[2].text = Alphabet(selent);
-                Selentbet(selent);
+                tmps[2].text = Alphabet(select);
+                Selectbet(select);
                 tmps[4].text = "";
                 tmps[5].text = "";
                 break;
             case 2:
                 if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
                 {
-                    switch (selent)
+                    switch (select)
                     {
                         case 0:
                             mode = 1;
@@ -261,7 +261,7 @@ strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.Overwro
                         case 1:
                             mode = -1;
                             MainControl.instance.PlayerControl.playerName = setName;
-                            GameObject.Find("BGM Source").transform.GetComponent<AudioSource>().Pause();
+                            AudioController.instance.transform.GetComponent<AudioSource>().Pause();
                             Volume v = GameObject.Find("Global Volume").transform.GetComponent<Volume>();
                             Volume v2 = GameObject.Find("Global Volume (1)").transform.GetComponent<Volume>();
                             
@@ -285,11 +285,11 @@ strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.Overwro
                                    MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Rename2") +
                                    MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Rename3");
                 }
-                if (selentMax && (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow) || MainControl.instance.KeyArrowToControl(KeyCode.RightArrow))) 
+                if (selectMax && (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow) || MainControl.instance.KeyArrowToControl(KeyCode.RightArrow))) 
                 {
-                    if (selent == 0)
+                    if (select == 0)
                     {
-                        selent = 1;
+                        select = 1;
                         if (MainControl.instance.OverwroldControl.textWidth)
                             tmps[3].text = "<size=0>wwww</size>" + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "No") + "    <color=yellow>" + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Yes") + "</color>";
                         else
@@ -298,7 +298,7 @@ strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.Overwro
                     }
                     else
                     {
-                        selent = 0;
+                        select = 0;
                         if (MainControl.instance.OverwroldControl.textWidth)
                             tmps[3].text = "<color=#00000000><size=0>wwww</size><color=yellow>" + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "No") + "</color>    <color=white>" + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Yes");
                         else

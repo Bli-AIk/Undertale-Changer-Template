@@ -23,32 +23,32 @@ public class DebugVideoController : MonoBehaviour
             if (videoPlayer.isPaused)
             {
                 videoPlayer.Play();
-                Debug.Log("video play");
+                //Debug.Log("video play");
             }
             else
             {
                 videoPlayer.Pause();
-                Debug.Log("video pause");
+                //Debug.Log("video pause");
             }
         }
 
         if (Input.GetKeyDown(KeyCode.KeypadPlus))
         {
             videoPlayer.StepForward();
-            Debug.Log("video +");
-            Debug.Log("frame:" + videoPlayer.frame);
+            //Debug.Log("video +");
+            //Debug.Log("frame:" + videoPlayer.frame);
         }
 
         if (Input.GetKeyDown(KeyCode.KeypadMinus))
         {
             videoPlayer.frame -= 1;
-            Debug.Log("video -");
-            Debug.Log("frame:" + videoPlayer.frame);
+            //Debug.Log("video -");
+            //Debug.Log("frame:" + videoPlayer.frame);
         }
         if (Input.GetKeyDown(KeyCode.KeypadEnter))
         {
             videoPlayer.frame = skip;
-            Debug.Log("video skip");
+            //Debug.Log("video skip");
         }
     }
 }

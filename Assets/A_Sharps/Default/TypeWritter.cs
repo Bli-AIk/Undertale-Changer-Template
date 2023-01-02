@@ -3,16 +3,20 @@ using System.Collections.Generic;
 using MEC;
 using UnityEngine;
 using System;
-
+using UnityEngine.Audio;
 public class TypeWritter : MonoBehaviour
 {
     public string originString, endString;
     public bool isTyping;
     public int hpIn;
+    public int hpSave;
+    public bool canNotX;
     public bool pressX;
     public float clockTime;//实际上计数
     public bool isStop;
-    int fx;//音效
+    public int fx;//音效
+    public bool fxRandomPitch;
+    
     [Header("打字速度与检测停顿字符后的打字速度")]
     public float speed = 0.075f, speedSlow = 0.15f;
     [Header("打字后多少秒可以按X跳过，0为不能跳")]
@@ -26,8 +30,15 @@ public class TypeWritter : MonoBehaviour
     public bool isOverworld;
     TalkUIPositionChanger talkUIPositionChanger;
 
-    
+    public float pitch = 1;
+    public float volume = 0.5f;
+    public AudioMixerGroup audioMixerGroup;
 
+    public int useFont;
+    [Header("总有那么一些情况需要强硬手段（拔枪")]
+    public bool forceReturn = false;
+    
+    
     private void Start()
     {
         if (isOverworld)
@@ -51,16 +62,19 @@ public class TypeWritter : MonoBehaviour
         passTextString = 0;
         originString = text;
         hpIn = hp;
+        hpSave = MainControl.instance.PlayerControl.hp;
         clockTime = clock;
         pressX = false;
         isStop = false;
         this.fx = fx;
+        if (isOverworld)
+            talkUIPositionChanger.Change(true, originString[0] == '鼵' && originString[1] != '-', true, this);
         Timing.RunCoroutine(_Typing());
     }
     public void TypeStop()
     {
-        isTyping = false;
         Timing.KillCoroutines();
+        isTyping = false;
         endString = "";
         passTextString = 0;
     }
@@ -81,6 +95,8 @@ public class TypeWritter : MonoBehaviour
 
         for (int i = 0; i < originString.Length; i++)
         {
+            if (fxRandomPitch)
+                pitch = UnityEngine.Random.Range(0.25f, 1.25f);
 
             if (originString[i] != '齉')
                 passTextString++;
@@ -100,13 +116,34 @@ public class TypeWritter : MonoBehaviour
                         if (fix0)
                             fix0 = false;
                     }
-                    switch (spText)
+                    if (spText.Substring(0, 6) == "<Font=")
                     {
-                        default://富文本
-                            endString += spText;
-                            passTextString += spText.Length;
-                            break;
+                        string fontSave = spText.Substring(6);
+                        fontSave = fontSave.Substring(0, fontSave.Length - 1);
+                        useFont = int.Parse(fontSave);
+                        passTextString += spText.Length;
                     }
+                    else
+                    {
+                        switch (spText)
+                        {
+                            case "<StoryStart1>":
+                                GameObject.Find("Grid/Fog").GetComponent<Animator>().enabled = true;
+                                passTextString += spText.Length;
+
+                                break;
+
+                            case "<sprite=0>":
+                                if (!pressX)
+                                    AudioController.instance.GetFx(fx, MainControl.instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
+                                goto default;
+                            default://富文本
+                                endString += spText;
+                                passTextString += spText.Length;
+                                break;
+                        }
+                    }
+                   
                     if (i >= originString.Length)
                     {
                         originString += " ";
@@ -114,9 +151,8 @@ public class TypeWritter : MonoBehaviour
                     }
                     fix0 = true;
                 }
-
             }
-
+            
             while (originString[i] == '粜')//跳字
             {
                 endString += originString[i + 1];
@@ -124,7 +160,27 @@ public class TypeWritter : MonoBehaviour
                 i += 2;
             }
             isStop = originString[i] == '龘';
-            if (originString[i] == '龘')//停顿
+            if (originString[i] == '鯈')
+            {
+                canNotX = !canNotX;
+            }
+            else if (originString[i] == '禤')
+            {
+                int q = i;
+                string text = "";
+                while (i < originString.Length - 1)
+                {
+                    i++;
+                    text += originString[i];
+                }
+                i = q;
+                originString = originString.Substring(0, originString.Length - text.Length);
+                //passTextString--;
+                originString += '轂';
+                GetComponent<OverworldTalkSelect>().typeText = text;
+                GetComponent<OverworldTalkSelect>().Open();
+            }
+            else if (originString[i] == '龘')//停顿
             {
                 if (!pressX)
                     yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f * Convert.ToInt32(!MainControl.instance.OverwroldControl.textWidth));
@@ -164,7 +220,7 @@ public class TypeWritter : MonoBehaviour
                 {
                     i -= 2;
                     string plusString;
-                    if (hpIn + MainControl.instance.PlayerControl.hp >= MainControl.instance.PlayerControl.hpMax)
+                    if (hpIn + hpSave >= MainControl.instance.PlayerControl.hpMax)
                     {
                         plusString = MainControl.instance.ItemControl.itemTextMaxData[22];
                         plusString = plusString.Substring(0, plusString.Length - 1);
@@ -220,7 +276,7 @@ public class TypeWritter : MonoBehaviour
                         }
                     }
                     if (cantString != "" && !pressX)
-                        AudioController.instance.GetFx(fx, MainControl.instance.AudioControl.fxClipType);
+                        AudioController.instance.GetFx(fx, MainControl.instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
                     endString += originString[i];
                 }
 
@@ -233,7 +289,7 @@ public class TypeWritter : MonoBehaviour
         {
             isTyping = false;
         }
-        else
+        else if (passTextString < originString.Length) 
         {
             if (originString[passTextString] != '<')
             {
@@ -247,14 +303,12 @@ public class TypeWritter : MonoBehaviour
 
         }
         pressX = false;
+        canNotX = false;
         isStop = false;
     }
     private void Update()
     {
-
-
-
-        if (MainControl.instance.OverwroldControl.isSetting)//pause在OW检测的时候会用
+        if (MainControl.instance.OverwroldControl.isSetting || forceReturn)//pause在OW检测的时候会用
             return;
 
         if (clockTime > 0)
@@ -277,13 +331,15 @@ public class TypeWritter : MonoBehaviour
             }
             passTextString = 0;
             if (isOverworld)
+            {
                 talkUIPositionChanger.Change(true, originString[0] == '鼵' && originString[1] != '-', true, this);
+            }
             pressX = false;
             Timing.RunCoroutine(_Typing());
 
 
         }
-        else if (!pressX && MainControl.instance.KeyArrowToControl(KeyCode.X))//跳字
+        else if (!pressX && !canNotX && MainControl.instance.KeyArrowToControl(KeyCode.X))//跳字
         {
             if (clock != 0 && clockTime <= 0 && isTyping)
                 pressX = true;

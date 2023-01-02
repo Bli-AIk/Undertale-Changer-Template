@@ -50,7 +50,7 @@ public class DebugGrid : MonoBehaviour
         for (int x = 1; x < divisionX; x++)
         {
             float length = Mathf.Abs(referenceX.y - referenceX.x);
-            Debug.Log(length);
+            //Debug.Log(length);
             GameObject objGrid = GetFromPool();
             objGrid.transform.localPosition = new Vector3(length / divisionX * x - deviationX, 0, 0);
             objGrid.GetComponent<SpriteRenderer>().color = colorY;
@@ -66,7 +66,7 @@ public class DebugGrid : MonoBehaviour
         for (int y = 1; y < divisionX; y++)
         {
             float length = Mathf.Abs(referenceY.y - referenceY.x);
-            Debug.Log(length);
+            //Debug.Log(length);
             GameObject objGrid = GetFromPool();
             objGrid.transform.localPosition = new Vector3(0, length / divisionY * y - deviationY, 0);
             objGrid.GetComponent<SpriteRenderer>().color = colorX;

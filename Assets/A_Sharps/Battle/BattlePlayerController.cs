@@ -59,6 +59,7 @@ public class BattlePlayerController : MonoBehaviour
         hitVolume.weight = 0;
         roundController = GameObject.Find("MainControl").GetComponent<RoundController>();
         //mask = 1 << 6;
+        MainControl.instance.PlayerControl.missTime = 0;
     }
     private void Update()
     {
@@ -637,8 +638,8 @@ public class BattlePlayerController : MonoBehaviour
             isMoveing = !(x || y);
 
             /*
-            Debug.Log("X:" + x);
-            Debug.Log("Y:" + y);
+            //Debug.Log("X:" + x);
+            //Debug.Log("Y:" + y);
             */
         }
         else
@@ -653,13 +654,13 @@ public class BattlePlayerController : MonoBehaviour
             && isMoveX && infoMoveX.collider != null && (infoMoveX.collider.gameObject.tag == "frame" || infoMoveX.collider.gameObject.tag == "board"))
         {
             isMoveing = true;
-            Debug.Log(1);
+            //Debug.Log(1);
         }
         if (isMoveX && (infoMoveX.collider == null || (infoMoveX.collider != null && infoMoveY.collider.gameObject.tag != "frame" && infoMoveY.collider.gameObject.tag != "board"))
             && isMoveY && infoMoveY.collider != null && (infoMoveY.collider.gameObject.tag == "frame" || infoMoveY.collider.gameObject.tag == "board"))
         {
             isMoveing = true;
-            Debug.Log(2);
+            //Debug.Log(2);
         }
         */
         float moveingSave = 0;

@@ -15,12 +15,14 @@ public class BulletController : MonoBehaviour
     public BattleControl.BulletColor bulletColor;//含有属性的颜色 读取BattleControl中的enum BulletColor
     public bool followMode;
 
-    /*貌似不需要了
+    public bool useExtra;
+    public Collider2D extra;
+
     void Start()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        if (useExtra) 
+            extra = GetComponent<Collider2D>();
     }
-    */
   
     /// <summary>
     /// 初始化
@@ -43,6 +45,17 @@ public class BulletController : MonoBehaviour
         SetMask(lister[3]);
         followMode = bool.Parse(lister[4]);
         int j = 0;
+
+        for (int i = 0; i < boxColliderList.Count; i++)
+        {
+            Destroy(boxColliderList[0]);
+            boxColliderList.RemoveAt(0);
+        }
+
+        boxColliderSizes.Clear();
+        boxHitList.Clear();
+
+
         //4开始后 循环生成box碰撞
         for (int i = 5; i < lister.Count; i++)
         {
@@ -89,6 +102,7 @@ public class BulletController : MonoBehaviour
     {
         if (collision.transform.tag == "Player") 
         {
+            if(!useExtra)
             for (int i = 0; i < boxColliderList.Count; i++)
             {
                 if (boxColliderList[i].IsTouching(collision))
@@ -105,8 +119,21 @@ public class BulletController : MonoBehaviour
                     break;
                 }
             }
+            else if (extra.IsTouching(collision))
+            {
+                BattlePlayerController battlePlayerController = collision.GetComponent<BattlePlayerController>();
+                if (bulletColor == BattleControl.BulletColor.white
+                    || (bulletColor == BattleControl.BulletColor.orange && !battlePlayerController.isMoveing)
+                    || (bulletColor == BattleControl.BulletColor.blue && battlePlayerController.isMoveing))
+                {
+                    HitPlayer(0);
+                    if (!MainControl.instance.OverwroldControl.noSFX)
+                        battlePlayerController.hitVolume.weight = 1;
+                }
+            }
         }
     }
+
     void HitPlayer(int i)
     {
         if (MainControl.instance.PlayerControl.missTime < 0)

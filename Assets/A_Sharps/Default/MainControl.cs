@@ -9,12 +9,20 @@ using UnityEngine.Rendering.Universal;
 using System.IO;
 using System;
 using System.Globalization;
+using MEC;
+using System.Threading.Tasks;
 /// <summary>
 /// 调用所有ScriptableObject 并负责对数据和语言包的导入
 /// 还包括一大堆常用的函数
 /// </summary>
 public class MainControl : MonoBehaviour
 {
+    [Header("BGM设定 空为无")]
+    public AudioClip bgmClip;
+    public float volume = 0.5f;
+    public float pitch = 1;
+    public bool loop = true;
+
     [Header("状态 0正常 1战斗内 2编辑器")]
     public int inBattle;
     public static MainControl instance;
@@ -27,7 +35,7 @@ public class MainControl : MonoBehaviour
     public AudioControl AudioControl { get; private set; }
     public BattleControl BattleControl { get; private set; }
 
-
+    BattlePlayerController battlePlayerController;
 
     public void Initialization(int languagePack)
     {
@@ -77,6 +85,7 @@ public class MainControl : MonoBehaviour
 
         if (inBattle == 1)
         {
+            battlePlayerController = GameObject.Find("Player").GetComponent<BattlePlayerController>();
             LoadItemData(BattleControl.barrgeSetUpSave, BattleControl.barrgeSetUpAsset);
 
             LoadRound(GetComponent<RoundController>().round);
@@ -134,10 +143,31 @@ public class MainControl : MonoBehaviour
     {
         instance = this;
         Initialization(-1);
-        //DOTween.Init(null, false);
+
     }
     void Start()
     {
+        GameObject bgm;
+        if(AudioController.instance == null)
+        {
+            bgm = Instantiate(Resources.Load<GameObject>("BGM Source"));
+            DontDestroyOnLoad(bgm);
+        }
+        else
+        {
+            bgm = AudioController.instance.gameObject;
+        }
+        AudioSource audioSource = bgm.GetComponent<AudioSource>();
+        audioSource.pitch = pitch;
+        audioSource.volume = volume;
+        audioSource.loop = loop;
+        if (audioSource.clip != bgmClip)
+        {
+            audioSource.clip = bgmClip;
+            audioSource.Play();
+        }
+
+
         if (haveInOutBlack)
         {
             inOutBlack = GameObject.Find("Canvas/InOutBlack").GetComponent<Image>();
@@ -181,6 +211,20 @@ public class MainControl : MonoBehaviour
     {
         if (OverwroldControl.isDebug)
         {
+            if (Input.GetKeyDown(KeyCode.F5))
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+            if (OverwroldControl.invincible)
+                PlayerControl.hp = PlayerControl.hpMax;
+
+            if (Input.GetKeyDown(KeyCode.CapsLock))
+            {
+                LoadRound(UnityEngine.Random.Range(0, 2));
+
+            }
+
+
+
             PlayerControl.playerName = RandomTextColor() + 'd' + RandomTextColor() + 'e' + RandomTextColor() + 'b' + RandomTextColor() + 'u' + RandomTextColor() + 'g' + "</color></color></color></color></color>";
         }
         if (PlayerControl.hpMax < PlayerControl.hp)
@@ -395,9 +439,10 @@ public class MainControl : MonoBehaviour
     /// </summary>
     int ScreenSet(int y)
     {
-        if (OverwroldControl.backGround)
-            y = y / 9 * 16;
-        else y = y / 3 * 4;
+        //if (OverwroldControl.backGround)
+        //    y = y / 9 * 16;
+        //else 
+            y = y / 3 * 4;
         return y;
     }
     /// <summary>
@@ -441,21 +486,21 @@ public class MainControl : MonoBehaviour
     /// 淡出 输入跳转场景名称
     /// banMusic是渐出
     /// </summary>
-    public void OutBlack(string scene, bool banMusic = false, float time = 0.5f,bool Async = true)
+    public void OutBlack(string scene, Color color, bool banMusic = false, float time = 0.5f, bool Async = true)
     {
         if (banMusic)
         {
-            AudioSource bgm = GameObject.Find("BGM Source").transform.GetComponent<AudioSource>();
+            AudioSource bgm = AudioController.instance.transform.GetComponent<AudioSource>();
             if (time > 0)
                 DOTween.To(() => bgm.volume, x => bgm.volume = x, 0, time).SetEase(Ease.Linear);
             else bgm.volume = 0;
         }
         OverwroldControl.pause = true;
         if (time > 0)
-            inOutBlack.DOColor(Color.black, time).SetEase(Ease.Linear).OnKill(() => SwitchScene(scene));
+            inOutBlack.DOColor(color, time).SetEase(Ease.Linear).OnKill(() => SwitchScene(scene));
         else
         {
-            inOutBlack.color = Color.black;
+            inOutBlack.color = color;
             SwitchScene(scene, Async);
         }
     }
@@ -467,6 +512,7 @@ public class MainControl : MonoBehaviour
     }
     public void SwitchScene(string name, bool Async = true)
     {
+        PlayerControl.lastScene = SceneManager.GetActiveScene().name;
         if (Async)
             SceneManager.LoadSceneAsync(name);
         else SceneManager.LoadScene(name);
@@ -493,14 +539,23 @@ public class MainControl : MonoBehaviour
         return text;
 
     }
+    public bool forceJumpLoadRound;
+
     /// <summary>
     /// 因为回合数据是在每回合前调入的，所以搁这
     /// 调入回合数据
     /// </summary>
     public void LoadRound(int round)
     {
-        LoadItemData(BattleControl.roundSave, BattleControl.roundAsset[round]);
-       
+        StopAllCoroutines();
+        StartCoroutine(_LoadItemDataForRound(BattleControl.roundSave, BattleControl.roundAsset[round]));
+        
+    }
+    /// <summary>
+    /// 回合保存自动排序
+    /// </summary>
+    void RoundSaveTrier()
+    {
         int sp = BattleControl.roundSave.Count / 2;
         //以下部分是自动排序的相关代码
 
@@ -525,15 +580,44 @@ public class MainControl : MonoBehaviour
             }
 
         }
-
-        
     }
+    public IEnumerator _LoadItemDataForRound(List<string> list, TextAsset texter)//保存的list 导入的text
+    {
+        list.Clear();
+        string text = "";
+        for (int i = 0; i < texter.text.Length; i++)
+        {
+
+            if (texter.text[i] == '/' && texter.text[i + 1] == '*')
+            {
+                i++;
+                while (!(texter.text[i] == '/' && texter.text[i - 1] == '*'))
+                {
+                    i++;
+                }
+                i += 2;
+            }
+
+            if (texter.text[i] != '\n' && texter.text[i] != '\r' && texter.text[i] != ';')
+                text += texter.text[i];
+            if (texter.text[i] == ';')
+            {
+                list.Add(text + ";");
+                text = "";
+            }
+            if ((i + 1) % 2 == 0 && !forceJumpLoadRound)
+                yield return 0;
+        }
+
+        RoundSaveTrier();
+
+    }
+
     /// <summary>
     /// 调入数据
     /// </summary>
-    public void LoadItemData(List<string> list,TextAsset texter)//保存的list 导入的text
+    public void LoadItemData(List<string> list, TextAsset texter)//保存的list 导入的text
     {
-        List<int> EnterI = new List<int>();
         list.Clear();
         string text = "";
         for (int i = 0; i < texter.text.Length; i++)
@@ -556,7 +640,7 @@ public class MainControl : MonoBehaviour
                 list.Add(text + ";");
                 text = "";
             }
-            
+
         }
 
     }
@@ -565,7 +649,6 @@ public class MainControl : MonoBehaviour
     /// </summary>
     public void LoadItemData(List<string> list, string texter)//保存的list 导入的text
     {
-        List<int> EnterI = new List<int>();
         list.Clear();
         string text = "";
         for (int i = 0; i < texter.Length; i++)
@@ -598,53 +681,62 @@ public class MainControl : MonoBehaviour
     /// 然后再让打字机打个字
     /// plusText填0就自己计算
     /// </summary>
-    public void UseItem(TypeWritter typeWritter, int sonSelent, int plusText = 0)
+    public void UseItem(TypeWritter typeWritter, int sonSelect, int plusText = 0)
     {
         if (plusText == 0)
         {
-            if (PlayerControl.myItems[sonSelent - 1] >= 20000)
+            if (PlayerControl.myItems[sonSelect - 1] >= 20000)
                 plusText = -20000 + ItemControl.itemFoods.Count / 3 + ItemControl.itemArms.Count / 2;
-            else if (PlayerControl.myItems[sonSelent - 1] >= 10000)
+            else if (PlayerControl.myItems[sonSelect - 1] >= 10000)
                 plusText = -10000 + ItemControl.itemFoods.Count / 3;
             else plusText = 0;
         }
 
-        if (PlayerControl.myItems[sonSelent - 1] >= 20000)
+        if (PlayerControl.myItems[sonSelect - 1] >= 20000)
         {
-            typeWritter.TypeOpen(ItemControl.itemTextMaxItemSon[(PlayerControl.myItems[sonSelent - 1] + plusText) * 5 - 3], false, 0, 0);
-            PlayerControl.wearDef = int.Parse(ItemIdGet(PlayerControl.myItems[sonSelent - 1], "Auto", 1));
+            typeWritter.TypeOpen(ItemControl.itemTextMaxItemSon[(PlayerControl.myItems[sonSelect - 1] + plusText) * 5 - 3], false, 0, 0);
+            PlayerControl.wearDef = int.Parse(ItemIdGet(PlayerControl.myItems[sonSelect - 1], "Auto", 1));
             int wearInt = PlayerControl.wearArmor;
-            PlayerControl.wearArmor = PlayerControl.myItems[sonSelent - 1];
-            PlayerControl.myItems[sonSelent - 1] = wearInt;
+            PlayerControl.wearArmor = PlayerControl.myItems[sonSelect - 1];
+            PlayerControl.myItems[sonSelect - 1] = wearInt;
 
             AudioController.instance.GetFx(3, AudioControl.fxClipUI);
 
         }
-        else if (PlayerControl.myItems[sonSelent - 1] >= 10000)
+        else if (PlayerControl.myItems[sonSelect - 1] >= 10000)
         {
-            typeWritter.TypeOpen(ItemControl.itemTextMaxItemSon[(PlayerControl.myItems[sonSelent - 1] + plusText) * 5 - 3], false, 0, 0);
-            PlayerControl.wearAtk = int.Parse(ItemIdGet(PlayerControl.myItems[sonSelent - 1], "Auto", 1));
+            typeWritter.TypeOpen(ItemControl.itemTextMaxItemSon[(PlayerControl.myItems[sonSelect - 1] + plusText) * 5 - 3], false, 0, 0);
+            PlayerControl.wearAtk = int.Parse(ItemIdGet(PlayerControl.myItems[sonSelect - 1], "Auto", 1));
             int wearInt = PlayerControl.wearArm;
-            PlayerControl.wearArm = PlayerControl.myItems[sonSelent - 1];
-            PlayerControl.myItems[sonSelent - 1] = wearInt;
+            PlayerControl.wearArm = PlayerControl.myItems[sonSelect - 1];
+            PlayerControl.myItems[sonSelect - 1] = wearInt;
 
             AudioController.instance.GetFx(3, AudioControl.fxClipUI);
 
         }
         else//食物
         {
-            typeWritter.TypeOpen(ItemControl.itemTextMaxItemSon[PlayerControl.myItems[sonSelent - 1] * 5 - 3], false,
-                int.Parse(ItemIdGet(PlayerControl.myItems[sonSelent - 1], "Auto", 2)), 0);
-            PlayerControl.hp += int.Parse(ItemIdGet(PlayerControl.myItems[sonSelent - 1], "Auto", 2));
+            int plusHp = int.Parse(ItemIdGet(PlayerControl.myItems[sonSelect - 1], "Auto", 2));
+            if (PlayerControl.wearArm == 10001)
+                plusHp += 4;
+
+            typeWritter.TypeOpen(ItemControl.itemTextMaxItemSon[PlayerControl.myItems[sonSelect - 1] * 5 - 3], false,
+                plusHp, 0);
+
+
+
+            PlayerControl.hp += plusHp;
+
+
             if (PlayerControl.hp > PlayerControl.hpMax)
                 PlayerControl.hp = PlayerControl.hpMax;
             for (int i = 0; i < ItemControl.itemFoods.Count; i++)
             {
-                if (ItemControl.itemTextMaxItemSon[PlayerControl.myItems[sonSelent - 1] * 5 - 5] == ItemControl.itemFoods[i])
+                if (ItemControl.itemTextMaxItemSon[PlayerControl.myItems[sonSelect - 1] * 5 - 5] == ItemControl.itemFoods[i])
                 {
                     string text = ItemControl.itemFoods[i + 1];
                     text = text.Substring(1, text.Length - 1);
-                    PlayerControl.myItems[sonSelent - 1] = ItemNameGetId(text, "Foods");
+                    PlayerControl.myItems[sonSelect - 1] = ItemNameGetId(text, "Foods");
                     break;
                 }
 
@@ -753,6 +845,13 @@ public class MainControl : MonoBehaviour
 
             case "</passText>":
                 text += "轂";
+                break;
+
+            case "</select>":
+                text += "禤";
+                break;
+            case "</changeX>":
+                text += "鯈";
                 break;
 
             /*
@@ -942,6 +1041,34 @@ public class MainControl : MonoBehaviour
         }
         return final;
     }
+
+    /// <summary>
+    /// 检测输入文本内的小写字母，转为全大写。
+    /// </summary>
+    public string LowercaseToUppercase(string origin)
+    {
+        string final = "";
+        string betS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        string bet = "abcdefghijklmnopqrstuvwxyz";
+        for (int i = 0; i < origin.Length; i++)
+        {
+            bool isPlus = false;
+            for (int j = 0; j < bet.Length; j++)
+            {
+                if (origin[i] == bet[j])
+                {
+                    final += betS[j];
+                    break;
+                }
+                else if (j == bet.Length - 1)
+                    isPlus = true;
+
+            }
+            if (isPlus)
+                final += origin[i];
+        }
+        return final;
+    }
     /// <summary>
     /// 输入形如(x,y)的向量
     /// 若向量形如(xRx，yRy)或(xrx，yry)，则在R左右取随机数
@@ -958,13 +1085,13 @@ public class MainControl : MonoBehaviour
             {
                 if (!isSetX)
                 {
-                    realVector2.x = RandomFloatChange(save, origin.x);
+                    realVector2.x = RandomFloatChange(save, origin.x, false);
                     isSetX = true;
                     save = "";
                 }
                 else
                 {
-                    realVector2.y = RandomFloatChange(save, origin.y);
+                    realVector2.y = RandomFloatChange(save, origin.y, true);
                     break;
                 }
 
@@ -977,13 +1104,16 @@ public class MainControl : MonoBehaviour
     /// <summary>
     /// 形如xRx？xrx？O？来我来帮你随机分开吧嘿嘿嘿(((((
     /// 如果没有r或R的话就会返回原本的，非常的实用
+    /// 
+    /// 额外添加：P/p获取玩家位置 通过isY确定是X还是Y
+    /// 通过xxx + xRx的形式实现一定程度上的固定。
     /// </summary>
-    float RandomFloatChange(string text,float origin)
+    public float RandomFloatChange(string text, float origin, bool isY = false, float plusSave = 0)
     {
         bool isHaveR = false;
         string save = "";
         float x1 = 0, x2 = 0;
-        if (text != "O" && text != "o")
+        if (text[0] != 'O' && text[0] != 'o' && text[0] != 'P' && text[0] != 'p')
         {
 
             for (int i = 0; i < text.Length; i++)
@@ -994,21 +1124,47 @@ public class MainControl : MonoBehaviour
                     save = "";
                     isHaveR = true;
                 }
+                else if (text[i] == '+')
+                {
+                    plusSave = float.Parse(save);
+                    save = "";
+                }
                 else save += text[i];
             }
             if (isHaveR)
             {
                 x2 = float.Parse(save);
-                return UnityEngine.Random.Range(x1, x2);
+                return plusSave + UnityEngine.Random.Range(x1, x2);
             }
             else
             {
-                return float.Parse(text);
-
+                return plusSave + float.Parse(text);
             }
         }
-        else 
-            return origin;
+        else if (text == "P" || text == "p")
+        {
+            if (isY)
+            {
+                return battlePlayerController.transform.position.y;
+            }
+            else
+            {
+                return battlePlayerController.transform.position.x;
+            }
+        }
+        else
+        {
+            if (text.Length > 1 && (text[0] == 'O' || text[0] == 'o') && text[1] == '+')
+            {
+                //Debug.LogWarning(text.Substring(2));
+                //Debug.Log(RandomFloatChange(text.Substring(2), origin, isY, origin));
+                return RandomFloatChange(text.Substring(2), origin, isY, origin);
+
+            }
+            else
+                return origin;
+
+        }
     }
 
     /*之后回来翻才意识到这不就一个强制转换的事儿）
@@ -1469,6 +1625,52 @@ public class MainControl : MonoBehaviour
             }
         }
         return id;
+
+    }
+
+
+
+    /// <summary>
+    /// 给List<Int>，检测到空的返回
+    /// </summary>
+    public int GetRealIntListCount(List<int> ints)
+    {
+        for (int i = 0; i < ints.Count; i++)
+        {
+            if (ints[i] == 0)
+                return i;
+        }
+        return ints.Count;
+    }
+
+    public List<int> ListIntAdd(List<int> origin, int add)
+    {
+        for (int i = 0; i < origin.Count; i++)
+        {
+            if (origin[i] == 0)
+            {
+                origin[i] = add;
+                break;
+            }
+        }
+        return origin;
+    }
+
+
+
+    /// <summary>
+    /// 获取-1或1
+    /// </summary>
+    public int Get1Or_1()
+    {
+        int i = 0;
+        do
+        {
+            i = UnityEngine.Random.Range(-1, 2);
+        }
+        while (i == 0);
+
+        return i;
 
     }
 }

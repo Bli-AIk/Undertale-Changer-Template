@@ -18,7 +18,7 @@ public class StartController : MonoBehaviour
         text = transform.Find("SafeText").GetComponent<TextMeshPro>();
         text.color = Color.clear;
         textUnder.color = Color.clear;
-        AudioController.instance.GetFx(MainControl.instance.AudioControl.fxClipUI[11]);
+        AudioController.instance.GetFx(11, MainControl.instance.AudioControl.fxClipUI);
         text.text = MainControl.instance.OverwroldControl.safeText;
     }
 
@@ -47,11 +47,11 @@ public class StartController : MonoBehaviour
                     text.DOColor(Color.clear, 1).SetEase(Ease.Linear);
                     if (MainControl.instance.PlayerControl.playerName == "")
                     {
-                        MainControl.instance.OutBlack("Rename", false, 2f);
+                        MainControl.instance.OutBlack("Rename", Color.black, false, 2f);
                     }
                     else
                     {
-                        MainControl.instance.OutBlack("Menu", false, 2f);
+                        MainControl.instance.OutBlack("Menu", Color.black, false, 2f);
                     }
                     break;
             }

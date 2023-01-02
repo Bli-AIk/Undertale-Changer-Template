@@ -13,7 +13,7 @@ public class RoundController : MonoBehaviour
     public float roundClock;
     public bool isMyRound;
 
-    SelentUIController selentUIController;
+    SelectUIController selectUIController;
     BattlePlayerController player;
 
     public int poolCount;
@@ -34,11 +34,24 @@ public class RoundController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        selectUIController = GameObject.Find("SelectUI").GetComponent<SelectUIController>();
         player = GameObject.Find("Player").GetComponent<BattlePlayerController>();
-        selentUIController = GameObject.Find("SelentUI").GetComponent<SelentUIController>();
         //OutYourRound();
 
+
+
     }
+
+    public bool roundLoop = false;
+    /// <summary>
+    /// 改回合，可以自定义。
+    /// </summary>
+    void ChangeRound()
+    {
+        if (!roundLoop)
+            round++;
+    }
+
     IEnumerator GetFx(float fxPlayWhileTime, AudioClip audioClipSave, int fxPlayNum)
     {
         if (fxPlayNum == 0)
@@ -59,9 +72,6 @@ public class RoundController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       
-
-
         if (!isMyRound)
         {
 
@@ -93,13 +103,13 @@ public class RoundController : MonoBehaviour
                     if (roundClock >= roundAssetTime)
                     {
                         float i;
-                        i = RunRoundAsset(true, "", gameObject,1);//执行
+                        i = RunRoundAsset(true, "", gameObject);//执行
                         if (i < 99999999 && MainControl.instance.BattleControl.roundSave[roundAssetLine].Substring(0, 7) != "Inherit")
                         {
 
                             while (roundAssetLine + 1  < MainControl.instance.BattleControl.roundSave.Count && i == MainControl.instance.MaxToLastFloat(MainControl.instance.BattleControl.roundSave[roundAssetLine + 1]))
                             {
-                                RunRoundAsset(true, "", gameObject,2);
+                                RunRoundAsset(true, "", gameObject);
                             }
 
                         }
@@ -121,7 +131,7 @@ public class RoundController : MonoBehaviour
     /// 若使用RoundAsset，那就true
     /// 否则就自己输入string
     /// </summary>
-    float RunRoundAsset(bool isRoundAssetLine, string notRoundAssetString, GameObject gameObject,int debug = 0)
+    float RunRoundAsset(bool isRoundAssetLine, string notRoundAssetString, GameObject gameObject)
     {
 
         List<string> lister = new List<string>();
@@ -147,7 +157,10 @@ public class RoundController : MonoBehaviour
                     if (transform.Find("Nest") == null)
                         newNest = Instantiate(new GameObject(), transform);
                     else
+                    {
                         newNest = transform.Find("Nest").gameObject;
+                        newNest.SetActive(true);
+                    }
 
                     newNest.AddComponent<TweenRotationCorrection>();
                     newNest.name = lister[1];
@@ -197,15 +210,37 @@ public class RoundController : MonoBehaviour
                 break;
 
             case "Delete":
+                //Debug.Log(lister[1]);
+
                 switch (lister[1])
                 {
                     case "Bullet":
-                        gameObject.transform.Find(lister[2]).GetComponent<TweenRotationCorrection>().KillAllTween();
-                        ReturnPool(gameObject.transform.Find(lister[2]).gameObject, "bullet");
+                        Transform gameObject0 = gameObject.transform.Find(lister[2]);
+                        //Debug.Log(1);
+                        //Debug.Log(gameObject0.GetComponent<TweenRotationCorrection>(), gameObject0);
+                        gameObject0.GetComponent<TweenRotationCorrection>().KillAllTween();
+                        Destroy(gameObject0.GetComponent<BulletController>());
+                        gameObject0.gameObject.AddComponent<BulletController>();
+
+                        List<BoxCollider2D> comList = new List<BoxCollider2D>();
+                        foreach (var component in gameObject0.GetComponents<BoxCollider2D>())
+                        {
+                            comList.Add(component);
+                        }
+                        foreach (BoxCollider2D item in comList)
+                        {
+                            Destroy(item);
+                        }
+
+
+
+                        ReturnPool(gameObject0.gameObject, "bullet");
                         break;
                     case "Board":
-                        gameObject.transform.Find(lister[2]).GetComponent<TweenRotationCorrection>().KillAllTween();
-                        ReturnPool(gameObject.transform.Find(lister[2]).gameObject, "board");
+
+                        Transform gameObject1 = gameObject.transform.Find(lister[2]);
+                        gameObject1.GetComponent<TweenRotationCorrection>().KillAllTween();
+                        ReturnPool(gameObject1.gameObject, "board");
                         break;
                     case "Nest":
                         //Debug.Log(111111111111);
@@ -224,13 +259,17 @@ public class RoundController : MonoBehaviour
                         objTr.name = "Nest";
 
                         objTr.position = Vector3.zero;
-                        objTr.GetComponent<TweenRotationCorrection>().euler = Vector3.zero;
-                        objTr.GetComponent<TweenRotationCorrection>().KillAllTween();
-                        objTr.localScale = Vector3.zero;
+                        TweenRotationCorrection tweenRotationCorrectionObjTr = objTr.GetComponent<TweenRotationCorrection>();
+                        tweenRotationCorrectionObjTr.euler = Vector3.zero;
+                        tweenRotationCorrectionObjTr.KillAllTween();
+                        Destroy(tweenRotationCorrectionObjTr);
+                        objTr.localScale = Vector3.one;
 
                         objTr.gameObject.SetActive(false);
                         break;
                     default:
+                        //Debug.LogError(lister[1]);
+
                         break;
                 }
                 break;
@@ -257,9 +296,11 @@ public class RoundController : MonoBehaviour
                 break;
             case "EndRound":
                 isMyRound = true;
-                round++;
+                ChangeRound();
                 roundClock = 0;
-                selentUIController.InRound(round);
+
+                selectUIController.InRound(round);
+
                 return 99999999;
             
             case "ChangeData":
@@ -304,7 +345,7 @@ public class RoundController : MonoBehaviour
                     case "LocalRotation":
                         TweenRotationCorrection objTween = objcd.GetComponent<TweenRotationCorrection>();
                         objTween.notLocal = false;
-                        objTween.euler = new Vector3(0, 0, float.Parse(lister[2]));
+                        objTween.euler = new Vector3(0, 0, MainControl.instance.RandomFloatChange(lister[2], objTween.euler.z));
                         break;
                     case "Position":
                         objcd.transform.position = (Vector3)MainControl.instance.StringVector2ToRealVector2(lister[3], objcd.transform.position);
@@ -312,7 +353,7 @@ public class RoundController : MonoBehaviour
                     case "Rotation":
                         TweenRotationCorrection objTweener = objcd.GetComponent<TweenRotationCorrection>();
                         objTweener.notLocal = true;
-                        objTweener.euler = new Vector3(0, 0, float.Parse(lister[2]));
+                        objTweener.euler = new Vector3(0, 0, MainControl.instance.RandomFloatChange(lister[2], objTweener.euler.z));
                         break;
                     case "Scale":
                         objcd.transform.localScale = (Vector3)MainControl.instance.StringVector2ToRealVector2(lister[3], objcd.transform.localScale);
@@ -334,6 +375,10 @@ public class RoundController : MonoBehaviour
                     case "Mask":
                         BulletController bulletController = objcd.GetComponent<BulletController>();
                         bulletController.SetMask(lister[3]);
+                        break;
+
+                    case "Script":
+                        objcd.AddComponent(Type.GetType(lister[3]));
                         break;
                 }
                 break;
@@ -400,21 +445,43 @@ public class RoundController : MonoBehaviour
                         if (lister[2] != "null")
                             obj.transform.localPosition = MainControl.instance.StringVector2ToRealVector2(lister[2], obj.transform.localPosition);
 
-                        tweenRotationCorrection.tweens.Add(
-                            DOTween.To(() => obj.transform.localPosition, x => obj.transform.localPosition = x, (Vector3)MainControl.instance.StringVector2ToRealVector2(lister[3], obj.transform.localPosition), float.Parse(lister[5]))
-                            .SetEase((Ease)System.Enum.Parse(typeof(Ease), lister[4]))
-                            .SetLoops(int.Parse(lister[6]), (LoopType)System.Enum.Parse(typeof(LoopType), lister[7]))
-                            .OnKill(() => LoadInheritList(lister[8], gameObject)));
+                        Vector3 endVector3Local = (Vector3)MainControl.instance.StringVector2ToRealVector2(lister[3], obj.transform.localPosition);
+
+                        if (obj.transform.position.x == endVector3Local.x)
+                        {
+                            tweenRotationCorrection.tweens.Add(
+                                 obj.transform.DOLocalMoveY(endVector3Local.y, float.Parse(lister[5]))
+                                .SetEase((Ease)System.Enum.Parse(typeof(Ease), lister[4]))
+                                .SetLoops(int.Parse(lister[6]), (LoopType)System.Enum.Parse(typeof(LoopType), lister[7]))
+                                .OnKill(() => LoadInheritList(lister[8], gameObject)));
+                        }
+                        else if (obj.transform.position.y == endVector3Local.y)
+                        {
+                            tweenRotationCorrection.tweens.Add(
+                                obj.transform.DOLocalMoveX(endVector3Local.x, float.Parse(lister[5]))
+                               .SetEase((Ease)System.Enum.Parse(typeof(Ease), lister[4]))
+                               .SetLoops(int.Parse(lister[6]), (LoopType)System.Enum.Parse(typeof(LoopType), lister[7]))
+                               .OnKill(() => LoadInheritList(lister[8], gameObject)));
+                        }
+                        else
+                        {
+                            tweenRotationCorrection.tweens.Add(
+                                 DOTween.To(() => obj.transform.localPosition, x => obj.transform.localPosition = x, endVector3Local, float.Parse(lister[5]))
+                                 .SetEase((Ease)System.Enum.Parse(typeof(Ease), lister[4]))
+                                 .SetLoops(int.Parse(lister[6]), (LoopType)System.Enum.Parse(typeof(LoopType), lister[7]))
+                                 .OnKill(() => LoadInheritList(lister[8], gameObject)));
+                        }
+
                         break;
 
                     case 2://局部旋转
                         TweenRotationCorrection objTween = tweenRotationCorrection;
                         objTween.notLocal = false;
                         if (lister[2] != "null")
-                            objTween.euler = new Vector3(0, 0, float.Parse(lister[2]));
+                            objTween.euler = new Vector3(0, 0, MainControl.instance.RandomFloatChange(lister[2], objTween.euler.z));
 
                         objTween.tweens.Add(
-                        DOTween.To(() => objTween.euler, x => objTween.euler = x, new Vector3(0, 0, float.Parse(lister[3])), float.Parse(lister[5]))
+                        DOTween.To(() => objTween.euler, x => objTween.euler = x, new Vector3(0, 0, MainControl.instance.RandomFloatChange(lister[3], objTween.euler.z)), float.Parse(lister[5]))
                            .SetEase((Ease)System.Enum.Parse(typeof(Ease), lister[4]))
                             .SetLoops(int.Parse(lister[6]), (LoopType)System.Enum.Parse(typeof(LoopType), lister[7]))
                             .OnKill(() => LoadInheritList(lister[8], gameObject)));
@@ -444,23 +511,51 @@ public class RoundController : MonoBehaviour
                             .OnKill(() => LoadInheritList(lister[8], gameObject)));
                         break;
                     case 5://世界坐标
+
+
                         if (lister[2] != "null")
                             obj.transform.position = MainControl.instance.StringVector2ToRealVector2(lister[2], obj.transform.position);
 
-                        tweenRotationCorrection.tweens.Add(
-                            DOTween.To(() => obj.transform.position, x => obj.transform.position = x, (Vector3)MainControl.instance.StringVector2ToRealVector2(lister[3], obj.transform.position), float.Parse(lister[5]))
-                            .SetEase((Ease)System.Enum.Parse(typeof(Ease), lister[4]))
-                            .SetLoops(int.Parse(lister[6]), (LoopType)System.Enum.Parse(typeof(LoopType), lister[7]))
-                            .OnKill(() => LoadInheritList(lister[8], gameObject)));
+                        Vector3 endVector3 = (Vector3)MainControl.instance.StringVector2ToRealVector2(lister[3], obj.transform.position);
+                        if (obj.transform.position.x == endVector3.x)
+                        {
+
+                            tweenRotationCorrection.tweens.Add(
+                                 obj.transform.DOMoveY(endVector3.y, float.Parse(lister[5]))
+                                .SetEase((Ease)System.Enum.Parse(typeof(Ease), lister[4]))
+                                .SetLoops(int.Parse(lister[6]), (LoopType)System.Enum.Parse(typeof(LoopType), lister[7]))
+                                .OnKill(() => LoadInheritList(lister[8], gameObject))
+                                );
+                        }
+                        else if (obj.transform.position.y == endVector3.y)
+                        {
+
+                            tweenRotationCorrection.tweens.Add(
+                                 obj.transform.DOMoveX(endVector3.x, float.Parse(lister[5]))
+                                .SetEase((Ease)Enum.Parse(typeof(Ease), lister[4]))
+                                .SetLoops(int.Parse(lister[6]), (LoopType)System.Enum.Parse(typeof(LoopType), lister[7]))
+                                .OnKill(() => LoadInheritList(lister[8], gameObject))
+                                );
+                        }
+                        else
+                        {
+                            tweenRotationCorrection.tweens.Add(
+                                DOTween.To(() => obj.transform.position, x => obj.transform.position = x, endVector3, float.Parse(lister[5]))
+                                .SetEase((Ease)Enum.Parse(typeof(Ease), lister[4]))
+                                .SetLoops(int.Parse(lister[6]), (LoopType)System.Enum.Parse(typeof(LoopType), lister[7]))
+                                .OnKill(() => LoadInheritList(lister[8], gameObject))
+                                );
+
+                        }
                         break;
 
                     case 6://世界旋转
                         TweenRotationCorrection objTweener = tweenRotationCorrection;
                         if (lister[2] != "null")
-                            objTweener.euler = new Vector3(0, 0, float.Parse(lister[2]));
+                            objTweener.euler = new Vector3(0, 0, MainControl.instance.RandomFloatChange(lister[2], objTweener.euler.z));
                         objTweener.notLocal = true;
                         objTweener.tweens.Add(
-                        DOTween.To(() => objTweener.euler, x => objTweener.euler = x, new Vector3(0, 0, float.Parse(lister[3])), float.Parse(lister[5]))
+                        DOTween.To(() => objTweener.euler, x => objTweener.euler = x, new Vector3(0, 0, MainControl.instance.RandomFloatChange(lister[3], objTweener.euler.z)), float.Parse(lister[5]))
                            .SetEase((Ease)System.Enum.Parse(typeof(Ease), lister[4]))
                             .SetLoops(int.Parse(lister[6]), (LoopType)System.Enum.Parse(typeof(LoopType), lister[7]))
                             .OnKill(() => LoadInheritList(lister[8], gameObject)));
@@ -521,7 +616,7 @@ public class RoundController : MonoBehaviour
                         else
                         {
                             GameObject returnObj = gameObj.transform.Find(MainControl.instance.MaxToOneSon(returnText.Substring(7))).gameObject;
-                            DOTween.Kill(returnObj);
+                            returnObj.GetComponent<TweenRotationCorrection>().KillAllTween();
                             ReturnPool(returnObj, returnObj.tag);
                         }
                         inheritList.RemoveAt(i);

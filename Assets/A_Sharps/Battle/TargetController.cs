@@ -16,7 +16,7 @@ public class TargetController : MonoBehaviour
     GameObject bar;
     public GameObject hpBar;
     [Header("父级传入")]
-    public int selent;
+    public int select;
 
     [Header("父级传入 要击打的怪物")]
     public EnemiesController hitMonster;
@@ -64,12 +64,12 @@ public class TargetController : MonoBehaviour
             hitDamage = (int)
                 (2.2f / 13.2f * (14 - Mathf.Abs(bar.transform.localPosition.x))//准确度系数
                 * (MainControl.instance.PlayerControl.atk + MainControl.instance.PlayerControl.wearAtk
-                - MainControl.instance.BattleControl.enemiesDEF[selent] + Random.Range(0, 2)));
+                - MainControl.instance.BattleControl.enemiesDEF[select] + Random.Range(0, 2)));
         else
             hitDamage = (int)
                  (2.2f / 13.2f * (14 - 0.8f)//准确度系数
                  * (MainControl.instance.PlayerControl.atk + MainControl.instance.PlayerControl.wearAtk
-                 - MainControl.instance.BattleControl.enemiesDEF[selent] + Random.Range(0, 2)));
+                 - MainControl.instance.BattleControl.enemiesDEF[select] + Random.Range(0, 2)));
 
         if (hitDamage <= 0)
         {
@@ -90,9 +90,9 @@ public class TargetController : MonoBehaviour
     {
 
         hitMonster.anim.SetBool("Hit", true);
-        hpBar.transform.localScale = new Vector3((float)MainControl.instance.BattleControl.enemiesHp[selent * 2] / MainControl.instance.BattleControl.enemiesHp[selent * 2 + 1], 1);
-        MainControl.instance.BattleControl.enemiesHp[selent * 2] -= hitDamage;
-        DOTween.To(() => hpBar.transform.localScale, x => hpBar.transform.localScale = x, new Vector3((float)MainControl.instance.BattleControl.enemiesHp[selent * 2] / MainControl.instance.BattleControl.enemiesHp[selent * 2 + 1], 1), 
+        hpBar.transform.localScale = new Vector3((float)MainControl.instance.BattleControl.enemiesHp[select * 2] / MainControl.instance.BattleControl.enemiesHp[select * 2 + 1], 1);
+        MainControl.instance.BattleControl.enemiesHp[select * 2] -= hitDamage;
+        DOTween.To(() => hpBar.transform.localScale, x => hpBar.transform.localScale = x, new Vector3((float)MainControl.instance.BattleControl.enemiesHp[select * 2] / MainControl.instance.BattleControl.enemiesHp[select * 2 + 1], 1), 
             0.75f).SetEase(Ease.OutSine);
     }
     void OpenPressZ()

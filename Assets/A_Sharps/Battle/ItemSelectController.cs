@@ -5,20 +5,20 @@ using DG.Tweening;
 /// <summary>
 /// ◊÷√Ê“‚Àº
 /// </summary>
-public class ItemSelentController : MonoBehaviour
+public class ItemSelectController : MonoBehaviour
 {
     public List<SpriteRenderer> sons;
     public List<GameObject> sonsChanged;
 
     public int myItemMax;
-    public int myItemSelent;
-    public int myItemRealSelent;
+    public int myItemSelect;
+    public int myItemRealSelect;
     Tween tweenSave;
 
-    //SelentUIController selentUIController;
+    //SelectUIController selectUIController;
     void Awake()
     {
-        //selentUIController = transform.parent.GetComponent<SelentUIController>();
+        //selectUIController = transform.parent.GetComponent<SelectUIController>();
         for (int i = 0; i < transform.childCount; i++)
         {
             sons.Add(transform.GetChild(i).GetComponent<SpriteRenderer>());
@@ -47,20 +47,20 @@ public class ItemSelentController : MonoBehaviour
     }
     private void Update()
     {
-        if (myItemRealSelent > 0 && sons[0].color.a == 0)
+        if (myItemRealSelect > 0 && sons[0].color.a == 0)
         {
             DOTween.To(() => sons[0].color, x => sons[0].color = x, new Color(1, 1, 1, 1), 0.15f).SetEase(Ease.Linear);
         }
-        else if (myItemRealSelent == 0 && sons[0].color.a > 0)
+        else if (myItemRealSelect == 0 && sons[0].color.a > 0)
         {
             DOTween.To(() => sons[0].color, x => sons[0].color = x, new Color(1, 1, 1, 0), 0.1f).SetEase(Ease.Linear);
         }
 
-        if (myItemRealSelent < myItemMax - 1 && sons[1].color.a == 0)
+        if (myItemRealSelect < myItemMax - 1 && sons[1].color.a == 0)
         {
             DOTween.To(() => sons[1].color, x => sons[1].color = x, new Color(1, 1, 1, 1), 0.15f).SetEase(Ease.Linear);
         }
-        else if (myItemRealSelent == myItemMax - 1 && sons[1].color.a > 0)
+        else if (myItemRealSelect == myItemMax - 1 && sons[1].color.a > 0)
         {
             DOTween.To(() => sons[1].color, x => sons[1].color = x, new Color(1, 1, 1, 0), 0.1f).SetEase(Ease.Linear);
         }
@@ -69,12 +69,12 @@ public class ItemSelentController : MonoBehaviour
     public void PressDown(bool isUp)
     {
         tweenSave.Kill(true);
-        if (!isUp && myItemSelent > 0)
-            sonsChanged[myItemSelent - 1].transform.localScale = Vector3.one * 2;
-        else if (myItemSelent < myItemMax - 1)
-            sonsChanged[myItemSelent + 1].transform.localScale = Vector3.one * 2;
-        sonsChanged[myItemSelent].transform.localScale = Vector3.one * 2;
-        tweenSave = DOTween.To(() => sonsChanged[myItemSelent].transform.localScale,x => sonsChanged[myItemSelent].transform.localScale = x, Vector3.one * 3, 0.5f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
+        if (!isUp && myItemSelect > 0)
+            sonsChanged[myItemSelect - 1].transform.localScale = Vector3.one * 2;
+        else if (myItemSelect < myItemMax - 1)
+            sonsChanged[myItemSelect + 1].transform.localScale = Vector3.one * 2;
+        sonsChanged[myItemSelect].transform.localScale = Vector3.one * 2;
+        tweenSave = DOTween.To(() => sonsChanged[myItemSelect].transform.localScale,x => sonsChanged[myItemSelect].transform.localScale = x, Vector3.one * 3, 0.5f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
     }
     public void Close()
     {

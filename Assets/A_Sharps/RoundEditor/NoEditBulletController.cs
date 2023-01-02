@@ -9,7 +9,7 @@ public class NoEditBulletController : MonoBehaviour
     public List<Sprite> sprites;
     SpriteRenderer spriteRenderer;
     [Header(" «∑Ò—°‘Ò¡Àspr")]
-    public bool isSelentSprite;
+    public bool isSelectSprite;
     public float spinSpeed, randomClockMax;
     float randomClock, euler;
     int random, dir;
@@ -36,7 +36,7 @@ public class NoEditBulletController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isSelentSprite)
+        if (!isSelectSprite)
         {
             if (randomClock < 0)
             {

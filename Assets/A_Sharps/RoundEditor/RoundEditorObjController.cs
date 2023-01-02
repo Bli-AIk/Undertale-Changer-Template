@@ -9,9 +9,9 @@ using System.Runtime.InteropServices;
 /// </summary>
 public class RoundEditorObjController : MonoBehaviour
 {
-    //intTmp为引用data行数，selent为选择数。此两项内任意一项若选择负数则为不引用该项。
+    //intTmp为引用data行数，select为选择数。此两项内任意一项若选择负数则为不引用该项。
     public List<int> intTmp;
-    public int intSelent;
+    public int intSelect;
     RoundEditorController roundEditorController;
     TextMeshPro tmp;
     SpriteRenderer tmpSprParent;
@@ -21,7 +21,7 @@ public class RoundEditorObjController : MonoBehaviour
     public bool spExchange;
 
     /*
-    [Header("鼠标按下selent不变(多用于创建相关)")]
+    [Header("鼠标按下select不变(多用于创建相关)")]
     public bool mouseMode;
     */
     private void Start()
@@ -38,7 +38,7 @@ public class RoundEditorObjController : MonoBehaviour
             tmpSprParent = transform.parent.GetComponent<SpriteRenderer>();
         }
 
-        if (intSelent == roundEditorController.selent && intSelent >= 0)
+        if (intSelect == roundEditorController.select && intSelect >= 0)
         {
             tmp.color = new Color(1, 1, 0, 1);
             if (colorTmpPlusParent)
@@ -58,9 +58,9 @@ public class RoundEditorObjController : MonoBehaviour
     /// </summary>
     private void OnMouseEnter()
     {
-        if (roundEditorController.selent != intSelent && roundEditorController.inputNum <= 0)
+        if (roundEditorController.select != intSelect && roundEditorController.inputNum <= 0)
         {
-            roundEditorController.selent = intSelent;
+            roundEditorController.select = intSelect;
             AudioController.instance.GetFx(0, MainControl.instance.AudioControl.fxClipUI);
 
         }
@@ -68,7 +68,7 @@ public class RoundEditorObjController : MonoBehaviour
 
     private void OnMouseOver()
     {
-        if(Input.GetMouseButtonDown(0) && roundEditorController.selent <= roundEditorController.selentMax)
+        if(Input.GetMouseButtonDown(0) && roundEditorController.select <= roundEditorController.selectMax)
         {
             if (roundEditorController.inputNum <= 0)
                 roundEditorController.DownKey(/*mouseMode*/);
@@ -78,15 +78,15 @@ public class RoundEditorObjController : MonoBehaviour
           
             if (Input.GetMouseButtonDown(0))
             {
-                if (!roundEditorController.fileSaver.files[roundEditorController.selent - roundEditorController.selentMax - 1].GetComponent<RoundEditorFileController>().isSelent)
+                if (!roundEditorController.fileSaver.files[roundEditorController.select - roundEditorController.selectMax - 1].GetComponent<RoundEditorFileController>().isSelect)
                 {
 
-                    roundEditorController.fileSaver.files[roundEditorController.selent - roundEditorController.selentMax - 1].GetComponent<RoundEditorFileController>().isSelent = true;
-                    roundEditorController.isSelentOne++;
+                    roundEditorController.fileSaver.files[roundEditorController.select - roundEditorController.selectMax - 1].GetComponent<RoundEditorFileController>().isSelect = true;
+                    roundEditorController.isSelectOne++;
 
                     AudioController.instance.GetFx(2, MainControl.instance.AudioControl.fxClipBattle);
-                    if (roundEditorController.isSelentOne == 1)
-                        roundEditorController.FindOneSelentNum();
+                    if (roundEditorController.isSelectOne == 1)
+                        roundEditorController.FindOneSelectNum();
                 }
                 else
                 {
@@ -96,10 +96,10 @@ public class RoundEditorObjController : MonoBehaviour
             }
             else if (Input.GetMouseButtonDown(1))
             {
-                roundEditorController.fileSaver.files[roundEditorController.selent - roundEditorController.selentMax - 1].GetComponent<RoundEditorFileController>().isSelent = false;
-                roundEditorController.isSelentOne--; 
-                if (roundEditorController.isSelentOne == 1)
-                    roundEditorController.FindOneSelentNum();
+                roundEditorController.fileSaver.files[roundEditorController.select - roundEditorController.selectMax - 1].GetComponent<RoundEditorFileController>().isSelect = false;
+                roundEditorController.isSelectOne--; 
+                if (roundEditorController.isSelectOne == 1)
+                    roundEditorController.FindOneSelectNum();
             }
 
         }

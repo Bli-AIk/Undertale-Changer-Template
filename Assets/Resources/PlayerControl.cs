@@ -21,4 +21,9 @@ public class PlayerControl : ScriptableObject
     public int wearArm, wearArmor;
     public bool canMove;
     public Vector3 deadPos;
+
+    [Header("³¡¾°ÏÎ½Ó´æ´¢")]
+    public Vector3 scenePos;
+    public Vector2 animDirection;
+    public string lastScene;
 }

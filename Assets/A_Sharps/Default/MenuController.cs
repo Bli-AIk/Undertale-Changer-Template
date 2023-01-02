@@ -9,7 +9,7 @@ public class MenuController : MonoBehaviour
 {
     [Header("玩家名-LV-时间-位置-具体选项-底部字")]
     public List<TextMeshPro> tmps;
-    public int selent, selentMax;
+    public int select, selectMax = 3;
     public int layer;
     CanvasController canvasController;
     private void Awake()
@@ -38,7 +38,7 @@ public class MenuController : MonoBehaviour
         List<string> list = new List<string>();
         for (int i = 0; i < 4; i++)
         {
-            if (i != selent)
+            if (i != select)
                 list.Add("");
             else list.Add("<color=yellow>");
         }
@@ -56,32 +56,32 @@ public class MenuController : MonoBehaviour
 
         if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow))
         {
-            selent--;
+            select--;
         }
         else if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow))
         {
-            selent -= 2;
+            select -= 2;
         }
         if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow))
         {
-            selent++;
+            select++;
         }
         else if (MainControl.instance.KeyArrowToControl(KeyCode.DownArrow))
         {
-            selent += 2;
+            select += 2;
         }
-        if (selent < 0)
+        if (select < 0)
         {
-            if (selent % 2 != 0)
-                selent = selentMax;
+            if (select % 2 != 0)
+                select = selectMax;
             else
-                selent = selentMax - 1;
+                select = selectMax - 1;
         }
-        if (selent > selentMax)
+        if (select > selectMax)
         {
-            if (selent % 2 == 0)
-                selent = 0;
-            else selent = 1;
+            if (select % 2 == 0)
+                select = 0;
+            else select = 1;
 
         }
         if (layer == 0)
@@ -91,7 +91,7 @@ public class MenuController : MonoBehaviour
                 List<string> list = new List<string>();
                 for (int i = 0; i < 4; i++)
                 {
-                    if (i != selent)
+                    if (i != select)
                         list.Add("");
                     else list.Add("<color=yellow>");
                 }
@@ -99,13 +99,13 @@ public class MenuController : MonoBehaviour
             }
             if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
             {
-                switch (selent)
+                switch (select)
                 {
                     case 0:
-                        MainControl.instance.OutBlack("Corridor", true);
+                        MainControl.instance.OutBlack("Corridor", Color.black, true);
                         break;
                     case 1:
-                        MainControl.instance.OutBlack("Rename", true);
+                        MainControl.instance.OutBlack("Rename", Color.black, true);
                         break;
                     case 2:
                         canvasController.InSetting();

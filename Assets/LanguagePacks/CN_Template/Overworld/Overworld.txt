@@ -52,3 +52,5 @@ Plot\<Image=-1><FX=0>* .</stop>.</stop>.</stop>.</stop>.</stop>.
 </passText><Image=-1><FX=0>* 我超，</stop>花！</stop></enter>* 但是你这花影都没有，</stop></enter>< >< >啥意思啊？
 </passText><Image=2><FX=2>* 闭嘴啊。</stop></stop></stop></stop></stop><Image=1>来对战，</stop>麻溜的。
 ;
+
+BackMenu\<Image=-1><FX=1>* (这是测试文本喵。)</enter>* (要回到MENU场景喵？)</enter><FX=-1><size=5> </size>< >< >< >< >< >< >  喵<size=5> </size>< >< >< >< >< >< >< >  嬲</select>BackMenu;

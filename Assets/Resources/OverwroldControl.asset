@@ -14,10 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   languagePack: 2
   pause: 0
+  tmpFonts:
+  - {fileID: 11400000, guid: 3c24208bcb2fde7488b42e2ffe8c922a, type: 2}
+  - {fileID: 11400000, guid: 953652b0168c362499772adfae78ec91, type: 2}
+  - {fileID: 11400000, guid: cc082749fb53e2246a86ef4f3aab4943, type: 2}
+  - {fileID: 11400000, guid: 2fb4bf2c8426f4a48baa87d88688e4e9, type: 2}
   textWidth: 0
   resolutionLevel: 0
   fullScreen: 0
-  backGround: 0
   mainVolume: 1
   noSFX: 0
   openFPS: 0
@@ -58,7 +62,9 @@ MonoBehaviour:
     one??\r\n</passText><Image=0><FX=2>* SquarePants, shut up.\r\n</passText><Image=-1><FX=0>*
     WHAT,</stop>FLOWEY!</stop></enter>* But you have no shadow,</stop></enter>< ><
     >What's wrong with you?\r\n</passText><Image=2><FX=2>* Shut up,</stop></stop></stop></stop></stop><Image=1>and
-    fight,</stop></enter>< >< >hurry up.\r\n;\r\n"
+    fight,</stop></enter>< >< >hurry up.\r\n;\r\n\r\nBackMenu\\<Image=-1><FX=1>*
+    (This is the test text meow.)</enter>* (Return to MENU scene meow?)</enter><FX=-1><size=5>
+    </size>< >< >< >< >< >< >   Meow<size=5> </size>< >< >< >< >< >< >< > Nahh</select>BackMenu;"
   owTextsSave:
   - "DemoBox1\\\u9F35-1\u9F35\u83D40\u83D4* This is a broken box\u9F98.\u9F98.\u9F98.\n*
     WTF,why is there no interface?!\u8F42\u9F350\u9F35\u83D42\u83D4Never \u9F98\u9F351\u9F35gonna\u83D43\u83D4\n\u7C9C
@@ -76,6 +82,10 @@ MonoBehaviour:
     no shadow,\u9F98\n\u7C9C \u7C9C What's wrong with you?\u8F42\u9F352\u9F35\u83D42\u83D4*
     Shut up,\u9F98\u9F98\u9F98\u9F98\u9F98\u9F351\u9F35and fight,\u9F98\n\u7C9C \u7C9C
     hurry up.;"
+  - "BackMenu\\\u9F35-1\u9F35\u83D41\u83D4* (This is the test text meow.)\n* (Return
+    to MENU scene meow?)\n\u83D4-1\u83D4<size=5> </size>\u7C9C \u7C9C \u7C9C \u7C9C
+    \u7C9C \u7C9C    Meow<size=5> </size>\u7C9C \u7C9C \u7C9C \u7C9C \u7C9C \u7C9C
+    \u7C9C  Nahh\u79A4BackMenu;"
   menuAndSettingAsset: "/*\r\nText storage in MENU and settings.\r\n\r\nFormat:\r\n\r\nRead
     Name\\Text;\r\n\r\n\r\nGenerally speaking, the read name is fixed.\r\nSpecifically,\r\nRenameSp\\name|true|true|text;\r\nThe
     format is the setting when trying to name a special name. The first true or false
@@ -401,8 +411,15 @@ MonoBehaviour:
     determined\u9F98.\u9F98.\u9F98.;"
   - "GameOver3\\Don't lost hope!\u8F42Chara!\u9F98\u9F98\u9F98\nStay determined\u9F98.\u9F98.\u9F98.;"
   - "GameOver4\\It cannot end\nnow!\u8F42Chara!\u9F98\u9F98\u9F98\nStay determined\u9F98.\u9F98.\u9F98.;"
+  safeText: "Undertale:Changer is based \r\non Unity Engine produced \r\nUndertale
+    fan game template.\r\nIt is strongly recommended that \r\nyou visit undertale.com
+    to purchase\r\nand play the original game.\r\nThis template is open source\r\non
+    Gamejolt and Github according to\r\nGNU General Public License v3.0.\r\nIt is
+    strictly prohibited to sell\r\nthis template, its modified version\r\nand games
+    made based on the template\r\nin any form."
   isSetting: 0
   keyCodes: 120100001301000011010000140100007a0000007800000063000000760000001d01000000000000000000001b000000
   keyCodesBack1: 730000006400000077000000610000000d0000002f010000310100000000000000000000000000000000000000000000
   keyCodesBack2: 000000000000000000000000000000000000000030010000320100000000000000000000000000000000000000000000
   isDebug: 0
+  invincible: 0

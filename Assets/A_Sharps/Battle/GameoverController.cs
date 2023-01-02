@@ -31,7 +31,7 @@ public class GameoverController : MonoBehaviour
         
         m_ParticleSystem.transform.localPosition = new Vector3(0, 0, -5);
         foolDay = DateTime.Now.Month == 4 && DateTime.Now.Day == 1;
-        bgm = GameObject.Find("BGM Source").GetComponent<AudioSource>();
+        bgm = AudioController.instance.audioSource;
         bgm.clip = clips[Convert.ToInt32(foolDay)];
         player.transform.position = MainControl.instance.PlayerControl.deadPos;
         m_ParticleSystem.transform.position = MainControl.instance.PlayerControl.deadPos;
@@ -95,17 +95,19 @@ public class GameoverController : MonoBehaviour
         if (!typeWritter.isTyping && MainControl.instance.KeyArrowToControl(KeyCode.Z) && canChangeSence)
         {
             typeWritter.endString = "";
-            MainControl.instance.OutBlack("Corridor", true, 2);
+            MainControl.instance.OutBlack("Corridor", Color.black, true, 2);
             canChangeSence = false;
         }
 
         if (MainControl.instance.KeyArrowToControl(KeyCode.C) && canChangeSenceForC)
         {
-            MainControl.instance.OutBlack("Corridor", true);
+            MainControl.instance.OutBlack("Corridor", Color.black, true);
             typeWritter.TypeStop();
             canChangeSenceForC = false;
         }
         tmp.text = typeWritter.endString;
+        if (tmp.font != MainControl.instance.OverwroldControl.tmpFonts[typeWritter.useFont])
+            tmp.font = MainControl.instance.OverwroldControl.tmpFonts[typeWritter.useFont];
 
     }
 }

@@ -17,16 +17,28 @@ public class TweenRotationCorrection : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(notLocal)
+
+
+        if (notLocal)
             transform.rotation = Quaternion.Euler(euler);
         else
             transform.localRotation = Quaternion.Euler(euler);
     }
     public void KillAllTween()
     {
+        
         for (int i = 0; i < tweens.Count; i++)
         {
-            tweens[i].Kill();
+            tweens[i].Kill(true);
         }
+        
+        tweens = new List<Tween>();
+        euler = new Vector3();
+        transform.rotation = Quaternion.Euler(euler);
+        notLocal = false;
+        transform.position = new Vector3();
+        
+        
+        
     }
 }

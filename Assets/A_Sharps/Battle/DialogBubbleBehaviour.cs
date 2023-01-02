@@ -32,6 +32,8 @@ public class DialogBubbleBehaviour : MonoBehaviour
     void Update()
     {
         tmp.text = typeWritter.endString;
+        if (tmp.font != MainControl.instance.OverwroldControl.tmpFonts[typeWritter.useFont])
+            tmp.font = MainControl.instance.OverwroldControl.tmpFonts[typeWritter.useFont];
     }
 
     /// <summary>

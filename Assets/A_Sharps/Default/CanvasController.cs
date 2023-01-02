@@ -23,9 +23,9 @@ public class CanvasController : MonoBehaviour
     Image setting, settingSoul;
     TextMeshProUGUI settingTmp, settingTmpSon, settingTmpUnder;
     public RenderMode renderMode;
-    public int settingSelent, settingSelentMax;//目前 Max仅用于配置语言包
+    public int settingSelect, settingSelectMax;//目前 Max仅用于配置语言包
     public int settingLevel;//切换层级 0层默认 1层按键设置 2层语言包配置
-    public int controlPage, controlSelent;//Page是翻页 Selent是切换主次按键设置
+    public int controlPage, controlSelect;//Page是翻页 Select是切换主次按键设置
     public bool isSettingName;//是否选中
     public bool canNotSetting;
     float saveVolume;
@@ -63,7 +63,7 @@ public class CanvasController : MonoBehaviour
         /*
      foreach (var item in Screen.resolutions)
      {
-         Debug.Log(item);
+         //Debug.Log(item);
      }
      */
         typeWritters = (TypeWritter[])Resources.FindObjectsOfTypeAll(typeof(TypeWritter));
@@ -112,7 +112,7 @@ public class CanvasController : MonoBehaviour
 
                 for (int i = 0; i < 6; i++)
                 {
-                    if (isSetting && i == settingSelent)
+                    if (isSetting && i == settingSelect)
                         strings.Add("<color=yellow>");
                     else
                         strings.Add("");
@@ -135,11 +135,11 @@ public class CanvasController : MonoBehaviour
                         settingTmpSon.text = "";
                         for (int i = 0; i < 6; i++)
                         {
-                            if (isSetting && i == settingSelent)
+                            if (isSetting && i == settingSelect)
                             {
                                 settingTmpSon.text += "<color=yellow>";
                             }
-                            switch (controlSelent)
+                            switch (controlSelect)
                             {
                                 case 0:
                                     settingTmpSon.text += MainControl.instance.OverwroldControl.keyCodes[i] + "</color>\n";
@@ -168,11 +168,11 @@ public class CanvasController : MonoBehaviour
                         settingTmpSon.text = "";
                         for (int i = 6; i < 12; i++)
                         {
-                            if (isSetting && i - 6 == settingSelent)
+                            if (isSetting && i - 6 == settingSelect)
                             {
                                 settingTmpSon.text += "<color=yellow>";
                             }
-                            switch (controlSelent)
+                            switch (controlSelect)
                             {
                                 case 0:
                                     settingTmpSon.text += MainControl.instance.OverwroldControl.keyCodes[i] + "</color>\n";
@@ -195,37 +195,37 @@ public class CanvasController : MonoBehaviour
 
                 if (isSetting)
                 {
-                    MainControl.instance.Initialization(settingSelent);
+                    MainControl.instance.Initialization(settingSelect);
                 }
                 if (!OnlySetSon)
                     settingTmp.text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "LanguagePack")+'\n';
                 settingTmpSon.text = "";
-                settingSelentMax = 0;
-                int settingSelentBack = settingSelent;
+                settingSelectMax = 0;
+                int settingSelectBack = settingSelect;
                 if (OnlySetSon)
-                    settingSelent = MainControl.instance.OverwroldControl.languagePack;
+                    settingSelect = MainControl.instance.OverwroldControl.languagePack;
 
                 foreach (string pathString in Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage"))//内置包信息
                 {
 
-                    if (settingSelentMax == settingSelent)
+                    if (settingSelectMax == settingSelect)
                     {
                         pathStringSaver = pathString;
                     }
-                    settingSelentMax++;
+                    settingSelectMax++;
                     if (!OnlySetSon)
                         settingTmp.text += GetLanguagePackageName(pathString, "LanguagePackName") + '\n';
                         
                 }
                 foreach (string pathString in Directory.GetDirectories(Application.dataPath + "\\LanguagePacks"))
                 {
-                    if (settingSelentMax == settingSelent)
+                    if (settingSelectMax == settingSelect)
                         pathStringSaver = pathString;
-                    settingSelentMax++;
+                    settingSelectMax++;
                     if (!OnlySetSon)
                         settingTmp.text += GetLanguagePackageName(pathString, "LanguagePackName") + '\n';
 
-                    //if (settingSelentMax % 5 == 0 && !OnlySetSon)
+                    //if (settingSelectMax % 5 == 0 && !OnlySetSon)
                     //    settingTmp.text += MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "PageNext") + '\n';
 
                 }
@@ -235,7 +235,7 @@ public class CanvasController : MonoBehaviour
                 settingTmpUnder.text = GetLanguagePackageName(pathStringSaver, "LanguagePackInformation") + '\n' + GetLanguagePackageName(pathStringSaver, "LanguagePackAuthor");
 
 
-                settingSelent = settingSelentBack;
+                settingSelect = settingSelectBack;
                 break;
         }
      
@@ -315,30 +315,30 @@ public class CanvasController : MonoBehaviour
                     default:
                         KeyCode origin = KeyCode.None;
                       
-                        switch (controlSelent)
+                        switch (controlSelect)
                         {
                             case 0:
-                                origin = MainControl.instance.OverwroldControl.keyCodes[settingSelent + j];
-                                MainControl.instance.OverwroldControl.keyCodes[settingSelent + j] = SettingControl();
+                                origin = MainControl.instance.OverwroldControl.keyCodes[settingSelect + j];
+                                MainControl.instance.OverwroldControl.keyCodes[settingSelect + j] = SettingControl();
                                 goto default;
                             case 1:
-                                origin = MainControl.instance.OverwroldControl.keyCodesBack1[settingSelent + j];
-                                MainControl.instance.OverwroldControl.keyCodesBack1[settingSelent + j] = SettingControl();
+                                origin = MainControl.instance.OverwroldControl.keyCodesBack1[settingSelect + j];
+                                MainControl.instance.OverwroldControl.keyCodesBack1[settingSelect + j] = SettingControl();
                                 goto default;
                             case 2:
-                                origin = MainControl.instance.OverwroldControl.keyCodesBack2[settingSelent + j];
-                                MainControl.instance.OverwroldControl.keyCodesBack2[settingSelent + j] = SettingControl();
+                                origin = MainControl.instance.OverwroldControl.keyCodesBack2[settingSelect + j];
+                                MainControl.instance.OverwroldControl.keyCodesBack2[settingSelect + j] = SettingControl();
                                 goto default;
                             default:
                                 List<KeyCode> keycodes = new List<KeyCode>()
                                 {
-                                    MainControl.instance.OverwroldControl.keyCodes[settingSelent + j],
-                                    MainControl.instance.OverwroldControl.keyCodesBack1[settingSelent + j],
-                                    MainControl.instance.OverwroldControl.keyCodesBack2[settingSelent + j]
+                                    MainControl.instance.OverwroldControl.keyCodes[settingSelect + j],
+                                    MainControl.instance.OverwroldControl.keyCodesBack1[settingSelect + j],
+                                    MainControl.instance.OverwroldControl.keyCodesBack2[settingSelect + j]
                                 };
                                 for (int i = 0; i < MainControl.instance.OverwroldControl.keyCodes.Count; i++)
                                 {
-                                    if (MainControl.instance.OverwroldControl.keyCodes[i] == keycodes[controlSelent] && i != settingSelent + j)
+                                    if (MainControl.instance.OverwroldControl.keyCodes[i] == keycodes[controlSelect] && i != settingSelect + j)
                                     {
                                         MainControl.instance.OverwroldControl.keyCodes[i] = origin;
                                         break;
@@ -346,7 +346,7 @@ public class CanvasController : MonoBehaviour
                                 }
                                 for (int i = 0; i < MainControl.instance.OverwroldControl.keyCodesBack1.Count; i++)
                                 {
-                                    if (MainControl.instance.OverwroldControl.keyCodesBack1[i] == keycodes[controlSelent] && i != settingSelent + j)
+                                    if (MainControl.instance.OverwroldControl.keyCodesBack1[i] == keycodes[controlSelect] && i != settingSelect + j)
                                     {
                                         MainControl.instance.OverwroldControl.keyCodesBack1[i] = origin;
                                         break;
@@ -354,7 +354,7 @@ public class CanvasController : MonoBehaviour
                                 }
                                 for (int i = 0; i < MainControl.instance.OverwroldControl.keyCodesBack2.Count; i++)
                                 {
-                                    if (MainControl.instance.OverwroldControl.keyCodesBack2[i] == keycodes[controlSelent] && i != settingSelent + j)
+                                    if (MainControl.instance.OverwroldControl.keyCodesBack2[i] == keycodes[controlSelect] && i != settingSelect + j)
                                     {
                                         MainControl.instance.OverwroldControl.keyCodesBack2[i] = origin;
                                         break;
@@ -388,7 +388,7 @@ public class CanvasController : MonoBehaviour
             if (!MainControl.instance.OverwroldControl.isSetting)
                 return;
 
-            settingSoul.rectTransform.anchoredPosition = new Vector2(-325f, -28f + settingSelent * -37);
+            settingSoul.rectTransform.anchoredPosition = new Vector2(-325f, -28f + settingSelect * -37);
 
             if (settingTmp.rectTransform.anchoredPosition.x > 125)
             {
@@ -401,16 +401,16 @@ public class CanvasController : MonoBehaviour
                             if (MainControl.instance.KeyArrowToControl(KeyCode.DownArrow))
                             {
                                 AudioController.instance.GetFx(0, MainControl.instance.AudioControl.fxClipUI);
-                                settingSelent++;
-                                if (settingSelent > 7)
-                                    settingSelent = 0;
+                                settingSelect++;
+                                if (settingSelect > 7)
+                                    settingSelect = 0;
                             }
                             else if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow))
                             {
                                 AudioController.instance.GetFx(0, MainControl.instance.AudioControl.fxClipUI);
-                                settingSelent--;
-                                if (settingSelent < 0)
-                                    settingSelent = 7;
+                                settingSelect--;
+                                if (settingSelect < 0)
+                                    settingSelect = 7;
                             }
                         }
                         else
@@ -440,7 +440,7 @@ public class CanvasController : MonoBehaviour
                         {
                             AudioController.instance.GetFx(1, MainControl.instance.AudioControl.fxClipUI);
                             if (!isSettingName)
-                                switch (settingSelent)
+                                switch (settingSelect)
                                 {
                                     case 0:
                                         saveVolume = MainControl.instance.OverwroldControl.mainVolume;
@@ -450,7 +450,7 @@ public class CanvasController : MonoBehaviour
                                     case 1:
                                         settingLevel = 1;
                                         SettingText();
-                                        settingSelent = 0;
+                                        settingSelect = 0;
                                         break;
                                     case 2:
                                         MainControl.instance.OverwroldControl.fullScreen = !MainControl.instance.OverwroldControl.fullScreen;
@@ -474,7 +474,7 @@ public class CanvasController : MonoBehaviour
                                             goto case 7;
                                         else
                                         {
-                                            MainControl.instance.OutBlack("Menu", true);
+                                            MainControl.instance.OutBlack("Menu", Color.black, true);
                                             freeze = true;
                                             break;
                                         }
@@ -507,7 +507,7 @@ public class CanvasController : MonoBehaviour
                         }
 
                         string textForUnder = "";
-                        switch (settingSelent)
+                        switch (settingSelect)
                         {
 
                             case 0:
@@ -544,23 +544,23 @@ public class CanvasController : MonoBehaviour
                         if (MainControl.instance.KeyArrowToControl(KeyCode.DownArrow))
                         {
                             AudioController.instance.GetFx(0, MainControl.instance.AudioControl.fxClipUI);
-                            settingSelent++;
-                            if (settingSelent > 8)
-                                settingSelent = 0;
+                            settingSelect++;
+                            if (settingSelect > 8)
+                                settingSelect = 0;
                         }
                         else if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow))
                         {
                             AudioController.instance.GetFx(0, MainControl.instance.AudioControl.fxClipUI);
-                            settingSelent--;
-                            if (settingSelent < 0)
-                                settingSelent = 8;
+                            settingSelect--;
+                            if (settingSelect < 0)
+                                settingSelect = 8;
                         }
                         if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
                         {
                             AudioController.instance.GetFx(1, MainControl.instance.AudioControl.fxClipUI);
-                            if (settingSelent < 6)
+                            if (settingSelect < 6)
                                 isSettingControl = true;
-                            else if (settingSelent == 6)
+                            else if (settingSelect == 6)
                                 switch (controlPage)
                                 {
                                     case 0:
@@ -570,12 +570,12 @@ public class CanvasController : MonoBehaviour
                                         controlPage = 0;
                                         break;
                                 }
-                            else if (settingSelent == 7)
+                            else if (settingSelect == 7)
                                 MainControl.instance.ApplyDefaultControl();
                             else
                             {
                                 settingLevel = 0;
-                                settingSelent = 0;
+                                settingSelect = 0;
 
                                 SettingText();
                                 return;
@@ -586,7 +586,7 @@ public class CanvasController : MonoBehaviour
                         else if (MainControl.instance.KeyArrowToControl(KeyCode.X))
                         {
                             settingLevel = 0;
-                            settingSelent = 0;
+                            settingSelect = 0;
 
                             SettingText();
                             return;
@@ -594,37 +594,37 @@ public class CanvasController : MonoBehaviour
                         else if (MainControl.instance.KeyArrowToControl(KeyCode.C))
                         {
                             AudioController.instance.GetFx(3, MainControl.instance.AudioControl.fxClipUI);
-                            if (controlSelent < 2)
-                                controlSelent++;
-                            else controlSelent = 0;
+                            if (controlSelect < 2)
+                                controlSelect++;
+                            else controlSelect = 0;
 
                             SettingText();
                         }
-                        settingTmpUnder.text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "ControlUnder" + controlSelent);
+                        settingTmpUnder.text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "ControlUnder" + controlSelect);
 
                         break;
                     case 2:
                         if (MainControl.instance.KeyArrowToControl(KeyCode.DownArrow))
                         {
                             AudioController.instance.GetFx(0, MainControl.instance.AudioControl.fxClipUI);
-                            settingSelent++;
-                            if (settingSelent > settingSelentMax)
-                                settingSelent = 0;
+                            settingSelect++;
+                            if (settingSelect > settingSelectMax)
+                                settingSelect = 0;
                         }
                         else if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow))
                         {
                             AudioController.instance.GetFx(0, MainControl.instance.AudioControl.fxClipUI);
-                            settingSelent--;
-                            if (settingSelent < 0)
-                                settingSelent = settingSelentMax;
+                            settingSelect--;
+                            if (settingSelect < 0)
+                                settingSelect = settingSelectMax;
                         }
                         if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
                         {
-                            if (settingSelent != settingSelentMax)
+                            if (settingSelect != settingSelectMax)
                             {
                                 AudioController.instance.GetFx(1, MainControl.instance.AudioControl.fxClipUI);
                                 SettingText(false, true);
-                                MainControl.instance.OverwroldControl.languagePack = settingSelent;
+                                MainControl.instance.OverwroldControl.languagePack = settingSelect;
                             }
                             else
                             {
@@ -675,7 +675,7 @@ public class CanvasController : MonoBehaviour
         DOTween.To(() => setting.rectTransform.sizeDelta, x => setting.rectTransform.sizeDelta = x, new Vector2(6000, setting.rectTransform.sizeDelta.y), 0.75f).SetEase(Ease.InCirc);
         settingTmp.DOColor(Color.white, 1).SetEase(Ease.InCubic);
         DOTween.To(() => settingTmp.rectTransform.anchoredPosition, x => settingTmp.rectTransform.anchoredPosition = x, new Vector2(140, 140), 1).SetEase(Ease.OutCubic);
-        settingSelent = 0;
+        settingSelect = 0;
         settingTmpUnder.text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "ControlEggshell");
         SettingText();
         if(settingLevel == 2)
@@ -740,7 +740,7 @@ public class CanvasController : MonoBehaviour
         RectTransform i = transform.Find("Heart").GetComponent<RectTransform>();
         Image j = i.GetComponent<Image>();
         j.DOColor(new Color(j.color.r, j.color.g, j.color.b, 0), 0.75f).SetEase(Ease.Linear);
-        DOTween.To(() => i.anchoredPosition, x => i.anchoredPosition = x, new Vector2(-330, -250), 1.5f).SetEase(Ease.OutCirc).OnKill(() => MainControl.instance.OutBlack("Battle", false, 0.5f));
+        DOTween.To(() => i.anchoredPosition, x => i.anchoredPosition = x, new Vector2(-330, -250), 1.5f).SetEase(Ease.OutCirc).OnKill(() => MainControl.instance.OutBlack("Battle", Color.black, false, 0.5f));
         
     }
     public void PlayFX(int i)

@@ -12,7 +12,7 @@ The pivot point is the upper left corner.
 It is generally not recommended to change the bubble size ratio (unless the word size is too large). Set it above (2,2) to prevent pixel distortion caused by too small
 */
 
-(4,3)\(2,1.5)\NPC1\false\-1.5\Well，you still stand here, which means you still have some ability;
-(4,3)\(2,1.5)\NPC1\false\-1.5\But you don't have many abilities, huh?;
-(4,3)\(-6,1.5)\NPC2\true\-1.5\LOL.;
-(4,3)\(-6,1.5)\NPC2\true\-1.5\NEXT ROUND,LET'S GO!;
+(4,3)\(2,1.5)\NPC1\false\-1.5\<Font=3>Well，you still stand here, which means you still have some ability;
+(4,3)\(2,1.5)\NPC1\false\-1.5\<Font=3>But you don't have many abilities, huh?;
+(4,3)\(-6,1.5)\NPC2\true\-1.5\<Font=3>LOL.;
+(4,3)\(-6,1.5)\NPC2\true\-1.5\<Font=3>NEXT ROUND,LET'S GO!;

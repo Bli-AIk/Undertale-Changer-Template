@@ -11,11 +11,14 @@ public class BattleControl : ScriptableObject
     [Header("弹幕初始化")]
     public TextAsset barrgeSetUpAsset;//弹幕初始化
     public List<string> barrgeSetUpSave;
+    [Header("回合存储")]
     public List<TextAsset> roundAsset;//回合
     public List<string> roundSave;
+    [Header("敌人OBJ")]
     [Header("物体名会识别为敌人名称")]
     public List<GameObject> enemies;//敌方的Obj。
-    [Header("HP 前为现血后接Max")]
+
+    [Header("HP 偶为目前血量 奇为最大Max 下同")]
     public List<int> enemiesHp;
     public List<int> enemiesATK, enemiesDEF;
     [Header("战斗内UIText读取")]
@@ -54,6 +57,7 @@ public class BattleControl : ScriptableObject
     }
     public List<Color> playerColorList, playerMissColorList;
 
+    
     /*  回  合  编  辑  器  */
 
     [Header("回合编辑器")]
@@ -61,4 +65,7 @@ public class BattleControl : ScriptableObject
     public List<string> roundEditorMax;//总List存储
 
 
+    [Header("项目附加")]
+    public int randomRoundDir;
+    
 }

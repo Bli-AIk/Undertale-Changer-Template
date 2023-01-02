@@ -57,3 +57,5 @@ Plot\<Image=-1><FX=0>* .</stop>.</stop>.</stop>.</stop>.</stop>.
 </passText><Image=-1><FX=0>* WHAT,</stop>FLOWEY!</stop></enter>* But you have no shadow,</stop></enter>< >< >What's wrong with you?
 </passText><Image=2><FX=2>* Shut up,</stop></stop></stop></stop></stop><Image=1>and fight,</stop></enter>< >< >hurry up.
 ;
+
+BackMenu\<Image=-1><FX=1>* (This is the test text meow.)</enter>* (Return to MENU scene meow?)</enter><FX=-1><size=5> </size>< >< >< >< >< >< >  Meow<size=5> </size>< >< >< >< >< >< >< >  Nahh</select>BackMenu;

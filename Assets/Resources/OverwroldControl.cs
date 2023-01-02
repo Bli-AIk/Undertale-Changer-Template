@@ -10,15 +10,29 @@ public class OverwroldControl : ScriptableObject
     public int languagePack;
     public bool pause;//黑切屏的时候防止玩家操作导致报错
 
-    //UI
+    [Header("--UI--")]
+    [Header("字体存储")]
+    public List<TMPro.TMP_FontAsset> tmpFonts;
+
+    [Header("字体全半角")]
     public bool textWidth;//字体全半角
-    public int resolutionLevel;//分辨率档
+    [Header("分辨率等级")]
+    public int resolutionLevel;//分辨率等级
+    [Header("全屏")]
     public bool fullScreen;//全屏开关
-    public bool backGround;//是否启用侧边框
+
+    //[Header("侧边框（废弃）")]
+    //public bool backGround;//是否启用侧边框
+    [Header("全局音量")]
     public float mainVolume;//全局音量
+    [Header("简化特效")]
     public bool noSFX;//光效 后处理特效显示
+    [Header("显示FPS")]
     public bool openFPS;//显示FPS
+    [Header("分辨率（显示用）")]
     public Vector2 resolution;//分辨率
+
+    [Header("OW文本包读取")]
     public string owTextsAsset;
     public List<string> owTextsSave;
     public string menuAndSettingAsset;
@@ -29,6 +43,13 @@ public class OverwroldControl : ScriptableObject
 
 
 
-
+    [Header("开启调试")]
     public bool isDebug;
+    [Header("--调试模式设定--")]
+    [Header("锁血")]
+    public bool invincible;
+
+
+    //[Header("游戏内需要存档的数据在下面写")]
+
 }

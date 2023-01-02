@@ -7,18 +7,18 @@ public class EnemiesHpLineController : MonoBehaviour
     SpriteRenderer greenSprite;
     [Header("0¿ª")]
     public int num;
-    SelentUIController selentController;
+    SelectUIController selectController;
     void Start()
     {
         transform.localScale = Vector2.zero;
-        selentController = transform.parent.parent.GetComponent<SelentUIController>();
+        selectController = transform.parent.parent.GetComponent<SelectUIController>();
         greenSprite = transform.GetChild(0).GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (selentController.selentUI == 1 && selentController.selentLayer == 1)
+        if (selectController.selectUI == 1 && selectController.selectLayer == 1)
         {
             if (MainControl.instance.BattleControl.enemiesHp.Count - 1 < num * 2)
                 transform.localScale = Vector2.zero;

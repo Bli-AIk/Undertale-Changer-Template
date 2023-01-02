@@ -16,15 +16,15 @@ public class RoundEditorController : MonoBehaviour
     [Header("目前页面 0初始化 1初始化编辑 2回合编辑 3曲线编辑")]
     public int editMode;
 
-    public int selent;
+    public int select;
     [Header("需要手动输入默认最大值")]
-    public int selentMax;
+    public int selectMax;
     [Header("改名编号 0为不改名状态 初始化编辑模式内则1为地址 2为偏移 3为大小 4为伤害")]
     public int inputNum;
     [Header("有一个选定则1")]
-    public int isSelentOne;
+    public int isSelectOne;
     [Header("上面的这一个选定的编号")]
-    public int isSelentNum;
+    public int isSelectNum;
 
     [Header("初始化编辑：是否已设定Spr")]
     public bool isSetSpr;
@@ -105,7 +105,7 @@ public class RoundEditorController : MonoBehaviour
         yield return www;
         if (string.IsNullOrEmpty(www.error) == false)
         {
-            Debug.Log("error");
+            //Debug.Log("error");
             AudioController.instance.GetFx(5, MainControl.instance.AudioControl.fxClipUI);
             uiRes.color = Color.red;
             isSetSpr = false;
@@ -145,7 +145,7 @@ public class RoundEditorController : MonoBehaviour
 
                 if (value.Substring(0, 5) == "Res:/" || value.Substring(0, 5) == "Res:/")// 路径不需要.png!!!不需要.png!!!不需要.png!!!不需要.png!!!不需要.png!!!
                 {
-                    editBulletSpr.isSelentSprite = true;
+                    editBulletSpr.isSelectSprite = true;
                     editBulletSpr.GetComponent<SpriteRenderer>().sprite = null;
                     value = value.Substring(5);
 
@@ -170,7 +170,7 @@ public class RoundEditorController : MonoBehaviour
                 }
                 else if (value.Substring(0, 5) == "Str:/" || value.Substring(0, 5) == "Str:/")// 路径需要.png!!!需要.png!!!需要.png!!!需要.png!!!需要.png!!!
                 {
-                    editBulletSpr.isSelentSprite = true;
+                    editBulletSpr.isSelectSprite = true;
                     editBulletSpr.GetComponent<SpriteRenderer>().sprite = null;
                     value = value.Substring(5);
                     if (value[value.Length - 4] != '.' && value[value.Length - 3] != 'p' && value[value.Length - 2] != 'n' && value[value.Length - 1] != 'g') //png修正
@@ -357,7 +357,7 @@ public class RoundEditorController : MonoBehaviour
             if (!isControlBox)
                 InputKey();
 
-            if (selent <= selentMax)
+            if (select <= selectMax)
             {
                 if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
                 {
@@ -370,12 +370,12 @@ public class RoundEditorController : MonoBehaviour
             {
                 if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
                 {
-                    if (!fileSaver.files[selent - selentMax - 1].GetComponent<RoundEditorFileController>().isSelent)
+                    if (!fileSaver.files[select - selectMax - 1].GetComponent<RoundEditorFileController>().isSelect)
                     {
-                        fileSaver.files[selent - selentMax - 1].GetComponent<RoundEditorFileController>().isSelent = true;
-                        isSelentOne++;
-                        if (isSelentOne == 1)
-                            FindOneSelentNum();
+                        fileSaver.files[select - selectMax - 1].GetComponent<RoundEditorFileController>().isSelect = true;
+                        isSelectOne++;
+                        if (isSelectOne == 1)
+                            FindOneSelectNum();
                         AudioController.instance.GetFx(2, MainControl.instance.AudioControl.fxClipBattle);
                     }
                     else
@@ -384,24 +384,24 @@ public class RoundEditorController : MonoBehaviour
 
                         AudioController.instance.GetFx(4, MainControl.instance.AudioControl.fxClipUI);
 
-                        selent = 0;
+                        select = 0;
                     }
                 }
                 else if (MainControl.instance.KeyArrowToControl(KeyCode.X))
                 {
-                    fileSaver.files[selent - selentMax - 1].GetComponent<RoundEditorFileController>().isSelent = false;
-                    isSelentOne--;
-                    if (isSelentOne == 1)
-                        FindOneSelentNum();
+                    fileSaver.files[select - selectMax - 1].GetComponent<RoundEditorFileController>().isSelect = false;
+                    isSelectOne--;
+                    if (isSelectOne == 1)
+                        FindOneSelectNum();
                 }
-                if ((MainControl.instance.KeyArrowToControl(KeyCode.C)) && fileSaver.files[selent - selentMax - 1].GetComponent<RoundEditorFileController>().isSelent && editMode == 0)
+                if ((MainControl.instance.KeyArrowToControl(KeyCode.C)) && fileSaver.files[select - selectMax - 1].GetComponent<RoundEditorFileController>().isSelect && editMode == 0)
                 {
-                    ReFileName(fileSaver.files[selent - selentMax - 1]);
+                    ReFileName(fileSaver.files[select - selectMax - 1]);
 
-                    fileSaver.files[selent - selentMax - 1].GetComponent<RoundEditorFileController>().isSelent = false;
-                    isSelentOne--;
-                    if (isSelentOne == 1)
-                        FindOneSelentNum();
+                    fileSaver.files[select - selectMax - 1].GetComponent<RoundEditorFileController>().isSelect = false;
+                    isSelectOne--;
+                    if (isSelectOne == 1)
+                        FindOneSelectNum();
                 }
             }
         }
@@ -427,9 +427,9 @@ public class RoundEditorController : MonoBehaviour
         {
 
             editBulletSpr.gameObject.SetActive(true);
-            fileSaver.files[selent - selentMax - 1].GetComponent<RoundEditorFileController>().isSelent = false;
-            isSelentOne = 0;
-            isSelentNum = 0;
+            fileSaver.files[select - selectMax - 1].GetComponent<RoundEditorFileController>().isSelect = false;
+            isSelectOne = 0;
+            isSelectNum = 0;
             uiNothing.transform.localPosition = new Vector3(11.85f, -10, -5.5f);
             uiNothing.text = MainControl.instance.SubText(MainControl.instance.BattleControl.roundEditorMax[29]);
 
@@ -465,25 +465,25 @@ public class RoundEditorController : MonoBehaviour
         }
     }
 
-    public void FindOneSelentNum()
+    public void FindOneSelectNum()
     {
         foreach (var item in fileSaver.files)
         {
-            if (item.GetComponent<RoundEditorFileController>().isSelent)
+            if (item.GetComponent<RoundEditorFileController>().isSelect)
             {
-                isSelentNum = item.GetComponent<RoundEditorFileController>().selentNum - 1;
+                isSelectNum = item.GetComponent<RoundEditorFileController>().selectNum - 1;
                 break;
             }
         }
     }
-    int editModeSelentTwo = 31;//编辑弹幕中的播放提示
+    int editModeSelectTwo = 31;//编辑弹幕中的播放提示
     public void DownKey(/*bool mouseMode = false*/)
     {
         AudioController.instance.GetFx(1, MainControl.instance.AudioControl.fxClipUI);
         bool isFolder = false;
 
         if (editMode == 0)
-            switch (selent)
+            switch (select)
             {
                 case 1:
                     isFolder = false;
@@ -506,15 +506,15 @@ public class RoundEditorController : MonoBehaviour
                     }
                     else newFile.transform.localPosition = fileSaver.files[fileSaver.files.Count - 2].transform.position - new Vector3(2 * 3.325f, 2.475f, 0);
                     newFile.GetComponent<RoundEditorFileController>().isFolder = isFolder;
-                    selent = fileSaver.files.Count + selentMax;
+                    select = fileSaver.files.Count + selectMax;
                     ReFileName(newFile, true, false, isFolder);
                     break;
                 case 3:
-                    if (isSelentOne == 1)
+                    if (isSelectOne == 1)
                     {
-                        selent = isSelentNum + selentMax + 1;
-                        ReFileName(fileSaver.files[isSelentNum], false, true);
-                        fileSaver.files[isSelentNum].GetComponent<RoundEditorFileController>().isSelent = false;
+                        select = isSelectNum + selectMax + 1;
+                        ReFileName(fileSaver.files[isSelectNum], false, true);
+                        fileSaver.files[isSelectNum].GetComponent<RoundEditorFileController>().isSelect = false;
 
                     }
                     break;
@@ -522,7 +522,7 @@ public class RoundEditorController : MonoBehaviour
             }
         else if (editMode == 1)
         {
-            switch (selent)
+            switch (select)
             {
                 case 0://返回
                     goto default;
@@ -543,10 +543,10 @@ public class RoundEditorController : MonoBehaviour
                     break;
                 case 2:
                     uiRes.color = Color.green;
-                    if (editModeSelentTwo >= 41 || editModeSelentTwo < 31)
-                        editModeSelentTwo = 31;
-                    uiRes.text = MainControl.instance.SubText(MainControl.instance.BattleControl.roundEditorMax[editModeSelentTwo]);
-                    editModeSelentTwo++;
+                    if (editModeSelectTwo >= 41 || editModeSelectTwo < 31)
+                        editModeSelectTwo = 31;
+                    uiRes.text = MainControl.instance.SubText(MainControl.instance.BattleControl.roundEditorMax[editModeSelectTwo]);
+                    editModeSelectTwo++;
                     goto default;
                 case 3:
                     if (isSetSpr)
@@ -604,13 +604,13 @@ public class RoundEditorController : MonoBehaviour
 
 
     }
-    void ReFileName(GameObject newFile, bool isNew = false, bool isSelent = false, bool isNewFolder = true)
+    void ReFileName(GameObject newFile, bool isNew = false, bool isSelect = false, bool isNewFolder = true)
     {
-        if (!isSelent)
-            inputNum = selent - selentMax;
+        if (!isSelect)
+            inputNum = select - selectMax;
         else
         {
-            inputNum = isSelentNum + 1;
+            inputNum = isSelectNum + 1;
 
         }
         if (isNew)
@@ -651,21 +651,21 @@ public class RoundEditorController : MonoBehaviour
     {
         if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow) || MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow))
         {
-            if (selent > 0)
+            if (select > 0)
             {
                 if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow))
                 {
-                    if (selent <= selentMax)
-                        selent--;
+                    if (select <= selectMax)
+                        select--;
                     else
                     {
-                        selent -= 3;
+                        select -= 3;
                     }
                 }
-                else if (selent <= selentMax && fileSaver.files.Count > 0)
+                else if (select <= selectMax && fileSaver.files.Count > 0)
                 {
                     if (editMode == 0)
-                        selent = selentMax + 1;
+                        select = selectMax + 1;
                     else if (boxLine > 1)
                     {
                         boxLine--;
@@ -673,32 +673,32 @@ public class RoundEditorController : MonoBehaviour
                     }
                 }
                 else
-                    selent--;
+                    select--;
             }
             else if (editMode == 0)
-                selent = selentMax + fileSaver.files.Count;
-            else selent = selentMax;
+                select = selectMax + fileSaver.files.Count;
+            else select = selectMax;
             AudioController.instance.GetFx(0, MainControl.instance.AudioControl.fxClipUI);
         }
         else if (MainControl.instance.KeyArrowToControl(KeyCode.DownArrow) || (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow)))
         {
-            if (((selent < selentMax + fileSaver.files.Count && editMode == 0) || (selent < selentMax && editMode == 1)))
+            if (((select < selectMax + fileSaver.files.Count && editMode == 0) || (select < selectMax && editMode == 1)))
             {
                 if (MainControl.instance.KeyArrowToControl(KeyCode.DownArrow))
                 {
-                    if (selent <= selentMax)
-                        selent++;
+                    if (select <= selectMax)
+                        select++;
                     else
                     {
-                        selent += 3;
-                        if (selent >= selentMax + fileSaver.files.Count)
-                            selent = selentMax + fileSaver.files.Count;
+                        select += 3;
+                        if (select >= selectMax + fileSaver.files.Count)
+                            select = selectMax + fileSaver.files.Count;
                     }
                 }
-                else if (selent <= selentMax && fileSaver.files.Count > 0)
+                else if (select <= selectMax && fileSaver.files.Count > 0)
                 {
                     if (editMode == 0)
-                        selent = selentMax + 1;
+                        select = selectMax + 1;
                     else if (boxLine < editBulletSpr.getBoxs.Count) 
                     {
                         boxLine++;
@@ -706,9 +706,9 @@ public class RoundEditorController : MonoBehaviour
                     }
                 }
                 else
-                    selent++;
+                    select++;
             }
-            else selent = 0;
+            else select = 0;
             AudioController.instance.GetFx(0, MainControl.instance.AudioControl.fxClipUI);
         }
     }
@@ -722,7 +722,7 @@ public class RoundEditorController : MonoBehaviour
 
         foreach (var file in di.GetFiles())
         {
-            Debug.Log(file.Name);
+            //Debug.Log(file.Name);
         }
         //DirectoryInfo di = Directory.CreateDirectory(Application.dataPath + "/RoundEditor/新建文件夹 (" + Random.Range(0, 100000) + ")");
 

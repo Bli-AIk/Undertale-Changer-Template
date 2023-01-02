@@ -11,7 +11,9 @@ public class ScreenBackgroundBehaviour : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        backBlack = transform.Find("Back").gameObject;
+        enabled = false;
+        return;
+        //backBlack = transform.Find("Back").gameObject;
 
     }
 
@@ -23,6 +25,6 @@ public class ScreenBackgroundBehaviour : MonoBehaviour
         {
             Screen.SetResolution(Screen.width, Screen.height, MainControl.instance.OverwroldControl.fullScreen);
         }
-        backBlack.SetActive(MainControl.instance.OverwroldControl.backGround);
+        //backBlack.SetActive(MainControl.instance.OverwroldControl.backGround);
     }
 }

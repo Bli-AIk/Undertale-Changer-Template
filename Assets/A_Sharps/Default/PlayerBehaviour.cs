@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 /// <summary>
 /// Overworld中的玩家控制器
 /// </summary>
 public class PlayerBehaviour : MonoBehaviour
 {
-    Animator animator;
+    public Animator animator;
     Rigidbody2D rbody;
     BoxCollider2D boxCollider;
     TypeWritter typeWritter;
@@ -21,10 +22,13 @@ public class PlayerBehaviour : MonoBehaviour
     //天杀的Ray检测范围太短了 还是拿box好使）
     BoxCollider2D boxTrigger;
 
-    OverworldObjTrigger saveOwObj;
+    public OverworldObjTrigger saveOwObj;
     GameObject backpackUI;
     BackpackBehaviour backpackBehaviour;
     public float owTimer;//0.1秒，防止调查OW冲突
+
+    AudioMixerGroup mixer = null;//需要就弄上 整这个是因为有的项目里做了回音效果
+    
     private void Awake()
     {
         backpackUI = GameObject.Find("Main Camera/BackpackUI");
@@ -39,6 +43,11 @@ public class PlayerBehaviour : MonoBehaviour
         typeWritter = GameObject.Find("BackpackCanvas").GetComponent<TypeWritter>();
         boxTrigger.transform.localPosition = boxCollider.offset;
         //mask = 1 << 6;
+
+        transform.position = MainControl.instance.PlayerControl.scenePos;
+        animDirectionX = (int)MainControl.instance.PlayerControl.animDirection.x;
+        animDirectionY = (int)MainControl.instance.PlayerControl.animDirection.y;
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -87,20 +96,32 @@ public class PlayerBehaviour : MonoBehaviour
         }
         if (saveOwObj != null && backpackUI.transform.localPosition.z < 0)
         {
-            if (saveOwObj.isTriggerMode || (!saveOwObj.isTriggerMode && MainControl.instance.KeyArrowToControl(KeyCode.Z) && backpackBehaviour.selent == 0))
+            if (saveOwObj.isTriggerMode || (!saveOwObj.isTriggerMode && MainControl.instance.KeyArrowToControl(KeyCode.Z) && backpackBehaviour.select == 0))
             {
                 if (owTimer <= 0)
                 {
-
-                    bool isUp;
-                    if (saveOwObj.setIsUp)
-                        isUp = saveOwObj.isUp;
-                    else isUp = transform.position.y < saveOwObj.mainCamera.transform.position.y - 1.25f;
-                    if (saveOwObj.openAnim)
-                        saveOwObj.AnimTypeText(isUp);
+                    if (saveOwObj.changeScene)
+                    {
+                        if ((saveOwObj.onlyDir == 0) || (saveOwObj.onlyDir == -1 && animDirectionX != 0) || (saveOwObj.onlyDir == 1 && animDirectionY != 0))
+                        {
+                            MainControl.instance.PlayerControl.scenePos = saveOwObj.newPlayerPos;
+                            MainControl.instance.PlayerControl.animDirection = new Vector2(animDirectionX, animDirectionY);
+                            MainControl.instance.OutBlack(saveOwObj.sceneName, Color.black);
+                            saveOwObj.gameObject.SetActive(false);
+                            saveOwObj = null;
+                        }
+                    }
                     else
-                        saveOwObj.TypeText(isUp);
-
+                    {
+                        bool isUp;
+                        if (saveOwObj.setIsUp)
+                            isUp = saveOwObj.isUp;
+                        else isUp = transform.position.y < saveOwObj.mainCamera.transform.position.y - 1.25f;
+                        if (saveOwObj.openAnim)
+                            saveOwObj.AnimTypeText(isUp);
+                        else
+                            saveOwObj.TypeText(isUp);
+                    }
                 }
                 owTimer = 0.1f;
             }
@@ -116,7 +137,7 @@ public class PlayerBehaviour : MonoBehaviour
         if (info.collider != null && MainControl.instance.KeyArrowToControl(KeyCode.Z))
         {
             GameObject obj = info.collider.gameObject;
-            Debug.Log(obj.transform.tag);
+            //Debug.Log(obj.transform.tag);
             if (obj.transform.tag == "owObjTrigger")
             {
                 OverworldObjTrigger owObj = obj.transform.GetComponent<OverworldObjTrigger>();
@@ -131,11 +152,11 @@ public class PlayerBehaviour : MonoBehaviour
         if (MainControl.instance.OverwroldControl.isSetting || MainControl.instance.OverwroldControl.pause)
             return;
         if (Input.GetKeyDown(KeyCode.B) && MainControl.instance.OverwroldControl.isDebug)
-            MainControl.instance.OutBlack("Battle");
+            MainControl.instance.OutBlack("Battle", Color.black);
     }
     public void PlayWalkAudio()//动画器引用
     {
-        AudioController.instance.GetFx(Random.Range((int)walk.x, (int)walk.y), MainControl.instance.AudioControl.fxClipWalk);
+        AudioController.instance.GetFx(Random.Range((int)walk.x, (int)walk.y), MainControl.instance.AudioControl.fxClipWalk, 1, 1, mixer);
     }
     public void TriggerSpin(int i)
     {
@@ -155,7 +176,7 @@ public class PlayerBehaviour : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (MainControl.instance.OverwroldControl.isSetting || MainControl.instance.OverwroldControl.pause || backpackBehaviour.selent > 0)
+        if (MainControl.instance.OverwroldControl.isSetting || MainControl.instance.OverwroldControl.pause || backpackBehaviour.select > 0)
         {
             animator.Play("Walk Tree", 0, 0);
             if (MainControl.instance.PlayerControl.canMove)
@@ -195,8 +216,8 @@ public class PlayerBehaviour : MonoBehaviour
             }
             else moveDirectionY = 0;
 
-            if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
-                moveDirectionX = 0;
+            //if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
+                //moveDirectionX = 0;
 
 
 
@@ -205,7 +226,7 @@ public class PlayerBehaviour : MonoBehaviour
 
             rbody.MovePosition(new Vector2(transform.position.x + speed * Time.deltaTime * moveDirectionX, transform.position.y + speed * Time.deltaTime * moveDirectionY));
 
-            if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
+            if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))//&& !(MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1) || MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1)))
             {
 
                 animator.SetFloat("MoveX", Random.Range(-1, 2));

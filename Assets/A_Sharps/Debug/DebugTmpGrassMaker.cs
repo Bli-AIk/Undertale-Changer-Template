@@ -9,7 +9,7 @@ public class DebugTmpGrassMaker : MonoBehaviour
     TextMeshPro tmp;
     public List<string> strings;
     public float time, timeMax;
-    bool selent;
+    bool select;
     // Start is called before the first frame update
     void Start()
     {
@@ -25,8 +25,8 @@ public class DebugTmpGrassMaker : MonoBehaviour
         if (time < 0)
         {
             time = timeMax;
-            selent = !selent;
-            tmp.text = strings[Convert.ToInt32(selent)];
+            select = !select;
+            tmp.text = strings[Convert.ToInt32(select)];
         }
         else time -= Time.deltaTime;
     }
