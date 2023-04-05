@@ -10,41 +10,75 @@ public class BulletController : MonoBehaviour
 {
     public SpriteRenderer spriteRenderer;
     public List<BoxCollider2D> boxColliderList = new List<BoxCollider2D>();
-    public List<Vector2> boxColliderSizes = new List<Vector2>();//给Follow用的（（
+    public List<Vector2> boxColliderSizes = new List<Vector2>();
     public List<int> boxHitList = new List<int>();
     public BattleControl.BulletColor bulletColor;//含有属性的颜色 读取BattleControl中的enum BulletColor
-    public bool followMode;
 
+    public FollowMode followMode;
     public bool useExtra;
     public Collider2D extra;
+    public TweenRotationCorrection tweenRotationCorrection;
+    /// <summary>
+    /// 设置碰撞箱跟随SpriteRenderer缩放的模式。
+    /// CutFollow:切去boxColliderSizes内存储的数据；
+    /// NoFollow:不跟随缩放。
+    /// FullFollow:完全跟随缩放，因此你不需要设置boxColliderSizes。这一般不会用到；
+    /// </summary>
+    public enum FollowMode
+    {
+        CutFollow,
+        NoFollow,
+        FullFollow,
+    }
 
     void Start()
     {
+        if (tweenRotationCorrection == null)
+            tweenRotationCorrection = transform.GetComponent<TweenRotationCorrection>();
+
         if (useExtra) 
             extra = GetComponent<Collider2D>();
     }
-  
     /// <summary>
-    /// 初始化
+    /// 初始化弹幕。
     /// </summary>
-    public void SetBullet(string name, string layer, string color, string startPosition, string startRotation, string startScale, string startString)
+    /// <param name="name">设置弹幕的Obj的名称，以便查找。</param>
+    /// <param name="layer">基础值建议设为50（玩家为100）。</param>
+    /// <param name="sprite">一般在Resources内导入。</param>
+    /// <param name="startMask">设置Sprite遮罩模式。</param>
+    /// <param name="bulletColor">设置弹幕属性颜色数据</param>
+    /// <param name="startPosition">设置起始位置（相对坐标）。</param>
+    /// <param name="startRotation">设置旋转角度，一般只需更改Z轴。</param>
+    /// <param name="startScale">若弹幕不需拉伸，StartScale一般设置为(0.4f, 0.4f, 0.4f) 或 Vector3.zero * 0.4f。</param>
+    /// <param name="sizes">设置判定箱大小，可设定多个List，但多数情况下需要避免其重叠。</param>
+    /// <param name="offsets">设定判定箱偏移，List大小必须与sizes相等。</param>
+    /// <param name="hits">设定碰撞箱伤害，List大小必须与sizes相等。</param>
+    /// <param name="followMode">设置碰撞箱跟随SpriteRenderer缩放的模式。</param>
+    public void SetBullet(string name, int layer, Sprite sprite, SpriteMaskInteraction startMask, BattleControl.BulletColor bulletColor,
+        Vector3 startPosition, Vector3 startRotation, Vector3 startScale,  List<Vector2> sizes, List<Vector2> offsets, List<int> hits, FollowMode followMode = FollowMode.NoFollow)
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        
         gameObject.name = name;
-        spriteRenderer.sortingOrder = int.Parse(layer);
-        bulletColor = (BattleControl.BulletColor)Enum.Parse(typeof(BattleControl.BulletColor), color);
-        spriteRenderer.color = MainControl.instance.BattleControl.bulletColorList[(int)bulletColor];
-        transform.localPosition = MainControl.instance.StringVector2ToRealVector2(startPosition, transform.localPosition);
-        transform.GetComponent<TweenRotationCorrection>().euler = new Vector3(0, 0, float.Parse(startRotation));
-        transform.localScale = MainControl.instance.StringVector2ToRealVector2(startScale, transform.localScale);
+
+        spriteRenderer.sortingOrder = layer;
+
+        this.bulletColor = bulletColor;
+        spriteRenderer.color = MainControl.instance.BattleControl.bulletColorList[(int)this.bulletColor];
+        
+        transform.localPosition = startPosition;
+
+        if (tweenRotationCorrection == null)
+            tweenRotationCorrection = transform.GetComponent<TweenRotationCorrection>();
+
+        tweenRotationCorrection.euler = startRotation;
+
+        transform.localScale = startScale;
 
 
-        List<string> lister = new List<string>();
-        MainControl.instance.MaxToOneSon(startString, lister);
-        spriteRenderer.sprite = Resources.Load<Sprite>(lister[2]);
-        SetMask(lister[3]);
-        followMode = bool.Parse(lister[4]);
-        int j = 0;
+        spriteRenderer.sprite = sprite;
+        SetMask(startMask);
+
 
         for (int i = 0; i < boxColliderList.Count; i++)
         {
@@ -55,46 +89,39 @@ public class BulletController : MonoBehaviour
         boxColliderSizes.Clear();
         boxHitList.Clear();
 
-
-        //4开始后 循环生成box碰撞
-        for (int i = 5; i < lister.Count; i++)
+        boxColliderSizes = sizes;
+        boxHitList = hits;
+        //循环生成box碰撞
+        for (int i = 0; i < sizes.Count; i++)
         {
-            switch (j)
-            {
-                case 0://size
-                    boxColliderList.Add(gameObject.AddComponent<BoxCollider2D>());
-                    boxColliderList[boxColliderList.Count - 1].isTrigger = true;
-                    if (!followMode)
-                        boxColliderList[boxColliderList.Count - 1].size = MainControl.instance.StringVector2ToRealVector2(lister[i], new Vector3());
-                    else
-                        boxColliderSizes.Add(MainControl.instance.StringVector2ToRealVector2(lister[i], new Vector3()));
+            BoxCollider2D save = gameObject.AddComponent<BoxCollider2D>();
+            save.isTrigger = true;
+            if (followMode != FollowMode.CutFollow)
+                save.size = boxColliderSizes[i];
+            else
+                save.size = boxColliderList[i].transform.GetComponent<SpriteRenderer>().size - boxColliderSizes[i];
 
-                    goto default;
-
-                case 1://offset
-                    boxColliderList[boxColliderList.Count - 1].offset = MainControl.instance.StringVector2ToRealVector2(lister[i], new Vector3());
-                    goto default;
-
-                case 2:
-                    j = 0;
-                    boxHitList.Add(int.Parse(lister[i]));
-                    break;
-
-                default:
-                    j++;
-                    break;
-            }
-
-
+            save.offset = offsets[i];
+            
+            boxColliderList.Add(save);
         }
     }
     private void Update()
     {
-        if (followMode)
+        if (followMode != FollowMode.NoFollow)
         {
             for (int i = 0; i < boxColliderList.Count; i++)
             {
-                boxColliderList[i].size = boxColliderList[i].transform.GetComponent<SpriteRenderer>().size - boxColliderSizes[i];
+                switch (followMode)
+                {
+                    case FollowMode.FullFollow:
+                        boxColliderList[i].size = boxColliderList[i].transform.GetComponent<SpriteRenderer>().size;
+                        break;
+                    case FollowMode.CutFollow:
+                        boxColliderList[i].size = boxColliderList[i].transform.GetComponent<SpriteRenderer>().size - boxColliderSizes[i];
+                        break;
+                }
+
             }
         }
     }
@@ -144,25 +171,9 @@ public class BulletController : MonoBehaviour
            
         }
     }
-    public void SetMask(string set)
+    public void SetMask(SpriteMaskInteraction spriteMaskInteraction)
     {
-        switch (set)//遮罩
-        {
-            case "None":
-                spriteRenderer.maskInteraction = SpriteMaskInteraction.None;
-                break;
-
-            case "In":
-                spriteRenderer.maskInteraction = SpriteMaskInteraction.VisibleInsideMask;
-                break;
-
-            case "Out":
-                spriteRenderer.maskInteraction = SpriteMaskInteraction.VisibleOutsideMask;
-                break;
-
-            default:
-                goto case "None";
-        }
+        spriteRenderer.maskInteraction = spriteMaskInteraction;
     }
     private void OnDisable()
     {

@@ -161,6 +161,7 @@ public class SelectUIController : MonoBehaviour
     /// </summary>
     public void InRound(int round)
     {
+        roundController.isMyRound = true;
         selectLayer = 0;
         selectUI = 1;
         selectSon = 0;
@@ -171,8 +172,6 @@ public class SelectUIController : MonoBehaviour
 
 
         MainControl.instance.forceJumpLoadRound = false;
-        if (round >= 0)
-            MainControl.instance.LoadRound(round);
     }
 
     /// <summary>
@@ -608,14 +607,11 @@ public class SelectUIController : MonoBehaviour
                 load = RoundTextLoad(MainControl.instance.BattleControl.roundTextSave, diy);
                 firstIn = false;
             }
-            else if (!roundController.roundLoop)
+            else
             {
                 load = RoundTextLoad(MainControl.instance.BattleControl.roundTextSave, saveRound);
             }
-            else
-            {
-               load = RoundTextLoad(MainControl.instance.BattleControl.roundTextSave, -1);
-            }
+            
             saveRoundText = load[UnityEngine.Random.Range(0, load.Count)];
         }
         Type(saveRoundText);

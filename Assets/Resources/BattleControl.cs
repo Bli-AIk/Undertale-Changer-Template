@@ -2,18 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
-/// 万恶的战斗系统啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
-/// 还有包含天杀的回合编辑器数据啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊
+/// 战斗系统管理器，仅使用于战斗场景。
 /// </summary>
 [CreateAssetMenu(fileName = "BattleControl", menuName = "BattleControl")]
 public class BattleControl : ScriptableObject
 {
-    [Header("弹幕初始化")]
-    public TextAsset barrgeSetUpAsset;//弹幕初始化
-    public List<string> barrgeSetUpSave;
-    [Header("回合存储")]
-    public List<TextAsset> roundAsset;//回合
-    public List<string> roundSave;
     [Header("敌人OBJ")]
     [Header("物体名会识别为敌人名称")]
     public List<GameObject> enemies;//敌方的Obj。
@@ -35,7 +28,9 @@ public class BattleControl : ScriptableObject
     public List<string> roundDialogAsset;//直接在战斗场景内读取
     public List<TextAsset> otherDialogAsset;
 
-
+    /// <summary>
+    /// 弹幕颜色数据（原版特殊弹幕），非视觉颜色
+    /// </summary>
     public enum BulletColor
     {
         white,
@@ -44,6 +39,9 @@ public class BattleControl : ScriptableObject
         green
     }
     public List<Color> bulletColorList;
+    /// <summary>
+    /// 玩家数据颜色
+    /// </summary>
     public enum PlayerColor
     {
         red,
@@ -53,16 +51,10 @@ public class BattleControl : ScriptableObject
         cyan,
         blue,
         purple,
-        nullColor
     }
     public List<Color> playerColorList, playerMissColorList;
 
     
-    /*  回  合  编  辑  器  */
-
-    [Header("回合编辑器")]
-    public string roundEditorData;//弹幕初始化
-    public List<string> roundEditorMax;//总List存储
 
 
     [Header("项目附加")]

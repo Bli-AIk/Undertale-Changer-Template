@@ -5,7 +5,7 @@ using TMPro;
 /// <summary>
 /// Debug网格定位 用于做弹幕啥的
 /// </summary>
-public class DebugGrid : MonoBehaviour
+public class DebugGrid : ObjectPool
 {
     [Header("颜色是给到'条'上面的")]
     public Color colorX;
@@ -24,14 +24,10 @@ public class DebugGrid : MonoBehaviour
     
     public Vector2 referenceX;
     public Vector2 referenceY;
-    [Header("填充对象池的对象数量")]
-    public int count;
-    GameObject grid;
-    Queue<GameObject> availbleGrid = new Queue<GameObject>();
     // Start is called before the first frame update
     void Start()
     {
-        grid = Resources.Load<GameObject>("Template/Grid Template");
+        obj = Resources.Load<GameObject>("Template/Grid Template");
         FillPool();
 
         SummonGrid();
@@ -85,41 +81,6 @@ public class DebugGrid : MonoBehaviour
         {
             SummonGrid();
         }
-    }
-    //-----对象池部分-----
-
-    /// <summary>
-    /// 初始化/填充对象池
-    /// </summary>
-    public void FillPool()
-    {
-        for (int i = 0; i < count; i++)
-        {
-            var newObj = Instantiate(grid, transform);
-            ReturnPool(newObj);
-        }
-    }
-    /// <summary>
-    /// 返回对象池
-    /// </summary>
-    public void ReturnPool(GameObject gameObject)
-    {
-        gameObject.SetActive(false);
-        gameObject.transform.SetParent(transform);
-        availbleGrid.Enqueue(gameObject);
-    }
-    /// <summary>
-    /// 喜提对象 grid
-    /// </summary>
-    public GameObject GetFromPool()
-    {
-        if (availbleGrid.Count == 0)
-            FillPool();
-
-        var grid = availbleGrid.Dequeue();
-
-        grid.SetActive(true);
-        return grid;
     }
 
 }

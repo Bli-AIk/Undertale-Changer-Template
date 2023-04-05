@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd233730508f81c4e9962afa5c5f5269, type: 3}
   m_Name: PlayerControl
   m_EditorClassIdentifier: 
-  hp: -1442
+  hp: 92
   hpMax: 92
   lv: 19
   exp: 0
@@ -20,7 +20,7 @@ MonoBehaviour:
   wearAtk: 1
   wearDef: 123
   nextExp: 0
-  missTime: -0.0312642
+  missTime: -0.02
   missTimeMax: 0.4
   atk: 10
   def: 10
@@ -29,7 +29,7 @@ MonoBehaviour:
   wearArm: 10001
   wearArmor: 20001
   canMove: 1
-  deadPos: {x: 4.025, y: -4.45, z: 0}
+  deadPos: {x: 0, y: -1.5, z: 0}
   scenePos: {x: 0, y: 0, z: 0}
   animDirection: {x: 0, y: 0}
   lastScene: Battle

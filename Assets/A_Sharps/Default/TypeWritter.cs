@@ -4,6 +4,9 @@ using MEC;
 using UnityEngine;
 using System;
 using UnityEngine.Audio;
+/// <summary>
+/// 打字机系统
+/// </summary>
 public class TypeWritter : MonoBehaviour
 {
     public string originString, endString;

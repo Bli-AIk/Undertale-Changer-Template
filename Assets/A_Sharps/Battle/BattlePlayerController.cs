@@ -773,7 +773,7 @@ public class BattlePlayerController : MonoBehaviour
         {
             spriteRenderer.DOColor(aimColor, time).SetEase(Ease.InOutSine);
         }
-        if (playerColor != aimPlayerColor && aimPlayerColor != BattleControl.PlayerColor.nullColor)
+        if (playerColor != aimPlayerColor)
         {
             transform.rotation = Quaternion.Euler(0, 0, 0);
             transform.SetParent(null);

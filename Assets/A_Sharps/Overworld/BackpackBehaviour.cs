@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+/// <summary>
+/// 管理OW背包系统
+/// </summary>
 public class BackpackBehaviour : MonoBehaviour
 {
     public int select, sonSelect, sonUse;

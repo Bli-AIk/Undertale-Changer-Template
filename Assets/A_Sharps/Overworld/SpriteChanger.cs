@@ -4,8 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// 又到了我们喜欢的Sprite大变脸环节（不
-/// 存脸，变脸，一气呵成。
+/// Overworld对话中更改Sprite
 /// </summary>
 public class SpriteChanger : MonoBehaviour
 {

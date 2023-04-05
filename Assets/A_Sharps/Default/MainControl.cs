@@ -4,31 +4,45 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using UnityEngine.SceneManagement;
-using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using System.IO;
-using System;
 using System.Globalization;
-using MEC;
-using System.Threading.Tasks;
 /// <summary>
 /// 调用所有ScriptableObject 并负责对数据和语言包的导入
-/// 还包括一大堆常用的函数
+/// 还包括大部分常用的函数
 /// </summary>
 public class MainControl : MonoBehaviour
 {
-    [Header("BGM设定 空为无")]
+    [Header("-BGMControl设置-")]
+    [Space]
+    [Header("BGM本体音频 空为无音频")]
     public AudioClip bgmClip;
+    [Header("BGM音量")]
     public float volume = 0.5f;
+    [Header("BGM音调")]
     public float pitch = 1;
+    [Header("BGM循环播放初始状态")]
     public bool loop = true;
+  
+    [Space]
 
-    [Header("状态 0正常 1战斗内 2编辑器")]
-    public int inBattle;
+    [Header("-MainControl设置-")]
+    [Space]
+
+    [Header("状态:正常,战斗内")]
+    public SceneState sceneState;
     public static MainControl instance;
     public bool haveInOutBlack, noInBlack;
     public bool notPauseIn;
+    
+
     Image inOutBlack;
+    public enum SceneState
+    {
+        Normal,
+        InBattle,
+
+    };
     public OverwroldControl OverwroldControl { get; private set; }
     public ItemControl ItemControl { get; private set; }
     public PlayerControl PlayerControl { get; private set; }
@@ -37,14 +51,23 @@ public class MainControl : MonoBehaviour
 
     BattlePlayerController battlePlayerController;
 
+
     public void Initialization(int languagePack)
     {
+        //调用ScriptableObject
+
+        //--------------------------------------------------------------------------------
         ItemControl = Resources.Load<ItemControl>("ItemControl");
         PlayerControl = Resources.Load<PlayerControl>("PlayerControl");
         AudioControl = Resources.Load<AudioControl>("AudioControl");
         OverwroldControl = Resources.Load<OverwroldControl>("OverwroldControl");
-        if (inBattle != 0)
+
+        if (sceneState == SceneState.InBattle)
             BattleControl = Resources.Load<BattleControl>("BattleControl");
+        //--------------------------------------------------------------------------------
+
+
+
 
         if (languagePack < 0)//优先读取保存languagePack的数据
         {
@@ -55,40 +78,36 @@ public class MainControl : MonoBehaviour
             languagePack = 0;
             OverwroldControl.languagePack = 0;
         }
-       
-            if (languagePack > Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage").Length - 1)
-                languagePack -= Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage").Length;
 
-            if (inBattle != 0)
+        if (languagePack > Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage").Length - 1)
+            languagePack -= Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage").Length;
+
+        if (sceneState == SceneState.InBattle)
+        {
+            BattleControl.roundDialogAsset = new List<string>();
+
+            BattleControl.uiText = File.ReadAllText(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\Battle\\UIBattleText.txt");
+            for (int i = 0; i < Directory.GetFiles(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\Battle\\Round").Length; i++)
             {
-                BattleControl.roundDialogAsset = new List<string>();
-
-                BattleControl.uiText = File.ReadAllText(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\Battle\\UIBattleText.txt");
-                for (int i = 0; i < Directory.GetFiles(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] +"\\Battle\\Round").Length; i++)
-                {
-                    string file = Directory.GetFiles(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\Battle\\Round")[i];
-                    if (Directory.GetFiles(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\Battle\\Round")[i]
-                        .Substring(Directory.GetFiles(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\Battle\\Round")[i].Length - 3) == "txt") 
-                        BattleControl.roundDialogAsset.Add(File.ReadAllText(file));
-                }
-
-            BattleControl.roundEditorData = File.ReadAllText(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\UI\\RoundEditor.txt");
+                string file = Directory.GetFiles(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\Battle\\Round")[i];
+                if (Directory.GetFiles(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\Battle\\Round")[i]
+                    .Substring(Directory.GetFiles(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\Battle\\Round")[i].Length - 3) == "txt")
+                    BattleControl.roundDialogAsset.Add(File.ReadAllText(file));
             }
+
+        }
         OverwroldControl.menuAndSettingAsset = File.ReadAllText(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\UI\\MenuAndSetting.txt");
         OverwroldControl.owTextsAsset = File.ReadAllText(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\Overworld\\Overworld.txt");
         OverwroldControl.safeText = File.ReadAllText(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\SafeText.txt");
         ItemControl.itemText = File.ReadAllText(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\UI\\ItemText.txt");
-     
-        
 
 
 
-        if (inBattle == 1)
+
+
+        if (sceneState == SceneState.InBattle)
         {
             battlePlayerController = GameObject.Find("Player").GetComponent<BattlePlayerController>();
-            LoadItemData(BattleControl.barrgeSetUpSave, BattleControl.barrgeSetUpAsset);
-
-            LoadRound(GetComponent<RoundController>().round);
 
             LoadItemData(BattleControl.uiTextSave, BattleControl.uiText);
             ScreenMaxToOneSon(BattleControl.uiTextSave, BattleControl.actSave, "Act\\");
@@ -97,12 +116,6 @@ public class MainControl : MonoBehaviour
             BattleControl.roundTextSave = ChangeItemData(BattleControl.roundTextSave, true, new List<string>());
 
         }
-        else if (inBattle == 2)
-        {
-            LoadItemData(BattleControl.roundEditorMax, BattleControl.roundEditorData);
-        }
-
-
         LoadItemData(OverwroldControl.menuAndSettingSave, OverwroldControl.menuAndSettingAsset);
         LoadItemData(OverwroldControl.owTextsSave, OverwroldControl.owTextsAsset);
         LoadItemData(ItemControl.itemMax, ItemControl.itemData);
@@ -137,6 +150,11 @@ public class MainControl : MonoBehaviour
         }
 
         CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture(ScreenMaxToOneSon(OverwroldControl.menuAndSettingSave, "CultureInfo"));
+
+
+        if (OverwroldControl.isDebug)
+            PlayerControl.hp = PlayerControl.hpMax;
+
     }
     // Start is called before the first frame update
     private void Awake()
@@ -216,14 +234,6 @@ public class MainControl : MonoBehaviour
 
             if (OverwroldControl.invincible)
                 PlayerControl.hp = PlayerControl.hpMax;
-
-            if (Input.GetKeyDown(KeyCode.CapsLock))
-            {
-                LoadRound(UnityEngine.Random.Range(0, 2));
-
-            }
-
-
 
             PlayerControl.playerName = RandomTextColor() + 'd' + RandomTextColor() + 'e' + RandomTextColor() + 'b' + RandomTextColor() + 'u' + RandomTextColor() + 'g' + "</color></color></color></color></color>";
         }
@@ -541,46 +551,7 @@ public class MainControl : MonoBehaviour
     }
     public bool forceJumpLoadRound;
 
-    /// <summary>
-    /// 因为回合数据是在每回合前调入的，所以搁这
-    /// 调入回合数据
-    /// </summary>
-    public void LoadRound(int round)
-    {
-        StopAllCoroutines();
-        StartCoroutine(_LoadItemDataForRound(BattleControl.roundSave, BattleControl.roundAsset[round]));
-        
-    }
-    /// <summary>
-    /// 回合保存自动排序
-    /// </summary>
-    void RoundSaveTrier()
-    {
-        int sp = BattleControl.roundSave.Count / 2;
-        //以下部分是自动排序的相关代码
-
-        for (int i = 0; i < BattleControl.roundSave.Count; i++)
-        {
-            string back = BattleControl.roundSave[i];
-            float temp = MaxToLastFloat(back);
-            int j = i;
-            for (j = i; j > 0; j--)
-            {
-                if (temp < MaxToLastFloat(BattleControl.roundSave[j - 1]))
-                {
-
-                    BattleControl.roundSave[j] = BattleControl.roundSave[j - 1];   //更小的向前移动
-
-                }
-                else
-                {
-                    BattleControl.roundSave[j] = back;//如果插入的值大于已有的值，直接在当前位置插入，并不再与前面的数字进行比较
-                    break;
-                }
-            }
-
-        }
-    }
+  
     public IEnumerator _LoadItemDataForRound(List<string> list, TextAsset texter)//保存的list 导入的text
     {
         list.Clear();
@@ -609,7 +580,6 @@ public class MainControl : MonoBehaviour
                 yield return 0;
         }
 
-        RoundSaveTrier();
 
     }
 

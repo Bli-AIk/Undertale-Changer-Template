@@ -5,8 +5,7 @@ using TMPro;
 using DG.Tweening;
 using System.Reflection;
 /// <summary>
-/// 非常简单的一个脚本
-/// 最常用的方法是挂在obj上面配一个碰撞器 配合玩家射线
+/// OWObj触发器相关 配合玩家射线
 /// 用于读取并显示文本然后显示出来
 /// </summary>
 

@@ -405,12 +405,12 @@ MonoBehaviour:
   - LanguagePack\       Language;
   - LanguagePackFullWidth\false;
   - CultureInfo\en-US;
-  - "GameOver1\\You're going to\nbe alright!\u8F42Chara!\u9F98\u9F98\u9F98\nStay
+  - "GameOver1\\You're going to\nbe alright!\u8F42debug!\u9F98\u9F98\u9F98\nStay
     determined\u9F98.\u9F98.\u9F98.;"
-  - "GameOver2\\You cannot give\nup just yet\u9F98.\u9F98.\u9F98.\u8F42Chara!\u9F98\u9F98\u9F98\nStay
+  - "GameOver2\\You cannot give\nup just yet\u9F98.\u9F98.\u9F98.\u8F42debug!\u9F98\u9F98\u9F98\nStay
     determined\u9F98.\u9F98.\u9F98.;"
-  - "GameOver3\\Don't lost hope!\u8F42Chara!\u9F98\u9F98\u9F98\nStay determined\u9F98.\u9F98.\u9F98.;"
-  - "GameOver4\\It cannot end\nnow!\u8F42Chara!\u9F98\u9F98\u9F98\nStay determined\u9F98.\u9F98.\u9F98.;"
+  - "GameOver3\\Don't lost hope!\u8F42debug!\u9F98\u9F98\u9F98\nStay determined\u9F98.\u9F98.\u9F98.;"
+  - "GameOver4\\It cannot end\nnow!\u8F42debug!\u9F98\u9F98\u9F98\nStay determined\u9F98.\u9F98.\u9F98.;"
   safeText: "Undertale:Changer is based \r\non Unity Engine produced \r\nUndertale
     fan game template.\r\nIt is strongly recommended that \r\nyou visit undertale.com
     to purchase\r\nand play the original game.\r\nThis template is open source\r\non
@@ -421,5 +421,5 @@ MonoBehaviour:
   keyCodes: 120100001301000011010000140100007a0000007800000063000000760000001d01000000000000000000001b000000
   keyCodesBack1: 730000006400000077000000610000000d0000002f010000310100000000000000000000000000000000000000000000
   keyCodesBack2: 000000000000000000000000000000000000000030010000320100000000000000000000000000000000000000000000
-  isDebug: 0
+  isDebug: 1
   invincible: 0

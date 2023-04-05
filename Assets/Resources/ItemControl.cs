@@ -4,12 +4,12 @@ using UnityEngine;
 
 
 /// <summary>
-/// 所有物品信息及当前背包信息与箱子物品信息
+/// 存储所有物品信息。
 /// </summary>
 [CreateAssetMenu(fileName = "ItemControl", menuName = "ItemControl")]
 public class ItemControl : ScriptableObject
 {
-    public TextAsset itemData;//数据包(内置) 
+    public TextAsset itemData;//数据包(内置数据调入) 
     public string itemText;//语言包
     public List<string> itemMax, itemTextMax;//总List存储 将分配到MainControl
     public List<string> itemTextMaxItem, itemTextMaxItemSon, itemTextMaxData;

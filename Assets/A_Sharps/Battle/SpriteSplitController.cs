@@ -9,7 +9,7 @@ using UnityEngine;
 /// </summary>
 public class SpriteSplitController : MonoBehaviour
 {
-    Queue<GameObject> availble = new Queue<GameObject>();//对象池
+    Queue<GameObject> available = new Queue<GameObject>();//对象池
     Texture2D map;
     GameObject Mask;
     public int poolCount;
@@ -91,17 +91,17 @@ public class SpriteSplitController : MonoBehaviour
     {
         gameObject.SetActive(false);
         gameObject.transform.SetParent(transform);
-        availble.Enqueue(gameObject);
+        available.Enqueue(gameObject);
     }
     /// <summary>
     /// 喜提对象 square)
     /// </summary>
     public GameObject GetFromPool()
     {
-        if (availble.Count == 0)
+        if (available.Count == 0)
             FillPool();
 
-        var square = availble.Dequeue();
+        var square = available.Dequeue();
 
         square.SetActive(true);
         return square;
