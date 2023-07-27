@@ -33,7 +33,7 @@
 編輯選中;
 刪除選中;
 刷新;
-讓我們開始嘗試新事物吧。</enter></enter>在左側新建初始化彈幕，或導入文件至遊戲根目錄下的StreamingAssets文件夾內。</enter>回合編輯器教程視頻：www.bilibili.com/video/BV1GJ411x7h7;
+讓我們開始嘗試新事物吧。<enter><enter>在左側新建初始化彈幕，或導入文件至遊戲根目錄下的StreamingAssets文件夾內。<enter>回合編輯器教程視頻：www.bilibili.com/video/BV1GJ411x7h7;
 新建分組;
 隨機：;
 新建初始化;

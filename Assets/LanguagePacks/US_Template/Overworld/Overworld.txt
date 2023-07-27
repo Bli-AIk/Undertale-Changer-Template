@@ -6,22 +6,22 @@ Format:
 
 Read name\Text;
 
-<Image=x> or 鼵x鼵 set the expression code to be displayed. In particular, if x is negative here, it will be set as no one sends out a conversation (narration).
+<image=x> or 鼵x鼵 set the expression code to be displayed. In particular, if x is negative here, it will be set as no one sends out a conversation (narration).
 
 Generally speaking, the expression code is determined by the game. If you want to change it, you should test it one by on.
 
 Typewriter special characters (general) input:
-</stop> or  龘 causes the typewriter to pause briefly as it passes through the character.
+<stop> or  龘 causes the typewriter to pause briefly as it passes through the character.
 (This character will not be printed before/after the punctuation mark. The principle is to use the preset "pause typing speed" to type a blank character to achieve pause.
 
-</enter>Use it to enter the carriage return symbol. 
+<enter>Use it to enter the carriage return symbol. 
 <x> Enter the character x directly. X can only be one character. This character will skip the typewriter and be input directly. It is very easy to use.
 
 </else>Display separator, if the food has more than one display text, use this symbol to split.
 
 -In general, the probability of occurrence of each text display is equal. (WIP, please do not use)
 
-If you need to input a long text or simply want the player to press the Z key more often, you can insert</passText>or 轂 into a text
+If you need to input a long text or simply want the player to press the Z key more often, you can insert<passText>or 轂 into a text
 
 After the typewriter detects the character, it will stop typing. If the player presses the Z key, it will clear the current text and continue typing.
 
@@ -45,17 +45,17 @@ Rich text input:
 
 */
 
-DemoBox1\<Image=-1><FX=0>* This is a broken box</stop>.</stop>.</stop>.</enter>* WTF,why is there no interface?!
-</passText><Image=0><FX=2>Never </stop><Image=1>gonna<FX=3></enter>< >< >GIVE </stop>YOU </stop>UP.
-</passText><Image=2><FX=2>* By the way,</stop>This sentence</enter>< >< >is to test the typewriter,<FX=3></stop></enter>< >< ><Image=0><L><I><K><E>< ><T><H><I><S>.
-</passText><Image=0><FX=2><*>< ><D><I><R><E><C><T>< ><I><N><P><U><T><.></enter>< >< ></stop></stop></stop>Cool.
-</passText><Image=2>* What?</stop>You didn't see it</enter>< >< >clearly?</stop></enter>* Then I'll slow down.</stop></stop></stop></stop></stop>
-</passText><Image=2><*>< ></stop></stop></stop><D><I></stop></stop></stop><R><E></stop></stop></stop><C><T>< ></stop></stop></stop><T><H></stop></stop></stop><I><S></stop></stop></stop><.></stop></stop></stop>Huh?;
-Plot\<Image=-1><FX=0>* .</stop>.</stop>.</stop>.</stop>.</stop>.
-</passText>* WTF? Why is there no one??
-</passText><Image=0><FX=2>* SpongeHead, shut up.
-</passText><Image=-1><FX=0>* WHAT,</stop>FLOWEY!</stop></enter>* But you have no shadow,</stop></enter>< >< >What's wrong with you?
-</passText><Image=2><FX=2>* Shut up,</stop></stop></stop></stop></stop><Image=1>and fight,</stop></enter>< >< >hurry up.
+DemoBox1\<image=-1><fx=0>* This is a broken box<stop>.<stop>.<stop>.<enter>* WTF,why is there no interface?!
+<passText><image=0><fx=2>Never <stop><image=1>gonna<fx=3><enter>< >< >GIVE <stop>YOU <stop>UP.
+<passText><image=2><fx=2>* By the way,<stop>This sentence<enter>< >< >is to test the typewriter,<fx=3><stop><enter>< >< ><image=0><L><I><K><E>< ><T><H><I><S>.
+<passText><image=0><fx=2><*>< ><D><I><R><E><C><T>< ><I><N><P><U><T><.><enter>< >< ><stop><stop><stop>Cool.
+<passText><image=2>* What?<stop>You didn't see it<enter>< >< >clearly?<stop><enter>* Then I'll slow down.<stop><stop><stop><stop><stop>
+<passText><image=2><*>< ><stop><stop><stop><D><I><stop><stop><stop><R><E><stop><stop><stop><C><T>< ><stop><stop><stop><T><H><stop><stop><stop><I><S><stop><stop><stop><.><stop><stop><stop>Huh?;
+Plot\<image=-1><fx=0>* .<stop>.<stop>.<stop>.<stop>.<stop>.
+<passText>* WTF? Why is there no one??
+<passText><image=0><fx=2>* SpongeHead, shut up.
+<passText><image=-1><fx=0>* WHAT,<stop>FLOWEY!<stop><enter>* But you have no shadow,<stop><enter>< >< >What's wrong with you?
+<passText><image=2><fx=2>* Shut up,<stop><stop><stop><stop><stop><image=1>and fight,<stop><enter>< >< >hurry up.
 ;
 
-BackMenu\<Image=-1><FX=1>* (This is the test text meow.)</enter>* (Return to MENU scene meow?)</enter><FX=-1><size=5> </size>< >< >< >< >< >< >  Meow<size=5> </size>< >< >< >< >< >< >< >  Nahh</select>BackMenu;
+BackMenu\<image=-1><fx=1>* (This is the test text meow.)<enter>* (Return to MENU scene meow?)<enter><fx=-1><size=5> </size>< >< >< >< >< >< >  Meow<size=5> </size>< >< >< >< >< >< >< >  Nahh<select>BackMenu;

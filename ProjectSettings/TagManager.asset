@@ -15,7 +15,7 @@ TagManager:
   - CanvasUI
   - Water
   - UI
-  - 
+  - BulletInside
   - 
   - 
   - 
@@ -45,14 +45,14 @@ TagManager:
   - name: Tilemap
     uniqueID: 1212127259
     locked: 0
+  - name: Shadow
+    uniqueID: 1156365445
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
   - name: Columns
     uniqueID: 695157325
-    locked: 0
-  - name: Shadow
-    uniqueID: 1156365445
     locked: 0
   - name: UI
     uniqueID: 3159946757

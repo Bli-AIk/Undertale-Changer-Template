@@ -14,4 +14,4 @@ It is generally not recommended to change the bubble size ratio (unless the word
 
 (4,3)\(2,1.5)\NPC1\false\-1.5\<Font=3>WTF!;
 (4,3)\(2,1.5)\NPC1\false\-1.5\<Font=3>What are you???;
-(4,3)\(-6,1.5)\NPC2\true\-1.5\<Font=3>Get the hell out</enter>of here.;
+(4,3)\(-6,1.5)\NPC2\true\-1.5\<Font=3>Get the hell out<enter>of here.;

@@ -22,40 +22,40 @@ After the change, please confirm that the txt format is UTF-8. If not, please mo
 
 Special character input:
 
-</data0>Call the text in the data, where 0 is the number. The number starts from 0 instead of 1
+<data0>Call the text in the data, where 0 is the number. The number starts from 0 instead of 1
 
 Can be changed (No Dolphins!!!!!!!)
 
-</autoFoodFull>Automatically detect the player's HP and the item's recovered HP, and then display:
+<autoFoodFull>Automatically detect the player's HP and the item's recovered HP, and then display:
 * You ate XX.
 * * You recovered XX HP! / Your HP was maxed out.
-</autoFood> or 齉 ditto,but there is no first half sentence.(You ate XX.)
+<autoFood> or 齉 ditto,but there is no first half sentence.(You ate XX.)
 Please note that this character can only be placed in Text for USE, otherwise, the program will ignore it.
 
 
-</autoCheckFood>Automatically detect the food and display * "Name" - Heals XX HP
--Subitem</itemHp>Get food supplement hp 
--Subitem</itemNameFood>Get the name of the item, in which Food can be changed to Arm/Armor/Other
+<autoCheckFood>Automatically detect the food and display * "Name" - Heals XX HP
+-Subitem<itemHp>Get food supplement hp 
+-Subitem<itemNameFood>Get the name of the item, in which Food can be changed to Arm/Armor/Other
 
-</autoArm>Automatically detect the Weapon and display * You equipped XX.
-</autoArmor>Automatically detect the Armor and display * You equipped XX.
+<autoArm>Automatically detect the Weapon and display * You equipped XX.
+<autoArmor>Automatically detect the Armor and display * You equipped XX.
 
-</autoCheckArm>Automatically detect the Weapon and display * "Name" - WEAPON AT XX
--Subitem</itemAtk>get ATK
-</autoCheckArmor>Automatically detect the Armor and display * "Name" - ARMOR DF XX
--Subitem</itemDef>get DEF
+<autoCheckArm>Automatically detect the Weapon and display * "Name" - WEAPON AT XX
+-Subitem<itemAtk>get ATK
+<autoCheckArmor>Automatically detect the Armor and display * "Name" - ARMOR DF XX
+-Subitem<itemDef>get DEF
 
-</autoLoseFood>Automatically detects the item name and displays "* XX was thrown away."
+<autoLoseFood>Automatically detects the item name and displays "* XX was thrown away."
 
 Food can be changed to Arm/Armor/Other
 
 The above principle is to call data.
 
 Typewriter special characters (general) input:
-</stop> or  龘 causes the typewriter to pause briefly as it passes through the character.
+<stop> or  龘 causes the typewriter to pause briefly as it passes through the character.
 (This character will not be printed before/after the punctuation mark. The principle is to use the preset "pause typing speed" to type a blank character to achieve pause.
 
-</enter>Use it to enter the carriage return symbol. 
+<enter>Use it to enter the carriage return symbol. 
 
 </else>Display separator, if the food has more than one display text, use this symbol to split.
 
@@ -93,20 +93,20 @@ In addition, do not write two comments consecutively at least 3 characters apart
 */
 
 /* I T E M */
-Item\baaaaaaaaaaaaaaaa\Two servings\</autoFoodFull></enter>* Another test, ahhhhh</stop>.</stop>.</stop>.</passText>* But it went well.\</autoCheckFood></enter>* An indescribable gadget</stop>.</stop>.</stop>.</passText><color=yellow>* Oh, my God, the test was successful!!!\</autoLoseFood>;
-Item\bang\A serving of food\* You tasted the rest of this stuff.</stop></enter></autoFood>\</autoCheckFood></enter>* Still nameless</stop>.</stop>.</stop>.\</autoLoseFood>;
+Item\baaaaaaaaaaaaaaaa\Two servings\<autoFoodFull><enter>* Another test, ahhhhh<stop>.<stop>.<stop>.</passText>* But it went well.\<autoCheckFood><enter>* An indescribable gadget<stop>.<stop>.<stop>.</passText><color=yellow>* Oh, my God, the test was successful!!!\<autoLoseFood>;
+Item\bang\A serving of food\* You tasted the rest of this stuff.<stop><enter><autoFood>\<autoCheckFood><enter>* Still nameless<stop>.<stop>.<stop>.\<autoLoseFood>;
 
-Item\pia1\Broken t.knife\</autoArm>\</autoCheckArm>\</autoLoseArm>;
-Item\pia2\<color=yellow>Golden Sword PLUS</color>\</autoArm></enter>* Golden Legend This is.\</autoCheckArm></enter>* Um... wtf is that(\* <color=red>You just throw it away?</stop>?</stop>?</color>;
+Item\pia1\Broken t.knife\<autoArm>\<autoCheckArm>\<autoLoseArm>;
+Item\pia2\<color=yellow>Golden Sword PLUS</color>\<autoArm><enter>* Golden Legend This is.\<autoCheckArm><enter>* Um... wtf is that(\* <color=red>You just throw it away?<stop>?<stop>?</color>;
 
 
-Item\tatata1\T.P.S\</autoArmor>\</autoCheckArmor>\</autoLoseArmor>;
-Item\tatata2\Wearable sth\</autoArmor>\</autoCheckArmor>\</autoLoseArmor>;
+Item\tatata1\T.P.S\<autoArmor>\<autoCheckArmor>\<autoLoseArmor>;
+Item\tatata2\Wearable sth\<autoArmor>\<autoCheckArmor>\<autoLoseArmor>;
 
 
 /* D A T A */
 
-Data\ITEM</enter></color>STAT;/*Color detection graying is written in the code. If you don't need this effect, you can write</color>at the top*/
+Data\ITEM<enter></color>STAT;/*Color detection graying is written in the code. If you don't need this effect, you can write</color>at the top*/
 Data\AT;/*STAT*/
 Data\DF;
 Data\ NEXT;
@@ -123,15 +123,15 @@ item use/info/drop
 11+ 
 */
 
-Data\* You ate </itemNameFood>.</stop>;
-Data\* You recovered 齉 HP!</stop>;/*</itemHp>is not used. This step requires real-time detection, so a separate detection method is inserted into the typewriter.The 齉 here is only used to detect where the HP value is inserted*/
-Data\* "</itemNameFood>" - Heals </itemHp> HP</stop>;
-Data\* You equipped </itemNameArm>.</stop>;
-Data\* You equipped </itemNameArmor>.</stop>;
-Data\* "</itemNameArm>" - Weapon </stop>AT </itemAtk></stop>;
-Data\* "</itemNameArmor>" - Armor </stop>DF </itemDef></stop>;
-Data\* </itemNameFood> was thrown away.</stop>;
-Data\* </itemNameArm> was thrown away.</stop>;
-Data\* </itemNameArmor> was thrown away.</stop>;/*20*/
-Data\* </itemNameOther> was thrown away.</stop>;
-Data\* Your HP was maxed out.</stop>;
+Data\* You ate <itemNameFood>.<stop>;
+Data\* You recovered 齉 HP!<stop>;/*<itemHp>is not used. This step requires real-time detection, so a separate detection method is inserted into the typewriter.The 齉 here is only used to detect where the HP value is inserted*/
+Data\* "<itemNameFood>" - Heals <itemHp> HP<stop>;
+Data\* You equipped <itemNameArm>.<stop>;
+Data\* You equipped <itemNameArmor>.<stop>;
+Data\* "<itemNameArm>" - Weapon <stop>AT <itemAtk><stop>;
+Data\* "<itemNameArmor>" - Armor <stop>DF <itemDef><stop>;
+Data\* <itemNameFood> was thrown away.<stop>;
+Data\* <itemNameArm> was thrown away.<stop>;
+Data\* <itemNameArmor> was thrown away.<stop>;/*20*/
+Data\* <itemNameOther> was thrown away.<stop>;
+Data\* Your HP was maxed out.<stop>;

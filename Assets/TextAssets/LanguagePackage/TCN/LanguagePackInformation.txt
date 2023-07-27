@@ -4,6 +4,6 @@
 LanguagePackName\繁體中文(內置);
 
 /* 建議在此處標明各人員及職位 如xxx(原始文本),xxx(翻譯),xxx(校對)等。 */
-LanguagePackAuthor\通過Open Chinese Convert轉換，</enter>可能存在語義差異。;
+LanguagePackAuthor\通過Open Chinese Convert轉換，<enter>可能存在語義差異。;
 
 LanguagePackInformation\已啓用內置繁體中文語言包。;

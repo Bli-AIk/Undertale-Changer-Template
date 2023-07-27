@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SpriteBattleMask
+  m_Shader: {fileID: -6465566751694194690, guid: 148a856a5013511488d29384c4e4589c,
+    type: 3}
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _Inside: 0
+    - _IsMask: 1
+    - _IsOutSide: 0
+    - _PointNum: 4
+    - _Width: 0.115
+    m_Colors:
+    - _End: {r: -5.93, g: 41.4, b: 0, a: 0}
+    - _Point: {r: 0, g: 0, b: 0, a: 0}
+    - _Point0: {r: 5.93, g: 41.4, b: 0, a: 0}
+    - _Point1: {r: -5.93, g: 35.8, b: 0, a: 0}
+    - _Point2: {r: -5.93, g: 38.6, b: 0, a: 0}
+    - _Point3: {r: 5.93, g: 38.6, b: 0, a: 0}
+    - _Point4: {r: 0, g: 0, b: 0, a: 0}
+    - _Start: {r: 5.93, g: 41.4, b: 0, a: 0}
+  m_BuildTextureStacks: []

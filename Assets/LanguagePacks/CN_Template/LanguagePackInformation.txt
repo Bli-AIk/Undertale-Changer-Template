@@ -6,6 +6,6 @@ LanguagePackName\简体中文模板包;
 /* 建议在此处标明各人员及职位 如xxx(原始文本),xxx(翻译),xxx(校对)等。 */
 LanguagePackAuthor\作者：AIk(原始文本);
 
-LanguagePackInformation\简体中文模板包，内容与 简体中文(内置) 一致，</enter>供修改使用，修改前记得备份。;
+LanguagePackInformation\简体中文模板包，内容与 简体中文(内置) 一致，<enter>供修改使用，修改前记得备份。;
 
 /*因debug调试原因，全半角设定在MenuAndSetting.txt里设置*/

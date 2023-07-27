@@ -18,23 +18,23 @@ If the text is null, it will be skipped directly.
 Item related options must be configured at the Item text.
 
 Special characters:
-</getEnemiesName>Get the name of the selected enemy
-</getEnemiesATK>Get the ATK of the selected enemy
-</getEnemiesDEF>Get the DEF of the selected enemy
+<getEnemiesName>Get the name of the selected enemy
+<getEnemiesATK>Get the ATK of the selected enemy
+<getEnemiesDEF>Get the DEF of the selected enemy
 The above three special characters are used for Check only for ACT.
 
 Typewriter special characters (general) input:
-</stop> or  龘 causes the typewriter to pause briefly as it passes through the character.
+<stop> or  龘 causes the typewriter to pause briefly as it passes through the character.
 (This character will not be printed before/after the punctuation mark. The principle is to use the preset "pause typing speed" to type a blank character to achieve pause.
 
-</enter>Use it to enter the carriage return symbol. 
+<enter>Use it to enter the carriage return symbol. 
 <x> Enter the character x directly. X can only be one character. This character will skip the typewriter and input directly. It is very humanized().
 
 </else>Display separator, if the food has more than one display text, use this symbol to split.
 
 -In general, the probability of occurrence of each text display is equal. (WIP, please do not use)
 
-If you need to input a long text or simply want the player to press the Z key more often, you can insert</passText>or 轂 into a text
+If you need to input a long text or simply want the player to press the Z key more often, you can insert<passText>or 轂 into a text
 
 After the typewriter detects the character, it will stop typing. If the player presses the Z key, it will clear the current text and continue typing.
 
@@ -71,15 +71,15 @@ Round\0\* Everybody,this is just great!;
 Round\1\* CaO.;
 
 
-Act\NPC1\Check\* </getEnemiesName> 龘-龘 ATK龘 </getEnemiesATK>龘 DEF龘 </getEnemiesDEF>龘</enter>* What's this?;
-Act\NPC1\Rua\* You touched </getEnemiesName>。龘</enter>* It makes a sound of "pika pika".;
-Act\NPC1\Prpr \* You rushed up and licked at the speed of light.龘</enter>* and then,龘You get fooled,龘 fool.;
+Act\NPC1\Check\* <getEnemiesName> 龘-龘 ATK龘 <getEnemiesATK>龘 DEF龘 <getEnemiesDEF>龘<enter>* What's this?;
+Act\NPC1\Rua\* You touched <getEnemiesName>。龘<enter>* It makes a sound of "pika pika".;
+Act\NPC1\Prpr \* You rushed up and licked at the speed of light.龘<enter>* and then,龘You get fooled,龘 fool.;
 Act\NPC1\Fk\* People can't.龘.龘.龘at least not.龘.龘.;
 
-Act\NPC2\Check\* </getEnemiesName> 龘-龘 ATK龘 </getEnemiesATK>龘 DEF龘 </getEnemiesDEF>龘</enter>* What's this...?!;
-Act\NPC2\Commend\* You said to </getEnemiesName> that it looks very unique。龘</enter>* </getEnemiesName> felt very confused.;
-Act\NPC2\Hug\* You picked it up </getEnemiesName>。龘</enter>* </getEnemiesName>seems to be scared龘.龘.龘.</passText>* But he felt very happy.;
-Act\NPC2\Knock\* You knocked </getEnemiesName> on the head。龘</enter>* <color=red>The effect is outstanding!;
+Act\NPC2\Check\* <getEnemiesName> 龘-龘 ATK龘 <getEnemiesATK>龘 DEF龘 <getEnemiesDEF>龘<enter>* What's this...?!;
+Act\NPC2\Commend\* You said to <getEnemiesName> that it looks very unique。龘<enter>* <getEnemiesName> felt very confused.;
+Act\NPC2\Hug\* You picked it up <getEnemiesName>。龘<enter>* <getEnemiesName>seems to be scared龘.龘.龘.<passText>* But he felt very happy.;
+Act\NPC2\Knock\* You knocked <getEnemiesName> on the head。龘<enter>* <color=red>The effect is outstanding!;
 
 Mercy\NPC1\Spare\Null;
 Mercy\NPC1\Flee\* You can't Flee.;

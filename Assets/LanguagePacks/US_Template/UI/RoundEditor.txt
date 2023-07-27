@@ -33,7 +33,7 @@
 编辑选中;
 删除选中;
 刷新;
-让我们开始尝试新事物吧。</enter></enter>在左侧新建初始化弹幕，或导入文件至游戏根目录下的StreamingAssets文件夹内。</enter>回合编辑器教程视频：www.bilibili.com/video/BV1GJ411x7h7;
+让我们开始尝试新事物吧。<enter><enter>在左侧新建初始化弹幕，或导入文件至游戏根目录下的StreamingAssets文件夹内。<enter>回合编辑器教程视频：www.bilibili.com/video/BV1GJ411x7h7;
 新建分组;
 随机：;
 新建初始化;

@@ -15,24 +15,24 @@ Mercy\怪物名稱\顯示文本\選擇後顯示的文本;
 Item相關選項必須在Item文本處配置。
 
 特殊字符：
-</getEnemiesName>獲取選擇敵人的名稱
-</getEnemiesATK>獲取選擇敵人的ATK
-</getEnemiesDEF>獲取選擇敵人的DEF
+<getEnemiesName>獲取選擇敵人的名稱
+<getEnemiesATK>獲取選擇敵人的ATK
+<getEnemiesDEF>獲取選擇敵人的DEF
 以上三個特殊字符就是爲Check服務的 僅能用於ACT
 
 打字機特殊字符(通用)輸入：
-</stop>或 龘 字符會使打字機經過此字符時會短暫停頓。
+<stop>或 龘 字符會使打字機經過此字符時會短暫停頓。
 (該字符不會被打出 一般用於標點符號前/後。原理爲使用預設的“停頓打字速度”打出一個空字符，從而實現停頓。
 在舊模板中，打字機經過標點符號就會停頓，但這也導致了一些特殊情況無法解決。因此，修改爲必須手動添加該字符。
 請注意，按下X後不會在此字符處停頓。該字符可疊加使用。停頓速度根據打字機的設置而定——簡單來說就是你改不了)
 
-</enter>回車符 
+<enter>回車符 
 <x>直接輸入字符x。x只能是一個字符，這個字符會跳過打字機直接輸入，非常的人性。
 
 </else>顯示分隔符，如果若食物有多種顯示文本，使用該符號分割。
 -一般情況下，各個文本顯示出現的概率均等。(WIP 未完成 勿用)
 
-如果你需要輸入很長的一段文字或單純想要玩家多按那麼一下子Z鍵，你可以在一段文本內插入 </passText>或 轂 字符
+如果你需要輸入很長的一段文字或單純想要玩家多按那麼一下子Z鍵，你可以在一段文本內插入 <passText>或 轂 字符
 打字機檢測該字符後會停止打字，玩家若按下Z鍵將會清空當前文本並繼續打字狀態。
 此前的富文本將失效，因爲此前的文本都清空了。
 
@@ -64,15 +64,15 @@ Round\0\* 好極了我的家人們！;
 Round\1\* 草;
 
 
-Act\NPC1\查看\* </getEnemiesName> 龘-龘 攻擊龘 </getEnemiesATK>龘 防禦龘 </getEnemiesDEF>龘</enter>* 這是啥啊？？？。;
-Act\NPC1\Rua\* 你摸了摸</getEnemiesName>。龘</enter>* 它發出了“嗷”的聲音。;
-Act\NPC1\Prpr\* 你衝了上去然後光速開舔。龘</enter>* 然後呢，龘你就被電了，龘憨批。;
+Act\NPC1\查看\* <getEnemiesName> 龘-龘 攻擊龘 <getEnemiesATK>龘 防禦龘 <getEnemiesDEF>龘<enter>* 這是啥啊？？？。;
+Act\NPC1\Rua\* 你摸了摸<getEnemiesName>。龘<enter>* 它發出了“嗷”的聲音。;
+Act\NPC1\Prpr\* 你衝了上去然後光速開舔。龘<enter>* 然後呢，龘你就被電了，龘憨批。;
 Act\NPC1\綽\* 人不能.龘.龘.龘至少不可以.龘.龘.;
 
-Act\NPC2\查看\* </getEnemiesName> 龘-龘 攻擊龘 </getEnemiesATK>龘 防禦龘 </getEnemiesDEF>龘</enter>* 這又啥啊？？？;
-Act\NPC2\誇誇\* 你對</getEnemiesName>說它長得很別緻。龘</enter>* </getEnemiesName>感到非常疑惑。;
-Act\NPC2\抱抱\* 你一把抱起了</getEnemiesName>。龘</enter>* </getEnemiesName>似乎被嚇到了龘.龘.龘.</passText>* 不過它感到很開心。;
-Act\NPC2\敲敲\* 你敲了一下</getEnemiesName>的小腦殼。龘</enter>* <color=red>效 果 拔 羣 ！;
+Act\NPC2\查看\* <getEnemiesName> 龘-龘 攻擊龘 <getEnemiesATK>龘 防禦龘 <getEnemiesDEF>龘<enter>* 這又啥啊？？？;
+Act\NPC2\誇誇\* 你對<getEnemiesName>說它長得很別緻。龘<enter>* <getEnemiesName>感到非常疑惑。;
+Act\NPC2\抱抱\* 你一把抱起了<getEnemiesName>。龘<enter>* <getEnemiesName>似乎被嚇到了龘.龘.龘.<passText>* 不過它感到很開心。;
+Act\NPC2\敲敲\* 你敲了一下<getEnemiesName>的小腦殼。龘<enter>* <color=red>效 果 拔 羣 ！;
 
 Mercy\NPC1\饒恕\Null;
 Mercy\NPC1\逃跑\* 你跑不了。;

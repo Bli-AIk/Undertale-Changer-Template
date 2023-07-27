@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 132097658758957429}
   - component: {fileID: 132097658758957428}
   - component: {fileID: 132097658758957426}
-  - component: {fileID: 6758507522326976904}
+  - component: {fileID: -205202902293966211}
   m_Layer: 0
   m_Name: Bullet Template
   m_TagString: bullet
@@ -98,11 +98,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e065271676cf6f40a0b57226edd9be5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  typeName: 
   spriteRenderer: {fileID: 0}
   boxColliderList: []
+  boxColliderSizes: []
   boxHitList: 
   bulletColor: 0
---- !u!114 &6758507522326976904
+  followMode: 0
+--- !u!114 &-205202902293966211
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -111,8 +114,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 132097658758957431}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71e67dab6bf3e724eb0d623196c394f8, type: 3}
+  m_Script: {fileID: 11500000, guid: b0ab0ccf84302814c95fe0feb2247a96, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  euler: {x: 0, y: 0, z: 0}
-  notLocal: 0
