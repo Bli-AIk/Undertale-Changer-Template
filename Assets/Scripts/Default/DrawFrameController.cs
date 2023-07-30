@@ -69,9 +69,6 @@ public class DrawFrameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (MainControl.instance.OverwroldControl.isSetting || MainControl.instance.OverwroldControl.pause)
-            return;
-
         List<Vector2> localPoss = new List<Vector2>();
         for (int i = 0; i < points.Count; i++)
         {

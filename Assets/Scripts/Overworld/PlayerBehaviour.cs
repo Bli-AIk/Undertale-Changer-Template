@@ -114,7 +114,7 @@ public class PlayerBehaviour : MonoBehaviour
                         {
                             MainControl.instance.PlayerControl.scenePos = saveOwObj.newPlayerPos;
                             MainControl.instance.PlayerControl.animDirection = new Vector2(animDirectionX, animDirectionY);
-                            MainControl.instance.OutBlack(saveOwObj.sceneName, Color.black);
+                            MainControl.instance.OutBlack(saveOwObj.sceneName, Color.black, saveOwObj.banMusic);
                             saveOwObj.gameObject.SetActive(false);
                             saveOwObj = null;
                         }

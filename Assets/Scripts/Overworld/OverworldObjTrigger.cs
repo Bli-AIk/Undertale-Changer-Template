@@ -28,6 +28,7 @@ public class OverworldObjTrigger : MonoBehaviour
 
     [Header("OW跳场景 只给trigger")]
     public bool changeScene;
+    public bool banMusic;
     public string sceneName;
     public Vector3 newPlayerPos;
     [Header("OW跳场景锁定进入时方向 0无 -1左右 1上下")]
@@ -98,7 +99,7 @@ public class OverworldObjTrigger : MonoBehaviour
             MethodInfo methodInfo = typeof(OverworldObjTrigger).GetMethod(item);
             if (methodInfo == null)
             {
-                //Debug.LogError(item + "检测失败", gameObject);
+                Debug.LogError(item + "检测失败", gameObject);
             }
             else
             {
@@ -146,4 +147,6 @@ public class OverworldObjTrigger : MonoBehaviour
 
 
     }
+
+    
 }

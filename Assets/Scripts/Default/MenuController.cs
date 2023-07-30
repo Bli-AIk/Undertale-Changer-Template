@@ -11,7 +11,6 @@ public class MenuController : MonoBehaviour
     public List<TextMeshPro> tmps;
     public int select, selectMax = 3;
     public int layer;
-    CanvasController canvasController;
     private void Awake()
     {
         for (int i = 0; i < transform.childCount; i++)
@@ -22,7 +21,6 @@ public class MenuController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        canvasController = GameObject.Find("Canvas").GetComponent<CanvasController>();
         layer = 0;
         LoadLayer0();
 
@@ -116,10 +114,10 @@ public class MenuController : MonoBehaviour
                         MainControl.instance.OutBlack("Rename", Color.black, true);
                         break;
                     case 2:
-                        canvasController.InSetting();
+                        CanvasController.instance.InSetting();
                         break;
                     case 3:
-                        canvasController.settingLevel = 2;
+                        CanvasController.instance.settingLevel = 2;
                         goto case 2;
                 }
             }

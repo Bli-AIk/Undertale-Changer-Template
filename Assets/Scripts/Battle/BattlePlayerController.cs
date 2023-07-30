@@ -35,7 +35,6 @@ public class BattlePlayerController : MonoBehaviour
     public CircleCollider2D collideCollider;//圆形碰撞体
     SpriteRenderer spriteRenderer;
     public BattleControl.PlayerColor playerColor;//含有属性的颜色 读取BattleControl中的enum PlayerColor.颜色变换通过具体变换的函数来执行
-    RoundController roundController;
     Tween missAnim = null;
 
     public Volume hitVolume;
@@ -55,7 +54,6 @@ public class BattlePlayerController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         hitVolume = GetComponent<Volume>();
         hitVolume.weight = 0;
-        roundController = GameObject.Find("MainControl").GetComponent<RoundController>();
         //mask = 1 << 6;
         MainControl.instance.PlayerControl.missTime = 0;
     }
@@ -130,7 +128,7 @@ public class BattlePlayerController : MonoBehaviour
     {
         if (MainControl.instance.OverwroldControl.isSetting || MainControl.instance.OverwroldControl.pause)
             return;
-        if (!roundController.isMyRound)
+        if (!RoundController.instance.isMyRound)
             Moveing();
 
        

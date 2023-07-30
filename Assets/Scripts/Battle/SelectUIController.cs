@@ -35,7 +35,6 @@ public class SelectUIController : MonoBehaviour
     public int selectSon;
     public int selectGrandSon;//Item&Mercy:1 2 3三个位置 ACT:四个位置
     ItemSelectController itemSelectController;
-    RoundController roundController;
     TypeWritter typeWritter;
     GameObject enemiesHpLine;
     [Header("暂存ACT选项以便调用")]
@@ -61,7 +60,6 @@ public class SelectUIController : MonoBehaviour
         textUI = transform.Find("Text UI").GetComponent<TextMeshPro>();
         textUIBack = transform.Find("Text UI Back").GetComponent<TextMeshPro>();
         hpSpr = transform.Find("HP").GetComponent<SpriteRenderer>();
-        roundController = GameObject.Find("MainControl").GetComponent<RoundController>();
         itemSelectController = transform.Find("ItemSelect").GetComponent<ItemSelectController>();
         enemiesHpLine = transform.Find("EnemiesHpLine").gameObject;
         dialog = GameObject.Find("DialogBubble").GetComponent<DialogBubbleBehaviour>();
@@ -106,7 +104,7 @@ public class SelectUIController : MonoBehaviour
             return;
 
 
-        if (roundController.isMyRound)
+        if (RoundController.instance.isMyRound)
             MyRound();
 
         dialog.gameObject.SetActive(isDialog);
@@ -121,7 +119,7 @@ public class SelectUIController : MonoBehaviour
                 {
                     isDialog = false;
 
-                    roundController.OutYourRound();
+                    RoundController.instance.OutYourRound();
 
                     itemSelectController.gameObject.SetActive(false);
                     actSave = new List<string>();
@@ -170,7 +168,7 @@ public class SelectUIController : MonoBehaviour
     /// </summary>
     public void InRound()
     {
-        roundController.isMyRound = true;
+        RoundController.instance.isMyRound = true;
         selectLayer = 0;
         selectUI = 1;
         selectSon = 0;
@@ -591,7 +589,7 @@ public class SelectUIController : MonoBehaviour
                 {
                     if (selectUI != 1 && typeWritter.endString == "")
                     {
-                        OpenDialogBubble(MainControl.instance.BattleControl.roundDialogAsset[roundController.round]);
+                        OpenDialogBubble(MainControl.instance.BattleControl.roundDialogAsset[RoundController.instance.round]);
                         MainControl.instance.battlePlayerController.transform.position = new Vector2(0, -1.5f);
                         break;
                     }
@@ -601,7 +599,7 @@ public class SelectUIController : MonoBehaviour
                         {
                             typeWritter.endString = "";
                             MainControl.instance.battlePlayerController.transform.position = new Vector2(0, -1.5f);
-                            OpenDialogBubble(MainControl.instance.BattleControl.roundDialogAsset[roundController.round]);
+                            OpenDialogBubble(MainControl.instance.BattleControl.roundDialogAsset[RoundController.instance.round]);
 
                         }
                     }
@@ -610,7 +608,7 @@ public class SelectUIController : MonoBehaviour
                         if (MainControl.instance.battlePlayerController.transform.position != new Vector3(0, -1.5f))
                         {
                             MainControl.instance.battlePlayerController.transform.position = new Vector3(0, -1.5f);
-                            OpenDialogBubble(MainControl.instance.BattleControl.roundDialogAsset[roundController.round]);
+                            OpenDialogBubble(MainControl.instance.BattleControl.roundDialogAsset[RoundController.instance.round]);
                         }
                     }
                     else
@@ -662,10 +660,10 @@ public class SelectUIController : MonoBehaviour
     }
     void RoundTextLoad(bool isDiy = false, int diy = 0)
     {
-        if (roundController.round != saveRound || saveRoundText == "")
+        if (RoundController.instance.round != saveRound || saveRoundText == "")
         {
             List<string> load = new List<string>();
-            saveRound = roundController.round;
+            saveRound = RoundController.instance.round;
             if (isDiy)
             {
                 load = RoundTextLoad(MainControl.instance.BattleControl.roundTextSave, diy);

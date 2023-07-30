@@ -21,6 +21,13 @@ public class RoundController : MonoBehaviour
     private void Awake()
     {
         instance = this;
+      
+    }
+    // Start is called before the first frame update
+    void Start()
+    {
+        mainFrame = GameObject.Find("MainFrame");
+        //OutYourRound();
         //µ¯Ä»
         objectPools.Add(gameObject.AddComponent<ObjectPool>());
         objectPools[^1].count = poolCount[0];
@@ -32,13 +39,6 @@ public class RoundController : MonoBehaviour
         objectPools[^1].count = poolCount[1];
         objectPools[^1].obj = Resources.Load<GameObject>("Template/Board Template");
         objectPools[^1].FillPool();
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
-        mainFrame = GameObject.Find("MainFrame");
-        //OutYourRound();
-
 
 
     }

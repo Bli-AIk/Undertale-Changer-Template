@@ -23,7 +23,7 @@ public class TypeWritter : MonoBehaviour
     [Header("打字速度与检测停顿字符后的打字速度")]
     public float speed = 0.075f, speedSlow = 0.15f;
     [Header("打字后多少秒可以按X跳过，0为不能跳")]
-    public float clock;//设置
+    public float clock = 0.1f;//设置
     public int passTextString;
     public bool passText;
     [Header("有就勾上")]
@@ -353,7 +353,7 @@ public class TypeWritter : MonoBehaviour
     Animator canvasAnim;
     public void EndInBattle()
     {
-        canvasAnim = GameObject.Find("Canvas").GetComponent<Animator>();
+        canvasAnim = CanvasController.instance.animator;
         endInBattle = true;
     }
     /*
