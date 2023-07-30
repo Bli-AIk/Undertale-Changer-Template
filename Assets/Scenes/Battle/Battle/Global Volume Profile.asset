@@ -15,6 +15,7 @@ MonoBehaviour:
   components:
   - {fileID: 8133619234732192967}
   - {fileID: 3041026883999951130}
+  - {fileID: 7518764020060369083}
 --- !u!114 &3041026883999951130
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -59,6 +60,34 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 1
   bladeRotation:
+    m_OverrideState: 1
+    m_Value: 0
+--- !u!114 &7518764020060369083
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a87ea217cbf29246a8ae9f545ce3e5f, type: 3}
+  m_Name: ChromaticAberrationComponent
+  m_EditorClassIdentifier: 
+  active: 1
+  isShow:
+    m_OverrideState: 1
+    m_Value: 1
+  offset:
+    m_OverrideState: 1
+    m_Value: 0.01
+  speed:
+    m_OverrideState: 1
+    m_Value: 2.5
+  height:
+    m_OverrideState: 1
+    m_Value: 0.15
+  onlyOri:
     m_OverrideState: 1
     m_Value: 0
 --- !u!114 &8133619234732192967
