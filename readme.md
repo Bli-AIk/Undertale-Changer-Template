@@ -51,9 +51,11 @@ However, please make sure to prominently display "Undertale-Changer-Template" in
 3. Import the files into Unity.
 4. Open the project in Unity, and you're good to go.
 
-Currently compatible with Unity Editor version: 2022.3.3f1c1 LTS
+Currently compatible with Unity Editor version: 2021.3.15f1c1 LTS
 
 I recommend using this version or a higher one for the best experience.
+
+But it is not recommended to use the 2022 version, otherwise the template may have issues.
 
 
 ## Wiki

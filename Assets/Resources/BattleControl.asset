@@ -12,170 +12,118 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a73a6e3ef72583f49abfec714fa2cd26, type: 3}
   m_Name: BattleControl
   m_EditorClassIdentifier: 
+  barrgeSetUpAsset: {fileID: 4900000, guid: 484aa06ac99a3fb44a9dad527fa3c789, type: 3}
+  barrgeSetUpSave:
+  - demoBullet\Bullet\Demo/spr_vertplane_0\None\(0.6,2)\(0,0)\3\(0.55,0.6)\(-0.575,0)\3\(0.55,0.6)\(0.575,0)\3;
+  roundAsset:
+  - {fileID: 4900000, guid: 4915ea19652b129468972c403cdcb55e, type: 3}
+  - {fileID: 4900000, guid: 6eeb512eb42a11b4b8943a391babe8df, type: 3}
+  roundSave:
+  - EndRound\10;
   enemies:
   - {fileID: 1498577367889383382, guid: d9682d4f54f7bca49958a4b7eb68cfff, type: 3}
   - {fileID: 4810276312561821585, guid: 197e5b84c1440b748933e7f4ebd81b24, type: 3}
   enemiesHp: 65000000650000000a0000000a000000
   enemiesATK: 0200000003000000
   enemiesDEF: 0500000006000000
-  uiText: "/*\r\nUI text in battle.\r\n\r\nThe format is as follows:\r\n\r\nRound\\Round
-    number\\Text\uFF1B\r\n\r\nThe text that must be displayed before a round.\r\nIf
-    the number of rounds is 0\r\nIt will be displayed randomly before the round without
-    specific settings.\r\n\r\nAct\\Monster name\\Text displayed\\Text displayed after
-    selection;\r\nMercy\\Monster name\\Text displayed\\Text displayed after selection;\r\n\r\nA
-    monster can have up to four Act options, while Mercy has three.\r\nIf the text
-    is null, it will be skipped directly.\r\n\r\nItem related options must be configured
-    at the Item text.\r\n\r\nSpecial characters:\r\n<getEnemiesName>Get the name
-    of the selected enemy\r\n<getEnemiesATK>Get the ATK of the selected enemy\r\n<getEnemiesDEF>Get
-    the DEF of the selected enemy\r\nThe above three special characters are used
-    for Check only for ACT.\r\n\r\nTypewriter special characters (general) input:\r\n<stop>
-    or  \u9F98 causes the typewriter to pause briefly as it passes through the character.\r\n(This
-    character will not be printed before/after the punctuation mark. The principle
-    is to use the preset \"pause typing speed\" to type a blank character to achieve
-    pause.\r\n\r\n<enter>Use it to enter the carriage return symbol. \r\n<x> Enter
-    the character x directly. X can only be one character. This character will skip
-    the typewriter and be input directly. It is very easy to use.\r\n\r\n</else>Display
-    separator, if the food has more than one display text, use this symbol to split.\r\n\r\n-In
-    general, the probability of occurrence of each text display is equal. (WIP, please
-    do not use)\r\n\r\nIf you need to input a long text or simply want the player
-    to press the Z key more often, you can insert<passText>or \u8F42 into a text\r\n\r\nAfter
-    the typewriter detects the character, it will stop typing. If the player presses
-    the Z key, it will clear the current text and continue typing.\r\n\r\nThe previous
-    rich text will be invalidated because the previous text is empty.\r\n\r\nRich
-    text input:\r\n<color=#00000000>Color symbol, support RGBA, need hexadecimal\r\n</color>Remove
-    color\r\n\r\n<b>bold\r\n</b>Remove bold\r\n\r\n<i>italic\r\n</i>Remove italic\r\n\r\n<size=50>Change
-    font size\r\n</size>Remove Changes\r\n\r\n<color=red>Color symbol. If you need
-    a specific support name, please search \"Rich Text\" or \"Unity Rich Text\" on
-    your browser\r\n</color>Remove color\r\n\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014-
-    SPOILER REMINDER -\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\r\n\r\n*This
-    document contains in-game story content*\r\n\r\nFor your game experience, if
-    you have not completed the game process, please do not browse this text package.\r\n\r\nIn
-    addition, do not write two comments consecutively at least 3 characters apart,
-    otherwise an error may be reported.\r\n\r\n\r\n*/\r\n\r\nRound\\0\\* Fate is
-    wonderful);\r\nRound\\0\\* Everybody,this is just great!;\r\nRound\\1\\* CaO.;\r\n\r\n\r\nAct\\NPC1\\Check\\*
-    <getEnemiesName> \u9F98-\u9F98 ATK\u9F98 <getEnemiesATK>\u9F98 DEF\u9F98 <getEnemiesDEF>\u9F98<enter>*
-    What's this?;\r\nAct\\NPC1\\Rua\\* You touched <getEnemiesName>\u3002\u9F98<enter>*
-    It makes a sound of \"ahhhhhh\".;\r\nAct\\NPC1\\Prpr \\* You rushed up and licked
-    at the speed of light.\u9F98<enter>* and then,\u9F98You get fooled,\u9F98 fool.;\r\nAct\\NPC1\\Fk\\*
-    People can't.\u9F98.\u9F98.\u9F98at least not.\u9F98.\u9F98.;\r\n\r\nAct\\NPC2\\Check\\*
-    <getEnemiesName> \u9F98-\u9F98 ATK\u9F98 <getEnemiesATK>\u9F98 DEF\u9F98 <getEnemiesDEF>\u9F98<enter>*
-    What's this??!;\r\nAct\\NPC2\\Commend\\* You said to <getEnemiesName> that it
-    looks very unique\u3002\u9F98<enter>* <getEnemiesName> felt very confused.;\r\nAct\\NPC2\\Hug\\*
-    You picked it up <getEnemiesName>\u3002\u9F98<enter>* <getEnemiesName>seems to
-    be scared\u9F98.\u9F98.\u9F98.<passText>* But he felt very happy.;\r\nAct\\NPC2\\Knock\\*
-    You knocked <getEnemiesName> on the head\u3002\u9F98<enter>* <color=red>The effect
-    is outstanding!;\r\n\r\nMercy\\NPC1\\Spare\\Null;\r\nMercy\\NPC1\\Flee\\* You
-    can't Flee.;\r\nMercy\\NPC2\\Spare\\Null;\r\nMercy\\NPC2\\Flee\\* You can't Flee.;\r\nMercy\\NPC2\\Catch\\Null;"
+  uiText: "/*\r\n\u6218\u6597\u5185UI\u6587\u5B57\u3002\r\n\u683C\u5F0F\u5982\u4E0B\uFF1A\r\n\r\nRound\\\u56DE\u5408\u6570\\\u6587\u672C;\r\n\u5728\u67D0\u4E2A\u56DE\u5408\u524D\u4E00\u5B9A\u4F1A\u663E\u793A\u7684\u6587\u672C\u3002\r\n\u82E5\u56DE\u5408\u6570\u8F93\u5165\u4E3A
+    0 \r\n\u5219\u4F1A\u968F\u673A\u663E\u793A\u5728\u65E0\u5177\u4F53\u8BBE\u5B9A\u7684\u56DE\u5408\u524D\u3002\r\n\r\nAct\\\u602A\u7269\u540D\u79F0\\\u663E\u793A\u6587\u672C\\\u9009\u62E9\u540E\u663E\u793A\u7684\u6587\u672C;\r\nMercy\\\u602A\u7269\u540D\u79F0\\\u663E\u793A\u6587\u672C\\\u9009\u62E9\u540E\u663E\u793A\u7684\u6587\u672C;\r\n\u4E00\u4E2A\u602A\u7269\u8EAB\u4E0A\u6700\u591A\u5141\u8BB8\u5B58\u5728\u56DB\u4E2AAct\u9009\u9879\uFF0CMercy\u5219\u4E3A\u4E09\u4E2A\u3002\r\n\u6587\u672C\u82E5\u4E3ANull\u5C06\u76F4\u63A5\u8DF3\u8FC7\u3002\r\n\r\nItem\u76F8\u5173\u9009\u9879\u5FC5\u987B\u5728Item\u6587\u672C\u5904\u914D\u7F6E\u3002\r\n\r\n\u7279\u6B8A\u5B57\u7B26\uFF1A\r\n</getEnemiesName>\u83B7\u53D6\u9009\u62E9\u654C\u4EBA\u7684\u540D\u79F0\r\n</getEnemiesATK>\u83B7\u53D6\u9009\u62E9\u654C\u4EBA\u7684ATK\r\n</getEnemiesDEF>\u83B7\u53D6\u9009\u62E9\u654C\u4EBA\u7684DEF\r\n\u4EE5\u4E0A\u4E09\u4E2A\u7279\u6B8A\u5B57\u7B26\u5C31\u662F\u4E3ACheck\u670D\u52A1\u7684
+    \u4EC5\u80FD\u7528\u4E8EACT\r\n\r\n\u6253\u5B57\u673A\u7279\u6B8A\u5B57\u7B26(\u901A\u7528)\u8F93\u5165\uFF1A\r\n</stop>\u6216
+    \u9F98 \u5B57\u7B26\u4F1A\u4F7F\u6253\u5B57\u673A\u7ECF\u8FC7\u6B64\u5B57\u7B26\u65F6\u4F1A\u77ED\u6682\u505C\u987F\u3002\r\n(\u8BE5\u5B57\u7B26\u4E0D\u4F1A\u88AB\u6253\u51FA
+    \u4E00\u822C\u7528\u4E8E\u6807\u70B9\u7B26\u53F7\u524D/\u540E\u3002\u539F\u7406\u4E3A\u4F7F\u7528\u9884\u8BBE\u7684\u201C\u505C\u987F\u6253\u5B57\u901F\u5EA6\u201D\u6253\u51FA\u4E00\u4E2A\u7A7A\u5B57\u7B26\uFF0C\u4ECE\u800C\u5B9E\u73B0\u505C\u987F\u3002\r\n\u5728\u65E7\u6A21\u677F\u4E2D\uFF0C\u6253\u5B57\u673A\u7ECF\u8FC7\u6807\u70B9\u7B26\u53F7\u5C31\u4F1A\u505C\u987F\uFF0C\u4F46\u8FD9\u4E5F\u5BFC\u81F4\u4E86\u4E00\u4E9B\u7279\u6B8A\u60C5\u51B5\u65E0\u6CD5\u89E3\u51B3\u3002\u56E0\u6B64\uFF0C\u4FEE\u6539\u4E3A\u5FC5\u987B\u624B\u52A8\u6DFB\u52A0\u8BE5\u5B57\u7B26\u3002\r\n\u8BF7\u6CE8\u610F\uFF0C\u6309\u4E0BX\u540E\u4E0D\u4F1A\u5728\u6B64\u5B57\u7B26\u5904\u505C\u987F\u3002\u8BE5\u5B57\u7B26\u53EF\u53E0\u52A0\u4F7F\u7528\u3002\u505C\u987F\u901F\u5EA6\u6839\u636E\u6253\u5B57\u673A\u7684\u8BBE\u7F6E\u800C\u5B9A\u2014\u2014\u7B80\u5355\u6765\u8BF4\u5C31\u662F\u4F60\u6539\u4E0D\u4E86)\r\n\r\n</enter>\u56DE\u8F66\u7B26
+    \r\n<x>\u76F4\u63A5\u8F93\u5165\u5B57\u7B26x\u3002x\u53EA\u80FD\u662F\u4E00\u4E2A\u5B57\u7B26\uFF0C\u8FD9\u4E2A\u5B57\u7B26\u4F1A\u8DF3\u8FC7\u6253\u5B57\u673A\u76F4\u63A5\u8F93\u5165\uFF0C\u975E\u5E38\u7684\u4EBA\u6027\u3002\r\n\r\n</else>\u663E\u793A\u5206\u9694\u7B26\uFF0C\u5982\u679C\u82E5\u98DF\u7269\u6709\u591A\u79CD\u663E\u793A\u6587\u672C\uFF0C\u4F7F\u7528\u8BE5\u7B26\u53F7\u5206\u5272\u3002\r\n-\u4E00\u822C\u60C5\u51B5\u4E0B\uFF0C\u5404\u4E2A\u6587\u672C\u663E\u793A\u51FA\u73B0\u7684\u6982\u7387\u5747\u7B49\u3002(WIP
+    \u672A\u5B8C\u6210 \u52FF\u7528)\r\n\r\n\u5982\u679C\u4F60\u9700\u8981\u8F93\u5165\u5F88\u957F\u7684\u4E00\u6BB5\u6587\u5B57\u6216\u5355\u7EAF\u60F3\u8981\u73A9\u5BB6\u591A\u6309\u90A3\u4E48\u4E00\u4E0B\u5B50Z\u952E\uFF0C\u4F60\u53EF\u4EE5\u5728\u4E00\u6BB5\u6587\u672C\u5185\u63D2\u5165
+    </passText>\u6216 \u8F42 \u5B57\u7B26\r\n\u6253\u5B57\u673A\u68C0\u6D4B\u8BE5\u5B57\u7B26\u540E\u4F1A\u505C\u6B62\u6253\u5B57\uFF0C\u73A9\u5BB6\u82E5\u6309\u4E0BZ\u952E\u5C06\u4F1A\u6E05\u7A7A\u5F53\u524D\u6587\u672C\u5E76\u7EE7\u7EED\u6253\u5B57\u72B6\u6001\u3002\r\n\u6B64\u524D\u7684\u5BCC\u6587\u672C\u5C06\u5931\u6548\uFF0C\u56E0\u4E3A\u6B64\u524D\u7684\u6587\u672C\u90FD\u6E05\u7A7A\u4E86\u3002\r\n\r\n\u5BCC\u6587\u672C\u8F93\u5165\u793A\u610F\uFF1A\r\n<color=#00000000>\u989C\u8272\u7B26
+    \u652F\u6301RGBA \u5341\u516D\u8FDB\u5236\r\n</color>\u53BB\u9664\u989C\u8272\r\n\r\n<b>\u7C97\u4F53\r\n</b>\u53BB\u9664\u7C97\u4F53\r\n\r\n<i>\u659C\u4F53\r\n</i>\u53BB\u9664\u659C\u4F53\r\n\r\n<size=50>\u66F4\u6539\u5B57\u4F53\u5927\u5C0F\r\n</size>\u53BB\u9664\u66F4\u6539\r\n\r\n<color=red>\u989C\u8272\u7B26
+    \u5177\u4F53\u652F\u6301\u540D\u79F0\u8BF7\u81EA\u884C\u6D4F\u89C8\u5668\u641C\u7D22\u201C\u5BCC\u6587\u672C\u201D\u6216\u201CUnity
+    \u5BCC\u6587\u672C\u201D\r\n</color>\u53BB\u9664\u989C\u8272\r\n\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u5267\u2014\u2014\u2014\u900F\u2014\u2014\u2014\u6CE8\u2014\u2014\u2014\u610F\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\u2014\r\n*\u6B64\u6587\u6863\u5305\u542B\u6E38\u620F\u5185\u5267\u60C5\u5185\u5BB9*\r\n\u4E3A\u4E86\u60A8\u7684\u6E38\u620F\u4F53\u9A8C\uFF0C\u82E5\u60A8\u672A\u5B8C\u6210\u6E38\u620F\u6D41\u7A0B\uFF0C\u8BF7\u52FF\u6D4F\u89C8\u6B64\u6587\u672C\u5305\u3002\r\n\u53E6\u5916\u4E0D\u8981\u628A\u4E24\u4E2A\u6CE8\u91CA\u8FDE\u7740\u5199
+    \u81F3\u5C11\u96943\u5B57\u7B26 \u5426\u5219\u53EF\u80FD\u4F1A\u62A5\u9519\u3002\r\n\r\n\r\n*/\r\n\r\nRound\\0\\*
+    \u7F18\uFF0C\u5999\u4E0D\u53EF\u8A00);\r\nRound\\0\\* \u597D\u6781\u4E86\u6211\u7684\u5BB6\u4EBA\u4EEC\uFF01;\r\nRound\\1\\*
+    \u8349\uFF0C\u6B22\u8FCE\u6765\u5230\u56DE\u54081</stop>.</stop>.</stop>.</enter>*
+    \u4E0D\u7136\u561E\uFF1F</stop>\u521A\u521A\u90A3\u662F\u7B2C0\u4E2A\u56DE\u5408\u3002;\r\n\r\n\r\nAct\\Pikachu\\\u67E5\u770B\\*
+    </getEnemiesName> \u9F98-\u9F98 \u653B\u51FB\u9F98 </getEnemiesATK>\u9F98 \u9632\u5FA1\u9F98
+    </getEnemiesDEF>\u9F98</enter>* \u6BDB\u8338\u8338\u7684.\u9F98.\u9F98.\u9F98\u9F98<color=yellow>\u76AE
+    \u9F98\u5361 \u9F98\u8D85 \u9F98\uFF01</passText>* \u559C\u6B22\u6D4B\u8BD5\u662F\u5427\u3002;\r\nAct\\Pikachu\\Rua\\*
+    \u4F60\u6478\u4E86\u6478</getEnemiesName>\u3002\u9F98</enter>* \u5B83\u53D1\u51FA\u4E86\u201C\u76AE\u5361\u76AE\u5361\u201D\u7684\u58F0\u97F3\u3002;\r\nAct\\Pikachu\\Prpr\\*
+    \u4F60\u51B2\u4E86\u4E0A\u53BB\u7136\u540E\u5149\u901F\u5F00\u8214\u3002\u9F98</enter>*
+    \u7136\u540E\u5462\uFF0C\u9F98\u4F60\u5C31\u88AB\u7535\u4E86\uFF0C\u9F98\u61A8\u6279\u3002;\r\nAct\\Pikachu\\\u7EF0\\*
+    \u4EBA\u4E0D\u80FD.\u9F98.\u9F98.\u9F98\u81F3\u5C11\u4E0D\u53EF\u4EE5.\u9F98.\u9F98.;\r\n\r\nAct\\Eevee\\\u67E5\u770B\\*
+    </getEnemiesName> \u9F98-\u9F98 \u653B\u51FB\u9F98 </getEnemiesATK>\u9F98 \u9632\u5FA1\u9F98
+    </getEnemiesDEF>\u9F98</enter>* \u6BDB\u8338\u8338\u7684.\u9F98.\u9F98.\u9F98\u9F98<color=yellow>\u4F0A
+    \u9F98\u5E03 \u9F98\u513F \u9F98\uFF01;\r\nAct\\Eevee\\\u5938\u5938\\* \u4F60\u5BF9</getEnemiesName>\u8BF4\u5B83\u957F\u5F97\u5F88\u522B\u81F4\u3002\u9F98</enter>*
+    </getEnemiesName>\u611F\u5230\u975E\u5E38\u7591\u60D1\u3002;\r\nAct\\Eevee\\\u62B1\u62B1\\*
+    \u4F60\u4E00\u628A\u62B1\u8D77\u4E86</getEnemiesName>\u3002\u9F98</enter>* </getEnemiesName>\u4F3C\u4E4E\u88AB\u5413\u5230\u4E86\u9F98.\u9F98.\u9F98.</passText>*
+    \u4E0D\u8FC7\u5B83\u611F\u5230\u5F88\u5F00\u5FC3\u3002;\r\nAct\\Eevee\\\u6572\u6572\\*
+    \u4F60\u6572\u4E86\u4E00\u4E0B</getEnemiesName>\u7684\u5C0F\u8111\u58F3\u3002\u9F98</enter>*
+    <color=red>\u6548 \u679C \u62D4 \u7FA4 \uFF01;\r\n\r\nMercy\\Pikachu\\\u9976\u6055\\Null;\r\nMercy\\Pikachu\\\u9003\u8DD1\\*
+    \u548C\u6CE1\u58F3\u68A6\u7684\u5BF9\u6297\u4E0D\u80FD\u9003\u8DD1\uFF01\u9F98\u9F98\u9F98(\u8FEB\u771F);\r\nMercy\\Eevee\\\u9976\u6055\\Null;\r\nMercy\\Eevee\\\u9003\u8DD1\\*
+    \u548C\u6CE1\u58F3\u68A6\u7684\u5BF9\u6297\u4E0D\u80FD\u9003\u8DD1\uFF01\u9F98\u9F98\u9F98(\u8FEB\u771F);\r\nMercy\\Eevee\\\u6355\u6349\\Null;"
   uiTextSave:
-  - Round\0\* Fate is wonderful);
-  - Round\0\* Everybody,this is just great!;
-  - Round\1\* CaO.;
-  - "Act\\NPC1\\Check\\* <getEnemiesName> \u9F98-\u9F98 ATK\u9F98 <getEnemiesATK>\u9F98
-    DEF\u9F98 <getEnemiesDEF>\u9F98<enter>* What's this?;"
-  - "Act\\NPC1\\Rua\\* You touched <getEnemiesName>\u3002\u9F98<enter>* It makes
-    a sound of \"ahhhhhh\".;"
-  - "Act\\NPC1\\Prpr \\* You rushed up and licked at the speed of light.\u9F98<enter>*
-    and then,\u9F98You get fooled,\u9F98 fool.;"
-  - "Act\\NPC1\\Fk\\* People can't.\u9F98.\u9F98.\u9F98at least not.\u9F98.\u9F98.;"
-  - "Act\\NPC2\\Check\\* <getEnemiesName> \u9F98-\u9F98 ATK\u9F98 <getEnemiesATK>\u9F98
-    DEF\u9F98 <getEnemiesDEF>\u9F98<enter>* What's this??!;"
-  - "Act\\NPC2\\Commend\\* You said to <getEnemiesName> that it looks very unique\u3002\u9F98<enter>*
-    <getEnemiesName> felt very confused.;"
-  - "Act\\NPC2\\Hug\\* You picked it up <getEnemiesName>\u3002\u9F98<enter>* <getEnemiesName>seems
-    to be scared\u9F98.\u9F98.\u9F98.<passText>* But he felt very happy.;"
-  - "Act\\NPC2\\Knock\\* You knocked <getEnemiesName> on the head\u3002\u9F98<enter>*
-    <color=red>The effect is outstanding!;"
-  - Mercy\NPC1\Spare\Null;
-  - Mercy\NPC1\Flee\* You can't Flee.;
-  - Mercy\NPC2\Spare\Null;
-  - Mercy\NPC2\Flee\* You can't Flee.;
-  - Mercy\NPC2\Catch\Null;
+  - "Round\\0\\* \u7F18\uFF0C\u5999\u4E0D\u53EF\u8A00);"
+  - "Round\\0\\* \u597D\u6781\u4E86\u6211\u7684\u5BB6\u4EBA\u4EEC\uFF01;"
+  - "Round\\1\\* \u8349\uFF0C\u6B22\u8FCE\u6765\u5230\u56DE\u54081</stop>.</stop>.</stop>.</enter>*
+    \u4E0D\u7136\u561E\uFF1F</stop>\u521A\u521A\u90A3\u662F\u7B2C0\u4E2A\u56DE\u5408\u3002;"
+  - "Act\\Pikachu\\\u67E5\u770B\\* </getEnemiesName> \u9F98-\u9F98 \u653B\u51FB\u9F98
+    </getEnemiesATK>\u9F98 \u9632\u5FA1\u9F98 </getEnemiesDEF>\u9F98</enter>* \u6BDB\u8338\u8338\u7684.\u9F98.\u9F98.\u9F98\u9F98<color=yellow>\u76AE
+    \u9F98\u5361 \u9F98\u8D85 \u9F98\uFF01</passText>* \u559C\u6B22\u6D4B\u8BD5\u662F\u5427\u3002;"
+  - "Act\\Pikachu\\Rua\\* \u4F60\u6478\u4E86\u6478</getEnemiesName>\u3002\u9F98</enter>*
+    \u5B83\u53D1\u51FA\u4E86\u201C\u76AE\u5361\u76AE\u5361\u201D\u7684\u58F0\u97F3\u3002;"
+  - "Act\\Pikachu\\Prpr\\* \u4F60\u51B2\u4E86\u4E0A\u53BB\u7136\u540E\u5149\u901F\u5F00\u8214\u3002\u9F98</enter>*
+    \u7136\u540E\u5462\uFF0C\u9F98\u4F60\u5C31\u88AB\u7535\u4E86\uFF0C\u9F98\u61A8\u6279\u3002;"
+  - "Act\\Pikachu\\\u7EF0\\* \u4EBA\u4E0D\u80FD.\u9F98.\u9F98.\u9F98\u81F3\u5C11\u4E0D\u53EF\u4EE5.\u9F98.\u9F98.;"
+  - "Act\\Eevee\\\u67E5\u770B\\* </getEnemiesName> \u9F98-\u9F98 \u653B\u51FB\u9F98
+    </getEnemiesATK>\u9F98 \u9632\u5FA1\u9F98 </getEnemiesDEF>\u9F98</enter>* \u6BDB\u8338\u8338\u7684.\u9F98.\u9F98.\u9F98\u9F98<color=yellow>\u4F0A
+    \u9F98\u5E03 \u9F98\u513F \u9F98\uFF01;"
+  - "Act\\Eevee\\\u5938\u5938\\* \u4F60\u5BF9</getEnemiesName>\u8BF4\u5B83\u957F\u5F97\u5F88\u522B\u81F4\u3002\u9F98</enter>*
+    </getEnemiesName>\u611F\u5230\u975E\u5E38\u7591\u60D1\u3002;"
+  - "Act\\Eevee\\\u62B1\u62B1\\* \u4F60\u4E00\u628A\u62B1\u8D77\u4E86</getEnemiesName>\u3002\u9F98</enter>*
+    </getEnemiesName>\u4F3C\u4E4E\u88AB\u5413\u5230\u4E86\u9F98.\u9F98.\u9F98.</passText>*
+    \u4E0D\u8FC7\u5B83\u611F\u5230\u5F88\u5F00\u5FC3\u3002;"
+  - "Act\\Eevee\\\u6572\u6572\\* \u4F60\u6572\u4E86\u4E00\u4E0B</getEnemiesName>\u7684\u5C0F\u8111\u58F3\u3002\u9F98</enter>*
+    <color=red>\u6548 \u679C \u62D4 \u7FA4 \uFF01;"
+  - "Mercy\\Pikachu\\\u9976\u6055\\Null;"
+  - "Mercy\\Pikachu\\\u9003\u8DD1\\* \u548C\u6CE1\u58F3\u68A6\u7684\u5BF9\u6297\u4E0D\u80FD\u9003\u8DD1\uFF01\u9F98\u9F98\u9F98(\u8FEB\u771F);"
+  - "Mercy\\Eevee\\\u9976\u6055\\Null;"
+  - "Mercy\\Eevee\\\u9003\u8DD1\\* \u548C\u6CE1\u58F3\u68A6\u7684\u5BF9\u6297\u4E0D\u80FD\u9003\u8DD1\uFF01\u9F98\u9F98\u9F98(\u8FEB\u771F);"
+  - "Mercy\\Eevee\\\u6355\u6349\\Null;"
   actSave:
-  - "NPC1\\Check\\* <getEnemiesName> \u9F98-\u9F98 ATK\u9F98 <getEnemiesATK>\u9F98
-    DEF\u9F98 <getEnemiesDEF>\u9F98<enter>* What's this?;"
-  - "NPC1\\Rua\\* You touched <getEnemiesName>\u3002\u9F98<enter>* It makes a sound
-    of \"ahhhhhh\".;"
-  - "NPC1\\Prpr \\* You rushed up and licked at the speed of light.\u9F98<enter>*
-    and then,\u9F98You get fooled,\u9F98 fool.;"
-  - "NPC1\\Fk\\* People can't.\u9F98.\u9F98.\u9F98at least not.\u9F98.\u9F98.;"
-  - "NPC2\\Check\\* <getEnemiesName> \u9F98-\u9F98 ATK\u9F98 <getEnemiesATK>\u9F98
-    DEF\u9F98 <getEnemiesDEF>\u9F98<enter>* What's this??!;"
-  - "NPC2\\Commend\\* You said to <getEnemiesName> that it looks very unique\u3002\u9F98<enter>*
-    <getEnemiesName> felt very confused.;"
-  - "NPC2\\Hug\\* You picked it up <getEnemiesName>\u3002\u9F98<enter>* <getEnemiesName>seems
-    to be scared\u9F98.\u9F98.\u9F98.<passText>* But he felt very happy.;"
-  - "NPC2\\Knock\\* You knocked <getEnemiesName> on the head\u3002\u9F98<enter>*
-    <color=red>The effect is outstanding!;"
+  - "Pikachu\\\u67E5\u770B\\* </getEnemiesName> \u9F98-\u9F98 \u653B\u51FB\u9F98
+    </getEnemiesATK>\u9F98 \u9632\u5FA1\u9F98 </getEnemiesDEF>\u9F98</enter>* \u6BDB\u8338\u8338\u7684.\u9F98.\u9F98.\u9F98\u9F98<color=yellow>\u76AE
+    \u9F98\u5361 \u9F98\u8D85 \u9F98\uFF01</passText>* \u559C\u6B22\u6D4B\u8BD5\u662F\u5427\u3002;"
+  - "Pikachu\\Rua\\* \u4F60\u6478\u4E86\u6478</getEnemiesName>\u3002\u9F98</enter>*
+    \u5B83\u53D1\u51FA\u4E86\u201C\u76AE\u5361\u76AE\u5361\u201D\u7684\u58F0\u97F3\u3002;"
+  - "Pikachu\\Prpr\\* \u4F60\u51B2\u4E86\u4E0A\u53BB\u7136\u540E\u5149\u901F\u5F00\u8214\u3002\u9F98</enter>*
+    \u7136\u540E\u5462\uFF0C\u9F98\u4F60\u5C31\u88AB\u7535\u4E86\uFF0C\u9F98\u61A8\u6279\u3002;"
+  - "Pikachu\\\u7EF0\\* \u4EBA\u4E0D\u80FD.\u9F98.\u9F98.\u9F98\u81F3\u5C11\u4E0D\u53EF\u4EE5.\u9F98.\u9F98.;"
+  - "Eevee\\\u67E5\u770B\\* </getEnemiesName> \u9F98-\u9F98 \u653B\u51FB\u9F98 </getEnemiesATK>\u9F98
+    \u9632\u5FA1\u9F98 </getEnemiesDEF>\u9F98</enter>* \u6BDB\u8338\u8338\u7684.\u9F98.\u9F98.\u9F98\u9F98<color=yellow>\u4F0A
+    \u9F98\u5E03 \u9F98\u513F \u9F98\uFF01;"
+  - "Eevee\\\u5938\u5938\\* \u4F60\u5BF9</getEnemiesName>\u8BF4\u5B83\u957F\u5F97\u5F88\u522B\u81F4\u3002\u9F98</enter>*
+    </getEnemiesName>\u611F\u5230\u975E\u5E38\u7591\u60D1\u3002;"
+  - "Eevee\\\u62B1\u62B1\\* \u4F60\u4E00\u628A\u62B1\u8D77\u4E86</getEnemiesName>\u3002\u9F98</enter>*
+    </getEnemiesName>\u4F3C\u4E4E\u88AB\u5413\u5230\u4E86\u9F98.\u9F98.\u9F98.</passText>*
+    \u4E0D\u8FC7\u5B83\u611F\u5230\u5F88\u5F00\u5FC3\u3002;"
+  - "Eevee\\\u6572\u6572\\* \u4F60\u6572\u4E86\u4E00\u4E0B</getEnemiesName>\u7684\u5C0F\u8111\u58F3\u3002\u9F98</enter>*
+    <color=red>\u6548 \u679C \u62D4 \u7FA4 \uFF01;"
   mercySave:
-  - NPC1\Spare\Null;
-  - NPC1\Flee\* You can't Flee.;
-  - NPC2\Spare\Null;
-  - NPC2\Flee\* You can't Flee.;
-  - NPC2\Catch\Null;
+  - "Pikachu\\\u9976\u6055\\Null;"
+  - "Pikachu\\\u9003\u8DD1\\* \u548C\u6CE1\u58F3\u68A6\u7684\u5BF9\u6297\u4E0D\u80FD\u9003\u8DD1\uFF01\u9F98\u9F98\u9F98(\u8FEB\u771F);"
+  - "Eevee\\\u9976\u6055\\Null;"
+  - "Eevee\\\u9003\u8DD1\\* \u548C\u6CE1\u58F3\u68A6\u7684\u5BF9\u6297\u4E0D\u80FD\u9003\u8DD1\uFF01\u9F98\u9F98\u9F98(\u8FEB\u771F);"
+  - "Eevee\\\u6355\u6349\\Null;"
   roundTextSave:
-  - 0\* Fate is wonderful);
-  - 0\* Everybody,this is just great!;
-  - 1\* CaO.;
-  roundDialogAsset:
-  - '/*Save conversation messages in a single round.
-
-    Format:
-
-    (xxx,xxx)\(xxx,xxx)\Monster
-    name\Boolean value with bubbles pointing left or right\Arrow relative y value\Text;
-
-    The
-    first bracket is the bubble size scale, followed by the relative offset coordinate.
-    Enter a name search for the role, false on the left and true on the right. The
-    default is to press Z from top to bottom.
-
-    
-
-    Some of the dialogue messages
-    are implemented in the battle, and a single text is required.
-
-    
-
-    The
-    relative ordinate is used to adjust the arrow up/down. Notice that the center
-    is - 1.5.
-
-    
-
-    The pivot point is the upper left corner.
-
-    
-
-    It
-    is generally not recommended to change the bubble size ratio (unless the word
-    size is too large). Set it above (2,2) to prevent pixel distortion caused by
-    too small
-
-    */
-
-    
-
-    (4,3)\(2,1.5)\NPC1\false\-1.5\<Font=3>WTF!;
-
-    (4,3)\(2,1.5)\NPC1\false\-1.5\<Font=3>What
-    are you???;
-
-    (4,3)\(-6,1.5)\NPC2\true\-1.5\<Font=3>Get the hell out<enter>of
-    here.;'
-  - "/*Save conversation messages in a single round.\r\nFormat:\r\n(xxx,xxx)\\(xxx,xxx)\\Monster
-    name\\Boolean value with bubbles pointing left or right\\Arrow relative y value\\Text;\r\nThe
-    first bracket is the bubble size scale, followed by the relative offset coordinate.
-    Enter a name search for the role, false on the left and true on the right. The
-    default is to press Z from top to bottom.\r\n\r\nSome of the dialogue messages
-    are implemented in the battle, and a single text is required.\r\n\r\nThe relative
-    ordinate is used to adjust the arrow up/down. Notice that the center is - 1.5.\r\n\r\nThe
-    pivot point is the upper left corner.\r\n\r\nIt is generally not recommended
-    to change the bubble size ratio (unless the word size is too large). Set it above
-    (2,2) to prevent pixel distortion caused by too small\r\n*/\r\n\r\n(4,3)\\(2,1.5)\\NPC1\\false\\-1.5\\<Font=3>Well\uFF0Cyou
-    still stand here, which means you still have some ability;\r\n(4,3)\\(2,1.5)\\NPC1\\false\\-1.5\\<Font=3>But
-    you don't have many abilities, huh?;\r\n(4,3)\\(-6,1.5)\\NPC2\\true\\-1.5\\<Font=3>LOL.;\r\n(4,3)\\(-6,1.5)\\NPC2\\true\\-1.5\\<Font=3>NEXT
-    ROUND,LET'S GO!;"
-  otherDialogAsset: []
+  - "0\\* \u7F18\uFF0C\u5999\u4E0D\u53EF\u8A00);"
+  - "0\\* \u597D\u6781\u4E86\u6211\u7684\u5BB6\u4EBA\u4EEC\uFF01;"
+  - "1\\* \u8349\uFF0C\u6B22\u8FCE\u6765\u5230\u56DE\u54081\u9F98.\u9F98.\u9F98.\n*
+    \u4E0D\u7136\u561E\uFF1F\u9F98\u521A\u521A\u90A3\u662F\u7B2C0\u4E2A\u56DE\u5408\u3002;"
+  roundDialog:
+  - "/*\u50A8\u5B58\u4EBA\u7269\u5355\u56DE\u5408\u5185\u7684\u5BF9\u8BDD\u6D88\u606F\r\n\u683C\u5F0F\uFF1A\r\n(xxx,xxx)\\(xxx,xxx)\\\u7ED9\u4E88\u89D2\u8272\\\u6C14\u6CE1\u6307\u5411\u5DE6\u6216\u53F3
+    \u8F93\u5165\u5E03\u5C14\u503C\\\u7BAD\u5934\u76F8\u5BF9\u7EB5\u5750\u6807\\\u6587\u672C;\r\n\u524D\u4E00\u4E2A\u62EC\u53F7\u4E3A\u6C14\u6CE1\u5927\u5C0F\u6BD4\u4F8B\uFF0C\u540E\u4E3A\u76F8\u5BF9\u504F\u79FB\u5750\u6807\u3002\u7ED9\u4E88\u89D2\u8272\u8F93\u5165\u540D\u79F0\u641C\u5BFB\uFF0C\u5DE6\u4FA7false\uFF0C\u53F3\u4FA7ture\u3002\u9ED8\u8BA4\u81EA\u4E0A\u800C\u4E0B\u6309Z\u8FDB\u884C\u3002\r\n\u90E8\u5206\u5BF9\u8BDD\u6D88\u606F\u5728\u6218\u6597\u5185\u5B9E\u884C\uFF0C\u9700\u8981\u5355\u5199\u4E00\u4EFD\u6587\u672C\u3002\r\n\u76F8\u5BF9\u7EB5\u5750\u6807\u7528\u4E8E\u8C03\u6574\u7BAD\u5934\u504F\u4E0A/\u504F\u4E0B\u3002\u8BF7\u6CE8\u610F\uFF0C\u5C45\u4E2D\u4E3A-1.5\u3002\r\n\u8F74\u70B9\u4E3A\u5DE6\u4E0A\u89D2\u3002\r\n\u6C14\u6CE1\u5927\u5C0F\u6BD4\u4F8B\u4E00\u822C\u4E0D\u5EFA\u8BAE\u66F4\u6539(\u9664\u975E\u5B57\u5BB9\u4E0D\u4E0B)\uFF0C\u8BBE\u5B9A\u5728(2,2)\u4EE5\u4E0A\u4EE5\u9632\u6B62\u8FC7\u5C0F\u800C\u5BFC\u81F4\u50CF\u7D20\u5931\u771F\r\n*/\r\n\r\n(4,3)\\(2,1.5)\\Pikachu\\false\\-1.5\\\u6211\u8D85\uFF01;\r\n(4,3)\\(2,1.5)\\Pikachu\\false\\-1.5\\\u4F60\u662F\u4E2A\u4EC0\u4E48\u73A9\u610F\uFF1F\uFF1F\uFF1F;\r\n(4,3)\\(-6,1.5)\\Eevee\\true\\-1.5\\\u722C\u3002;"
+  - "/*\u50A8\u5B58\u4EBA\u7269\u5355\u56DE\u5408\u5185\u7684\u5BF9\u8BDD\u6D88\u606F\r\n\u683C\u5F0F\uFF1A\r\n(xxx,xxx)\\(xxx,xxx)\\\u7ED9\u4E88\u89D2\u8272\\\u6C14\u6CE1\u6307\u5411\u5DE6\u6216\u53F3
+    \u8F93\u5165\u5E03\u5C14\u503C\\\u7BAD\u5934\u76F8\u5BF9\u7EB5\u5750\u6807\\\u6587\u672C;\r\n\u524D\u4E00\u4E2A\u62EC\u53F7\u4E3A\u6C14\u6CE1\u5927\u5C0F\u6BD4\u4F8B\uFF0C\u540E\u4E3A\u76F8\u5BF9\u504F\u79FB\u5750\u6807\u3002\u7ED9\u4E88\u89D2\u8272\u8F93\u5165\u540D\u79F0\u641C\u5BFB\uFF0C\u5DE6\u4FA7false\uFF0C\u53F3\u4FA7ture\u3002\u9ED8\u8BA4\u81EA\u4E0A\u800C\u4E0B\u6309Z\u8FDB\u884C\u3002\r\n\u90E8\u5206\u5BF9\u8BDD\u6D88\u606F\u5728\u6218\u6597\u5185\u5B9E\u884C\uFF0C\u9700\u8981\u5355\u5199\u4E00\u4EFD\u6587\u672C\u3002\r\n\u76F8\u5BF9\u7EB5\u5750\u6807\u7528\u4E8E\u8C03\u6574\u7BAD\u5934\u504F\u4E0A/\u504F\u4E0B\u3002\u8BF7\u6CE8\u610F\uFF0C\u5C45\u4E2D\u4E3A-1.5\u3002\r\n\u8F74\u70B9\u4E3A\u5DE6\u4E0A\u89D2\u3002\r\n\u6C14\u6CE1\u5927\u5C0F\u6BD4\u4F8B\u4E00\u822C\u4E0D\u5EFA\u8BAE\u66F4\u6539(\u9664\u975E\u5B57\u5BB9\u4E0D\u4E0B)\uFF0C\u8BBE\u5B9A\u5728(2,2)\u4EE5\u4E0A\u4EE5\u9632\u6B62\u8FC7\u5C0F\u800C\u5BFC\u81F4\u50CF\u7D20\u5931\u771F\r\n*/\r\n\r\n(4,3)\\(2,1.5)\\Pikachu\\false\\-1.5\\\u884C\uFF0C\u4F60\u6491\u5230\u8FD9\u91CC</enter>\u8FD8\u662F\u6709\u70B9\u542B\u91D1\u91CF\u7684\u3002;\r\n(4,3)\\(2,1.5)\\Pikachu\\false\\-1.5\\\u53EA\u4E0D\u8FC7\u8FD9</enter>\u542B\u91D1\u91CF\u4E0D\u592A\u591A\u5427\u3002;\r\n(4,3)\\(-6,1.5)\\Eevee\\true\\-1.5\\\u963F\u5DF4\u963F\u5DF4\u3002;\r\n(4,3)\\(-6,1.5)\\Eevee\\true\\-1.5\\\u4E0B\u4E00\u56DE\u5408\uFF0C\u5F00\u6574\uFF01;"
+  otherDialog: []
+  roundDialogSave: []
+  otherDialogSave: []
   bulletColorList:
   - {r: 1, g: 1, b: 1, a: 1}
   - {r: 0.2509804, g: 0.9960785, b: 0.9960785, a: 1}
@@ -197,4 +145,20 @@ MonoBehaviour:
   - {r: 0, g: 0.6509804, b: 0.77647066, a: 1}
   - {r: 0, g: 0.1137255, b: 0.49411768, a: 1}
   - {r: 0.56078434, g: 0.10980393, b: 0.5803922, a: 1}
-  randomRoundDir: 1
+  roundEditorData: "/*\r\n\u6CE8\u610F\uFF1A\u56DE\u5408\u7F16\u8F91\u5668\u76EE\u524D\u5DF2\u6401\u7F6E\uFF0C\u65E0\u89C6\u6B64\u5305\u5373\u53EF\u3002\r\n---------------------------------------\r\n---------------------------------------\r\n---------------------------------------\r\n---------------------------------------\r\n---------------------------------------\r\n---------------------------------------\r\n\u50A8\u5B58\u56DE\u5408\u7F16\u8F91\u5668\u5185\u7F6E\u7684\u6587\u672C\uFF0C\u8BF7\u52FF\u66F4\u6539\u4E0A\u4E0B\u6587\u987A\u5E8F\u3002\r\n\r\n\u5BCC\u6587\u672C\u8F93\u5165\u793A\u610F\uFF1A\r\n<color=#00000000>\u989C\u8272\u7B26
+    \u652F\u6301RGBA \u5341\u516D\u8FDB\u5236\r\n</color>\u53BB\u9664\u989C\u8272\r\n\r\n<b>\u7C97\u4F53\r\n</b>\u53BB\u9664\u7C97\u4F53\r\n\r\n<i>\u659C\u4F53\r\n</i>\u53BB\u9664\u659C\u4F53\r\n\r\n<size=50>\u66F4\u6539\u5B57\u4F53\u5927\u5C0F\r\n</size>\u53BB\u9664\u66F4\u6539\r\n\r\n<color=red>\u989C\u8272\u7B26
+    \u5177\u4F53\u652F\u6301\u540D\u79F0\u8BF7\u81EA\u884C\u6D4F\u89C8\u5668\u641C\u7D22\u201C\u5BCC\u6587\u672C\u201D\u6216\u201CUnity
+    \u5BCC\u6587\u672C\u201D\r\n</color>\u53BB\u9664\u989C\u8272\r\n*/\r\n\u521D\u59CB\u5316;\r\n\u7F16\u8F91\u5668;\r\n\r\n/*\u521D\u59CB\u5316*/\r\n\u65B0\u5EFA\u521D\u59CB\u5316;\r\n\u65B0\u5EFA\u5206\u7EC4;\r\n\u7F16\u8F91\u9009\u4E2D;\r\n\u5220\u9664\u9009\u4E2D;\r\n\u5237\u65B0;\r\n\u8BA9\u6211\u4EEC\u5F00\u59CB\u5C1D\u8BD5\u65B0\u4E8B\u7269\u5427\u3002</enter></enter>\u5728\u5DE6\u4FA7\u65B0\u5EFA\u521D\u59CB\u5316\u5F39\u5E55\uFF0C\u6216\u5BFC\u5165\u6587\u4EF6\u81F3\u6E38\u620F\u6839\u76EE\u5F55\u4E0B\u7684StreamingAssets\u6587\u4EF6\u5939\u5185\u3002</enter>\u56DE\u5408\u7F16\u8F91\u5668\u6559\u7A0B\u89C6\u9891\uFF1Awww.bilibili.com/video/BV1GJ411x7h7;\r\n\u65B0\u5EFA\u5206\u7EC4;\r\n\u968F\u673A\uFF1A;\r\n\u65B0\u5EFA\u521D\u59CB\u5316;\r\n\r\n/*\u521D\u59CB\u5316\uFF1A\u7F16\u8F91 
+    11 */\r\n\u4E0A\u4E00\u9875;\r\n\u7C7B\uFF1A;\r\n\u5F39\u5E55;\r\n\u6321\u677F;\r\nSP;\r\n\u52A0\u8F7D;\r\n\u8BBE\u7F6E\u4E0E\u4FEE\u6539;\r\n\u67E5\u8BE2\u6307\u4EE4;\r\n\u521B\u5EFA\u78B0\u649E\u4F53;\r\n\u5220\u9664\u78B0\u649E\u4F53;\r\n/*
+    21 */\r\n\u906E\u7F69\uFF1A;\r\n\u65E0;\r\n\u5185;\r\n\u5916;\r\n\u78B0\u649E
+    ;\r\n\u78B0\u649E\u4F53\u504F\u79FB\uFF1A;\r\n\u78B0\u649E\u4F53\u5927\u5C0F\uFF1A;\r\n\u78B0\u649E\u4F53\u4F24\u5BB3\uFF1A;\r\n\u6B64\u7269\u4EF6\u6CA1\u6709\u78B0\u649E\u4F53;\r\n\u8D34\u56FE\u672A\u8BBE\u7F6E;\r\n/*
+    31 */\r\nStr:/\u6216Res:/ \u8C03\u7528\u7D20\u6750(\u76F8\u5E94\u76EE\u5F55\u8DEF\u5F84
+    \u5EFA\u8BAE\u7528png);\r\nSet:/ \u9884\u89C8\u5F39\u5E55\u7684\u5927\u5C0F(\u8F93\u5165\u5F62\u5982(x,y)\u7684\u5750\u6807);\r\nBox:/
+    \u78B0\u649E\u4F53\u663E\u793A\u5BBD\u5EA6(\u8F93\u5165\u6570\u5B57 \u4E0D\u5F71\u54CD\u5B9E\u9645\u5BBD\u5EA6);\r\nOff:/
+    \u8BBE\u7F6E\u78B0\u649E\u4F53\u504F\u79FB(\u8F93\u5165\u5F62\u5982(x,y)\u7684\u5750\u6807);\r\nSiz:/
+    \u8BBE\u7F6E\u78B0\u649E\u4F53\u5927\u5C0F(\u8F93\u5165\u5F62\u5982(x,y)\u7684\u5750\u6807);\r\nHur:/
+    \u8BBE\u7F6E\u78B0\u649E\u4F53\u4F24\u5BB3(\u8F93\u5165\u6570\u5B57);\r\nCol:/
+    \u8BBE\u7F6E\u78B0\u649E\u4F53\u504F\u79FB\uFF0C\u5927\u5C0F\uFF0C\u4F24\u5BB3(\u4F7F\u7528\\\u5206\u5272);\r\n\u504F\u79FB
+    \u5927\u5C0F \u4F24\u5BB3\u53EF\u901A\u8FC7\u53EA\u8F93\u5165\u6570\u5B57+c\u8FDB\u5165\u63A7\u5236\u6A21\u5F0F-;\r\n\u63A7\u5236\u6A21\u5F0F\u5185\u4F7F\u7528\u65B9\u5411\u952E\u53EF\u76F4\u63A5\u4FEE\u6539\u6570\u636E\uFF0C\u6309X\u9000\u51FA-;\r\n\u4E4B\u524D\u8F93\u5165\u7684\u6570\u5B57\u4E3A\u5355\u6B21\u79FB\u52A8\u7684\u5355\u4F4D\uFF0C1\u50CF\u7D20\u4E3A0.05;\r\n/*
+    41 */\r\n"
+  roundEditorMax: []

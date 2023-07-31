@@ -66,7 +66,7 @@ public class BattlePlayerController : MonoBehaviour
         {
             MainControl.instance.PlayerControl.hp = MainControl.instance.PlayerControl.hpMax;
 
-            if (!(MainControl.instance.OverwroldControl.isDebug && MainControl.instance.OverwroldControl.invincible))
+            if (!MainControl.instance.OverwroldControl.isDebug)
             {
                 spriteRenderer.color = Color.red;
                 MainControl.instance.PlayerControl.deadPos = transform.position;

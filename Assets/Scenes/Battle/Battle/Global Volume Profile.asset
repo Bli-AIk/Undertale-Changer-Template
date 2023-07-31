@@ -62,53 +62,6 @@ MonoBehaviour:
   bladeRotation:
     m_OverrideState: 1
     m_Value: 0
---- !u!114 &5542349959372816530
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35a1bd58dd7548198609eabd8ae2bb7d, type: 3}
-  m_Name: Pixelation
-  m_EditorClassIdentifier: 
-  active: 1
-  widthPixelation:
-    m_OverrideState: 1
-    m_Value: 512
-  heightPixelation:
-    m_OverrideState: 1
-    m_Value: 512
-  colorPrecision:
-    m_OverrideState: 1
-    m_Value: 32
---- !u!114 &5959484637370899193
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ea62842ddb6960488930897ba9ce398, type: 3}
-  m_Name: Dithering
-  m_EditorClassIdentifier: 
-  active: 1
-  patternIndex:
-    m_OverrideState: 1
-    m_Value: 100
-  ditherThreshold:
-    m_OverrideState: 1
-    m_Value: 512
-  ditherStrength:
-    m_OverrideState: 1
-    m_Value: 1
-  ditherScale:
-    m_OverrideState: 1
-    m_Value: 2
 --- !u!114 &7518764020060369083
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -127,7 +80,7 @@ MonoBehaviour:
     m_Value: 1
   offset:
     m_OverrideState: 1
-    m_Value: 0.005
+    m_Value: 0.01
   speed:
     m_OverrideState: 1
     m_Value: 2.5

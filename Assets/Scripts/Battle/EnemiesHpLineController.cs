@@ -10,8 +10,7 @@ public class EnemiesHpLineController : MonoBehaviour
     void Start()
     {
         transform.localScale = Vector2.zero;
-        greenSprite = GetComponent<SpriteRenderer>();
-        greenSprite.material = Instantiate(greenSprite.material);
+        greenSprite = transform.GetChild(0).GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -24,11 +23,7 @@ public class EnemiesHpLineController : MonoBehaviour
             else
             {
                 transform.localScale = new Vector3(42, 7.25f, 1);
-
-                greenSprite.material.SetFloat("_Crop", (float)MainControl.instance.BattleControl.enemiesHp[num * 2] / MainControl.instance.BattleControl.enemiesHp[num * 2 + 1]);
-                greenSprite.material.SetFloat("_Flash", (float)MainControl.instance.BattleControl.enemiesHp[num * 2] / MainControl.instance.BattleControl.enemiesHp[num * 2 + 1]);
-
-                Debug.Log((float)MainControl.instance.BattleControl.enemiesHp[num * 2] / MainControl.instance.BattleControl.enemiesHp[num * 2 + 1]);
+                greenSprite.transform.localScale = new Vector3((float)MainControl.instance.BattleControl.enemiesHp[num * 2] / MainControl.instance.BattleControl.enemiesHp[num * 2 + 1], greenSprite.transform.localScale.y);
             }
         }
     }
