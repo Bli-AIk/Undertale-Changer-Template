@@ -1,4 +1,5 @@
-[![license](https://img.shields.io/github/license/Bli-AIk/Undertale-Changer-Template)](LICENSE)
+[![license](https://img.shields.io/github/license/Bli-AIk/Undertale-Changer-Template
+)](LICENSE)
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 # Undetale-Changer-Template
 An UNDERTALE fan game template based on unity engine.
