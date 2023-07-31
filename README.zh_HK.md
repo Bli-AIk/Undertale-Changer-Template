@@ -8,7 +8,7 @@
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
 - en [English](readme.md)
-- zh_CN [簡體中文](README.zh_CN.md)
+- zh_CN [简体中文](README.zh_CN.md)
 - zh-HK [繁體中文](README.zh_HK.md)
 
 ## 內容目錄
@@ -22,8 +22,11 @@
 
 ## 背景
 該項目始於2022年初，由我（Bli_AIk）獨自完成。
+
 在此之前，我創建了壹個簡單的Undertale同人戰鬥模板（未發布），並使用它來開發壹個遊戲項目。
+
 然而，我對舊模板的結果不滿意。因此，我決定創建壹個能夠生成完整同人遊戲的模板。
+
 這標誌著它千裏之行的第壹步。
 
 ## 簡介
@@ -32,11 +35,13 @@
 該項目使用了通用渲染管線（URP）。
 
 目前，該模板包括以下內容：
+
 標題場景，重新命名場景，世界場景，戰鬥場景，遊戲結束場景。
 
 包含外部語言包系統。
 
 您可以使用此模板創建自己的遊戲或修改原始代碼。
+
 但請確保在顯眼的位置醒目顯示“Undertale-Changer-Template”。
 
 ## 使用方法
@@ -46,6 +51,7 @@
 4. 在Unity中打開項目，然後您可以開始使用了。
 
 目前兼容的Unity編輯器版本：2022.3.3f1c1 LTS
+
 建議使用此版本或更高版本以獲得最佳體驗。
 
 ## Wiki
@@ -55,4 +61,4 @@
 
 ## 許可證
 
-[GNU通用公共許可證 v3.0](../LICENSE)
+[GNU通用公共許可證 v3.0(GNU General Public License v3.0)](../LICENSE)
