@@ -86,7 +86,10 @@ public class MainControl : MonoBehaviour
             InitializationBattle(languagePack);
         */
         OverwroldControl.menuAndSettingAsset = File.ReadAllText(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\UI\\MenuAndSetting.txt");
+
         OverwroldControl.owTextsAsset = File.ReadAllText(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\Overworld\\Overworld.txt");
+
+
         OverwroldControl.safeText = File.ReadAllText(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\SafeText.txt");
         ItemControl.itemText = File.ReadAllText(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\UI\\ItemText.txt");
 
@@ -234,8 +237,8 @@ public class MainControl : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.F5))
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
-            if (OverwroldControl.invincible)
-                PlayerControl.hp = PlayerControl.hpMax;
+            //if (OverwroldControl.invincible)
+            //    PlayerControl.hp = PlayerControl.hpMax;
 
             PlayerControl.playerName = RandomStringColor() + 'd' + RandomStringColor() + 'e' + RandomStringColor() + 'b' + RandomStringColor() + 'u' + RandomStringColor() + 'g' + "</color></color></color></color></color>";
         }

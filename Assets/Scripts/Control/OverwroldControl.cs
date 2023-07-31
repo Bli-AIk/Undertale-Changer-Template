@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
-/// 主要用于Overworld的数据与通用基本数据
+/// 主要用于Overworld为主的场景的文本调用与通用基本数据
 /// </summary>
 [CreateAssetMenu(fileName = "OverwroldControl", menuName = "OverwroldControl")]
 public class OverwroldControl : ScriptableObject
