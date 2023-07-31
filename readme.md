@@ -1,18 +1,22 @@
+# Undetale-Changer-Template
+An UNDERTALE fan game template based on unity engine.
+
 [![license](https://img.shields.io/github/license/Bli-AIk/Undertale-Changer-Template
 )](LICENSE)
 <img src="https://img.shields.io/github/repo-size/Bli-AIk/Undertale-Changer-Template.svg"/>
 <img src="https://img.shields.io/github/last-commit/Bli-AIk/Undertale-Changer-Template.svg"/>
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
-
-# Undetale-Changer-Template
-An UNDERTALE fan game template based on unity engine.
+- en [English](README.md)
+- zh_CN [简体中文](README.zh_CN.md)
+- zh-HK [繁体中文](README.zh-HK.md)
 
 ## Table of Contents
 
 - [Background](#background)
 - [Usage](#usage)
 - [Contributing](#contributing)
+- [Wiki](#Wiki)
 - [License](#license)
 
 
@@ -37,10 +41,10 @@ However, please make sure to prominently display "Undertale-Changer-Template" in
 
 
 ## Usage
-
-1. Download and extract the files to a location of your choice, preferably in a path that is entirely in English.
-2. Import the files into Unity.
-3. Open the project in Unity, and you're good to go.
+1. Make sure you have purchased and played Undertale, you can click [here](undertale.com) to purchase it.
+2. Download and extract the files to a location of your choice, preferably in a path that is entirely in English.
+3. Import the files into Unity.
+4. Open the project in Unity, and you're good to go.
 
 Currently compatible with Unity Editor version: 2022.3.3f1c1 LTS
 I recommend using this version or a higher one for the best experience.
@@ -50,7 +54,6 @@ I recommend using this version or a higher one for the best experience.
 
 ### Take your time, the wiki is in progress! 
 ### You can click [here](https://youtu.be/dQw4w9WgXcQ) to access the preview version of the wiki and learn how to use this template!
-
 
 ## License
 
