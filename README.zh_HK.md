@@ -9,7 +9,7 @@
 
 - en [English](README.md)
 - zh_CN [簡體中文](README.zh_CN.md)
-- zh-HK [繁體中文](README.zh-HK.md)
+- zh-HK [繁體中文](README.zh_HK.md)
 
 ## 內容目錄
 
