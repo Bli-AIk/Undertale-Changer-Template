@@ -7,7 +7,7 @@
 <img src="https://img.shields.io/github/last-commit/Bli-AIk/Undertale-Changer-Template.svg"/>
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
-- en [English](README.md)
+- en [English](readme.md)
 - zh_CN [簡體中文](README.zh_CN.md)
 - zh-HK [繁體中文](README.zh_HK.md)
 
