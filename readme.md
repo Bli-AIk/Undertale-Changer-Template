@@ -21,13 +21,18 @@ An UNDERTALE fan game template based on unity engine.
 ##
 
 ## Synopsis
-### For now, the template includes the following contents:
-### Title scene, rename scene,overworld scene,battle scene,gameover scene.
-### Contains an external language pack system.
-### You can use this template to create your own game or modify the original code. 
-### However, please make sure to prominently display "Undertale-Changer-Template" in a visible location.
 ### Undetale Changer Template made by Bli_AIk.
-### The project has used URP.
+
+The project has used URP.
+
+For now, the template includes the following contents:
+Title scene, rename scene,overworld scene,battle scene,gameover scene.
+
+Contains an external language pack system.
+
+You can use this template to create your own game or modify the original code. 
+However, please make sure to prominently display "Undertale-Changer-Template" in a visible location.
+
 
 ## Usage
 
