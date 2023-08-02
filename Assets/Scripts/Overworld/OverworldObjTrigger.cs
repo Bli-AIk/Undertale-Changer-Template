@@ -16,6 +16,8 @@ public class OverworldObjTrigger : MonoBehaviour
     public bool setIsUp;
     public bool isUp;
     public string text;
+    [Header("检测玩家动画方向 0,0为不检测")]
+    public Vector2 playerDir;
     [Header("插入摄像机动画相关")]
     public bool openAnim;
     public Vector3 animEndPosPlus;
@@ -70,6 +72,7 @@ public class OverworldObjTrigger : MonoBehaviour
     }
     private void Update()
     {
+        //检测相关见PlayerBehaviour
         if (isTyping && MainControl.instance.KeyArrowToControl(KeyCode.Z) && !typeWritter.isTyping)
         {
             PressZ();
@@ -92,7 +95,7 @@ public class OverworldObjTrigger : MonoBehaviour
         talkUI.transform.localPosition = new Vector3(talkUI.transform.localPosition.x, talkUI.transform.localPosition.y, -50);
         //Debug.Log(talkUI.transform.localPosition.z);
         MainControl.instance.PlayerControl.canMove = true;
-        MainControl.instance.OverwroldControl.pause = false;
+        MainControl.instance.OverworldControl.pause = false;
 
         foreach (var item in funNames)
         {
@@ -115,7 +118,7 @@ public class OverworldObjTrigger : MonoBehaviour
     {
 		isTyping = true;
         MainControl.instance.PlayerControl.canMove = false;
-        MainControl.instance.OverwroldControl.pause = true;
+        MainControl.instance.OverworldControl.pause = true;
         talkUI.Change(true);
 
         //if (!talkUI.gameObject.activeSelf)
@@ -125,7 +128,7 @@ public class OverworldObjTrigger : MonoBehaviour
             //Debug.Log(talkUI.transform.localPosition.z);
         }
         talkUI.isUp = isUp;
-        typeWritter.TypeOpen(MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.owTextsSave, text), false, 0, 1);
+        typeWritter.TypeOpen(MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, text), false, 0, 1);
         if (endInBattle)
             typeWritter.EndInBattle();
 
@@ -137,7 +140,7 @@ public class OverworldObjTrigger : MonoBehaviour
     public void AnimTypeText(bool isUp)
     {
         MainControl.instance.PlayerControl.canMove = false;
-        MainControl.instance.OverwroldControl.pause = true;
+        MainControl.instance.OverworldControl.pause = true;
         mainCamera.isFollow = false;
         mainCamera.transform.DOLocalMove(animEndPosPlus, animTime).SetEase(animEase).OnKill(() => TypeText(isUp, false));
         DOTween.To(() => mainCamera.followPosition, x => mainCamera.followPosition = x, animEndPosPlus, animTime).SetEase(animEase);

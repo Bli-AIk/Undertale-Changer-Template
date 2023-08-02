@@ -1,0 +1,75 @@
+/*
+
+Text storage in MENU and settings.
+
+Format:
+
+Read Name\Text;
+
+
+Generally speaking, the read name is fixed.
+Specifically,
+RenameSp\name|true|true|text;
+The format is the setting when trying to name a special name. The first true or false is used to determine whether renaming to this name is allowed, and the second true or false is used to determine whether text in the name is case sensitive when detecting
+
+In particular, if the text is<gaster>, the game will crash.
+
+<playerName> Get player's name.
+
+*/
+
+
+
+
+LanguagePack\       Language;
+/* 
+Full width setting. It is recommended to set the language with most full width characters such as China, Japan and Korea to true, which will fine tune the text in the game. */
+LanguagePackFullWidth\false;
+
+/* It is required to input an accurate language and culture code without extra characters for CultureInfo detection */
+
+CultureInfo\en-US;
+
+Setting\       Settings;
+SettingMainVolume\Master volume;
+SettingControl\Controls;
+SettingFullScreen\Full screen;
+SettingResolving\Resolution;
+SettingSFX\Simplify VFX;
+SettingFPS\Show FPS;
+SettingBackMenu\Return to menu;
+SettingBackGame\Back;
+Open\ON;
+Close\OFF;
+Back\Back;
+
+SettingMainVolumeTip\Adjust global volume.;
+SettingControlTip\Key setting.;
+SettingFullScreenTipOpen\Enable Full screen.;
+SettingFullScreenTipClose\When Full screen is enabled, it is recommended to increase the resolution.;
+SettingResolvingTip\Set game window size.(Always 4:3);
+SettingSFXTip\Set whether the light effects and special effects in the game are enabled.;
+SettingFPSTip\Set whether FPS is displayed.;
+SettingBackMenuTip\Unsaved data will be lost.;
+SettingBackGameTip\Go back and continue the game.;
+
+Control\       Control;
+ControlDown\Down;
+ControlRight\Right;
+ControlUp\Up;
+ControlLeft\Left;
+ControlZ\Confirm;
+ControlX\Cancel;
+ControlC\Menu;
+ControlV\Setting;
+ControlF4\Full screen;
+ControlTab\Resolution;
+ControlSemicolon\VFX;
+ControlEsc\Exit game;
+ControlDefault\Reset to default;
+
+ControlEggshell\~Dudu Dudu Dudu~;
+
+ControlUnder0\In the main key position setting, press C to set the auxiliary key position.;
+ControlUnder1\Auxiliary key 1 is being set. Press C to set auxiliary key 2.;
+ControlUnder2\Auxiliary key 2 is being set. Press C to set the main key.;

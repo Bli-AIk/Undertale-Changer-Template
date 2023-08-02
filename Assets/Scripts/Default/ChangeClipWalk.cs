@@ -12,7 +12,8 @@ public class ChangeClipWalk : MonoBehaviour
     {
         if (collision.transform.CompareTag("Player"))
         {
-            PlayerBehaviour playerBehaviour = collision.transform.GetComponent<PlayerBehaviour>();
+            //PlayerBehaviour playerBehaviour = collision.transform.GetComponent<PlayerBehaviour>();
+            PlayerBehaviour playerBehaviour = MainControl.instance.playerBehaviour;
             if (playerBehaviour != null)
             {
                 playerBehaviour.walk = range;

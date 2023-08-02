@@ -1,88 +1,81 @@
 /*
-UI text in battle.
+Battle UI texts.
+Format as follows:
 
-The format is as follows:
+Round\Round Number\Text;
+Text that will always be displayed before a certain round.
+If Round Number is input as 0,
+it will be randomly displayed before rounds with no specific setting.
 
-Round\Round number\Text；
+Act\Monster Name\Display Text\Text After Selection;
+Mercy\Monster Name\Display Text\Text After Selection;
+A monster can have up to four Act options, while Mercy can have three.
+If the text is Null, it will be skipped.
 
-The text that must be displayed before a round.
-If the number of rounds is 0
-It will be displayed randomly before the round without specific settings.
-
-Act\Monster name\Text displayed\Text displayed after selection;
-Mercy\Monster name\Text displayed\Text displayed after selection;
-
-A monster can have up to four Act options, while Mercy has three.
-If the text is null, it will be skipped directly.
-
-Item related options must be configured at the Item text.
+Item-related options must be configured in the Item text section.
 
 Special characters:
-<getEnemiesName>Get the name of the selected enemy
-<getEnemiesATK>Get the ATK of the selected enemy
-<getEnemiesDEF>Get the DEF of the selected enemy
-The above three special characters are used for Check only for ACT.
+<getEnemiesName> get the name of the selected enemy
+<getEnemiesATK> get the ATK of the selected enemy
+<getEnemiesDEF> get the DEF of the selected enemy
+The above three special characters are for use with Check and can only be used in ACT.
 
-Typewriter special characters (general) input:
-<stop> or  龘 causes the typewriter to pause briefly as it passes through the character.
-(This character will not be printed before/after the punctuation mark. The principle is to use the preset "pause typing speed" to type a blank character to achieve pause.
+Typewriter special characters (universal input):
+<stop> This character will cause a brief pause when the typewriter reaches it.
+(This character won't be displayed. It's generally used before/after punctuation marks. The principle is to use the preset "pause typing speed" to type an empty character, creating a pause.
+In the old template, the typewriter would pause when it encountered punctuation marks, but this caused some specific issues. Therefore, it was changed to manually add this character.
+Please note that pressing X won't pause at this character. This character can be stacked. The pause speed depends on the typewriter's settings—simply put, you can't change it.)
 
-<enter>Use it to enter the carriage return symbol. 
-<x> Enter the character x directly. X can only be one character. This character will skip the typewriter and input directly. It is very humanized().
+<enter> Enter key symbol.
+<x> Directly input character x. x can only be a single character, and the typewriter will skip it and input directly, which is very user-friendly.
 
-</else>Display separator, if the food has more than one display text, use this symbol to split.
+</else> Display separator. If there are multiple display texts for an item, use this symbol to separate them.
+-In general, each text has an equal probability of being displayed. (WIP, not finished, do not use)
 
--In general, the probability of occurrence of each text display is equal. (WIP, please do not use)
+If you need to input a long paragraph or simply want the player to press the Z key multiple times, you can insert <passText> character within a paragraph of text.
+When the typewriter detects this character, it will stop typing, and if the player presses the Z key, the current text will be cleared, and typing will resume.
+Previous rich text formatting will be invalidated since the previous text has been cleared.
 
-If you need to input a long text or simply want the player to press the Z key more often, you can insert<passText>or 轂 into a text
+Rich text input example:
+<color=#00000000>Color code supports RGBA hexadecimal.
+</color>Remove color.
 
-After the typewriter detects the character, it will stop typing. If the player presses the Z key, it will clear the current text and continue typing.
+<b>Bold text
+</b>Remove bold.
 
-The previous rich text will be invalidated because the previous text is empty.
-
-Rich text input:
-<color=#00000000>Color symbol, support RGBA, need hexadecimal
-</color>Remove color
-
-<b>bold
-</b>Remove bold
-
-<i>italic
-</i>Remove italic
+<i>Italic text
+</i>Remove italics.
 
 <size=50>Change font size
-</size>Remove Changes
+</size>Remove size change.
 
-<color=red>Color symbol. If you need a specific support name, please search "Rich Text" or "Unity Rich Text" on your browser
+<color=red>Color code supports specific names, please search "rich text" or "Unity rich text" in your browser for details.
 </color>Remove color
-————————- SPOILER REMINDER -————————
-
-*This document contains in-game story content*
-
-For your game experience, if you have not completed the game process, please do not browse this text package.
-
-In addition, do not write two comments consecutively at least 3 characters apart, otherwise an error may be reported.
+—————————Attention: Contains Game Plot Spoilers—————————
+*This document contains in-game plot content.*
+For the sake of your gaming experience, please do not browse this text pack if you haven't completed the game flow.
+Also, do not write two comments together, leave at least 3 characters of space between them, otherwise, it may cause errors.
 
 
 */
 
-Round\0\* Fate is wonderful);
-Round\0\* Everybody,this is just great!;
-Round\1\* CaO.;
+Round\0\* Round 0.;
+Round\0\* Another version of Round 0<stop>.<stop>.<stop>.<stop>.<stop>.<stop>.<stop>;
+Round\1\* Welcome to Round 1<stop>.<stop>.<stop>.<enter>* Of course.;
 
 
-Act\NPC1\Check\* <getEnemiesName> 龘-龘 ATK龘 <getEnemiesATK>龘 DEF龘 <getEnemiesDEF>龘<enter>* What's this?;
-Act\NPC1\Rua\* You touched <getEnemiesName>。龘<enter>* It makes a sound of "pika pika".;
-Act\NPC1\Prpr \* You rushed up and licked at the speed of light.龘<enter>* and then,龘You get fooled,龘 fool.;
-Act\NPC1\Fk\* People can't.龘.龘.龘at least not.龘.龘.;
+Act\NPC1\Check\* <getEnemiesName> <stop>-<stop> ATK<stop> <getEnemiesATK><stop> DEF<stop> <getEnemiesDEF><stop><enter>* What's this?;
+Act\NPC1\Pet\* You pet <getEnemiesName>.<stop><enter>* It makes a sound like "ow.";
+Act\NPC1\Glare\* You glare at it fiercely.<stop><enter>* When you gaze into the abyss<stop>.<stop>.<stop>.;
+Act\NPC1\Ignore\* You don't look at it.<stop>.<stop>.<stop><enter>< >< >Probably.<stop>.<stop>.;
 
-Act\NPC2\Check\* <getEnemiesName> 龘-龘 ATK龘 <getEnemiesATK>龘 DEF龘 <getEnemiesDEF>龘<enter>* What's this...?!;
-Act\NPC2\Commend\* You said to <getEnemiesName> that it looks very unique。龘<enter>* <getEnemiesName> felt very confused.;
-Act\NPC2\Hug\* You picked it up <getEnemiesName>。龘<enter>* <getEnemiesName>seems to be scared龘.龘.龘.<passText>* But he felt very happy.;
-Act\NPC2\Knock\* You knocked <getEnemiesName> on the head。龘<enter>* <color=red>The effect is outstanding!;
+Act\NPC2\Check\* <getEnemiesName> <stop>-<stop> ATK<stop> <getEnemiesATK><stop> DEF<stop> <getEnemiesDEF><stop><enter>* What's this again?;
+Act\NPC2\Compliment\* You compliment <getEnemiesName> on its<enter>< >< >unique appearance.<stop><enter>* <getEnemiesName> looks very puzzled.;
+Act\NPC2\Hug\* You pick up <getEnemiesName>.<stop><enter>* <getEnemiesName> seems startled.<stop>.<stop>.<stop><passText>* But it feels happy.;
+Act\NPC2\Grin\* You let out an evil grin.<stop><enter>* <getEnemiesName> can't figure out<enter>< >< >what you're doing.;
 
-Mercy\NPC1\Spare\Null;
-Mercy\NPC1\Flee\* You can't Flee.;
-Mercy\NPC2\Spare\Null;
-Mercy\NPC2\Flee\* You can't Flee.;
-Mercy\NPC2\Catch\Null;
+Mercy\NPC1\Forgive\Null;
+Mercy\NPC1\Escape\* You can't run away.;
+Mercy\NPC2\Forgive\Null;
+Mercy\NPC2\Escape\* You can't run away.;
+Mercy\NPC2\Let It Go\* You wish.;

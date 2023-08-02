@@ -63,10 +63,10 @@ public class GameoverController : MonoBehaviour
     {
         List<string> strings = new List<string>
         {
-            MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "GameOver1"),
-            MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "GameOver2"),
-            MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "GameOver3"),
-            MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "GameOver4")
+            MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "GameOver1"),
+            MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "GameOver2"),
+            MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "GameOver3"),
+            MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "GameOver4")
     };
         typeWritter.TypeOpen(strings[UnityEngine.Random.Range(0, 4)], false, 0, 4);
         canChangeSence = true;
@@ -106,8 +106,8 @@ public class GameoverController : MonoBehaviour
             canChangeSenceForC = false;
         }
         tmp.text = typeWritter.endString;
-        if (tmp.font != MainControl.instance.OverwroldControl.tmpFonts[typeWritter.useFont])
-            tmp.font = MainControl.instance.OverwroldControl.tmpFonts[typeWritter.useFont];
+        if (tmp.font != MainControl.instance.OverworldControl.tmpFonts[typeWritter.useFont])
+            tmp.font = MainControl.instance.OverworldControl.tmpFonts[typeWritter.useFont];
 
     }
 }

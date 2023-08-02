@@ -1,0 +1,53 @@
+/* 
+All dialogue texts for non-combat scenes.
+The format is:
+Speaker\Text;
+
+<image=x> Set the display emotion code. Specifically, if x is a negative number, it means no one is speaking (narrator).
+Emotion codes are generally predefined in the game. If you need to change them, you'll have to test them one by one.
+
+Typewriter special characters (universal input):
+<stop> This character will cause a brief pause when the typewriter reaches it.
+(This character won't be displayed. It's generally used before/after punctuation marks. The principle is to use the preset "pause typing speed" to type an empty character, creating a pause.
+In the old template, the typewriter would pause when it encountered punctuation marks, but this caused some specific issues. Therefore, it was changed to manually add this character.
+Please note that pressing X won't pause at this character. This character can be stacked. The pause speed depends on the typewriter's settings—simply put, you can't change it.)
+
+<enter> Enter key symbol.
+<x> Directly input character x. x can only be a single character, and the typewriter will skip it and input directly.
+<fx=x> Change the typewriter's sound effect to the x-th one.
+
+If you need to input a long paragraph or simply want the player to press the Z key multiple times, you can insert <passText> within a paragraph of text.
+When the typewriter detects this character, it will stop typing, and if the player presses the Z key, the current text will be cleared, and typing will resume.
+Previous rich text formatting will be invalidated since the previous text has been cleared.
+
+Rich text input examples:
+<color=#00000000>Color code supports RGBA hexadecimal.
+</color>Remove color.
+
+<b>Bold text
+</b>Remove bold.
+
+<i>Italic text
+</i>Remove italics.
+
+<size=50>Change font size
+</size>Remove size change.
+
+<color=red>Color code supports specific names, see TMP documentation at http://digitalnativestudios.com/textmeshpro/docs/
+</color>Remove color.
+*/
+
+Brand\<image=-1><fx=0>* "Press <gradient="White to Yellow - UTC">[Z]</gradient> to read the sign!"<stop><stop><stop><stop><stop><stop><stop><enter>* <size=20><gradient="White to Yellow - UTC">[Enter]</gradient> works too.</size>
+<passText>* "This scene uses <gradient="White to Yellow - UTC">normal maps</gradient>! <enter>< >< >Also, try going to <enter>< >< >the <gradient="White to Red - UTC">riverside</gradient>?" ;
+
+River\<image=-1><fx=0>* This is you! ;
+
+WallBrand\<image=-1><fx=0>* Follow the path if you want. ;
+
+Text1\<image=-1><fx=0><*>< ><D><o><n><'><t>< ><p><r><e><s><s><.> ;
+
+Text2\<image=-1><fx=0><*>< ><D><o><n><'><t>< ><p><r><e><s><s><,><t><o><o><.> ;
+
+TextAlex\<image=-1><fx=0>* Your typewriter isn't broken lol<enter>< >< >you're just being pranked 111.;
+
+

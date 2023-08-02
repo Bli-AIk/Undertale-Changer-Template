@@ -42,7 +42,6 @@ public class CanvasController : MonoBehaviour
     {
         instance = this;
 
-
         animator = GetComponent<Animator>();
         canvas = GetComponent<Canvas>();
         fps = transform.Find("FPS Text").GetComponent<TextMeshProUGUI>();
@@ -91,34 +90,34 @@ public class CanvasController : MonoBehaviour
                 {
                     if (!isSetting)
                     {
-                        settingTmp.text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Setting") + '\n' +
-                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "SettingMainVolume") + '\n' +
-                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "SettingControl") + '\n' +
-                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "SettingFullScreen") + '\n' +
-                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "SettingResolving") + '\n' +
-                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "SettingSFX") + '\n' +
-                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "SettingFPS") + '\n' +
-                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "SettingBackMenu") + '\n' +
-                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "SettingBackGame");
+                        settingTmp.text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Setting") + '\n' +
+                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingMainVolume") + '\n' +
+                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingControl") + '\n' +
+                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingFullScreen") + '\n' +
+                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingResolving") + '\n' +
+                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingSFX") + '\n' +
+                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingFPS") + '\n' +
+                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingBackMenu") + '\n' +
+                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingBackGame");
                     }
                     else
                     {
-                        settingTmp.text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Setting") + "\n<color=yellow>" +
-                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "SettingMainVolume") + "</color>\n" +
-                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "SettingControl") + '\n' +
-                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "SettingFullScreen") + '\n' +
-                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "SettingResolving") + '\n' +
-                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "SettingSFX") + '\n' +
-                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "SettingFPS") + '\n' +
-                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "SettingBackMenu") + '\n' +
-                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "SettingBackGame");
+                        settingTmp.text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Setting") + "\n<color=yellow>" +
+                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingMainVolume") + "</color>\n" +
+                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingControl") + '\n' +
+                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingFullScreen") + '\n' +
+                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingResolving") + '\n' +
+                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingSFX") + '\n' +
+                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingFPS") + '\n' +
+                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingBackMenu") + '\n' +
+                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingBackGame");
                     }
                 }
                 if (!isSetting)
-                    settingTmpSon.text = ((int)(MainControl.instance.OverwroldControl.mainVolume * 100)).ToString() + "%\n\n" + OpenOrClose(MainControl.instance.OverwroldControl.fullScreen) + '\n' +
-                    MainControl.instance.OverwroldControl.resolution.x + '×' + MainControl.instance.OverwroldControl.resolution.y + '\n' + OpenOrClose(MainControl.instance.OverwroldControl.noSFX) + '\n' + OpenOrClose(MainControl.instance.OverwroldControl.openFPS);
-                else settingTmpSon.text = "<color=yellow>" + ((int)(MainControl.instance.OverwroldControl.mainVolume * 100)).ToString() + "%</color>\n\n" + OpenOrClose(MainControl.instance.OverwroldControl.fullScreen) + '\n' +
-                    MainControl.instance.OverwroldControl.resolution.x + '×' + MainControl.instance.OverwroldControl.resolution.y + '\n' + OpenOrClose(MainControl.instance.OverwroldControl.noSFX) + '\n' + OpenOrClose(MainControl.instance.OverwroldControl.openFPS);
+                    settingTmpSon.text = ((int)(MainControl.instance.OverworldControl.mainVolume * 100)).ToString() + "%\n\n" + OpenOrClose(MainControl.instance.OverworldControl.fullScreen) + '\n' +
+                    MainControl.instance.OverworldControl.resolution.x + '×' + MainControl.instance.OverworldControl.resolution.y + '\n' + OpenOrClose(MainControl.instance.OverworldControl.noSFX) + '\n' + OpenOrClose(MainControl.instance.OverworldControl.openFPS);
+                else settingTmpSon.text = "<color=yellow>" + ((int)(MainControl.instance.OverworldControl.mainVolume * 100)).ToString() + "%</color>\n\n" + OpenOrClose(MainControl.instance.OverworldControl.fullScreen) + '\n' +
+                    MainControl.instance.OverworldControl.resolution.x + '×' + MainControl.instance.OverworldControl.resolution.y + '\n' + OpenOrClose(MainControl.instance.OverworldControl.noSFX) + '\n' + OpenOrClose(MainControl.instance.OverworldControl.openFPS);
 
                 break;
             case 1:
@@ -134,16 +133,16 @@ public class CanvasController : MonoBehaviour
                 switch (controlPage)
                 {
                     case 0:
-                        settingTmp.text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Control") + "</color>" + '\n' +
-                       strings[0] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "ControlDown") + "</color>"+ '\n' +
-                       strings[1] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "ControlRight") + "</color>"+ '\n' +
-                       strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "ControlUp") + "</color>" +'\n' +
-                       strings[3] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "ControlLeft") + "</color>" + '\n' +
-                       strings[4] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "ControlZ") + "</color>" + '\n' +
-                       strings[5] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "ControlX") + "</color>" + '\n' +
-                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "PageNext") + '\n' +
-                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "ControlDefault") + '\n' +
-                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Back");
+                        settingTmp.text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Control") + "</color>" + '\n' +
+                       strings[0] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlDown") + "</color>"+ '\n' +
+                       strings[1] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlRight") + "</color>"+ '\n' +
+                       strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlUp") + "</color>" +'\n' +
+                       strings[3] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlLeft") + "</color>" + '\n' +
+                       strings[4] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlZ") + "</color>" + '\n' +
+                       strings[5] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlX") + "</color>" + '\n' +
+                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "PageNext") + '\n' +
+                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlDefault") + '\n' +
+                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Back");
 
 
                         settingTmpSon.text = "";
@@ -156,29 +155,29 @@ public class CanvasController : MonoBehaviour
                             switch (controlSelect)
                             {
                                 case 0:
-                                    settingTmpSon.text += MainControl.instance.OverwroldControl.keyCodes[i] + "</color>\n";
+                                    settingTmpSon.text += MainControl.instance.OverworldControl.keyCodes[i] + "</color>\n";
                                     break;
                                 case 1:
-                                    settingTmpSon.text += MainControl.instance.OverwroldControl.keyCodesBack1[i] + "</color>\n";
+                                    settingTmpSon.text += MainControl.instance.OverworldControl.keyCodesBack1[i] + "</color>\n";
                                     break;
                                 case 2:
-                                    settingTmpSon.text += MainControl.instance.OverwroldControl.keyCodesBack2[i] + "</color>\n";
+                                    settingTmpSon.text += MainControl.instance.OverworldControl.keyCodesBack2[i] + "</color>\n";
                                     break;
                             }
                         }
 
                         break;
                     case 1:
-                        settingTmp.text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Control") + '\n' +
-                       strings[0] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "ControlC") + "</color>" + '\n' +
-                       strings[1] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "ControlV") + "</color>" + '\n' +
-                       strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "ControlF4") + "</color>" + '\n' +
-                       strings[3] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "ControlTab") + "</color>" + '\n' +
-                       strings[4] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "ControlSemicolon") + "</color>" + '\n' +
-                       strings[5] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "ControlEsc") + "</color>" + '\n' +
-                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "PageLast") + '\n' +
-                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "ControlDefault") + '\n' +
-                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Back");
+                        settingTmp.text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Control") + '\n' +
+                       strings[0] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlC") + "</color>" + '\n' +
+                       strings[1] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlV") + "</color>" + '\n' +
+                       strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlF4") + "</color>" + '\n' +
+                       strings[3] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlTab") + "</color>" + '\n' +
+                       strings[4] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlSemicolon") + "</color>" + '\n' +
+                       strings[5] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlEsc") + "</color>" + '\n' +
+                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "PageLast") + '\n' +
+                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlDefault") + '\n' +
+                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Back");
                         settingTmpSon.text = "";
                         for (int i = 6; i < 12; i++)
                         {
@@ -189,13 +188,13 @@ public class CanvasController : MonoBehaviour
                             switch (controlSelect)
                             {
                                 case 0:
-                                    settingTmpSon.text += MainControl.instance.OverwroldControl.keyCodes[i] + "</color>\n";
+                                    settingTmpSon.text += MainControl.instance.OverworldControl.keyCodes[i] + "</color>\n";
                                     break;
                                 case 1:
-                                    settingTmpSon.text += MainControl.instance.OverwroldControl.keyCodesBack1[i] + "</color>\n";
+                                    settingTmpSon.text += MainControl.instance.OverworldControl.keyCodesBack1[i] + "</color>\n";
                                     break;
                                 case 2:
-                                    settingTmpSon.text += MainControl.instance.OverwroldControl.keyCodesBack2[i] + "</color>\n";
+                                    settingTmpSon.text += MainControl.instance.OverworldControl.keyCodesBack2[i] + "</color>\n";
                                     break;
                             }
                         }
@@ -212,12 +211,12 @@ public class CanvasController : MonoBehaviour
                     MainControl.instance.Initialization(settingSelect);
                 }
                 if (!OnlySetSon)
-                    settingTmp.text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "LanguagePack")+'\n';
+                    settingTmp.text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "LanguagePack")+'\n';
                 settingTmpSon.text = "";
                 settingSelectMax = 0;
                 int settingSelectBack = settingSelect;
                 if (OnlySetSon)
-                    settingSelect = MainControl.instance.OverwroldControl.languagePack;
+                    settingSelect = MainControl.instance.languagePack;
 
                 foreach (string pathString in Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage"))//内置包信息
                 {
@@ -240,11 +239,11 @@ public class CanvasController : MonoBehaviour
                         settingTmp.text += GetLanguagePackageName(pathString, "LanguagePackName") + '\n';
 
                     //if (settingSelectMax % 5 == 0 && !OnlySetSon)
-                    //    settingTmp.text += MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "PageNext") + '\n';
+                    //    settingTmp.text += MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "PageNext") + '\n';
 
                 }
                 if (!OnlySetSon)
-                    settingTmp.text += MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Back");
+                    settingTmp.text += MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Back");
                 
                 settingTmpUnder.text = GetLanguagePackageName(pathStringSaver, "LanguagePackInformation") + '\n' + GetLanguagePackageName(pathStringSaver, "LanguagePackAuthor");
 
@@ -279,16 +278,16 @@ public class CanvasController : MonoBehaviour
     string OpenOrClose(bool booler)
     {
         if (booler)
-            return MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Open");
+            return MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Open");
         else
-            return MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Close");
+            return MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Close");
     }
     // Update is called once per frame
     void Update()
     {
         if (freeze)
             return;
-        if (MainControl.instance.OverwroldControl.openFPS)
+        if (MainControl.instance.OverworldControl.openFPS)
             fps.text = FPSFlash(fps.text);
         else
             fps.text = "";
@@ -332,45 +331,45 @@ public class CanvasController : MonoBehaviour
                         switch (controlSelect)
                         {
                             case 0:
-                                origin = MainControl.instance.OverwroldControl.keyCodes[settingSelect + j];
-                                MainControl.instance.OverwroldControl.keyCodes[settingSelect + j] = SettingControl();
+                                origin = MainControl.instance.OverworldControl.keyCodes[settingSelect + j];
+                                MainControl.instance.OverworldControl.keyCodes[settingSelect + j] = SettingControl();
                                 goto default;
                             case 1:
-                                origin = MainControl.instance.OverwroldControl.keyCodesBack1[settingSelect + j];
-                                MainControl.instance.OverwroldControl.keyCodesBack1[settingSelect + j] = SettingControl();
+                                origin = MainControl.instance.OverworldControl.keyCodesBack1[settingSelect + j];
+                                MainControl.instance.OverworldControl.keyCodesBack1[settingSelect + j] = SettingControl();
                                 goto default;
                             case 2:
-                                origin = MainControl.instance.OverwroldControl.keyCodesBack2[settingSelect + j];
-                                MainControl.instance.OverwroldControl.keyCodesBack2[settingSelect + j] = SettingControl();
+                                origin = MainControl.instance.OverworldControl.keyCodesBack2[settingSelect + j];
+                                MainControl.instance.OverworldControl.keyCodesBack2[settingSelect + j] = SettingControl();
                                 goto default;
                             default:
                                 List<KeyCode> keycodes = new List<KeyCode>()
                                 {
-                                    MainControl.instance.OverwroldControl.keyCodes[settingSelect + j],
-                                    MainControl.instance.OverwroldControl.keyCodesBack1[settingSelect + j],
-                                    MainControl.instance.OverwroldControl.keyCodesBack2[settingSelect + j]
+                                    MainControl.instance.OverworldControl.keyCodes[settingSelect + j],
+                                    MainControl.instance.OverworldControl.keyCodesBack1[settingSelect + j],
+                                    MainControl.instance.OverworldControl.keyCodesBack2[settingSelect + j]
                                 };
-                                for (int i = 0; i < MainControl.instance.OverwroldControl.keyCodes.Count; i++)
+                                for (int i = 0; i < MainControl.instance.OverworldControl.keyCodes.Count; i++)
                                 {
-                                    if (MainControl.instance.OverwroldControl.keyCodes[i] == keycodes[controlSelect] && i != settingSelect + j)
+                                    if (MainControl.instance.OverworldControl.keyCodes[i] == keycodes[controlSelect] && i != settingSelect + j)
                                     {
-                                        MainControl.instance.OverwroldControl.keyCodes[i] = origin;
+                                        MainControl.instance.OverworldControl.keyCodes[i] = origin;
                                         break;
                                     }
                                 }
-                                for (int i = 0; i < MainControl.instance.OverwroldControl.keyCodesBack1.Count; i++)
+                                for (int i = 0; i < MainControl.instance.OverworldControl.keyCodesBack1.Count; i++)
                                 {
-                                    if (MainControl.instance.OverwroldControl.keyCodesBack1[i] == keycodes[controlSelect] && i != settingSelect + j)
+                                    if (MainControl.instance.OverworldControl.keyCodesBack1[i] == keycodes[controlSelect] && i != settingSelect + j)
                                     {
-                                        MainControl.instance.OverwroldControl.keyCodesBack1[i] = origin;
+                                        MainControl.instance.OverworldControl.keyCodesBack1[i] = origin;
                                         break;
                                     }
                                 }
-                                for (int i = 0; i < MainControl.instance.OverwroldControl.keyCodesBack2.Count; i++)
+                                for (int i = 0; i < MainControl.instance.OverworldControl.keyCodesBack2.Count; i++)
                                 {
-                                    if (MainControl.instance.OverwroldControl.keyCodesBack2[i] == keycodes[controlSelect] && i != settingSelect + j)
+                                    if (MainControl.instance.OverworldControl.keyCodesBack2[i] == keycodes[controlSelect] && i != settingSelect + j)
                                     {
-                                        MainControl.instance.OverwroldControl.keyCodesBack2[i] = origin;
+                                        MainControl.instance.OverworldControl.keyCodesBack2[i] = origin;
                                         break;
                                     }
                                 }
@@ -389,7 +388,7 @@ public class CanvasController : MonoBehaviour
 
         if ((openRound && RoundController.instance.isMyRound) || !openRound)
         {
-            if (MainControl.instance.KeyArrowToControl(KeyCode.V) && !MainControl.instance.OverwroldControl.isSetting)
+            if (MainControl.instance.KeyArrowToControl(KeyCode.V) && !MainControl.instance.OverworldControl.isSetting && !MainControl.instance.blacking)
             {
                 foreach (TypeWritter typeWritter in typeWritters)
                 {
@@ -399,7 +398,7 @@ public class CanvasController : MonoBehaviour
                 InSetting();
             }
         }
-        if (!MainControl.instance.OverwroldControl.isSetting)
+        if (!MainControl.instance.OverworldControl.isSetting)
             return;
 
         settingSoul.rectTransform.anchoredPosition = new Vector2(-325f, -28f + settingSelect * -37);
@@ -431,21 +430,21 @@ public class CanvasController : MonoBehaviour
                     {
                         if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1) || MainControl.instance.KeyArrowToControl(KeyCode.DownArrow))
                         {
-                            if (MainControl.instance.OverwroldControl.mainVolume > 0)
+                            if (MainControl.instance.OverworldControl.mainVolume > 0)
                             {
                                 AudioController.instance.GetFx(0, MainControl.instance.AudioControl.fxClipUI);
-                                MainControl.instance.OverwroldControl.mainVolume -= 0.01f;
-                                AudioListener.volume = MainControl.instance.OverwroldControl.mainVolume;
+                                MainControl.instance.OverworldControl.mainVolume -= 0.01f;
+                                AudioListener.volume = MainControl.instance.OverworldControl.mainVolume;
                             }
                             SettingText(false, true);
                         }
                         else if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) || MainControl.instance.KeyArrowToControl(KeyCode.UpArrow))
                         {
-                            if (MainControl.instance.OverwroldControl.mainVolume < 1)
+                            if (MainControl.instance.OverworldControl.mainVolume < 1)
                             {
                                 AudioController.instance.GetFx(0, MainControl.instance.AudioControl.fxClipUI);
-                                MainControl.instance.OverwroldControl.mainVolume += 0.01f;
-                                AudioListener.volume = MainControl.instance.OverwroldControl.mainVolume;
+                                MainControl.instance.OverworldControl.mainVolume += 0.01f;
+                                AudioListener.volume = MainControl.instance.OverworldControl.mainVolume;
                             }
                             SettingText(false, true);
                         }
@@ -457,7 +456,7 @@ public class CanvasController : MonoBehaviour
                             switch (settingSelect)
                             {
                                 case 0:
-                                    saveVolume = MainControl.instance.OverwroldControl.mainVolume;
+                                    saveVolume = MainControl.instance.OverworldControl.mainVolume;
                                     isSettingName = true;
                                     SettingText(false, true);
                                     break;
@@ -467,19 +466,19 @@ public class CanvasController : MonoBehaviour
                                     settingSelect = 0;
                                     break;
                                 case 2:
-                                    MainControl.instance.OverwroldControl.fullScreen = !MainControl.instance.OverwroldControl.fullScreen;
-                                    MainControl.instance.SetResolution(MainControl.instance.OverwroldControl.resolutionLevel);
+                                    MainControl.instance.OverworldControl.fullScreen = !MainControl.instance.OverworldControl.fullScreen;
+                                    MainControl.instance.SetResolution(MainControl.instance.OverworldControl.resolutionLevel);
 
                                     goto default;
                                 case 3:
                                     MainControl.instance.ChangeResolution();
                                     goto default;
                                 case 4:
-                                    MainControl.instance.OverwroldControl.noSFX = !MainControl.instance.OverwroldControl.noSFX;
-                                    MainControl.instance.FindAndChangeAllSFX(MainControl.instance.OverwroldControl.noSFX);
+                                    MainControl.instance.OverworldControl.noSFX = !MainControl.instance.OverworldControl.noSFX;
+                                    MainControl.instance.FindAndChangeAllSFX(MainControl.instance.OverworldControl.noSFX);
                                     goto default;
                                 case 5:
-                                    MainControl.instance.OverwroldControl.openFPS = !MainControl.instance.OverwroldControl.openFPS;
+                                    MainControl.instance.OverworldControl.openFPS = !MainControl.instance.OverworldControl.openFPS;
                                     goto default;
                                 case 6:
                                     if (SceneManager.GetActiveScene().name == "Rename")
@@ -514,8 +513,8 @@ public class CanvasController : MonoBehaviour
                         }
                         else
                         {
-                            MainControl.instance.OverwroldControl.mainVolume = saveVolume;
-                            AudioListener.volume = MainControl.instance.OverwroldControl.mainVolume;
+                            MainControl.instance.OverworldControl.mainVolume = saveVolume;
+                            AudioListener.volume = MainControl.instance.OverworldControl.mainVolume;
                             SettingText();
                             isSettingName = false;
                         }
@@ -526,31 +525,31 @@ public class CanvasController : MonoBehaviour
                     {
 
                         case 0:
-                            textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "SettingMainVolumeTip");
+                            textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingMainVolumeTip");
                             break;
                         case 1:
-                            textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "SettingControlTip");
+                            textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingControlTip");
                             break;
                         case 2:
-                            if (!MainControl.instance.OverwroldControl.fullScreen)
-                                textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "SettingFullScreenTipOpen");
+                            if (!MainControl.instance.OverworldControl.fullScreen)
+                                textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingFullScreenTipOpen");
                             else
-                                textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "SettingFullScreenTipClose");
+                                textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingFullScreenTipClose");
                             break;
                         case 3:
-                            textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "SettingResolvingTip");
+                            textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingResolvingTip");
                             break;
                         case 4:
-                            textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "SettingSFXTip");
+                            textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingSFXTip");
                             break;
                         case 5:
-                            textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "SettingFPSTip");
+                            textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingFPSTip");
                             break;
                         case 6:
-                            textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "SettingBackMenuTip");
+                            textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingBackMenuTip");
                             break;
                         case 7:
-                            textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "SettingBackGameTip");
+                            textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingBackGameTip");
                             break;
                     }
                     settingTmpUnder.text = textForUnder;
@@ -615,7 +614,7 @@ public class CanvasController : MonoBehaviour
 
                         SettingText();
                     }
-                    settingTmpUnder.text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "ControlUnder" + controlSelect);
+                    settingTmpUnder.text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlUnder" + controlSelect);
 
                     break;
                 case 2:
@@ -639,16 +638,16 @@ public class CanvasController : MonoBehaviour
                         {
                             AudioController.instance.GetFx(1, MainControl.instance.AudioControl.fxClipUI);
                             SettingText(false, true);
-                            MainControl.instance.OverwroldControl.languagePack = settingSelect;
+                            MainControl.instance.languagePack = settingSelect; 
                         }
                         else
                         {
-                            ExitSetting();
+                            ExitSetting(true);
                         }
                     }
                     else if (MainControl.instance.KeyArrowToControl(KeyCode.X) || MainControl.instance.KeyArrowToControl(KeyCode.V))
                     {
-                        ExitSetting();
+                        ExitSetting(true);
                         return;
                     }
                     break;
@@ -660,13 +659,15 @@ public class CanvasController : MonoBehaviour
 
 
     }
-    void CloseSetting()
+    void CloseSetting(bool isLan = false)
     {
-        MainControl.instance.OverwroldControl.isSetting = false;
+        MainControl.instance.OverworldControl.isSetting = false;
         foreach (TypeWritter typeWritter in typeWritters)
         {
             typeWritter.TypePause(false);
         }
+        if (isLan)
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
     KeyCode SettingControl()
     {
@@ -686,23 +687,23 @@ public class CanvasController : MonoBehaviour
     }
     public void InSetting()
     {
-        MainControl.instance.OverwroldControl.isSetting = true;
+        MainControl.instance.OverworldControl.isSetting = true;
         DOTween.To(() => setting.rectTransform.sizeDelta, x => setting.rectTransform.sizeDelta = x, new Vector2(6000, setting.rectTransform.sizeDelta.y), 0.75f).SetEase(Ease.InCirc);
         settingTmp.DOColor(Color.white, 1).SetEase(Ease.InCubic);
         DOTween.To(() => settingTmp.rectTransform.anchoredPosition, x => settingTmp.rectTransform.anchoredPosition = x, new Vector2(140, 140), 1).SetEase(Ease.OutCubic);
         settingSelect = 0;
-        settingTmpUnder.text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "ControlEggshell");
+        settingTmpUnder.text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlEggshell");
         SettingText();
-        if(settingLevel == 2)
+        if (settingLevel == 2)
             SettingText(true);
     }
-    void ExitSetting()
+    void ExitSetting(bool isLan = false)
     {
         settingLevel = 0;
         DOTween.To(() => setting.rectTransform.sizeDelta, x => setting.rectTransform.sizeDelta = x, new Vector2(0, setting.rectTransform.sizeDelta.y), 0.75f).SetEase(Ease.OutCirc);
         settingTmp.DOColor(Color.white, 0).SetEase(Ease.OutCubic);
-        DOTween.To(() => settingTmp.rectTransform.anchoredPosition, x => settingTmp.rectTransform.anchoredPosition = x, new Vector2(-610, 140), 1).SetEase(Ease.InSine).OnKill(CloseSetting);
-        settingTmpUnder.text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "ControlEggshell");
+        DOTween.To(() => settingTmp.rectTransform.anchoredPosition, x => settingTmp.rectTransform.anchoredPosition = x, new Vector2(-610, 140), 1).SetEase(Ease.InSine).OnKill(() => CloseSetting(isLan));
+        settingTmpUnder.text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlEggshell");
     }
     private float m_LastUpdateShowTime = 0f;  //上一次更新帧率的时间;  
     private float m_UpdateShowDeltaTime = 0.2f;//更新帧率的时间间隔;  

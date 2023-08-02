@@ -31,7 +31,7 @@ public class MenuController : MonoBehaviour
         tmps[0].text = MainControl.instance.PlayerControl.playerName;
         tmps[1].text = "LV " + MainControl.instance.PlayerControl.lv;
         //tmps[2]‘⁄updateƒ⁄…Ë÷√
-        tmps[3].text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "MenuSetPlace");
+        tmps[3].text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "MenuSetPlace");
 
         List<string> list = new List<string>();
         for (int i = 0; i < 4; i++)
@@ -40,20 +40,20 @@ public class MenuController : MonoBehaviour
                 list.Add("");
             else list.Add("<color=yellow>");
         }
-        tmps[4].text = list[0] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Menu0") + "</color> "
-                     + list[1] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Menu1") + "</color>\n" 
-                     + list[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Menu2") + "</color> " 
-                     + list[3] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Menu3") + "</color>";
+        tmps[4].text = list[0] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Menu0") + "</color> "
+                     + list[1] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Menu1") + "</color>\n" 
+                     + list[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Menu2") + "</color> " 
+                     + list[3] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Menu3") + "</color>";
 
-        tmps[5].text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "MenuUnder") + Application.version;
+        tmps[5].text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "MenuUnder") + Application.version;
     }
 
     private void Update()
     {
-        if (MainControl.instance.OverwroldControl.isDebug)
+        if (MainControl.instance.OverworldControl.isDebug)
             tmps[0].text = MainControl.instance.PlayerControl.playerName;
 
-        if (MainControl.instance.OverwroldControl.isSetting || MainControl.instance.OverwroldControl.pause)
+        if (MainControl.instance.OverworldControl.isSetting || MainControl.instance.OverworldControl.pause)
             return;
 
         if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow))
@@ -98,10 +98,10 @@ public class MenuController : MonoBehaviour
                         list.Add("");
                     else list.Add("<color=yellow>");
                 }
-                tmps[4].text = list[0] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Menu0") + "</color> "
-                             + list[1] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Menu1") + "</color>\n"
-                             + list[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Menu2") + "</color> "
-                             + list[3] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Menu3") + "</color>";
+                tmps[4].text = list[0] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Menu0") + "</color> "
+                             + list[1] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Menu1") + "</color>\n"
+                             + list[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Menu2") + "</color> "
+                             + list[3] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Menu3") + "</color>";
             }
             if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
             {

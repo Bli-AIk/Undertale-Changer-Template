@@ -45,9 +45,6 @@ TagManager:
   - name: Tilemap
     uniqueID: 1212127259
     locked: 0
-  - name: Shadow
-    uniqueID: 1156365445
-    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

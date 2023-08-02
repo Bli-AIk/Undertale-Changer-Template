@@ -12,7 +12,7 @@ public class StorySceneController : MonoBehaviour
     void Start()
     {
         typeWritter = GetComponent<TypeWritter>();
-        typeWritter.TypeOpen(MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.owTextsSave, text), false, 0, 1);
+        //typeWritter.TypeOpen(MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, text), false, 0, 1);
     }
 
     // Update is called once per frame

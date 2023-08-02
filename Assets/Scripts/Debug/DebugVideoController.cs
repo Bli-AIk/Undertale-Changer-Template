@@ -15,7 +15,7 @@ public class DebugVideoController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!MainControl.instance.OverwroldControl.isDebug)
+        if (!MainControl.instance.OverworldControl.isDebug)
             return;
 
         if (Input.GetKeyDown(KeyCode.Space))

@@ -1,0 +1,63 @@
+/*
+MENU与设置内的文本存储。
+格式：
+读取名称\文本;
+
+一般来说 读取名称是固定的。
+特殊地，
+RenameSp\name|true|true|text;
+格式为试图给特殊名称起名时的设定，其中以第一个true或false判断是否允许重命名为此名称，第二个true或false判断name内的文本检测时是否分大小写。
+特别地，如果text文本为</gester>，则将崩溃游戏。
+
+<playerName>获取玩家名称
+*/
+
+LanguagePack\       语言;
+/* 全半角设定，中日韩等全角字符居多的语言建议设为true，会对游戏内的文本进行微调。 */
+LanguagePackFullWidth\true;
+/* 需要输入准确的语言文化代码，且不得有多余字符，用于CultureInfo检测。 */
+CultureInfo\zh-CN;
+
+Setting\       设置;
+SettingMainVolume\主音量;
+SettingControl\控制;
+SettingFullScreen\全屏;
+SettingResolving\分辨率设置;
+SettingSFX\简化视觉效果;
+SettingFPS\显示FPS;
+SettingBackMenu\返回菜单界面;
+SettingBackGame\返回游戏;
+Open\开;
+Close\关;
+Back\返回;
+
+SettingMainVolumeTip\调节全局音量大小。;
+SettingControlTip\按键设置。;
+SettingFullScreenTipOpen\开启全屏模式。;
+SettingFullScreenTipClose\在全屏状态下，建议将分辨率调高。;
+SettingResolvingTip\设置游戏窗口大小。(恒为4:3);
+SettingSFXTip\设置游戏内的光效与特效是否开启。;
+SettingFPSTip\设置帧率是否显示。;
+SettingBackMenuTip\未保存的数据将会丢失。;
+SettingBackGameTip\返回并继续游戏。;
+
+Control\       控制;
+ControlDown\下;
+ControlRight\右;
+ControlUp\上;
+ControlLeft\左;
+ControlZ\确认;
+ControlX\取消;
+ControlC\菜单;
+ControlV\设置;
+ControlF4\全屏;
+ControlTab\更改分辨率;
+ControlSemicolon\更改视觉效果;
+ControlEsc\退出游戏键;
+ControlDefault\恢复默认设置;
+
+ControlEggshell\~嘟嘟嘟嘟嘟嘟嘟~;
+
+ControlUnder0\主键位设置中。按C设置辅助键位。;
+ControlUnder1\辅助键位1设置中。按C设置辅助键位2。;
+ControlUnder2\辅助键位2设置中。按C设置主键位。;

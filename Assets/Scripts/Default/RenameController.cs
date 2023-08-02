@@ -61,15 +61,15 @@ public class RenameController : MonoBehaviour
                 strings.Add("<color=yellow>");
             else strings.Add("");
         }
-        tmps[3].text = strings[0] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Rename1") + "</color> " +
-strings[1] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Rename2") + "</color>  " +
-strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Rename3") + "</color>";
+        tmps[3].text = strings[0] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Rename1") + "</color> " +
+strings[1] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Rename2") + "</color>  " +
+strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Rename3") + "</color>";
         
     }
     // Update is called once per frame
     void Update()
     {
-        if (MainControl.instance.OverwroldControl.isSetting)
+        if (MainControl.instance.OverworldControl.isSetting)
             return;
         switch (mode)
         {
@@ -103,14 +103,14 @@ strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.Overwro
                                 {
                                     select = 0;
                                     mode = 2;
-                                    List<string> list = MainControl.instance.ScreenMaxToAllSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "RenameSp");
-                                    tmps[0].text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Rename");
-                                    if (MainControl.instance.OverwroldControl.textWidth)
-                                        tmps[3].text = "<size=0>wwww</size><color=yellow>" + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "No") + 
-                                                       "</color>    " + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Yes");
+                                    List<string> list = MainControl.instance.ScreenMaxToAllSon(MainControl.instance.OverworldControl.sceneTextsSave, "RenameSp");
+                                    tmps[0].text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Rename");
+                                    if (MainControl.instance.OverworldControl.textWidth)
+                                        tmps[3].text = "<size=0>wwww</size><color=yellow>" + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "No") + 
+                                                       "</color>    " + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Yes");
                                     else
-                                        tmps[3].text = "<size=2><color=#00000000>wwww</color></size><color=yellow>" + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "No") + 
-                                                       "</color>    <color=#00000000><size=5>wwwwwwwww</size></color>" + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Yes");
+                                        tmps[3].text = "<size=2><color=#00000000>wwww</color></size><color=yellow>" + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "No") + 
+                                                       "</color>    <color=#00000000><size=5>wwwwwwwww</size></color>" + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Yes");
                                     selectMax = true;
                                     foreach (var item in list)
                                     {
@@ -118,17 +118,17 @@ strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.Overwro
                                         MainControl.instance.MaxToOneSon(item+'|', lister, '|');
                                         if ((lister[0] == MainControl.instance.UppercaseToLowercase(setName) && !bool.Parse(lister[2]))|| (lister[0] == setName && bool.Parse(lister[2]))) 
                                         {
-                                            if (lister[3] == "</gaster>")
+                                            if (lister[3] == "<gaster>")
                                                 Application.Quit();
                                             else
                                                 tmps[0].text = lister[3];
                                             if (!bool.Parse(lister[1]))
                                             {
                                                 selectMax = false;
-                                                if (MainControl.instance.OverwroldControl.textWidth)
-                                                    tmps[3].text = "<size=0>wwww</size><color=yellow>"+ MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "GoBack") + "</color>";
+                                                if (MainControl.instance.OverworldControl.textWidth)
+                                                    tmps[3].text = "<size=0>wwww</size><color=yellow>"+ MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "GoBack") + "</color>";
                                             else
-                                                    tmps[3].text = "<size=2><color=#00000000>wwww</color></size><color=yellow>" + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "GoBack") + "</color>";
+                                                    tmps[3].text = "<size=2><color=#00000000>wwww</color></size><color=yellow>" + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "GoBack") + "</color>";
 
                                             }
 
@@ -237,7 +237,7 @@ strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.Overwro
 
 
                 }
-                tmps[0].text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Rename0");
+                tmps[0].text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Rename0");
                 tmps[1].text = setName;
                 tmps[2].text = Alphabet(select);
                 Selectbet(select);
@@ -256,9 +256,9 @@ strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.Overwro
                             tmps[1].transform.localPosition = new Vector3(8.95f, 0.6f);
                             tmps[1].transform.localScale = Vector3.one;
                             tmps[1].GetComponent<DynamicTMP>().mode = -1;
-                            tmps[3].text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Rename1") +
-                                           MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Rename2") +
-                                           MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Rename3");
+                            tmps[3].text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Rename1") +
+                                           MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Rename2") +
+                                           MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Rename3");
                             break;
                         case 1:
                             mode = -1;
@@ -283,32 +283,32 @@ strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.Overwro
                     tmps[1].transform.localPosition = new Vector3(8.95f, 0.6f);
                     tmps[1].transform.localScale = Vector3.one;
                     tmps[1].GetComponent<DynamicTMP>().mode = -1;
-                    tmps[3].text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Rename1") +
-                                   MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Rename2") +
-                                   MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Rename3");
+                    tmps[3].text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Rename1") +
+                                   MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Rename2") +
+                                   MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Rename3");
                 }
                 if (selectMax && (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow) || MainControl.instance.KeyArrowToControl(KeyCode.RightArrow))) 
                 {
                     if (select == 0)
                     {
                         select = 1;
-                        if (MainControl.instance.OverwroldControl.textWidth)
-                            tmps[3].text = "<size=0>wwww</size>" + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "No") +
-                                           "    <color=yellow>" + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Yes") + "</color>";
+                        if (MainControl.instance.OverworldControl.textWidth)
+                            tmps[3].text = "<size=0>wwww</size>" + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "No") +
+                                           "    <color=yellow>" + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Yes") + "</color>";
                         else
-                            tmps[3].text = "<color=#00000000><size=2>wwww</size></color>" + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "No") +
-                                           "    <color=#00000000><size=5>wwwwwwwww</size></color><color=yellow>" + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Yes") + "</color>";
+                            tmps[3].text = "<color=#00000000><size=2>wwww</size></color>" + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "No") +
+                                           "    <color=#00000000><size=5>wwwwwwwww</size></color><color=yellow>" + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Yes") + "</color>";
 
                     }
                     else
                     {
                         select = 0;
-                        if (MainControl.instance.OverwroldControl.textWidth)
-                            tmps[3].text = "<color=#00000000><size=0>wwww</size><color=yellow>" + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "No") + 
-                                           "</color>    <color=white>" + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Yes");
+                        if (MainControl.instance.OverworldControl.textWidth)
+                            tmps[3].text = "<color=#00000000><size=0>wwww</size><color=yellow>" + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "No") + 
+                                           "</color>    <color=white>" + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Yes");
                         else
-                            tmps[3].text = "<color=#00000000><size=2>wwww</size></color><color=yellow>" + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "No") +
-                                           "</color>    <color=#00000000><size=5>wwwwwwwww</size></color>" + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Yes");
+                            tmps[3].text = "<color=#00000000><size=2>wwww</size></color><color=yellow>" + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "No") +
+                                           "</color>    <color=#00000000><size=5>wwwwwwwww</size></color>" + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Yes");
 
                     }
                 }
@@ -319,8 +319,8 @@ strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.Overwro
                 setName = "";
                 tmps[2].text = "";
                 tmps[3].text = "";
-                tmps[4].text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "Teach");
-                tmps[5].text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.menuAndSettingSave, "MenuUnder") + Application.version;
+                tmps[4].text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Teach");
+                tmps[5].text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "MenuUnder") + Application.version;
                 if ((MainControl.instance.KeyArrowToControl(KeyCode.Z)) && setName.Length < 6)
                     mode = 1;
                     break;

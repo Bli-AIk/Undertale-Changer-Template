@@ -186,7 +186,7 @@ public class TypeWritter : MonoBehaviour
             else if (originString[i] == '龘')//停顿
             {
                 if (!pressX)
-                    yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f * Convert.ToInt32(!MainControl.instance.OverwroldControl.textWidth));
+                    yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f * Convert.ToInt32(!MainControl.instance.OverworldControl.textWidth));
                
             }
             else if (originString[i] == '鼵')//变脸
@@ -284,7 +284,7 @@ public class TypeWritter : MonoBehaviour
                 }
 
                 if (!pressX)
-                    yield return Timing.WaitForSeconds(speed - speed * 0.25f * Convert.ToInt32(!MainControl.instance.OverwroldControl.textWidth));
+                    yield return Timing.WaitForSeconds(speed - speed * 0.25f * Convert.ToInt32(!MainControl.instance.OverworldControl.textWidth));
             }
 
         }
@@ -311,7 +311,7 @@ public class TypeWritter : MonoBehaviour
     }
     private void Update()
     {
-        if (MainControl.instance.OverwroldControl.isSetting || forceReturn)//pause在OW检测的时候会用
+        if (MainControl.instance.OverworldControl.isSetting || forceReturn)//pause在OW检测的时候会用
             return;
 
         if (clockTime > 0)

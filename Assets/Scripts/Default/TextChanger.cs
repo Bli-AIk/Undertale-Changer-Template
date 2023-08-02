@@ -38,7 +38,7 @@ public class TextChanger : MonoBehaviour
             tmp.font = assetback;
         }
         */
-        width = MainControl.instance.OverwroldControl.textWidth;
+        width = MainControl.instance.OverworldControl.textWidth;
         /*
         if (tmp.font != assetback)
             tmp.font = assetback;

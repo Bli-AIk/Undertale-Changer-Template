@@ -17,13 +17,11 @@ public class OverworldTalkSelect : MonoBehaviour
     TypeWritter typeWritter;
     public List<string> texts;
     public List<Sprite> sprites;
-    PlayerBehaviour player;
     float saveFloat;
     public string typeText;
     // Start is called before the first frame update
     void Start()
     {
-        player = GameObject.Find("Player").GetComponent<PlayerBehaviour>();
         typeWritter = GameObject.Find("BackpackCanvas").GetComponent<TypeWritter>();
         Transform heartTrans = transform.Find("RawImage/Talk/UITalk/Heart");
         GameObject heartObj;
@@ -79,13 +77,13 @@ public class OverworldTalkSelect : MonoBehaviour
                             ´ò×Ö»úÊ¾Àý
                             case "XXX":
 
-                        typeWritter.TypeOpen(MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverwroldControl.owTextsSave, texts[0]), false, 0, 1);
+                        typeWritter.TypeOpen(MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.owTextsSave, texts[0]), false, 0, 1);
                         break;
                             */
 
                             case "BackMenu":
                                 typeWritter.forceReturn = true;
-                                MainControl.instance.OverwroldControl.pause = true;
+                                MainControl.instance.OverworldControl.pause = true;
                                 MainControl.instance.OutWhite("Menu");
                                 AudioController.instance.audioSource.volume = 0;
                                 break;

@@ -1,0 +1,17 @@
+/*
+MENU與設置內的文本存儲。
+格式：
+讀取名稱\文本;
+
+一般來說 讀取名稱是固定的。
+特殊地，
+RenameSp\name|true|true|text;
+格式爲試圖給特殊名稱起名時的設定，其中以第一個true或false判斷是否允許重命名爲此名稱，第二個true或false判斷name內的文本檢測時是否分大小寫。
+特別地，如果text文本爲</gester>，則將崩潰遊戲。
+
+<playerName>獲取玩家名稱
+*/
+GameOver1\你<stop>< >會<stop>< >沒<stop>< >事<stop>< >的<stop>< >！<stop>< ><passText><playerName>！<stop>< ><stop>< ><stop>< ><enter>保<stop>< >持<stop>< >你<stop>< >的<stop>< >決<stop>< >心<stop>.<stop>< >.<stop>< >.;
+GameOver2\我<stop>< >們<stop>< >的<stop>< >命<stop>< >運<stop>< ><enter><stop>都<stop>< >寄<stop>< >託<stop>< >予<stop>< >你<stop>.<stop>< >.<stop>< >.<stop>< ><passText><playerName>！<stop>< ><stop>< ><stop>< ><enter>保<stop>< >持<stop>< >你<stop>< >的<stop>< >決<stop>< >心<stop>.<stop>< >.<stop>< >.;
+GameOver3\別<stop>< >失<stop>< >去<stop>< >希<stop>< >望<stop>< >！<stop>< ><passText><playerName>！<stop>< ><stop>< ><stop>< ><enter>保<stop>< >持<stop>< >你<stop>< >的<stop>< >決<stop>< >心<stop>.<stop>< >.<stop>< >.;
+GameOver4\現<stop>< >在<stop>< ><enter><stop>還<stop>< >不<stop>< >能<stop>< >結<stop>< >束<stop>< >！<stop>< ><passText><playerName>！<stop>< ><stop>< ><stop>< ><enter>保<stop>< >持<stop>< >你<stop>< >的<stop>< >決<stop>< >心<stop>.<stop>< >.<stop>< >.;

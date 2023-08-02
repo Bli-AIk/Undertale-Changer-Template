@@ -1,7 +1,7 @@
 /*
 配置語言包信息
 */
-LanguagePackName\繁體中文(內置);
+LanguagePackName\繁體中文<gradient="White to Yellow - UTC">(內置)</gradient>;
 
 /* 建議在此處標明各人員及職位 如xxx(原始文本),xxx(翻譯),xxx(校對)等。 */
 LanguagePackAuthor\通過Open Chinese Convert轉換，<enter>可能存在語義差異。;

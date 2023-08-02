@@ -18,7 +18,6 @@ public class BackpackBehaviour : MonoBehaviour
     GameObject BackpackUIRightPoint2, BackpackUIRightPoint3;
     TalkUIPositionChanger talkUI;
     TypeWritter typeWritter;
-    PlayerBehaviour playerBehaviour;
 
     private void Awake()
     {
@@ -40,7 +39,6 @@ public class BackpackBehaviour : MonoBehaviour
         BackpackUIRight = GameObject.Find("Main Camera/BackpackUI/Right");
         player = GameObject.Find("Player");
         mainCamera = GameObject.Find("Main Camera");
-        playerBehaviour = GameObject.Find("Player").GetComponent<PlayerBehaviour>();
         BackpackUIRightPoint2 = BackpackUIRight.transform.Find("Point2").gameObject;
         BackpackUIRightPoint3 = BackpackUIRight.transform.Find("Point3").gameObject;
         BackpackUILeft.transform.parent.localPosition = new Vector3(BackpackUILeft.transform.parent.localPosition.x, BackpackUILeft.transform.parent.localPosition.y, -50);
@@ -51,13 +49,13 @@ public class BackpackBehaviour : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (MainControl.instance.OverwroldControl.isSetting || MainControl.instance.OverwroldControl.pause)
+        if (MainControl.instance.OverworldControl.isSetting || MainControl.instance.OverworldControl.pause)
         {
-            if (MainControl.instance.OverwroldControl.pause)
+            if (MainControl.instance.OverworldControl.pause)
             {
                 typeMessage.text = typeWritter.endString;
-                if (typeMessage.font != MainControl.instance.OverwroldControl.tmpFonts[typeWritter.useFont])
-                    typeMessage.font = MainControl.instance.OverwroldControl.tmpFonts[typeWritter.useFont];
+                if (typeMessage.font != MainControl.instance.OverworldControl.tmpFonts[typeWritter.useFont])
+                    typeMessage.font = MainControl.instance.OverworldControl.tmpFonts[typeWritter.useFont];
             }
             return;
         }
@@ -146,7 +144,7 @@ public class BackpackBehaviour : MonoBehaviour
         {
             if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
             {
-                playerBehaviour.owTimer = 0.1f;
+                MainControl.instance.playerBehaviour.owTimer = 0.1f;
 
                 if (select == 1)
                 {
@@ -263,7 +261,7 @@ public class BackpackBehaviour : MonoBehaviour
             }
 
             /*
-            if (MainControl.instance.OverwroldControl.backGround)//边框自适应
+            if (MainControl.instance.OverworldControl.backGround)//边框自适应
                 backpack.localScale = Vector3.one * 0.8888f;
             else
             */
@@ -330,8 +328,8 @@ public class BackpackBehaviour : MonoBehaviour
         
         
         typeMessage.text = typeWritter.endString;
-        if (typeMessage.font != MainControl.instance.OverwroldControl.tmpFonts[typeWritter.useFont])
-            typeMessage.font = MainControl.instance.OverwroldControl.tmpFonts[typeWritter.useFont];
+        if (typeMessage.font != MainControl.instance.OverworldControl.tmpFonts[typeWritter.useFont])
+            typeMessage.font = MainControl.instance.OverworldControl.tmpFonts[typeWritter.useFont];
 
 
 
@@ -370,7 +368,7 @@ public class BackpackBehaviour : MonoBehaviour
                 heart.rectTransform.anchoredPosition = new Vector2(-255, 35);
                 break;
         }
-        if(MainControl.instance.OverwroldControl.isDebug)
+        if(MainControl.instance.OverworldControl.isDebug)
             uiName.text = MainControl.instance.PlayerControl.playerName;
 
 

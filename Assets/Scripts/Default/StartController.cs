@@ -22,7 +22,7 @@ public class StartController : MonoBehaviour
         text.color = Color.clear;
         textUnder.color = Color.clear;
         AudioController.instance.GetFx(11, MainControl.instance.AudioControl.fxClipUI);
-        text.text = MainControl.instance.OverwroldControl.safeText;
+        text.text = MainControl.instance.OverworldControl.safeText;
     }
 
     // Update is called once per frame

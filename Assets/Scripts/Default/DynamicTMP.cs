@@ -10,7 +10,7 @@ public class DynamicTMP : MonoBehaviour
     float randomStart;
     private void Start()
     {
-        tmp = GetComponent<TextMeshPro>();
+        tmp = GetComponent<TMP_Text>();
         randomStart = Random.Range(2, 2.5f);
     }
     void FixedUpdate()

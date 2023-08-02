@@ -81,6 +81,8 @@ public class PlayerBehaviour : MonoBehaviour
 
     private void Update()
     {
+       
+
         MainControl.instance.PlayerControl.deadPos = transform.position;
         if (typeWritter.isTyping)
         {
@@ -94,7 +96,7 @@ public class PlayerBehaviour : MonoBehaviour
                 distance = 2;
         }
 
-        if (MainControl.instance.OverwroldControl.isSetting || MainControl.instance.OverwroldControl.pause)
+        if (MainControl.instance.OverworldControl.isSetting || MainControl.instance.OverworldControl.pause)
         {
             return;
         }
@@ -104,7 +106,10 @@ public class PlayerBehaviour : MonoBehaviour
         }
         if (saveOwObj != null && backpackUI.transform.localPosition.z < 0)
         {
-            if (saveOwObj.isTriggerMode || (!saveOwObj.isTriggerMode && MainControl.instance.KeyArrowToControl(KeyCode.Z) && backpackBehaviour.select == 0))
+            if (saveOwObj.isTriggerMode
+                || (!saveOwObj.isTriggerMode && MainControl.instance.KeyArrowToControl(KeyCode.Z)
+                && ((saveOwObj.playerDir == Vector2.one) || (saveOwObj.playerDir.x == animDirectionX) || (saveOwObj.playerDir.y == animDirectionY))
+                && backpackBehaviour.select == 0)) 
             {
                 if (owTimer <= 0)
                 {
@@ -163,9 +168,9 @@ public class PlayerBehaviour : MonoBehaviour
         }
         */
 
-        if (MainControl.instance.OverwroldControl.isSetting || MainControl.instance.OverwroldControl.pause)
+        if (MainControl.instance.OverworldControl.isSetting || MainControl.instance.OverworldControl.pause)
             return;
-        if (Input.GetKeyDown(KeyCode.B) && MainControl.instance.OverwroldControl.isDebug)
+        if (Input.GetKeyDown(KeyCode.B) && MainControl.instance.OverworldControl.isDebug)
             MainControl.instance.OutBlack("Battle", Color.black);
     }
     public void PlayWalkAudio()//¶¯»­Æ÷ÒýÓÃ
@@ -190,7 +195,14 @@ public class PlayerBehaviour : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (MainControl.instance.OverwroldControl.isSetting || MainControl.instance.OverwroldControl.pause || backpackBehaviour.select > 0)
+        float speed;
+        if (MainControl.instance.KeyArrowToControl(KeyCode.X, 1))
+            speed = this.speed * 2;
+        else speed = this.speed;
+
+        animator.SetFloat("Speed", System.Convert.ToInt32(MainControl.instance.KeyArrowToControl(KeyCode.X, 1)) + 1);
+
+        if (MainControl.instance.OverworldControl.isSetting || MainControl.instance.OverworldControl.pause || backpackBehaviour.select > 0)
         {
             animator.Play("Walk Tree", 0, 0);
             if (MainControl.instance.PlayerControl.canMove)

@@ -22,7 +22,7 @@ public class BulletShaderController : MonoBehaviour
     {
         if (MainControl.instance.sceneState != MainControl.SceneState.InBattle)
             return;
-        if (MainControl.instance.OverwroldControl.isSetting || MainControl.instance.OverwroldControl.pause)
+        if (MainControl.instance.OverworldControl.isSetting || MainControl.instance.OverworldControl.pause)
             return;
 
         Set();

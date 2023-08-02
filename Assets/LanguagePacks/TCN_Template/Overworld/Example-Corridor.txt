@@ -1,0 +1,54 @@
+/* 
+戰鬥外場景的所有對話文本。
+格式爲：
+讀取名稱\文本;
+
+<image=x>  設定顯示的表情編碼，特別地，在此x若爲負數則設定爲無人發出對話（旁白）。
+表情編碼一般來說是遊戲內定的，要改的話就挨個測試吧(
+
+打字機特殊字符(通用)輸入：
+<stop> 字符會使打字機經過此字符時會短暫停頓。
+(該字符不會被打出 一般用於標點符號前/後。原理爲使用預設的“停頓打字速度”打出一個空字符，從而實現停頓。
+在舊模板中，打字機經過標點符號就會停頓，但這也導致了一些特殊情況無法解決。因此，修改爲必須手動添加該字符。
+請注意，按下X後不會在此字符處停頓。該字符可疊加使用。停頓速度根據打字機的設置而定——簡單來說就是你改不了)
+
+<enter>回車符 
+<x>直接輸入字符x。x只能是一個字符，這個字符會跳過打字機直接輸入。
+<fx=x>  將打字機的音效換爲第x位音效。
+
+
+如果你需要輸入很長的一段文字或單純想要玩家多按那麼一下子Z鍵，你可以在一段文本內插入 <passText>
+打字機檢測該字符後會停止打字，玩家若按下Z鍵將會清空當前文本並繼續打字狀態。
+此前的富文本將失效，因爲此前的文本都清空了。
+
+富文本輸入示意：
+<color=#00000000>顏色符 支持RGBA 十六進制
+</color>去除顏色
+
+<b>粗體
+</b>去除粗體
+
+<i>斜體
+</i>去除斜體
+
+<size=50>更改字體大小
+</size>去除更改
+
+<color=red>顏色符 具體支持名稱可參考TMP文檔http://digitalnativestudios.com/textmeshpro/docs/
+</color>去除顏色
+*/
+
+DemoBox1\<image=-1><fx=0>* 這是個<gradient="White to Yellow - UTC">破箱子</gradient><stop>.<stop>.<stop>.<enter>* 哈哈，咱沒做界面。
+<passText><image=0><fx=3>* <gradient="White to Red - UTC">啊？？？</gradient><fx=2><stop><stop><stop>怎麼說，<stop><image=1><fx=3><enter>< >< >你<stop>先<stop>別<stop>急<stop>。
+<passText><image=2><fx=2>* 現在捏，<stop>這個對話是測試<gradient="White to Yellow - UTC"><enter>< >< >打字機</gradient>來的，<fx=3><stop><image=0><就><像><這><樣>。
+<passText><image=0><fx=2><*>< ><啪><的><一><下><就><說><完><了><一><句><話><。><enter>< >< ><stop><stop><stop><gradient="White to Red - UTC">炫。</gradient>
+<passText><image=2>* 啥？<stop>你沒看清？<stop><enter>< >< >那我慢點？<stop><stop><stop><stop><stop><enter><*>< ><stop><啪><的><stop><一><下><stop><就><說><stop><完><了><stop><。><stop><stop><stop>蛤？;
+
+Plot\<image=-1><fx=0>* .<stop>.<stop>.<stop>.<stop>.<stop>.
+<passText>* 啊<stop>.<stop>.<stop>.沒有人？<stop>？
+<passText><image=0><fx=2>* 你好。
+<passText><image=-1><fx=0>* 啊？<stop>Flowey！<stop><enter>* 你這傢伙躲哪去了？
+<passText><image=2><fx=2>* 要你管。<stop><stop><stop><stop><stop><image=1>現在該對戰辣！;
+
+
+BackMenu\<image=-1><fx=1>* (這是測試文本喵。)<enter>* (要回到MENU場景喵？)<enter><fx=-1><size=5> </size>< >< >< >< >< >< >  喵<size=5> </size>< >< >< >< >< >< >< >  嬲<select>BackMenu;

@@ -244,7 +244,7 @@ public class BulletController : MonoBehaviour
                         || (bulletColor == BattleControl.BulletColor.blue && MainControl.instance.battlePlayerController.isMoveing))
                     {
                         HitPlayer(i);
-                        if (!MainControl.instance.OverwroldControl.noSFX)
+                        if (!MainControl.instance.OverworldControl.noSFX)
                                 MainControl.instance.battlePlayerController.hitVolume.weight = 1;
                     }
                     break;
@@ -258,7 +258,7 @@ public class BulletController : MonoBehaviour
                     || (bulletColor == BattleControl.BulletColor.blue && MainControl.instance.battlePlayerController.isMoveing))
                 {
                     HitPlayer(0);
-                    if (!MainControl.instance.OverwroldControl.noSFX)
+                    if (!MainControl.instance.OverworldControl.noSFX)
                         MainControl.instance.battlePlayerController.hitVolume.weight = 1;
                 }
             }

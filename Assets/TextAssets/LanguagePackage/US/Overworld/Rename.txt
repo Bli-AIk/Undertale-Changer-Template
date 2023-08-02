@@ -1,0 +1,138 @@
+/*
+
+Text storage in MENU and settings.
+
+Format:
+
+Read Name\Text;
+
+
+Generally speaking, the read name is fixed.
+Specifically,
+RenameSp\name|true|true|text;
+The format is the setting when trying to name a special name. The first true or false is used to determine whether renaming to this name is allowed, and the second true or false is used to determine whether text in the name is case sensitive when detecting
+
+In particular, if the text is<gaster>, the game will crash.
+
+<playerName> Get player's name.
+
+*/
+
+
+
+Rename\Is this name correct?;
+Rename0\Name the fallen human.;
+Rename1\<size=0>aaaaaaaaa</size>Quit;
+Rename2\Backspace;
+Rename3\Done;
+Yes\Yes;
+No\No;
+GoBack\Go back;
+Teach\---Instruction---<enter><enter>[Z or ENTER]-Confirm<enter>[X or SHIFT]-Cancel<enter>[C or CTRL]-Menu(In-Game)<enter>[V]-Settings<enter>[F4]-Fullscreen<enter>[Hold ESC]-Quit<enter>When HP is 0,you lose.;
+
+PageNext\Next page;
+PageLast\Last page;
+
+RenameSp\chara|true|false|The true name.;
+RenameSp\frisk|true|false|WARNING:This name will<enter>cause nothing to happen.<enter>To put it bluntly, I'm lazy.;
+RenameSp\toriel|false|false|I think you should<enter>think of your own<enter>name,my child.;
+RenameSp\alphys|false|false|D-don't do that.;
+RenameSp\alphy|true|false|Uh...OK?;
+RenameSp\undyne|false|false|Get your OWN name!;
+RenameSp\mett|true|false|OOOOH!!!ARE YOU<enter>PROMOTING MY BRAND?;
+RenameSp\asriel|false|false|...;
+RenameSp\asgore|false|false|You cannot.;
+RenameSp\sans|false|false|nope.;
+RenameSp\papyru|true|false|I'LL ALLOW IT!!!!;
+RenameSp\flowey|false|false|I already CHOSE<enter>that name.;
+RenameSp\temmie|true|false|hOI!;
+RenameSp\gerson|true|false|Wah ha ha!Why not?;
+RenameSp\catty|true|false|Bratty!Bratty!<enter>That's MY name!;
+RenameSp\bpants|true|false|You are really scraping the<enter>bottom of the barrel.;
+RenameSp\blooky|true|false|......<enter>(They're powerless to stop you.);
+RenameSp\shyren|true|false|...?;
+RenameSp\jerry|true|false|Jerry.;
+RenameSp\murder|true|false|That's a little on-<enter>the nose,isn't it...?;
+RenameSp\mercy|true|false|That's a little on-<enter>the nose,isn't it...?;
+RenameSp\aaaaaa|true|false|Not very creative...?;
+RenameSp\gaster|true|false|<gaster>;
+
+RenameSp\tom|true|false|Tom.;
+RenameSp\toooom|true|false|Too————oom.;
+RenameSp\badtom|true|false|BAD TOOOOOOOOOM?!;
+
+RenameSp\tobyfox|false|false|woof!?!?;
+RenameSp\tobyfo|false|false|woof,woof?;
+RenameSp\toby|false|false|woof?;
+RenameSp\tobyf|false|false|woof...?;
+
+RenameSp\kris|true|false|...;
+RenameSp\susie|true|false|Hello peppa(what);
+RenameSp\ralsei|false|false|Did you play<enter>the wrong game?;
+RenameSp\lancer|true|false|The name is correct!;
+
+RenameSp\aik|true|false|ah,yeah...Here is AIk,<enter>I guess.;
+RenameSp\bliaik|false|false|The name is already in use.;
+RenameSp\alk|false|false|THE MIDDLE LETTER IS "I"!!!<enter>IT IS "I"! "I"!<enter>AAAAAAHHHHH!!!!!;
+RenameSp\blialk|true|false|Do whatever you want,damn it.;
+RenameSp\tse|false|false|I hope you come<enter>from the near future...;
+RenameSp\tsefor|false|false|I'm waiting for you.;
+RenameSp\alpha|true|false|Origin.;
+RenameSp\beta|true|false|Just like <enter>the poor test body<enter>you CONTROL.;
+RenameSp\omega|true|false|End.;
+RenameSp\undert|true|false|Why not?;
+RenameSp\deltar|true|false|Why not?;
+RenameSp\delta|true|false|everything changes,<enter>everything ceases.;
+RenameSp\change|true|false|everything changes,<enter>everything ceases.;
+RenameSp\origin|true|false|everything changes,<enter>everything ceases.;
+
+RenameSp\pvzol|true|false|A familiar name...;
+RenameSp\Lnsidi|false|true|Hello, but I'm sorry.<enter>I think we don't belong here anymore.;
+RenameSp\insidi|true|false|This is an incorrect name.<enter>You probably need...<enter>to be more accurate...?;
+
+RenameSp\you|true|false|YOU.;
+RenameSp\LeaF|true|true|草.;
+RenameSp\usao|true|false|Headshot,<enter>GG,noooooooob!;
+RenameSp\a|true|false|You are a bit lazy here...;
+RenameSp\aa|true|false|All right.;
+RenameSp\xyz|true|false|Welcome to the 3D era.;
+RenameSp\hello|true|false|Hello world.;
+RenameSp\hallo|true|false|Hallo world...<stop>Um... is there a problem?;
+RenameSp\hi|true|false|Hi world.<stop>At least it saves time and effort;
+RenameSp\ssr|true|false|Wow, the golden legend(;
+
+RenameSp\nmsl|false|false|Not very friendly.;
+RenameSp\shit|false|false|s h i t.;
+RenameSp\fuck|false|false|Not very friendly.;
+RenameSp\fucker|false|false|Not very...uh.;
+RenameSp\cnm|false|false|Not very friendly.;
+RenameSp\rnm|false|false|Not very friendly.;
+RenameSp\dnm|false|false|Not very friendly.;
+RenameSp\wcnm|false|false|Not very friendly.;
+RenameSp\wrnm|false|false|Not very friendly.;
+RenameSp\wdnmd|true|false|Barely OK);
+RenameSp\wcnmm|false|false|sAiD dIrTy wOrDs.;
+RenameSp\yysy|true|false|Exactly.;
+RenameSp\yyds|true|false|Huh?;
+RenameSp\nsdd|true|false|You are right, but "Undertale" is a role-playing game independently developed and released by Toby Fox. It was released on Microsoft Windows, OS X and Steam platforms on September 15, 2015 Players will control a human who falls into the underground monster world in the game. Players can find the way to leave, or choose to stay;
+
+RenameSp\awsl|true|false|かわいい!;
+
+RenameSp\gms|true|false|You're probably in the wrong place(;
+RenameSp\unity|true|false|UnITy,good(;
+
+RenameSp\noitem|true|false|It's magical to see.;
+RenameSp\nohit|true|false|... give it a try?
+RenameSp\noplay|true|false|<gaster>;
+RenameSp\exit|true|false|<gaster>;
+
+RenameSp\CC|true|true|Someone will always remember...;
+RenameSp\Rewrit|true|true|Someone will always remember.;
+
+RenameSp\cheat|true|false|If you open CE, I suggest<enter>you just play in private);
+RenameSp\cheate|true|false|If you open CE, I suggest<enter>you just play in private);
+
+RenameSp\debug|false|false|You found the door,<enter>but I still need a key...;
+RenameSp\cdkey|false|false|Please enter the serial number：<enter>_____-_____-_____-_____;
+
+RenameSp\candym|true|false|Sorry, no related accounts:D;

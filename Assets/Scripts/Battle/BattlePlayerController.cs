@@ -59,18 +59,18 @@ public class BattlePlayerController : MonoBehaviour
     }
     private void Update()
     {
-        if (!MainControl.instance.OverwroldControl.noSFX && hitVolume.weight > 0)
+        if (!MainControl.instance.OverworldControl.noSFX && hitVolume.weight > 0)
             hitVolume.weight -= Time.deltaTime;
 
         if (MainControl.instance.PlayerControl.hp <= 0)
         {
             MainControl.instance.PlayerControl.hp = MainControl.instance.PlayerControl.hpMax;
 
-            if (!MainControl.instance.OverwroldControl.isDebug)
+            if (!(MainControl.instance.OverworldControl.isDebug && MainControl.instance.OverworldControl.invincible))
             {
                 spriteRenderer.color = Color.red;
                 MainControl.instance.PlayerControl.deadPos = transform.position;
-                MainControl.instance.OverwroldControl.pause = true;
+                MainControl.instance.OverworldControl.pause = true;
                 MainControl.instance.SwitchScene("Gameover", false);
             }
             else
@@ -78,7 +78,7 @@ public class BattlePlayerController : MonoBehaviour
         }
 
 
-        if (MainControl.instance.OverwroldControl.isSetting || MainControl.instance.OverwroldControl.pause)
+        if (MainControl.instance.OverworldControl.isSetting || MainControl.instance.OverworldControl.pause)
             return;
 
         if (MainControl.instance.PlayerControl.missTime >= 0) 
@@ -99,7 +99,7 @@ public class BattlePlayerController : MonoBehaviour
 
 
         //Debug
-        if (MainControl.instance.OverwroldControl.isDebug)
+        if (MainControl.instance.OverworldControl.isDebug)
         {
 
             if (Input.GetKeyDown(KeyCode.Keypad1))
@@ -126,7 +126,7 @@ public class BattlePlayerController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (MainControl.instance.OverwroldControl.isSetting || MainControl.instance.OverwroldControl.pause)
+        if (MainControl.instance.OverworldControl.isSetting || MainControl.instance.OverworldControl.pause)
             return;
         if (!RoundController.instance.isMyRound)
             Moveing();

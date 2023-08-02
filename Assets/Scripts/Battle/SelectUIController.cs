@@ -100,7 +100,7 @@ public class SelectUIController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (MainControl.instance.OverwroldControl.isSetting || MainControl.instance.OverwroldControl.pause)
+        if (MainControl.instance.OverworldControl.isSetting || MainControl.instance.OverworldControl.pause)
             return;
 
 
@@ -193,8 +193,8 @@ public class SelectUIController : MonoBehaviour
         {
             case 0:
                 textUI.text = typeWritter.endString;
-                if (textUI.font != MainControl.instance.OverwroldControl.tmpFonts[typeWritter.useFont])
-                    textUI.font = MainControl.instance.OverwroldControl.tmpFonts[typeWritter.useFont];
+                if (textUI.font != MainControl.instance.OverworldControl.tmpFonts[typeWritter.useFont])
+                    textUI.font = MainControl.instance.OverworldControl.tmpFonts[typeWritter.useFont];
 
                 MainControl.instance.battlePlayerController.transform.position = playerUIPos[selectUI - 1];
                 if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow))
@@ -619,8 +619,8 @@ public class SelectUIController : MonoBehaviour
                 }
 
                 textUI.text = typeWritter.endString;
-                if (textUI.font != MainControl.instance.OverwroldControl.tmpFonts[typeWritter.useFont])
-                    textUI.font = MainControl.instance.OverwroldControl.tmpFonts[typeWritter.useFont];
+                if (textUI.font != MainControl.instance.OverworldControl.tmpFonts[typeWritter.useFont])
+                    textUI.font = MainControl.instance.OverworldControl.tmpFonts[typeWritter.useFont];
 
                 break;
         }

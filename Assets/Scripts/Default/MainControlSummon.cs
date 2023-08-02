@@ -95,13 +95,14 @@ public class MainControlSummon : MonoBehaviour
             mainControl.haveInOutBlack = haveInOutBlack;
             mainControl.noInBlack = noInBlack;
             mainControl.notPauseIn = notPauseIn;
+            mainControl.InitializationOverworld();
             mainControl.Start();
             return;
         }
         //Éú³É
         DontDestroyOnLoad(transform);
-      
-        
+
+
 
 
 
@@ -112,6 +113,7 @@ public class MainControlSummon : MonoBehaviour
         mainControl.notPauseIn = notPauseIn;
 
         mainControl.gameObject.name = "MainControl";
+        mainControl.InitializationOverworld();
 
     }
 }

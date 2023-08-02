@@ -1,9 +1,9 @@
 /*
-配置语言包信息
+配置語言包信息
 */
 LanguagePackName\繁體中文模板包;
 
-/* 建议在此处标明各人员及职位 如xxx(原始文本),xxx(翻译),xxx(校对)等。 */
-LanguagePackAuthor\通过Open Chinese Convert转换，<enter>可能存在语义差异。;
+/* 建議在此處標明各人員及職位 如xxx(原始文本),xxx(翻譯),xxx(校對)等。 */
+LanguagePackAuthor\通過Open Chinese Convert轉換，<enter>可能存在語義差異。;
 
 LanguagePackInformation\繁體中文模板包，內容與 繁體中文(內置) 一致，<enter>供修改使用，修改前記得備份。;

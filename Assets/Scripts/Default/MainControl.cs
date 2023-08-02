@@ -15,6 +15,9 @@ using DG.Tweening.Core;
 public class MainControl : MonoBehaviour
 {
     public static MainControl instance;
+    public int languagePack = 0;
+
+    public bool blacking = false;
     [Header("-MainControl设置-")]
 
     [Space]
@@ -28,13 +31,16 @@ public class MainControl : MonoBehaviour
     Image inOutBlack;
 
     [Header("引用用的")]
+    [Header("战斗外")]
+    public PlayerBehaviour playerBehaviour;
+    [Header("战斗内")]
     public DrawFrameController drawFrameController;
     public enum SceneState
     {
         Normal,
         InBattle,
     };
-    public OverwroldControl OverwroldControl { get; private set; }
+    public OverworldControl OverworldControl { get; private set; }
     public ItemControl ItemControl { get; private set; }
     public PlayerControl PlayerControl { get; private set; }
     public AudioControl AudioControl { get; private set; }
@@ -49,51 +55,45 @@ public class MainControl : MonoBehaviour
 
     public CameraShake cameraShake, cameraShake3D;
 
-    /// <summary>
-    /// 初始化加载一大堆数据
-    /// </summary>
-    /// <param name="languagePack">负数为自动检测</param>
-    public void Initialization(int languagePack)
+    void LanguagePackDetection()
     {
-        //调用ScriptableObject
-
-        //--------------------------------------------------------------------------------
-        ItemControl = Resources.Load<ItemControl>("ItemControl");
-        PlayerControl = Resources.Load<PlayerControl>("PlayerControl");
-        AudioControl = Resources.Load<AudioControl>("AudioControl");
-        OverwroldControl = Resources.Load<OverwroldControl>("OverwroldControl");
-
-        //--------------------------------------------------------------------------------
-
-
-
-
-        if (languagePack < 0)//优先读取保存languagePack的数据
+        if (languagePack < 0 || languagePack >= Directory.GetDirectories(Application.dataPath + "\\LanguagePacks").Length + Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage").Length)
         {
-            languagePack = OverwroldControl.languagePack;
-        }
-        if (languagePack >= Directory.GetDirectories(Application.dataPath + "\\LanguagePacks").Length + Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage").Length)
-        {
-            languagePack = 0;
-            OverwroldControl.languagePack = 0;
+            languagePack = 2;
         }
 
         if (languagePack > Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage").Length - 1)
             languagePack -= Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage").Length;
+    }
+    public void InitializationLoad()
+    {
+        //调用ScriptableObject
+        //--------------------------------------------------------------------------------
+        PlayerControl = Resources.Load<PlayerControl>("PlayerControl");
+        AudioControl = Resources.Load<AudioControl>("AudioControl");
+        //InitializationOverworld内调用OverworldControl
+        //Initialization内调用ItemControl
+        //--------------------------------------------------------------------------------
+    }
+    /// <summary>
+    /// 初始化加载一大堆数据
+    /// </summary>
+    public void Initialization(int lan)
+    {
+        if (ItemControl == null)
+            ItemControl = Resources.Load<ItemControl>("ItemControl");
 
-        /*
-        if (sceneState == SceneState.InBattle)
-            InitializationBattle(languagePack);
-        */
-        OverwroldControl.menuAndSettingAsset = File.ReadAllText(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\UI\\MenuAndSetting.txt");
-        OverwroldControl.owTextsAsset = File.ReadAllText(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\Overworld\\Overworld.txt");
-        OverwroldControl.safeText = File.ReadAllText(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\SafeText.txt");
+
+        if (lan != languagePack)
+            languagePack = lan;
+
+        LanguagePackDetection();
+
+
+        //ItemControl加载
+        //--------------------------------------------------------------------------------
         ItemControl.itemText = File.ReadAllText(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\UI\\ItemText.txt");
 
-
-
-        LoadItemData(OverwroldControl.menuAndSettingSave, OverwroldControl.menuAndSettingAsset);
-        LoadItemData(OverwroldControl.owTextsSave, OverwroldControl.owTextsAsset);
         LoadItemData(ItemControl.itemMax, ItemControl.itemData);
         LoadItemData(ItemControl.itemTextMax, ItemControl.itemText);
 
@@ -101,50 +101,69 @@ public class MainControl : MonoBehaviour
         ItemClassificatio();
 
         ItemControl.itemTextMaxData = ChangeItemData(ItemControl.itemTextMaxData, true, new List<string>());
-
         ItemControl.itemTextMaxItem = ChangeItemData(ItemControl.itemTextMaxItem, true, new List<string>());
         ItemControl.itemTextMaxItem = ChangeItemData(ItemControl.itemTextMaxItem, false, new List<string>());
-        OverwroldControl.menuAndSettingSave = ChangeItemData(OverwroldControl.menuAndSettingSave, true, new List<string>());
-        OverwroldControl.owTextsSave = ChangeItemData(OverwroldControl.owTextsSave, true, new List<string>());
+
         MaxToOneSon(ItemControl.itemTextMaxItem, ItemControl.itemTextMaxItemSon);
-
-
-
-        if (OverwroldControl.textWidth != bool.Parse(ScreenMaxToOneSon(OverwroldControl.menuAndSettingSave, "LanguagePackFullWidth")))
-        {
-            OverwroldControl.textWidth = bool.Parse(ScreenMaxToOneSon(OverwroldControl.menuAndSettingSave, "LanguagePackFullWidth"));
-            foreach (TextChanger textChanger in Resources.FindObjectsOfTypeAll(typeof(TextChanger)))
-            {
-
-                textChanger.width = OverwroldControl.textWidth;
-                textChanger.Set();
-                textChanger.Change();
-
-            }
-
-
-        }
-
-        CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture(ScreenMaxToOneSon(OverwroldControl.menuAndSettingSave, "CultureInfo"));
-
-
-        if (OverwroldControl.isDebug)
-            PlayerControl.hp = PlayerControl.hpMax / 2;
+        //--------------------------------------------------------------------------------
 
     }
-
-    public void InitializationBattle(int languagePack)
+    public void InitializationOverworld()
     {
-        if (languagePack < 0)//优先读取保存languagePack的数据
+        LanguagePackDetection();
+
+        if (sceneState == SceneState.InBattle)
+            return;
+        //OverworldControl加载
+        //--------------------------------------------------------------------------------
+        if (OverworldControl == null)
         {
-            languagePack = OverwroldControl.languagePack;
+            OverworldControl = Resources.Load<OverworldControl>("OverworldControl");
         }
 
-        BattleControl = Resources.Load<BattleControl>("BattleControl");
+        OverworldControl.safeText = File.ReadAllText(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\SafeText.txt");
 
+        OverworldControl.settingAsset = File.ReadAllText(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\UI\\Setting.txt");
+        //OverworldControl.owTextsAsset = File.ReadAllText(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\Overworld\\Overworld.txt");
 
+        OverworldControl.sceneTextsAsset = File.ReadAllText(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\Overworld\\" + SceneManager.GetActiveScene().name + ".txt");
 
+        LoadItemData(OverworldControl.settingSave, OverworldControl.settingAsset);
+        //LoadItemData(OverworldControl.owTextsSave, OverworldControl.owTextsAsset);
 
+        LoadItemData(OverworldControl.sceneTextsSave, OverworldControl.sceneTextsAsset);
+
+        OverworldControl.settingSave = ChangeItemData(OverworldControl.settingSave, true, new List<string>());
+        //OverworldControl.owTextsSave = ChangeItemData(OverworldControl.owTextsSave, true, new List<string>());
+        OverworldControl.sceneTextsSave = ChangeItemData(OverworldControl.sceneTextsSave, true, new List<string>());
+
+        //--------------------------------------------------------------------------------
+
+        
+
+    }
+    public void InitializationLanguagePackFullWidth()
+    {
+        //检测语言包全半角
+        if (OverworldControl.textWidth != bool.Parse(ScreenMaxToOneSon(OverworldControl.settingSave, "LanguagePackFullWidth")))
+        {
+            OverworldControl.textWidth = bool.Parse(ScreenMaxToOneSon(OverworldControl.settingSave, "LanguagePackFullWidth"));
+            foreach (TextChanger textChanger in Resources.FindObjectsOfTypeAll(typeof(TextChanger)))
+            {
+                textChanger.width = OverworldControl.textWidth;
+                textChanger.Set();
+                textChanger.Change();
+            }
+        }
+
+        CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture(ScreenMaxToOneSon(OverworldControl.settingSave, "CultureInfo"));
+    }
+    public void InitializationBattle()
+    {
+        //BattleControl加载
+        //--------------------------------------------------------------------------------
+        if (BattleControl == null)
+            BattleControl = Resources.Load<BattleControl>("BattleControl");
 
         BattleControl.roundDialogAsset = new List<string>();
 
@@ -156,55 +175,62 @@ public class MainControl : MonoBehaviour
                 .Substring(Directory.GetFiles(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\Battle\\Round")[i].Length - 3) == "txt")
                 BattleControl.roundDialogAsset.Add(File.ReadAllText(file));
         }
-
-
-        drawFrameController = GameObject.Find("MainFrame").GetComponent<DrawFrameController>();
-
-
-
-
-
-        battlePlayerController = GameObject.Find("Player").GetComponent<BattlePlayerController>();
-        selectUIController = GameObject.Find("SelectUI").GetComponent<SelectUIController>();
-        cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
-        cameraShake3D = GameObject.Find("3D CameraP").GetComponent<CameraShake>();
-
         LoadItemData(BattleControl.uiTextSave, BattleControl.uiText);
         ScreenMaxToOneSon(BattleControl.uiTextSave, BattleControl.actSave, "Act\\");
         ScreenMaxToOneSon(BattleControl.uiTextSave, BattleControl.mercySave, "Mercy\\");
         ScreenMaxToOneSon(BattleControl.uiTextSave, BattleControl.roundTextSave, "Round\\");
+
         BattleControl.roundTextSave = ChangeItemData(BattleControl.roundTextSave, true, new List<string>());
+        //--------------------------------------------------------------------------------
+        drawFrameController = GameObject.Find("MainFrame").GetComponent<DrawFrameController>();
+        battlePlayerController = GameObject.Find("Player").GetComponent<BattlePlayerController>();
+        selectUIController = GameObject.Find("SelectUI").GetComponent<SelectUIController>();
+        cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
+        cameraShake3D = GameObject.Find("3D CameraP").GetComponent<CameraShake>();
     }
     // Start is called before the first frame update
     private void Awake()
     {
         instance = this;
-        Initialization(-1);
+        InitializationLoad();
+        Initialization(languagePack);
 
     }
     public void Start()
     {
+
+        if (OverworldControl.isDebug && OverworldControl.invincible)
+            PlayerControl.hp = PlayerControl.hpMax / 2;
+
+        InitializationLanguagePackFullWidth();
+
         if (sceneState == SceneState.InBattle)
         {
-            InitializationBattle(-1);
+            InitializationBattle();
+        }
+        else
+        {
+            GameObject playerOw = GameObject.Find("Player");
+            if (playerOw != null)
+                playerBehaviour = playerOw.GetComponent<PlayerBehaviour>();
         }
 
         if (haveInOutBlack)
         {
             inOutBlack = GameObject.Find("Canvas/InOutBlack").GetComponent<Image>();
             inOutBlack.color = Color.black;
-            OverwroldControl.pause = !notPauseIn;
+            OverworldControl.pause = !notPauseIn;
             if (!noInBlack)
                 inOutBlack.DOColor(Color.clear, 0.5f).SetEase(Ease.Linear).OnKill(EndBlack);
             else inOutBlack.color = Color.clear;
         }
        
-        AudioListener.volume = OverwroldControl.mainVolume;
-        OverwroldControl.isSetting = false;
+        AudioListener.volume = OverworldControl.mainVolume;
+        OverworldControl.isSetting = false;
 
-        SetResolution(OverwroldControl.resolutionLevel);
-        FindAndChangeAllSFX(OverwroldControl.noSFX);
-        if (!OverwroldControl.isDebug && PlayerControl.playerName.Length > 0 && PlayerControl.playerName[0] == '<')
+        SetResolution(OverworldControl.resolutionLevel);
+        FindAndChangeAllSFX(OverworldControl.noSFX);
+        if (!OverworldControl.isDebug && PlayerControl.playerName.Length > 0 && PlayerControl.playerName[0] == '<')
         {
             PlayerControl.playerName = "Chara";
         }
@@ -225,16 +251,16 @@ public class MainControl : MonoBehaviour
 
     void EndBlack()
     {
-        OverwroldControl.pause = false;
+        OverworldControl.pause = false;
     }
     private void Update()
     {
-        if (OverwroldControl.isDebug)
+        if (OverworldControl.isDebug)
         {
             if (Input.GetKeyDown(KeyCode.F5))
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
-            if (OverwroldControl.invincible)
+            if (OverworldControl.invincible)
                 PlayerControl.hp = PlayerControl.hpMax;
 
             PlayerControl.playerName = RandomStringColor() + 'd' + RandomStringColor() + 'e' + RandomStringColor() + 'b' + RandomStringColor() + 'u' + RandomStringColor() + 'g' + "</color></color></color></color></color>";
@@ -242,7 +268,7 @@ public class MainControl : MonoBehaviour
         if (PlayerControl.hpMax < PlayerControl.hp)
             PlayerControl.hp = PlayerControl.hpMax;
        
-        if (OverwroldControl.isSetting)
+        if (OverworldControl.isSetting)
             return;
         if (KeyArrowToControl(KeyCode.Tab))
         {
@@ -250,13 +276,13 @@ public class MainControl : MonoBehaviour
         }
         if (KeyArrowToControl(KeyCode.Semicolon))
         {
-            OverwroldControl.noSFX = !OverwroldControl.noSFX;
-            FindAndChangeAllSFX(OverwroldControl.noSFX);
+            OverworldControl.noSFX = !OverworldControl.noSFX;
+            FindAndChangeAllSFX(OverworldControl.noSFX);
         }
         if (KeyArrowToControl(KeyCode.F4))
         {
-            OverwroldControl.fullScreen = !OverwroldControl.fullScreen;
-            SetResolution(OverwroldControl.resolutionLevel);
+            OverworldControl.fullScreen = !OverworldControl.fullScreen;
+            SetResolution(OverworldControl.resolutionLevel);
         }
     }
     /// <summary>
@@ -264,7 +290,7 @@ public class MainControl : MonoBehaviour
     /// </summary>
     public void ApplyDefaultControl()
     {
-        OverwroldControl.keyCodes = new List<KeyCode>
+        OverworldControl.keyCodes = new List<KeyCode>
         {
             KeyCode.DownArrow,
             KeyCode.RightArrow,
@@ -280,7 +306,7 @@ public class MainControl : MonoBehaviour
             KeyCode.Escape
         };
 
-        OverwroldControl.keyCodesBack1 = new List<KeyCode>
+        OverworldControl.keyCodesBack1 = new List<KeyCode>
         {
             KeyCode.S,
             KeyCode.D,
@@ -295,7 +321,7 @@ public class MainControl : MonoBehaviour
             KeyCode.None,
             KeyCode.None
         }; 
-        OverwroldControl.keyCodesBack2 = new List<KeyCode>
+        OverworldControl.keyCodesBack2 = new List<KeyCode>
         {
             KeyCode.None,
             KeyCode.None,
@@ -324,29 +350,29 @@ public class MainControl : MonoBehaviour
                 switch (key)
                 {
                     case KeyCode.DownArrow:
-                        return Input.GetKeyDown(OverwroldControl.keyCodes[0]) || Input.GetKeyDown(OverwroldControl.keyCodesBack1[0]) || Input.GetKeyDown(OverwroldControl.keyCodesBack2[0]);
+                        return Input.GetKeyDown(OverworldControl.keyCodes[0]) || Input.GetKeyDown(OverworldControl.keyCodesBack1[0]) || Input.GetKeyDown(OverworldControl.keyCodesBack2[0]);
                     case KeyCode.RightArrow:
-                        return Input.GetKeyDown(OverwroldControl.keyCodes[1]) || Input.GetKeyDown(OverwroldControl.keyCodesBack1[1]) || Input.GetKeyDown(OverwroldControl.keyCodesBack2[1]);
+                        return Input.GetKeyDown(OverworldControl.keyCodes[1]) || Input.GetKeyDown(OverworldControl.keyCodesBack1[1]) || Input.GetKeyDown(OverworldControl.keyCodesBack2[1]);
                     case KeyCode.UpArrow:
-                        return Input.GetKeyDown(OverwroldControl.keyCodes[2]) || Input.GetKeyDown(OverwroldControl.keyCodesBack1[2]) || Input.GetKeyDown(OverwroldControl.keyCodesBack2[2]);
+                        return Input.GetKeyDown(OverworldControl.keyCodes[2]) || Input.GetKeyDown(OverworldControl.keyCodesBack1[2]) || Input.GetKeyDown(OverworldControl.keyCodesBack2[2]);
                     case KeyCode.LeftArrow:
-                        return Input.GetKeyDown(OverwroldControl.keyCodes[3]) || Input.GetKeyDown(OverwroldControl.keyCodesBack1[3]) || Input.GetKeyDown(OverwroldControl.keyCodesBack2[3]);
+                        return Input.GetKeyDown(OverworldControl.keyCodes[3]) || Input.GetKeyDown(OverworldControl.keyCodesBack1[3]) || Input.GetKeyDown(OverworldControl.keyCodesBack2[3]);
                     case KeyCode.Z:
-                        return Input.GetKeyDown(OverwroldControl.keyCodes[4]) || Input.GetKeyDown(OverwroldControl.keyCodesBack1[4]) || Input.GetKeyDown(OverwroldControl.keyCodesBack2[4]);
+                        return Input.GetKeyDown(OverworldControl.keyCodes[4]) || Input.GetKeyDown(OverworldControl.keyCodesBack1[4]) || Input.GetKeyDown(OverworldControl.keyCodesBack2[4]);
                     case KeyCode.X:
-                        return Input.GetKeyDown(OverwroldControl.keyCodes[5]) || Input.GetKeyDown(OverwroldControl.keyCodesBack1[5]) || Input.GetKeyDown(OverwroldControl.keyCodesBack2[5]);
+                        return Input.GetKeyDown(OverworldControl.keyCodes[5]) || Input.GetKeyDown(OverworldControl.keyCodesBack1[5]) || Input.GetKeyDown(OverworldControl.keyCodesBack2[5]);
                     case KeyCode.C:
-                        return Input.GetKeyDown(OverwroldControl.keyCodes[6]) || Input.GetKeyDown(OverwroldControl.keyCodesBack1[6]) || Input.GetKeyDown(OverwroldControl.keyCodesBack2[6]);
+                        return Input.GetKeyDown(OverworldControl.keyCodes[6]) || Input.GetKeyDown(OverworldControl.keyCodesBack1[6]) || Input.GetKeyDown(OverworldControl.keyCodesBack2[6]);
                     case KeyCode.V:
-                        return Input.GetKeyDown(OverwroldControl.keyCodes[7]) || Input.GetKeyDown(OverwroldControl.keyCodesBack1[7]) || Input.GetKeyDown(OverwroldControl.keyCodesBack2[7]);
+                        return Input.GetKeyDown(OverworldControl.keyCodes[7]) || Input.GetKeyDown(OverworldControl.keyCodesBack1[7]) || Input.GetKeyDown(OverworldControl.keyCodesBack2[7]);
                     case KeyCode.F4:
-                        return Input.GetKeyDown(OverwroldControl.keyCodes[8]) || Input.GetKeyDown(OverwroldControl.keyCodesBack1[8]) || Input.GetKeyDown(OverwroldControl.keyCodesBack2[8]);
+                        return Input.GetKeyDown(OverworldControl.keyCodes[8]) || Input.GetKeyDown(OverworldControl.keyCodesBack1[8]) || Input.GetKeyDown(OverworldControl.keyCodesBack2[8]);
                     case KeyCode.Tab:
-                        return Input.GetKeyDown(OverwroldControl.keyCodes[9]) || Input.GetKeyDown(OverwroldControl.keyCodesBack1[9]) || Input.GetKeyDown(OverwroldControl.keyCodesBack2[9]);
+                        return Input.GetKeyDown(OverworldControl.keyCodes[9]) || Input.GetKeyDown(OverworldControl.keyCodesBack1[9]) || Input.GetKeyDown(OverworldControl.keyCodesBack2[9]);
                     case KeyCode.Semicolon:
-                        return Input.GetKeyDown(OverwroldControl.keyCodes[10]) || Input.GetKeyDown(OverwroldControl.keyCodesBack1[10]) || Input.GetKeyDown(OverwroldControl.keyCodesBack2[10]);
+                        return Input.GetKeyDown(OverworldControl.keyCodes[10]) || Input.GetKeyDown(OverworldControl.keyCodesBack1[10]) || Input.GetKeyDown(OverworldControl.keyCodesBack2[10]);
                     case KeyCode.Escape:
-                        return Input.GetKeyDown(OverwroldControl.keyCodes[11]) || Input.GetKeyDown(OverwroldControl.keyCodesBack1[11]) || Input.GetKeyDown(OverwroldControl.keyCodesBack2[11]);
+                        return Input.GetKeyDown(OverworldControl.keyCodes[11]) || Input.GetKeyDown(OverworldControl.keyCodesBack1[11]) || Input.GetKeyDown(OverworldControl.keyCodesBack2[11]);
 
                     default:
                         return false;
@@ -355,29 +381,29 @@ public class MainControl : MonoBehaviour
                 switch (key)
                 {
                     case KeyCode.DownArrow:
-                        return Input.GetKey(OverwroldControl.keyCodes[0]) || Input.GetKey(OverwroldControl.keyCodesBack1[0]) || Input.GetKey(OverwroldControl.keyCodesBack2[0]);
+                        return Input.GetKey(OverworldControl.keyCodes[0]) || Input.GetKey(OverworldControl.keyCodesBack1[0]) || Input.GetKey(OverworldControl.keyCodesBack2[0]);
                     case KeyCode.RightArrow:
-                        return Input.GetKey(OverwroldControl.keyCodes[1]) || Input.GetKey(OverwroldControl.keyCodesBack1[1]) || Input.GetKey(OverwroldControl.keyCodesBack2[1]);
+                        return Input.GetKey(OverworldControl.keyCodes[1]) || Input.GetKey(OverworldControl.keyCodesBack1[1]) || Input.GetKey(OverworldControl.keyCodesBack2[1]);
                     case KeyCode.UpArrow:
-                        return Input.GetKey(OverwroldControl.keyCodes[2]) || Input.GetKey(OverwroldControl.keyCodesBack1[2]) || Input.GetKey(OverwroldControl.keyCodesBack2[2]);
+                        return Input.GetKey(OverworldControl.keyCodes[2]) || Input.GetKey(OverworldControl.keyCodesBack1[2]) || Input.GetKey(OverworldControl.keyCodesBack2[2]);
                     case KeyCode.LeftArrow:
-                        return Input.GetKey(OverwroldControl.keyCodes[3]) || Input.GetKey(OverwroldControl.keyCodesBack1[3]) || Input.GetKey(OverwroldControl.keyCodesBack2[3]);
+                        return Input.GetKey(OverworldControl.keyCodes[3]) || Input.GetKey(OverworldControl.keyCodesBack1[3]) || Input.GetKey(OverworldControl.keyCodesBack2[3]);
                     case KeyCode.Z:
-                        return Input.GetKey(OverwroldControl.keyCodes[4]) || Input.GetKey(OverwroldControl.keyCodesBack1[4]) || Input.GetKey(OverwroldControl.keyCodesBack2[4]);
+                        return Input.GetKey(OverworldControl.keyCodes[4]) || Input.GetKey(OverworldControl.keyCodesBack1[4]) || Input.GetKey(OverworldControl.keyCodesBack2[4]);
                     case KeyCode.X:
-                        return Input.GetKey(OverwroldControl.keyCodes[5]) || Input.GetKey(OverwroldControl.keyCodesBack1[5]) || Input.GetKey(OverwroldControl.keyCodesBack2[5]);
+                        return Input.GetKey(OverworldControl.keyCodes[5]) || Input.GetKey(OverworldControl.keyCodesBack1[5]) || Input.GetKey(OverworldControl.keyCodesBack2[5]);
                     case KeyCode.C:
-                        return Input.GetKey(OverwroldControl.keyCodes[6]) || Input.GetKey(OverwroldControl.keyCodesBack1[6]) || Input.GetKey(OverwroldControl.keyCodesBack2[6]);
+                        return Input.GetKey(OverworldControl.keyCodes[6]) || Input.GetKey(OverworldControl.keyCodesBack1[6]) || Input.GetKey(OverworldControl.keyCodesBack2[6]);
                     case KeyCode.V:
-                        return Input.GetKey(OverwroldControl.keyCodes[7]) || Input.GetKey(OverwroldControl.keyCodesBack1[7]) || Input.GetKey(OverwroldControl.keyCodesBack2[7]);
+                        return Input.GetKey(OverworldControl.keyCodes[7]) || Input.GetKey(OverworldControl.keyCodesBack1[7]) || Input.GetKey(OverworldControl.keyCodesBack2[7]);
                     case KeyCode.F4:
-                        return Input.GetKey(OverwroldControl.keyCodes[8]) || Input.GetKey(OverwroldControl.keyCodesBack1[8]) || Input.GetKey(OverwroldControl.keyCodesBack2[8]);
+                        return Input.GetKey(OverworldControl.keyCodes[8]) || Input.GetKey(OverworldControl.keyCodesBack1[8]) || Input.GetKey(OverworldControl.keyCodesBack2[8]);
                     case KeyCode.Tab:
-                        return Input.GetKey(OverwroldControl.keyCodes[9]) || Input.GetKey(OverwroldControl.keyCodesBack1[9]) || Input.GetKey(OverwroldControl.keyCodesBack2[9]);
+                        return Input.GetKey(OverworldControl.keyCodes[9]) || Input.GetKey(OverworldControl.keyCodesBack1[9]) || Input.GetKey(OverworldControl.keyCodesBack2[9]);
                     case KeyCode.Semicolon:
-                        return Input.GetKey(OverwroldControl.keyCodes[10]) || Input.GetKey(OverwroldControl.keyCodesBack1[10]) || Input.GetKey(OverwroldControl.keyCodesBack2[10]);
+                        return Input.GetKey(OverworldControl.keyCodes[10]) || Input.GetKey(OverworldControl.keyCodesBack1[10]) || Input.GetKey(OverworldControl.keyCodesBack2[10]);
                     case KeyCode.Escape:
-                        return Input.GetKey(OverwroldControl.keyCodes[11]) || Input.GetKey(OverwroldControl.keyCodesBack1[11]) || Input.GetKey(OverwroldControl.keyCodesBack2[11]);
+                        return Input.GetKey(OverworldControl.keyCodes[11]) || Input.GetKey(OverworldControl.keyCodesBack1[11]) || Input.GetKey(OverworldControl.keyCodesBack2[11]);
 
                     default:
                         return false;
@@ -386,29 +412,29 @@ public class MainControl : MonoBehaviour
                 switch (key)
                 {
                     case KeyCode.DownArrow:
-                        return Input.GetKeyUp(OverwroldControl.keyCodes[0]) || Input.GetKeyUp(OverwroldControl.keyCodesBack1[0]) || Input.GetKeyUp(OverwroldControl.keyCodesBack2[0]);
+                        return Input.GetKeyUp(OverworldControl.keyCodes[0]) || Input.GetKeyUp(OverworldControl.keyCodesBack1[0]) || Input.GetKeyUp(OverworldControl.keyCodesBack2[0]);
                     case KeyCode.RightArrow:
-                        return Input.GetKeyUp(OverwroldControl.keyCodes[1]) || Input.GetKeyUp(OverwroldControl.keyCodesBack1[1]) || Input.GetKeyUp(OverwroldControl.keyCodesBack2[1]);
+                        return Input.GetKeyUp(OverworldControl.keyCodes[1]) || Input.GetKeyUp(OverworldControl.keyCodesBack1[1]) || Input.GetKeyUp(OverworldControl.keyCodesBack2[1]);
                     case KeyCode.UpArrow:
-                        return Input.GetKeyUp(OverwroldControl.keyCodes[2]) || Input.GetKeyUp(OverwroldControl.keyCodesBack1[2]) || Input.GetKeyUp(OverwroldControl.keyCodesBack2[2]);
+                        return Input.GetKeyUp(OverworldControl.keyCodes[2]) || Input.GetKeyUp(OverworldControl.keyCodesBack1[2]) || Input.GetKeyUp(OverworldControl.keyCodesBack2[2]);
                     case KeyCode.LeftArrow:
-                        return Input.GetKeyUp(OverwroldControl.keyCodes[3]) || Input.GetKeyUp(OverwroldControl.keyCodesBack1[3]) || Input.GetKeyUp(OverwroldControl.keyCodesBack2[3]);
+                        return Input.GetKeyUp(OverworldControl.keyCodes[3]) || Input.GetKeyUp(OverworldControl.keyCodesBack1[3]) || Input.GetKeyUp(OverworldControl.keyCodesBack2[3]);
                     case KeyCode.Z:
-                        return Input.GetKeyUp(OverwroldControl.keyCodes[4]) || Input.GetKeyUp(OverwroldControl.keyCodesBack1[4]) || Input.GetKeyUp(OverwroldControl.keyCodesBack2[4]);
+                        return Input.GetKeyUp(OverworldControl.keyCodes[4]) || Input.GetKeyUp(OverworldControl.keyCodesBack1[4]) || Input.GetKeyUp(OverworldControl.keyCodesBack2[4]);
                     case KeyCode.X:
-                        return Input.GetKeyUp(OverwroldControl.keyCodes[5]) || Input.GetKeyUp(OverwroldControl.keyCodesBack1[5]) || Input.GetKeyUp(OverwroldControl.keyCodesBack2[5]);
+                        return Input.GetKeyUp(OverworldControl.keyCodes[5]) || Input.GetKeyUp(OverworldControl.keyCodesBack1[5]) || Input.GetKeyUp(OverworldControl.keyCodesBack2[5]);
                     case KeyCode.C:
-                        return Input.GetKeyUp(OverwroldControl.keyCodes[6]) || Input.GetKeyUp(OverwroldControl.keyCodesBack1[6]) || Input.GetKeyUp(OverwroldControl.keyCodesBack2[6]);
+                        return Input.GetKeyUp(OverworldControl.keyCodes[6]) || Input.GetKeyUp(OverworldControl.keyCodesBack1[6]) || Input.GetKeyUp(OverworldControl.keyCodesBack2[6]);
                     case KeyCode.V:
-                        return Input.GetKeyUp(OverwroldControl.keyCodes[7]) || Input.GetKeyUp(OverwroldControl.keyCodesBack1[7]) || Input.GetKeyUp(OverwroldControl.keyCodesBack2[7]);
+                        return Input.GetKeyUp(OverworldControl.keyCodes[7]) || Input.GetKeyUp(OverworldControl.keyCodesBack1[7]) || Input.GetKeyUp(OverworldControl.keyCodesBack2[7]);
                     case KeyCode.F4:
-                        return Input.GetKeyUp(OverwroldControl.keyCodes[8]) || Input.GetKeyUp(OverwroldControl.keyCodesBack1[8]) || Input.GetKeyUp(OverwroldControl.keyCodesBack2[8]);
+                        return Input.GetKeyUp(OverworldControl.keyCodes[8]) || Input.GetKeyUp(OverworldControl.keyCodesBack1[8]) || Input.GetKeyUp(OverworldControl.keyCodesBack2[8]);
                     case KeyCode.Tab:
-                        return Input.GetKeyUp(OverwroldControl.keyCodes[9]) || Input.GetKeyUp(OverwroldControl.keyCodesBack1[9]) || Input.GetKeyUp(OverwroldControl.keyCodesBack2[9]);
+                        return Input.GetKeyUp(OverworldControl.keyCodes[9]) || Input.GetKeyUp(OverworldControl.keyCodesBack1[9]) || Input.GetKeyUp(OverworldControl.keyCodesBack2[9]);
                     case KeyCode.Semicolon:
-                        return Input.GetKeyUp(OverwroldControl.keyCodes[10]) || Input.GetKeyUp(OverwroldControl.keyCodesBack1[10]) || Input.GetKeyUp(OverwroldControl.keyCodesBack2[10]);
+                        return Input.GetKeyUp(OverworldControl.keyCodes[10]) || Input.GetKeyUp(OverworldControl.keyCodesBack1[10]) || Input.GetKeyUp(OverworldControl.keyCodesBack2[10]);
                     case KeyCode.Escape:
-                        return Input.GetKeyUp(OverwroldControl.keyCodes[11]) || Input.GetKeyUp(OverwroldControl.keyCodesBack1[11]) || Input.GetKeyUp(OverwroldControl.keyCodesBack2[11]);
+                        return Input.GetKeyUp(OverworldControl.keyCodes[11]) || Input.GetKeyUp(OverworldControl.keyCodesBack1[11]) || Input.GetKeyUp(OverworldControl.keyCodesBack2[11]);
 
                     default:
                         return false;
@@ -440,10 +466,10 @@ public class MainControl : MonoBehaviour
     /// </summary>
     public void ChangeResolution()
     {
-        if (OverwroldControl.resolutionLevel < 4)
-            OverwroldControl.resolutionLevel += 1;
-        else OverwroldControl.resolutionLevel = 0;
-        SetResolution(OverwroldControl.resolutionLevel);
+        if (OverworldControl.resolutionLevel < 4)
+            OverworldControl.resolutionLevel += 1;
+        else OverworldControl.resolutionLevel = 0;
+        SetResolution(OverworldControl.resolutionLevel);
 
     }
     /// <summary>
@@ -451,7 +477,7 @@ public class MainControl : MonoBehaviour
     /// </summary>
     int ScreenSet(int y)
     {
-        //if (OverwroldControl.backGround)
+        //if (OverworldControl.backGround)
         //    y = y / 9 * 16;
         //else 
             y = y / 3 * 4;
@@ -465,30 +491,30 @@ public class MainControl : MonoBehaviour
         switch (resolution)
         {
             case 0:
-                Screen.SetResolution(ScreenSet(480), 480, OverwroldControl.fullScreen);
-                OverwroldControl.resolution = new Vector2(ScreenSet(480), 480);
+                Screen.SetResolution(ScreenSet(480), 480, OverworldControl.fullScreen);
+                OverworldControl.resolution = new Vector2(ScreenSet(480), 480);
                 break;
             /* 具有显示错误 固删去
             case 1:
-                Screen.SetResolution(ScreenSet(600), 600, OverwroldControl.fullScreen);
-                OverwroldControl.resolution = new Vector2(ScreenSet(600), 600);
+                Screen.SetResolution(ScreenSet(600), 600, OverworldControl.fullScreen);
+                OverworldControl.resolution = new Vector2(ScreenSet(600), 600);
                 break;
             */
             case 1:
-                Screen.SetResolution(ScreenSet(768), 768, OverwroldControl.fullScreen);
-                OverwroldControl.resolution = new Vector2(ScreenSet(768), 768);
+                Screen.SetResolution(ScreenSet(768), 768, OverworldControl.fullScreen);
+                OverworldControl.resolution = new Vector2(ScreenSet(768), 768);
                 break;
             case 2:
-                Screen.SetResolution(ScreenSet(864), 864, OverwroldControl.fullScreen);
-                OverwroldControl.resolution = new Vector2(ScreenSet(864), 864);
+                Screen.SetResolution(ScreenSet(864), 864, OverworldControl.fullScreen);
+                OverworldControl.resolution = new Vector2(ScreenSet(864), 864);
                 break;
             case 3:
-                Screen.SetResolution(ScreenSet(960), 960, OverwroldControl.fullScreen);
-                OverwroldControl.resolution = new Vector2(ScreenSet(960), 960);
+                Screen.SetResolution(ScreenSet(960), 960, OverworldControl.fullScreen);
+                OverworldControl.resolution = new Vector2(ScreenSet(960), 960);
                 break;
             case 4:
-                Screen.SetResolution(ScreenSet(1080), 1080, OverwroldControl.fullScreen);
-                OverwroldControl.resolution = new Vector2(ScreenSet(1080), 1080);
+                Screen.SetResolution(ScreenSet(1080), 1080, OverworldControl.fullScreen);
+                OverworldControl.resolution = new Vector2(ScreenSet(1080), 1080);
                 break;
             default:
                 break;
@@ -501,6 +527,7 @@ public class MainControl : MonoBehaviour
     /// </summary>
     public void OutBlack(string scene, Color color, bool banMusic = false, float time = 0.5f, bool Async = true)
     {
+        blacking = true;
         if (banMusic)
         {
             AudioSource bgm = AudioController.instance.transform.GetComponent<AudioSource>();
@@ -511,7 +538,7 @@ public class MainControl : MonoBehaviour
             else
                 DOTween.To(() => bgm.volume, x => bgm.volume = x, 0, Mathf.Abs(time)).SetEase(Ease.Linear);
         }
-        OverwroldControl.pause = true;
+        OverworldControl.pause = true;
         if (time > 0)
             inOutBlack.DOColor(color, time).SetEase(Ease.Linear).OnKill(() => SwitchScene(scene));
         else if (time == 0)
@@ -528,6 +555,7 @@ public class MainControl : MonoBehaviour
     }
     public void OutWhite(string scene)
     {
+        blacking = true;
         inOutBlack.color = new Color(1, 1, 1, 0);
         AudioController.instance.GetFx(6, AudioControl.fxClipUI);
         inOutBlack.DOColor(Color.white, 5.5f).SetEase(Ease.Linear).OnKill(() => SwitchScene(scene));
@@ -538,6 +566,8 @@ public class MainControl : MonoBehaviour
         if (Async)
             SceneManager.LoadSceneAsync(name);
         else SceneManager.LoadScene(name);
+
+        blacking = false;
     }
     /// <summary>
     /// 传入string，返回删去末尾i个字符的string
@@ -647,7 +677,6 @@ public class MainControl : MonoBehaviour
                 }
                 i += 2;
             }
-
             if (texter[i] != '\n' && texter[i] != '\r' && texter[i] != ';')
                 text += texter[i];
             if (texter[i] == ';')
@@ -803,7 +832,7 @@ public class MainControl : MonoBehaviour
         switch (texters)
         {
             case "<playerName>":
-                if (!OverwroldControl.isDebug)
+                if (!OverworldControl.isDebug)
                     text += PlayerControl.playerName;
                 else
                     text += "debug";
