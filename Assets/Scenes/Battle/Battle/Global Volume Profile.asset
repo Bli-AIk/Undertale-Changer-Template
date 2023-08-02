@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb60a22f311433c4c962b888d1393f88, type: 3}
   m_Name: PaniniProjection
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   distance:
     m_OverrideState: 1
     m_Value: 0.5
@@ -31,7 +31,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42bfe390942d3d1429011d4ef3ea1611, type: 3}
   m_Name: CRTScreenComponent
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   isShow:
     m_OverrideState: 1
     m_Value: 1
@@ -161,7 +161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c12f8b0d59df2742b1a7f9b2b2a3b53, type: 3}
   m_Name: GlitchArtComponent
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   isShow:
     m_OverrideState: 1
     m_Value: 1

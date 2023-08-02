@@ -141,27 +141,31 @@ public class MainControl : MonoBehaviour
     {
         LanguagePackDetection();
 
-        if (sceneState == SceneState.InBattle)
-            return;
-        //OverworldControlº”‘ÿ
-        //--------------------------------------------------------------------------------
         if (OverworldControl == null)
         {
             OverworldControl = Resources.Load<OverworldControl>("OverworldControl");
         }
 
+        OverworldControl.settingAsset = LoadLanguageData("UI\\Setting");
+
+        LoadItemData(OverworldControl.settingSave, OverworldControl.settingAsset);
+
+        if (sceneState == SceneState.InBattle)
+            return;
+        //OverworldControlº”‘ÿ
+        //--------------------------------------------------------------------------------
+       
+
         OverworldControl.safeText = LoadLanguageData("SafeText");
 
-        OverworldControl.settingAsset = LoadLanguageData("UI\\Setting");
 
         OverworldControl.sceneTextsAsset = LoadLanguageData("Overworld\\" + SceneManager.GetActiveScene().name);
        
-        LoadItemData(OverworldControl.settingSave, OverworldControl.settingAsset);
 
         LoadItemData(OverworldControl.sceneTextsSave, OverworldControl.sceneTextsAsset);
 
         OverworldControl.settingSave = ChangeItemData(OverworldControl.settingSave, true, new List<string>());
-        //OverworldControl.owTextsSave = ChangeItemData(OverworldControl.owTextsSave, true, new List<string>());
+
         OverworldControl.sceneTextsSave = ChangeItemData(OverworldControl.sceneTextsSave, true, new List<string>());
 
         //--------------------------------------------------------------------------------

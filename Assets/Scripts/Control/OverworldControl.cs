@@ -36,10 +36,6 @@ public class OverworldControl : ScriptableObject
     public string sceneTextsAsset;
     public List<string> sceneTextsSave;
 
-
-    //[Header("OW文本包读取")]
-    //public string owTextsAsset;
-    //public List<string> owTextsSave;
     public string settingAsset;
     public List<string> settingSave;
     public string safeText;
