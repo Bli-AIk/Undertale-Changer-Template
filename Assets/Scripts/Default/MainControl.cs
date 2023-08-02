@@ -16,6 +16,7 @@ public class MainControl : MonoBehaviour
 {
     public static MainControl instance;
     public int languagePack = 0;
+    public readonly int languagePackInsideNum = 3;//内置语言包总数
 
     public bool blacking = false;
     [Header("-MainControl设置-")]
@@ -54,16 +55,44 @@ public class MainControl : MonoBehaviour
     public SelectUIController selectUIController;
 
     public CameraShake cameraShake, cameraShake3D;
-
+    /// <summary>
+    /// 获取内置语言包ID
+    /// </summary>
+    public string GetLanguageInsideId(int id)
+    {
+        switch (id)
+        {
+            case 0:
+                return "CN";
+            case 1:
+                return "TCN";
+            case 2:
+                goto default;
+            default:
+                return "US";
+        }
+    }
+    /// <summary>
+    /// 加载对应语言包的数据
+    /// </summary>
+    string LoadLanguageData(string path)
+    {
+        if (languagePack < languagePackInsideNum)
+        {
+            return Resources.Load<TextAsset>("TextAssets/LanguagePacks/" + GetLanguageInsideId(languagePack) + "/" + path).text;
+        }
+        else
+        {
+            return File.ReadAllText(Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[languagePack - languagePackInsideNum] + "\\" + path + ".txt");
+        }
+    }
     void LanguagePackDetection()
     {
-        if (languagePack < 0 || languagePack >= Directory.GetDirectories(Application.dataPath + "\\LanguagePacks").Length + Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage").Length)
+        if ((languagePack < 0)
+            || (languagePack >= Directory.GetDirectories(Application.dataPath + "\\LanguagePacks").Length + languagePackInsideNum))
         {
             languagePack = 2;
         }
-
-        if (languagePack > Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage").Length - 1)
-            languagePack -= Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage").Length;
     }
     public void InitializationLoad()
     {
@@ -92,7 +121,7 @@ public class MainControl : MonoBehaviour
 
         //ItemControl加载
         //--------------------------------------------------------------------------------
-        ItemControl.itemText = File.ReadAllText(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\UI\\ItemText.txt");
+        ItemControl.itemText = LoadLanguageData("UI\\ItemText");
 
         LoadItemData(ItemControl.itemMax, ItemControl.itemData);
         LoadItemData(ItemControl.itemTextMax, ItemControl.itemText);
@@ -121,15 +150,13 @@ public class MainControl : MonoBehaviour
             OverworldControl = Resources.Load<OverworldControl>("OverworldControl");
         }
 
-        OverworldControl.safeText = File.ReadAllText(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\SafeText.txt");
+        OverworldControl.safeText = LoadLanguageData("SafeText");
 
-        OverworldControl.settingAsset = File.ReadAllText(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\UI\\Setting.txt");
-        //OverworldControl.owTextsAsset = File.ReadAllText(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\Overworld\\Overworld.txt");
+        OverworldControl.settingAsset = LoadLanguageData("UI\\Setting");
 
-        OverworldControl.sceneTextsAsset = File.ReadAllText(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\Overworld\\" + SceneManager.GetActiveScene().name + ".txt");
-
+        OverworldControl.sceneTextsAsset = LoadLanguageData("Overworld\\" + SceneManager.GetActiveScene().name);
+       
         LoadItemData(OverworldControl.settingSave, OverworldControl.settingAsset);
-        //LoadItemData(OverworldControl.owTextsSave, OverworldControl.owTextsAsset);
 
         LoadItemData(OverworldControl.sceneTextsSave, OverworldControl.sceneTextsAsset);
 
@@ -167,12 +194,30 @@ public class MainControl : MonoBehaviour
 
         BattleControl.roundDialogAsset = new List<string>();
 
-        BattleControl.uiText = File.ReadAllText(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\Battle\\UIBattleText.txt");
-        for (int i = 0; i < Directory.GetFiles(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\Battle\\Round").Length; i++)
+        BattleControl.uiText = LoadLanguageData("Battle\\UIBattleText");
+
+        string[] roundSave;
+        TextAsset[] textAssets;
+        if (languagePack < languagePackInsideNum)
         {
-            string file = Directory.GetFiles(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\Battle\\Round")[i];
-            if (Directory.GetFiles(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\Battle\\Round")[i]
-                .Substring(Directory.GetFiles(Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage")[languagePack] + "\\Battle\\Round")[i].Length - 3) == "txt")
+            textAssets = Resources.LoadAll<TextAsset>("TextAssets/LanguagePacks/" + GetLanguageInsideId(languagePack) + "/Battle/Round");
+
+            roundSave = new string[textAssets.Length];
+            for (int i = 0; i < textAssets.Length; i++)
+            {
+                roundSave[i] = textAssets[i].text;
+            }
+        }
+        else
+            roundSave = Directory.GetFiles(Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[languagePack - languagePackInsideNum] + "\\Battle\\Round");
+
+        for (int i = 0; i < roundSave.Length; i++)
+        {
+            string file = roundSave[i];
+
+            if (languagePack < languagePackInsideNum)
+                BattleControl.roundDialogAsset.Add(file);
+            else if (roundSave[i].Substring(roundSave[i].Length - 3) == "txt")
                 BattleControl.roundDialogAsset.Add(File.ReadAllText(file));
         }
         LoadItemData(BattleControl.uiTextSave, BattleControl.uiText);

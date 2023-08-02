@@ -217,17 +217,19 @@ public class CanvasController : MonoBehaviour
                 int settingSelectBack = settingSelect;
                 if (OnlySetSon)
                     settingSelect = MainControl.instance.languagePack;
-
-                foreach (string pathString in Directory.GetDirectories(Application.dataPath + "\\TextAssets\\LanguagePackage"))//内置包信息
+                
+                for (int i = 0; i < MainControl.instance.languagePackInsideNum; i++) //内置包信息
                 {
+                    string pathString = "TextAssets/LanguagePacks/" + MainControl.instance.GetLanguageInsideId(i);
 
                     if (settingSelectMax == settingSelect)
                     {
                         pathStringSaver = pathString;
                     }
                     settingSelectMax++;
+
                     if (!OnlySetSon)
-                        settingTmp.text += GetLanguagePackageName(pathString, "LanguagePackName") + '\n';
+                        settingTmp.text += GetLanguagePacksName(pathString, "LanguagePackName", false) + '\n';
                         
                 }
                 foreach (string pathString in Directory.GetDirectories(Application.dataPath + "\\LanguagePacks"))
@@ -236,17 +238,13 @@ public class CanvasController : MonoBehaviour
                         pathStringSaver = pathString;
                     settingSelectMax++;
                     if (!OnlySetSon)
-                        settingTmp.text += GetLanguagePackageName(pathString, "LanguagePackName") + '\n';
-
-                    //if (settingSelectMax % 5 == 0 && !OnlySetSon)
-                    //    settingTmp.text += MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "PageNext") + '\n';
+                        settingTmp.text += GetLanguagePacksName(pathString, "LanguagePackName", true) + '\n';
 
                 }
                 if (!OnlySetSon)
                     settingTmp.text += MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Back");
-                
-                settingTmpUnder.text = GetLanguagePackageName(pathStringSaver, "LanguagePackInformation") + '\n' + GetLanguagePackageName(pathStringSaver, "LanguagePackAuthor");
 
+                settingTmpUnder.text = GetLanguagePacksName(pathStringSaver, "LanguagePackInformation", settingSelect >= MainControl.instance.languagePackInsideNum) + '\n' + GetLanguagePacksName(pathStringSaver, "LanguagePackAuthor", settingSelect >= MainControl.instance.languagePackInsideNum);
 
                 settingSelect = settingSelectBack;
                 break;
@@ -257,18 +255,22 @@ public class CanvasController : MonoBehaviour
     /// 获取语言包信息
     /// 返回returnString
     /// </summary>
-    string GetLanguagePackageName(string pathString,string returnString)
+    string GetLanguagePacksName(string pathString,string returnString, bool isOutSide)
     {
         List<string> strings = new List<string>();
-        MainControl.instance.LoadItemData(strings, ReadFile(pathString + "\\LanguagePackInformation.txt"));
+        MainControl.instance.LoadItemData(strings, ReadFile(pathString + "\\LanguagePackInformation", isOutSide));
         strings = MainControl.instance.ChangeItemData(strings, true, new List<string>());
         return MainControl.instance.ScreenMaxToOneSon(strings, returnString);
     }
 
 
-    string ReadFile(string PathName)
+    string ReadFile(string PathName, bool isOutSide)
     {
-        string strs = File.ReadAllText(PathName);
+        string strs;
+        if (!isOutSide)
+            strs = Resources.Load<TextAsset>(PathName).text;
+        else
+            strs = File.ReadAllText(PathName + ".txt");
         return strs;
     }
 

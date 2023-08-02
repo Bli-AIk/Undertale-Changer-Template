@@ -1,10 +1,10 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-public class ChromaticAberrationRendererFeature : ScriptableRendererFeature
+public class GlitchArtRendererFeature : ScriptableRendererFeature
 {
     [System.Serializable]
     public class Settings
@@ -13,11 +13,11 @@ public class ChromaticAberrationRendererFeature : ScriptableRendererFeature
         public Shader shader;
     }
     public Settings settings = new Settings();
-    ChromaticAberrationPass pass;
+    GlitchArtPass pass;
     public override void Create()
     {
-        this.name = "ChromaticAberrationPass";
-        pass = new ChromaticAberrationPass(RenderPassEvent.BeforeRenderingPostProcessing, settings.shader);
+        this.name = "GlitchArtPass";
+        pass = new GlitchArtPass(RenderPassEvent.BeforeRenderingPostProcessing, settings.shader);
     }
 
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
@@ -28,25 +28,25 @@ public class ChromaticAberrationRendererFeature : ScriptableRendererFeature
 
 }
 [System.Serializable]
-public class ChromaticAberrationPass : ScriptableRenderPass
+public class GlitchArtPass : ScriptableRenderPass
 {
-    static readonly string renderTag = "ChromaticAberration Effects";
+    static readonly string renderTag = "GlitchArt Effects";
     static readonly int MainTexId = Shader.PropertyToID("_MainTex");
     static readonly int TempTargetId = Shader.PropertyToID("_TempTargetColorTint");
 
 
-    private ChromaticAberrationComponent chromaticAberrationVolume;
+    private GlitchArtComponent GlitchArtVolume;
     private Material mat;
     RenderTargetIdentifier currentTarget;
-    public ChromaticAberrationPass(RenderPassEvent passEvent, Shader ChromaticAberrationShader)
+    public GlitchArtPass(RenderPassEvent passEvent, Shader GlitchArtShader)
     {
         renderPassEvent = passEvent;
-        if (ChromaticAberrationShader == null)
+        if (GlitchArtShader == null)
         {
-            Debug.LogError("Shader≤ª¥Ê‘⁄");
+            Debug.LogError("Shader‰∏çÂ≠òÂú®");
             return;
         }
-        mat = CoreUtils.CreateEngineMaterial(ChromaticAberrationShader);
+        mat = CoreUtils.CreateEngineMaterial(GlitchArtShader);
     }
     public void Setup(in RenderTargetIdentifier currentTarget)
     {
@@ -65,12 +65,12 @@ public class ChromaticAberrationPass : ScriptableRenderPass
             return;
         }
         VolumeStack stack = VolumeManager.instance.stack;
-        chromaticAberrationVolume = stack.GetComponent<ChromaticAberrationComponent>();
-        if (chromaticAberrationVolume == null)
+        GlitchArtVolume = stack.GetComponent<GlitchArtComponent>();
+        if (GlitchArtVolume == null)
         {
             return;
         }
-        if (chromaticAberrationVolume.isShow.value == false)
+        if (GlitchArtVolume.isShow.value == false)
         {
             return;
         }
@@ -87,10 +87,14 @@ public class ChromaticAberrationPass : ScriptableRenderPass
         RenderTargetIdentifier source = currentTarget;
         int destination = TempTargetId;
 
-        mat.SetFloat("_Offset", chromaticAberrationVolume.offset.value);
-        mat.SetFloat("_Speed", chromaticAberrationVolume.speed.value);
-        mat.SetFloat("_Height", chromaticAberrationVolume.height.value);
-        mat.SetFloat("_OnlyOri", System.Convert.ToInt32(chromaticAberrationVolume.onlyOri.value));
+        mat.SetFloat("_AnalogGlitchMode", System.Convert.ToInt32(GlitchArtVolume.analogGlitchMode.value));
+        mat.SetVector("_ScanLineJitter", GlitchArtVolume.scanLineJitter.value); 
+        mat.SetFloat("_HorizontalShakeMode", System.Convert.ToInt32(GlitchArtVolume.horizontalShakeMode.value));
+        mat.SetFloat("_HorizontalShake", GlitchArtVolume.horizontalShake.value);
+        mat.SetFloat("_ColorDriftMode", System.Convert.ToInt32(GlitchArtVolume.colorDriftMode.value));
+        mat.SetFloat("_ColorDrift", GlitchArtVolume.colorDrift.value);
+        mat.SetFloat("_VerticalJumpMode", System.Convert.ToInt32(GlitchArtVolume.verticalJumpMode.value));
+        mat.SetFloat("_VerticalJump", GlitchArtVolume.verticalJump.value);
 
 
         cmd.SetGlobalTexture(MainTexId, source);

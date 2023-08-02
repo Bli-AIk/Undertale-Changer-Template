@@ -41,8 +41,11 @@ public class RoundController : MonoBehaviour
         objectPools[^1].FillPool();
 
 
+    } 
+    public void KillIEnumerator()
+    {
+        Timing.KillCoroutines();
     }
-
     /// <summary>
     /// 进入敌方回合
     /// </summary>

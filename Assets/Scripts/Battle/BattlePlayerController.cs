@@ -4,6 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using System;
 using UnityEngine.Rendering;
+using MEC;
 
 /// <summary>
 /// 控制战斗内玩家(心)的相关属性
@@ -71,6 +72,7 @@ public class BattlePlayerController : MonoBehaviour
                 spriteRenderer.color = Color.red;
                 MainControl.instance.PlayerControl.deadPos = transform.position;
                 MainControl.instance.OverworldControl.pause = true;
+                RoundController.instance.KillIEnumerator();
                 MainControl.instance.SwitchScene("Gameover", false);
             }
             else

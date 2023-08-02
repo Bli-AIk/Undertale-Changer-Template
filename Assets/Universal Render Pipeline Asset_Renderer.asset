@@ -1,5 +1,22 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-328802072970137823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0eae60ad9a9e9244a6887d4e776a99b, type: 3}
+  m_Name: GlitchArtPass
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    renderPassEvent: 550
+    shader: {fileID: -6465566751694194690, guid: d36daaca1236fcd4c975e01e02036176,
+      type: 3}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17,7 +34,9 @@ MonoBehaviour:
       type: 3}
   m_RendererFeatures:
   - {fileID: 2264132949354156685}
-  m_RendererFeatureMap: 8d1283eaebd06b1f
+  - {fileID: -328802072970137823}
+  - {fileID: 8447456358522118238}
+  m_RendererFeatureMap: 8d1283eaebd06b1f21ef33b741dc6ffb5e605331cd643b75
   m_UseNativeRenderPass: 0
   m_TransparencySortMode: 0
   m_TransparencySortAxis: {x: 0, y: 1, z: 0}
@@ -87,4 +106,21 @@ MonoBehaviour:
   settings:
     renderPassEvent: 550
     shader: {fileID: -6465566751694194690, guid: 2669501925dbeee468ef20e1c2c63328,
+      type: 3}
+--- !u!114 &8447456358522118238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aafce205e18fecb418fdaa7c92dfb436, type: 3}
+  m_Name: CRTScreenPass
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    renderPassEvent: 550
+    shader: {fileID: -6465566751694194690, guid: 607f6d7639d7f354e84540194f93bca3,
       type: 3}

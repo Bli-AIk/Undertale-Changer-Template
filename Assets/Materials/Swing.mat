@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Swing
-  m_Shader: {fileID: -6465566751694194690, guid: 2fb89accd65b94c48884224164c5766d,
+  m_Shader: {fileID: -6465566751694194690, guid: b6700a42f9b78b543b5152d69a570113,
     type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -39,9 +39,12 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _Distortion_Scale: 0.1
     - _IsPixel: 0
+    - _Noise_Scale: 2.5
     - _PixelateAmount: 0
     - _Size: 0.5
     - _Speed: 1
-    m_Colors: []
+    m_Colors:
+    - _Dir: {r: 0, g: -1, b: 0, a: 0}
   m_BuildTextureStacks: []

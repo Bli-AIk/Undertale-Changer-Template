@@ -20,16 +20,16 @@ MonoBehaviour:
   wearAtk: 1
   wearDef: 123
   nextExp: 0
-  missTime: 0
+  missTime: 0.4
   missTimeMax: 0.4
   atk: 10
   def: 10
-  playerName: <color=#910351FF>d<color=#4BBCE7FF>e<color=#82C5C1FF>b<color=#EF8403FF>u<color=#D8F37BFF>g</color></color></color></color></color>
+  playerName: <color=#C5E688FF>d<color=#2A58EAFF>e<color=#489D02FF>b<color=#2D766EFF>u<color=#258ABCFF>g</color></color></color></color></color>
   myItems: 1127000012270000214e0000224e000001000000010000000100000001000000
   wearArm: 10001
   wearArmor: 20001
-  canMove: 0
-  deadPos: {x: 14.840021, y: -1.7724923, z: 0}
-  scenePos: {x: -11, y: -5, z: 0}
-  animDirection: {x: 0, y: 1}
-  lastScene: Example-Corridor
+  canMove: 1
+  deadPos: {x: 0, y: -1.5, z: 0}
+  scenePos: {x: -0.5, y: -1, z: 0}
+  animDirection: {x: 0, y: -1}
+  lastScene: Rename

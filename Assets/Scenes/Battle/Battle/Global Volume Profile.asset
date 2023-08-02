@@ -1,5 +1,49 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8336938524950401636
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb60a22f311433c4c962b888d1393f88, type: 3}
+  m_Name: PaniniProjection
+  m_EditorClassIdentifier: 
+  active: 0
+  distance:
+    m_OverrideState: 1
+    m_Value: 0.5
+  cropToFit:
+    m_OverrideState: 0
+    m_Value: 1
+--- !u!114 &-6058264418041624216
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42bfe390942d3d1429011d4ef3ea1611, type: 3}
+  m_Name: CRTScreenComponent
+  m_EditorClassIdentifier: 
+  active: 0
+  isShow:
+    m_OverrideState: 1
+    m_Value: 1
+  resolution:
+    m_OverrideState: 1
+    m_Value: {x: 1000, y: 1000}
+  pixelScanlineBrightness:
+    m_OverrideState: 1
+    m_Value: {x: 0.225, y: 0.85, z: 0.05, w: 0.95}
+  speed:
+    m_OverrideState: 1
+    m_Value: 1
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15,6 +59,9 @@ MonoBehaviour:
   components:
   - {fileID: 8133619234732192967}
   - {fileID: 3041026883999951130}
+  - {fileID: -6058264418041624216}
+  - {fileID: 8350349414379319508}
+  - {fileID: -8336938524950401636}
 --- !u!114 &3041026883999951130
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -102,3 +149,43 @@ MonoBehaviour:
   dirtIntensity:
     m_OverrideState: 0
     m_Value: 0
+--- !u!114 &8350349414379319508
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c12f8b0d59df2742b1a7f9b2b2a3b53, type: 3}
+  m_Name: GlitchArtComponent
+  m_EditorClassIdentifier: 
+  active: 0
+  isShow:
+    m_OverrideState: 1
+    m_Value: 1
+  analogGlitchMode:
+    m_OverrideState: 1
+    m_Value: 1
+  scanLineJitter:
+    m_OverrideState: 1
+    m_Value: {x: 0.01, y: 0.975}
+  horizontalShakeMode:
+    m_OverrideState: 1
+    m_Value: 1
+  horizontalShake:
+    m_OverrideState: 1
+    m_Value: 0.001
+  colorDriftMode:
+    m_OverrideState: 1
+    m_Value: 1
+  colorDrift:
+    m_OverrideState: 1
+    m_Value: 0.25
+  verticalJumpMode:
+    m_OverrideState: 1
+    m_Value: 1
+  verticalJump:
+    m_OverrideState: 1
+    m_Value: 0.15

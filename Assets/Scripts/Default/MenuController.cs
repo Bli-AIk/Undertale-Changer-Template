@@ -13,6 +13,8 @@ public class MenuController : MonoBehaviour
     public int layer;
     private void Awake()
     {
+        MainControl.instance.PlayerControl.scenePos = new Vector3(-0.5f, -1);
+
         for (int i = 0; i < transform.childCount; i++)
         {
             tmps.Add(transform.GetChild(i).GetComponent<TextMeshPro>());

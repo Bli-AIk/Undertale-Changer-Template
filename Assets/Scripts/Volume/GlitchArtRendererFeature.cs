@@ -1,10 +1,10 @@
-using System.Collections;
+Ôªøusing System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-public class ChromaticAberrationRendererFeature : ScriptableRendererFeature
+public class CRTScreenRendererFeature : ScriptableRendererFeature
 {
     [System.Serializable]
     public class Settings
@@ -13,11 +13,11 @@ public class ChromaticAberrationRendererFeature : ScriptableRendererFeature
         public Shader shader;
     }
     public Settings settings = new Settings();
-    ChromaticAberrationPass pass;
+    CRTScreenPass pass;
     public override void Create()
     {
-        this.name = "ChromaticAberrationPass";
-        pass = new ChromaticAberrationPass(RenderPassEvent.BeforeRenderingPostProcessing, settings.shader);
+        this.name = "CRTScreenPass";
+        pass = new CRTScreenPass(RenderPassEvent.BeforeRenderingPostProcessing, settings.shader);
     }
 
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
@@ -28,25 +28,25 @@ public class ChromaticAberrationRendererFeature : ScriptableRendererFeature
 
 }
 [System.Serializable]
-public class ChromaticAberrationPass : ScriptableRenderPass
+public class CRTScreenPass : ScriptableRenderPass
 {
-    static readonly string renderTag = "ChromaticAberration Effects";
+    static readonly string renderTag = "CRTScreen Effects";
     static readonly int MainTexId = Shader.PropertyToID("_MainTex");
     static readonly int TempTargetId = Shader.PropertyToID("_TempTargetColorTint");
 
 
-    private ChromaticAberrationComponent chromaticAberrationVolume;
+    private CRTScreenComponent CRTScreenVolume;
     private Material mat;
     RenderTargetIdentifier currentTarget;
-    public ChromaticAberrationPass(RenderPassEvent passEvent, Shader ChromaticAberrationShader)
+    public CRTScreenPass(RenderPassEvent passEvent, Shader CRTScreenShader)
     {
         renderPassEvent = passEvent;
-        if (ChromaticAberrationShader == null)
+        if (CRTScreenShader == null)
         {
-            Debug.LogError("Shader≤ª¥Ê‘⁄");
+            Debug.LogError("Shader‰∏çÂ≠òÂú®");
             return;
         }
-        mat = CoreUtils.CreateEngineMaterial(ChromaticAberrationShader);
+        mat = CoreUtils.CreateEngineMaterial(CRTScreenShader);
     }
     public void Setup(in RenderTargetIdentifier currentTarget)
     {
@@ -65,12 +65,12 @@ public class ChromaticAberrationPass : ScriptableRenderPass
             return;
         }
         VolumeStack stack = VolumeManager.instance.stack;
-        chromaticAberrationVolume = stack.GetComponent<ChromaticAberrationComponent>();
-        if (chromaticAberrationVolume == null)
+        CRTScreenVolume = stack.GetComponent<CRTScreenComponent>();
+        if (CRTScreenVolume == null)
         {
             return;
         }
-        if (chromaticAberrationVolume.isShow.value == false)
+        if (CRTScreenVolume.isShow.value == false)
         {
             return;
         }
@@ -87,10 +87,9 @@ public class ChromaticAberrationPass : ScriptableRenderPass
         RenderTargetIdentifier source = currentTarget;
         int destination = TempTargetId;
 
-        mat.SetFloat("_Offset", chromaticAberrationVolume.offset.value);
-        mat.SetFloat("_Speed", chromaticAberrationVolume.speed.value);
-        mat.SetFloat("_Height", chromaticAberrationVolume.height.value);
-        mat.SetFloat("_OnlyOri", System.Convert.ToInt32(chromaticAberrationVolume.onlyOri.value));
+        mat.SetVector("_Resolution", CRTScreenVolume.resolution.value); 
+        mat.SetVector("_PixelScanlineBrightness", CRTScreenVolume.pixelScanlineBrightness.value);
+        mat.SetFloat("_Speed",CRTScreenVolume.speed.value);
 
 
         cmd.SetGlobalTexture(MainTexId, source);

@@ -55,7 +55,7 @@ public class PlayerBehaviour : MonoBehaviour
         animDirectionY = (int)MainControl.instance.PlayerControl.animDirection.y;
 
         if (isShadow)
-            shadowSprite = transform.Find("Shadow").GetComponent<SpriteRenderer>();
+            shadowSprite = transform.Find("Dir/Shadow").GetComponent<SpriteRenderer>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
