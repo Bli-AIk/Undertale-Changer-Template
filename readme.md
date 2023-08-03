@@ -46,7 +46,7 @@ However, please make sure to prominently display "Undertale-Changer-Template" in
 
 
 ## Usage
-1. Make sure you have purchased and played Undertale, you can click [here](undertale.com) to purchase it.
+1. Make sure you have purchased and played Undertale, you can click [here](https://undertale.com/) to purchase it.
 2. Download and extract the files to a location of your choice, preferably in a path that is entirely in English.
 3. Import the files into Unity.
 4. Open the project in Unity, and you're good to go.

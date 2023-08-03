@@ -45,7 +45,7 @@
 但請確保在顯眼的位置醒目顯示“Undertale-Changer-Template”。
 
 ## 使用方法
-1. 確保您已購買並玩過Undertale，您可以點擊[此處](undertale.com)購買。
+1. 確保您已購買並玩過Undertale，您可以點擊[此處](https://undertale.com/)購買。
 2. 下載並解壓縮到您喜歡的文件路徑內，最好選擇完全以英語命名的路徑。
 3. 將文件導入Unity。
 4. 在Unity中打開項目，然後您可以開始使用了。
