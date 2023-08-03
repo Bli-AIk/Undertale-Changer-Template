@@ -38,7 +38,6 @@ public class OverworldControl : ScriptableObject
 
     public string settingAsset;
     public List<string> settingSave;
-    public string safeText;
     public bool isSetting;
     public List<KeyCode> keyCodes, keyCodesBack1, keyCodesBack2;//“¿’’…Ë÷√À≥–Ú
 

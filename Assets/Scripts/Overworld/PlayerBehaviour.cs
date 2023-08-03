@@ -28,7 +28,6 @@ public class PlayerBehaviour : MonoBehaviour
 
     public OverworldObjTrigger saveOwObj;
     GameObject backpackUI;
-    BackpackBehaviour backpackBehaviour;
     SpriteRenderer spriteRenderer;
     public float owTimer;//0.1√Î£¨∑¿÷πµ˜≤ÈOW≥ÂÕª
 
@@ -37,7 +36,6 @@ public class PlayerBehaviour : MonoBehaviour
     private void Awake()
     {
         backpackUI = GameObject.Find("Main Camera/BackpackUI");
-        backpackBehaviour = GameObject.Find("BackpackCanvas").GetComponent<BackpackBehaviour>();
     }
     void Start()
     {
@@ -81,7 +79,12 @@ public class PlayerBehaviour : MonoBehaviour
 
     private void Update()
     {
-       
+
+        if (isShadow)
+        {
+            shadowSprite.sprite = spriteRenderer.sprite;
+        }
+
 
         MainControl.instance.PlayerControl.deadPos = transform.position;
         if (typeWritter.isTyping)
@@ -109,7 +112,7 @@ public class PlayerBehaviour : MonoBehaviour
             if (saveOwObj.isTriggerMode
                 || (!saveOwObj.isTriggerMode && MainControl.instance.KeyArrowToControl(KeyCode.Z)
                 && ((saveOwObj.playerDir == Vector2.one) || (saveOwObj.playerDir.x == animDirectionX) || (saveOwObj.playerDir.y == animDirectionY))
-                && backpackBehaviour.select == 0)) 
+                && BackpackBehaviour.instance.select == 0)) 
             {
                 if (owTimer <= 0)
                 {
@@ -140,11 +143,6 @@ public class PlayerBehaviour : MonoBehaviour
             }
 
         }
-        if (isShadow)
-        {
-            shadowSprite.sprite = spriteRenderer.sprite;
-        }
-
 
         /*
         Vector2 dirReal = new Vector2(animDirectionX, animDirectionY);
@@ -202,7 +200,7 @@ public class PlayerBehaviour : MonoBehaviour
 
         animator.SetFloat("Speed", System.Convert.ToInt32(MainControl.instance.KeyArrowToControl(KeyCode.X, 1)) + 1);
 
-        if (MainControl.instance.OverworldControl.isSetting || MainControl.instance.OverworldControl.pause || backpackBehaviour.select > 0)
+        if (MainControl.instance.OverworldControl.isSetting || MainControl.instance.OverworldControl.pause || BackpackBehaviour.instance.select > 0)
         {
             animator.Play("Walk Tree", 0, 0);
             if (MainControl.instance.PlayerControl.canMove)

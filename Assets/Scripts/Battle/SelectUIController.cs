@@ -111,7 +111,7 @@ public class SelectUIController : MonoBehaviour
 
         if (isDialog)
         {
-            if ((!dialog.typeWritter.isTyping && (MainControl.instance.KeyArrowToControl(KeyCode.Z))) || ((selectUI == 1 || typeWritter.endString == "") && numDialog == 0)) 
+            if ((!dialog.typeWritter.isTyping && (MainControl.instance.KeyArrowToControl(KeyCode.Z))) || ((selectUI == 1 || textUI.text == "") && numDialog == 0)) 
             {
                 if (numDialog < actSave.Count)
                     KeepDialogBubble();
@@ -133,7 +133,7 @@ public class SelectUIController : MonoBehaviour
     /// </summary>
     void Type(string text)
     {
-        typeWritter.TypeOpen(text, false, 0, 0);
+        typeWritter.TypeOpen(text, false, 0, 0, textUI);
     }
     /// <summary>
     /// ’Ω ıª•ªª
@@ -192,9 +192,6 @@ public class SelectUIController : MonoBehaviour
         switch (selectLayer)
         {
             case 0:
-                textUI.text = typeWritter.endString;
-                if (textUI.font != MainControl.instance.OverworldControl.tmpFonts[typeWritter.useFont])
-                    textUI.font = MainControl.instance.OverworldControl.tmpFonts[typeWritter.useFont];
 
                 MainControl.instance.battlePlayerController.transform.position = playerUIPos[selectUI - 1];
                 if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow))
@@ -438,7 +435,7 @@ public class SelectUIController : MonoBehaviour
                         else if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
                         {
                             selectLayer = 3;
-                            MainControl.instance.UseItem(typeWritter, selectSon + 1);
+                            MainControl.instance.UseItem(typeWritter, textUI, selectSon + 1);
                             SpriteChange();
                             itemSelectController.Close();
 
@@ -587,7 +584,7 @@ public class SelectUIController : MonoBehaviour
 
                 if (!isDialog)
                 {
-                    if (selectUI != 1 && typeWritter.endString == "")
+                    if (selectUI != 1 && textUI.text == "")
                     {
                         OpenDialogBubble(MainControl.instance.BattleControl.roundDialogAsset[RoundController.instance.round]);
                         MainControl.instance.battlePlayerController.transform.position = new Vector2(0, -1.5f);
@@ -597,7 +594,7 @@ public class SelectUIController : MonoBehaviour
                     {
                         if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
                         {
-                            typeWritter.endString = "";
+                            textUI.text = "";
                             MainControl.instance.battlePlayerController.transform.position = new Vector2(0, -1.5f);
                             OpenDialogBubble(MainControl.instance.BattleControl.roundDialogAsset[RoundController.instance.round]);
 
@@ -618,9 +615,6 @@ public class SelectUIController : MonoBehaviour
 
                 }
 
-                textUI.text = typeWritter.endString;
-                if (textUI.font != MainControl.instance.OverworldControl.tmpFonts[typeWritter.useFont])
-                    textUI.font = MainControl.instance.OverworldControl.tmpFonts[typeWritter.useFont];
 
                 break;
         }
@@ -654,8 +648,9 @@ public class SelectUIController : MonoBehaviour
        
         dialog.isBackRight = Convert.ToBoolean(save[3]);
         dialog.backY = float.Parse(save[4]);
-        dialog.typeWritter.TypeOpen(save[5], false, 0, 1);
+        dialog.typeWritter.TypeOpen(save[5], false, 0, 1, dialog.tmp);
         numDialog++;
+        dialog.tmp.text = "";
         dialog.PositionChange();
     }
     void RoundTextLoad(bool isDiy = false, int diy = 0)

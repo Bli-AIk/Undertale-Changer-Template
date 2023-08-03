@@ -26,12 +26,6 @@ public class DialogBubbleBehaviour : MonoBehaviour
         PositionChange();
     }
 
-    void Update()
-    {
-        tmp.text = typeWritter.endString;
-        if (tmp.font != MainControl.instance.OverworldControl.tmpFonts[typeWritter.useFont])
-            tmp.font = MainControl.instance.OverworldControl.tmpFonts[typeWritter.useFont];
-    }
 
     /// <summary>
     /// 改变气泡的大小和左右箭头情况 进行赋值 之类的

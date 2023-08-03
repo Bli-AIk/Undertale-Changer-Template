@@ -15,7 +15,7 @@ using DG.Tweening.Core;
 public class MainControl : MonoBehaviour
 {
     public static MainControl instance;
-    public int languagePack = 0;
+    public int languagePack = 2;
     public readonly int languagePackInsideNum = 3;//内置语言包总数
 
     public bool blacking = false;
@@ -156,13 +156,13 @@ public class MainControl : MonoBehaviour
         //--------------------------------------------------------------------------------
        
 
-        OverworldControl.safeText = LoadLanguageData("SafeText");
 
 
         OverworldControl.sceneTextsAsset = LoadLanguageData("Overworld\\" + SceneManager.GetActiveScene().name);
-       
 
-        LoadItemData(OverworldControl.sceneTextsSave, OverworldControl.sceneTextsAsset);
+        if (SceneManager.GetActiveScene().name == "Start")
+            return;
+            LoadItemData(OverworldControl.sceneTextsSave, OverworldControl.sceneTextsAsset);
 
         OverworldControl.settingSave = ChangeItemData(OverworldControl.settingSave, true, new List<string>());
 
@@ -743,7 +743,7 @@ public class MainControl : MonoBehaviour
     /// 然后再让打字机打个字
     /// plusText填0就自己计算
     /// </summary>
-    public void UseItem(TypeWritter typeWritter, int sonSelect, int plusText = 0)
+    public void UseItem(TypeWritter typeWritter, TMPro.TMP_Text tmp_Text,int sonSelect, int plusText = 0)
     {
         if (plusText == 0)
         {
@@ -756,7 +756,7 @@ public class MainControl : MonoBehaviour
 
         if (PlayerControl.myItems[sonSelect - 1] >= 20000)
         {
-            typeWritter.TypeOpen(ItemControl.itemTextMaxItemSon[(PlayerControl.myItems[sonSelect - 1] + plusText) * 5 - 3], false, 0, 0);
+            typeWritter.TypeOpen(ItemControl.itemTextMaxItemSon[(PlayerControl.myItems[sonSelect - 1] + plusText) * 5 - 3], false, 0, 0, tmp_Text);
             PlayerControl.wearDef = int.Parse(ItemIdGetName(PlayerControl.myItems[sonSelect - 1], "Auto", 1));
             int wearInt = PlayerControl.wearArmor;
             PlayerControl.wearArmor = PlayerControl.myItems[sonSelect - 1];
@@ -767,7 +767,7 @@ public class MainControl : MonoBehaviour
         }
         else if (PlayerControl.myItems[sonSelect - 1] >= 10000)
         {
-            typeWritter.TypeOpen(ItemControl.itemTextMaxItemSon[(PlayerControl.myItems[sonSelect - 1] + plusText) * 5 - 3], false, 0, 0);
+            typeWritter.TypeOpen(ItemControl.itemTextMaxItemSon[(PlayerControl.myItems[sonSelect - 1] + plusText) * 5 - 3], false, 0, 0, tmp_Text);
             PlayerControl.wearAtk = int.Parse(ItemIdGetName(PlayerControl.myItems[sonSelect - 1], "Auto", 1));
             int wearInt = PlayerControl.wearArm;
             PlayerControl.wearArm = PlayerControl.myItems[sonSelect - 1];
@@ -783,7 +783,7 @@ public class MainControl : MonoBehaviour
                 plusHp += 4;
 
             typeWritter.TypeOpen(ItemControl.itemTextMaxItemSon[PlayerControl.myItems[sonSelect - 1] * 5 - 3], false,
-                plusHp, 0);
+                plusHp, 0, tmp_Text);
 
 
 

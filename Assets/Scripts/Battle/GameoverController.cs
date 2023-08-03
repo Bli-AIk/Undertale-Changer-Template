@@ -68,7 +68,7 @@ public class GameoverController : MonoBehaviour
             MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "GameOver3"),
             MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "GameOver4")
     };
-        typeWritter.TypeOpen(strings[UnityEngine.Random.Range(0, 4)], false, 0, 4);
+        typeWritter.TypeOpen(strings[UnityEngine.Random.Range(0, 4)], false, 0, 4, tmp);
         canChangeSence = true;
     }
     public void Follish()
@@ -94,7 +94,7 @@ public class GameoverController : MonoBehaviour
 
         if (!typeWritter.isTyping && MainControl.instance.KeyArrowToControl(KeyCode.Z) && canChangeSence)
         {
-            typeWritter.endString = "";
+            tmp.text = "";
             MainControl.instance.OutBlack("Example-Corridor", Color.black, true, 2);
             canChangeSence = false;
         }
@@ -105,9 +105,5 @@ public class GameoverController : MonoBehaviour
             typeWritter.TypeStop();
             canChangeSenceForC = false;
         }
-        tmp.text = typeWritter.endString;
-        if (tmp.font != MainControl.instance.OverworldControl.tmpFonts[typeWritter.useFont])
-            tmp.font = MainControl.instance.OverworldControl.tmpFonts[typeWritter.useFont];
-
     }
 }

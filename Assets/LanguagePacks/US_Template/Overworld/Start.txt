@@ -1,0 +1,17 @@
+Undertale:Changer is based 
+on Unity Engine produced 
+Undertale fan game template.
+It is strongly recommended that 
+you visit undertale.com to purchase
+and play the original game.
+This template is open source
+on Gamejolt and Github according to
+GNU General Public License v3.0.
+Published to Github
+<size=5>github.com/Bli-AIk/Undertale-Changer-Template/</size>
+It is strictly prohibited to sell
+this template, its modified version
+and games made based on the template
+in any form.
+Please be sure to use it before read
+the readme.md file in this project.

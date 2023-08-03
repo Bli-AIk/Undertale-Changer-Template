@@ -36,7 +36,8 @@ MonoBehaviour:
   - {fileID: 2264132949354156685}
   - {fileID: -328802072970137823}
   - {fileID: 8447456358522118238}
-  m_RendererFeatureMap: 8d1283eaebd06b1f21ef33b741dc6ffb5e605331cd643b75
+  - {fileID: 6939219352180137151}
+  m_RendererFeatureMap: 8d1283eaebd06b1f21ef33b741dc6ffb5e605331cd643b75bf9c36393c0f4d60
   m_UseNativeRenderPass: 0
   m_TransparencySortMode: 0
   m_TransparencySortAxis: {x: 0, y: 1, z: 0}
@@ -106,6 +107,23 @@ MonoBehaviour:
   settings:
     renderPassEvent: 550
     shader: {fileID: -6465566751694194690, guid: 2669501925dbeee468ef20e1c2c63328,
+      type: 3}
+--- !u!114 &6939219352180137151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d325a1abf1a6c8d4caf54067ccbceaad, type: 3}
+  m_Name: StretchPostPass
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    renderPassEvent: 550
+    shader: {fileID: -6465566751694194690, guid: 8471faea457e1b2499d084af45e52be5,
       type: 3}
 --- !u!114 &8447456358522118238
 MonoBehaviour:

@@ -13,6 +13,8 @@ public class StartController : MonoBehaviour
     float time = 0;
     GameObject title;
     int layer = 0;
+
+    float afkTimer = 20;
     // Start is called before the first frame update
     void Start()
     {
@@ -22,7 +24,7 @@ public class StartController : MonoBehaviour
         text.color = Color.clear;
         textUnder.color = Color.clear;
         AudioController.instance.GetFx(11, MainControl.instance.AudioControl.fxClipUI);
-        text.text = MainControl.instance.OverworldControl.safeText;
+        text.text = MainControl.instance.OverworldControl.sceneTextsAsset;
     }
 
     // Update is called once per frame
@@ -59,6 +61,21 @@ public class StartController : MonoBehaviour
                     break;
             }
         }
+        if (Input.anyKeyDown)
+        {
+            afkTimer = 20;
+            return;
+        }
+        if (afkTimer > 0)
+            afkTimer -= Time.deltaTime;
+        else
+        {
+            MainControl.instance.OutBlack("Story", Color.black);
+            afkTimer = 10000000000;
+        }
+
+
+
     }
     void TextAnim()
     {

@@ -57,9 +57,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
   m_Name: UT-Gameover
   m_EditorClassIdentifier: 
-  hashCode: 0
+  hashCode: 1596437900
   material: {fileID: -2143577974925049369}
-  materialHashCode: 0
+  materialHashCode: 2132640940
   m_Version: 1.1.0
   m_SourceFontFileGUID: 1bcdcd9b054dabf47b5b032da1e05825
   m_SourceFontFile_EditorRef: {fileID: 12800000, guid: 1bcdcd9b054dabf47b5b032da1e05825,
@@ -1745,7 +1745,7 @@ Texture2D:
   m_MipsStripped: 0
   m_TextureFormat: 1
   m_MipCount: 1
-  m_IsReadable: 0
+  m_IsReadable: 1
   m_IsPreProcessed: 0
   m_IgnoreMasterTextureLimit: 0
   m_StreamingMipmaps: 0

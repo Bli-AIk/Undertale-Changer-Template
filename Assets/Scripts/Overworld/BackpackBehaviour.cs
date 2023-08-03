@@ -8,19 +8,24 @@ using TMPro;
 /// </summary>
 public class BackpackBehaviour : MonoBehaviour
 {
+    public static BackpackBehaviour instance;
+
     public int select, sonSelect, sonUse;
     int sonSelectMax;
     RectTransform backpack, UIMessage;
-    TextMeshProUGUI uiItems, uiName, uiTexts, uiSelect, typeMessage;
+    TextMeshProUGUI uiItems, uiName, uiTexts, uiSelect;
+    public TextMeshProUGUI typeMessage;
     Image heart;
     float clock;
     GameObject BackpackUILeft, BackpackUIRight, player, mainCamera;
     GameObject BackpackUIRightPoint2, BackpackUIRightPoint3;
     TalkUIPositionChanger talkUI;
-    TypeWritter typeWritter;
+    
+    public TypeWritter typeWritter;
 
     private void Awake()
     {
+        instance = this;
         talkUI = GameObject.Find("Main Camera/TalkUI").GetComponent<TalkUIPositionChanger>();
         typeMessage = GameObject.Find("BackpackCanvas/RawImage/Talk/UITalk").GetComponent<TextMeshProUGUI>();
     }
@@ -51,12 +56,6 @@ public class BackpackBehaviour : MonoBehaviour
     {
         if (MainControl.instance.OverworldControl.isSetting || MainControl.instance.OverworldControl.pause)
         {
-            if (MainControl.instance.OverworldControl.pause)
-            {
-                typeMessage.text = typeWritter.endString;
-                if (typeMessage.font != MainControl.instance.OverworldControl.tmpFonts[typeWritter.useFont])
-                    typeMessage.font = MainControl.instance.OverworldControl.tmpFonts[typeWritter.useFont];
-            }
             return;
         }
 
@@ -191,18 +190,18 @@ public class BackpackBehaviour : MonoBehaviour
                                     break;
                                 case 1:
                                     sonUse = 4;
-                                    MainControl.instance.UseItem(typeWritter, sonSelect, plusText);
+                                    MainControl.instance.UseItem(typeWritter, typeMessage, sonSelect, plusText);
                                     uiTexts.text = "LV " + MainControl.instance.PlayerControl.lv + "\nHP " + MainControl.instance.PlayerControl.hp + "/" + MainControl.instance.PlayerControl.hpMax + "\nG " + MainControl.instance.PlayerControl.gold;
 
                                     goto default;
                                 case 2:
                                     sonUse = 4;
-                                    typeWritter.TypeOpen(MainControl.instance.ItemControl.itemTextMaxItemSon[(MainControl.instance.PlayerControl.myItems[sonSelect - 1] + plusText) * 5 - 2], false, 0, 1);
+                                    typeWritter.TypeOpen(MainControl.instance.ItemControl.itemTextMaxItemSon[(MainControl.instance.PlayerControl.myItems[sonSelect - 1] + plusText) * 5 - 2], false, 0, 1, typeMessage);
 
                                     goto default;
                                 case 3:
                                     sonUse = 4;
-                                    typeWritter.TypeOpen(MainControl.instance.ItemControl.itemTextMaxItemSon[(MainControl.instance.PlayerControl.myItems[sonSelect - 1] + plusText) * 5 - 1], false, 0, 1);
+                                    typeWritter.TypeOpen(MainControl.instance.ItemControl.itemTextMaxItemSon[(MainControl.instance.PlayerControl.myItems[sonSelect - 1] + plusText) * 5 - 1], false, 0, 1, typeMessage);
 
                                     MainControl.instance.PlayerControl.myItems[sonSelect - 1] = 0;
                                     goto default;
@@ -326,11 +325,6 @@ public class BackpackBehaviour : MonoBehaviour
         }
         else heart.rectTransform.anchoredPosition = new Vector2(-255, 35);
         
-        
-        typeMessage.text = typeWritter.endString;
-        if (typeMessage.font != MainControl.instance.OverworldControl.tmpFonts[typeWritter.useFont])
-            typeMessage.font = MainControl.instance.OverworldControl.tmpFonts[typeWritter.useFont];
-
 
 
         switch (sonUse)

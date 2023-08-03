@@ -57,9 +57,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
   m_Name: UT-MSB
   m_EditorClassIdentifier: 
-  hashCode: 82236
+  hashCode: -1066614256
   material: {fileID: -2010574113474186102}
-  materialHashCode: -2110079844
+  materialHashCode: -1741006928
   m_Version: 1.1.0
   m_SourceFontFileGUID: ae64b1cfd2cc90b4cbfb326fccdafbf6
   m_SourceFontFile_EditorRef: {fileID: 0}
@@ -2372,7 +2372,7 @@ Texture2D:
   m_MipsStripped: 0
   m_TextureFormat: 1
   m_MipCount: 1
-  m_IsReadable: 0
+  m_IsReadable: 1
   m_IsPreProcessed: 0
   m_IgnoreMasterTextureLimit: 0
   m_StreamingMipmaps: 0

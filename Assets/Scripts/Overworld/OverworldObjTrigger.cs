@@ -64,7 +64,7 @@ public class OverworldObjTrigger : MonoBehaviour
         talkUI = GameObject.Find("Main Camera/TalkUI").GetComponent<TalkUIPositionChanger>();
         mainCamera = talkUI.transform.parent.GetComponent<CameraFollowPlayer>();
         //typeMessage = GameObject.Find("BackpackCanvas/RawImage/Talk/UITalk").GetComponent<TextMeshProUGUI>();
-        typeWritter = GameObject.Find("BackpackCanvas").GetComponent<TypeWritter>();
+        typeWritter = BackpackBehaviour.instance.typeWritter;
         bgm = AudioController.instance.audioSource;
         
         //backpackBehaviour = typeWritter.transform.GetComponent<BackpackBehaviour>();
@@ -80,7 +80,7 @@ public class OverworldObjTrigger : MonoBehaviour
     }
     public void PressZ()
     {
-        if (typeWritter.endString != "")
+        if (BackpackBehaviour.instance.typeMessage.text != "")
         {
             if (endAnim)
             {
@@ -91,7 +91,7 @@ public class OverworldObjTrigger : MonoBehaviour
                 gameObject.SetActive(false);
         }
         isTyping = false;
-        typeWritter.endString = "";
+        BackpackBehaviour.instance.typeMessage.text = "";
         talkUI.transform.localPosition = new Vector3(talkUI.transform.localPosition.x, talkUI.transform.localPosition.y, -50);
         //Debug.Log(talkUI.transform.localPosition.z);
         MainControl.instance.PlayerControl.canMove = true;
@@ -128,7 +128,7 @@ public class OverworldObjTrigger : MonoBehaviour
             //Debug.Log(talkUI.transform.localPosition.z);
         }
         talkUI.isUp = isUp;
-        typeWritter.TypeOpen(MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, text), false, 0, 1);
+        typeWritter.TypeOpen(MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, text), false, 0, 1, BackpackBehaviour.instance.typeMessage);
         if (endInBattle)
             typeWritter.EndInBattle();
 

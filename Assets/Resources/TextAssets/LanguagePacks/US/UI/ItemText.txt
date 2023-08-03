@@ -61,7 +61,7 @@ Typewriter special characters (general) input:
 
 -In general, the probability of occurrence of each text display is equal. (WIP, please do not use)
 
-If you need to input a long text or simply want the player to press the Z key more often, you can insert<passText>or 轂 into a text
+If you need to input a long text or simply want the player to press the Z key more often, you can insert<passText> into a text
 
 After the typewriter detects the character, it will stop typing. If the player presses the Z key, it will clear the current text and continue typing.
 

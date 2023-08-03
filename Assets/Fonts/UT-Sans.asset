@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
   m_Name: UT-Sans
   m_EditorClassIdentifier: 
-  hashCode: 838969733
+  hashCode: -837296605
   material: {fileID: 4390321431835005566}
-  materialHashCode: 2098001925
+  materialHashCode: 1329134115
   m_Version: 1.1.0
   m_SourceFontFileGUID: 567bbd6fc28f2a544ba272e2252d58cf
   m_SourceFontFile_EditorRef: {fileID: 12800000, guid: 567bbd6fc28f2a544ba272e2252d58cf,
@@ -4087,7 +4087,7 @@ Texture2D:
   m_MipsStripped: 0
   m_TextureFormat: 1
   m_MipCount: 1
-  m_IsReadable: 0
+  m_IsReadable: 1
   m_IsPreProcessed: 0
   m_IgnoreMasterTextureLimit: 0
   m_StreamingMipmaps: 0

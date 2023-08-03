@@ -20,7 +20,7 @@ Texture2D:
   m_MipsStripped: 0
   m_TextureFormat: 1
   m_MipCount: 1
-  m_IsReadable: 0
+  m_IsReadable: 1
   m_IsPreProcessed: 0
   m_IgnoreMasterTextureLimit: 0
   m_StreamingMipmaps: 0
@@ -107,9 +107,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
   m_Name: UT-Papyrus
   m_EditorClassIdentifier: 
-  hashCode: -713039426
+  hashCode: -1544253056
   material: {fileID: -193998481330307211}
-  materialHashCode: -1702729762
+  materialHashCode: 451243296
   m_Version: 1.1.0
   m_SourceFontFileGUID: e9d644a95cbf9444e918e7711d6793bf
   m_SourceFontFile_EditorRef: {fileID: 12800000, guid: e9d644a95cbf9444e918e7711d6793bf,
