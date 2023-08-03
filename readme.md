@@ -14,8 +14,8 @@ An UNDERTALE fan game template based on unity engine.
 ## Table of Contents
 
 - [Background](#background)
+- [Synopsis](#Synopsis)
 - [Usage](#usage)
-- [Contributing](#contributing)
 - [Wiki](#Wiki)
 - [License](#license)
 
