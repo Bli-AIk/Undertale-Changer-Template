@@ -11,10 +11,18 @@ RenameSp\name|true|true|text;
 
 <playerName>獲取玩家名稱
 */
-MenuSetPlace\最後的長廊;
 Menu0\繼續;
 Menu1\重置;
 Menu2\設置;
 Menu3\語言;
+Menu4\存檔;
+Menu5\退出;
+Menu6\上頁;
+Menu7\下頁;
+Menu8\返回;
+Menu9\確定;
+Menu10\新建;
+Menu11\刪除;
+Menu12\存檔;
 
 MenuUnder\Undertale (c)  toby fox 2015<enter>undertale changer V;

@@ -4,6 +4,8 @@ using UnityEngine;
 using TMPro;
 using DG.Tweening;
 using System.Reflection;
+using UnityEngine.SceneManagement;
+using System;
 /// <summary>
 /// OWObj触发器相关 配合玩家射线
 /// 用于读取并显示文本然后显示出来
@@ -18,6 +20,11 @@ public class OverworldObjTrigger : MonoBehaviour
     public string text;
     [Header("检测玩家动画方向 0,0为不检测")]
     public Vector2 playerDir;
+    [Header("存档相关")]
+    public bool isSave;
+    public bool saveFullHp;
+    int saveSelect;
+    bool saveOpen;
     [Header("插入摄像机动画相关")]
     public bool openAnim;
     public Vector3 animEndPosPlus;
@@ -36,11 +43,8 @@ public class OverworldObjTrigger : MonoBehaviour
     [Header("OW跳场景锁定进入时方向 0无 -1左右 1上下")]
     public int onlyDir;
     AudioSource bgm;
-    //BoxCollider2D boxCollider2D;
-    //TextMeshProUGUI typeMessage;
     TalkUIPositionChanger talkUI;
     TypeWritter typeWritter;
-    //BackpackBehaviour backpackBehaviour;
 
     [Header("结束时调用动画器并将下设为true")]
     public bool endAnim;
@@ -60,18 +64,67 @@ public class OverworldObjTrigger : MonoBehaviour
     void Start()
     {
         transform.tag = "owObjTrigger";
-        //boxCollider2D = GetComponent<BoxCollider2D>();
         talkUI = GameObject.Find("Main Camera/TalkUI").GetComponent<TalkUIPositionChanger>();
         mainCamera = talkUI.transform.parent.GetComponent<CameraFollowPlayer>();
-        //typeMessage = GameObject.Find("BackpackCanvas/RawImage/Talk/UITalk").GetComponent<TextMeshProUGUI>();
         typeWritter = BackpackBehaviour.instance.typeWritter;
         bgm = AudioController.instance.audioSource;
-        
-        //backpackBehaviour = typeWritter.transform.GetComponent<BackpackBehaviour>();
-
     }
     private void Update()
     {
+        if (saveOpen)
+        {
+            if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow) || MainControl.instance.KeyArrowToControl(KeyCode.RightArrow))
+            {
+                saveSelect = Convert.ToInt32(!Convert.ToBoolean(saveSelect));
+
+
+                BackpackBehaviour.instance.saveUIHeart.anchoredPosition = new Vector2(-258 + saveSelect * 180, -44);
+            }
+            if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
+            {
+                switch (saveSelect)
+                {
+                    case 0:
+
+                        SaveController.SaveData(MainControl.instance.PlayerControl, "Data"+ MainControl.instance.dataNum);
+                        saveSelect = 2;
+                        AudioController.instance.GetFx(12, MainControl.instance.AudioControl.fxClipUI);
+                        string name = MainControl.instance.PlayerControl.playerName;
+
+                        BackpackBehaviour.instance.saveUIHeart.anchoredPosition = new Vector2(10000, 10000);
+
+                        BackpackBehaviour.instance.saveUI.text = "<color=yellow>" + MainControl.instance.FillString(name, 10) + "LV" + MainControl.instance.FillString(MainControl.instance.PlayerControl.lv.ToString(), 7) +
+                        MainControl.instance.GetRealTime((int)MainControl.instance.PlayerControl.gameTime) + "\n" +
+                        MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, SceneManager.GetActiveScene().name) + "\n<size=1>\n</size>  " +
+                        MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Saved");
+                        MainControl.instance.PlayerControl.saveScene = SceneManager.GetActiveScene().name;
+                        PlayerPrefs.SetInt("languagePack", MainControl.instance.languagePack);
+                        PlayerPrefs.SetInt("dataNum", MainControl.instance.dataNum);
+                        break;
+                    case 1:
+                        goto default;
+                    default:
+                        BackpackBehaviour.instance.saveUIHeart.anchoredPosition = new Vector2(10000, 10000);
+                        BackpackBehaviour.instance.saveBack.transform.localPosition = new Vector3(BackpackBehaviour.instance.saveBack.transform.localPosition.x, BackpackBehaviour.instance.saveBack.transform.localPosition.y, -50);
+                        BackpackBehaviour.instance.saveUI.text = "";
+                        PressZ();
+                        saveOpen = false;
+                        break;
+                    case 2:
+                        goto default;
+                }
+            }
+            else if (MainControl.instance.KeyArrowToControl(KeyCode.X))
+            {
+                BackpackBehaviour.instance.saveUIHeart.anchoredPosition = new Vector2(10000, 10000);
+                BackpackBehaviour.instance.saveBack.transform.localPosition = new Vector3(BackpackBehaviour.instance.saveBack.transform.localPosition.x, BackpackBehaviour.instance.saveBack.transform.localPosition.y, -50);
+                BackpackBehaviour.instance.saveUI.text = "";
+                PressZ();
+                saveOpen = false;
+            }
+                
+        }
+
         //检测相关见PlayerBehaviour
         if (isTyping && MainControl.instance.KeyArrowToControl(KeyCode.Z) && !typeWritter.isTyping)
         {
@@ -94,6 +147,12 @@ public class OverworldObjTrigger : MonoBehaviour
         BackpackBehaviour.instance.typeMessage.text = "";
         talkUI.transform.localPosition = new Vector3(talkUI.transform.localPosition.x, talkUI.transform.localPosition.y, -50);
         //Debug.Log(talkUI.transform.localPosition.z);
+        if (isSave && !saveOpen)
+        {
+            Save();
+            return;
+        }
+
         MainControl.instance.PlayerControl.canMove = true;
         MainControl.instance.OverworldControl.pause = false;
 
@@ -110,6 +169,25 @@ public class OverworldObjTrigger : MonoBehaviour
             }
         }
       
+    }
+
+    public void Save()
+    {
+        saveOpen = true;
+        saveSelect = 0;
+
+
+        BackpackBehaviour.instance.saveBack.transform.localPosition = new Vector3(BackpackBehaviour.instance.saveBack.transform.localPosition.x, BackpackBehaviour.instance.saveBack.transform.localPosition.y, 5);
+        string name = MainControl.instance.PlayerControl.playerName;
+
+        BackpackBehaviour.instance.saveUI.text = MainControl.instance.FillString(name, 10) + "LV" + MainControl.instance.FillString(MainControl.instance.PlayerControl.lv.ToString(), 7) +
+            MainControl.instance.GetRealTime((int)MainControl.instance.PlayerControl.gameTime) + "\n" +
+            MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, SceneManager.GetActiveScene().name) + "\n<size=1>\n</size>  " +
+            MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Save") + "         " + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Back")
+            ;
+        BackpackBehaviour.instance.saveUIHeart.anchoredPosition = new Vector2(-258, -44);
+
+
     }
     /// <summary>
     /// 激活打字。第二个参数别动

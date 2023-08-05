@@ -18,6 +18,13 @@ LanguagePackFullWidth\true;
 /* 需要输入准确的语言文化代码，且不得有多余字符，用于CultureInfo检测。 */
 CultureInfo\zh-CN;
 
+/* 输入场景名字，用于读存档 */
+
+Saved\档案已保存。;
+Example-Corridor\最后的长廊;
+
+/* 设置相关 */
+
 Setting\       设置;
 SettingMainVolume\主音量;
 SettingControl\控制;
@@ -29,6 +36,7 @@ SettingBackMenu\返回菜单界面;
 SettingBackGame\返回游戏;
 Open\开;
 Close\关;
+Save\保存;
 Back\返回;
 
 SettingMainVolumeTip\调节全局音量大小。;

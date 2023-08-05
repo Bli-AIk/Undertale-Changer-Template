@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3c08356e096c1e4dad5a50bfe5f03d2, type: 3}
   m_Name: AudioControl
   m_EditorClassIdentifier: 
-  bgmClip: []
   fxClipUI:
   - {fileID: 8300000, guid: 1f81fb3dfe91f2f4f98ef5e136cbe3b5, type: 3}
   - {fileID: 8300000, guid: 36ca1ecab2d402c4489630bcfed943e0, type: 3}
@@ -26,6 +25,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: d0e1dffb71674914083f89ef22d912b6, type: 3}
   - {fileID: 8300000, guid: 6855e055d39e08147b377b32d5a0ce7e, type: 3}
   - {fileID: 8300000, guid: 39c857b261c543e4bb037f0aae775047, type: 3}
+  - {fileID: 8300000, guid: a2e72c4ea1a51be4bbb38c5e082293e3, type: 3}
   fxClipType:
   - {fileID: 8300000, guid: c07dbf7b874d8fd4eb8e857020e37bfb, type: 3}
   - {fileID: 8300000, guid: 9fac4480efb59c149b9b251a63a6b7ee, type: 3}

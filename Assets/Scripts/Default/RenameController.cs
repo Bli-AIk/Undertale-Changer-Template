@@ -24,7 +24,23 @@ public class RenameController : MonoBehaviour
         {
             mode = 1;
         }
-        else mode = 3;
+        else
+        { 
+            mode = 3;
+            MainControl.instance.PlayerControl.hp = 92;
+            MainControl.instance.PlayerControl.hpMax = 92;
+            MainControl.instance.PlayerControl.lv = 19;
+            MainControl.instance.PlayerControl.gold = 1000;
+            MainControl.instance.PlayerControl.wearArm = 10001;
+            MainControl.instance.PlayerControl.wearArmor = 20001;
+            MainControl.instance.PlayerControl.wearAtk = 1;
+            MainControl.instance.PlayerControl.wearDef = 123;
+            MainControl.instance.PlayerControl.saveScene = "Example-Corridor";
+
+            MainControl.instance.PlayerControl.myItems = new List<int>() { 0, 0, 0, 0, 0, 0, 0, 0 };
+
+
+        }
 
 
     }
@@ -264,12 +280,15 @@ strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.Overwor
                             mode = -1;
                             MainControl.instance.PlayerControl.playerName = setName;
                             AudioController.instance.transform.GetComponent<AudioSource>().Pause();
-                            Volume v = GameObject.Find("Global Volume").transform.GetComponent<Volume>();
+                            //Volume v = GameObject.Find("Global Volume").transform.GetComponent<Volume>();
                             Volume v2 = GameObject.Find("Global Volume (1)").transform.GetComponent<Volume>();
                             
-                            DOTween.To(() => v.weight, x => v.weight = x, 0, 5.5f).SetEase(Ease.Linear);
+                            //DOTween.To(() => v.weight, x => v.weight = x, 0, 5.5f).SetEase(Ease.Linear);
                             DOTween.To(() => v2.weight, x => v2.weight = x, 1, 5.5f).SetEase(Ease.Linear);
 
+                            SaveController.SaveData(MainControl.instance.PlayerControl, "Data" + MainControl.instance.dataNum);
+                            PlayerPrefs.SetInt("languagePack", MainControl.instance.languagePack);
+                            PlayerPrefs.SetInt("dataNum", MainControl.instance.dataNum);
                             MainControl.instance.OutWhite("Menu");
                             break;
                     }
@@ -321,7 +340,7 @@ strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.Overwor
                 tmps[3].text = "";
                 tmps[4].text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Teach");
                 tmps[5].text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "MenuUnder") + Application.version;
-                if ((MainControl.instance.KeyArrowToControl(KeyCode.Z)) && setName.Length < 6)
+                if (MainControl.instance.KeyArrowToControl(KeyCode.Z) && setName.Length < 6)
                     mode = 1;
                     break;
             default:

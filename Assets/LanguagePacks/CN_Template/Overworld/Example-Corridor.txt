@@ -52,5 +52,6 @@ Plot\<image=-1><fx=0>* .<stop>.<stop>.<stop>.<stop>.<stop>.
 <passText><image=-1><fx=0>* 啊？<stop>Flowey！<stop><enter>* 你这家伙躲哪去了？
 <passText><image=2><fx=2>* 要你管。<stop><stop><stop><stop><stop><image=1>现在该对战辣！;
 
+Save\<image=-1><fx=0>* (长廊的地板上铺满了金色的光芒，<enter>< >< >这使你充满了<gradient="White to Red - UTC">决心</gradient>。);
 
 BackMenu\<image=-1><fx=1>* (这是测试文本喵。)<enter>* (要回到MENU场景喵？)<enter><fx=-1><size=5> </size>< >< >< >< >< >< >  喵<size=5> </size>< >< >< >< >< >< >< >  嬲<select>BackMenu;

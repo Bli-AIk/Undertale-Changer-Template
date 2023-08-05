@@ -51,4 +51,7 @@ Plot\<image=-1><fx=0>* .<stop>.<stop>.<stop>.<stop>.<stop>.
 <passText><image=-1><fx=0>* Ah?<stop>Flowey!<stop><enter>* Where have you been hiding,<enter>< >< >you scoundrel?
 <passText><image=2><fx=2>* None of your business.<stop><stop><stop><stop><stop><image=1><enter>* It's time for a battle<enter>< >< >now!;
 
+
+Save\<image=-1><fx=0>* (The floor of corridor was<enter>< >< >covered in golden light,filling<enter>< >< >you with <gradient="White to Red - UTC">determination</gradient>.);
+
 BackMenu\<image=-1><fx=1>* (This is a test text, meow.)<enter>* (Do you want to go back to the MENU scene, meow?)<enter><fx=-1><size=5> </size>< >< >< >< >< >< >  Meow<size=5> </size>< >< >< >< >< >< >< >  Annoyed<select>BackMenu;

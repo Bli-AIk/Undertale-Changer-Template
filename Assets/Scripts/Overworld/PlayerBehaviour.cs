@@ -48,9 +48,9 @@ public class PlayerBehaviour : MonoBehaviour
         boxTrigger.transform.localPosition = boxCollider.offset;
         //mask = 1 << 6;
 
-        transform.position = MainControl.instance.PlayerControl.scenePos;
-        animDirectionX = (int)MainControl.instance.PlayerControl.animDirection.x;
-        animDirectionY = (int)MainControl.instance.PlayerControl.animDirection.y;
+        transform.position = MainControl.instance.OverworldControl.playerScenePos;
+        animDirectionX = (int)MainControl.instance.OverworldControl.animDirection.x;
+        animDirectionY = (int)MainControl.instance.OverworldControl.animDirection.y;
 
         if (isShadow)
             shadowSprite = transform.Find("Dir/Shadow").GetComponent<SpriteRenderer>();
@@ -86,7 +86,7 @@ public class PlayerBehaviour : MonoBehaviour
         }
 
 
-        MainControl.instance.PlayerControl.deadPos = transform.position;
+        MainControl.instance.OverworldControl.playerDeadPos = transform.position;
         if (typeWritter.isTyping)
         {
             distance = 0;
@@ -120,8 +120,8 @@ public class PlayerBehaviour : MonoBehaviour
                     {
                         if ((saveOwObj.onlyDir == 0) || (saveOwObj.onlyDir == -1 && animDirectionX != 0) || (saveOwObj.onlyDir == 1 && animDirectionY != 0))
                         {
-                            MainControl.instance.PlayerControl.scenePos = saveOwObj.newPlayerPos;
-                            MainControl.instance.PlayerControl.animDirection = new Vector2(animDirectionX, animDirectionY);
+                            MainControl.instance.OverworldControl.playerScenePos = saveOwObj.newPlayerPos;
+                            MainControl.instance.OverworldControl.animDirection = new Vector2(animDirectionX, animDirectionY);
                             MainControl.instance.OutBlack(saveOwObj.sceneName, Color.black, saveOwObj.banMusic);
                             saveOwObj.gameObject.SetActive(false);
                             saveOwObj = null;
@@ -137,6 +137,15 @@ public class PlayerBehaviour : MonoBehaviour
                             saveOwObj.AnimTypeText(isUp);
                         else
                             saveOwObj.TypeText(isUp);
+
+                        if (saveOwObj.isSave)
+                        {
+                            AudioController.instance.GetFx(MainControl.instance.AudioControl.fxClipUI[2]);
+                            if (MainControl.instance.PlayerControl.hp < MainControl.instance.PlayerControl.hpMax)
+                                MainControl.instance.PlayerControl.hp = MainControl.instance.PlayerControl.hpMax;
+
+                        }
+
                     }
                 }
                 owTimer = 0.1f;
@@ -168,7 +177,7 @@ public class PlayerBehaviour : MonoBehaviour
 
         if (MainControl.instance.OverworldControl.isSetting || MainControl.instance.OverworldControl.pause)
             return;
-        if (Input.GetKeyDown(KeyCode.B) && MainControl.instance.OverworldControl.isDebug)
+        if (Input.GetKeyDown(KeyCode.B) && MainControl.instance.PlayerControl.isDebug)
             MainControl.instance.OutBlack("Battle", Color.black);
     }
     public void PlayWalkAudio()//¶¯»­Æ÷ÒýÓÃ

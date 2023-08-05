@@ -44,6 +44,7 @@ public class MainControlSummon : MonoBehaviour
 
     void Awake()
     {
+
         GameObject canvas;
         if (CanvasController.instance == null)
         {

@@ -25,6 +25,8 @@ Teach\---游戏教学---<enter><enter>[Z或ENTER]-确认<enter>[X或SHIFT]-取�
 PageNext\下一页;
 PageLast\上一页;
 
+MenuUnder\Undertale (c)  toby fox 2015<enter>undertale changer V;
+
 RenameSp\chara|true|false|真正的名字。;
 RenameSp\frisk|true|false|警告：这个名字<enter>你起了也没用。<enter>说白了，咱懒得整困难模式。;
 RenameSp\toriel|false|false|我觉得你应该<enter>想一个属于自己<enter>的名字，我的孩子。;

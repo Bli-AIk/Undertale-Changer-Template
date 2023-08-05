@@ -17,11 +17,13 @@
 <fx=x>  將打字機的音效換爲第x位音效。
 
 
+
+
 如果你需要輸入很長的一段文字或單純想要玩家多按那麼一下子Z鍵，你可以在一段文本內插入 <passText>
 打字機檢測該字符後會停止打字，玩家若按下Z鍵將會清空當前文本並繼續打字狀態。
 此前的富文本將失效，因爲此前的文本都清空了。
 
-富文本輸入示意：
+富文本輸入部分示意：
 <color=#00000000>顏色符 支持RGBA 十六進制
 </color>去除顏色
 
@@ -50,5 +52,6 @@ Plot\<image=-1><fx=0>* .<stop>.<stop>.<stop>.<stop>.<stop>.
 <passText><image=-1><fx=0>* 啊？<stop>Flowey！<stop><enter>* 你這傢伙躲哪去了？
 <passText><image=2><fx=2>* 要你管。<stop><stop><stop><stop><stop><image=1>現在該對戰辣！;
 
+Save\<image=-1><fx=0>* (長廊的地板上鋪滿了金色的光芒，<enter>< >< >這使你充滿了<gradient="White to Red - UTC">決心</gradient>。);
 
 BackMenu\<image=-1><fx=1>* (這是測試文本喵。)<enter>* (要回到MENU場景喵？)<enter><fx=-1><size=5> </size>< >< >< >< >< >< >  喵<size=5> </size>< >< >< >< >< >< >< >  嬲<select>BackMenu;

@@ -20,7 +20,11 @@ public class BackpackBehaviour : MonoBehaviour
     GameObject BackpackUILeft, BackpackUIRight, player, mainCamera;
     GameObject BackpackUIRightPoint2, BackpackUIRightPoint3;
     TalkUIPositionChanger talkUI;
-    
+
+    public GameObject saveBack;
+    public TextMeshProUGUI saveUI;
+    public RectTransform saveUIHeart;
+
     public TypeWritter typeWritter;
 
     private void Awake()
@@ -42,6 +46,9 @@ public class BackpackBehaviour : MonoBehaviour
         heart = backpack.Find("Heart").GetComponent<Image>();
         BackpackUILeft = GameObject.Find("Main Camera/BackpackUI/Left2");
         BackpackUIRight = GameObject.Find("Main Camera/BackpackUI/Right");
+        saveBack = GameObject.Find("Main Camera/Save");
+        saveUI = GameObject.Find("BackpackCanvas/RawImage/Talk/UISave").GetComponent<TextMeshProUGUI>();
+        saveUIHeart = GameObject.Find("BackpackCanvas/RawImage/Talk/UISave/Heart").GetComponent<RectTransform>();
         player = GameObject.Find("Player");
         mainCamera = GameObject.Find("Main Camera");
         BackpackUIRightPoint2 = BackpackUIRight.transform.Find("Point2").gameObject;
@@ -362,8 +369,6 @@ public class BackpackBehaviour : MonoBehaviour
                 heart.rectTransform.anchoredPosition = new Vector2(-255, 35);
                 break;
         }
-        if(MainControl.instance.OverworldControl.isDebug)
-            uiName.text = MainControl.instance.PlayerControl.playerName;
 
 
     }

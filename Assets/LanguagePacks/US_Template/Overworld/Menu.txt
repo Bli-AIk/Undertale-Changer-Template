@@ -20,10 +20,18 @@ In particular, if the text is<gaster>, the game will crash.
 
 
 
-MenuSetPlace\The last corridor;
 Menu0\Continue;
 Menu1\Reset;
 Menu2\Settings;
 Menu3\Language;
+Menu4\GameSave;
+Menu5\Exit;
+Menu6\PgUp;
+Menu7\PgDn;
+Menu8\Back;
+Menu9\Enter;
+Menu10\New;
+Menu11\Wipe;
+Menu12\Save;
 
 MenuUnder\Undertale (c)  toby fox 2015<enter>undertale changer V;

@@ -33,6 +33,8 @@ Teach\---Instruction---<enter><enter>[Z or ENTER]-Confirm<enter>[X or SHIFT]-Can
 PageNext\Next page;
 PageLast\Last page;
 
+MenuUnder\Undertale (c)  toby fox 2015<enter>undertale changer V;
+
 RenameSp\chara|true|false|The true name.;
 RenameSp\frisk|true|false|WARNING:This name will<enter>cause nothing to happen.<enter>To put it bluntly, I'm lazy.;
 RenameSp\toriel|false|false|I think you should<enter>think of your own<enter>name,my child.;

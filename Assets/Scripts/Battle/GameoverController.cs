@@ -33,8 +33,8 @@ public class GameoverController : MonoBehaviour
         foolDay = DateTime.Now.Month == 4 && DateTime.Now.Day == 1;
         bgm = AudioController.instance.audioSource;
         bgm.clip = clips[Convert.ToInt32(foolDay)];
-        player.transform.position = MainControl.instance.PlayerControl.deadPos;
-        m_ParticleSystem.transform.position = MainControl.instance.PlayerControl.deadPos;
+        player.transform.position = MainControl.instance.OverworldControl.playerDeadPos;
+        m_ParticleSystem.transform.position = MainControl.instance.OverworldControl.playerDeadPos;
         m_ParticleSystem.Pause();
         m_ParticleSystem.gameObject.SetActive(false);
 
@@ -54,7 +54,7 @@ public class GameoverController : MonoBehaviour
 
     public void StartParticleSystem()
     {
-        m_ParticleSystem.transform.position = MainControl.instance.PlayerControl.deadPos;
+        m_ParticleSystem.transform.position = MainControl.instance.OverworldControl.playerDeadPos;
         m_ParticleSystem.gameObject.SetActive(true);
         m_ParticleSystem.Play();
     }

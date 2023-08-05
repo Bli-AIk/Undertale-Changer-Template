@@ -82,6 +82,93 @@ MonoBehaviour:
   - {fileID: -7587518124690072398}
   - {fileID: 8870105005504611258}
   - {fileID: -5834262825892191371}
+  - {fileID: 3569874126758278099}
+  - {fileID: 7395956572312364838}
+  - {fileID: 4884969257130658511}
+--- !u!114 &3569874126758278099
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c12f8b0d59df2742b1a7f9b2b2a3b53, type: 3}
+  m_Name: GlitchArtComponent
+  m_EditorClassIdentifier: 
+  active: 1
+  isShow:
+    m_OverrideState: 1
+    m_Value: 1
+  analogGlitchMode:
+    m_OverrideState: 1
+    m_Value: 1
+  scanLineJitter:
+    m_OverrideState: 1
+    m_Value: {x: 0.001, y: 0.1}
+  horizontalShakeMode:
+    m_OverrideState: 1
+    m_Value: 0
+  horizontalShake:
+    m_OverrideState: 1
+    m_Value: 0.001
+  colorDriftMode:
+    m_OverrideState: 1
+    m_Value: 0
+  colorDrift:
+    m_OverrideState: 1
+    m_Value: 0.25
+  verticalJumpMode:
+    m_OverrideState: 1
+    m_Value: 1
+  verticalJump:
+    m_OverrideState: 1
+    m_Value: 0.01
+--- !u!114 &4884969257130658511
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42bfe390942d3d1429011d4ef3ea1611, type: 3}
+  m_Name: CRTScreenComponent
+  m_EditorClassIdentifier: 
+  active: 1
+  isShow:
+    m_OverrideState: 1
+    m_Value: 1
+  resolution:
+    m_OverrideState: 1
+    m_Value: {x: 10000, y: 10000}
+  pixelScanlineBrightness:
+    m_OverrideState: 1
+    m_Value: {x: 0.225, y: 0.85, z: 0.05, w: 0.95}
+  speed:
+    m_OverrideState: 1
+    m_Value: 1
+--- !u!114 &7395956572312364838
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb60a22f311433c4c962b888d1393f88, type: 3}
+  m_Name: PaniniProjection
+  m_EditorClassIdentifier: 
+  active: 1
+  distance:
+    m_OverrideState: 1
+    m_Value: 0.25
+  cropToFit:
+    m_OverrideState: 1
+    m_Value: 0
 --- !u!114 &8870105005504611258
 MonoBehaviour:
   m_ObjectHideFlags: 3

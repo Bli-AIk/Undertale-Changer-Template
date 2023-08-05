@@ -4,8 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "AudioControl", menuName = "AudioControl")]
 public class AudioControl : ScriptableObject
 {
-    //BGM&FX
-    public List<AudioClip> bgmClip;
+    //public List<AudioClip> bgmClip;
     [Header("用于UI音效")]
     public List<AudioClip> fxClipUI;
     [Header("用于打字机音效")]

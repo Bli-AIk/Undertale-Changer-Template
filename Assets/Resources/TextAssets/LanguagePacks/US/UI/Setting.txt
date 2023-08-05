@@ -18,6 +18,12 @@ In particular, if the text is<gaster>, the game will crash.
 
 */
 
+/* Enter the scene name for reading and archiving */
+
+Saved\File saved.;
+Example-Corridor\Last Corridor;
+
+/* Settings */
 
 
 
@@ -41,7 +47,8 @@ SettingBackMenu\Return to menu;
 SettingBackGame\Back;
 Open\ON;
 Close\OFF;
-Back\Back;
+Back\Return;
+Save\Save;
 
 SettingMainVolumeTip\Adjust global volume.;
 SettingControlTip\Key setting.;

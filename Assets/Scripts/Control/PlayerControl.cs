@@ -20,10 +20,17 @@ public class PlayerControl : ScriptableObject
     public List<int> myItems;//玩家背包数据 储存编号
     public int wearArm, wearArmor;
     public bool canMove;
-    public Vector3 deadPos;
+
+    public float gameTime;
 
     [Header("场景衔接存储")]
-    public Vector3 scenePos;
-    public Vector2 animDirection;
     public string lastScene;
+    public string saveScene;
+
+
+    [Header("开启调试")]
+    public bool isDebug;
+    [Header("--调试模式设定--")]
+    [Header("锁血")]
+    public bool invincible;
 }

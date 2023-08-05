@@ -8,7 +8,7 @@ public class CameraShake : MonoBehaviour
 
     private void Update()
     {
-        if (MainControl.instance.OverworldControl.isDebug && Input.GetKeyDown(KeyCode.G))
+        if (MainControl.instance.PlayerControl.isDebug && Input.GetKeyDown(KeyCode.G))
         {
             Shake();
 

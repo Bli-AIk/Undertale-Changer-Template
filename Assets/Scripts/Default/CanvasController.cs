@@ -731,7 +731,7 @@ public class CanvasController : MonoBehaviour
     /// </summary>
     public void AnimSetHeartPos()
     {
-        Vector2 uiPos = WorldToUgui(MainControl.instance.PlayerControl.deadPos);
+        Vector2 uiPos = WorldToUgui(MainControl.instance.OverworldControl.playerDeadPos);
         transform.Find("Heart").GetComponent<RectTransform>().anchoredPosition = uiPos;
        
     }

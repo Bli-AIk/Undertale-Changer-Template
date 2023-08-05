@@ -373,7 +373,6 @@ public class TypeWritter : MonoBehaviour
             clockTime -= Time.deltaTime;
         if (!passText && !isTyping && MainControl.instance.KeyArrowToControl(KeyCode.Z) && typeMode != TypeMode.CantZ)
         {
-            Debug.Log(1);
             if (haveSpriteChanger)
                 spriteChanger.ChangeImage(-1);
             if (endInBattle)

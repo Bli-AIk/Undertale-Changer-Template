@@ -8,14 +8,18 @@ using UnityEngine.Rendering.Universal;
 using System.IO;
 using System.Globalization;
 using DG.Tweening.Core;
+using System.Xml.Linq;
 /// <summary>
 /// 调用所有ScriptableObject 并负责对数据和语言包的导入
 /// 还包括大部分常用的函数
 /// </summary>
 public class MainControl : MonoBehaviour
 {
+
     public static MainControl instance;
-    public int languagePack = 2;
+    public int languagePack;
+    public int dataNum;
+
     public readonly int languagePackInsideNum = 3;//内置语言包总数
 
     public bool blacking = false;
@@ -30,7 +34,6 @@ public class MainControl : MonoBehaviour
     
 
     Image inOutBlack;
-
     [Header("引用用的")]
     [Header("战斗外")]
     public PlayerBehaviour playerBehaviour;
@@ -55,6 +58,34 @@ public class MainControl : MonoBehaviour
     public SelectUIController selectUIController;
 
     public CameraShake cameraShake, cameraShake3D;
+    
+    public void SetPlayerControl(PlayerControl playerControl)
+    {
+        PlayerControl.hp = playerControl.hp;
+        PlayerControl.hpMax = playerControl.hpMax;
+        PlayerControl.lv = playerControl.lv;
+        PlayerControl.exp = playerControl.exp;
+        PlayerControl.gold = playerControl.gold;
+        PlayerControl.wearAtk = playerControl.wearAtk;
+        PlayerControl.wearDef = playerControl.wearDef;
+        PlayerControl.nextExp = playerControl.nextExp;
+        PlayerControl.missTime = playerControl.missTime;
+        PlayerControl.missTimeMax = playerControl.missTimeMax;
+        PlayerControl.atk = playerControl.atk;
+        PlayerControl.def = playerControl.def;
+        PlayerControl.playerName = playerControl.playerName;
+        PlayerControl.myItems = playerControl.myItems;
+        PlayerControl.wearArm = playerControl.wearArm;
+        PlayerControl.wearArmor = playerControl.wearArmor;
+        PlayerControl.canMove = playerControl.canMove;
+        PlayerControl.gameTime = playerControl.gameTime;
+        PlayerControl.lastScene = playerControl.lastScene;
+        PlayerControl.saveScene = playerControl.saveScene;
+        PlayerControl.isDebug = playerControl.isDebug;
+        PlayerControl.invincible = playerControl.invincible;
+
+
+    }
     /// <summary>
     /// 获取内置语言包ID
     /// </summary>
@@ -240,6 +271,12 @@ public class MainControl : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
+
+        languagePack = PlayerPrefs.GetInt("languagePack", 2);
+        dataNum = PlayerPrefs.GetInt("dataNum", 0);
+        if (dataNum > (SaveController.GetDataNum() - 1))
+            dataNum = (SaveController.GetDataNum() - 1);
+
         instance = this;
         InitializationLoad();
         Initialization(languagePack);
@@ -247,8 +284,7 @@ public class MainControl : MonoBehaviour
     }
     public void Start()
     {
-
-        if (OverworldControl.isDebug && OverworldControl.invincible)
+        if (PlayerControl.isDebug && PlayerControl.invincible)
             PlayerControl.hp = PlayerControl.hpMax / 2;
 
         InitializationLanguagePackFullWidth();
@@ -279,10 +315,8 @@ public class MainControl : MonoBehaviour
 
         SetResolution(OverworldControl.resolutionLevel);
         FindAndChangeAllSFX(OverworldControl.noSFX);
-        if (!OverworldControl.isDebug && PlayerControl.playerName.Length > 0 && PlayerControl.playerName[0] == '<')
-        {
-            PlayerControl.playerName = "Chara";
-        }
+
+
     }
     /// <summary>
     /// 生成字符串形式的随机颜色。
@@ -304,15 +338,17 @@ public class MainControl : MonoBehaviour
     }
     private void Update()
     {
-        if (OverworldControl.isDebug)
+        PlayerControl.gameTime += Time.deltaTime;
+
+        if (PlayerControl.isDebug)
         {
             if (Input.GetKeyDown(KeyCode.F5))
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
-            if (OverworldControl.invincible)
+            if (PlayerControl.invincible)
                 PlayerControl.hp = PlayerControl.hpMax;
 
-            PlayerControl.playerName = RandomStringColor() + 'd' + RandomStringColor() + 'e' + RandomStringColor() + 'b' + RandomStringColor() + 'u' + RandomStringColor() + 'g' + "</color></color></color></color></color>";
+            PlayerControl.playerName = "Debug";
         }
         if (PlayerControl.hpMax < PlayerControl.hp)
             PlayerControl.hp = PlayerControl.hpMax;
@@ -611,7 +647,8 @@ public class MainControl : MonoBehaviour
     }
     public void SwitchScene(string name, bool Async = true)
     {
-        PlayerControl.lastScene = SceneManager.GetActiveScene().name;
+        if (SceneManager.GetActiveScene().name != "Menu" && SceneManager.GetActiveScene().name != "Rename" && SceneManager.GetActiveScene().name != "Story" && SceneManager.GetActiveScene().name != "Start" && SceneManager.GetActiveScene().name != "Gameover")
+            PlayerControl.lastScene = SceneManager.GetActiveScene().name;
         if (Async)
             SceneManager.LoadSceneAsync(name);
         else SceneManager.LoadScene(name);
@@ -627,7 +664,7 @@ public class MainControl : MonoBehaviour
         return str;
     }
     /// <summary>
-    /// 随机生成一个六位长的英文)
+    /// 随机生成一个六位长的英文
     /// </summary>
     public string RandomName(int l = 6, string abc = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM")
     {
@@ -677,7 +714,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 调入数据
+    /// 调入数据(传入TextAsset)
     /// </summary>
     public void LoadItemData(List<string> list, TextAsset texter)//保存的list 导入的text
     {
@@ -708,7 +745,7 @@ public class MainControl : MonoBehaviour
 
     }
     /// <summary>
-    /// 咱说就是不拿TextAsset拿string也行昂)
+    /// 调入数据(传入string)
     /// </summary>
     public void LoadItemData(List<string> list, string texter)//保存的list 导入的text
     {
@@ -841,7 +878,7 @@ public class MainControl : MonoBehaviour
                 while (list[i][j] == '<')
                 {
                     string texters = "";
-                    while ((list[i][j - 1] != '>' && !isXH) || isXH)
+                    while ((j !=0 && list[i][j - 1] != '>' && !isXH) || isXH)
                     {
                         texters += list[i][j];
                         j++;
@@ -881,10 +918,7 @@ public class MainControl : MonoBehaviour
         switch (texters)
         {
             case "<playerName>":
-                if (!OverworldControl.isDebug)
-                    text += PlayerControl.playerName;
-                else
-                    text += "debug";
+                text += PlayerControl.playerName;
                 break;
 
 
@@ -1172,7 +1206,7 @@ public class MainControl : MonoBehaviour
         return realVector2;
     }
     /// <summary>
-    /// 形如xRx？xrx？O？来我来帮你随机分开吧嘿嘿嘿(((((
+    /// 形如xRx / xrx / O   随机分开
     /// 如果没有r或R的话就会返回原本的，非常的实用
     /// 
     /// 额外添加：P/p获取玩家位置 通过isY确定是X还是Y
@@ -1859,7 +1893,7 @@ public class MainControl : MonoBehaviour
 
     }
     /// <summary>
-    /// 传入数 返回1/-1。
+    /// 传入数根据正负返回1/-1。
     /// 传0返1。
     /// </summary>
     public int Get1Or_1(float i)
@@ -1871,4 +1905,44 @@ public class MainControl : MonoBehaviour
         return (int)i;
 
     }
+    /// <summary>
+    /// 给一个指定长度，然后会用空格填充原字符串
+    /// </summary>
+    /// <param name="origin">原字符串</param>
+    /// <param name="length">返回长度</param>
+    /// <returns></returns>
+    public string FillString(string origin, int length)
+    {
+        int forNum = length - origin.Length;
+        for (int i = 0; i < forNum; i++)
+        {
+            origin += " ";
+        }
+        return origin;
+    }
+
+    public string GetRealTime(int second)
+    {
+        int hr;
+        int min;
+        int sec;
+        if (second < 0)
+            second = 0;
+        sec = second % 60;
+        second = second - sec;
+        second /= 60;
+        min = second % 60;
+        second -= min;
+        hr = second / 60;
+        string shiS, fenS;
+        if (hr < 10)
+            shiS = "0" + hr;
+        else shiS = "" + hr;
+        if (min < 10)
+            fenS = "0" + min;
+        else fenS = "" + min;
+
+        return (shiS + ":" + fenS);
+    }
+
 }

@@ -67,10 +67,10 @@ public class BattlePlayerController : MonoBehaviour
         {
             MainControl.instance.PlayerControl.hp = MainControl.instance.PlayerControl.hpMax;
 
-            if (!(MainControl.instance.OverworldControl.isDebug && MainControl.instance.OverworldControl.invincible))
+            if (!(MainControl.instance.PlayerControl.isDebug && MainControl.instance.PlayerControl.invincible))
             {
                 spriteRenderer.color = Color.red;
-                MainControl.instance.PlayerControl.deadPos = transform.position;
+                MainControl.instance.OverworldControl.playerDeadPos = transform.position;
                 MainControl.instance.OverworldControl.pause = true;
                 RoundController.instance.KillIEnumerator();
                 MainControl.instance.SwitchScene("Gameover", false);
@@ -101,7 +101,7 @@ public class BattlePlayerController : MonoBehaviour
 
 
         //Debug
-        if (MainControl.instance.OverworldControl.isDebug)
+        if (MainControl.instance.PlayerControl.isDebug)
         {
 
             if (Input.GetKeyDown(KeyCode.Keypad1))

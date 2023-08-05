@@ -41,13 +41,13 @@ public class OverworldControl : ScriptableObject
     public bool isSetting;
     public List<KeyCode> keyCodes, keyCodesBack1, keyCodesBack2;//依照设置顺序
 
+    [Header("玩家相关")]
+    public Vector3 playerDeadPos;
 
+    [Header("场景衔接存储")]
+    public Vector3 playerScenePos;
+    public Vector2 animDirection;
 
-    [Header("开启调试")]
-    public bool isDebug;
-    [Header("--调试模式设定--")]
-    [Header("锁血")]
-    public bool invincible;
 
 
     //[Header("游戏内需要存档的数据在下面写")]

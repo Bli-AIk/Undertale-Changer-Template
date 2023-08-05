@@ -18,6 +18,13 @@ LanguagePackFullWidth\true;
 /* 需要輸入準確的語言文化代碼，且不得有多餘字符，用於CultureInfo檢測。 */
 CultureInfo\zh-CN;
 
+/* 輸入場景名字，用於讀存檔 */
+
+Saved\檔案已保存。;
+Example-Corridor\最後的長廊;
+
+/* 設置相關 */
+
 Setting\       設置;
 SettingMainVolume\主音量;
 SettingControl\控制;
@@ -29,6 +36,7 @@ SettingBackMenu\返回菜單界面;
 SettingBackGame\返回遊戲;
 Open\開;
 Close\關;
+Save\保存;
 Back\返回;
 
 SettingMainVolumeTip\調節全局音量大小。;
@@ -60,4 +68,4 @@ ControlEggshell\~嘟嘟嘟嘟嘟嘟嘟~;
 
 ControlUnder0\主鍵位設置中。按C設置輔助鍵位。;
 ControlUnder1\輔助鍵位1設置中。按C設置輔助鍵位2。;
-ControlUnder2\輔助鍵位2設置中。按C設置主鍵位。;
+ControlUnder2\輔助鍵位2設置中。按C設置主鍵位。; 
