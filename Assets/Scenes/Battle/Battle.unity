@@ -438,6 +438,37 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &113111510
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 113111511}
+  m_Layer: 0
+  m_Name: SaveBullet
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &113111511
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 113111510}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &164142078 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4810276312561821587, guid: 197e5b84c1440b748933e7f4ebd81b24,
@@ -1184,7 +1215,7 @@ PrefabInstance:
     - target: {fileID: 833677141888568880, guid: 85a3edc090f79fb4780a6e2f72de7957,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 833677141888568880, guid: 85a3edc090f79fb4780a6e2f72de7957,
         type: 3}
@@ -1239,7 +1270,7 @@ PrefabInstance:
     - target: {fileID: 833677141888568882, guid: 85a3edc090f79fb4780a6e2f72de7957,
         type: 3}
       propertyPath: m_Name
-      value: MainControl
+      value: MainControlSummon
       objectReference: {fileID: 0}
     - target: {fileID: 833677141888568883, guid: 85a3edc090f79fb4780a6e2f72de7957,
         type: 3}
@@ -1286,6 +1317,11 @@ PrefabInstance:
       propertyPath: bgmClip
       value: 
       objectReference: {fileID: 8300000, guid: df8153b204e7de24aad5ad530f685431, type: 3}
+    - target: {fileID: 2735931670647202130, guid: 85a3edc090f79fb4780a6e2f72de7957,
+        type: 3}
+      propertyPath: framePic
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 2735931670647202130, guid: 85a3edc090f79fb4780a6e2f72de7957,
         type: 3}
       propertyPath: notPauseIn
@@ -5431,6 +5467,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   count: 10
   obj: {fileID: 0}
+  parent: {fileID: 0}
   colorX: {r: 1, g: 0, b: 0, a: 0.5019608}
   colorY: {r: 0, g: 1, b: 0, a: 0.5019608}
   colorXForText: {r: 1, g: 0, b: 1, a: 1}

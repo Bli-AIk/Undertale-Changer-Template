@@ -19,7 +19,7 @@ public class OverworldTalkSelect : MonoBehaviour
     public List<Sprite> sprites;
     float saveFloat;
     public string typeText;
-    // Start is called before the first frame update
+    
     void Start()
     {
         typeWritter = GameObject.Find("BackpackCanvas").GetComponent<TypeWritter>();
@@ -42,7 +42,7 @@ public class OverworldTalkSelect : MonoBehaviour
         canSelect = true;
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
         if (canSelect)

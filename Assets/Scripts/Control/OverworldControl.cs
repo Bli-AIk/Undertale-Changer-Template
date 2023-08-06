@@ -48,6 +48,9 @@ public class OverworldControl : ScriptableObject
     public Vector3 playerScenePos;
     public Vector2 animDirection;
 
+    [Header("HD边框")]
+    public bool hdResolution;
+    public List<Sprite> frames;
 
 
     //[Header("游戏内需要存档的数据在下面写")]

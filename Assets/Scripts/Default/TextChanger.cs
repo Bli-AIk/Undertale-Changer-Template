@@ -1,4 +1,4 @@
- using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -10,12 +10,11 @@ public class TextChanger : MonoBehaviour
 {
     //public TMP_FontAsset assetback;
     TMP_Text tmp;
-    public bool notUGUI;
     public bool width;//若中英混搭 则true就完事了
     [Header("US/CN")]
     public Vector4[] Options;
     //public float[] sizes;
-    
+
     //public bool no = true;
     private void Start()
     {
@@ -24,14 +23,8 @@ public class TextChanger : MonoBehaviour
     }
     public void Set()
     {
-        if (notUGUI)
-        {
-            tmp = GetComponent<TextMeshPro>();
-        }
-        else
-        {
-            tmp = GetComponent<TextMeshProUGUI>();
-        }
+        tmp = GetComponent<TMP_Text>();
+
         /*
        while (tmp.font != assetback)
         {
@@ -43,29 +36,18 @@ public class TextChanger : MonoBehaviour
         if (tmp.font != assetback)
             tmp.font = assetback;
         */
-        }
+    }
 
-    
+
     public void Change()
     {
         if (tmp != null)
         {
-            if (notUGUI)
-            {
-                tmp.characterSpacing = Options[Convert.ToInt32(width)].x;
-                tmp.wordSpacing = Options[Convert.ToInt32(width)].y;
-                tmp.lineSpacing = Options[Convert.ToInt32(width)].z;
-                tmp.paragraphSpacing = Options[Convert.ToInt32(width)].w;
-                //textMeshPro.fontSize = sizes[Convert.ToInt32(width)];
-            }
-            else
-            {
-                tmp.characterSpacing = Options[Convert.ToInt32(width)].x;
-                tmp.wordSpacing = Options[Convert.ToInt32(width)].y;
-                tmp.lineSpacing = Options[Convert.ToInt32(width)].z;
-                tmp.paragraphSpacing = Options[Convert.ToInt32(width)].w;
-                //textMeshProUGUI.fontSize = sizes[Convert.ToInt32(width)];
-            }
+            tmp.characterSpacing = Options[Convert.ToInt32(width)].x;
+            tmp.wordSpacing = Options[Convert.ToInt32(width)].y;
+            tmp.lineSpacing = Options[Convert.ToInt32(width)].z;
+            tmp.paragraphSpacing = Options[Convert.ToInt32(width)].w;
+
         }
         else
         {

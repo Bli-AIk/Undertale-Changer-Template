@@ -10,14 +10,18 @@ public class ObjectPool : MonoBehaviour
 
     public GameObject obj;
     Queue<GameObject> availableObj = new Queue<GameObject>();
+    public Transform parent = null;
     /// <summary>
     /// 初始化/填充对象池
     /// </summary>
     public void FillPool()
     {
+        if (parent == null)
+            parent = transform;
+
         for (int i = 0; i < count; i++)
         {
-            var newObj = Instantiate(obj, transform);
+            var newObj = Instantiate(obj, parent);
             ReturnPool(newObj);
         }
     }
@@ -26,8 +30,11 @@ public class ObjectPool : MonoBehaviour
     /// </summary>
     public void ReturnPool(GameObject gameObject)
     {
+        if (parent == null)
+            parent = transform;
+
         gameObject.SetActive(false);
-        gameObject.transform.SetParent(transform);
+        gameObject.transform.SetParent(parent);
         availableObj.Enqueue(gameObject);
     }
     /// <summary>

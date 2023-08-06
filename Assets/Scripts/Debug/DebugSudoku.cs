@@ -9,7 +9,7 @@ public class DebugSudoku : MonoBehaviour
     SpriteRenderer sprite;
     BoxCollider2D BoxCollider2D;
 
-    // Start is called before the first frame update
+    
     void Awake()
     {
         sprite = GetComponent<SpriteRenderer>();
@@ -45,7 +45,7 @@ public class DebugSudoku : MonoBehaviour
             BoxCollider2D.enabled = true;
         }
     }
-    // Update is called once per frame
+    
     void Update()
     {
         if (booooool)

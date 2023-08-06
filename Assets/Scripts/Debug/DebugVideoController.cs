@@ -5,14 +5,14 @@ public class DebugVideoController : MonoBehaviour
 {
     UnityEngine.Video.VideoPlayer videoPlayer;
     public int skip;
-    // Start is called before the first frame update
+    
     void Start()
     {
         videoPlayer = GetComponent<UnityEngine.Video.VideoPlayer>();
 
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
         if (!MainControl.instance.PlayerControl.isDebug)

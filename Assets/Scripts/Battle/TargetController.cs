@@ -20,7 +20,7 @@ public class TargetController : MonoBehaviour
 
     [Header("父级传入 要击打的怪物")]
     public EnemiesController hitMonster;
-    // Start is called before the first frame update
+    
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -39,7 +39,7 @@ public class TargetController : MonoBehaviour
         anim.SetFloat("MoveSpeed", 1);
         pressZ = true;
     }
-    // Update is called once per frame
+    
     void Update()
     {
         if (!pressZ)

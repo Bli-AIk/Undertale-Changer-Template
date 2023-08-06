@@ -20,17 +20,17 @@ MonoBehaviour:
   wearAtk: 1
   wearDef: 123
   nextExp: 0
-  missTime: 0
+  missTime: -0.0098414
   missTimeMax: 0
   atk: 0
   def: 0
-  playerName: A
-  myItems: 0000000000000000000000000000000000000000000000000000000000000000
+  playerName: Debug
+  myItems: 0200000001000000010000000100000000000000000000000000000000000000
   wearArm: 10001
   wearArmor: 20001
-  canMove: 0
-  gameTime: 30.521227
-  lastScene: Example-Corridor
+  canMove: 1
+  gameTime: 1458.9292
+  lastScene: Battle
   saveScene: Example-Corridor
-  isDebug: 0
-  invincible: 0
+  isDebug: 1
+  invincible: 1

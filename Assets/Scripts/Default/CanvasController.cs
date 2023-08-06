@@ -12,14 +12,20 @@ using System.IO;
 /// </summary>
 public class CanvasController : MonoBehaviour
 {
+
+    public int framePic;
+
+    public static CanvasController instance;
     public bool openRound;//敌人回合不能开
     TextMeshProUGUI fps;
-    Image image;
+    public Image frame, frameBack;
+    Image exitImage;
     float clock;
     public List<Sprite> sprites;
     public List<Vector2> sizes;
-    
-    Image setting, settingSoul;
+
+    public Image setting;
+    Image settingSoul;
     TextMeshProUGUI settingTmp, settingTmpSon, settingTmpUnder;
     public RenderMode renderMode;
 
@@ -37,7 +43,6 @@ public class CanvasController : MonoBehaviour
     TypeWritter[] typeWritters;//存储打字机以暂停协程
 
     public Animator animator;
-    public static CanvasController instance;
     private void Awake()
     {
         instance = this;
@@ -45,7 +50,7 @@ public class CanvasController : MonoBehaviour
         animator = GetComponent<Animator>();
         canvas = GetComponent<Canvas>();
         fps = transform.Find("FPS Text").GetComponent<TextMeshProUGUI>();
-        image = transform.Find("Exit Image").GetComponent<Image>();
+        exitImage = transform.Find("Exit Image").GetComponent<Image>();
 
         settingTmp = transform.Find("Setting/Setting Text").GetComponent<TextMeshProUGUI>();
         settingTmpSon = settingTmp.transform.Find("Setting Son").GetComponent<TextMeshProUGUI>();
@@ -53,6 +58,8 @@ public class CanvasController : MonoBehaviour
         settingTmpUnder = settingTmp.transform.Find("Setting Under").GetComponent<TextMeshProUGUI>();
         setting = transform.Find("Setting").GetComponent<Image>();
 
+        frame = transform.Find("Frame").GetComponent<Image>();
+        frameBack = transform.Find("FrameBack").GetComponent<Image>();
 
         typeWritters = (TypeWritter[])Resources.FindObjectsOfTypeAll(typeof(TypeWritter));
 
@@ -284,7 +291,7 @@ public class CanvasController : MonoBehaviour
         else
             return MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Close");
     }
-    // Update is called once per frame
+    
     void Update()
     {
         if (freeze)
@@ -296,12 +303,12 @@ public class CanvasController : MonoBehaviour
 
         if (MainControl.instance.KeyArrowToControl(KeyCode.Escape,1))
         {
-            if (image.color.a < 1)
-                image.color += Time.deltaTime * Color.white;
+            if (exitImage.color.a < 1)
+                exitImage.color += Time.deltaTime * Color.white;
             if (clock < 3)
             {
-                image.sprite = sprites[(int)clock];
-                image.rectTransform.sizeDelta = sizes[(int)clock];
+                exitImage.sprite = sprites[(int)clock];
+                exitImage.rectTransform.sizeDelta = sizes[(int)clock];
                 clock += Time.deltaTime;
             }
             else Application.Quit();
@@ -309,7 +316,7 @@ public class CanvasController : MonoBehaviour
         if (MainControl.instance.KeyArrowToControl(KeyCode.Escape, 2))
         {
             clock = 0;
-            image.color = new Color(1, 1, 1, 0);
+            exitImage.color = new Color(1, 1, 1, 0);
         }
 
         //设置菜单
@@ -390,7 +397,7 @@ public class CanvasController : MonoBehaviour
 
         if ((openRound && RoundController.instance.isMyRound) || !openRound)
         {
-            if (MainControl.instance.KeyArrowToControl(KeyCode.V) && !MainControl.instance.OverworldControl.isSetting && !MainControl.instance.blacking)
+            if (SceneManager.GetActiveScene().name != "Story" && MainControl.instance.KeyArrowToControl(KeyCode.V) && !MainControl.instance.OverworldControl.isSetting && !MainControl.instance.blacking)
             {
                 foreach (TypeWritter typeWritter in typeWritters)
                 {
@@ -451,6 +458,7 @@ public class CanvasController : MonoBehaviour
                             SettingText(false, true);
                         }
                     }
+
                     if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
                     {
                         AudioController.instance.GetFx(1, MainControl.instance.AudioControl.fxClipUI);
@@ -507,7 +515,7 @@ public class CanvasController : MonoBehaviour
                             isSettingName = false;
                         }
                     }
-                    if (MainControl.instance.KeyArrowToControl(KeyCode.X) || MainControl.instance.KeyArrowToControl(KeyCode.V))
+                    else if (SceneManager.GetActiveScene().name != "Story" && (MainControl.instance.KeyArrowToControl(KeyCode.X) || MainControl.instance.KeyArrowToControl(KeyCode.V))) 
                     {
                         if (!isSettingName)
                         {
@@ -519,6 +527,20 @@ public class CanvasController : MonoBehaviour
                             AudioListener.volume = MainControl.instance.OverworldControl.mainVolume;
                             SettingText();
                             isSettingName = false;
+                        }
+                    }
+                    else if (MainControl.instance.KeyArrowToControl(KeyCode.C))
+                    {
+                        if (!isSettingName)
+                        {
+                            if (settingSelect == 3)
+                            {
+                                AudioController.instance.GetFx(1, MainControl.instance.AudioControl.fxClipUI);
+                                MainControl.instance.OverworldControl.hdResolution = !MainControl.instance.OverworldControl.hdResolution;
+                                MainControl.instance.ChangeResolution();
+                                SettingText();
+                                PlayerPrefs.SetInt("hdResolution", Convert.ToInt32(MainControl.instance.OverworldControl.hdResolution));
+                            }
                         }
                     }
 
@@ -539,7 +561,11 @@ public class CanvasController : MonoBehaviour
                                 textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingFullScreenTipClose");
                             break;
                         case 3:
-                            textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingResolvingTip");
+                            if (!MainControl.instance.OverworldControl.hdResolution)
+                                textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingResolvingTip");
+                            else
+                                textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingResolvingTipHD");
+
                             break;
                         case 4:
                             textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingSFXTip");
@@ -640,14 +666,14 @@ public class CanvasController : MonoBehaviour
                         {
                             AudioController.instance.GetFx(1, MainControl.instance.AudioControl.fxClipUI);
                             SettingText(false, true);
-                            MainControl.instance.languagePack = settingSelect; 
+                            MainControl.instance.languagePack = settingSelect;
                         }
                         else
                         {
                             ExitSetting(true);
                         }
                     }
-                    else if (MainControl.instance.KeyArrowToControl(KeyCode.X) || MainControl.instance.KeyArrowToControl(KeyCode.V))
+                    else if (SceneManager.GetActiveScene().name != "Story" && (MainControl.instance.KeyArrowToControl(KeyCode.X) || MainControl.instance.KeyArrowToControl(KeyCode.V))) 
                     {
                         ExitSetting(true);
                         return;
@@ -771,4 +797,5 @@ public class CanvasController : MonoBehaviour
         animator.SetBool("Open", false);
         MainControl.instance.OutBlack("Battle", Color.black, false, -0.5f);
     }
+
 }

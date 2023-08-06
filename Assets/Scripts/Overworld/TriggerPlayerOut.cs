@@ -27,7 +27,7 @@ public class TriggerPlayerOut : MonoBehaviour
 	public string sceneBool = "SceneSp";
     [Header("ÔÚelectricOpenµÄÊ±ºòelectricOpen")]
     public bool electricOpen;
-    // Start is called before the first frame update
+    
     void Start()
     {
         animator = GetComponent<Animator>();

@@ -14,7 +14,7 @@ public class FramePlotterScript : MonoBehaviour
 
     [SerializeField] private Material material = null;
     [SerializeField] private Texture mainTex = null;
-    // Start is called before the first frame update
+    
     void Start()
     {
         vh.Clear();
@@ -37,7 +37,7 @@ public class FramePlotterScript : MonoBehaviour
 
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
         vh.Clear();

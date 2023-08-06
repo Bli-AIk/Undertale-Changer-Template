@@ -679,6 +679,11 @@ PrefabInstance:
       objectReference: {fileID: 8300000, guid: 6a3ffd5222d1e7e4ba9501f6e683080d, type: 3}
     - target: {fileID: 2735931670647202130, guid: 85a3edc090f79fb4780a6e2f72de7957,
         type: 3}
+      propertyPath: framePic
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 2735931670647202130, guid: 85a3edc090f79fb4780a6e2f72de7957,
+        type: 3}
       propertyPath: noInBlack
       value: 1
       objectReference: {fileID: 0}

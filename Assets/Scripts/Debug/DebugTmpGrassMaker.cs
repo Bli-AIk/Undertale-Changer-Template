@@ -10,7 +10,7 @@ public class DebugTmpGrassMaker : MonoBehaviour
     public List<string> strings;
     public float time, timeMax;
     bool select;
-    // Start is called before the first frame update
+    
     void Start()
     {
         strings.Add("²Ý\n²Ý");
@@ -19,7 +19,7 @@ public class DebugTmpGrassMaker : MonoBehaviour
         time = timeMax;
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
         if (time < 0)

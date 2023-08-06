@@ -199,7 +199,7 @@ public class PlayerBehaviour : MonoBehaviour
             boxTrigger.size = new Vector2(0.5f, 0.575f);
         }
     }
-    // Update is called once per frame
+    
     void FixedUpdate()
     {
         float speed;

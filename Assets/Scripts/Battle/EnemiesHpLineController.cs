@@ -13,7 +13,7 @@ public class EnemiesHpLineController : MonoBehaviour
         greenSprite = transform.GetChild(0).GetComponent<SpriteRenderer>();
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
         if (MainControl.instance.selectUIController.selectUI == 1 && MainControl.instance.selectUIController.selectLayer == 1)

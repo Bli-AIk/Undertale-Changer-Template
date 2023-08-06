@@ -76,7 +76,7 @@ namespace TMPro.Examples
             }
         }
 
-        // Update is called once per frame
+        
         void LateUpdate()
         {
             GetPlayerInput();

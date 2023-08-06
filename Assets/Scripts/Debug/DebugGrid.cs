@@ -24,7 +24,7 @@ public class DebugGrid : ObjectPool
     
     public Vector2 referenceX;
     public Vector2 referenceY;
-    // Start is called before the first frame update
+    
     void Start()
     {
         obj = Resources.Load<GameObject>("Template/Grid Template");

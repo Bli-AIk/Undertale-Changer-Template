@@ -15,7 +15,7 @@ public class StartController : MonoBehaviour
     int layer = 0;
 
     float afkTimer = 20;
-    // Start is called before the first frame update
+    
     void Start()
     {
         title = transform.Find("Title").gameObject;
@@ -25,9 +25,12 @@ public class StartController : MonoBehaviour
         textUnder.color = Color.clear;
         AudioController.instance.GetFx(11, MainControl.instance.AudioControl.fxClipUI);
         text.text = MainControl.instance.OverworldControl.sceneTextsAsset;
+
+
+        PlayerControl playerControl = SaveController.LoadData("Data" + MainControl.instance.dataNum);
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
         if (time < 5)
@@ -50,7 +53,7 @@ public class StartController : MonoBehaviour
                 case 1:
 
                     text.DOColor(Color.clear, 1).SetEase(Ease.Linear);
-                    if (MainControl.instance.PlayerControl.playerName == "")
+                    if (MainControl.instance.PlayerControl.playerName == ""|| MainControl.instance.PlayerControl.playerName == null)
                     {
                         MainControl.instance.OutBlack("Rename", Color.black, false, 2f);
                     }

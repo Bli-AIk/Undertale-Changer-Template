@@ -35,7 +35,7 @@ namespace TMPro.Examples
         }
 
 
-        // Update is called once per frame
+        
         void Update()
         {
             if (Motion == MotionType.Rotation)

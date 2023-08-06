@@ -24,7 +24,7 @@ public class DrawFrameController : MonoBehaviour
     LineRenderer lineRenderer;
     Material material;
     
-    // Start is called before the first frame update
+    
     void Start()
     {
         points.Clear();
@@ -66,7 +66,7 @@ public class DrawFrameController : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
         List<Vector2> localPoss = new List<Vector2>();

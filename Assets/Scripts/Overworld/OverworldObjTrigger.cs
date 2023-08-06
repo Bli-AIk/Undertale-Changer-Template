@@ -60,7 +60,7 @@ public class OverworldObjTrigger : MonoBehaviour
     [Header("结束时执行方法")]
     public List<string> funNames;
 
-    // Start is called before the first frame update
+    
     void Start()
     {
         transform.tag = "owObjTrigger";
@@ -100,6 +100,7 @@ public class OverworldObjTrigger : MonoBehaviour
                         MainControl.instance.PlayerControl.saveScene = SceneManager.GetActiveScene().name;
                         PlayerPrefs.SetInt("languagePack", MainControl.instance.languagePack);
                         PlayerPrefs.SetInt("dataNum", MainControl.instance.dataNum);
+                        PlayerPrefs.SetInt("hdResolution", Convert.ToInt32(MainControl.instance.OverworldControl.hdResolution));
                         break;
                     case 1:
                         goto default;

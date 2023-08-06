@@ -14,8 +14,10 @@ public class SaveController : MonoBehaviour
 
     public static void SaveData(PlayerControl data, string dataName)
     {
-        if (!File.Exists(Application.dataPath + "/Data"))
+        //Debug.Log("save");
+        if (!Directory.Exists(Application.dataPath + "/Data"))
         {
+            //Debug.Log("create");
             Directory.CreateDirectory(Application.dataPath + "/Data");
         }
         usersData[data.name] = data;
@@ -28,10 +30,8 @@ public class SaveController : MonoBehaviour
     // 读取用户数据到内存
     public static PlayerControl LoadData(string dataName)
     {
-        //if (usersData.ContainsKey(dataName))
-        //{
-        //    return usersData[dataName];
-        //}
+        //Debug.Log("load");
+
         SortAndRenameData();
         string path = Application.dataPath + string.Format("/Data/{0}.json", dataName);
         // 检查用户配置文件是否存在
@@ -51,14 +51,20 @@ public class SaveController : MonoBehaviour
     }
     public static int GetDataNum()
     {
+
+        if (!Directory.Exists(Application.dataPath + "/Data"))
+        {
+            //Debug.Log("家人们谁懂啊"+ Application.dataPath + "/Data");
+            return 0;
+        }
+
         int returnNum = 0;
         for (int i = 0; i < Directory.GetFiles(Application.dataPath + "/Data").Length; i++)
         {
             string text = Directory.GetFiles(Application.dataPath + "/Data")[i];
-            if (text.Substring(text.Length - 5) == ".json") 
+            if (text.Substring(text.Length - 5) == ".json")
                 returnNum++;
         }
-
         return returnNum;
     }
 

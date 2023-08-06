@@ -7,10 +7,10 @@
 <storyExit>漸出結束並退出到Start
 */
 
-Text\<fx=1>因爲山就在那裏。
+Text\<changeX><fx=1>因爲山就在那裏。
 <passText=2.5><fx=-1> 
 <storyFade=6>
-<passText=1><fx=1>還真是。
+<passText=1><changeX><fx=1>還真是。
 <passText=2.5> 
 <storyExit>
 ;

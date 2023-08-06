@@ -59,7 +59,7 @@ public class BoardController : MonoBehaviour
 
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
         if (keepEdge)

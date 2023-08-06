@@ -19,7 +19,7 @@ public class StorySceneController : MonoBehaviour
     {
         instance = this;
     }
-    // Start is called before the first frame update
+    
     void Start()
     {
         typeWritter = GetComponent<TypeWritter>();
@@ -27,7 +27,18 @@ public class StorySceneController : MonoBehaviour
         tmp = transform.Find("Text").GetComponent<TextMeshPro>();
         mask = transform.Find("Mask").gameObject;
 
-        typeWritter.TypeOpen(MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Text"), false, 0, 1, tmp, TypeWritter.TypeMode.CantZ);
+        typeWritter.TypeOpen(MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Text"), false, 0, 1, tmp, TypeWritter.TypeMode.CantZX);
+    }
+    private void Update()
+    {
+        if (MainControl.instance.OverworldControl.isSetting || MainControl.instance.OverworldControl.pause)
+            return;
+        if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
+        {
+            typeWritter.TypeStop();
+            tmp.text = "";
+            MainControl.instance.OutBlack("Start", Color.black);
+        }
     }
     public void Fade(int Num)
     {

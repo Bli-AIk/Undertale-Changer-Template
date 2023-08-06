@@ -13,7 +13,7 @@ public class DebugEasing : MonoBehaviour
     public string enumStr;
     LineRenderer lineRenderer;
     int setNum;
-    // Start is called before the first frame update
+    
     void Start()
     {
         lineRenderer = GetComponent<LineRenderer>();

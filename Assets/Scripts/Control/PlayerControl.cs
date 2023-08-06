@@ -23,6 +23,7 @@ public class PlayerControl : ScriptableObject
 
     public float gameTime;
 
+
     [Header("³¡¾°ÏÎ½Ó´æ´¢")]
     public string lastScene;
     public string saveScene;

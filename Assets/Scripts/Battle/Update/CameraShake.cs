@@ -5,7 +5,6 @@ using DG.Tweening;
 public class CameraShake : MonoBehaviour
 {
     Tween tween;
-
     private void Update()
     {
         if (MainControl.instance.PlayerControl.isDebug && Input.GetKeyDown(KeyCode.G))

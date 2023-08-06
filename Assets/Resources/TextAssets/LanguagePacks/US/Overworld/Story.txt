@@ -7,10 +7,10 @@
 <storyExit> - Fade out, end, and exit to Start.
 */
 
-Text\<fx=1>Because it's there.
+Text\<changeX><fx=1>Because it's there.
 <passText=2.5><fx=-1> 
 <storyFade=6> 
-<passText=1><fx=1>Indeed, it is.
+<passText=1><changeX><fx=1>Indeed, it is.
 <passText=2.5>  
 <storyExit>
 ;

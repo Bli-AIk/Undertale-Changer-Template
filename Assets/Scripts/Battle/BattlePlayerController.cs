@@ -125,7 +125,7 @@ public class BattlePlayerController : MonoBehaviour
 
         }
     }
-    // Update is called once per frame
+    
     void FixedUpdate()
     {
         if (MainControl.instance.OverworldControl.isSetting || MainControl.instance.OverworldControl.pause)

@@ -74,8 +74,8 @@ Act\NPC2\Compliment\* You compliment <getEnemiesName> on its<enter>< >< >unique 
 Act\NPC2\Hug\* You pick up <getEnemiesName>.<stop><enter>* <getEnemiesName> seems startled.<stop>.<stop>.<stop><passText>* But it feels happy.;
 Act\NPC2\Grin\* You let out an evil grin.<stop><enter>* <getEnemiesName> can't figure out<enter>< >< >what you're doing.;
 
-Mercy\NPC1\Forgive\Null;
-Mercy\NPC1\Escape\* You can't run away.;
-Mercy\NPC2\Forgive\Null;
-Mercy\NPC2\Escape\* You can't run away.;
+Mercy\NPC1\Spare\Null;
+Mercy\NPC1\Flee\* You can't run away.;
+Mercy\NPC2\Spare\Null;
+Mercy\NPC2\Flee\* You can't run away.;
 Mercy\NPC2\Let It Go\* You wish.;

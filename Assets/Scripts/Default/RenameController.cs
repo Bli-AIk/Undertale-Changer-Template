@@ -13,14 +13,14 @@ public class RenameController : MonoBehaviour
     public string setName;
     public int mode;
     Tween animMove, animScale;
-    // Start is called before the first frame update
+    
     void Start()
     {
         for (int i = 0; i < transform.childCount; i++)
         {
             tmps.Add(transform.GetChild(i).GetComponent<TextMeshPro>());
         }
-        if (MainControl.instance.PlayerControl.playerName != "")
+        if (MainControl.instance.PlayerControl.playerName != "" && MainControl.instance.PlayerControl.playerName != null)
         {
             mode = 1;
         }
@@ -82,7 +82,7 @@ strings[1] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.Overwor
 strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Rename3") + "</color>";
         
     }
-    // Update is called once per frame
+    
     void Update()
     {
         if (MainControl.instance.OverworldControl.isSetting)
@@ -102,7 +102,7 @@ strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.Overwor
                         switch (select)
                         {
                             case 52:
-                                if (MainControl.instance.PlayerControl.playerName != "")
+                                if (MainControl.instance.PlayerControl.playerName != "" && MainControl.instance.PlayerControl.playerName != null)
                                 {
                                     MainControl.instance.OutBlack("Menu", Color.black);
                                     mode = 0;
@@ -289,6 +289,7 @@ strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.Overwor
                             SaveController.SaveData(MainControl.instance.PlayerControl, "Data" + MainControl.instance.dataNum);
                             PlayerPrefs.SetInt("languagePack", MainControl.instance.languagePack);
                             PlayerPrefs.SetInt("dataNum", MainControl.instance.dataNum);
+                            PlayerPrefs.SetInt("hdResolution", System.Convert.ToInt32(MainControl.instance.OverworldControl.hdResolution));
                             MainControl.instance.OutWhite("Menu");
                             break;
                     }

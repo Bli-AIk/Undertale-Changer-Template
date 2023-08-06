@@ -19,7 +19,7 @@ public class GameoverController : MonoBehaviour
     public bool canChangeSence, canChangeSenceForC;
 
     bool foolDay;
-    // Start is called before the first frame update
+    
     void Start()
     {
         canChangeSence = false;

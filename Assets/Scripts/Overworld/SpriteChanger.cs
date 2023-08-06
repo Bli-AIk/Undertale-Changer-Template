@@ -24,7 +24,7 @@ public class SpriteChanger : MonoBehaviour
     float clock;
     bool back;
 
-    // Start is called before the first frame update
+    
     void Start()
     {
         clock = backFrame / 60f;

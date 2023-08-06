@@ -10,7 +10,7 @@ public class EnemiesController : MonoBehaviour
 {
     public Animator anim;
     public int atk, def;
-    // Start is called before the first frame update
+    
     void Start()
     {
         anim = GetComponent<Animator>();

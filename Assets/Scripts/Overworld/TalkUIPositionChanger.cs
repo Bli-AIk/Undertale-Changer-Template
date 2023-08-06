@@ -16,14 +16,14 @@ public class TalkUIPositionChanger : MonoBehaviour
     {
         talk = GameObject.Find("BackpackCanvas/RawImage/Talk/UITalk").GetComponent<TextMeshProUGUI>();
     }
-    // Start is called before the first frame update
+    
     void Start()
     {
         //gameObject.SetActive(false);
         transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, -50);
     }
 
-    // Update is called once per frame
+    
     public void Change(bool forceFlash = true, bool haveHeader = false, bool cleaner = true, TypeWritter typeWritter = null)
     {
         if (forceFlash)

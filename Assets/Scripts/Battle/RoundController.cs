@@ -23,19 +23,22 @@ public class RoundController : MonoBehaviour
         instance = this;
       
     }
-    // Start is called before the first frame update
+    
     void Start()
     {
+        GameObject saveBullet = GameObject.Find("SaveBullet");
         mainFrame = GameObject.Find("MainFrame");
         //OutYourRound();
         //µ¯Ä»
         objectPools.Add(gameObject.AddComponent<ObjectPool>());
+        objectPools[^1].parent = saveBullet.transform;
         objectPools[^1].count = poolCount[0];
         objectPools[^1].obj = Resources.Load<GameObject>("Template/Bullet Template");
         objectPools[^1].FillPool();
 
         //µ²°å
         objectPools.Add(gameObject.AddComponent<ObjectPool>());
+        objectPools[^1].parent = saveBullet.transform;
         objectPools[^1].count = poolCount[1];
         objectPools[^1].obj = Resources.Load<GameObject>("Template/Board Template");
         objectPools[^1].FillPool();

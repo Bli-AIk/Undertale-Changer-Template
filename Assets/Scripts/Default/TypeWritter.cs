@@ -54,7 +54,7 @@ public class TypeWritter : MonoBehaviour
     public enum TypeMode
     {
         Normal,//正常的打字机
-        CantZ,//不能按Z的打字机，使用富文本进行控制。
+        CantZX,//不能按ZX的打字机，使用富文本进行控制。
     }
     TypeMode typeMode = TypeMode.Normal;
     /// <summary>
@@ -371,7 +371,7 @@ public class TypeWritter : MonoBehaviour
 
         if (clockTime > 0)
             clockTime -= Time.deltaTime;
-        if (!passText && !isTyping && MainControl.instance.KeyArrowToControl(KeyCode.Z) && typeMode != TypeMode.CantZ)
+        if (!passText && !isTyping && MainControl.instance.KeyArrowToControl(KeyCode.Z) && typeMode != TypeMode.CantZX)
         {
             if (haveSpriteChanger)
                 spriteChanger.ChangeImage(-1);
@@ -379,11 +379,11 @@ public class TypeWritter : MonoBehaviour
                 canvasAnim.SetBool("Open", true);
 
         }
-        if (passText && MainControl.instance.KeyArrowToControl(KeyCode.Z) && typeMode != TypeMode.CantZ)
+        if (passText && MainControl.instance.KeyArrowToControl(KeyCode.Z) && typeMode != TypeMode.CantZX)
         {
             PassText();
         }
-        else if (!pressX && !canNotX && MainControl.instance.KeyArrowToControl(KeyCode.X))//跳字
+        else if (!pressX && !canNotX && MainControl.instance.KeyArrowToControl(KeyCode.X) && typeMode != TypeMode.CantZX)//跳字
         {
             if (clock != 0 && clockTime <= 0 && isTyping)
                 pressX = true;

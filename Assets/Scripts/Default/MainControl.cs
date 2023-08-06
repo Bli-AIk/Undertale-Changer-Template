@@ -9,13 +9,13 @@ using System.IO;
 using System.Globalization;
 using DG.Tweening.Core;
 using System.Xml.Linq;
+using UnityEditor.Rendering;
 /// <summary>
 /// 调用所有ScriptableObject 并负责对数据和语言包的导入
 /// 还包括大部分常用的函数
 /// </summary>
 public class MainControl : MonoBehaviour
 {
-
     public static MainControl instance;
     public int languagePack;
     public int dataNum;
@@ -39,6 +39,7 @@ public class MainControl : MonoBehaviour
     public PlayerBehaviour playerBehaviour;
     [Header("战斗内")]
     public DrawFrameController drawFrameController;
+    Camera cameraMainInBattle;
     public enum SceneState
     {
         Normal,
@@ -58,7 +59,7 @@ public class MainControl : MonoBehaviour
     public SelectUIController selectUIController;
 
     public CameraShake cameraShake, cameraShake3D;
-    
+
     public void SetPlayerControl(PlayerControl playerControl)
     {
         PlayerControl.hp = playerControl.hp;
@@ -201,7 +202,8 @@ public class MainControl : MonoBehaviour
 
         //--------------------------------------------------------------------------------
 
-        
+
+        OverworldControl.hdResolution = System.Convert.ToBoolean(PlayerPrefs.GetInt("hdResolution", 0));
 
     }
     public void InitializationLanguagePackFullWidth()
@@ -267,19 +269,36 @@ public class MainControl : MonoBehaviour
         selectUIController = GameObject.Find("SelectUI").GetComponent<SelectUIController>();
         cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
         cameraShake3D = GameObject.Find("3D CameraP").GetComponent<CameraShake>();
+        if (cameraMainInBattle == null)
+            cameraMainInBattle = cameraShake.GetComponent<Camera>();
     }
-    // Start is called before the first frame update
+    
     private void Awake()
     {
 
         languagePack = PlayerPrefs.GetInt("languagePack", 2);
-        dataNum = PlayerPrefs.GetInt("dataNum", 0);
+        if (PlayerPrefs.GetInt("dataNum", 0) >= 0)
+            dataNum = PlayerPrefs.GetInt("dataNum", 0);
+        else
+        {
+            PlayerPrefs.SetInt("dataNum", 0);
+            dataNum = 0;
+        }
         if (dataNum > (SaveController.GetDataNum() - 1))
+        {
             dataNum = (SaveController.GetDataNum() - 1);
+        }
+
 
         instance = this;
         InitializationLoad();
         Initialization(languagePack);
+
+
+        if (dataNum == -1)
+        {
+            SetPlayerControl(ScriptableObject.CreateInstance<PlayerControl>());
+        }
 
     }
     public void Start()
@@ -306,14 +325,27 @@ public class MainControl : MonoBehaviour
             inOutBlack.color = Color.black;
             OverworldControl.pause = !notPauseIn;
             if (!noInBlack)
+            {
                 inOutBlack.DOColor(Color.clear, 0.5f).SetEase(Ease.Linear).OnKill(EndBlack);
-            else inOutBlack.color = Color.clear;
+                if (OverworldControl.hdResolution)
+                {
+                    //CanvasController.instance.frame.DOKill();
+                    //CanvasController.instance.frame.DOColor(Color.white, 0.5f);
+                    CanvasController.instance.frame.color = new Color(1, 1, 1, 1);
+
+                }
+                else CanvasController.instance.frame.color = new Color(1, 1, 1, 0);
+            }
+            else 
+            {
+                inOutBlack.color = Color.clear;
+            } 
         }
-       
+        SetCanvasFrameSprite(CanvasController.instance.framePic);
+
         AudioListener.volume = OverworldControl.mainVolume;
         OverworldControl.isSetting = false;
 
-        SetResolution(OverworldControl.resolutionLevel);
         FindAndChangeAllSFX(OverworldControl.noSFX);
 
 
@@ -551,9 +583,20 @@ public class MainControl : MonoBehaviour
     /// </summary>
     public void ChangeResolution()
     {
-        if (OverworldControl.resolutionLevel < 4)
-            OverworldControl.resolutionLevel += 1;
-        else OverworldControl.resolutionLevel = 0;
+        if (!OverworldControl.hdResolution)
+        {
+            if (OverworldControl.resolutionLevel >= 0 && OverworldControl.resolutionLevel < 4)
+                OverworldControl.resolutionLevel += 1;
+            else
+                OverworldControl.resolutionLevel = 0;
+        }
+        else
+        {
+            if (OverworldControl.resolutionLevel >= 5 && OverworldControl.resolutionLevel < 6)
+                OverworldControl.resolutionLevel += 1;
+            else
+                OverworldControl.resolutionLevel = 5;
+        }
         SetResolution(OverworldControl.resolutionLevel);
 
     }
@@ -568,23 +611,95 @@ public class MainControl : MonoBehaviour
             y = y / 3 * 4;
         return y;
     }
+    void SetCanvasFrameSprite(int framePic = 2)//一般为CanvasController.instance.framePic
+    {
+        CanvasController.instance.frame.sprite = OverworldControl.frames[framePic];
+    }
     /// <summary>
     /// 分辨率设置
     /// </summary>
     public void SetResolution(int resolution)
     {
+        if (!OverworldControl.hdResolution)
+        {
+            if (OverworldControl.resolutionLevel > 4)
+                OverworldControl.resolutionLevel = 0;
+        }
+        else
+        {
+            if (OverworldControl.resolutionLevel < 5)
+                OverworldControl.resolutionLevel = 5;
+        }
+
+
+        if (!OverworldControl.hdResolution)
+        {
+            Camera.main.rect = new Rect(0, 0, 1, 1); 
+            if (sceneState == SceneState.InBattle)
+            {
+                if (cameraMainInBattle == null)
+                    cameraMainInBattle = cameraShake.GetComponent<Camera>();
+                cameraMainInBattle.rect = new Rect(0, 0, 1, 1);
+            }
+            // BackpackBehaviour rawImage在其脚本中控制
+            /*
+            RectTransform rectTransform = BackpackBehaviour.instance.rawImage.rectTransform;
+
+            rectTransform.offsetMin = new Vector2(0, 0);
+
+            rectTransform.offsetMax = new Vector2(0, 0);
+
+            rectTransform.localScale = Vector3.one;
+            */
+            if (BackpackBehaviour.instance != null)
+                BackpackBehaviour.instance.SuitResolution();
+
+            CanvasController.instance.DOKill();
+            CanvasController.instance.frame.color = new Color(1, 1, 1, 0);
+            CanvasController.instance.frameBack.color = new Color(1, 1, 1, 0);
+            CanvasController.instance.setting.transform.localScale = Vector3.one;
+            CanvasController.instance.setting.rectTransform.anchoredPosition = new Vector2(0, CanvasController.instance.setting.rectTransform.anchoredPosition.y);
+        }
+        else
+        {
+            Camera.main.rect = new Rect(0, 0.056f, 1, 0.888f);
+            if (sceneState == SceneState.InBattle)
+            {
+                cameraMainInBattle.rect = new Rect(0, 0.056f, 1, 0.888f);
+            }
+
+            // BackpackBehaviour rawImage在其脚本中控制
+            /*
+            RectTransform rectTransform = BackpackBehaviour.instance.rawImage.rectTransform;
+
+            rectTransform.offsetMin = new Vector2(107, 0);
+
+            rectTransform.offsetMax = new Vector2(-107, 0);
+
+            rectTransform.localScale = Vector3.one * 0.89f;
+            */
+            if (BackpackBehaviour.instance != null)
+                BackpackBehaviour.instance.SuitResolution();
+
+            //在SetCanvasFrameSprite内设定
+            //CanvasController.instance.frame.sprite = OverworldControl.frames[CanvasController.instance.framePic];
+
+
+            CanvasController.instance.DOKill();
+            CanvasController.instance.frame.DOColor(new Color(1, 1, 1, 1), 1f);
+            CanvasController.instance.frameBack.color = new Color(1, 1, 1, 1);
+            CanvasController.instance.setting.transform.localScale = Vector3.one * 0.89f;
+            CanvasController.instance.setting.rectTransform.anchoredPosition = new Vector2(142.5f, CanvasController.instance.setting.rectTransform.anchoredPosition.y);
+
+        }
+
+
         switch (resolution)
         {
             case 0:
                 Screen.SetResolution(ScreenSet(480), 480, OverworldControl.fullScreen);
                 OverworldControl.resolution = new Vector2(ScreenSet(480), 480);
                 break;
-            /* 具有显示错误 固删去
-            case 1:
-                Screen.SetResolution(ScreenSet(600), 600, OverworldControl.fullScreen);
-                OverworldControl.resolution = new Vector2(ScreenSet(600), 600);
-                break;
-            */
             case 1:
                 Screen.SetResolution(ScreenSet(768), 768, OverworldControl.fullScreen);
                 OverworldControl.resolution = new Vector2(ScreenSet(768), 768);
@@ -600,6 +715,14 @@ public class MainControl : MonoBehaviour
             case 4:
                 Screen.SetResolution(ScreenSet(1080), 1080, OverworldControl.fullScreen);
                 OverworldControl.resolution = new Vector2(ScreenSet(1080), 1080);
+                break;
+            case 5:
+                Screen.SetResolution(1920 / 2, 1080 / 2, OverworldControl.fullScreen);
+                OverworldControl.resolution = new Vector2(1920 / 2, 1080 / 2);
+                break;
+            case 6:
+                Screen.SetResolution(1920, 1080, OverworldControl.fullScreen);
+                OverworldControl.resolution = new Vector2(1920, 1080);
                 break;
             default:
                 break;
@@ -624,8 +747,12 @@ public class MainControl : MonoBehaviour
                 DOTween.To(() => bgm.volume, x => bgm.volume = x, 0, Mathf.Abs(time)).SetEase(Ease.Linear);
         }
         OverworldControl.pause = true;
-        if (time > 0)
+        if (time > 0) 
+        { 
             inOutBlack.DOColor(color, time).SetEase(Ease.Linear).OnKill(() => SwitchScene(scene));
+            if (!OverworldControl.hdResolution)
+                CanvasController.instance.frame.color = new Color(1, 1, 1, 0);
+        }
         else if (time == 0)
         {
             inOutBlack.color = color;
@@ -636,6 +763,8 @@ public class MainControl : MonoBehaviour
             time = Mathf.Abs(time);
             inOutBlack.color = color;
             inOutBlack.DOColor(color, time).SetEase(Ease.Linear).OnKill(() => SwitchScene(scene));
+            if (!OverworldControl.hdResolution)
+                CanvasController.instance.frame.color = new Color(1, 1, 1, 0);
         }
     }
     public void OutWhite(string scene)
@@ -647,12 +776,14 @@ public class MainControl : MonoBehaviour
     }
     public void SwitchScene(string name, bool Async = true)
     {
+        SetCanvasFrameSprite(2);
         if (SceneManager.GetActiveScene().name != "Menu" && SceneManager.GetActiveScene().name != "Rename" && SceneManager.GetActiveScene().name != "Story" && SceneManager.GetActiveScene().name != "Start" && SceneManager.GetActiveScene().name != "Gameover")
             PlayerControl.lastScene = SceneManager.GetActiveScene().name;
         if (Async)
             SceneManager.LoadSceneAsync(name);
         else SceneManager.LoadScene(name);
 
+        SetResolution(instance.OverworldControl.resolutionLevel);
         blacking = false;
     }
     /// <summary>

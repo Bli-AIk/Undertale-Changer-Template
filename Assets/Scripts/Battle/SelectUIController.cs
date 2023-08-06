@@ -50,7 +50,7 @@ public class SelectUIController : MonoBehaviour
     [Header("首次进入回合的时候播放自定义的回合文本")]
     public bool firstIn = false;
     public int firstInDiy = -1;
-    // Start is called before the first frame update
+    
     void Start()
     {
         target = transform.Find("Target").GetComponent<TargetController>();
@@ -97,7 +97,7 @@ public class SelectUIController : MonoBehaviour
         InRound();
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
         if (MainControl.instance.OverworldControl.isSetting || MainControl.instance.OverworldControl.pause)
@@ -189,6 +189,7 @@ public class SelectUIController : MonoBehaviour
     /// </summary>
     void MyRound()
     {
+
         switch (selectLayer)
         {
             case 0:
@@ -294,6 +295,9 @@ public class SelectUIController : MonoBehaviour
                             target.select = selectSon;
                             target.transform.Find("Move").transform.position = new Vector3(MainControl.instance.BattleControl.enemies[selectSon].transform.position.x, target.transform.Find("Move").transform.position.y);
                             target.hitMonster = enemiesControllers[selectSon];
+
+                            Debug.Log(1111);
+                            MainControl.instance.battlePlayerController.transform.position = Vector2.one * 10000;
                         }
                         break;
                     case 2://ACT：选择敌人
@@ -323,6 +327,11 @@ public class SelectUIController : MonoBehaviour
                             {
                                 actSave[i] = actSave[i].Substring(0, actSave[i].Length - 1);
                             }
+
+
+                            textUIBack.rectTransform.anchoredPosition = new Vector2(10.75f, -3.3f);
+                            textUIBack.alignment = TextAlignmentOptions.TopLeft;
+
                         }
                         break;
                     case 3://ITEM：跳2
@@ -352,25 +361,6 @@ public class SelectUIController : MonoBehaviour
                 switch (selectUI)
                 {
                     case 2:
-                        if (MainControl.instance.KeyArrowToControl(KeyCode.X))
-                        {
-                            selectLayer = 1;
-                            selectGrandSon = 1;
-                            textUI.text = "";
-                            textUIBack.text = "";
-                            for (int i = 0; i < MainControl.instance.BattleControl.enemies.Count; i++)
-                            {
-                                textUI.text += "<color=#00000000>aa*</color>* " + MainControl.instance.BattleControl.enemies[i].name + "\n";
-                            }
-                        }
-                        else if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
-                        {
-                            textUIBack.text = "";
-                            selectLayer = 3;
-                            Type(actSave[2 * (selectGrandSon + 1) - 3]);
-                            SpriteChange();
-                            itemSelectController.Close();
-                        }
                         if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow) && selectGrandSon - 2 >= 1)
                         {
                             AudioController.instance.GetFx(0, MainControl.instance.AudioControl.fxClipUI);
@@ -391,7 +381,7 @@ public class SelectUIController : MonoBehaviour
                             AudioController.instance.GetFx(0, MainControl.instance.AudioControl.fxClipUI);
                             selectGrandSon++;
                         }
-                        
+
                         float playerPosX, playerPosY;
                         if (selectGrandSon % 2 == 0)
                         {
@@ -410,6 +400,27 @@ public class SelectUIController : MonoBehaviour
                             playerPosY = -0.96f - 1 * 0.66f;
                         }
                         MainControl.instance.battlePlayerController.transform.position = new Vector3(playerPosX, playerPosY);
+                        if (MainControl.instance.KeyArrowToControl(KeyCode.X))
+                        {
+                            selectLayer = 1;
+                            selectGrandSon = 1;
+                            textUI.text = "";
+                            textUIBack.text = "";
+                            for (int i = 0; i < MainControl.instance.BattleControl.enemies.Count; i++)
+                            {
+                                textUI.text += "<color=#00000000>aa*</color>* " + MainControl.instance.BattleControl.enemies[i].name + "\n";
+                            }
+                        }
+                        else if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
+                        {
+                            textUIBack.text = "";
+                            selectLayer = 3;
+                            MainControl.instance.battlePlayerController.transform.position = Vector2.one * 10000;
+                            Type(actSave[2 * (selectGrandSon + 1) - 3]);
+                            SpriteChange();
+                            itemSelectController.Close();
+                        }
+                   
 
 
                         break;
@@ -435,6 +446,7 @@ public class SelectUIController : MonoBehaviour
                         else if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
                         {
                             selectLayer = 3;
+                            MainControl.instance.battlePlayerController.transform.position = Vector2.one * 10000;
                             MainControl.instance.UseItem(typeWritter, textUI, selectSon + 1);
                             SpriteChange();
                             itemSelectController.Close();
@@ -553,9 +565,15 @@ public class SelectUIController : MonoBehaviour
                         else if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
                         {
                             selectLayer = 3;
+                            MainControl.instance.battlePlayerController.transform.position = Vector2.one * 10000;
                             if (actSave[2 * (selectGrandSon + 1) - 3] != "Null")
                                 Type(actSave[2 * (selectGrandSon + 1) - 3]);
-                            
+                            else
+                            {
+                                textUI.text = "";
+                                MainControl.instance.battlePlayerController.transform.position = new Vector3(0, -1.5f);
+                                OpenDialogBubble(MainControl.instance.BattleControl.roundDialogAsset[RoundController.instance.round]);
+                            }
                                 SpriteChange();
                             itemSelectController.Close();
                         }
@@ -579,41 +597,41 @@ public class SelectUIController : MonoBehaviour
                 MainControl.instance.forceJumpLoadRound = true;
                 firstIn = false;
 
-                if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
-                    MainControl.instance.battlePlayerController.collideCollider.enabled = true;
-
-                if (!isDialog)
+                if (((selectUI == 1) && !target.gameObject.activeSelf))
                 {
-                    if (selectUI != 1 && textUI.text == "")
+                    if (MainControl.instance.battlePlayerController.transform.position != new Vector3(0, -1.5f))
                     {
+                        textUI.text = "";
+                        MainControl.instance.battlePlayerController.transform.position = new Vector3(0, -1.5f);
                         OpenDialogBubble(MainControl.instance.BattleControl.roundDialogAsset[RoundController.instance.round]);
-                        MainControl.instance.battlePlayerController.transform.position = new Vector2(0, -1.5f);
-                        break;
                     }
-                    if (selectUI != 1 && !typeWritter.isTyping)
-                    {
-                        if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
-                        {
-                            textUI.text = "";
-                            MainControl.instance.battlePlayerController.transform.position = new Vector2(0, -1.5f);
-                            OpenDialogBubble(MainControl.instance.BattleControl.roundDialogAsset[RoundController.instance.round]);
+                }
+                else if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
+                {
 
-                        }
-                    }
-                    else if (selectUI == 1 && !target.gameObject.activeSelf)
+                    MainControl.instance.battlePlayerController.collideCollider.enabled = true;
+                    if (!isDialog)
                     {
-                        if (MainControl.instance.battlePlayerController.transform.position != new Vector3(0, -1.5f))
+                        if (selectUI != 1 && textUI.text == "")
                         {
-                            MainControl.instance.battlePlayerController.transform.position = new Vector3(0, -1.5f);
                             OpenDialogBubble(MainControl.instance.BattleControl.roundDialogAsset[RoundController.instance.round]);
+                            MainControl.instance.battlePlayerController.transform.position = new Vector2(0, -1.5f);
+                            break;
                         }
-                    }
-                    else
-                    {
-                        MainControl.instance.battlePlayerController.transform.position = Vector2.one * 10000;
+                        if (selectUI != 1 && !typeWritter.isTyping)
+                        {
+                            if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
+                            {
+                                textUI.text = "";
+                                MainControl.instance.battlePlayerController.transform.position = new Vector2(0, -1.5f);
+                                OpenDialogBubble(MainControl.instance.BattleControl.roundDialogAsset[RoundController.instance.round]);
+
+                            }
+                        }
                     }
 
                 }
+
 
 
                 break;

@@ -44,6 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5490c4644a0d1a04f9a05bf9b0daa074, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  renderMode: 0
+  framePic: 2
   bgmClip: {fileID: 0}
   volume: 0.5
   pitch: 1

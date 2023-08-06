@@ -15,6 +15,7 @@ public class MainControlSummon : MonoBehaviour
 {
     [Header("-Canvas设置-")]
     public RenderMode renderMode;
+    public int framePic;
     [Space]
 
     [Header("-BGMControl设置-")]
@@ -50,11 +51,13 @@ public class MainControlSummon : MonoBehaviour
         {
             canvas = Instantiate(Resources.Load<GameObject>("Prefabs/Canvas"));
             canvas.name = "Canvas";
+            CanvasController.instance.framePic = framePic;
             CanvasController.instance.renderMode = renderMode;
             DontDestroyOnLoad(canvas);
         }
         else
         {
+            CanvasController.instance.framePic = framePic;
             CanvasController.instance.renderMode = renderMode;
             CanvasController.instance.Start();
         }
@@ -98,6 +101,7 @@ public class MainControlSummon : MonoBehaviour
             mainControl.notPauseIn = notPauseIn;
             mainControl.InitializationOverworld();
             mainControl.Start();
+            mainControl.SetResolution(instance.OverworldControl.resolutionLevel);
             return;
         }
         //生成
@@ -115,6 +119,7 @@ public class MainControlSummon : MonoBehaviour
 
         mainControl.gameObject.name = "MainControl";
         mainControl.InitializationOverworld();
+        mainControl.SetResolution(instance.OverworldControl.resolutionLevel);
 
     }
 }

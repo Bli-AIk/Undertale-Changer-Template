@@ -5,7 +5,7 @@ using DG.Tweening;
 public class DebugDoTween : MonoBehaviour
 {
 
-    // Start is called before the first frame update
+    
     void Start()
     {
         transform.DOMove(transform.position + new Vector3(10, 0, 0), 1, false)
@@ -14,7 +14,7 @@ public class DebugDoTween : MonoBehaviour
         
     }
 
-    // Update is called once per frame
+    
     /*
      void DoTweenVoid()
     {

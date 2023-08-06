@@ -17,8 +17,8 @@ MonoBehaviour:
     m_OverrideState: 1
     m_Value: 1
   draw:
-    m_OverrideState: 0
-    m_Value: {x: 0.125, y: 0.125}
+    m_OverrideState: 1
+    m_Value: {x: 0, y: 0}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0

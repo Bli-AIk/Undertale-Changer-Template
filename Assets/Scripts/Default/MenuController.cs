@@ -15,7 +15,7 @@ public class MenuController : MonoBehaviour
     public int layer;
     bool setData;
 
-    int saveNum;
+    public int saveNum;
 
     private void Awake()
     {
@@ -26,11 +26,13 @@ public class MenuController : MonoBehaviour
             tmps.Add(transform.GetChild(i).GetComponent<TextMeshPro>());
         }
     }
-    // Start is called before the first frame update
+    
     void Start()
     {
         setData = false;
         layer = 0;
+        if (MainControl.instance.dataNum < 0)
+            MainControl.instance.dataNum = 0;
         MainControl.instance.SetPlayerControl(SaveController.LoadData("Data" + MainControl.instance.dataNum));
         saveNum = MainControl.instance.dataNum;
         LoadLayer0();
@@ -102,7 +104,7 @@ public class MenuController : MonoBehaviour
                     switch (select)
                     {
                         case 0:
-                            MainControl.instance.OutBlack("Example-Corridor", Color.black, true);
+                            MainControl.instance.OutBlack(MainControl.instance.PlayerControl.saveScene, Color.black, true);
                             break;
                         case 1:
                             MainControl.instance.OutBlack("Rename", Color.black, true);
