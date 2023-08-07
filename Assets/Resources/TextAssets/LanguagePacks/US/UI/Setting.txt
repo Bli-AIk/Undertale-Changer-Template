@@ -49,11 +49,16 @@ Open\ON;
 Close\OFF;
 Back\Return;
 Save\Save;
+PageDown\PageDown;
+PageUp\PageUp;
 
 SettingMainVolumeTip\Adjust global volume.;
 SettingControlTip\Key setting.;
 SettingFullScreenTipOpen\Enable Full screen.;
 SettingFullScreenTipClose\When Full screen is enabled, it is recommended to increase the resolution.;
+VSyncNone\(vertical synchronization not enabled, press C to set);
+VSyncFull\(vertical synchronization: all, press C to set);
+VSyncHalf\(vertical synchronization: half, press C to set);
 SettingResolvingTip\Set game window size.(Press C to switch to 16:9);
 SettingResolvingTipHD\Set game window size.(Press C to switch to 4:3);
 SettingSFXTip\Set whether the light effects and special effects in the game are enabled.;

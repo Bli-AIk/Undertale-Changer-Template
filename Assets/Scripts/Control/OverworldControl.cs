@@ -54,5 +54,12 @@ public class OverworldControl : ScriptableObject
 
 
     //[Header("游戏内需要存档的数据在下面写")]
-
+    [Header("垂直同步")]
+    public VSyncMode vsyncMode;
+    public enum VSyncMode
+    {
+        DonNotSync, // 不同步
+        SyncToRefreshRate, // 同步到屏幕刷新率
+        HalfSync // 同步到屏幕刷新率的一半
+    }
 }

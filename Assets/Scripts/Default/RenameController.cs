@@ -4,6 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using TMPro;
 using UnityEngine.Rendering;
+using System;
 
 public class RenameController : MonoBehaviour
 {
@@ -171,7 +172,7 @@ strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.Overwor
                 }
                 else if (MainControl.instance.KeyArrowToControl(KeyCode.C, 1))
                 {
-                    setName = MainControl.instance.RandomName(Random.Range(1, 7));
+                    setName = MainControl.instance.RandomName(UnityEngine.Random.Range(1, 7));
                 }
                 if (breaker) break;
                 if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow))
@@ -289,7 +290,10 @@ strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.Overwor
                             SaveController.SaveData(MainControl.instance.PlayerControl, "Data" + MainControl.instance.dataNum);
                             PlayerPrefs.SetInt("languagePack", MainControl.instance.languagePack);
                             PlayerPrefs.SetInt("dataNum", MainControl.instance.dataNum);
-                            PlayerPrefs.SetInt("hdResolution", System.Convert.ToInt32(MainControl.instance.OverworldControl.hdResolution));
+                            PlayerPrefs.SetInt("hdResolution", Convert.ToInt32(MainControl.instance.OverworldControl.hdResolution));
+                            PlayerPrefs.SetInt("noSFX", Convert.ToInt32(MainControl.instance.OverworldControl.noSFX));
+                            PlayerPrefs.SetInt("vsyncMode", Convert.ToInt32(MainControl.instance.OverworldControl.vsyncMode));
+
                             MainControl.instance.OutWhite("Menu");
                             break;
                     }

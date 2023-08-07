@@ -38,11 +38,16 @@ Open\開;
 Close\關;
 Save\保存;
 Back\返回;
+PageDown\下一頁;
+PageUp\上一頁;
 
 SettingMainVolumeTip\調節全局音量大小。;
 SettingControlTip\按鍵設置。;
 SettingFullScreenTipOpen\開啓全屏模式。;
 SettingFullScreenTipClose\在全屏狀態下，建議將分辨率調高。;
+VSyncNone\(垂直同步未開啓，按C設置);
+VSyncFull\(垂直同步：全部，按C設置);
+VSyncHalf\(垂直同步：一半，按C設置);
 SettingResolvingTip\設置遊戲窗口大小。(按C切換爲16:9);
 SettingResolvingTipHD\設置遊戲窗口大小。(按C切換爲4:3);
 SettingSFXTip\設置遊戲內的光效與特效是否開啓。;

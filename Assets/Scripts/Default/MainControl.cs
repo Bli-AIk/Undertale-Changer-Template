@@ -10,6 +10,7 @@ using System.Globalization;
 using DG.Tweening.Core;
 using System.Xml.Linq;
 using UnityEditor.Rendering;
+using System;
 /// <summary>
 /// 调用所有ScriptableObject 并负责对数据和语言包的导入
 /// 还包括大部分常用的函数
@@ -203,7 +204,9 @@ public class MainControl : MonoBehaviour
         //--------------------------------------------------------------------------------
 
 
-        OverworldControl.hdResolution = System.Convert.ToBoolean(PlayerPrefs.GetInt("hdResolution", 0));
+        OverworldControl.hdResolution = Convert.ToBoolean(PlayerPrefs.GetInt("hdResolution", 0));
+        OverworldControl.noSFX = Convert.ToBoolean(PlayerPrefs.GetInt("noSFX", 0));
+        OverworldControl.vsyncMode = (OverworldControl.VSyncMode)PlayerPrefs.GetInt("vsyncMode", 0);
 
     }
     public void InitializationLanguagePackFullWidth()
@@ -275,7 +278,6 @@ public class MainControl : MonoBehaviour
     
     private void Awake()
     {
-
         languagePack = PlayerPrefs.GetInt("languagePack", 2);
         if (PlayerPrefs.GetInt("dataNum", 0) >= 0)
             dataNum = PlayerPrefs.GetInt("dataNum", 0);
@@ -577,6 +579,15 @@ public class MainControl : MonoBehaviour
         }
         */
         Camera.main.GetUniversalAdditionalCameraData().renderPostProcessing = !isClose;
+
+        if (sceneState == SceneState.InBattle)
+        {
+            if (cameraMainInBattle == null)
+                cameraMainInBattle = cameraShake.GetComponent<Camera>();
+            cameraMainInBattle.GetUniversalAdditionalCameraData().renderPostProcessing = !isClose;
+
+
+        }
     }
     /// <summary>
     /// 按按tab改改分辨率那样子))

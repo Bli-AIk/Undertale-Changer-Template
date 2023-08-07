@@ -147,7 +147,7 @@ public class CanvasController : MonoBehaviour
                        strings[3] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlLeft") + "</color>" + '\n' +
                        strings[4] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlZ") + "</color>" + '\n' +
                        strings[5] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlX") + "</color>" + '\n' +
-                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "PageNext") + '\n' +
+                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "PageDown") + '\n' +
                        MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlDefault") + '\n' +
                        MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Back");
 
@@ -182,7 +182,7 @@ public class CanvasController : MonoBehaviour
                        strings[3] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlTab") + "</color>" + '\n' +
                        strings[4] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlSemicolon") + "</color>" + '\n' +
                        strings[5] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlEsc") + "</color>" + '\n' +
-                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "PageLast") + '\n' +
+                       MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "PageUp") + '\n' +
                        MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlDefault") + '\n' +
                        MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Back");
                         settingTmpSon.text = "";
@@ -486,6 +486,7 @@ public class CanvasController : MonoBehaviour
                                 case 4:
                                     MainControl.instance.OverworldControl.noSFX = !MainControl.instance.OverworldControl.noSFX;
                                     MainControl.instance.FindAndChangeAllSFX(MainControl.instance.OverworldControl.noSFX);
+                                    PlayerPrefs.SetInt("noSFX", Convert.ToInt32(MainControl.instance.OverworldControl.noSFX));
                                     goto default;
                                 case 5:
                                     MainControl.instance.OverworldControl.openFPS = !MainControl.instance.OverworldControl.openFPS;
@@ -533,7 +534,19 @@ public class CanvasController : MonoBehaviour
                     {
                         if (!isSettingName)
                         {
-                            if (settingSelect == 3)
+                            if (settingSelect == 2)
+                            {
+                                AudioController.instance.GetFx(1, MainControl.instance.AudioControl.fxClipUI);
+                                if ((int)MainControl.instance.OverworldControl.vsyncMode < 2)
+                                    MainControl.instance.OverworldControl.vsyncMode++;
+                                else
+                                    MainControl.instance.OverworldControl.vsyncMode = OverworldControl.VSyncMode.DonNotSync;
+
+
+                                PlayerPrefs.SetInt("vsyncMode", Convert.ToInt32(MainControl.instance.OverworldControl.vsyncMode));
+
+                            }
+                            else if (settingSelect == 3)
                             {
                                 AudioController.instance.GetFx(1, MainControl.instance.AudioControl.fxClipUI);
                                 MainControl.instance.OverworldControl.hdResolution = !MainControl.instance.OverworldControl.hdResolution;
@@ -555,10 +568,26 @@ public class CanvasController : MonoBehaviour
                             textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingControlTip");
                             break;
                         case 2:
+                            string vsyncModeAdd;
+                            switch (MainControl.instance.OverworldControl.vsyncMode)
+                            {
+                                case OverworldControl.VSyncMode.DonNotSync:
+                                    vsyncModeAdd = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "VSyncNone");
+                                    break;
+                                case OverworldControl.VSyncMode.SyncToRefreshRate:
+                                    vsyncModeAdd = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "VSyncFull");
+                                    break;
+                                case OverworldControl.VSyncMode.HalfSync:
+                                    vsyncModeAdd = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "VSyncHalf");
+                                    break;
+                                default:
+                                    goto case OverworldControl.VSyncMode.DonNotSync;
+                            }
+
                             if (!MainControl.instance.OverworldControl.fullScreen)
-                                textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingFullScreenTipOpen");
+                                textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingFullScreenTipOpen") + "\n" + vsyncModeAdd;
                             else
-                                textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingFullScreenTipClose");
+                                textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingFullScreenTipClose") + "\n" + vsyncModeAdd;
                             break;
                         case 3:
                             if (!MainControl.instance.OverworldControl.hdResolution)

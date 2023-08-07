@@ -101,6 +101,8 @@ public class OverworldObjTrigger : MonoBehaviour
                         PlayerPrefs.SetInt("languagePack", MainControl.instance.languagePack);
                         PlayerPrefs.SetInt("dataNum", MainControl.instance.dataNum);
                         PlayerPrefs.SetInt("hdResolution", Convert.ToInt32(MainControl.instance.OverworldControl.hdResolution));
+                        PlayerPrefs.SetInt("noSFX", Convert.ToInt32(MainControl.instance.OverworldControl.noSFX));
+                        PlayerPrefs.SetInt("vsyncMode", Convert.ToInt32(MainControl.instance.OverworldControl.vsyncMode));
                         break;
                     case 1:
                         goto default;
