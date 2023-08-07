@@ -1331,7 +1331,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a3ecd31ce8ed72499cbcef45da89694, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  notUGUI: 1
   width: 0
   Options:
   - {x: -3.8, y: -20.25, z: 0, w: 0}
@@ -2575,7 +2574,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1095964733
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2687,7 +2686,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1114329916}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -20, y: -20, z: -10}
+  m_LocalPosition: {x: -20, y: 20, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3376,7 +3375,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a3ecd31ce8ed72499cbcef45da89694, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  notUGUI: 1
   width: 0
   Options:
   - {x: -3.8, y: -20.25, z: 0, w: 0}
@@ -4084,7 +4082,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a3ecd31ce8ed72499cbcef45da89694, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  notUGUI: 1
   width: 0
   Options:
   - {x: -3.8, y: -20.25, z: 0, w: 0}
@@ -4271,6 +4268,8 @@ GameObject:
   - component: {fileID: 2034549792}
   - component: {fileID: 2034549791}
   - component: {fileID: 2034549790}
+  - component: {fileID: 2034549795}
+  - component: {fileID: 2034549794}
   m_Layer: 5
   m_Name: Text UI
   m_TagString: Untagged
@@ -4285,12 +4284,12 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2034549789}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 004b7bcff67749046bb833215590b08e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mode: 1
+  mode: 0
 --- !u!114 &2034549791
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4446,6 +4445,54 @@ RectTransform:
   m_AnchoredPosition: {x: -20, y: 20}
   m_SizeDelta: {x: 12, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &2034549794
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2034549789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ddf015ccf3f30344b1f5fe3cb4380ce, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2034549795
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2034549789}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c19054dda1046cb4282efa91874c1526, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  originString: 
+  endString: 
+  isTyping: 0
+  hpIn: 0
+  hpSave: 0
+  canNotX: 0
+  pressX: 0
+  clockTime: 0
+  isStop: 0
+  fx: 0
+  fxRandomPitch: 0
+  speed: 0.075
+  speedSlow: 0.15
+  clock: 0.1
+  passTextString: 0
+  passText: 0
+  haveSpriteChanger: 0
+  spriteChanger: {fileID: 0}
+  isOverworld: 0
+  pitch: 1
+  volume: 0.5
+  audioMixerGroup: {fileID: 0}
+  useFont: 0
+  forceReturn: 0
 --- !u!1 &2037548602
 GameObject:
   m_ObjectHideFlags: 0
