@@ -413,6 +413,65 @@ public class SelectUIController : MonoBehaviour
                         }
                         else if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
                         {
+                            switch (selectSon)//在这里写ACT的相关触发代码
+                            {
+                                case 0://怪物0
+                                    switch (selectGrandSon)//选项
+                                    {
+                                        case 1:
+
+                                            break;
+                                        case 2:
+
+                                            Debug.Log(1);
+                                            AudioController.instance.GetFx(3, MainControl.instance.AudioControl.fxClipBattle);
+
+                                            break;
+                                        case 3:
+
+                                            break;
+                                        case 4:
+
+                                            break;
+                                    }
+                                    break;
+                                case 1://怪物1
+                                    switch (selectGrandSon)//选项
+                                    {
+                                        case 1:
+
+                                            break;
+                                        case 2:
+
+                                            break;
+                                        case 3:
+
+                                            break;
+                                        case 4:
+
+                                            break;
+                                    }
+                                    break;
+                                case 2://怪物2
+                                    switch (selectGrandSon)//选项
+                                    {
+                                        case 1:
+
+                                            break;
+                                        case 2:
+
+                                            break;
+                                        case 3:
+
+                                            break;
+                                        case 4:
+
+                                            break;
+                                    }
+                                    break;
+                            }
+
+
                             textUIBack.text = "";
                             selectLayer = 3;
                             MainControl.instance.battlePlayerController.transform.position = Vector2.one * 10000;
