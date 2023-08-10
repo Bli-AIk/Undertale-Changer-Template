@@ -54,4 +54,4 @@ Plot\<image=-1><fx=0>* .<stop>.<stop>.<stop>.<stop>.<stop>.
 
 Save\<image=-1><fx=0>* (The floor of corridor was<enter>< >< >covered in golden light,filling<enter>< >< >you with <gradient="White to Red - UTC">determination</gradient>.);
 
-BackMenu\<image=-1><fx=1>* (This is a test text, meow.)<enter>* (Do you want to go back to the MENU scene, meow?)<enter><fx=-1><size=5> </size>< >< >< >< >< >< >  Meow<size=5> </size>< >< >< >< >< >< >< >  Annoyed<select>BackMenu;
+BackMenu\<image=-1><fx=1>* (This is a test text, meow.)<enter>* (Wanna back to the MENU, meow?)<enter><fx=-1><size=5> </size>< >< >< >< >< >< >   Meow<size=5> </size>< >< >< >< >< >< >< > Annoyed<select>BackMenu;

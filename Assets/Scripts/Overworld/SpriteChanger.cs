@@ -16,10 +16,9 @@ public class SpriteChanger : MonoBehaviour
     public bool inOverWorld;
 
     TypeWritter typeWritter;
-    TalkUIPositionChanger talkUIPositionChanger;
     SpriteRenderer sprite;
     Image spriteImage;
-
+    TalkUIPositionChanger talkUIPositionChanger;
     int num;
     float clock;
     bool back;
@@ -29,7 +28,7 @@ public class SpriteChanger : MonoBehaviour
     {
         clock = backFrame / 60f;
         if (inOverWorld)
-            talkUIPositionChanger = GameObject.Find("Main Camera/TalkUI").GetComponent<TalkUIPositionChanger>();
+            talkUIPositionChanger = TalkUIPositionChanger.instance;
         if (haveBack)
             typeWritter = GetComponent<TypeWritter>();
 

@@ -21,7 +21,6 @@ public class BackpackBehaviour : MonoBehaviour
     float clock;
     GameObject BackpackUILeft, BackpackUIRight, player, mainCamera;
     GameObject BackpackUIRightPoint2, BackpackUIRightPoint3;
-    TalkUIPositionChanger talkUI;
 
     public GameObject saveBack;
     public TextMeshProUGUI saveUI;
@@ -33,7 +32,6 @@ public class BackpackBehaviour : MonoBehaviour
     {
         instance = this;
         rawImage = GameObject.Find("BackpackCanvas/RawImage").GetComponent<RawImage>();
-        talkUI = GameObject.Find("Main Camera/TalkUI").GetComponent<TalkUIPositionChanger>();
         typeMessage = GameObject.Find("BackpackCanvas/RawImage/Talk/UITalk").GetComponent<TextMeshProUGUI>();
     }
     
@@ -98,7 +96,7 @@ public class BackpackBehaviour : MonoBehaviour
             }
 
 
-            talkUI.isUp = player.transform.position.y < mainCamera.transform.position.y - 1.25f;
+        TalkUIPositionChanger.instance.isUp = player.transform.position.y < mainCamera.transform.position.y - 1.25f;
 
             if (player.transform.position.y >= mainCamera.transform.position.y - 1.25f)
             {
@@ -250,10 +248,10 @@ public class BackpackBehaviour : MonoBehaviour
                                             break;
 
                                         }
-                                        if (talkUI.transform.localPosition.z < 0)
+                                        if (TalkUIPositionChanger.instance.transform.localPosition.z < 0)
                                         {
-                                            talkUI.Change();
-                                            talkUI.transform.localPosition = new Vector3(talkUI.transform.localPosition.x, talkUI.transform.localPosition.y, 5);
+                                            TalkUIPositionChanger.instance.Change();
+                                            TalkUIPositionChanger.instance.transform.localPosition = new Vector3(TalkUIPositionChanger.instance.transform.localPosition.x, TalkUIPositionChanger.instance.transform.localPosition.y, 5);
                                             //Debug.LogWarning(talkUI.transform.localPosition.z);
                                         }
                                         break;
@@ -416,7 +414,7 @@ public class BackpackBehaviour : MonoBehaviour
             backpack.gameObject.SetActive(false);
             BackpackUILeft.transform.parent.localPosition = new Vector3(BackpackUILeft.transform.parent.localPosition.x, BackpackUILeft.transform.parent.localPosition.y, -50);
             typeWritter.TypeStop();
-            talkUI.transform.localPosition = new Vector3(talkUI.transform.localPosition.x, talkUI.transform.localPosition.y, -50);
+            TalkUIPositionChanger.instance.transform.localPosition = new Vector3(TalkUIPositionChanger.instance.transform.localPosition.x, TalkUIPositionChanger.instance.transform.localPosition.y, -50);
             //Debug.Log(talkUI.transform.localPosition.z);
             sonUse = 0;
             sonSelect = 0;

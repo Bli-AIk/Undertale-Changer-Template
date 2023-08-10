@@ -46,7 +46,7 @@ public class TypeWritter : MonoBehaviour
     private void Start()
     {
         if (isOverworld)
-            talkUIPositionChanger = GameObject.Find("Main Camera/TalkUI").GetComponent<TalkUIPositionChanger>();
+            talkUIPositionChanger = TalkUIPositionChanger.instance;
         if (haveSpriteChanger)
             spriteChanger = GetComponent<SpriteChanger>();
     }
@@ -224,8 +224,9 @@ public class TypeWritter : MonoBehaviour
                 originString = originString.Substring(0, originString.Length - text.Length);
                 //passTextString--;
                 originString += 'Ýž';
-                GetComponent<OverworldTalkSelect>().typeText = text;
-                GetComponent<OverworldTalkSelect>().Open();
+                OverworldTalkSelect.instance.typeText = text;
+                OverworldTalkSelect.instance.Open();
+                isTyping = false;
             }
             else if (originString[i] == 'ý“')//Í£¶Ù
             {

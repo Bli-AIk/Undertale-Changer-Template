@@ -11,15 +11,19 @@ using DG.Tweening;
 /// </summary>
 public class OverworldTalkSelect : MonoBehaviour
 {
+    public static OverworldTalkSelect instance;
     public int select;
     Image heart;
     bool canSelect;
     TypeWritter typeWritter;
     public List<string> texts;
-    public List<Sprite> sprites;
-    float saveFloat;
     public string typeText;
-    
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
     void Start()
     {
         typeWritter = GameObject.Find("BackpackCanvas").GetComponent<TypeWritter>();
@@ -83,8 +87,7 @@ public class OverworldTalkSelect : MonoBehaviour
 
                             case "BackMenu":
                                 typeWritter.forceReturn = true;
-                                MainControl.instance.OverworldControl.pause = true;
-                                MainControl.instance.OutWhite("Menu");
+                                MainControl.instance.OutBlack("Menu", Color.black, true, 0f);
                                 AudioController.instance.audioSource.volume = 0;
                                 break;
                             
@@ -97,7 +100,6 @@ public class OverworldTalkSelect : MonoBehaviour
                 }
                 heart.color = Color.clear;
                 canSelect = false;
-                typeText = "";
                 return;
             }
 

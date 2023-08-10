@@ -43,7 +43,6 @@ public class OverworldObjTrigger : MonoBehaviour
     [Header("OW跳场景锁定进入时方向 0无 -1左右 1上下")]
     public int onlyDir;
     AudioSource bgm;
-    TalkUIPositionChanger talkUI;
     TypeWritter typeWritter;
 
     [Header("结束时调用动画器并将下设为true")]
@@ -64,8 +63,7 @@ public class OverworldObjTrigger : MonoBehaviour
     void Start()
     {
         transform.tag = "owObjTrigger";
-        talkUI = GameObject.Find("Main Camera/TalkUI").GetComponent<TalkUIPositionChanger>();
-        mainCamera = talkUI.transform.parent.GetComponent<CameraFollowPlayer>();
+        mainCamera = TalkUIPositionChanger.instance.transform.parent.GetComponent<CameraFollowPlayer>();
         typeWritter = BackpackBehaviour.instance.typeWritter;
         bgm = AudioController.instance.audioSource;
     }
@@ -127,7 +125,6 @@ public class OverworldObjTrigger : MonoBehaviour
             }
                 
         }
-
         //检测相关见PlayerBehaviour
         if (isTyping && MainControl.instance.KeyArrowToControl(KeyCode.Z) && !typeWritter.isTyping)
         {
@@ -146,9 +143,10 @@ public class OverworldObjTrigger : MonoBehaviour
             if (endSelf)
                 gameObject.SetActive(false);
         }
+
         isTyping = false;
         BackpackBehaviour.instance.typeMessage.text = "";
-        talkUI.transform.localPosition = new Vector3(talkUI.transform.localPosition.x, talkUI.transform.localPosition.y, -50);
+        TalkUIPositionChanger.instance.transform.localPosition = new Vector3(TalkUIPositionChanger.instance.transform.localPosition.x, TalkUIPositionChanger.instance.transform.localPosition.y, -50);
         //Debug.Log(talkUI.transform.localPosition.z);
         if (isSave && !saveOpen)
         {
@@ -200,15 +198,13 @@ public class OverworldObjTrigger : MonoBehaviour
 		isTyping = true;
         MainControl.instance.PlayerControl.canMove = false;
         MainControl.instance.OverworldControl.pause = true;
-        talkUI.Change(true);
+        TalkUIPositionChanger.instance.Change(true);
 
-        //if (!talkUI.gameObject.activeSelf)
-        if (talkUI.transform.localPosition.z < 0)
+        if (TalkUIPositionChanger.instance.transform.localPosition.z < 0)
         {
-            talkUI.transform.localPosition = new Vector3(talkUI.transform.localPosition.x, talkUI.transform.localPosition.y, 5);
-            //Debug.Log(talkUI.transform.localPosition.z);
+            TalkUIPositionChanger.instance.transform.localPosition = new Vector3(TalkUIPositionChanger.instance.transform.localPosition.x, TalkUIPositionChanger.instance.transform.localPosition.y, 5);
         }
-        talkUI.isUp = isUp;
+        TalkUIPositionChanger.instance.isUp = isUp;
 
         if(typeWritter == null)
             typeWritter = BackpackBehaviour.instance.typeWritter;

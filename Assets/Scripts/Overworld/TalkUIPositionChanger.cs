@@ -9,11 +9,13 @@ using TMPro;
 /// </summary>
 public class TalkUIPositionChanger : MonoBehaviour
 {
+    public static TalkUIPositionChanger instance;
     public bool isUp;
     public bool haveHead;
     TextMeshProUGUI talk;
     private void Awake()
     {
+        instance = this;
         talk = GameObject.Find("BackpackCanvas/RawImage/Talk/UITalk").GetComponent<TextMeshProUGUI>();
     }
     
