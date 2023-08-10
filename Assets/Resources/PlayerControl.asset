@@ -28,9 +28,9 @@ MonoBehaviour:
   myItems: 0200000001000000010000000100000000000000000000000000000000000000
   wearArm: 10001
   wearArmor: 20001
-  canMove: 1
-  gameTime: 1458.9292
+  canMove: 0
+  gameTime: 1878.23
   lastScene: Battle
   saveScene: Example-Corridor
-  isDebug: 1
-  invincible: 1
+  isDebug: 0
+  invincible: 0

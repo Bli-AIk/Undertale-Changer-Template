@@ -1,0 +1,2 @@
+
+CrackedWall\<image=-1><fx=0>* This is a cracked wall.;

@@ -209,6 +209,10 @@ public class OverworldObjTrigger : MonoBehaviour
             //Debug.Log(talkUI.transform.localPosition.z);
         }
         talkUI.isUp = isUp;
+
+        if(typeWritter == null)
+            typeWritter = BackpackBehaviour.instance.typeWritter;
+
         typeWritter.TypeOpen(MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, text), false, 0, 1, BackpackBehaviour.instance.typeMessage);
         if (endInBattle)
             typeWritter.EndInBattle();
