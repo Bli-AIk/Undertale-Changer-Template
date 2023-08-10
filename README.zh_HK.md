@@ -63,4 +63,4 @@
 
 ## 許可證
 
-[GNU通用公共許可證 v3.0(GNU General Public License v3.0)](../LICENSE)
+[GNU通用公共許可證 v3.0(GNU General Public License v3.0)](../blob/main/LICENSE)

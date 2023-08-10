@@ -267,7 +267,8 @@ public class MainControl : MonoBehaviour
         drawFrameController = GameObject.Find("MainFrame").GetComponent<DrawFrameController>();
         battlePlayerController = GameObject.Find("Player").GetComponent<BattlePlayerController>();
         selectUIController = GameObject.Find("SelectUI").GetComponent<SelectUIController>();
-        cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
+        if (cameraShake == null)
+            cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
         cameraShake3D = GameObject.Find("3D CameraP").GetComponent<CameraShake>();
         if (cameraMainInBattle == null)
             cameraMainInBattle = cameraShake.GetComponent<Camera>();
@@ -580,7 +581,11 @@ public class MainControl : MonoBehaviour
         if (sceneState == SceneState.InBattle)
         {
             if (cameraMainInBattle == null)
+            {
+                if (cameraShake == null)
+                    cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
                 cameraMainInBattle = cameraShake.GetComponent<Camera>();
+            }
             cameraMainInBattle.GetUniversalAdditionalCameraData().renderPostProcessing = !isClose;
 
 
@@ -646,7 +651,11 @@ public class MainControl : MonoBehaviour
             if (sceneState == SceneState.InBattle)
             {
                 if (cameraMainInBattle == null)
+                {
+                    if (cameraShake == null)
+                        cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
                     cameraMainInBattle = cameraShake.GetComponent<Camera>();
+                }
                 cameraMainInBattle.rect = new Rect(0, 0, 1, 1);
             }
             // BackpackBehaviour rawImage在其脚本中控制
@@ -664,7 +673,6 @@ public class MainControl : MonoBehaviour
 
             CanvasController.instance.DOKill();
             CanvasController.instance.frame.color = new Color(1, 1, 1, 0);
-            CanvasController.instance.frameBack.color = new Color(1, 1, 1, 0);
             CanvasController.instance.setting.transform.localScale = Vector3.one;
             CanvasController.instance.setting.rectTransform.anchoredPosition = new Vector2(0, CanvasController.instance.setting.rectTransform.anchoredPosition.y);
         }
@@ -695,7 +703,6 @@ public class MainControl : MonoBehaviour
 
             CanvasController.instance.DOKill();
             CanvasController.instance.frame.DOColor(new Color(1, 1, 1, 1), 1f);
-            CanvasController.instance.frameBack.color = new Color(1, 1, 1, 1);
             CanvasController.instance.setting.transform.localScale = Vector3.one * 0.89f;
             CanvasController.instance.setting.rectTransform.anchoredPosition = new Vector2(142.5f, CanvasController.instance.setting.rectTransform.anchoredPosition.y);
 

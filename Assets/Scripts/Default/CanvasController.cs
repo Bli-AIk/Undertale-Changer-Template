@@ -18,7 +18,7 @@ public class CanvasController : MonoBehaviour
     public static CanvasController instance;
     public bool openRound;//敌人回合不能开
     TextMeshProUGUI fps;
-    public Image frame, frameBack;
+    public Image frame;
     Image exitImage;
     float clock;
     public List<Sprite> sprites;
@@ -59,8 +59,6 @@ public class CanvasController : MonoBehaviour
         setting = transform.Find("Setting").GetComponent<Image>();
 
         frame = transform.Find("Frame").GetComponent<Image>();
-        frameBack = transform.Find("FrameBack").GetComponent<Image>();
-
         typeWritters = (TypeWritter[])Resources.FindObjectsOfTypeAll(typeof(TypeWritter));
 
     }
