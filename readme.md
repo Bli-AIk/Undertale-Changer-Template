@@ -65,6 +65,6 @@ But it is not recommended to use the 2022 version, otherwise the template may ha
 
 ## License
 
-[GNU General Public License v3.0](../blob/main/LICENSE)
+[GNU General Public License v3.0](../main/LICENSE)
 
 
