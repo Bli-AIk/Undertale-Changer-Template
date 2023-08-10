@@ -74,7 +74,7 @@ public class OverworldTalkSelect : MonoBehaviour
                 typeWritter.TypeStop();
                 switch (select)
                 {
-                    case 0://选择了左侧选项“是”
+                    case 0://选择了左侧选项
                         switch (typeText)
                         {
                             /*
@@ -90,12 +90,16 @@ public class OverworldTalkSelect : MonoBehaviour
                                 MainControl.instance.OutBlack("Menu", Color.black, true, 0f);
                                 AudioController.instance.audioSource.volume = 0;
                                 break;
+
+                            case "Select":
+                                AudioController.instance.GetFx(2, MainControl.instance.AudioControl.fxClipBattle);
+                                break;
                             
                             default:
                                 break;
                         }
                         break;
-                    case 1://选择了右侧选项“否”
+                    case 1://选择了右侧选项
                         break;
                 }
                 heart.color = Color.clear;

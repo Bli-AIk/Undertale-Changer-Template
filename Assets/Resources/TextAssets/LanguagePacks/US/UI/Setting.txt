@@ -22,7 +22,7 @@ In particular, if the text is<gaster>, the game will crash.
 
 Saved\File saved.;
 Example-Corridor\Last Corridor;
-
+Example-Study\Study Scene;
 /* Settings */
 
 
