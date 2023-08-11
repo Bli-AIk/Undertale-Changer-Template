@@ -6,7 +6,7 @@ using TMPro;
 using DG.Tweening;
 
 /// <summary>
-/// 死了啦 都你害的啦）
+/// Gameover控制器
 /// </summary>
 public class GameoverController : MonoBehaviour
 {
