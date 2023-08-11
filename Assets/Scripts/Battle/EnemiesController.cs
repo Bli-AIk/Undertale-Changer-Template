@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 控制怪物的...工具人脚本)
+/// 怪物控制脚本
 /// 主要用于动画控制和存储ATKDEF
 /// </summary>
 public class EnemiesController : MonoBehaviour
