@@ -72,7 +72,7 @@ public class BattlePlayerController : MonoBehaviour
                 spriteRenderer.color = Color.red;
                 MainControl.instance.OverworldControl.playerDeadPos = transform.position;
                 MainControl.instance.OverworldControl.pause = true;
-                RoundController.instance.KillIEnumerator();
+                TurnController.instance.KillIEnumerator();
                 MainControl.instance.SwitchScene("Gameover", false);
             }
             else
@@ -130,7 +130,7 @@ public class BattlePlayerController : MonoBehaviour
     {
         if (MainControl.instance.OverworldControl.isSetting || MainControl.instance.OverworldControl.pause)
             return;
-        if (!RoundController.instance.isMyRound)
+        if (!TurnController.instance.isMyTurn)
             Moveing();
 
        

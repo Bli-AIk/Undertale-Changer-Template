@@ -2,7 +2,7 @@
 战斗内UI文字。
 格式如下：
 
-Round\回合数\文本;
+Turn\回合数\文本;
 在某个回合前一定会显示的文本。
 若回合数输入为 0 
 则会随机显示在无具体设定的回合前。
@@ -59,9 +59,9 @@ Item相关选项必须在Item文本处配置。
 
 */
 
-Round\0\* 回合0.;
-Round\0\* 回合0<stop>.<stop>.<stop>.<stop>.<stop>.<stop>.<stop>的另一种版本。;
-Round\1\* 欢迎来到回合1<stop>.<stop>.<stop>.<enter>* 当然。;
+Turn\0\* 回合0.;
+Turn\0\* 回合0<stop>.<stop>.<stop>.<stop>.<stop>.<stop>.<stop>的另一种版本。;
+Turn\1\* 欢迎来到回合1<stop>.<stop>.<stop>.<enter>* 当然。;
 
 
 Act\NPC1\查看\* <getEnemiesName> <stop>-<stop> 攻击<stop> <getEnemiesATK><stop> 防御<stop> <getEnemiesDEF><stop><enter>* 这是啥啊？;

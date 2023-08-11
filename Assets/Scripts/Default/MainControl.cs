@@ -229,40 +229,40 @@ public class MainControl : MonoBehaviour
         if (BattleControl == null)
             BattleControl = Resources.Load<BattleControl>("BattleControl");
 
-        BattleControl.roundDialogAsset = new List<string>();
+        BattleControl.turnDialogAsset = new List<string>();
 
         BattleControl.uiText = LoadLanguageData("Battle\\UIBattleText");
 
-        string[] roundSave;
+        string[] turnSave;
         TextAsset[] textAssets;
         if (languagePack < languagePackInsideNum)
         {
-            textAssets = Resources.LoadAll<TextAsset>("TextAssets/LanguagePacks/" + GetLanguageInsideId(languagePack) + "/Battle/Round");
+            textAssets = Resources.LoadAll<TextAsset>("TextAssets/LanguagePacks/" + GetLanguageInsideId(languagePack) + "/Battle/Turn");
 
-            roundSave = new string[textAssets.Length];
+            turnSave = new string[textAssets.Length];
             for (int i = 0; i < textAssets.Length; i++)
             {
-                roundSave[i] = textAssets[i].text;
+                turnSave[i] = textAssets[i].text;
             }
         }
         else
-            roundSave = Directory.GetFiles(Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[languagePack - languagePackInsideNum] + "\\Battle\\Round");
+            turnSave = Directory.GetFiles(Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[languagePack - languagePackInsideNum] + "\\Battle\\Turn");
 
-        for (int i = 0; i < roundSave.Length; i++)
+        for (int i = 0; i < turnSave.Length; i++)
         {
-            string file = roundSave[i];
+            string file = turnSave[i];
 
             if (languagePack < languagePackInsideNum)
-                BattleControl.roundDialogAsset.Add(file);
-            else if (roundSave[i].Substring(roundSave[i].Length - 3) == "txt")
-                BattleControl.roundDialogAsset.Add(File.ReadAllText(file));
+                BattleControl.turnDialogAsset.Add(file);
+            else if (turnSave[i].Substring(turnSave[i].Length - 3) == "txt")
+                BattleControl.turnDialogAsset.Add(File.ReadAllText(file));
         }
         LoadItemData(BattleControl.uiTextSave, BattleControl.uiText);
         ScreenMaxToOneSon(BattleControl.uiTextSave, BattleControl.actSave, "Act\\");
         ScreenMaxToOneSon(BattleControl.uiTextSave, BattleControl.mercySave, "Mercy\\");
-        ScreenMaxToOneSon(BattleControl.uiTextSave, BattleControl.roundTextSave, "Round\\");
+        ScreenMaxToOneSon(BattleControl.uiTextSave, BattleControl.turnTextSave, "Turn\\");
 
-        BattleControl.roundTextSave = ChangeItemData(BattleControl.roundTextSave, true, new List<string>());
+        BattleControl.turnTextSave = ChangeItemData(BattleControl.turnTextSave, true, new List<string>());
         //--------------------------------------------------------------------------------
         drawFrameController = GameObject.Find("MainFrame").GetComponent<DrawFrameController>();
         battlePlayerController = GameObject.Find("Player").GetComponent<BattlePlayerController>();
@@ -618,7 +618,7 @@ public class MainControl : MonoBehaviour
     /// </summary>
     int ScreenSet(int y)
     {
-        //if (OverworldControl.backGround)
+        //if (OverworldControl.background)
         //    y = y / 9 * 16;
         //else 
             y = y / 3 * 4;
@@ -825,10 +825,10 @@ public class MainControl : MonoBehaviour
     }
 
     [Space]
-    public bool forceJumpLoadRound;
+    public bool forceJumpLoadTurn;
 
   
-    public IEnumerator _LoadItemDataForRound(List<string> list, TextAsset texter)//保存的list 导入的text
+    public IEnumerator _LoadItemDataForTurn(List<string> list, TextAsset texter)//保存的list 导入的text
     {
         list.Clear();
         string text = "";
@@ -852,7 +852,7 @@ public class MainControl : MonoBehaviour
                 list.Add(text + ";");
                 text = "";
             }
-            if ((i + 1) % 2 == 0 && !forceJumpLoadRound)
+            if ((i + 1) % 2 == 0 && !forceJumpLoadTurn)
                 yield return 0;
         }
 

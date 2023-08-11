@@ -7,11 +7,11 @@ using MEC;
 /// <summary>
 /// 回合控制，同时也是弹幕的对象池
 /// </summary>
-public class RoundController : MonoBehaviour
+public class TurnController : MonoBehaviour
 {
-    public static RoundController instance;
-    public int round;
-    public bool isMyRound;
+    public static TurnController instance;
+    public int turn;
+    public bool isMyTurn;
 
     GameObject mainFrame;
     public List<int> poolCount;
@@ -28,7 +28,7 @@ public class RoundController : MonoBehaviour
     {
         GameObject saveBullet = GameObject.Find("SaveBullet");
         mainFrame = GameObject.Find("MainFrame");
-        //OutYourRound();
+        //OutYourTurn();
         //弹幕
         objectPools.Add(gameObject.AddComponent<ObjectPool>());
         objectPools[^1].parent = saveBullet.transform;
@@ -52,20 +52,19 @@ public class RoundController : MonoBehaviour
     /// <summary>
     /// 进入敌方回合
     /// </summary>
-    public void OutYourRound()
+    public void OutYourTurn()
     {
-        isMyRound = false;
-
-        Timing.RunCoroutine(_RoundExecute(round));
+        isMyTurn = false;
+        Timing.RunCoroutine(_TurnExecute(turn));
     }
 
     /// <summary>
     /// 回合执行系统
     /// 根据回合编号进行相应的执行
     /// </summary>
-    IEnumerator<float> _RoundExecute(int round)
+    IEnumerator<float> _TurnExecute(int turn)
     {
-        switch (round)
+        switch (turn)
         {
             case 0://示例回合
                 Debug.Log("这是一个示例回合");
@@ -96,7 +95,7 @@ public class RoundController : MonoBehaviour
                 Debug.Log("简单嵌套弹幕编写示例");
                 for (int i = 0; i < 5 * 20; i++) 
                 {
-                    Timing.RunCoroutine(_RoundNest(Nest.simpleNestBullet));
+                    Timing.RunCoroutine(_TurnNest(Nest.simpleNestBullet));
                     yield return Timing.WaitForSeconds(0.2f);
                 }
 
@@ -132,8 +131,8 @@ public class RoundController : MonoBehaviour
                 break;
         }
 
-        this.round++;
-        MainControl.instance.selectUIController.InRound();
+        this.turn++;
+        MainControl.instance.selectUIController.InTurn();
         yield return 0;
 
     }
@@ -142,7 +141,7 @@ public class RoundController : MonoBehaviour
     /// 首先在枚举Nest中定义嵌套名称，然后在此编写嵌套内容
     /// 用于重复复杂弹幕的嵌套使用
     /// </summary>
-    IEnumerator<float> _RoundNest(Nest nest)
+    IEnumerator<float> _TurnNest(Nest nest)
     {
         switch (nest)
         {

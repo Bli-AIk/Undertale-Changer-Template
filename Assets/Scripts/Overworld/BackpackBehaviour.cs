@@ -296,7 +296,7 @@ public class BackpackBehaviour : MonoBehaviour
                 }
 
                 /*
-                if (MainControl.instance.OverworldControl.backGround)//边框自适应
+                if (MainControl.instance.OverworldControl.background)//边框自适应
                     backpack.localScale = Vector3.one * 0.8888f;
                 else
                 */

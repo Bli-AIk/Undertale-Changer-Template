@@ -16,7 +16,7 @@ public class CanvasController : MonoBehaviour
     public int framePic;
 
     public static CanvasController instance;
-    public bool openRound;//敌人回合不能开
+    public bool openTurn;//敌人回合不能开
     TextMeshProUGUI fps;
     public Image frame;
     Image exitImage;
@@ -393,7 +393,7 @@ public class CanvasController : MonoBehaviour
             return;
         }
 
-        if ((openRound && RoundController.instance.isMyRound) || !openRound)
+        if ((openTurn && TurnController.instance.isMyTurn) || !openTurn)
         {
             if (SceneManager.GetActiveScene().name != "Story" && MainControl.instance.KeyArrowToControl(KeyCode.V) && !MainControl.instance.OverworldControl.isSetting && !MainControl.instance.blacking)
             {

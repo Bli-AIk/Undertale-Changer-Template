@@ -351,9 +351,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   framePic: 0
-  openRound: 0
+  openTurn: 1
   frame: {fileID: 0}
-  frameBack: {fileID: 0}
   sprites:
   - {fileID: 21300000, guid: 9821911d94695b6418f909184b6eae0c, type: 3}
   - {fileID: 21300000, guid: 27d6bffcc25fff040b20aca58d45ab6a, type: 3}

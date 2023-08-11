@@ -23,9 +23,9 @@ public class BattleControl : ScriptableObject
     [Header("存储MERCY选项和选择后文本")]
     public List<string> mercySave;
     [Header("按回合存储旁白")]
-    public List<string> roundTextSave;
+    public List<string> turnTextSave;
     [Header("存储敌人对话文件")]
-    public List<string> roundDialogAsset;//直接在战斗场景内读取
+    public List<string> turnDialogAsset;//直接在战斗场景内读取
     public List<TextAsset> otherDialogAsset;
 
     /// <summary>
@@ -58,6 +58,6 @@ public class BattleControl : ScriptableObject
 
 
     [Header("项目附加")]
-    public int randomRoundDir;
+    public int randomTurnDir;
     
 }

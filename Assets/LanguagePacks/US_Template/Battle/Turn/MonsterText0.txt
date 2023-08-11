@@ -9,5 +9,5 @@ The bubble size ratio is generally not recommended to change (unless the text ca
 */
 
 (4,3)\(2,1.5)\NPC1\false\-1.5\<Font=3>Hello!;
-(4,3)\(2,1.5)\NPC1\false\-1.5\<Font=3>Shall we start<enter>the first round??;
+(4,3)\(2,1.5)\NPC1\false\-1.5\<Font=3>Shall we start<enter>the first turn??;
 (4,3)\(-6,1.5)\NPC2\true\-1.5\<Font=3>Oh.;

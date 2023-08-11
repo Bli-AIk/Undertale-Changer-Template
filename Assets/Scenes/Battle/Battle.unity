@@ -139,11 +139,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8847045}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b75f54aeab8944c42a2b03589a940ce8, type: 3}
+  m_Script: {fileID: 11500000, guid: 4e55ffc523e67d2428dfffbed12b31a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  round: 0
-  isMyRound: 1
+  turn: 0
+  isMyTurn: 0
   poolCount: 1900000005000000
   objectPools: []
 --- !u!1001 &14043987

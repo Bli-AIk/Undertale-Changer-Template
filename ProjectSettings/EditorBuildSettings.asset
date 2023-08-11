@@ -24,6 +24,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Overworld/Example-Ruins.unity
     guid: 601c8a201f509ee45abac5ba5f402a69
   - enabled: 1
+    path: Assets/Scenes/Overworld/Example-Study.unity
+    guid: 3e6fd7f352078224cb155914acac3785
+  - enabled: 1
     path: Assets/Scenes/Battle/Battle.unity
     guid: f2a46c2f77d8a9544ac65abf451d9e60
   - enabled: 1

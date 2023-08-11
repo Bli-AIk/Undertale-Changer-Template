@@ -45,8 +45,8 @@ public class SelectUIController : MonoBehaviour
     TargetController target;
     DialogBubbleBehaviour dialog;
 
-    int saveRound = -1;
-    string saveRoundText = "";
+    int saveTurn = -1;
+    string saveTurnText = "";
     [Header("首次进入回合的时候播放自定义的回合文本")]
     public bool firstIn = false;
     public int firstInDiy = -1;
@@ -87,14 +87,14 @@ public class SelectUIController : MonoBehaviour
             }
         }
         selectUI = 1;
-        RoundTextLoad(true, 0);
+        TurnTextLoad(true, 0);
         enemiesHpLine.SetActive(false);
         
         UITextUpdate(0);
 
         hpFood = MainControl.instance.PlayerControl.hp;
 
-        InRound();
+        InTurn();
     }
 
     
@@ -104,8 +104,8 @@ public class SelectUIController : MonoBehaviour
             return;
 
 
-        if (RoundController.instance.isMyRound)
-            MyRound();
+        if (TurnController.instance.isMyTurn)
+            MyTurn();
 
         dialog.gameObject.SetActive(isDialog);
 
@@ -119,7 +119,7 @@ public class SelectUIController : MonoBehaviour
                 {
                     isDialog = false;
 
-                    RoundController.instance.OutYourRound();
+                    TurnController.instance.OutYourTurn();
 
                     itemSelectController.gameObject.SetActive(false);
                     actSave = new List<string>();
@@ -166,19 +166,19 @@ public class SelectUIController : MonoBehaviour
     /// <summary>
     ///进我方回合
     /// </summary>
-    public void InRound()
+    public void InTurn()
     {
-        RoundController.instance.isMyRound = true;
+        TurnController.instance.isMyTurn = true;
         selectLayer = 0;
         selectUI = 1;
         selectSon = 0;
         selectGrandSon = 0;
         SpriteChange();
-        RoundTextLoad();
+        TurnTextLoad();
         itemSelectController.gameObject.SetActive(true);
 
 
-        MainControl.instance.forceJumpLoadRound = false;
+        MainControl.instance.forceJumpLoadTurn = false;
 
         MainControl.instance.battlePlayerController.collideCollider.enabled = false;
 
@@ -187,7 +187,7 @@ public class SelectUIController : MonoBehaviour
     /// <summary>
     /// 我的回合！抽卡)
     /// </summary>
-    void MyRound()
+    void MyTurn()
     {
 
         switch (selectLayer)
@@ -262,9 +262,9 @@ public class SelectUIController : MonoBehaviour
                     selectLayer = 0;
                     selectSon = 0;
                     if (!firstIn)
-                        RoundTextLoad();
+                        TurnTextLoad();
                     else
-                        RoundTextLoad(true, firstInDiy);
+                        TurnTextLoad(true, firstInDiy);
                     enemiesHpLine.SetActive(false);
                     break;
                 }
@@ -489,9 +489,9 @@ public class SelectUIController : MonoBehaviour
                             selectLayer = 0;
                             selectSon = 0;
                             if (!firstIn)
-                                RoundTextLoad();
+                                TurnTextLoad();
                             else
-                                RoundTextLoad(true, firstInDiy);
+                                TurnTextLoad(true, firstInDiy);
                             itemSelectController.Close();
 
 
@@ -631,7 +631,7 @@ public class SelectUIController : MonoBehaviour
                             {
                                 textUI.text = "";
                                 MainControl.instance.battlePlayerController.transform.position = new Vector3(0, -1.5f);
-                                OpenDialogBubble(MainControl.instance.BattleControl.roundDialogAsset[RoundController.instance.round]);
+                                OpenDialogBubble(MainControl.instance.BattleControl.turnDialogAsset[TurnController.instance.turn]);
                             }
                                 SpriteChange();
                             itemSelectController.Close();
@@ -653,7 +653,7 @@ public class SelectUIController : MonoBehaviour
                 }
                 break;
             case 3:
-                MainControl.instance.forceJumpLoadRound = true;
+                MainControl.instance.forceJumpLoadTurn = true;
                 firstIn = false;
 
                 if (((selectUI == 1) && !target.gameObject.activeSelf))
@@ -662,7 +662,7 @@ public class SelectUIController : MonoBehaviour
                     {
                         textUI.text = "";
                         MainControl.instance.battlePlayerController.transform.position = new Vector3(0, -1.5f);
-                        OpenDialogBubble(MainControl.instance.BattleControl.roundDialogAsset[RoundController.instance.round]);
+                        OpenDialogBubble(MainControl.instance.BattleControl.turnDialogAsset[TurnController.instance.turn]);
                     }
                 }
                 else if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
@@ -673,7 +673,7 @@ public class SelectUIController : MonoBehaviour
                     {
                         if (selectUI != 1 && textUI.text == "")
                         {
-                            OpenDialogBubble(MainControl.instance.BattleControl.roundDialogAsset[RoundController.instance.round]);
+                            OpenDialogBubble(MainControl.instance.BattleControl.turnDialogAsset[TurnController.instance.turn]);
                             MainControl.instance.battlePlayerController.transform.position = new Vector2(0, -1.5f);
                             break;
                         }
@@ -683,7 +683,7 @@ public class SelectUIController : MonoBehaviour
                             {
                                 textUI.text = "";
                                 MainControl.instance.battlePlayerController.transform.position = new Vector2(0, -1.5f);
-                                OpenDialogBubble(MainControl.instance.BattleControl.roundDialogAsset[RoundController.instance.round]);
+                                OpenDialogBubble(MainControl.instance.BattleControl.turnDialogAsset[TurnController.instance.turn]);
 
                             }
                         }
@@ -699,7 +699,7 @@ public class SelectUIController : MonoBehaviour
     }
     void OpenDialogBubble(string textAsset)
     {
-        MainControl.instance.BattleControl.randomRoundDir = MainControl.instance.Get1Or_1();
+        MainControl.instance.BattleControl.randomTurnDir = MainControl.instance.Get1Or_1();
         MainControl.instance.LoadItemData(actSave, textAsset);
         actSave = MainControl.instance.ChangeItemData(actSave, true, new List<string>());
         isDialog = true;
@@ -730,37 +730,37 @@ public class SelectUIController : MonoBehaviour
         dialog.tmp.text = "";
         dialog.PositionChange();
     }
-    void RoundTextLoad(bool isDiy = false, int diy = 0)
+    void TurnTextLoad(bool isDiy = false, int diy = 0)
     {
-        if (RoundController.instance.round != saveRound || saveRoundText == "")
+        if (TurnController.instance.turn != saveTurn || saveTurnText == "")
         {
             List<string> load = new List<string>();
-            saveRound = RoundController.instance.round;
+            saveTurn = TurnController.instance.turn;
             if (isDiy)
             {
-                load = RoundTextLoad(MainControl.instance.BattleControl.roundTextSave, diy);
+                load = TurnTextLoad(MainControl.instance.BattleControl.turnTextSave, diy);
                 firstIn = false;
             }
             else
             {
-                load = RoundTextLoad(MainControl.instance.BattleControl.roundTextSave, saveRound);
+                load = TurnTextLoad(MainControl.instance.BattleControl.turnTextSave, saveTurn);
             }
             
-            saveRoundText = load[UnityEngine.Random.Range(0, load.Count)];
+            saveTurnText = load[UnityEngine.Random.Range(0, load.Count)];
         }
-        Type(saveRoundText);
+        Type(saveTurnText);
     }
 
-    List<string> RoundTextLoad(List<string> RoundTextSave, int round)
+    List<string> TurnTextLoad(List<string> TurnTextSave, int turn)
     {
-        List<string> RoundTextSaveChanged = new List<string>();
-        for (int i = 0; i < RoundTextSave.Count; i++)
+        List<string> TurnTextSaveChanged = new List<string>();
+        for (int i = 0; i < TurnTextSave.Count; i++)
         {
-            if (RoundTextSave[i].Substring(0, round.ToString().Length) == round.ToString())
-                RoundTextSaveChanged.Add(RoundTextSave[i].Substring(round.ToString().Length + 1));
+            if (TurnTextSave[i].Substring(0, turn.ToString().Length) == turn.ToString())
+                TurnTextSaveChanged.Add(TurnTextSave[i].Substring(turn.ToString().Length + 1));
         }
         List<string> saves = new List<string>();
-        MainControl.instance.MaxToOneSon(RoundTextSaveChanged, saves);
+        MainControl.instance.MaxToOneSon(TurnTextSaveChanged, saves);
         return saves;
     }
 
