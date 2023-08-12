@@ -393,7 +393,7 @@ public class CanvasController : MonoBehaviour
             return;
         }
 
-        if ((openTurn && TurnController.instance.isMyTurn) || !openTurn)
+        if ((openTurn && TurnController.instance != null && TurnController.instance.isMyTurn) || !openTurn)
         {
             if (SceneManager.GetActiveScene().name != "Story" && MainControl.instance.KeyArrowToControl(KeyCode.V) && !MainControl.instance.OverworldControl.isSetting && !MainControl.instance.blacking)
             {
