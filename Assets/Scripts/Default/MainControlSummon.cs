@@ -53,12 +53,14 @@ public class MainControlSummon : MonoBehaviour
             canvas.name = "Canvas";
             CanvasController.instance.framePic = framePic;
             CanvasController.instance.renderMode = renderMode;
+            CanvasController.instance.openTurn = sceneState == SceneState.InBattle;
             DontDestroyOnLoad(canvas);
         }
         else
         {
             CanvasController.instance.framePic = framePic;
             CanvasController.instance.renderMode = renderMode;
+            CanvasController.instance.openTurn = sceneState == SceneState.InBattle;
             CanvasController.instance.Start();
         }
         

@@ -65,7 +65,6 @@ public class CanvasController : MonoBehaviour
 
     public void Start()
     {
-
         settingLevel = 0;
         setting.rectTransform.sizeDelta = new Vector2(0, setting.rectTransform.sizeDelta.y);
         settingTmp.color = Color.white;
