@@ -58,8 +58,7 @@
 
 ## Wiki
 
-### 您先别急，Wiki正在建设中！
-### 您可以点击[此处](https://www.bilibili.com/video/BV1GJ411x7h7)访问Wiki的预览版本，了解如何使用此模板！
+[Wiki](https://github.com/Bli-AIk/Undertale-Changer-Template/wiki/Home%E2%80%90zh_CN)
 
 ## 许可证
 

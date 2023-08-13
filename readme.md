@@ -60,8 +60,7 @@ But it is not recommended to use the 2022 version, otherwise the template may ha
 
 ## Wiki
 
-### Take your time, the wiki is in progress! 
-### You can click [here](https://youtu.be/dQw4w9WgXcQ) to access the preview version of the wiki and learn how to use this template!
+[Wiki](https://github.com/Bli-AIk/Undertale-Changer-Template/wiki)
 
 ## License
 
