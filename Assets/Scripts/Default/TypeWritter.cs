@@ -6,7 +6,7 @@ using System;
 using UnityEngine.Audio;
 using TMPro;
 /// <summary>
-/// 打字机系统
+/// Typewriter system
 /// </summary>
 public class TypeWritter : MonoBehaviour
 {
@@ -21,16 +21,16 @@ public class TypeWritter : MonoBehaviour
     public int fx;//音效
     public bool fxRandomPitch;
     
-    [Header("打字速度与检测停顿字符后的打字速度")]
+    [Header("Typing speed and typing speed after detecting pause characters")]
     public float speed = 0.075f, speedSlow = 0.15f;
-    [Header("打字后多少秒可以按X跳过，0为不能跳")]
+    [Header("How many seconds can you press X to skip after typing, 0 means you cannot skip")]
     public float clock = 0.1f;//设置
     public int passTextString;
     public bool passText;
-    [Header("有就勾上")]
+    [Header("Tick it if you have it")]
     public bool haveSpriteChanger;
     public SpriteChanger spriteChanger;
-    [Header("适配OW框")]
+    [Header("Adapt to OW box")]
     public bool isOverworld;
     TalkUIPositionChanger talkUIPositionChanger;
 
@@ -39,7 +39,7 @@ public class TypeWritter : MonoBehaviour
     public AudioMixerGroup audioMixerGroup;
 
     public int useFont;
-    [Header("总有那么一些情况需要强硬手段（拔枪")]
+    [Header("There are always situations that require tough measures (pulling a gun")]
     public bool forceReturn = false;
 
     TMP_Text tmp_Text;
@@ -53,14 +53,14 @@ public class TypeWritter : MonoBehaviour
 
     public enum TypeMode
     {
-        Normal,//正常的打字机
-        CantZX,//不能按ZX的打字机，使用富文本进行控制。
+        Normal,//A normal typewriter
+        CantZX,//Unable to use ZX's typewriter, using rich text for control.
     }
     TypeMode typeMode = TypeMode.Normal;
     /// <summary>
-    /// 开启打字机。若打字正在进行，可强行终止。
-    /// 一般情况下不需要强行打断对话。
-    /// 若传入的语句中含有 齉 字符，请输入hp。若输入0，此字符将跳过。
+    /// Turn on the typewriter. If typing is in progress, it can be forcibly terminated.
+    /// Generally, there is no need to forcefully interrupt the conversation.
+    /// If the incoming statement contains the 齉 character, enter hp. If you enter 0, this character will be skipped.
     /// </summary>
     public void TypeOpen(string text, bool force, int hp, int fx, TMP_Text tmp_Text, TypeMode typeMode = TypeMode.Normal)
     {
@@ -184,7 +184,7 @@ public class TypeWritter : MonoBehaviour
                                 if (!pressX)
                                     AudioController.instance.GetFx(fx, MainControl.instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
                                 goto default;
-                            default://富文本
+                            default://Rich text
                                 endString += spText;
                                 passTextString += spText.Length;
                                 break;
@@ -200,7 +200,7 @@ public class TypeWritter : MonoBehaviour
                 }
             }
             
-            while (originString[i] == '粜')//跳字
+            while (originString[i] == '粜')//Skip Word
             {
                 endString += originString[i + 1];
                 passTextString += 2;
@@ -228,13 +228,13 @@ public class TypeWritter : MonoBehaviour
                 OverworldTalkSelect.instance.Open();
                 isTyping = false;
             }
-            else if (originString[i] == '龘')//停顿
+            else if (originString[i] == '龘')//Stop
             {
                 if (!pressX)
                     yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f * Convert.ToInt32(!MainControl.instance.OverworldControl.textWidth));
                
             }
-            else if (originString[i] == '鼵')//变脸
+            else if (originString[i] == '鼵')//Change sprite
             {
                 string num = "";
                 i++;
@@ -248,7 +248,7 @@ public class TypeWritter : MonoBehaviour
                 spriteChanger.ChangeImage(int.Parse(num));
                 continue;
             }
-            else if (originString[i] == '菔')//改打字机FX
+            else if (originString[i] == '菔')//Change typewriter FX
             {
                 string num = "";
                 i++;
@@ -264,7 +264,7 @@ public class TypeWritter : MonoBehaviour
             }
             else
             {
-                if (originString[i] == '齉'&& hpIn != 0)//检测hp状态并插字儿
+                if (originString[i] == '齉'&& hpIn != 0)//Detect HP status and insert words
                 {
                     i -= 2;
                     string plusString;
@@ -342,7 +342,7 @@ public class TypeWritter : MonoBehaviour
                     tmp_Text.font = MainControl.instance.OverworldControl.tmpFonts[useFont];
 
             }
-            else Debug.Log("你tmp_Text呢");
+            else Debug.Log("where is your tmp_Text?");
 
         }
 
@@ -367,7 +367,7 @@ public class TypeWritter : MonoBehaviour
     }
     private void Update()
     {
-        if (MainControl.instance.OverworldControl.isSetting || forceReturn)//pause在OW检测的时候会用
+        if (MainControl.instance.OverworldControl.isSetting || forceReturn)//Pause will use it during OW testing
             return;
 
         if (clockTime > 0)
@@ -384,7 +384,7 @@ public class TypeWritter : MonoBehaviour
         {
             PassText();
         }
-        else if (!pressX && !canNotX && MainControl.instance.KeyArrowToControl(KeyCode.X) && typeMode != TypeMode.CantZX)//跳字
+        else if (!pressX && !canNotX && MainControl.instance.KeyArrowToControl(KeyCode.X) && typeMode != TypeMode.CantZX)//Skip
         {
             if (clock != 0 && clockTime <= 0 && isTyping)
                 pressX = true;
@@ -421,7 +421,7 @@ public class TypeWritter : MonoBehaviour
         endInBattle = true;
     }
     /*
-     * 测试用
+     * For testing
     void Update()
     {
         if (Input.GetKeyDown("c"))

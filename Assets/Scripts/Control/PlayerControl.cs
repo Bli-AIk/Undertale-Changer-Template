@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 玩家的信息
-/// 以及一些相关的设置
+/// Player Information
+/// And some related settings
 /// </summary>
 [CreateAssetMenu(fileName = "PlayerControl", menuName = "PlayerControl")]
 public class PlayerControl : ScriptableObject
@@ -12,7 +12,7 @@ public class PlayerControl : ScriptableObject
     public int hp, hpMax, lv, exp, gold, wearAtk, wearDef, nextExp;
     public float missTime, missTimeMax;
 
-    [Header("OW背包内显示的AT和DF会-10")]
+    [Header("The AT and DF displayed in the Overworld backpack will be reduced by 10")]
     public int atk;
     public int def;
 
@@ -24,14 +24,14 @@ public class PlayerControl : ScriptableObject
     public float gameTime;
 
 
-    [Header("场景衔接存储")]
+    [Header("Scene switching storage")]
     public string lastScene;
     public string saveScene;
 
 
-    [Header("开启调试")]
+    [Header("Open debug")]
     public bool isDebug;
-    [Header("--调试模式设定--")]
-    [Header("锁血")]
+    [Header("--Debug mode settings--")]
+    [Header("Invincible")]
     public bool invincible;
 }

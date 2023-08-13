@@ -4,13 +4,13 @@ using UnityEngine;
 using DG.Tweening;
 
 /// <summary>
-/// Overworld摄像机跟随
+/// Overworld Camera Follow Player
 /// </summary>
 public class CameraFollowPlayer : MonoBehaviour
 {
     public bool limit = true;
-    public Vector2 limitX;//限制摄像机最大XY范围 0则不动
-    public Vector2 limitY;//限制摄像机最大XY范围 0则不动
+    public Vector2 limitX;//Limit the maximum XY range of the camera, if it is 0, it will not move
+    public Vector2 limitY;//Limit the maximum XY range of the camera, if it is 0, it will not move
     public GameObject player;
     public bool isFollow;
     public Vector3 followPosition;
@@ -25,7 +25,7 @@ public class CameraFollowPlayer : MonoBehaviour
             return;
         }
         followPosition = transform.position;
-        //跟随玩家
+        //Follow player
         if (limit)
         {
             if (player.transform.position.x >= limitX.x || player.transform.position.x <= limitX.y)
@@ -38,7 +38,7 @@ public class CameraFollowPlayer : MonoBehaviour
                 transform.position = new Vector3(transform.position.x, player.transform.position.y, transform.position.z);
             }
 
-            //限制范围
+            //Limits
             if (transform.position.x <= limitX.x)
             {
                 transform.position = new Vector3(limitX.x, transform.position.y, transform.position.z);

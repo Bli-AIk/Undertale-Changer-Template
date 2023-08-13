@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
-/// 长廊柱子移动
+/// Movement of last corridor columns
 /// </summary>
 public class ColumnsMove : MonoBehaviour
 {
     CameraFollowPlayer parentCamera;
-    public float speed;//包括方向(正负)
-    
+    public float speed;//Including direction (positive and negative)
+
     void Start()
     {
         parentCamera = transform.parent.GetComponent<CameraFollowPlayer>();

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 /// <summary>
-/// Overworld中的玩家控制器
+/// Player controllers in Overworld
 /// </summary>
 public class PlayerBehaviour : MonoBehaviour
 {
@@ -14,8 +14,8 @@ public class PlayerBehaviour : MonoBehaviour
     public int moveDirectionX, moveDirectionY;
     public int animDirectionX, animDirectionY;
     public float distance;
-    public float speed;//玩家速度 编辑器标准为13 导出为5.5
-    
+    public float speed;//Player speed, editor standard is 13, export is 5.5
+
     [Header("音效截取范围 int")]
     public Vector2 walk;
 
@@ -29,10 +29,10 @@ public class PlayerBehaviour : MonoBehaviour
     public OverworldObjTrigger saveOwObj;
     GameObject backpackUI;
     SpriteRenderer spriteRenderer;
-    public float owTimer;//0.1秒，防止调查OW冲突
+    public float owTimer;//0.1 seconds to prevent investigation of OW conflicts
 
-    AudioMixerGroup mixer = null;//需要就弄上 整这个是因为有的项目里做了回音效果
-    
+    AudioMixerGroup mixer = null;//Do it as needed.
+
     private void Awake()
     {
         backpackUI = GameObject.Find("Main Camera/BackpackUI");
@@ -180,7 +180,7 @@ public class PlayerBehaviour : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.B) && MainControl.instance.PlayerControl.isDebug)
             MainControl.instance.OutBlack("Battle", Color.black);
     }
-    public void PlayWalkAudio()//动画器引用
+    public void PlayWalkAudio()//Animator Reference
     {
         AudioController.instance.GetFx(Random.Range((int)walk.x, (int)walk.y), MainControl.instance.AudioControl.fxClipWalk, 1, 1, mixer);
     }

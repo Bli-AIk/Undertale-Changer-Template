@@ -4,13 +4,13 @@ using UnityEngine;
 using TMPro;
 using System;
 /// <summary>
-/// 用于字体匹配及双语字体数据修正
+/// Used for font matching and bilingual font data correction
 /// </summary>
 public class TextChanger : MonoBehaviour
 {
     //public TMP_FontAsset assetback;
     TMP_Text tmp;
-    public bool width;//若中英混搭 则true就完事了
+    public bool width;//If you mix and match Chinese and English, true will be done
     [Header("US/CN")]
     public Vector4[] Options;
     //public float[] sizes;

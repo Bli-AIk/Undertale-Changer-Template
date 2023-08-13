@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 /// <summary>
-/// ¿ØÖÆ½²¹ÊÊÂ³¡¾°£¨²¥PPT£©
+/// Control storytelling scenes (broadcast PPT)
 /// </summary>
 public class StorySceneController : MonoBehaviour
 {

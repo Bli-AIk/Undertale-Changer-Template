@@ -6,9 +6,10 @@ using DG.Tweening;
 using System.Reflection;
 using UnityEngine.SceneManagement;
 using System;
+using static Unity.Burst.Intrinsics.X86;
 /// <summary>
-/// OWObj触发器相关 配合玩家射线
-/// 用于读取并显示文本然后显示出来
+/// Overworld Obj trigger related. Need to cooperate with player ray
+/// Used to read and display text and then display it
 /// </summary>
 
 public class OverworldObjTrigger : MonoBehaviour
@@ -18,45 +19,46 @@ public class OverworldObjTrigger : MonoBehaviour
     public bool setIsUp;
     public bool isUp;
     public string text;
-    [Header("检测玩家动画方向 0,0为不检测")]
+    [Header("Detect player animation direction, (0,0) is not detected")]
     public Vector2 playerDir;
-    [Header("存档相关")]
+    [Header("Save related")]
     public bool isSave;
     public bool saveFullHp;
     int saveSelect;
     bool saveOpen;
-    [Header("插入摄像机动画相关")]
+    [Header("Insert camera animation related")]
     public bool openAnim;
     public Vector3 animEndPosPlus;
     public float animTime;
     public Ease animEase;
     public CameraFollowPlayer mainCamera;
     public bool endInBattle;
-    [Header("需要渐出就填正数时间")]
+    [Header("Fill in the positive time when fading out is required")]
     public float stopTime = -1;
 
-    [Header("OW跳场景 只给trigger")]
+    [Header("Overworld switches scenes. Only for triggers")]
     public bool changeScene;
     public bool banMusic;
     public string sceneName;
     public Vector3 newPlayerPos;
-    [Header("OW跳场景锁定进入时方向 0无 -1左右 1上下")]
+    [Header("Overworld switches the scene and locks the direction when entering.")]
+    [Header("0 is none, -1 is left and right, and 1 is up and down")]
     public int onlyDir;
     AudioSource bgm;
     TypeWritter typeWritter;
 
-    [Header("结束时调用动画器并将下设为true")]
+    [Header("Call the animator at the end and set animBoolName to true")]
     public bool endAnim;
     public string animRoute;
     public string animBoolName;
 
-    [Header("结束时物体自身关闭")]
+    [Header("At the end, the object itself is not active")]
     public bool endSelf;
 	
-	[Header("确定目前打字的物体")]
+	[Header("Identify objects currently using a typewriter")]
 	bool isTyping;
 
-    [Header("结束时执行方法")]
+    [Header("Execute function at end")]
     public List<string> funNames;
 
     
@@ -125,7 +127,7 @@ public class OverworldObjTrigger : MonoBehaviour
             }
                 
         }
-        //检测相关见PlayerBehaviour
+        //See PlayerBehaviors for detection related information
         if (isTyping && MainControl.instance.KeyArrowToControl(KeyCode.Z) && !typeWritter.isTyping)
         {
             PressZ();
@@ -162,7 +164,7 @@ public class OverworldObjTrigger : MonoBehaviour
             MethodInfo methodInfo = typeof(OverworldObjTrigger).GetMethod(item);
             if (methodInfo == null)
             {
-                Debug.LogError(item + "检测失败", gameObject);
+                Debug.LogError(item + "Detection failed", gameObject);
             }
             else
             {
@@ -191,7 +193,7 @@ public class OverworldObjTrigger : MonoBehaviour
 
     }
     /// <summary>
-    /// 激活打字。第二个参数别动
+    /// Activate typing. Do not change the second parameter
     /// </summary>
     public void TypeText(bool isUp,bool isMusic = true)
     {
