@@ -5,8 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Old Battle Box Draw Script: Obsolete
-///New: DrawFrame
+/// 旧的战斗框绘制脚本：已废弃
+/// 新的：DrawFrame
 /// </summary>
 
 [Obsolete]
@@ -79,7 +79,7 @@ public class CreateQuadChanged : MonoBehaviour
         meshRenderer.material = material;
         meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         meshRenderer.receiveShadows = false;
-        // Set mainTexture
+        // 设置主贴图
         meshRenderer.material.mainTexture = mainTex;
 
 

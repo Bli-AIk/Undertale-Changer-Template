@@ -5,7 +5,7 @@ using System;
 using TMPro;
 
 /// <summary>
-/// Modifying the Location of Dialogs in Overworld
+/// 修改Overworld中对话框的位置
 /// </summary>
 public class TalkUIPositionChanger : MonoBehaviour
 {

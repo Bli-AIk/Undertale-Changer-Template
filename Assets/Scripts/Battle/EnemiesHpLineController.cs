@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemiesHpLineController : MonoBehaviour
 {
     SpriteRenderer greenSprite;
-    [Header("Starting from 0")]
+    [Header("0¿ª")]
     public int num;
     void Start()
     {

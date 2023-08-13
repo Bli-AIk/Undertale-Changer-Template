@@ -15,8 +15,8 @@ public class CameraShake : MonoBehaviour
     }
 
     /// <summary>
-    /// Camera Shake
-    /// Loops will automatically convert to even numbers.
+    /// 摄像机摇晃
+    /// loops会自动转换为偶数。
     /// </summary>
     public void Shake(int loops = 4, float shakeTime = 1f / 60f * 4f)
     {

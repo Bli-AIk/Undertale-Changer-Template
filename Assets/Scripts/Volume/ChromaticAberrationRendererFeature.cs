@@ -43,7 +43,7 @@ public class ChromaticAberrationPass : ScriptableRenderPass
         renderPassEvent = passEvent;
         if (ChromaticAberrationShader == null)
         {
-            Debug.LogError("Shader does not exist");
+            Debug.LogError("Shader²»´æÔÚ");
             return;
         }
         mat = CoreUtils.CreateEngineMaterial(ChromaticAberrationShader);
