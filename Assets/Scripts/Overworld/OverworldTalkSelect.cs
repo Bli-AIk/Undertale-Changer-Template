@@ -5,9 +5,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 /// <summary>
-/// Used to insert the option system in OW, which is consistent with the UT option but different from the DR option.
-/// Heart will be added in scenes with options.
-/// Calling within a text package
+/// 用于在OW插入选项系统，与UT的选项一致，而不同于DR的选项。
+/// 在含有选项的场景内会添加heart。
+/// 在文本包内调用
 /// </summary>
 public class OverworldTalkSelect : MonoBehaviour
 {
@@ -74,11 +74,11 @@ public class OverworldTalkSelect : MonoBehaviour
                 typeWritter.TypeStop();
                 switch (select)
                 {
-                    case 0://Left option selected
+                    case 0://选择了左侧选项
                         switch (typeText)
                         {
                             /*
-                            Typewriter Example
+                            打字机示例
                             case "XXX":
 
                         typeWritter.TypeOpen(MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.owTextsSave, texts[0]), false, 0, 1);
@@ -99,7 +99,7 @@ public class OverworldTalkSelect : MonoBehaviour
                                 break;
                         }
                         break;
-                    case 1://Right option selected
+                    case 1://选择了右侧选项
                         break;
                 }
                 heart.color = Color.clear;

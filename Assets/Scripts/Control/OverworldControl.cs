@@ -2,64 +2,64 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
-/// Mainly used for Overworld data and general basic data
+/// 主要用于Overworld的数据与通用基本数据
 /// </summary>
 [CreateAssetMenu(fileName = "OverworldControl", menuName = "OverworldControl")]
 public class OverworldControl : ScriptableObject
 {
     //public int languagePack;
-    public bool pause;//Prevent player actions from causing errors during black screen switching
+    public bool pause;//黑切屏的时候防止玩家操作导致报错
 
     [Header("--UI--")]
-    [Header("Font storage")]
+    [Header("字体存储")]
     public List<TMPro.TMP_FontAsset> tmpFonts;
 
-    [Header("Font full width, half width")]
-    public bool textWidth;//Font full width, half width
-    [Header("Resolution level")]
-    public int resolutionLevel;//Resolution level
-    [Header("FullScreen")]
-    public bool fullScreen;//FullScreen
+    [Header("字体全半角")]
+    public bool textWidth;//字体全半角
+    [Header("分辨率等级")]
+    public int resolutionLevel;//分辨率等级
+    [Header("全屏")]
+    public bool fullScreen;//全屏开关
 
 
 
-    [Header("Global Volume")]
-    public float mainVolume;//Global Volume
-    [Header("Simplify special effects")]
-    public bool noSFX;//Light effect and post-processing special effect display switch
-    [Header("OpenFPS")]
-    public bool openFPS;//OpenFPS
-    [Header("Resolution")]
-    public Vector2 resolution;//Resolution
+    [Header("全局音量")]
+    public float mainVolume;//全局音量
+    [Header("简化特效")]
+    public bool noSFX;//光效 后处理特效显示
+    [Header("显示FPS")]
+    public bool openFPS;//显示FPS
+    [Header("分辨率（显示用）")]
+    public Vector2 resolution;//分辨率
 
-    [Header("Text packet reading")]
+    [Header("文本包读取")]
     public string sceneTextsAsset;
     public List<string> sceneTextsSave;
 
     public string settingAsset;
     public List<string> settingSave;
     public bool isSetting;
-    public List<KeyCode> keyCodes, keyCodesBack1, keyCodesBack2;//According to the setting order
+    public List<KeyCode> keyCodes, keyCodesBack1, keyCodesBack2;//依照设置顺序
 
-    [Header("Player related")]
+    [Header("玩家相关")]
     public Vector3 playerDeadPos;
 
-    [Header("Scene switching storage")]
+    [Header("场景衔接存储")]
     public Vector3 playerScenePos;
     public Vector2 animDirection;
 
-    [Header("HD Border")]
+    [Header("HD边框")]
     public bool hdResolution;
     public List<Sprite> frames;
 
 
     //[Header("游戏内需要存档的数据在下面写")]
-    [Header("Vertical Sync")]
+    [Header("垂直同步")]
     public VSyncMode vsyncMode;
     public enum VSyncMode
     {
-        DonNotSync, // out of sync
-        SyncToRefreshRate, // Synchronize to screen refresh rate
-        HalfSync // Synchronize to half the screen refresh rate
+        DonNotSync, // 不同步
+        SyncToRefreshRate, // 同步到屏幕刷新率
+        HalfSync // 同步到屏幕刷新率的一半
     }
 }

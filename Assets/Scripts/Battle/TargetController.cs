@@ -3,23 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using DG.Tweening;
-using Unity.Burst.Intrinsics;
 /// <summary>
-/// Control Target
+/// 控制Target
 /// </summary>
 public class TargetController : MonoBehaviour
 {
     Animator anim;
     bool pressZ;
-    [Header("Damage caused by attacks")]
+    [Header("攻击造成的伤害")]
     public int hitDamage;
     TextMeshPro hitUI, hitUIb;
     GameObject bar;
     public GameObject hpBar;
-    [Header("Parent incoming")]
+    [Header("父级传入")]
     public int select;
 
-    [Header("Parent incoming strike the monster")]
+    [Header("父级传入 要击打的怪物")]
     public EnemiesController hitMonster;
     
     void Start()
@@ -57,18 +56,18 @@ public class TargetController : MonoBehaviour
         }
     }
     /// <summary>
-    /// Calculations made when attacking enemies
+    /// 攻击敌人时进行的计算
     /// </summary>
     void Hit()
     {
         if (Mathf.Abs(bar.transform.localPosition.x) > 0.8f)
             hitDamage = (int)
-                (2.2f / 13.2f * (14 - Mathf.Abs(bar.transform.localPosition.x))//Accuracy coefficient
+                (2.2f / 13.2f * (14 - Mathf.Abs(bar.transform.localPosition.x))//准确度系数
                 * (MainControl.instance.PlayerControl.atk + MainControl.instance.PlayerControl.wearAtk
                 - MainControl.instance.BattleControl.enemiesDEF[select] + Random.Range(0, 2)));
         else
             hitDamage = (int)
-                 (2.2f / 13.2f * (14 - 0.8f)//Accuracy coefficient
+                 (2.2f / 13.2f * (14 - 0.8f)//准确度系数
                  * (MainControl.instance.PlayerControl.atk + MainControl.instance.PlayerControl.wearAtk
                  - MainControl.instance.BattleControl.enemiesDEF[select] + Random.Range(0, 2)));
 
@@ -86,7 +85,7 @@ public class TargetController : MonoBehaviour
         }
 
     }
-    //The following are all used for anim
+    //以下皆用于anim
     void HitAnim()
     {
 

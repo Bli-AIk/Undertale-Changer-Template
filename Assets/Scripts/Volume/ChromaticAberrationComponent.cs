@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 /// <summary>
-/// VolumeComponent, displayed in the add list
+/// VolumeComponent，显示在添加列表内
 /// </summary>
 
 [VolumeComponentMenuForRenderPipeline("Custom/Chromatic Aberration",typeof(UniversalRenderPipeline))]

@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Set the board. The specific data is controlled within the BattlePlayerController
+/// 设定挡板，具体数据在BattlePlayerController内控制
 /// </summary>
 public class BoardController : MonoBehaviour
 {
-    [Header("Width")]
+    [Header("宽度")]
     public float width = 2.1f;
-    [Header("Is it a follower board")]
+    [Header("是否为跟踪板")]
     public bool canMove;
-    [Header("Edge Collider Length Changes with Sprite Width")]
+    [Header("是否让边缘碰撞器长度随sprite宽度而变化")]
     public bool keepEdge;
     public List<Sprite> boards;
-    BoxCollider2D boxCollider2DUp, boxCollider2DDown;//Detectors that detect players modifying EdgeCollider on top of it. Specifically controlled within the BattlePlayerController
-    EdgeCollider2D edgeCollider2D;//Default to Trigger.
+    BoxCollider2D boxCollider2DUp, boxCollider2DDown;//纯纯的检测器 检测玩家在上面就把EdgeCollider掐了。具体在BattlePlayerController内控
+    EdgeCollider2D edgeCollider2D;//默认为触发器。
     SpriteRenderer spriteRenderer;
     private void Awake()
     {
@@ -87,7 +87,7 @@ public class BoardController : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            if (boxCollider2DDown.IsTouching(collision))//Entering is below
+            if (boxCollider2DDown.IsTouching(collision))//进入的是下面
                 edgeCollider2D.isTrigger = true;
             else if (boxCollider2DUp.IsTouching(collision))
                 edgeCollider2D.isTrigger = false;

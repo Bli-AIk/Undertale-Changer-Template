@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
 /// <summary>
-/// Manage overworld backpack system
+/// 管理OW背包系统
 /// </summary>
 public class BackpackBehaviour : MonoBehaviour
 {
@@ -138,11 +138,11 @@ public class BackpackBehaviour : MonoBehaviour
             }
             if ((MainControl.instance.KeyArrowToControl(KeyCode.X) || MainControl.instance.KeyArrowToControl(KeyCode.C)) && sonSelect == 0)
             {
-                if (backpack.gameObject.activeSelf)//Close
-            {
+                if (backpack.gameObject.activeSelf)//关闭
+                {
                     BackpackExit();
                 }
-                else if (MainControl.instance.KeyArrowToControl(KeyCode.C))//Open
+                else if (MainControl.instance.KeyArrowToControl(KeyCode.C))//开启
                 {
                     AudioController.instance.GetFx(0, MainControl.instance.AudioControl.fxClipUI);
                     MainControl.instance.PlayerControl.myItems = MainControl.instance.ListOrderChanger(MainControl.instance.PlayerControl.myItems);
@@ -295,12 +295,12 @@ public class BackpackBehaviour : MonoBehaviour
 
                 }
 
-            /*
-            if (MainControl.instance.OverworldControl.background)//Border adaptation
-                backpack.localScale = Vector3.one * 0.8888f;
-            else
-            */
-            backpack.localScale = Vector3.one;
+                /*
+                if (MainControl.instance.OverworldControl.background)//边框自适应
+                    backpack.localScale = Vector3.one * 0.8888f;
+                else
+                */
+                backpack.localScale = Vector3.one;
 
                 if (sonUse != 4)
                 {

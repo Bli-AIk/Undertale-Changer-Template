@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
-/// Change the movement range after the player triggers it
+/// 玩家触发后更改移动范围
 /// </summary>
 public class ChangeClipWalk : MonoBehaviour
 {
-    [Header("New range")]
+    [Header("新范围")]
     public Vector2 range;
     private void OnTriggerStay2D(Collider2D collision)
     {

@@ -3,24 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 /// <summary>
-/// Debug grid positioning is used for making bullet bullets and so on
+/// Debug网格定位 用于做弹幕啥的
 /// </summary>
 public class DebugGrid : ObjectPool
 {
-    [Header("The color is given to the 'bar'")]
+    [Header("颜色是给到'条'上面的")]
     public Color colorX;
     public Color colorY;
     public Color colorXForText;
     public Color colorYForText;
 
-    [Header("Divide several pieces horizontally and vertically (number of cuts -1). X is the horizontal tiling of vertical bars. Y is the opposite")]
+    [Header("横纵分割几片(刀数-1) X为横着平铺竖条 Y则反之")]
     public int divisionX;
     public int divisionY;
-    [Header("XY offset, if left and right symmetrical, fill in a positive number like the reference")]
+    [Header("XY偏移 如果左右对称就和参考一样填个正的数")]
     public float deviationX;
     public float deviationY;
 
-    [Header("Reference coordinates")]
+    [Header("参考坐标")]
     
     public Vector2 referenceX;
     public Vector2 referenceY;

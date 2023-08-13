@@ -3,29 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 /// <summary>
-/// V0.1.1 New addition
-/// Used for OW with animators to execute code/play animations when players enter/exit.
-/// Can be adjusted in multiple ways, I guess
+/// V0.1.1新加
+/// 用于带动画器的OW，在玩家进入/离开时，执行代码/播放动画。
+/// 可多方面调整，我猜
 /// </summary>
 public class TriggerPlayerOut : MonoBehaviour
 {
 	public float volume = 1;
     public float pitch = 1;
-    [Header("Change the Boolean value of the animation:")]
+    [Header("更改动画的布尔值：")]
     public string changeBool;
-	[Header("Remove the execution animation when entering the detection range")]
+	[Header("去除进入检测范围执行动画")]
 	public bool banTrigger;
-    [Header("Remove invalidation when the previous scene is the specified scene")]
+    [Header("在上个场景为指定场景时去除失效")]
     public string notBanSceneSp;
-	[Header("Set to execute when leaving/entering range")]
+	[Header("设置在离开范围/进入范围时执行")]
 	public bool isEnter;
     Animator animator;
 	bool triggered = false;
 
-    [Header("Set the animator's sceneBool to true when the previous scene is the specified scene")]
+    [Header("在上个场景为指定场景时动画器的sceneBool设true")]
     public string sceneSp;
 	public string sceneBool = "SceneSp";
-    [Header("When in ElectricOpen, ElectricOpen")]
+    [Header("在electricOpen的时候electricOpen")]
     public bool electricOpen;
     
     void Start()
@@ -60,7 +60,7 @@ public class TriggerPlayerOut : MonoBehaviour
     }
 
     /*
-    //Called for animation
+    //给动画调用的
 
     void SetNoActive(string name)
     {

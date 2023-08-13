@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 /// <summary>
-/// BulletShaderController
+/// µ¯Ä»Shader¿ØÖÆÆ÷
 /// </summary>
 public class BulletShaderController : MonoBehaviour
 {

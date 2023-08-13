@@ -5,14 +5,14 @@ using UnityEngine;
 public class AudioControl : ScriptableObject
 {
     //public List<AudioClip> bgmClip;
-    [Header("For UI sound effects")]
+    [Header("用于UI音效")]
     public List<AudioClip> fxClipUI;
-    [Header("For typewriter sound effects")]
+    [Header("用于打字机音效")]
     public List<AudioClip> fxClipType;
-    [Header("For Battle sound effects")]
+    [Header("用于战斗音效")]
     public List<AudioClip> fxClipBattle;
 
-    [Header("For walking sound effects")]
+    [Header("用于走路脚步音效")]
     public List<AudioClip> fxClipWalk;
 
 }

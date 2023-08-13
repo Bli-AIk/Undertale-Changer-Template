@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
-/// Child controllers of SpriteSplitController
+/// SpriteSplitController的子级控制器
 /// </summary>
 public class SpriteSplitFly : MonoBehaviour
 {

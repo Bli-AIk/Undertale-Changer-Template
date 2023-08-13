@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 /// <summary>
-/// Literally
+/// ◊÷√Ê“‚Àº
 /// </summary>
 public class ItemSelectController : MonoBehaviour
 {

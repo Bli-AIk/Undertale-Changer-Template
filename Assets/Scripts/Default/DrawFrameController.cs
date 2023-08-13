@@ -2,21 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 /// <summary>
-/// Use LineRenderer and Polygon Shader to draw polygonal boxes for combat boxes, UI, and more.
+/// 使用LineRenderer与多边形shader绘制多边形框，用于战斗框、UI等。
 /// </summary>
 public class DrawFrameController : MonoBehaviour
 {
-    [Header("width")]
+    [Header("线长")]
     public float width;
 
-    [Header("points max")]
+    [Header("顶点数")]
     public int pointsMax = 4;
 
 
-    [Header("points")]
+    [Header("顶点")]
     public List<Transform> points = new List<Transform>();
 
-    [Header("Enable collision (for battle boxes)")]
+    [Header("开启碰撞（用于战斗框）")]
     public bool isCollider;
     PolygonCollider2D polygonCollider2D;
     EdgeCollider2D edgeCollider2D;
@@ -30,7 +30,7 @@ public class DrawFrameController : MonoBehaviour
         points.Clear();
         if (pointsMax < 3)
         {
-            Debug.LogWarning("pointsMax < 3 , Changed to 3");
+            Debug.LogWarning("pointsMax < 3 , 已更改为3");
             pointsMax = 3;
         }
         for (int i = 0; i < pointsMax; i++)

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 /// <summary>
-/// Bubble control of enemy dialogue within combat
+/// 战斗内敌人对话气泡控制
 /// </summary>
 public class DialogBubbleBehaviour : MonoBehaviour
 { 
@@ -28,7 +28,7 @@ public class DialogBubbleBehaviour : MonoBehaviour
 
 
     /// <summary>
-    /// Change the size of bubbles and the situation of left and right arrows, assign values, and so on
+    /// 改变气泡的大小和左右箭头情况 进行赋值 之类的
     /// </summary>
     public void PositionChange()
     {

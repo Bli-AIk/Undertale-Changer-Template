@@ -5,7 +5,7 @@ using UnityEngine;
 
 
 /// <summary>
-/// Generate a series of foolish encrypted text
+/// 生成一系列脑梗加密文本
 /// </summary>
 public class DebugSpTextSummon : MonoBehaviour
 {
