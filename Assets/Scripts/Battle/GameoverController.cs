@@ -6,7 +6,7 @@ using TMPro;
 using DG.Tweening;
 
 /// <summary>
-/// Gameover控制器
+/// GameoverController
 /// </summary>
 public class GameoverController : MonoBehaviour
 {
@@ -40,7 +40,7 @@ public class GameoverController : MonoBehaviour
 
     }
 
-    //接下来交给Animator表演
+    //Next is the Animator's performance time
     public void PlayFX(int i)
     {
         if (i < 0)

@@ -4,7 +4,7 @@ using UnityEngine;
 using TMPro;
 using DG.Tweening;
 /// <summary>
-/// 最初始场景（模板信息）的控制器
+/// Controller for the initial scenario (template information)
 /// </summary>
 public class StartController : MonoBehaviour
 {

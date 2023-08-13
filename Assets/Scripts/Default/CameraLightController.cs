@@ -3,7 +3,7 @@ using UnityEngine.Rendering.Universal;
 
 public class CameraLightController : MonoBehaviour
 {
-    public float viewDistance = 10f; // 可视范围的半径
+    public float viewDistance = 10f; // The radius of the visible range
 
     Camera mainCamera;
 
@@ -23,7 +23,7 @@ public class CameraLightController : MonoBehaviour
         if (MainControl.instance.OverworldControl.noSFX)
             return;
 
-        // 获取所有光源组件的引用
+        // Obtain all light source components
         Light2D[] lights = FindObjectsOfType<Light2D>();
 
         foreach (Light2D light in lights)

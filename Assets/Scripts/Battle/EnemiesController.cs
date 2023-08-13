@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 怪物控制脚本
-/// 主要用于动画控制和存储ATKDEF
+/// Monster Control Script
+/// Mainly used for animation control, storing ATK, DEF
 /// </summary>
 public class EnemiesController : MonoBehaviour
 {

@@ -5,7 +5,7 @@ using DG.Tweening;
 using System;
 using MEC;
 /// <summary>
-/// 回合控制，同时也是弹幕的对象池
+/// Turn control, also serving as an object pool for bullet
 /// </summary>
 public class TurnController : MonoBehaviour
 {
@@ -29,14 +29,14 @@ public class TurnController : MonoBehaviour
         GameObject saveBullet = GameObject.Find("SaveBullet");
         mainFrame = GameObject.Find("MainFrame");
         //OutYourTurn();
-        //弹幕
+        //Bullet
         objectPools.Add(gameObject.AddComponent<ObjectPool>());
         objectPools[^1].parent = saveBullet.transform;
         objectPools[^1].count = poolCount[0];
         objectPools[^1].obj = Resources.Load<GameObject>("Template/Bullet Template");
         objectPools[^1].FillPool();
 
-        //挡板
+        //Board
         objectPools.Add(gameObject.AddComponent<ObjectPool>());
         objectPools[^1].parent = saveBullet.transform;
         objectPools[^1].count = poolCount[1];
@@ -50,7 +50,7 @@ public class TurnController : MonoBehaviour
         Timing.KillCoroutines();
     }
     /// <summary>
-    /// 进入敌方回合
+    /// Enter enemy turn
     /// </summary>
     public void OutYourTurn()
     {
@@ -59,20 +59,20 @@ public class TurnController : MonoBehaviour
     }
 
     /// <summary>
-    /// 回合执行系统
-    /// 根据回合编号进行相应的执行
+    /// Turn Execution System
+    /// Execute accordingly based on turn number
     /// </summary>
     IEnumerator<float> _TurnExecute(int turn)
     {
         switch (turn)
         {
-            case 0://示例回合
-                Debug.Log("这是一个示例回合");
+            case 0://Example turn
+                Debug.Log("This is an example turn");
                 yield return Timing.WaitForSeconds(0.5f);
-                Debug.Log("请注意查看控制台发出的Debug文本介绍");
+                Debug.Log("Please pay attention to the Debug text introduction issued by the console");
                 yield return Timing.WaitForSeconds(1.5f);
 
-                Debug.Log("战斗框缩放：更改四个点的坐标");
+                Debug.Log("Battle Box Scaling: Changing the Coordinates of Four Points");
                 mainFrame.transform.GetChild(0).DOLocalMoveX(1.4f, 0.5f).SetEase(Ease.InOutSine);
                 mainFrame.transform.GetChild(3).DOLocalMoveX(1.4f, 0.5f).SetEase(Ease.InOutSine);
                 mainFrame.transform.GetChild(1).DOLocalMoveX(-1.4f, 0.5f).SetEase(Ease.InOutSine);
@@ -80,7 +80,7 @@ public class TurnController : MonoBehaviour
 
                 yield return Timing.WaitForSeconds(1);
 
-                Debug.Log("通过更改点坐标实现的战斗框轴点旋转");
+                Debug.Log("Combat Box Axis Point Rotation by Changing Point Coordinates");
                 for (int i = 0; i < 4; i++)
                 {
                     mainFrame.transform.GetChild(0).DOLocalMove(mainFrame.transform.GetChild(3).transform.localPosition, 0.5f).SetEase(Ease.InOutSine);
@@ -92,14 +92,14 @@ public class TurnController : MonoBehaviour
 
 
 
-                Debug.Log("简单嵌套弹幕编写示例");
+                Debug.Log("Example of writing a simple nested bullet");
                 for (int i = 0; i < 5 * 20; i++) 
                 {
                     Timing.RunCoroutine(_TurnNest(Nest.simpleNestBullet));
                     yield return Timing.WaitForSeconds(0.2f);
                 }
 
-                Debug.Log("战斗框缩放回初始坐标以结束回合");
+                Debug.Log("Scale the battle box back to its initial coordinates to end the turn");
                 yield return Timing.WaitForSeconds(1f);
                 mainFrame.transform.GetChild(0).DOLocalMoveX(5.93f, 0.5f).SetEase(Ease.InOutSine);
                 mainFrame.transform.GetChild(3).DOLocalMoveX(5.93f, 0.5f).SetEase(Ease.InOutSine);
@@ -125,7 +125,7 @@ public class TurnController : MonoBehaviour
 
                 for (int i = 60; i > 0; i--)
                 {
-                    Debug.Log("你先别急，先等" + MainControl.instance.RandomStringColor() + i + "</color>秒");
+                    Debug.Log("Don't worry, wait " + MainControl.instance.RandomStringColor() + i + "</color> second");
                     yield return Timing.WaitForSeconds(1f);
                 }
                 break;
@@ -137,9 +137,9 @@ public class TurnController : MonoBehaviour
 
     }
     /// <summary>
-    /// 回合嵌套
-    /// 首先在枚举Nest中定义嵌套名称，然后在此编写嵌套内容
-    /// 用于重复复杂弹幕的嵌套使用
+    /// Nesting of turns
+    /// First, define nested names in the enumeration Nest, and then write nested content here
+    /// Nested use for repeating complex bullet
     /// </summary>
     IEnumerator<float> _TurnNest(Nest nest)
     {

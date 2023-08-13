@@ -43,7 +43,7 @@ public class StretchPostPass : ScriptableRenderPass
         renderPassEvent = passEvent;
         if (StretchPostShader == null)
         {
-            Debug.LogError("Shader²»´æÔÚ");
+            Debug.LogError("Shader does not exist");
             return;
         }
         mat = CoreUtils.CreateEngineMaterial(StretchPostShader);

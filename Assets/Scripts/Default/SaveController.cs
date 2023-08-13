@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using UnityEngine;
 
 /// <summary>
-/// 存档存储的数据
+/// Save stored data
 /// </summary>
 public class SaveController : MonoBehaviour
 {
@@ -21,25 +21,25 @@ public class SaveController : MonoBehaviour
             Directory.CreateDirectory(Application.dataPath + "/Data");
         }
         usersData[data.name] = data;
-        // 转换数据
+        // Convert Data
         string jsonData = JsonConvert.SerializeObject(data);
 
         File.WriteAllText(Application.dataPath + string.Format("/Data/{0}.json", dataName), jsonData);
     }
 
-    // 读取用户数据到内存
+    //Read user data to memory
     public static PlayerControl LoadData(string dataName)
     {
         //Debug.Log("load");
 
         SortAndRenameData();
         string path = Application.dataPath + string.Format("/Data/{0}.json", dataName);
-        // 检查用户配置文件是否存在
+        // Check if the user profile exists
         if (File.Exists(path))
         {
             string jsonData = File.ReadAllText(path);
-            PlayerControl userData = ScriptableObject.CreateInstance<PlayerControl>(); // 使用 CreateInstance 方法
-            JsonConvert.PopulateObject(jsonData, userData); // 使用 PopulateObject 方法来填充数据
+            PlayerControl userData = ScriptableObject.CreateInstance<PlayerControl>(); // Using the CreateInstance function
+            JsonConvert.PopulateObject(jsonData, userData); // Using the PopulateObject function to fill in data
             usersData[dataName] = userData;
             return userData;
         }
@@ -54,7 +54,7 @@ public class SaveController : MonoBehaviour
 
         if (!Directory.Exists(Application.dataPath + "/Data"))
         {
-            //Debug.Log("家人们谁懂啊"+ Application.dataPath + "/Data");
+            //Debug.Log("Never gonna give you up"+ Application.dataPath + "/Data");
             return 0;
         }
 
@@ -72,21 +72,21 @@ public class SaveController : MonoBehaviour
     {
         string path = Application.dataPath + string.Format("/Data/{0}.json", dataName);
 
-        // 检查存档是否存在
+        // Check if the archive exists
         if (File.Exists(path))
         {
-            // 从内存中移除存档数据
+            // Removing archived data from memory
             if (usersData.ContainsKey(dataName))
             {
                 usersData.Remove(dataName);
             }
 
-            // 删除文件
+            // delete file
             File.Delete(path);
         }
         else
         {
-            Debug.LogWarningFormat("存档 '{0}' 不存在，无法删除。", dataName);
+            Debug.LogWarningFormat("The archive '{0}' does not exist and cannot be deleted.", dataName);
         }
         SortAndRenameData();
     }
@@ -97,14 +97,14 @@ public class SaveController : MonoBehaviour
 
         if (!Directory.Exists(dataPath))
         {
-            Debug.LogWarning("存档目录不存在，无法进行排序和重命名。");
+            Debug.LogWarning("The archive directory does not exist and cannot be sorted or renamed.");
             return;
         }
 
-        // 获取目录下所有的存档文件路径
+        // Obtain all archive file paths under the directory
         string[] files = Directory.GetFiles(dataPath, "*.json");
 
-        // 按照文件名的数字进行排序
+        // Sort by number of file names
         Array.Sort(files, (a, b) =>
         {
             string fileNameA = Path.GetFileNameWithoutExtension(a);
@@ -119,7 +119,7 @@ public class SaveController : MonoBehaviour
             return fileNameA.CompareTo(fileNameB);
         });
 
-        // 重命名文件
+        // rename file
         for (int i = 0; i < files.Length; i++)
         {
             string newFileName = string.Format("Data{0}.json", i);

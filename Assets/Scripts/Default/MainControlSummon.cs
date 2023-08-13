@@ -6,41 +6,41 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using static MainControl;
 /// <summary>
-/// 生成总控，并在切换场景时保留已生成的总控。
-/// 以此只调用一次MainControl的数据加载。
+/// Generate a MainControl and retain the generated master control when switching scenes.
+/// Only call MainControl once to load data.
 /// 
-/// 同时会生成BGMControl
+/// BGMControl will also be generated
 /// </summary>
 public class MainControlSummon : MonoBehaviour
 {
-    [Header("-Canvas设置-")]
+    [Header("-Canvas Settings-")]
     public RenderMode renderMode;
     public int framePic;
     [Space]
 
-    [Header("-BGMControl设置-")]
+    [Header("-BGMControl Settings-")]
     [Space]
-    [Header("BGM本体音频 空为无音频")]
+    [Header("BGM. Empty for no audio")]
     public AudioClip bgmClip;
-    [Header("BGM音量")]
+    [Header("BGM Volume")]
     public float volume = 0.5f;
-    [Header("BGM音调")]
+    [Header("BGM Pitch")]
     public float pitch = 1;
-    [Header("BGM循环播放初始状态")]
+    [Header("BGM loop playback initial state")]
     public bool loop = true;
 
 
-    [Header("-MainControl设置-")]
+    [Header("-MainControl Settings-")]
 
     [Space]
 
-    [Header("黑场状态相关")]
+    [Header("Black field state related")]
     public SceneState sceneState;
     public bool haveInOutBlack, noInBlack;
     public bool notPauseIn;
 
     [Space]
-    [Header("战斗内场景额外设置")]
+    [Header("Additional settings for combat scenes")]
     public List<int> poolCount;
 
     void Awake()
@@ -95,7 +95,7 @@ public class MainControlSummon : MonoBehaviour
         GameObject gameObjectM = GameObject.Find("MainControl");
         if (gameObjectM != null && gameObjectM.TryGetComponent(out mainControl))
         {
-            //Debug.LogWarning("<color=yellow>检测到本场景内有MainControl</color>", gameObject);
+            //Debug.LogWarning("<color=yellow>MainControl detected in this scene</color>", gameObject);
 
             mainControl.sceneState = sceneState;
             mainControl.haveInOutBlack = haveInOutBlack;
@@ -106,7 +106,7 @@ public class MainControlSummon : MonoBehaviour
             mainControl.SetResolution(instance.OverworldControl.resolutionLevel);
             return;
         }
-        //生成
+        //Summon
         DontDestroyOnLoad(transform);
 
 

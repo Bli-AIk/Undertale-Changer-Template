@@ -1,35 +1,38 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 /// <summary>
-/// 战斗系统管理器，仅使用于战斗场景。
+/// Battle System Manager. Only used in Battle scene.
 /// </summary>
 [CreateAssetMenu(fileName = "BattleControl", menuName = "BattleControl")]
 public class BattleControl : ScriptableObject
 {
-    [Header("敌人OBJ")]
-    [Header("物体名会识别为敌人名称")]
-    public List<GameObject> enemies;//敌方的Obj。
+    [Header("Enemy OBJ")]
+    [Header("Object names will be recognized as enemy names")]
+    public List<GameObject> enemies;//Enemy Obj.
 
-    [Header("HP 偶为目前血量 奇为最大Max 下同")]
+    [Header("HP. Even numbers represent the current HP,")]
+    [Header("odd numbers represent the maximum Max,")]
+    [Header("the same below.")]
     public List<int> enemiesHp;
     public List<int> enemiesATK, enemiesDEF;
-    [Header("战斗内UIText读取")]
+    [Header("Reading UIText during battles")]
     public string uiText;
     public List<string> uiTextSave;
 
-    [Header("存储ACT选项和选择后文本")]
-    public List<string> actSave;//4个一对应 根据enemies而排序
-    [Header("存储MERCY选项和选择后文本")]
+    [Header("Store ACT options and selected text")]
+    public List<string> actSave;//Every 4 corresponds to one enemy. Sort by enemies
+    [Header("Store MERCY options and selected text")]
     public List<string> mercySave;
-    [Header("按回合存储旁白")]
+    [Header("Store narration by turn")]
     public List<string> turnTextSave;
-    [Header("存储敌人对话文件")]
-    public List<string> turnDialogAsset;//直接在战斗场景内读取
+    [Header("Storing Enemy Conversation Files")]
+    public List<string> turnDialogAsset;//Directly read within the Battle scene
     public List<TextAsset> otherDialogAsset;
 
     /// <summary>
-    /// 弹幕颜色数据（原版特殊弹幕），非视觉颜色
+    /// Bullet color data (original special bullet), non visual color
     /// </summary>
     public enum BulletColor
     {
@@ -40,7 +43,7 @@ public class BattleControl : ScriptableObject
     }
     public List<Color> bulletColorList;
     /// <summary>
-    /// 玩家数据颜色
+    /// Player Data Color
     /// </summary>
     public enum PlayerColor
     {
@@ -57,7 +60,7 @@ public class BattleControl : ScriptableObject
     
 
 
-    [Header("项目附加")]
+    [Header("Project Attachment")]
     public int randomTurnDir;
     
 }

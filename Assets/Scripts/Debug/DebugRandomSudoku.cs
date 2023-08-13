@@ -5,7 +5,7 @@ using UnityEngine;
 public class DebugRandomSudoku : MonoBehaviour
 {
 
-    //æ≈π¨∏Ò≤‚ ‘
+    //Nine Palace Grid Test
     public List<DebugSudoku> sudokos;
     public int randomNum;
     

@@ -43,7 +43,7 @@ public class GlitchArtPass : ScriptableRenderPass
         renderPassEvent = passEvent;
         if (GlitchArtShader == null)
         {
-            Debug.LogError("Shader不存在");
+            Debug.LogError("Shader does not exist");
             return;
         }
         mat = CoreUtils.CreateEngineMaterial(GlitchArtShader);

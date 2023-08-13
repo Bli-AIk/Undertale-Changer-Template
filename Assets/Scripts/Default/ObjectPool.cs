@@ -5,14 +5,14 @@ using UnityEngine;
 public class ObjectPool : MonoBehaviour
 {
 
-    [Header("填充对象池的对象数量")]
+    [Header("Number of objects to fill the object pool")]
     public int count = 10;
 
     public GameObject obj;
     Queue<GameObject> availableObj = new Queue<GameObject>();
     public Transform parent = null;
     /// <summary>
-    /// 初始化/填充对象池
+    /// Initialize/Fill Object Pool
     /// </summary>
     public void FillPool()
     {
@@ -26,7 +26,7 @@ public class ObjectPool : MonoBehaviour
         }
     }
     /// <summary>
-    /// 返回对象池
+    /// Return Object Pool
     /// </summary>
     public void ReturnPool(GameObject gameObject)
     {
@@ -38,7 +38,7 @@ public class ObjectPool : MonoBehaviour
         availableObj.Enqueue(gameObject);
     }
     /// <summary>
-    /// 喜提对象
+    /// Congratulations on getting an object :)
     /// </summary>
     public GameObject GetFromPool()
     {

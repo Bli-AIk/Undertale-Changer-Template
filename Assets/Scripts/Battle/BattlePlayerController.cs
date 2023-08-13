@@ -7,14 +7,14 @@ using UnityEngine.Rendering;
 using MEC;
 
 /// <summary>
-/// 控制战斗内玩家(心)的相关属性
+/// Control the relevant attributes of the player (heart) in the battle scene
 /// </summary>
 public class BattlePlayerController : MonoBehaviour
 {
-    public float speed, speedWeightX, speedWeightY;//速度与权重(按X乘以倍数)，速度测试为3，权重0.5f
+    public float speed, speedWeightX, speedWeightY;//Speed and weight (multiplied by X), the speed test is 3, and the weight is 0.5f
     float speedWeight = 0.5f;
-    public float hitCD, hitCDMax;//无敌时间
-    public bool isMoveing;//用于蓝橙骨判断：玩家是否真的在移动
+    public float hitCD, hitCDMax;//Invincible time
+    public bool isMoveing;//Used for Blue or Orange Bone Determination: Is the player really moving?
     public enum PlayerDirEnum
     {
         up,
@@ -24,18 +24,18 @@ public class BattlePlayerController : MonoBehaviour
         nullDir
 
     };
-    public PlayerDirEnum playerDir;//方向
+    public PlayerDirEnum playerDir;//direction
     public Vector3 moveing;
-    public bool isJump;//是否处于“跳起”状态
-    public float jumpAcceleration;//跳跃的加速度
-    public float jumpRayDistance;//射线距离
+    public bool isJump;//Is it in the 'start jumping' state
+    public float jumpAcceleration;//Jumping acceleration
+    public float jumpRayDistance;//Ray distance
     public float jumpRayDistanceForBoard;
-    public float jumpFrozen, jumpFrozenMax;//用于跳跃中途松开时的悬空帧计时。
+    public float jumpFrozen, jumpFrozenMax;//Used for timing the number of frames in the air when the jump key is raised midway through the jump.
 
     Rigidbody2D rigidBody;
-    public CircleCollider2D collideCollider;//圆形碰撞体
+    public CircleCollider2D collideCollider;//Circular collision
     SpriteRenderer spriteRenderer;
-    public BattleControl.PlayerColor playerColor;//含有属性的颜色 读取BattleControl中的enum PlayerColor.颜色变换通过具体变换的函数来执行
+    public BattleControl.PlayerColor playerColor;//Colors containing attributes. Read enum PlayerColor in BattleControl. Color transformation is performed through specific transformation functions
     Tween missAnim = null;
 
     public Volume hitVolume;
@@ -162,9 +162,9 @@ public class BattlePlayerController : MonoBehaviour
 
         Ray2D rayF = new Ray2D(transform.position, dirReal * -1);
         Debug.DrawRay(rayF.origin, rayF.direction, Color.red);
-        RaycastHit2D infoF = Physics2D.Raycast(transform.position, dirReal * -1, jumpRayDistance);//反向检测(顶头)
+        RaycastHit2D infoF = Physics2D.Raycast(transform.position, dirReal * -1, jumpRayDistance);//Reverse detection (touching the top)
 
-        //------------------------移动------------------------
+        //------------------------MOVE------------------------
         switch (playerColor)
         {
             case BattleControl.PlayerColor.red:
@@ -208,7 +208,7 @@ public class BattlePlayerController : MonoBehaviour
                     moveing = new Vector3(0, moveing.y);
                 break;
             case BattleControl.PlayerColor.orange:
-                /*同时按下两个方向键有bug
+                /*Pressing both direction keys simultaneously has a bug
                 if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow))
                 {
                     moveing = new Vector3(moveing.x, 1);
@@ -584,9 +584,9 @@ public class BattlePlayerController : MonoBehaviour
 
 
 
-        
 
-        //蓝橙骨所用的是否移动判定
+
+        //Used by Blue Orange Bone. Judgment on whether to move or not
         Vector2 dirMoveX = new Vector2();
         Vector2 dirMoveY = new Vector2();
         bool isMoveX = false, isMoveY = false;
@@ -690,8 +690,8 @@ public class BattlePlayerController : MonoBehaviour
         moveing.y = MainControl.instance.JudgmentNumber(true, moveing.y, 5);
 
 
-        rigidBody.MovePosition(transform.position + new Vector3(speedWeightX * speed * moveing.x * Time.deltaTime, speedWeightY * speed * moveing.y * Time.deltaTime));//速度参考：3
-        //transform.position = transform.position + new Vector3(speed * moveing.x * Time.deltaTime, speed * moveing.y * Time.deltaTime);//蓝心会有巨大偏差 不采用
+        rigidBody.MovePosition(transform.position + new Vector3(speedWeightX * speed * moveing.x * Time.deltaTime, speedWeightY * speed * moveing.y * Time.deltaTime));//Speed Reference: 3
+        //transform.position = transform.position + new Vector3(speed * moveing.x * Time.deltaTime, speed * moveing.y * Time.deltaTime);//Using this will cause significant deviation in the Blue Heart, so it is not recommended to use it
         if (moveingSave != 0)
             moveing.y = moveingSave;
 
@@ -701,7 +701,7 @@ public class BattlePlayerController : MonoBehaviour
     
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        //蓝心碰板子确保再次可以跳
+        //The blue heart touches the board to ensure it can jump again
         if (collision.transform.CompareTag("board") && collision.transform.GetComponent<EdgeCollider2D>().IsTouching(collideCollider) && playerColor == BattleControl.PlayerColor.blue)
         {
             jumpRayDistance = 0;
@@ -719,7 +719,7 @@ public class BattlePlayerController : MonoBehaviour
     }
     */
     /// <summary>
-    /// 掉出
+    /// fall out
     /// </summary>
     private void OnCollisionExit2D(Collision2D collision)
     {
@@ -749,9 +749,9 @@ public class BattlePlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// 通过渐变动画将玩家的颜色改变。
-    /// 若time小于等于0 则不会有渐变动画；
-    /// 若PlayerColor输入为nullColor，则不会更改玩家的实际颜色属性。
+    /// Change the player's color through gradient animation.
+    /// If time is less than or equal to 0, there will be no gradient animation;
+    /// If the PlayerColor input is nullColor, the player's actual color attribute will not be changed.
     /// </summary>
     public void ChangePlayerColor(Color aimColor, BattleControl.PlayerColor aimPlayerColor, float time = 0.1f, PlayerDirEnum dir = PlayerDirEnum.nullDir)
     {
@@ -821,9 +821,9 @@ public class BattlePlayerController : MonoBehaviour
 
 
 
-//杂项
+//miscellaneous
 /*
- 写蓝心的时候无意中搞出来的弹球式蓝心：
+ The pinball style blue heart that was accidentally created while writing blue heart:
 
   case BattleControl.PlayerColor.blue:
                 int gravity = 10;
