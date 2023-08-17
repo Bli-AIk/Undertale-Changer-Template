@@ -1480,7 +1480,7 @@ PrefabInstance:
     - target: {fileID: 2735931670647202130, guid: 85a3edc090f79fb4780a6e2f72de7957,
         type: 3}
       propertyPath: framePic
-      value: 4
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 2735931670647202130, guid: 85a3edc090f79fb4780a6e2f72de7957,
         type: 3}
