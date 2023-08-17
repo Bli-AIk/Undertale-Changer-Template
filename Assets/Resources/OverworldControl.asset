@@ -19,86 +19,70 @@ MonoBehaviour:
   - {fileID: 11400000, guid: cc082749fb53e2246a86ef4f3aab4943, type: 2}
   - {fileID: 11400000, guid: 2fb4bf2c8426f4a48baa87d88688e4e9, type: 2}
   textWidth: 0
-  resolutionLevel: 5
+  resolutionLevel: 0
   fullScreen: 0
   mainVolume: 0.05
   noSFX: 0
   openFPS: 1
-  resolution: {x: 960, y: 540}
-  sceneTextsAsset: "/* \nAll dialogue texts for non-combat scenes.\nThe format is:\nSpeaker\\Text;\n\n<image=x>
-    Set the display emotion code. Specifically, if x is a negative number, it means
-    no one is speaking (narrator).\nEmotion codes are generally predefined in the
-    game. If you need to change them, you'll have to test them one by one.\n\nTypewriter
-    special characters (universal input):\n<stop> This character will cause a brief
-    pause when the typewriter reaches it.\n(This character won't be displayed. It's
-    generally used before/after punctuation marks. The principle is to use the preset
-    \"pause typing speed\" to type an empty character, creating a pause.\nIn the
-    old template, the typewriter would pause when it encountered punctuation marks,
-    but this caused some specific issues. Therefore, it was changed to manually add
-    this character.\nPlease note that pressing X won't pause at this character. This
-    character can be stacked. The pause speed depends on the typewriter's settings\u2014simply
-    put, you can't change it.)\n\n<enter> Enter key symbol.\n<x> Directly input character
-    x. x can only be a single character, and the typewriter will skip it and input
-    directly.\n<fx=x> Change the typewriter's sound effect to the x-th one.\n\nIf
-    you need to input a long paragraph or simply want the player to press the Z key
-    multiple times, you can insert <passText> within a paragraph of text.\nWhen the
-    typewriter detects this character, it will stop typing, and if the player presses
-    the Z key, the current text will be cleared, and typing will resume.\nPrevious
-    rich text formatting will be invalidated since the previous text has been cleared.\n\nRich
-    text input examples:\n<color=#00000000>Color code supports RGBA hexadecimal.\n</color>Remove
-    color.\n\n<b>Bold text\n</b>Remove bold.\n\n<i>Italic text\n</i>Remove italics.\n\n<size=50>Change
-    font size\n</size>Remove size change.\n\n<color=red>Color code supports specific
-    names, see TMP documentation at http://digitalnativestudios.com/textmeshpro/docs/\n</color>Remove
-    color.\n*/\n\nDemoBox1\\<image=-1><fx=0>* This is a <gradient=\"White to Yellow
-    - UTC\">broken box</gradient><stop>.<stop>.<stop>.<enter>* Haha, we didn't<enter><
-    >< >make the interface.\n<passText><image=0><fx=3>* <gradient=\"White to Red
-    - UTC\">Huh???</gradient><fx=2><stop><stop><stop><enter>* Well, <stop><image=1><fx=3>you<stop>
-    just<stop> <enter>< >< >take<stop> it<stop> easy<stop>.\n<passText><image=2><fx=2>*
-    Right now,<stop>this dialogue<enter>< >< >is a test for<gradient=\"White to Yellow
-    - UTC\"> <enter>< >< >the typewriter</gradient>.\n<passText><image=0><fx=3>*
-    <j><u><s><t>< ><l><i><k><e>< ><t><h><i><s><stop>.\n<passText><image=0><fx=2><*><
-    ><S><n><a><p><stop> and it's <d><o><n><e> <stop><enter>< >< ><s><p><e><a><k><stop>
-    a<stop> whole<stop>sentence.<stop><enter>* <stop><stop><stop><gradient=\"White
-    to Red - UTC\">Cool.</gradient>\n<passText><image=2>* What? <stop>Didn't you
-    see it<enter>< >< >clearly?<stop><enter>* Should I slow down then? \n<passText><image=2><*><
-    ><stop><S><n><a><p><stop> and it's <d><o><n><e>.<stop><stop><stop>Huh?;\n\nPlot\\<image=-1><fx=0>*
-    .<stop>.<stop>.<stop>.<stop>.<stop>.\n<passText>* Ah<stop>.<stop>.<stop>.Is there
-    nobody here?<stop>?\n<passText><image=0><fx=2>* Hello.\n<passText><image=-1><fx=0>*
-    Ah?<stop>Flowey!<stop><enter>* Where have you been hiding,<enter>< >< >you scoundrel?\n<passText><image=2><fx=2>*
-    None of your business.<stop><stop><stop><stop><stop><image=1><enter>* It's time
-    for a battle<enter>< >< >now!;\n\n\nSave\\<image=-1><fx=0>* (The floor of corridor
-    was<enter>< >< >covered in golden light,filling<enter>< >< >you with <gradient=\"White
-    to Red - UTC\">determination</gradient>.);\n\nBackMenu\\<image=-1><fx=1>* (This
-    is a test text, meow.)<enter>* (Do you want to go back to the MENU scene, meow?)<enter><fx=-1><size=5>
-    </size>< >< >< >< >< >< >  Meow<size=5> </size>< >< >< >< >< >< >< >  Annoyed<select>BackMenu;"
+  resolution: {x: 640, y: 480}
+  sceneTextsAsset: '/*
+
+
+    Text storage in MENU and settings.
+
+
+    Format:
+
+
+    Read
+    Name\Text;
+
+
+
+    Generally speaking, the read name is fixed.
+
+    Specifically,
+
+    RenameSp\name|true|true|text;
+
+    The
+    format is the setting when trying to name a special name. The first true or false
+    is used to determine whether renaming to this name is allowed, and the second
+    true or false is used to determine whether text in the name is case sensitive
+    when detecting
+
+
+    In particular, if the text is<gaster>, the game will crash.
+
+
+    <playerName>
+    Get player''s name.
+
+
+    */
+
+
+    GameOver1\You''re going to<enter>be alright!<passText><playerName>!<stop><stop><stop><enter>Stay
+    determined<stop>.<stop>.<stop>.;
+
+    GameOver2\You cannot give<enter>up just
+    yet<stop>.<stop>.<stop>.<passText><playerName>!<stop><stop><stop><enter>Stay
+    determined<stop>.<stop>.<stop>.;
+
+    GameOver3\Don''t lost hope!<passText><playerName>!<stop><stop><stop><enter>Stay
+    determined<stop>.<stop>.<stop>.;
+
+    GameOver4\It cannot end<enter>now!<passText><playerName>!<stop><stop><stop><enter>Stay
+    determined<stop>.<stop>.<stop>.;
+
+'
   sceneTextsSave:
-  - "DemoBox1\\\u9F35-1\u9F35\u83D40\u83D4* This is a <gradient=\"White to Yellow
-    - UTC\">broken box</gradient>\u9F98.\u9F98.\u9F98.\n* Haha, we didn't\n\u7C9C
-    \u7C9C make the interface.\u8F42\u9F350\u9F35\u83D43\u83D4* <gradient=\"White
-    to Red - UTC\">Huh???</gradient>\u83D42\u83D4\u9F98\u9F98\u9F98\n* Well, \u9F98\u9F351\u9F35\u83D43\u83D4you\u9F98
-    just\u9F98 \n\u7C9C \u7C9C take\u9F98 it\u9F98 easy\u9F98.\u8F42\u9F352\u9F35\u83D42\u83D4*
-    Right now,\u9F98this dialogue\n\u7C9C \u7C9C is a test for<gradient=\"White to
-    Yellow - UTC\"> \n\u7C9C \u7C9C the typewriter</gradient>.\u8F42\u9F350\u9F35\u83D43\u83D4*
-    \u7C9Cj\u7C9Cu\u7C9Cs\u7C9Ct\u7C9C \u7C9Cl\u7C9Ci\u7C9Ck\u7C9Ce\u7C9C \u7C9Ct\u7C9Ch\u7C9Ci\u7C9Cs\u9F98.\u8F42\u9F350\u9F35\u83D42\u83D4\u7C9C*\u7C9C
-    \u7C9CS\u7C9Cn\u7C9Ca\u7C9Cp\u9F98 and it's \u7C9Cd\u7C9Co\u7C9Cn\u7C9Ce \u9F98\n\u7C9C
-    \u7C9C \u7C9Cs\u7C9Cp\u7C9Ce\u7C9Ca\u7C9Ck\u9F98 a\u9F98 whole\u9F98sentence.\u9F98\n*
-    \u9F98\u9F98\u9F98<gradient=\"White to Red - UTC\">Cool.</gradient>\u8F42\u9F352\u9F35*
-    What? \u9F98Didn't you see it\n\u7C9C \u7C9C clearly?\u9F98\n* Should I slow
-    down then? \u8F42\u9F352\u9F35\u7C9C*\u7C9C \u9F98\u7C9CS\u7C9Cn\u7C9Ca\u7C9Cp\u9F98
-    and it's \u7C9Cd\u7C9Co\u7C9Cn\u7C9Ce.\u9F98\u9F98\u9F98Huh?;"
-  - "Plot\\\u9F35-1\u9F35\u83D40\u83D4* .\u9F98.\u9F98.\u9F98.\u9F98.\u9F98.\u8F42*
-    Ah\u9F98.\u9F98.\u9F98.Is there nobody here?\u9F98?\u8F42\u9F350\u9F35\u83D42\u83D4*
-    Hello.\u8F42\u9F35-1\u9F35\u83D40\u83D4* Ah?\u9F98Flowey!\u9F98\n* Where have
-    you been hiding,\n\u7C9C \u7C9C you scoundrel?\u8F42\u9F352\u9F35\u83D42\u83D4*
-    None of your business.\u9F98\u9F98\u9F98\u9F98\u9F98\u9F351\u9F35\n* It's time
-    for a battle\n\u7C9C \u7C9C now!;"
-  - "Save\\\u9F35-1\u9F35\u83D40\u83D4* (The floor of corridor was\n\u7C9C \u7C9C
-    covered in golden light,filling\n\u7C9C \u7C9C you with <gradient=\"White to
-    Red - UTC\">determination</gradient>.);"
-  - "BackMenu\\\u9F35-1\u9F35\u83D41\u83D4* (This is a test text, meow.)\n* (Do you
-    want to go back to the MENU scene, meow?)\n\u83D4-1\u83D4<size=5> </size>\u7C9C
-    \u7C9C \u7C9C \u7C9C \u7C9C \u7C9C   Meow<size=5> </size>\u7C9C \u7C9C \u7C9C
-    \u7C9C \u7C9C \u7C9C \u7C9C   Annoyed\u79A4BackMenu;"
+  - "GameOver1\\You're going to\nbe alright!\u8F42Debug!\u9F98\u9F98\u9F98\nStay
+    determined\u9F98.\u9F98.\u9F98.;"
+  - "GameOver2\\You cannot give\nup just yet\u9F98.\u9F98.\u9F98.\u8F42Debug!\u9F98\u9F98\u9F98\nStay
+    determined\u9F98.\u9F98.\u9F98.;"
+  - "GameOver3\\Don't lost hope!\u8F42Debug!\u9F98\u9F98\u9F98\nStay determined\u9F98.\u9F98.\u9F98.;"
+  - "GameOver4\\It cannot end\nnow!\u8F42Debug!\u9F98\u9F98\u9F98\nStay determined\u9F98.\u9F98.\u9F98.;"
   settingAsset: "/*\n\nText storage in MENU and settings.\n\nFormat:\n\nRead Name\\Text;\n\n\nGenerally
     speaking, the read name is fixed.\nSpecifically,\nRenameSp\\name|true|true|text;\nThe
     format is the setting when trying to name a special name. The first true or false
@@ -106,21 +90,25 @@ MonoBehaviour:
     true or false is used to determine whether text in the name is case sensitive
     when detecting\n\nIn particular, if the text is<gaster>, the game will crash.\n\n<playerName>
     Get player's name.\n\n*/\n\n/* Enter the scene name for reading and archiving
-    */\n\nSaved\\File saved.;\nExample-Corridor\\Last Corridor;\n\n/* Settings */\n\n\n\nLanguagePack\\      
-    Language;\n/* \nFull width setting. It is recommended to set the language with
-    most full width characters such as China, Japan and Korea to true, which will
-    fine tune the text in the game. */\nLanguagePackFullWidth\\false;\n\n/* It is
-    required to input an accurate language and culture code without extra characters
-    for CultureInfo detection */\n\nCultureInfo\\en-US;\n\nSetting\\       Settings;\nSettingMainVolume\\Master
+    */\n\nSaved\\File saved.;\nExample-Corridor\\Last Corridor;\nExample-Study\\Study
+    Scene;\n/* Settings */\n\n\n\nLanguagePack\\       Language;\n/* \nFull width
+    setting. It is recommended to set the language with most full width characters
+    such as China, Japan and Korea to true, which will fine tune the text in the
+    game. */\nLanguagePackFullWidth\\false;\n\n/* It is required to input an accurate
+    language and culture code without extra characters for CultureInfo detection
+    */\n\nCultureInfo\\en-US;\n\nSetting\\       Settings;\nSettingMainVolume\\Master
     volume;\nSettingControl\\Controls;\nSettingFullScreen\\Full screen;\nSettingResolving\\Resolution;\nSettingSFX\\Simplify
-    VFX;\nSettingFPS\\Show FPS;\nSettingBackMenu\\Return to menu;\nSettingBackGame\\Back;\nOpen\\ON;\nClose\\OFF;\nBack\\Return;\nSave\\Save;\n\nSettingMainVolumeTip\\Adjust
+    VFX;\nSettingFPS\\Show FPS;\nSettingBackMenu\\Return to menu;\nSettingBackGame\\Back;\nOpen\\ON;\nClose\\OFF;\nBack\\Return;\nSave\\Save;\nPageDown\\PageDown;\nPageUp\\PageUp;\n\nSettingMainVolumeTip\\Adjust
     global volume.;\nSettingControlTip\\Key setting.;\nSettingFullScreenTipOpen\\Enable
     Full screen.;\nSettingFullScreenTipClose\\When Full screen is enabled, it is
-    recommended to increase the resolution.;\nSettingResolvingTip\\Set game window
-    size.(Always 4:3);\nSettingSFXTip\\Set whether the light effects and special
-    effects in the game are enabled.;\nSettingFPSTip\\Set whether FPS is displayed.;\nSettingBackMenuTip\\Unsaved
-    data will be lost.;\nSettingBackGameTip\\Go back and continue the game.;\n\nControl\\      
-    Control;\nControlDown\\Down;\nControlRight\\Right;\nControlUp\\Up;\nControlLeft\\Left;\nControlZ\\Confirm;\nControlX\\Cancel;\nControlC\\Menu;\nControlV\\Setting;\nControlF4\\Full
+    recommended to increase the resolution.;\nVSyncNone\\(vertical synchronization
+    not enabled, press C to set);\nVSyncFull\\(vertical synchronization: all, press
+    C to set);\nVSyncHalf\\(vertical synchronization: half, press C to set);\nSettingResolvingTip\\Set
+    game window size.(Press C to switch to 16:9);\nSettingResolvingTipHD\\Set game
+    window size.(Press C to switch to 4:3);\nSettingSFXTip\\Set whether the light
+    effects and special effects in the game are enabled.;\nSettingFPSTip\\Set whether
+    FPS is displayed.;\nSettingBackMenuTip\\Unsaved data will be lost.;\nSettingBackGameTip\\Go
+    back and continue the game.;\n\nControl\\       Control;\nControlDown\\Down;\nControlRight\\Right;\nControlUp\\Up;\nControlLeft\\Left;\nControlZ\\Confirm;\nControlX\\Cancel;\nControlC\\Menu;\nControlV\\Setting;\nControlF4\\Full
     screen;\nControlTab\\Resolution;\nControlSemicolon\\VFX;\nControlEsc\\Exit game;\nControlDefault\\Reset
     to default;\n\nControlEggshell\\~Dudu Dudu Dudu~;\n\nControlUnder0\\In the main
     key position setting, press C to set the auxiliary key position.;\nControlUnder1\\Auxiliary
@@ -129,6 +117,7 @@ MonoBehaviour:
   settingSave:
   - Saved\File saved.;
   - Example-Corridor\Last Corridor;
+  - Example-Study\Study Scene;
   - LanguagePack\       Language;
   - LanguagePackFullWidth\false;
   - CultureInfo\en-US;
@@ -145,12 +134,18 @@ MonoBehaviour:
   - Close\OFF;
   - Back\Return;
   - Save\Save;
+  - PageDown\PageDown;
+  - PageUp\PageUp;
   - SettingMainVolumeTip\Adjust global volume.;
   - SettingControlTip\Key setting.;
   - SettingFullScreenTipOpen\Enable Full screen.;
   - SettingFullScreenTipClose\When Full screen is enabled, it is recommended to increase
     the resolution.;
-  - SettingResolvingTip\Set game window size.(Always 4:3);
+  - VSyncNone\(vertical synchronization not enabled, press C to set);
+  - 'VSyncFull\(vertical synchronization: all, press C to set);'
+  - 'VSyncHalf\(vertical synchronization: half, press C to set);'
+  - SettingResolvingTip\Set game window size.(Press C to switch to 16:9);
+  - SettingResolvingTipHD\Set game window size.(Press C to switch to 4:3);
   - SettingSFXTip\Set whether the light effects and special effects in the game are
     enabled.;
   - SettingFPSTip\Set whether FPS is displayed.;
@@ -179,9 +174,10 @@ MonoBehaviour:
   keyCodes: 120100001301000011010000140100007a0000007800000063000000760000001d01000000000000000000001b000000
   keyCodesBack1: 730000006400000077000000610000000d0000002f010000310100000000000000000000000000000000000000000000
   keyCodesBack2: 000000000000000000000000000000000000000030010000320100000000000000000000000000000000000000000000
-  playerDeadPos: {x: 0, y: 0, z: 0}
+  playerDeadPos: {x: 0.35333824, y: -1.0826013, z: 0}
   playerScenePos: {x: 0, y: 0, z: 0}
   animDirection: {x: 0, y: 1}
+  hdResolution: 0
   frames:
   - {fileID: 21300000, guid: 00fa83b3b9050b446a6606a773182ff3, type: 3}
   - {fileID: 21300000, guid: 44c12212cff3fad43a670eea2cfbdf6e, type: 3}
@@ -196,3 +192,5 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 344dff6f11ee1814b861a04e08699d84, type: 3}
   - {fileID: 21300000, guid: ecc91edfdfc433e44a90058696f29d63, type: 3}
   - {fileID: 21300000, guid: 5718272f093dc0a4192ac154e87fc3e8, type: 3}
+  - {fileID: 21300000, guid: 6966e403f72f8dc48b7b01c54f5aa273, type: 3}
+  vsyncMode: 0
