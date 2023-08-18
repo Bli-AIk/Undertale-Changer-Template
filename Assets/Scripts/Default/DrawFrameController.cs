@@ -18,6 +18,10 @@ public class DrawFrameController : MonoBehaviour
 
     [Header("Enable collision (for battle boxes)")]
     public bool isCollider;
+
+    [Header("ID detection: using_ Point (0)")]
+    bool useBracketId;
+
     PolygonCollider2D polygonCollider2D;
     EdgeCollider2D edgeCollider2D;
 
@@ -73,7 +77,10 @@ public class DrawFrameController : MonoBehaviour
         for (int i = 0; i < points.Count; i++)
         {
             lineRenderer.SetPosition(i, points[i].transform.position);
-            material.SetVector("_Point" + i, points[i].transform.position);
+            if (!useBracketId)
+                material.SetVector("_Point" + i, points[i].transform.position);
+            else
+                material.SetVector("_Point (" + i + ")", points[i].transform.position);
             localPoss.Add(points[i].transform.localPosition);
         }
         if (isCollider)
