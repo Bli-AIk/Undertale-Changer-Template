@@ -1,0 +1,111 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: DrawFrameCircle
+  m_Shader: {fileID: -6465566751694194690, guid: 1defefd4269cfd941916c38fd85e6a23,
+    type: 3}
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _AlphaTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MainTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MaskTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _NormalMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _EnableExternalAlpha: 0
+    - _Width: 0.115
+    m_Colors:
+    - _Color: {r: 0, g: 0, b: 0, a: 1}
+    - _Flip: {r: 1, g: 1, b: 1, a: 1}
+    - _Point_0: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_1: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_10: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_11: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_12: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_13: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_14: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_15: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_16: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_17: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_18: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_19: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_2: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_20: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_21: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_22: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_23: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_24: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_25: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_26: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_27: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_28: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_29: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_3: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_30: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_31: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_32: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_33: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_34: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_35: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_36: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_37: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_38: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_39: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_4: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_40: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_41: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_42: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_43: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_44: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_45: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_46: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_47: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_48: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_49: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_5: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_50: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_6: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_7: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_8: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _Point_9: {r: -0.5, g: -0.5, b: 0, a: 0}
+    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
+  m_BuildTextureStacks: []

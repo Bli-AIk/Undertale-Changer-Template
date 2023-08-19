@@ -9,6 +9,11 @@ public class BulletShaderController : MonoBehaviour
 {
 
     Material material;
+
+
+    [Header("IDºÏ≤‚£∫ π”√_Point (0)")]
+    public bool useBracketId;
+
     void Start()
     {
         material = Instantiate(Resources.Load<Material>("Materials/SpriteBattleMask"));
@@ -33,7 +38,12 @@ public class BulletShaderController : MonoBehaviour
 
         for (int i = 0; i < MainControl.instance.drawFrameController.points.Count; i++)
         {
-            material.SetVector("_Point" + i, MainControl.instance.drawFrameController.points[i].transform.position);
+            string id;
+            if (!useBracketId)
+                id = "_Point" + i;
+            else 
+                id = "_Point_" + i;
+            material.SetVector(id, MainControl.instance.drawFrameController.points[i].transform.position);
         }
     }
 }
