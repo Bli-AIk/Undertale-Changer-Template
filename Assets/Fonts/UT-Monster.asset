@@ -13,7 +13,7 @@ Texture2D:
   m_ForcedFallbackFormat: 4
   m_DownscaleFallback: 0
   m_IsAlphaChannelOptional: 0
-  serializedVersion: 3
+  serializedVersion: 2
   m_Width: 512
   m_Height: 1024
   m_CompleteImageSize: 524288
@@ -47,9 +47,6 @@ Texture2D:
     offset: 0
     size: 0
     path: 
-  m_OriginalWidth: 0
-  m_OriginalHeight: 0
-  m_OriginalAssetGuid: 00000000000000000000000000000000
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11871,7 +11868,7 @@ MonoBehaviour:
     m_GlyphPairAdjustmentRecords: []
   fallbackFontAssets: []
   m_FallbackFontAssetTable:
-  - {fileID: 11400000, guid: 6c7aa5a5017414e48b605d14a7860472, type: 2}
+  - {fileID: 11400000, guid: 36b157e70e4f42248804d485f8d68d6c, type: 2}
   m_CreationSettings:
     sourceFontFileName: 
     sourceFontFileGUID: 160b21a5f7bc5ed4aafb90b6a26fdbd3
