@@ -8,6 +8,6 @@ The pivot point is the upper-left corner.
 The bubble size ratio is generally not recommended to change (unless the text cannot fit), set it to (2,2) or higher to prevent it from being too small and causing pixel distortion.
 */
 
-(4,3)\(2,1.5)\NPC1\false\-1.5\<Font=3>Hello!;
-(4,3)\(2,1.5)\NPC1\false\-1.5\<Font=3>Shall we start<enter>the first turn??;
-(4,3)\(-6,1.5)\NPC2\true\-1.5\<Font=3>Oh.;
+(4,3)\(2,1.5)\NPC1\false\-1.5\<font=3>Hello!;
+(4,3)\(2,1.5)\NPC1\false\-1.5\<font=3>Shall we start<enter>the first turn??;
+(4,3)\(-6,1.5)\NPC2\true\-1.5\<font=3>Oh.;

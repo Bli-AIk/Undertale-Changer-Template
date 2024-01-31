@@ -1,31 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
+
 /// <summary>
 /// 战斗内敌人对话气泡控制
 /// </summary>
 public class DialogBubbleBehaviour : MonoBehaviour
-{ 
+{
     public Vector2 position, size;
     public bool isBackRight;
     public float backY;
-    SpriteRenderer sprite, spriteBack;
+    private SpriteRenderer sprite, spriteBack;
     public TypeWritter typeWritter;
     public TextMeshPro tmp;
+
     private void Awake()
     {
         typeWritter = transform.Find("Text").GetComponent<TypeWritter>();
         tmp = transform.Find("Text").GetComponent<TextMeshPro>();
     }
-    void Start()
+
+    private void Start()
     {
         sprite = GetComponent<SpriteRenderer>();
-        spriteBack = transform.Find("DialogBubbleBack").GetComponent<SpriteRenderer>(); 
+        spriteBack = transform.Find("DialogBubbleBack").GetComponent<SpriteRenderer>();
 
         PositionChange();
     }
-
 
     /// <summary>
     /// 改变气泡的大小和左右箭头情况 进行赋值 之类的

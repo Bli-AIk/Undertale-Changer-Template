@@ -5,11 +5,9 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Framework.UserData;
 using UnityEditor;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Editor.Inspectors
 {
@@ -28,26 +26,21 @@ namespace Live2D.Cubism.Editor.Inspectors
         {
             var tag = target as CubismUserDataTag;
 
-
             // Fail silently.
             if (tag == null)
             {
                 return;
             }
 
-
             using (var scope = new EditorGUI.ChangeCheckScope())
             {
                 EditorGUILayout.BeginHorizontal();
-
 
                 // Display user data.
                 EditorGUILayout.LabelField("Value", GUILayout.Width(EditorGUIUtility.labelWidth));
                 var value = EditorGUILayout.TextArea(tag.Value, EditorStyles.textArea, null);
 
-
                 EditorGUILayout.EndHorizontal();
-
 
                 if (!scope.changed)
                 {
@@ -64,6 +57,6 @@ namespace Live2D.Cubism.Editor.Inspectors
             }
         }
 
-        #endregion
+        #endregion Editor
     }
 }

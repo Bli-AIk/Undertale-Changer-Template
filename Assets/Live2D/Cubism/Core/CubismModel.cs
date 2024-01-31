@@ -5,18 +5,19 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Framework;
 using System;
 using UnityEngine;
+
 #if UNITY_2019_3_OR_NEWER
+
 using UnityEngine.LowLevel;
 using UnityEngine.PlayerLoop;
+
 #elif UNITY_2018_1_OR_NEWER
 using UnityEngine.Experimental.LowLevel;
 using UnityEngine.Experimental.PlayerLoop;
 #endif
-
 
 namespace Live2D.Cubism.Core
 {
@@ -35,7 +36,7 @@ namespace Live2D.Cubism.Core
         /// <param name="data">New data.</param>
         public delegate void DynamicDrawableDataHandler(CubismModel sender, CubismDynamicDrawableData[] data);
 
-        #endregion
+        #endregion Delegates
 
         #region Events
 
@@ -44,7 +45,7 @@ namespace Live2D.Cubism.Core
         /// </summary>
         public event DynamicDrawableDataHandler OnDynamicDrawableData;
 
-        #endregion
+        #endregion Events
 
         #region Factory Methods
 
@@ -61,20 +62,17 @@ namespace Live2D.Cubism.Core
                 return null;
             }
 
-
             // Create model.
             var model = new GameObject(moc.name)
                 .AddComponent<CubismModel>();
 
-
             // Initialize it by resetting it.
             model.Reset(moc);
-
 
             return model;
         }
 
-        #endregion
+        #endregion Factory Methods
 
         /// <summary>
         /// Resets a <see cref="CubismMoc"/> reference in <see cref="CubismModel"/>.
@@ -101,12 +99,10 @@ namespace Live2D.Cubism.Core
             private set { _moc = value; }
         }
 
-
         /// <summary>
         /// TaskableModel for unmanaged backend.
         /// </summary>
         private CubismTaskableModel TaskableModel { get; set; }
-
 
         /// <summary>
         /// <see cref="Parameters"/> backing field.
@@ -125,7 +121,6 @@ namespace Live2D.Cubism.Core
                 {
                     Revive();
                 }
-
 
                 return _parameters;
             }
@@ -150,7 +145,6 @@ namespace Live2D.Cubism.Core
                     Revive();
                 }
 
-
                 return _parts;
             }
             private set { _parts = value; }
@@ -173,7 +167,6 @@ namespace Live2D.Cubism.Core
                 {
                     Revive();
                 }
-
 
                 return _drawables;
             }
@@ -198,7 +191,6 @@ namespace Live2D.Cubism.Core
                     Revive();
                 }
 
-
                 return _canvasInformation;
             }
             private set { _canvasInformation = value; }
@@ -207,7 +199,7 @@ namespace Live2D.Cubism.Core
         /// <summary>
         /// Parameter store cache.
         /// </summary>
-        CubismParameterStore _parameterStore;
+        private CubismParameterStore _parameterStore;
 
         /// <summary>
         /// True if instance is revived.
@@ -226,6 +218,7 @@ namespace Live2D.Cubism.Core
         }
 
 #if UNITY_2018_1_OR_NEWER
+
         /// <summary>
         /// Model update functions for player loop.
         /// </summary>
@@ -234,7 +227,6 @@ namespace Live2D.Cubism.Core
 
         private bool WasAttachedModelUpdateFunction { get; set; }
 #endif
-
 
         /// <summary>
         /// True on the frame the instance was enabled.
@@ -245,7 +237,6 @@ namespace Live2D.Cubism.Core
         /// Frame number last update was done.
         /// </summary>
         private int LastTick { get; set; }
-
 
         /// <summary>
         /// Revives instance.
@@ -258,13 +249,11 @@ namespace Live2D.Cubism.Core
                 return;
             }
 
-
             // Return if revive isn't possible.
             if (!CanRevive)
             {
                 return;
             }
-
 
             // Revive unmanaged model.
             TaskableModel = new CubismTaskableModel(Moc);
@@ -308,11 +297,9 @@ namespace Live2D.Cubism.Core
             var parts = CubismPart.CreateParts(TaskableModel.UnmanagedModel);
             var drawables = CubismDrawable.CreateDrawables(TaskableModel.UnmanagedModel);
 
-
             parameters.transform.SetParent(transform);
             parts.transform.SetParent(transform);
             drawables.transform.SetParent(transform);
-
 
             Parameters = parameters.GetComponentsInChildren<CubismParameter>();
             Parts = parts.GetComponentsInChildren<CubismPart>();
@@ -329,7 +316,6 @@ namespace Live2D.Cubism.Core
             WasJustEnabled = true;
             LastTick = -1;
 
-
             Revive();
 
 #if UNITY_2018_1_OR_NEWER
@@ -339,8 +325,8 @@ namespace Live2D.Cubism.Core
 #endif
         }
 
-
 #if UNITY_2018_1_OR_NEWER
+
         /// <summary>
         /// Calls model update functions for player loop.
         /// </summary>
@@ -351,7 +337,6 @@ namespace Live2D.Cubism.Core
                 _modelUpdateFunctions.Invoke();
             }
         }
-
 
         /// <summary>
         /// Register the model update function into the player loop.
@@ -365,7 +350,6 @@ namespace Live2D.Cubism.Core
                 type = typeof(CubismModel),     // Identifier for Profiler Hierarchy view.
                 updateDelegate = OnModelsUpdate    // Register the function.
             };
-
 
             // Get the default player loop.
             var playerLoopSystem =
@@ -397,20 +381,19 @@ namespace Live2D.Cubism.Core
             var playerLoopSubSystem = playerLoopSystem.subSystemList[playerLoopIndex];
             var subSystemList = playerLoopSubSystem.subSystemList;
 
-
             // Register the model update function after "PreLateUpdate" system.
             Array.Resize(ref subSystemList, subSystemList.Length + 1);
             subSystemList[subSystemList.Length - 1] = myPlayerLoopSystem;
-
 
             // Restore the "PreLateUpdate" sytem.
             playerLoopSubSystem.subSystemList = subSystemList;
             playerLoopSystem.subSystemList[playerLoopIndex] = playerLoopSubSystem;
             PlayerLoop.SetPlayerLoop(playerLoopSystem);
         }
+
 #endif
 
-#region Unity Event Handling
+        #region Unity Event Handling
 
         /// <summary>
         /// Called by Unity. Triggers <see langword="this"/> to update.
@@ -422,11 +405,9 @@ namespace Live2D.Cubism.Core
             {
                 _modelUpdateFunctions += OnModelUpdate;
 
-
                 WasAttachedModelUpdateFunction = true;
             }
 #endif
-
 
             // Return on first frame enabled.
             if (WasJustEnabled)
@@ -434,13 +415,11 @@ namespace Live2D.Cubism.Core
                 return;
             }
 
-
             // Return unless revived.
             if (!IsRevived)
             {
                 return;
             }
-
 
             // Return if backend is ticking.
             if (!TaskableModel.DidExecute)
@@ -448,12 +427,11 @@ namespace Live2D.Cubism.Core
                 return;
             }
 
-
             // Sync parameters back.
             TaskableModel.TryReadParameters(Parameters);
 
             // restore last frame parameters value and parts opacity.
-            if(_parameterStore != null)
+            if (_parameterStore != null)
             {
                 _parameterStore.RestoreParameters();
             }
@@ -464,10 +442,8 @@ namespace Live2D.Cubism.Core
                 return;
             }
 
-
             OnDynamicDrawableData(this, TaskableModel.DynamicDrawableData);
         }
-
 
         /// <summary>
         /// Called by Unity. Blockingly updates <see langword="this"/> on first frame enabled; otherwise tries async update.
@@ -490,20 +466,16 @@ namespace Live2D.Cubism.Core
                 return;
             }
 
-
             // Return if already ticked this frame.
             if (LastTick == Time.frameCount && Application.isPlaying)
             {
                 return;
             }
 
-
             LastTick = Time.frameCount;
-
 
             // Try to sync parameters and parts (without caring whether task is executing or not).
             TaskableModel.TryWriteParametersAndParts(Parameters, Parts);
-
 
             // Return if task is executing.
             if (TaskableModel.IsExecuting)
@@ -511,25 +483,20 @@ namespace Live2D.Cubism.Core
                 return;
             }
 
-
             // Force blocking update on first frame enabled.
             if (WasJustEnabled)
             {
                 // Force sync update.
                 TaskableModel.UpdateNow();
 
-
                 // Unset condition.
                 WasJustEnabled = false;
-
 
                 // Fetch results by calling own 'Update()'.
                 Update();
 
-
                 return;
             }
-
 
             // Enqueue update task.
             TaskableModel.Update();
@@ -542,7 +509,6 @@ namespace Live2D.Cubism.Core
         {
             WasJustEnabled = true;
 
-
             Revive();
         }
 
@@ -552,7 +518,6 @@ namespace Live2D.Cubism.Core
             if (WasAttachedModelUpdateFunction)
             {
                 _modelUpdateFunctions -= OnModelUpdate;
-
 
                 WasAttachedModelUpdateFunction = false;
             }
@@ -569,9 +534,7 @@ namespace Live2D.Cubism.Core
                 return;
             }
 
-
             TaskableModel.ReleaseUnmanaged();
-
 
             TaskableModel = null;
         }
@@ -584,6 +547,6 @@ namespace Live2D.Cubism.Core
             OnEnable();
         }
 
-#endregion
+        #endregion Unity Event Handling
     }
 }

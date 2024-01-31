@@ -1,7 +1,7 @@
 using DG.Tweening;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 /// <summary>
 /// 使用LineRenderer与多边形shader绘制多边形框，用于战斗框、UI等。
 /// </summary>
@@ -13,7 +13,6 @@ public class DrawFrameController : MonoBehaviour
     [Header("顶点数")]
     public int pointsMax = 4;
 
-
     [Header("顶点")]
     public List<Transform> points = new List<Transform>();
 
@@ -22,18 +21,20 @@ public class DrawFrameController : MonoBehaviour
 
     [Header("ID检测：使用_Point (0)")]
     public bool useBracketId;
+
     [Header("使用这个可以让它创建时绘制正多边形")]
     public bool startDraw;
+
     [Header("关闭自动获取材质")]
     public bool noAutoMaterial;
-    PolygonCollider2D polygonCollider2D;
-    EdgeCollider2D edgeCollider2D;
 
-    LineRenderer lineRenderer;
-    Material material;
+    private PolygonCollider2D polygonCollider2D;
+    private EdgeCollider2D edgeCollider2D;
 
+    private LineRenderer lineRenderer;
+    private Material material;
 
-    void Start()
+    private void Start()
     {
         points.Clear();
         if (pointsMax < 3)
@@ -58,7 +59,6 @@ public class DrawFrameController : MonoBehaviour
                 points[i] = obj.transform;
             }
         }
-
 
         lineRenderer = gameObject.GetComponent<LineRenderer>();
         lineRenderer.loop = true;
@@ -90,8 +90,7 @@ public class DrawFrameController : MonoBehaviour
         }
     }
 
-
-    void Update()
+    private void Update()
     {
         List<Vector2> localPoss = new List<Vector2>();
         for (int i = 0; i < points.Count; i++)
@@ -110,8 +109,6 @@ public class DrawFrameController : MonoBehaviour
             edgeCollider2D.SetPoints(localPoss);
         }
 
-
-
         if (Input.GetKeyDown(KeyCode.W))
         {
             List<Vector2> rectangleVertices = new List<Vector2>
@@ -126,7 +123,7 @@ public class DrawFrameController : MonoBehaviour
         }
     }
 
-    List<Transform> Draw(List<Transform> pointList, float drawRadius)
+    private List<Transform> Draw(List<Transform> pointList, float drawRadius)
     {
         int sides = pointList.Count;  // 根据points的数量确定边数
         List<Transform> drawnPoints = new List<Transform>();
@@ -146,9 +143,7 @@ public class DrawFrameController : MonoBehaviour
         return drawnPoints;
     }
 
-
-
-    void AnimateToRectangle(List<Transform> pointList, float duration, List<Vector2> vertices)
+    private void AnimateToRectangle(List<Transform> pointList, float duration, List<Vector2> vertices)
     {
         if (pointList.Count != vertices.Count)
         {

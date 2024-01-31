@@ -1,6 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 /// <summary>
 /// 主要用于Overworld的数据与通用基本数据
 /// </summary>
@@ -16,24 +16,28 @@ public class OverworldControl : ScriptableObject
 
     [Header("字体全半角")]
     public bool textWidth;//字体全半角
+
     [Header("分辨率等级")]
     public int resolutionLevel;//分辨率等级
+
     [Header("全屏")]
     public bool fullScreen;//全屏开关
 
-
-
     [Header("全局音量")]
     public float mainVolume;//全局音量
+
     [Header("简化特效")]
     public bool noSFX;//光效 后处理特效显示
+
     [Header("显示FPS")]
     public bool openFPS;//显示FPS
+
     [Header("分辨率（显示用）")]
     public Vector2 resolution;//分辨率
 
     [Header("文本包读取")]
     public string sceneTextsAsset;
+
     public List<string> sceneTextsSave;
 
     public string settingAsset;
@@ -46,16 +50,18 @@ public class OverworldControl : ScriptableObject
 
     [Header("场景衔接存储")]
     public Vector3 playerScenePos;
+
     public Vector2 animDirection;
 
     [Header("HD边框")]
     public bool hdResolution;
-    public List<Sprite> frames;
 
+    public List<Sprite> frames;
 
     //[Header("游戏内需要存档的数据在下面写")]
     [Header("垂直同步")]
     public VSyncMode vsyncMode;
+
     public enum VSyncMode
     {
         DonNotSync, // 不同步

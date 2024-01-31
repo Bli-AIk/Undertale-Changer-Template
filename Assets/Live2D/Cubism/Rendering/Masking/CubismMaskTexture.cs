@@ -5,11 +5,9 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
-
 
 namespace Live2D.Cubism.Rendering.Masking
 {
@@ -30,7 +28,7 @@ namespace Live2D.Cubism.Rendering.Masking
             return value.RenderTexture;
         }
 
-        #endregion
+        #endregion Conversion
 
         /// <summary>
         /// The global mask texture.
@@ -39,7 +37,6 @@ namespace Live2D.Cubism.Rendering.Masking
         {
             get { return Resources.Load<CubismMaskTexture>("Live2D/Cubism/GlobalMaskTexture"); }
         }
-
 
         /// <summary>
         /// <see cref="Size"/> backing field.
@@ -61,13 +58,11 @@ namespace Live2D.Cubism.Rendering.Masking
                     return;
                 }
 
-
                 // Fail silently if not power-of-two.
                 if (!value.IsPowerOfTwo())
                 {
                     return;
                 }
-
 
                 // Apply changes.
                 _size = value;
@@ -83,7 +78,6 @@ namespace Live2D.Cubism.Rendering.Masking
             }
         }
 
-
         /// <summary>
         /// Channel count.
         /// </summary>
@@ -91,7 +85,6 @@ namespace Live2D.Cubism.Rendering.Masking
         {
             get { return 4; }
         }
-
 
         /// <summary>
         /// <see cref="Subdivisions"/> backing field.
@@ -112,10 +105,8 @@ namespace Live2D.Cubism.Rendering.Masking
                     return;
                 }
 
-
                 // Apply changes.
                 _subdivisions = value;
-
 
                 if (_renderTextureCount < 1)
                 {
@@ -168,7 +159,6 @@ namespace Live2D.Cubism.Rendering.Masking
         /// </summary>
         private CubismMaskTilePool TilePool { get; set; }
 
-
         /// <summary>
         /// <see cref="RenderTexture"/> backing field.
         /// </summary>
@@ -185,7 +175,6 @@ namespace Live2D.Cubism.Rendering.Masking
                 {
                     RefreshRenderTexture();
                 }
-
 
                 return _renderTexture;
             }
@@ -218,7 +207,6 @@ namespace Live2D.Cubism.Rendering.Masking
         /// Sources.
         /// </summary>
         private List<SourcesItem> Sources { get; set; }
-
 
         /// <summary>
         /// True if instance is revived.
@@ -254,13 +242,11 @@ namespace Live2D.Cubism.Rendering.Masking
             // Make sure instance is valid.
             TryRevive();
 
-
             // Initialize container if necessary.
             if (Sources == null)
             {
                 Sources = new List<SourcesItem>();
             }
-
 
             // Return early if source already exists.
             else if (Sources.FindIndex(i => i.Source == source) != -1)
@@ -276,9 +262,7 @@ namespace Live2D.Cubism.Rendering.Masking
                 Tiles = TilePool.AcquireTiles(source.GetNecessaryTileCount())
             };
 
-
             Sources.Add(item);
-
 
             // Apply tiles to source.
             source.SetTiles(item.Tiles);
@@ -295,9 +279,7 @@ namespace Live2D.Cubism.Rendering.Masking
                 return;
             }
 
-
             var itemIndex = Sources.FindIndex(i => i.Source == source);
-
 
             // Return if source is invalid.
             if (itemIndex == -1)
@@ -312,7 +294,7 @@ namespace Live2D.Cubism.Rendering.Masking
             Sources.RemoveAt(itemIndex);
         }
 
-        #endregion
+        #endregion Interface For ICubismMaskSources
 
         private void TryRevive()
         {
@@ -328,7 +310,6 @@ namespace Live2D.Cubism.Rendering.Masking
             {
                 return;
             }
-
 
             RefreshRenderTexture();
         }
@@ -348,11 +329,9 @@ namespace Live2D.Cubism.Rendering.Masking
                 {
                     var source = Sources[i];
 
-
                     source.Tiles = TilePool.AcquireTiles(source.Source.GetNecessaryTileCount());
 
                     source.Source.SetTiles(source.Tiles);
-
 
                     Sources[i] = source;
                 }
@@ -384,7 +363,6 @@ namespace Live2D.Cubism.Rendering.Masking
 
             // Recreate allocator.
             TilePool = new CubismMaskTilePool(Subdivisions, Channels);
-
 
             // Reinitialize sources.
             ReinitializeSources();
@@ -435,7 +413,7 @@ namespace Live2D.Cubism.Rendering.Masking
             CubismMaskCommandBuffer.RemoveSource(this);
         }
 
-        #endregion
+        #endregion Unity Event Handling
 
         #region ICubismMaskCommandSource
 
@@ -454,7 +432,6 @@ namespace Live2D.Cubism.Rendering.Masking
                 return;
             }
 
-
             // Enqueue render target.
             if (isUsingMultipleBuffer)
             {
@@ -467,7 +444,6 @@ namespace Live2D.Cubism.Rendering.Masking
 
             buffer.ClearRenderTarget(false, true, Color.clear);
 
-
             // Enqueue sources.
             for (var i = 0; i < Sources.Count; ++i)
             {
@@ -475,7 +451,7 @@ namespace Live2D.Cubism.Rendering.Masking
             }
         }
 
-        #endregion
+        #endregion ICubismMaskCommandSource
 
         #region Source Item
 
@@ -495,6 +471,6 @@ namespace Live2D.Cubism.Rendering.Masking
             public CubismMaskTile[] Tiles;
         }
 
-        #endregion
+        #endregion Source Item
     }
 }

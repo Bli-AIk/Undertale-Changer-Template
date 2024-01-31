@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System;
+
 /// <summary>
 /// V0.1.1新加
 /// 用于带动画器的OW，在玩家进入/离开时，执行代码/播放动画。
@@ -9,26 +7,33 @@ using System;
 /// </summary>
 public class TriggerPlayerOut : MonoBehaviour
 {
-	public float volume = 1;
+    public float volume = 1;
     public float pitch = 1;
+
     [Header("更改动画的布尔值：")]
     public string changeBool;
-	[Header("去除进入检测范围执行动画")]
-	public bool banTrigger;
+
+    [Header("去除进入检测范围执行动画")]
+    public bool banTrigger;
+
     [Header("在上个场景为指定场景时去除失效")]
     public string notBanSceneSp;
-	[Header("设置在离开范围/进入范围时执行")]
-	public bool isEnter;
-    Animator animator;
-	bool triggered = false;
+
+    [Header("设置在离开范围/进入范围时执行")]
+    public bool isEnter;
+
+    private Animator animator;
+    private bool triggered = false;
 
     [Header("在上个场景为指定场景时动画器的sceneBool设true")]
     public string sceneSp;
-	public string sceneBool = "SceneSp";
+
+    public string sceneBool = "SceneSp";
+
     [Header("在electricOpen的时候electricOpen")]
     public bool electricOpen;
-    
-    void Start()
+
+    private void Start()
     {
         animator = GetComponent<Animator>();
 
@@ -36,26 +41,27 @@ public class TriggerPlayerOut : MonoBehaviour
         {
             animator.SetBool(sceneBool, true);
         }
-
     }
-	private void OnTriggerEnter2D(Collider2D collision)
+
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-		if (banTrigger && notBanSceneSp != MainControl.instance.PlayerControl.lastScene)
-			return;
+        if (banTrigger && notBanSceneSp != MainControl.instance.PlayerControl.lastScene)
+            return;
         if (!triggered && isEnter && collision.CompareTag("Player"))
         {
             animator.SetBool(changeBool, true);
-			triggered = true;
+            triggered = true;
         }
     }
+
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (banTrigger && notBanSceneSp != MainControl.instance.PlayerControl.lastScene)
-			return;
+            return;
         if (!triggered && !isEnter && collision.CompareTag("Player"))
         {
             animator.SetBool(changeBool, true);
-			triggered = true;
+            triggered = true;
         }
     }
 

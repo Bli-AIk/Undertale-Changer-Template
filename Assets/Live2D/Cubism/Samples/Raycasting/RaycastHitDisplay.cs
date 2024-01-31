@@ -5,11 +5,9 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
-using UnityEngine;
 using Live2D.Cubism.Core;
 using Live2D.Cubism.Framework.Raycasting;
-
+using UnityEngine;
 
 namespace Live2D.Cubism.Samples.Raycasting
 {
@@ -24,13 +22,11 @@ namespace Live2D.Cubism.Samples.Raycasting
         [SerializeField]
         public CubismModel Model;
 
-
         /// <summary>
         /// UI element to display results in.
         /// </summary>
         [SerializeField]
         public UnityEngine.UI.Text ResultsText;
-
 
         /// <summary>
         /// <see cref="CubismRaycaster"/> attached to <see cref="Model"/>.
@@ -42,7 +38,6 @@ namespace Live2D.Cubism.Samples.Raycasting
         /// </summary>
         private CubismRaycastHit[] Results { get; set; }
 
-
         /// <summary>
         /// Hit test.
         /// </summary>
@@ -52,20 +47,16 @@ namespace Live2D.Cubism.Samples.Raycasting
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             var hitCount = Raycaster.Raycast(ray, Results);
 
-
             // Return early if nothing was hit.
             if (hitCount == 0)
             {
                 ResultsText.text = "0";
 
-
                 return;
             }
 
-
             // Show results.
             ResultsText.text = hitCount + "\n";
-
 
             for (var i = 0; i < hitCount; i++)
             {
@@ -95,10 +86,9 @@ namespace Live2D.Cubism.Samples.Raycasting
                 return;
             }
 
-
             DoRaycast();
         }
 
-        #endregion
+        #endregion Unity Event Handling
     }
 }

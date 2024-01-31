@@ -41,15 +41,15 @@
 */
 
 Brand\<image=-1><fx=0>* “按下<gradient="White to Yellow - UTC">[Z]</gradient>键可以阅读标牌！”<stop><stop><stop><stop><stop><stop><stop><enter>* <size=20><gradient="White to Yellow - UTC">[Enter]</gradient>也行。</size>
-<passText>* “这个场景使用了<gradient="White to Yellow - UTC">法线贴图</gradient>！<enter>< >< >“另外，试着到<gradient="White to Red - UTC">水边</gradient>看看？”;
+<passText>* “这个场景使用了<gradient="White to Yellow - UTC">法线贴图</gradient>！<enter><-  ->“另外，试着到<gradient="White to Red - UTC">水边</gradient>看看？”;
 
 River\<image=-1><fx=0>* 这是你！;
 
 WallBrand\<image=-1><fx=0>* 顺着路走。如果你想。;
 
-Text1\<image=-1><fx=0><*>< ><别><按><。> ;
+Text1\<image=-1><fx=0><*><- -><别><按><。> ;
 
-Text2\<image=-1><fx=0><*>< ><也><别><按><。> ;
+Text2\<image=-1><fx=0><*><- -><也><别><按><。> ;
 
 TextAlex\<image=-1><fx=0>* 你打字机没坏你被耍了111;
 

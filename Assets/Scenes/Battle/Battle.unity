@@ -1472,13 +1472,13 @@ PrefabInstance:
     - target: {fileID: 2735931670647202130, guid: 85a3edc090f79fb4780a6e2f72de7957,
         type: 3}
       propertyPath: volume
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2735931670647202130, guid: 85a3edc090f79fb4780a6e2f72de7957,
         type: 3}
       propertyPath: bgmClip
       value: 
-      objectReference: {fileID: 8300000, guid: df8153b204e7de24aad5ad530f685431, type: 3}
+      objectReference: {fileID: 8300000, guid: 1c53cff84e1c2cd4197f0a6c123bfc34, type: 3}
     - target: {fileID: 2735931670647202130, guid: 85a3edc090f79fb4780a6e2f72de7957,
         type: 3}
       propertyPath: framePic
@@ -3753,6 +3753,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   originString: 
   endString: 
+  passTextString: 0
+  isRunning: 0
   isTyping: 0
   hpIn: 0
   hpSave: 0
@@ -3764,10 +3766,8 @@ MonoBehaviour:
   fxRandomPitch: 0
   speed: 0.075
   speedSlow: 0.15
-  clock: 0.1
-  passTextString: 0
+  clock: 0.01
   passText: 0
-  haveSpriteChanger: 0
   spriteChanger: {fileID: 0}
   isOverworld: 0
   pitch: 1
@@ -7175,6 +7175,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   originString: 
   endString: 
+  passTextString: 0
+  isRunning: 0
   isTyping: 0
   hpIn: 0
   hpSave: 0
@@ -7186,10 +7188,8 @@ MonoBehaviour:
   fxRandomPitch: 0
   speed: 0.075
   speedSlow: 0.15
-  clock: 0.1
-  passTextString: 0
+  clock: 0.01
   passText: 0
-  haveSpriteChanger: 0
   spriteChanger: {fileID: 0}
   isOverworld: 0
   pitch: 1

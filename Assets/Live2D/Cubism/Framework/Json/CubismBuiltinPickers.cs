@@ -5,11 +5,9 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core;
 using Live2D.Cubism.Rendering;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Framework.Json
 {
@@ -36,7 +34,6 @@ namespace Live2D.Cubism.Framework.Json
                         : CubismBuiltinMaterials.UnlitAdditive;
                 }
 
-
                 if (drawable.MultiplyBlend)
                 {
                     return (drawable.IsMasked)
@@ -44,7 +41,6 @@ namespace Live2D.Cubism.Framework.Json
                         CubismBuiltinMaterials.UnlitMultiplyMasked
                         : CubismBuiltinMaterials.UnlitMultiply;
                 }
-
 
                 return (drawable.IsMasked)
                     ? (drawable.IsInverted) ? CubismBuiltinMaterials.UnlitMaskedInverted :
@@ -60,7 +56,6 @@ namespace Live2D.Cubism.Framework.Json
                     : CubismBuiltinMaterials.UnlitAdditiveCulling;
             }
 
-
             if (drawable.MultiplyBlend)
             {
                 return (drawable.IsMasked)
@@ -69,13 +64,11 @@ namespace Live2D.Cubism.Framework.Json
                     : CubismBuiltinMaterials.UnlitMultiplyCulling;
             }
 
-
             return (drawable.IsMasked)
                 ? (drawable.IsInverted) ? CubismBuiltinMaterials.UnlitMaskedInvertedCulling :
                 CubismBuiltinMaterials.UnlitMaskedCulling
                 : CubismBuiltinMaterials.UnlitCulling;
         }
-
 
         /// <summary>
         /// Builtin <see cref="Texture2D"/> picker.

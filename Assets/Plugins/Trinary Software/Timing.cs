@@ -1,23 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using UnityEngine.Assertions;
+
 #if UNITY_5_5_OR_NEWER
+
 using UnityEngine.Profiling;
+
 #endif
 
 // /////////////////////////////////////////////////////////////////////////////////////////
 //                              More Effective Coroutines
 //                                        v3.10.2
-// 
+//
 // This is an improved implementation of coroutines that boasts zero per-frame memory allocations,
 // runs about twice as fast as Unity's built in coroutines and has a range of extra features.
-// 
+//
 // This is the free version. MEC also has a pro version, which can be found here:
 // https://www.assetstore.unity3d.com/en/#!/content/68480
 // The pro version contains exactly the same core that the free version uses, but also
 // contains many additional features. Every function that exists in MEC Free also exists in MEC Pro,
 // so you can upgrade at any time without breaking existing code.
-// 
+//
 // For manual, support, or upgrade guide visit http://trinary.tech/
 //
 // Created by Teal Rogers
@@ -34,66 +37,82 @@ namespace MEC
         /// </summary>
         [Tooltip("How quickly the SlowUpdate segment ticks.")]
         public float TimeBetweenSlowUpdateCalls = 1f / 7f;
+
         /// <summary>
         /// The amount that each coroutine should be seperated inside the Unity profiler. NOTE: When the profiler window
         /// is not open this value is ignored and all coroutines behave as if "None" is selected.
         /// </summary>
         [Tooltip("How much data should be sent to the profiler window when it's open.")]
         public DebugInfoType ProfilerDebugAmount;
+
         /// <summary>
         /// The number of coroutines that are being run in the Update segment.
         /// </summary>
         [Tooltip("A count of the number of Update coroutines that are currently running."), Space(12)]
         public int UpdateCoroutines;
+
         /// <summary>
         /// The number of coroutines that are being run in the FixedUpdate segment.
         /// </summary>
         [Tooltip("A count of the number of FixedUpdate coroutines that are currently running.")]
         public int FixedUpdateCoroutines;
+
         /// <summary>
         /// The number of coroutines that are being run in the LateUpdate segment.
         /// </summary>
         [Tooltip("A count of the number of LateUpdate coroutines that are currently running.")]
         public int LateUpdateCoroutines;
+
         /// <summary>
         /// The number of coroutines that are being run in the SlowUpdate segment.
         /// </summary>
         [Tooltip("A count of the number of SlowUpdate coroutines that are currently running.")]
         public int SlowUpdateCoroutines;
+
         /// <summary>
         /// The time in seconds that the current segment has been running.
         /// </summary>
         [System.NonSerialized]
         public float localTime;
+
         /// <summary>
         /// The time in seconds that the current segment has been running.
         /// </summary>
-        public static float LocalTime { get { return Instance.localTime; } }
+        public static float LocalTime
+        { get { return Instance.localTime; } }
+
         /// <summary>
         /// The amount of time in fractional seconds that elapsed between this frame and the last frame.
         /// </summary>
         [System.NonSerialized]
         public float deltaTime;
+
         /// <summary>
         /// The amount of time in fractional seconds that elapsed between this frame and the last frame.
         /// </summary>
-        public static float DeltaTime { get { return Instance.deltaTime; } }
+        public static float DeltaTime
+        { get { return Instance.deltaTime; } }
+
         /// <summary>
         /// Used for advanced coroutine control.
         /// </summary>
         public static System.Func<IEnumerator<float>, CoroutineHandle, IEnumerator<float>> ReplacementFunction;
+
         /// <summary>
         /// This event fires just before each segment is run.
         /// </summary>
         public static event System.Action OnPreExecute;
+
         /// <summary>
-        /// You can use "yield return Timing.WaitForOneFrame;" inside a coroutine function to go to the next frame. 
+        /// You can use "yield return Timing.WaitForOneFrame;" inside a coroutine function to go to the next frame.
         /// </summary>
         public const float WaitForOneFrame = float.NegativeInfinity;
+
         /// <summary>
         /// The main thread that (almost) everything in unity runs in.
         /// </summary>
         public static System.Threading.Thread MainThread { get; private set; }
+
         /// <summary>
         /// The handle of the current coroutine that is running.
         /// </summary>
@@ -107,6 +126,7 @@ namespace MEC
                 return default(CoroutineHandle);
             }
         }
+
         /// <summary>
         /// The handle of the current coroutine that is running.
         /// </summary>
@@ -134,6 +154,7 @@ namespace MEC
         private float _lastSlowUpdateDeltaTime;
         private ushort _framesSinceUpdate;
         private ushort _expansions = 1;
+
         [SerializeField, HideInInspector]
         private byte _instanceID;
 
@@ -192,13 +213,13 @@ namespace MEC
             set { _instance = value; }
         }
 
-        void OnDestroy()
+        private void OnDestroy()
         {
             if (_instance == this)
                 _instance = null;
         }
 
-        void OnEnable()
+        private void OnEnable()
         {
             if (MainThread == null)
                 MainThread = System.Threading.Thread.CurrentThread;
@@ -206,7 +227,7 @@ namespace MEC
             InitializeInstanceID();
         }
 
-        void OnDisable()
+        private void OnDisable()
         {
             if (_instanceID < ActiveInstances.Length)
                 ActiveInstances[_instanceID] = null;
@@ -236,7 +257,7 @@ namespace MEC
             }
         }
 
-        void Update()
+        private void Update()
         {
             if (OnPreExecute != null)
                 OnPreExecute();
@@ -345,7 +366,7 @@ namespace MEC
 
             currentCoroutine = default(CoroutineHandle);
 
-            if(++_framesSinceUpdate > FramesUntilMaintenance)
+            if (++_framesSinceUpdate > FramesUntilMaintenance)
             {
                 _framesSinceUpdate = 0;
 
@@ -359,7 +380,7 @@ namespace MEC
             }
         }
 
-        void FixedUpdate()
+        private void FixedUpdate()
         {
             if (OnPreExecute != null)
                 OnPreExecute();
@@ -377,7 +398,6 @@ namespace MEC
                         if (!FixedUpdatePaused[coindex.i] && !FixedUpdateHeld[coindex.i] && FixedUpdateProcesses[coindex.i] != null && !(localTime < FixedUpdateProcesses[coindex.i].Current))
                         {
                             currentCoroutine = _indexToHandle[coindex];
-
 
                             if (ProfilerDebugAmount != DebugInfoType.None && _indexToHandle.ContainsKey(coindex))
                             {
@@ -419,7 +439,7 @@ namespace MEC
             }
         }
 
-        void LateUpdate()
+        private void LateUpdate()
         {
             if (OnPreExecute != null)
                 OnPreExecute();
@@ -437,7 +457,6 @@ namespace MEC
                         if (!LateUpdatePaused[coindex.i] && !LateUpdateHeld[coindex.i] && LateUpdateProcesses[coindex.i] != null && !(localTime < LateUpdateProcesses[coindex.i].Current))
                         {
                             currentCoroutine = _indexToHandle[coindex];
-
 
                             if (ProfilerDebugAmount != DebugInfoType.None && _indexToHandle.ContainsKey(coindex))
                             {
@@ -768,7 +787,6 @@ namespace MEC
                  : RunCoroutineInternal(coroutine, segment, tag, new CoroutineHandle(_instanceID), true);
         }
 
-
         private CoroutineHandle RunCoroutineInternal(IEnumerator<float> coroutine, Segment segment, string tag, CoroutineHandle handle, bool prewarm)
         {
             ProcessIndex slot = new ProcessIndex { seg = segment };
@@ -1033,7 +1051,7 @@ namespace MEC
         /// <summary>
         /// This will kill all coroutines running on the main MEC instance and reset the context.
         /// NOTE: If you call this function from within a running coroutine then you MUST end the current
-        /// coroutine. If the running coroutine has more work to do you may run a new "part 2" coroutine 
+        /// coroutine. If the running coroutine has more work to do you may run a new "part 2" coroutine
         /// function to complete the task before ending the current one.
         /// </summary>
         /// <returns>The number of coroutines that were killed.</returns>
@@ -1045,7 +1063,7 @@ namespace MEC
         /// <summary>
         /// This will kill all coroutines running on the current MEC instance and reset the context.
         /// NOTE: If you call this function from within a running coroutine then you MUST end the current
-        /// coroutine. If the running coroutine has more work to do you may run a new "part 2" coroutine 
+        /// coroutine. If the running coroutine has more work to do you may run a new "part 2" coroutine
         /// function to complete the task before ending the current one.
         /// </summary>
         /// <returns>The number of coroutines that were killed.</returns>
@@ -1128,7 +1146,7 @@ namespace MEC
             return _instance == null ? 0 : _instance.KillCoroutinesOnInstance(tag);
         }
 
-        /// <summary> 
+        /// <summary>
         /// Kills all coroutines that have the given tag.
         /// </summary>
         /// <param name="tag">All coroutines with this tag will be killed.</param>
@@ -1399,7 +1417,7 @@ namespace MEC
 
         private bool UpdateTimeValues(Segment segment)
         {
-            switch(segment)
+            switch (segment)
             {
                 case Segment.Update:
                     if (_currentUpdateFrame != Time.frameCount)
@@ -1442,6 +1460,7 @@ namespace MEC
                     }
 
                     return false;
+
                 case Segment.SlowUpdate:
                     if (_currentSlowUpdateFrame != Time.frameCount)
                     {
@@ -1467,17 +1486,21 @@ namespace MEC
                 case Segment.Update:
                     if (_currentUpdateFrame == Time.frameCount)
                         return _lastUpdateTime;
-                    else 
+                    else
                         return _lastUpdateTime + Time.deltaTime;
+
                 case Segment.LateUpdate:
                     if (_currentUpdateFrame == Time.frameCount)
                         return _lastLateUpdateTime;
                     else
                         return _lastLateUpdateTime + Time.deltaTime;
+
                 case Segment.FixedUpdate:
                     return Time.fixedTime;
+
                 case Segment.SlowUpdate:
                     return Time.realtimeSinceStartup;
+
                 default:
                     return 0f;
             }
@@ -1529,18 +1552,22 @@ namespace MEC
                     retVal = UpdateProcesses[coindex.i] != null;
                     UpdateProcesses[coindex.i] = null;
                     return retVal;
+
                 case Segment.FixedUpdate:
                     retVal = FixedUpdateProcesses[coindex.i] != null;
                     FixedUpdateProcesses[coindex.i] = null;
                     return retVal;
+
                 case Segment.LateUpdate:
                     retVal = LateUpdateProcesses[coindex.i] != null;
                     LateUpdateProcesses[coindex.i] = null;
                     return retVal;
+
                 case Segment.SlowUpdate:
                     retVal = SlowUpdateProcesses[coindex.i] != null;
                     SlowUpdateProcesses[coindex.i] = null;
                     return retVal;
+
                 default:
                     return false;
             }
@@ -1556,18 +1583,22 @@ namespace MEC
                     retVal = UpdateProcesses[coindex.i];
                     UpdateProcesses[coindex.i] = null;
                     return retVal;
+
                 case Segment.FixedUpdate:
                     retVal = FixedUpdateProcesses[coindex.i];
                     FixedUpdateProcesses[coindex.i] = null;
                     return retVal;
+
                 case Segment.LateUpdate:
                     retVal = LateUpdateProcesses[coindex.i];
                     LateUpdateProcesses[coindex.i] = null;
                     return retVal;
+
                 case Segment.SlowUpdate:
                     retVal = SlowUpdateProcesses[coindex.i];
                     SlowUpdateProcesses[coindex.i] = null;
                     return retVal;
+
                 default:
                     return null;
             }
@@ -1579,12 +1610,16 @@ namespace MEC
             {
                 case Segment.Update:
                     return UpdateProcesses[coindex.i];
+
                 case Segment.FixedUpdate:
                     return FixedUpdateProcesses[coindex.i];
+
                 case Segment.LateUpdate:
                     return LateUpdateProcesses[coindex.i];
+
                 case Segment.SlowUpdate:
                     return SlowUpdateProcesses[coindex.i];
+
                 default:
                     return null;
             }
@@ -1596,12 +1631,16 @@ namespace MEC
             {
                 case Segment.Update:
                     return UpdateProcesses[coindex.i] == null;
+
                 case Segment.FixedUpdate:
                     return FixedUpdateProcesses[coindex.i] == null;
+
                 case Segment.LateUpdate:
                     return LateUpdateProcesses[coindex.i] == null;
+
                 case Segment.SlowUpdate:
                     return SlowUpdateProcesses[coindex.i] == null;
+
                 default:
                     return true;
             }
@@ -1613,7 +1652,7 @@ namespace MEC
                 return false;
 
             bool isPaused;
-            
+
             switch (coindex.seg)
             {
                 case Segment.Update:
@@ -1625,6 +1664,7 @@ namespace MEC
                             UpdateProcesses[coindex.i].Current - GetSegmentTime(coindex.seg));
 
                     return isPaused;
+
                 case Segment.FixedUpdate:
                     isPaused = FixedUpdatePaused[coindex.i];
                     FixedUpdatePaused[coindex.i] = newPausedState;
@@ -1634,6 +1674,7 @@ namespace MEC
                             FixedUpdateProcesses[coindex.i].Current - GetSegmentTime(coindex.seg));
 
                     return isPaused;
+
                 case Segment.LateUpdate:
                     isPaused = LateUpdatePaused[coindex.i];
                     LateUpdatePaused[coindex.i] = newPausedState;
@@ -1643,6 +1684,7 @@ namespace MEC
                             LateUpdateProcesses[coindex.i].Current - GetSegmentTime(coindex.seg));
 
                     return isPaused;
+
                 case Segment.SlowUpdate:
                     isPaused = SlowUpdatePaused[coindex.i];
                     SlowUpdatePaused[coindex.i] = newPausedState;
@@ -1652,6 +1694,7 @@ namespace MEC
                             SlowUpdateProcesses[coindex.i].Current - GetSegmentTime(coindex.seg));
 
                     return isPaused;
+
                 default:
                     return false;
             }
@@ -1675,6 +1718,7 @@ namespace MEC
                             UpdateProcesses[coindex.i].Current - GetSegmentTime(coindex.seg));
 
                     return isHeld;
+
                 case Segment.FixedUpdate:
                     isHeld = FixedUpdateHeld[coindex.i];
                     FixedUpdateHeld[coindex.i] = newHeldState;
@@ -1684,6 +1728,7 @@ namespace MEC
                             FixedUpdateProcesses[coindex.i].Current - GetSegmentTime(coindex.seg));
 
                     return isHeld;
+
                 case Segment.LateUpdate:
                     isHeld = LateUpdateHeld[coindex.i];
                     LateUpdateHeld[coindex.i] = newHeldState;
@@ -1693,6 +1738,7 @@ namespace MEC
                             LateUpdateProcesses[coindex.i].Current - GetSegmentTime(coindex.seg));
 
                     return isHeld;
+
                 case Segment.SlowUpdate:
                     isHeld = SlowUpdateHeld[coindex.i];
                     SlowUpdateHeld[coindex.i] = newHeldState;
@@ -1702,6 +1748,7 @@ namespace MEC
                             SlowUpdateProcesses[coindex.i].Current - GetSegmentTime(coindex.seg));
 
                     return isHeld;
+
                 default:
                     return false;
             }
@@ -1722,12 +1769,16 @@ namespace MEC
             {
                 case Segment.Update:
                     return UpdatePaused[coindex.i];
+
                 case Segment.FixedUpdate:
                     return FixedUpdatePaused[coindex.i];
+
                 case Segment.LateUpdate:
                     return LateUpdatePaused[coindex.i];
+
                 case Segment.SlowUpdate:
                     return SlowUpdatePaused[coindex.i];
+
                 default:
                     return false;
             }
@@ -1739,12 +1790,16 @@ namespace MEC
             {
                 case Segment.Update:
                     return UpdateHeld[coindex.i];
+
                 case Segment.FixedUpdate:
                     return FixedUpdateHeld[coindex.i];
+
                 case Segment.LateUpdate:
                     return LateUpdateHeld[coindex.i];
+
                 case Segment.SlowUpdate:
                     return SlowUpdateHeld[coindex.i];
+
                 default:
                     return false;
             }
@@ -1757,12 +1812,15 @@ namespace MEC
                 case Segment.Update:
                     UpdateProcesses[coindex.i] = replacement;
                     return;
+
                 case Segment.FixedUpdate:
                     FixedUpdateProcesses[coindex.i] = replacement;
                     return;
+
                 case Segment.LateUpdate:
                     LateUpdateProcesses[coindex.i] = replacement;
                     return;
+
                 case Segment.SlowUpdate:
                     SlowUpdateProcesses[coindex.i] = replacement;
                     return;
@@ -1790,7 +1848,7 @@ namespace MEC
         }
 
         /// <summary>
-        /// Use the command "yield return Timing.WaitUntilDone(otherCoroutine);" to pause the current 
+        /// Use the command "yield return Timing.WaitUntilDone(otherCoroutine);" to pause the current
         /// coroutine until otherCoroutine is done.
         /// </summary>
         /// <param name="otherCoroutine">The coroutine to pause for.</param>
@@ -1800,7 +1858,7 @@ namespace MEC
         }
 
         /// <summary>
-        /// Use the command "yield return Timing.WaitUntilDone(otherCoroutine, false);" to pause the current 
+        /// Use the command "yield return Timing.WaitUntilDone(otherCoroutine, false);" to pause the current
         /// coroutine until otherCoroutine is done, supressing warnings.
         /// </summary>
         /// <param name="otherCoroutine">The coroutine to pause for.</param>
@@ -1941,7 +1999,7 @@ namespace MEC
 
 #if !UNITY_2018_3_OR_NEWER
         /// <summary>
-        /// Use the command "yield return Timing.WaitUntilDone(wwwObject);" to pause the current 
+        /// Use the command "yield return Timing.WaitUntilDone(wwwObject);" to pause the current
         /// coroutine until the wwwObject is done.
         /// </summary>
         /// <param name="wwwObject">The www object to pause for.</param>
@@ -1953,7 +2011,6 @@ namespace MEC
             ReplacementFunction = WaitUntilDoneWwwHelper;
             return float.NaN;
         }
-
 
         private static IEnumerator<float> WaitUntilDoneWwwHelper(IEnumerator<float> coptr, CoroutineHandle handle)
         {
@@ -1972,7 +2029,7 @@ namespace MEC
 #endif
 
         /// <summary>
-        /// Use the command "yield return Timing.WaitUntilDone(operation);" to pause the current 
+        /// Use the command "yield return Timing.WaitUntilDone(operation);" to pause the current
         /// coroutine until the operation is done.
         /// </summary>
         /// <param name="operation">The operation variable returned.</param>
@@ -2000,7 +2057,7 @@ namespace MEC
         }
 
         /// <summary>
-        /// Use the command "yield return Timing.WaitUntilDone(operation);" to pause the current 
+        /// Use the command "yield return Timing.WaitUntilDone(operation);" to pause the current
         /// coroutine until the operation is done.
         /// </summary>
         /// <param name="operation">The operation variable returned.</param>
@@ -2151,7 +2208,7 @@ namespace MEC
         /// </summary>
         /// <param name="delay">The number of seconds to wait before calling the action.</param>
         /// <param name="action">The action to call.</param>
-        /// <param name="gameObject">A GameObject that will be checked to make sure it hasn't been destroyed 
+        /// <param name="gameObject">A GameObject that will be checked to make sure it hasn't been destroyed
         /// before calling the action.</param>
         /// <param name="segment">The timing segment that the call should be made in.</param>
         /// <returns>The handle to the coroutine that is started by this function.</returns>
@@ -2165,7 +2222,7 @@ namespace MEC
         /// </summary>
         /// <param name="delay">The number of seconds to wait before calling the action.</param>
         /// <param name="action">The action to call.</param>
-        /// <param name="gameObject">A GameObject that will be tagged onto the coroutine and checked to make sure it hasn't been destroyed 
+        /// <param name="gameObject">A GameObject that will be tagged onto the coroutine and checked to make sure it hasn't been destroyed
         /// before calling the action.</param>
         /// <param name="segment">The timing segment that the call should be made in.</param>
         /// <returns>The handle to the coroutine that is started by this function.</returns>
@@ -2178,7 +2235,7 @@ namespace MEC
         {
             yield return WaitForSecondsOnInstance(delay);
 
-            if(ReferenceEquals(cancelWith, null) || cancelWith != null)
+            if (ReferenceEquals(cancelWith, null) || cancelWith != null)
                 action();
         }
 
@@ -2312,7 +2369,7 @@ namespace MEC
         public static CoroutineHandle CallPeriodically<T>
             (T reference, float timeframe, float period, System.Action<T> action, System.Action<T> onDone = null)
         {
-            return action == null ? new CoroutineHandle() : 
+            return action == null ? new CoroutineHandle() :
                 RunCoroutine(Instance._CallContinuously(reference, timeframe, period, action, onDone), Segment.Update);
         }
 
@@ -2328,7 +2385,7 @@ namespace MEC
         public CoroutineHandle CallPeriodicallyOnInstance<T>
             (T reference, float timeframe, float period, System.Action<T> action, System.Action<T> onDone = null)
         {
-            return action == null ? new CoroutineHandle() : 
+            return action == null ? new CoroutineHandle() :
                 RunCoroutineOnInstance(_CallContinuously(reference, timeframe, period, action, onDone), Segment.Update);
         }
 
@@ -2342,10 +2399,10 @@ namespace MEC
         /// <param name="timing">The timing segment to run in.</param>
         /// <param name="onDone">An optional action to call when this function finishes.</param>
         /// <returns>The handle to the coroutine that is started by this function.</returns>
-        public static CoroutineHandle CallPeriodically<T>(T reference, float timeframe, float period, System.Action<T> action, 
+        public static CoroutineHandle CallPeriodically<T>(T reference, float timeframe, float period, System.Action<T> action,
             Segment timing, System.Action<T> onDone = null)
         {
-            return action == null ? new CoroutineHandle() : 
+            return action == null ? new CoroutineHandle() :
                 RunCoroutine(Instance._CallContinuously(reference, timeframe, period, action, onDone), timing);
         }
 
@@ -2362,7 +2419,7 @@ namespace MEC
         public CoroutineHandle CallPeriodicallyOnInstance<T>(T reference, float timeframe, float period, System.Action<T> action,
             Segment timing, System.Action<T> onDone = null)
         {
-            return action == null ? new CoroutineHandle() : 
+            return action == null ? new CoroutineHandle() :
                 RunCoroutineOnInstance(_CallContinuously(reference, timeframe, period, action, onDone), timing);
         }
 
@@ -2376,7 +2433,7 @@ namespace MEC
         /// <returns>The handle to the coroutine that is started by this function.</returns>
         public static CoroutineHandle CallContinuously<T>(T reference, float timeframe, System.Action<T> action, System.Action<T> onDone = null)
         {
-            return action == null ? new CoroutineHandle() : 
+            return action == null ? new CoroutineHandle() :
                 RunCoroutine(Instance._CallContinuously(reference, timeframe, 0f, action, onDone), Segment.Update);
         }
 
@@ -2390,7 +2447,7 @@ namespace MEC
         /// <returns>The handle to the coroutine that is started by this function.</returns>
         public CoroutineHandle CallContinuouslyOnInstance<T>(T reference, float timeframe, System.Action<T> action, System.Action<T> onDone = null)
         {
-            return action == null ? new CoroutineHandle() : 
+            return action == null ? new CoroutineHandle() :
                 RunCoroutineOnInstance(_CallContinuously(reference, timeframe, 0f, action, onDone), Segment.Update);
         }
 
@@ -2403,10 +2460,10 @@ namespace MEC
         /// <param name="timing">The timing segment to run in.</param>
         /// <param name="onDone">An optional action to call when this function finishes.</param>
         /// <returns>The handle to the coroutine that is started by this function.</returns>
-        public static CoroutineHandle CallContinuously<T>(T reference, float timeframe, System.Action<T> action, 
+        public static CoroutineHandle CallContinuously<T>(T reference, float timeframe, System.Action<T> action,
             Segment timing, System.Action<T> onDone = null)
         {
-            return action == null ? new CoroutineHandle() : 
+            return action == null ? new CoroutineHandle() :
                 RunCoroutine(Instance._CallContinuously(reference, timeframe, 0f, action, onDone), timing);
         }
 
@@ -2422,7 +2479,7 @@ namespace MEC
         public CoroutineHandle CallContinuouslyOnInstance<T>(T reference, float timeframe, System.Action<T> action,
             Segment timing, System.Action<T> onDone = null)
         {
-            return action == null ? new CoroutineHandle() : 
+            return action == null ? new CoroutineHandle() :
                 RunCoroutineOnInstance(_CallContinuously(reference, timeframe, 0f, action, onDone), timing);
         }
 
@@ -2475,70 +2532,92 @@ namespace MEC
         }
 
         [System.Obsolete("Unity coroutine function, use RunCoroutine instead.", true)]
-        public new Coroutine StartCoroutine(System.Collections.IEnumerator routine) { return null; }
+        public new Coroutine StartCoroutine(System.Collections.IEnumerator routine)
+        { return null; }
 
         [System.Obsolete("Unity coroutine function, use RunCoroutine instead.", true)]
-        public new Coroutine StartCoroutine(string methodName, object value) { return null; }
+        public new Coroutine StartCoroutine(string methodName, object value)
+        { return null; }
 
         [System.Obsolete("Unity coroutine function, use RunCoroutine instead.", true)]
-        public new Coroutine StartCoroutine(string methodName) { return null; }
+        public new Coroutine StartCoroutine(string methodName)
+        { return null; }
 
         [System.Obsolete("Unity coroutine function, use RunCoroutine instead.", true)]
-        public new Coroutine StartCoroutine_Auto(System.Collections.IEnumerator routine) { return null; }
+        public new Coroutine StartCoroutine_Auto(System.Collections.IEnumerator routine)
+        { return null; }
 
         [System.Obsolete("Unity coroutine function, use KillCoroutines instead.", true)]
-        public new void StopCoroutine(string methodName) { }
+        public new void StopCoroutine(string methodName)
+        { }
 
         [System.Obsolete("Unity coroutine function, use KillCoroutines instead.", true)]
-        public new void StopCoroutine(System.Collections.IEnumerator routine) { }
+        public new void StopCoroutine(System.Collections.IEnumerator routine)
+        { }
 
         [System.Obsolete("Unity coroutine function, use KillCoroutines instead.", true)]
-        public new void StopCoroutine(Coroutine routine) { }
+        public new void StopCoroutine(Coroutine routine)
+        { }
 
         [System.Obsolete("Unity coroutine function, use KillCoroutines instead.", true)]
-        public new void StopAllCoroutines() { }
+        public new void StopAllCoroutines()
+        { }
 
         [System.Obsolete("Use your own GameObject for this.", true)]
-        public new static void Destroy(Object obj) { }
+        public new static void Destroy(Object obj)
+        { }
 
         [System.Obsolete("Use your own GameObject for this.", true)]
-        public new static void Destroy(Object obj, float f) { }
+        public new static void Destroy(Object obj, float f)
+        { }
 
         [System.Obsolete("Use your own GameObject for this.", true)]
-        public new static void DestroyObject(Object obj) { }
+        public new static void DestroyObject(Object obj)
+        { }
 
         [System.Obsolete("Use your own GameObject for this.", true)]
-        public new static void DestroyObject(Object obj, float f) { }
+        public new static void DestroyObject(Object obj, float f)
+        { }
 
         [System.Obsolete("Use your own GameObject for this.", true)]
-        public new static void DestroyImmediate(Object obj) { }
+        public new static void DestroyImmediate(Object obj)
+        { }
 
         [System.Obsolete("Use your own GameObject for this.", true)]
-        public new static void DestroyImmediate(Object obj, bool b) { }
+        public new static void DestroyImmediate(Object obj, bool b)
+        { }
 
         [System.Obsolete("Use your own GameObject for this.", true)]
-        public new static void Instantiate(Object obj) { }
+        public new static void Instantiate(Object obj)
+        { }
 
         [System.Obsolete("Use your own GameObject for this.", true)]
-        public new static void Instantiate(Object original, Vector3 position, Quaternion rotation) { }
+        public new static void Instantiate(Object original, Vector3 position, Quaternion rotation)
+        { }
 
         [System.Obsolete("Use your own GameObject for this.", true)]
-        public new static void Instantiate<T>(T original) where T : Object { }
+        public new static void Instantiate<T>(T original) where T : Object
+        { }
 
         [System.Obsolete("Just.. no.", true)]
-        public new static T FindObjectOfType<T>() where T : Object { return null; }
+        public new static T FindObjectOfType<T>() where T : Object
+        { return null; }
 
         [System.Obsolete("Just.. no.", true)]
-        public new static Object FindObjectOfType(System.Type t) { return null; }
+        public new static Object FindObjectOfType(System.Type t)
+        { return null; }
 
         [System.Obsolete("Just.. no.", true)]
-        public new static T[] FindObjectsOfType<T>() where T : Object { return null; }
+        public new static T[] FindObjectsOfType<T>() where T : Object
+        { return null; }
 
         [System.Obsolete("Just.. no.", true)]
-        public new static Object[] FindObjectsOfType(System.Type t) { return null; }
+        public new static Object[] FindObjectsOfType(System.Type t)
+        { return null; }
 
         [System.Obsolete("Just.. no.", true)]
-        public new static void print(object message) { }
+        public new static void print(object message)
+        { }
     }
 
     /// <summary>
@@ -2550,18 +2629,22 @@ namespace MEC
         /// Sometimes returned as an error state
         /// </summary>
         Invalid = -1,
+
         /// <summary>
         /// This is the default timing segment
         /// </summary>
         Update,
+
         /// <summary>
         /// This is primarily used for physics calculations
         /// </summary>
         FixedUpdate,
+
         /// <summary>
         /// This is run immediately after update
         /// </summary>
         LateUpdate,
+
         /// <summary>
         /// This executes, by default, about as quickly as the eye can detect changes in a text field
         /// </summary>
@@ -2569,7 +2652,7 @@ namespace MEC
     }
 
     /// <summary>
-    /// How much debug info should be sent to the Unity profiler. NOTE: Setting this to anything above none shows up in the profiler as a 
+    /// How much debug info should be sent to the Unity profiler. NOTE: Setting this to anything above none shows up in the profiler as a
     /// decrease in performance and a memory alloc. Those effects do not translate onto device.
     /// </summary>
     public enum DebugInfoType
@@ -2578,10 +2661,12 @@ namespace MEC
         /// None coroutines will be separated in the Unity profiler
         /// </summary>
         None,
+
         /// <summary>
         /// The Unity profiler will identify each coroutine individually
         /// </summary>
         SeperateCoroutines,
+
         /// <summary>
         /// Coroutines will be separated and any tags or layers will be identified
         /// </summary>
@@ -2594,7 +2679,7 @@ namespace MEC
     public struct CoroutineHandle : System.IEquatable<CoroutineHandle>
     {
         private const byte ReservedSpace = 0x0F;
-        private readonly static int[] NextIndex = { ReservedSpace + 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+        private static readonly int[] NextIndex = { ReservedSpace + 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         private readonly int _id;
 
         public byte Key { get { return (byte)(_id & ReservedSpace); } }
@@ -2620,12 +2705,12 @@ namespace MEC
             return false;
         }
 
-        public static bool operator==(CoroutineHandle a, CoroutineHandle b)
+        public static bool operator ==(CoroutineHandle a, CoroutineHandle b)
         {
             return a._id == b._id;
         }
 
-        public static bool operator!=(CoroutineHandle a, CoroutineHandle b)
+        public static bool operator !=(CoroutineHandle a, CoroutineHandle b)
         {
             return a._id != b._id;
         }
@@ -2715,7 +2800,7 @@ public static class MECExtensionMethods2
     /// <returns>The modified coroutine handle.</returns>
     public static IEnumerator<float> CancelWith(this IEnumerator<float> coroutine, GameObject gameObject1, GameObject gameObject2)
     {
-        while (MEC.Timing.MainThread != System.Threading.Thread.CurrentThread || (gameObject1 && gameObject1.activeInHierarchy && 
+        while (MEC.Timing.MainThread != System.Threading.Thread.CurrentThread || (gameObject1 && gameObject1.activeInHierarchy &&
                 gameObject2 && gameObject2.activeInHierarchy && coroutine.MoveNext()))
             yield return coroutine.Current;
     }
@@ -2731,7 +2816,7 @@ public static class MECExtensionMethods2
     public static IEnumerator<float> CancelWith(this IEnumerator<float> coroutine,
         GameObject gameObject1, GameObject gameObject2, GameObject gameObject3)
     {
-        while (MEC.Timing.MainThread != System.Threading.Thread.CurrentThread || (gameObject1 && gameObject1.activeInHierarchy && 
+        while (MEC.Timing.MainThread != System.Threading.Thread.CurrentThread || (gameObject1 && gameObject1.activeInHierarchy &&
                 gameObject2 && gameObject2.activeInHierarchy && gameObject3 && gameObject3.activeInHierarchy && coroutine.MoveNext()))
             yield return coroutine.Current;
     }

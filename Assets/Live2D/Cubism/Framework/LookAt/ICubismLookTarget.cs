@@ -5,9 +5,7 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Framework.LookAt
 {
@@ -21,7 +19,6 @@ namespace Live2D.Cubism.Framework.LookAt
         /// </summary>
         /// <returns>The position of the target in world space.</returns>
         Vector3 GetPosition();
-
 
         /// <summary>
         /// Gets whether the target is active.

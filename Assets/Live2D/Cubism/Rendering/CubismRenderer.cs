@@ -5,13 +5,11 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core;
 using Live2D.Cubism.Rendering.Masking;
 using System;
 using UnityEngine;
 using UnityEngine.Rendering;
-
 
 namespace Live2D.Cubism.Rendering
 {
@@ -44,16 +42,13 @@ namespace Live2D.Cubism.Rendering
                     return;
                 }
 
-
                 // Store value.
                 _localSortingOrder = value;
-
 
                 // Apply it.
                 ApplySorting();
             }
         }
-
 
         /// <summary>
         /// <see cref="Color"/> backing field.
@@ -74,7 +69,6 @@ namespace Live2D.Cubism.Rendering
                 {
                     return;
                 }
-
 
                 // Store value.
                 _color = value;
@@ -152,7 +146,6 @@ namespace Live2D.Cubism.Rendering
                     return;
                 }
 
-
                 // Store value.
                 _multiplyColor = (value != null)
                     ? value
@@ -193,7 +186,6 @@ namespace Live2D.Cubism.Rendering
                     return;
                 }
 
-
                 // Store value.
                 _screenColor = (value != null)
                     ? value
@@ -206,7 +198,6 @@ namespace Live2D.Cubism.Rendering
         /// </summary>
         public Color LastScreenColor { get; set; }
 
-
         /// <summary>
         /// <see cref="UnityEngine.Material"/>.
         /// </summary>
@@ -214,33 +205,29 @@ namespace Live2D.Cubism.Rendering
         {
             get
             {
-                #if UNITY_EDITOR
+#if UNITY_EDITOR
                 if (!Application.isPlaying)
                 {
                     return MeshRenderer.sharedMaterial;
                 }
-                #endif
-
+#endif
 
                 return MeshRenderer.material;
             }
             set
             {
-                #if UNITY_EDITOR
+#if UNITY_EDITOR
                 if (!Application.isPlaying)
                 {
                     MeshRenderer.sharedMaterial = value;
 
-
                     return;
                 }
-                #endif
-
+#endif
 
                 MeshRenderer.material = value;
             }
         }
-
 
         /// <summary>
         /// <see cref="MainTexture"/> backing field.
@@ -262,18 +249,15 @@ namespace Live2D.Cubism.Rendering
                     return;
                 }
 
-
                 // Store value.
                 _mainTexture = (value != null)
                     ? value
                     : Texture2D.whiteTexture;
 
-
                 // Apply it.
                 ApplyMainTexture();
             }
         }
-
 
         /// <summary>
         /// Meshes.
@@ -302,7 +286,6 @@ namespace Live2D.Cubism.Rendering
             get { return Meshes[FrontMesh]; }
         }
 
-
         /// <summary>
         /// <see cref="MeshFilter"/> backing field.
         /// </summary>
@@ -319,7 +302,6 @@ namespace Live2D.Cubism.Rendering
                 return _meshFilter;
             }
         }
-
 
         /// <summary>
         /// <see cref="MeshRenderer"/> backing field.
@@ -350,7 +332,6 @@ namespace Live2D.Cubism.Rendering
         /// </summary>
         private CubismRenderController RenderController { get; set; }
 
-
         #region Interface For CubismRenderController
 
         /// <summary>
@@ -368,7 +349,6 @@ namespace Live2D.Cubism.Rendering
             set { _sortingMode = value; }
         }
 
-
         /// <summary>
         /// <see cref="SortingOrder"/> backing field.
         /// </summary>
@@ -383,7 +363,6 @@ namespace Live2D.Cubism.Rendering
             get { return _sortingOrder; }
             set { _sortingOrder = value; }
         }
-
 
         /// <summary>
         /// <see cref="RenderOrder"/> backing field.
@@ -400,7 +379,6 @@ namespace Live2D.Cubism.Rendering
             set { _renderOrder = value; }
         }
 
-
         /// <summary>
         /// <see cref="DepthOffset"/> backing field.
         /// </summary>
@@ -415,7 +393,6 @@ namespace Live2D.Cubism.Rendering
             get { return _depthOffset; }
             set { _depthOffset = value; }
         }
-
 
         /// <summary>
         /// <see cref="Opacity"/> backing field.
@@ -432,12 +409,10 @@ namespace Live2D.Cubism.Rendering
             set { _opacity = value; }
         }
 
-
         /// <summary>
         /// Buffer for vertex colors.
         /// </summary>
         private Color[] VertexColors { get; set; }
-
 
         /// <summary>
         /// Allows tracking of what vertex data was updated last swap.
@@ -448,7 +423,6 @@ namespace Live2D.Cubism.Rendering
         /// Allows tracking of what vertex data will be swapped.
         /// </summary>
         private SwapInfo ThisSwap { get; set; }
-
 
         /// <summary>
         /// Swaps mesh buffers.
@@ -462,20 +436,15 @@ namespace Live2D.Cubism.Rendering
             BackMesh = FrontMesh;
             FrontMesh = (FrontMesh == 0) ? 1 : 0;
 
-
             var mesh = Meshes[FrontMesh];
-
 
             // Update colors.
             Meshes[BackMesh].colors = VertexColors;
 
-
             // Update swap info.
             LastSwap = ThisSwap;
 
-
             ResetSwapInfoFlags();
-
 
             // Apply swap.
 #if UNITY_EDITOR
@@ -483,15 +452,12 @@ namespace Live2D.Cubism.Rendering
             {
                 MeshFilter.mesh = mesh;
 
-
                 return;
             }
 #endif
 
-
             MeshFilter.mesh = mesh;
         }
-
 
         /// <summary>
         /// Updates visibility.
@@ -507,10 +473,8 @@ namespace Live2D.Cubism.Rendering
                 MeshRenderer.enabled = false;
             }
 
-
             ResetVisibilityFlags();
         }
-
 
         /// <summary>
         /// Updates render order.
@@ -521,7 +485,6 @@ namespace Live2D.Cubism.Rendering
             {
                 ApplySorting();
             }
-
 
             ResetRenderOrderFlag();
         }
@@ -543,7 +506,6 @@ namespace Live2D.Cubism.Rendering
         {
             SortingMode = newSortingMode;
 
-
             ApplySorting();
         }
 
@@ -554,7 +516,6 @@ namespace Live2D.Cubism.Rendering
         internal void OnControllerSortingOrderDidChange(int newSortingOrder)
         {
             SortingOrder = newSortingOrder;
-
 
             ApplySorting();
         }
@@ -567,10 +528,8 @@ namespace Live2D.Cubism.Rendering
         {
             DepthOffset = newDepthOffset;
 
-
             ApplySorting();
         }
-
 
         /// <summary>
         /// Sets the opacity.
@@ -579,7 +538,6 @@ namespace Live2D.Cubism.Rendering
         internal void OnDrawableOpacityDidChange(float newOpacity)
         {
             Opacity = newOpacity;
-
 
             ApplyVertexColors();
         }
@@ -592,9 +550,7 @@ namespace Live2D.Cubism.Rendering
         {
             if (RenderOrder == newRenderOrder) return;
 
-
             RenderOrder = newRenderOrder;
-
 
             SetNewRenderOrder();
         }
@@ -607,13 +563,10 @@ namespace Live2D.Cubism.Rendering
         {
             var mesh = Mesh;
 
-
             // Apply positions and update bounds.
             mesh.vertices = newVertexPositions;
 
-
             mesh.RecalculateBounds();
-
 
             // Set swap flag.
             SetNewVertexPositions();
@@ -635,7 +588,6 @@ namespace Live2D.Cubism.Rendering
                 BecomeInvisible();
             }
         }
-
 
         /// <summary>
         /// Sets mask properties.
@@ -659,7 +611,6 @@ namespace Live2D.Cubism.Rendering
             MeshRenderer.SetPropertyBlock(SharedPropertyBlock);
         }
 
-
         /// <summary>
         /// Sets model opacity.
         /// </summary>
@@ -668,14 +619,13 @@ namespace Live2D.Cubism.Rendering
         {
             _meshRenderer.GetPropertyBlock(SharedPropertyBlock);
 
-
             // Write property.
             SharedPropertyBlock.SetFloat(CubismShaderVariables.ModelOpacity, newModelOpacity);
 
             MeshRenderer.SetPropertyBlock(SharedPropertyBlock);
         }
 
-        #endregion
+        #endregion Interface For CubismRenderController
 
         /// <summary>
         /// <see cref="SharedPropertyBlock"/> backing field.
@@ -695,11 +645,9 @@ namespace Live2D.Cubism.Rendering
                     _sharedPropertyBlock = new MaterialPropertyBlock();
                 }
 
-
                 return _sharedPropertyBlock;
             }
         }
-
 
         /// <summary>
         /// Applies main texture for rendering.
@@ -707,7 +655,6 @@ namespace Live2D.Cubism.Rendering
         private void ApplyMainTexture()
         {
             MeshRenderer.GetPropertyBlock(SharedPropertyBlock);
-
 
             // Write property.
             SharedPropertyBlock.SetTexture(CubismShaderVariables.MainTexture, MainTexture);
@@ -727,19 +674,15 @@ namespace Live2D.Cubism.Rendering
                     ? (RenderOrder + LocalSortingOrder)
                     : -(RenderOrder + LocalSortingOrder));
 
-
                 transform.localPosition = Vector3.zero;
-
 
                 return;
             }
-
 
             // Sort by depth.
             var offset = (SortingMode == CubismSortingMode.BackToFrontZ)
                     ? -DepthOffset
                     : DepthOffset;
-
 
             MeshRenderer.sortingOrder = SortingOrder + LocalSortingOrder;
 
@@ -754,15 +697,12 @@ namespace Live2D.Cubism.Rendering
             var vertexColors = VertexColors;
             var color = Color;
 
-
             color.a *= Opacity;
-
 
             for (var i = 0; i < vertexColors.Length; ++i)
             {
                 vertexColors[i] = color;
             }
-
 
             // Set swap flag.
             SetNewVertexColors();
@@ -774,7 +714,6 @@ namespace Live2D.Cubism.Rendering
         public void ApplyMultiplyColor()
         {
             MeshRenderer.GetPropertyBlock(SharedPropertyBlock);
-
 
             // Write property.
             SharedPropertyBlock.SetColor(CubismShaderVariables.MultiplyColor, MultiplyColor);
@@ -800,7 +739,6 @@ namespace Live2D.Cubism.Rendering
         public void ApplyScreenColor()
         {
             MeshRenderer.GetPropertyBlock(SharedPropertyBlock);
-
 
             // Write property.
             SharedPropertyBlock.SetColor(CubismShaderVariables.ScreenColor, ScreenColor);
@@ -829,7 +767,6 @@ namespace Live2D.Cubism.Rendering
             {
                 _meshRenderer = GetComponent<MeshRenderer>();
 
-
                 // Lazily add component.
                 if (_meshRenderer == null)
                 {
@@ -842,7 +779,6 @@ namespace Live2D.Cubism.Rendering
             }
         }
 
-
         /// <summary>
         /// Initializes the mesh filter.
         /// </summary>
@@ -852,7 +788,6 @@ namespace Live2D.Cubism.Rendering
             {
                 _meshFilter = GetComponent<MeshFilter>();
 
-
                 // Lazily add component.
                 if (_meshFilter == null)
                 {
@@ -861,7 +796,6 @@ namespace Live2D.Cubism.Rendering
                 }
             }
         }
-
 
         /// <summary>
         /// Initializes the mesh if necessary.
@@ -875,12 +809,10 @@ namespace Live2D.Cubism.Rendering
                 return;
             }
 
-
             if (Meshes == null)
             {
                 Meshes = new Mesh[2];
             }
-
 
             for (var i = 0; i < 2; ++i)
             {
@@ -892,10 +824,8 @@ namespace Live2D.Cubism.Rendering
                     triangles = Drawable.Indices
                 };
 
-
                 mesh.MarkDynamic();
                 mesh.RecalculateBounds();
-
 
                 // Store mesh.
                 Meshes[i] = mesh;
@@ -909,9 +839,7 @@ namespace Live2D.Cubism.Rendering
         {
             var mesh = Mesh;
 
-
             VertexColors = new Color[mesh.vertexCount];
-
 
             for (var i = 0; i < VertexColors.Length; ++i)
             {
@@ -930,10 +858,8 @@ namespace Live2D.Cubism.Rendering
                 MainTexture = null;
             }
 
-
             ApplyMainTexture();
         }
-
 
         /// <summary>
         /// Initializes components if possible.
@@ -967,7 +893,6 @@ namespace Live2D.Cubism.Rendering
             ThisSwap = swapInfo;
         }
 
-
         /// <summary>
         /// Sets <see cref="NewVertexColors"/>.
         /// </summary>
@@ -977,7 +902,6 @@ namespace Live2D.Cubism.Rendering
             swapInfo.NewVertexColors = true;
             ThisSwap = swapInfo;
         }
-
 
         /// <summary>
         /// Sets <see cref="DidBecomeVisible"/> on visible.
@@ -989,7 +913,6 @@ namespace Live2D.Cubism.Rendering
             ThisSwap = swapInfo;
         }
 
-
         /// <summary>
         /// Sets <see cref="DidBecomeInvisible"/> on invisible.
         /// </summary>
@@ -999,7 +922,6 @@ namespace Live2D.Cubism.Rendering
             swapInfo.DidBecomeInvisible = true;
             ThisSwap = swapInfo;
         }
-
 
         /// <summary>
         /// Sets <see cref="SetNewRenderOrder"/>.
@@ -1011,7 +933,6 @@ namespace Live2D.Cubism.Rendering
             ThisSwap = swapInfo;
         }
 
-
         /// <summary>
         /// Resets flags.
         /// </summary>
@@ -1019,7 +940,6 @@ namespace Live2D.Cubism.Rendering
         {
             ThisSwap = default;
         }
-
 
         /// <summary>
         /// Reset visibility flags.
@@ -1032,7 +952,6 @@ namespace Live2D.Cubism.Rendering
             LastSwap = swapInfo;
         }
 
-
         /// <summary>
         /// Reset render order flag.
         /// </summary>
@@ -1042,7 +961,6 @@ namespace Live2D.Cubism.Rendering
             swapInfo.NewRenderOrder = false;
             LastSwap = swapInfo;
         }
-
 
         /// <summary>
         /// Allows tracking of <see cref="Mesh"/> data changed on a swap.
@@ -1075,9 +993,7 @@ namespace Live2D.Cubism.Rendering
             public bool NewRenderOrder { get; set; }
         }
 
-        #endregion
-
-
+        #endregion Swap Info
 
         #region Unity Events Handling
 
@@ -1091,13 +1007,12 @@ namespace Live2D.Cubism.Rendering
                 return;
             }
 
-
             for (var i = 0; i < Meshes.Length; i++)
             {
                 DestroyImmediate(Meshes[i]);
             }
         }
 
-        #endregion
+        #endregion Unity Events Handling
     }
 }

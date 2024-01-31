@@ -7,9 +7,7 @@
 
 /* THIS FILE WAS AUTO-GENERATED. ALL CHANGES WILL BE LOST UPON RE-GENERATION. */
 
-
 using System;
-
 
 namespace Live2D.Cubism.Core.Unmanaged
 {
@@ -32,16 +30,14 @@ namespace Live2D.Cubism.Core.Unmanaged
                 return null;
             }
 
-
             var moc = new CubismUnmanagedMoc(bytes);
-
 
             return (moc.Ptr != IntPtr.Zero)
                 ? moc
                 : null;
         }
 
-        #endregion
+        #endregion Factory Methods
 
         /// <summary>
         /// Native moc pointer.
@@ -82,9 +78,7 @@ namespace Live2D.Cubism.Core.Unmanaged
                 return;
             }
 
-
             CubismUnmanagedMemory.Deallocate(Ptr);
-
 
             Ptr = IntPtr.Zero;
         }
@@ -100,19 +94,15 @@ namespace Live2D.Cubism.Core.Unmanaged
             // Allocate and initialize memory (returning on fail).
             var memory = CubismUnmanagedMemory.Allocate(bytes.Length, CubismCoreDll.AlignofMoc);
 
-
             if (memory == IntPtr.Zero)
             {
                 return;
             }
 
-
             CubismUnmanagedMemory.Write(bytes, memory);
-
 
             // Revive native moc (cleaning up on fail).
             Ptr = CubismCoreDll.ReviveMocInPlace(memory, (uint)bytes.Length);
-
 
             if (Ptr == IntPtr.Zero)
             {
@@ -124,6 +114,6 @@ namespace Live2D.Cubism.Core.Unmanaged
             MocVersion = CubismCoreDll.GetMocVersion(Ptr, (uint)bytes.Length);
         }
 
-        #endregion
+        #endregion Ctors
     }
 }

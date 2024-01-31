@@ -5,13 +5,11 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using AOT;
 using Live2D.Cubism.Core.Unmanaged;
 using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Core
 {
@@ -28,7 +26,7 @@ namespace Live2D.Cubism.Core
         /// <param name="message">Message to log.</param>
         private unsafe delegate void UnmanagedLogDelegate(char* message);
 
-        #endregion
+        #endregion Delegates
 
         /// <summary>
         /// Delegate to pass to native Api.
@@ -42,19 +40,16 @@ namespace Live2D.Cubism.Core
         /// Registers delegates.
         /// </summary>
         [RuntimeInitializeOnLoadMethod]
-        // ReSharper disable once UnusedMember.Local
         private static unsafe void Initialize()
         {
             LogDelegate = LogUnmanaged;
 
-
             var logFunction = Marshal.GetFunctionPointerForDelegate(LogDelegate);
-
 
             csmSetLogFunction(logFunction);
         }
 
-        #endregion
+        #endregion Initialization
 
         /// <summary>
         /// Prints an unmanaged, null-terminated message.
@@ -66,7 +61,6 @@ namespace Live2D.Cubism.Core
             // Marshal message and log it.
             var managedMessage = Marshal.PtrToStringAnsi(new IntPtr(message));
 
-
             Debug.LogFormat("[Cubism] Core: {0}.", managedMessage);
         }
 
@@ -75,6 +69,6 @@ namespace Live2D.Cubism.Core
         [DllImport(CubismCoreDll.DllName)]
         private static extern void csmSetLogFunction(IntPtr logFunction);
 
-        #endregion
+        #endregion Extern C
     }
 }

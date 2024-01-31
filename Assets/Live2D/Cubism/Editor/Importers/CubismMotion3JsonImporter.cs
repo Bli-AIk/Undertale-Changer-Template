@@ -5,14 +5,12 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Framework.Json;
 using System;
 using System.IO;
 using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Editor.Importers
 {
@@ -40,11 +38,9 @@ namespace Live2D.Cubism.Editor.Importers
                     _motion3Json = CubismMotion3Json.LoadFrom(AssetDatabase.LoadAssetAtPath<TextAsset>((AssetPath)));
                 }
 
-
                 return _motion3Json;
             }
         }
-
 
         /// <summary>
         /// GUID of generated clip.
@@ -140,13 +136,12 @@ namespace Live2D.Cubism.Editor.Importers
         /// Registers importer.
         /// </summary>
         [InitializeOnLoadMethod]
-        // ReSharper disable once UnusedMember.Local
         private static void RegisterImporter()
         {
             CubismImporter.RegisterImporter<CubismMotion3JsonImporter>(".motion3.json");
         }
 
-        #endregion
+        #endregion Unity Event Handling
 
         #region CubismImporterBase
 
@@ -230,7 +225,6 @@ namespace Live2D.Cubism.Editor.Importers
             // Trigger event.
             CubismImporter.SendMotionImportEvent(this, AnimationClip);
 
-
             // Apply changes.
             if (isImporterDirty)
             {
@@ -256,6 +250,6 @@ namespace Live2D.Cubism.Editor.Importers
             }
         }
 
-        #endregion
+        #endregion CubismImporterBase
     }
 }

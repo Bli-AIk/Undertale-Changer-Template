@@ -7,9 +7,7 @@
 
 /* THIS FILE WAS AUTO-GENERATED. ALL CHANGES WILL BE LOST UPON RE-GENERATION. */
 
-
 using System;
-
 
 namespace Live2D.Cubism.Core.Unmanaged
 {
@@ -32,16 +30,14 @@ namespace Live2D.Cubism.Core.Unmanaged
                 return null;
             }
 
-
             var model = new CubismUnmanagedModel(moc);
-
 
             return (model.Ptr != IntPtr.Zero)
                 ? model
                 : null;
         }
 
-        #endregion
+        #endregion Factory Methods
 
         /// <summary>
         /// Unmanaged parameters.
@@ -68,7 +64,6 @@ namespace Live2D.Cubism.Core.Unmanaged
         /// </summary>
         public IntPtr Ptr { get; private set; }
 
-
         /// <summary>
         /// Updates instance.
         /// </summary>
@@ -78,7 +73,6 @@ namespace Live2D.Cubism.Core.Unmanaged
             {
                 return;
             }
-
 
             CubismCoreDll.UpdateModel(Ptr);
         }
@@ -93,9 +87,7 @@ namespace Live2D.Cubism.Core.Unmanaged
                 return;
             }
 
-
             CubismUnmanagedMemory.Deallocate(Ptr);
-
 
             Ptr = IntPtr.Zero;
         }
@@ -112,25 +104,20 @@ namespace Live2D.Cubism.Core.Unmanaged
             var size = CubismCoreDll.GetSizeofModel(moc.Ptr);
             var memory = CubismUnmanagedMemory.Allocate((int)size, CubismCoreDll.AlignofModel);
 
-
             if (memory == IntPtr.Zero)
             {
                 return;
             }
 
-
             // Initialize native model (cleaning up and returning on fail).
             Ptr = CubismCoreDll.InitializeModelInPlace(moc.Ptr, memory, size);
-
 
             if (Ptr == IntPtr.Zero)
             {
                 CubismUnmanagedMemory.Deallocate(memory);
 
-
                 return;
             }
-
 
             // Initialize 'components'.
             Parameters = new CubismUnmanagedParameters(Ptr);
@@ -139,6 +126,6 @@ namespace Live2D.Cubism.Core.Unmanaged
             CanvasInformation = new CubismUnmanagedCanvasInformation(Ptr);
         }
 
-        #endregion
+        #endregion Ctors
     }
 }

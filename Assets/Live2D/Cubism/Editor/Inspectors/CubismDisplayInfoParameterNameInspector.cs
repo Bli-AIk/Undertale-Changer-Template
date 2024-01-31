@@ -5,7 +5,6 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Framework;
 using UnityEditor;
 
@@ -30,7 +29,6 @@ namespace Live2D.Cubism.Editor.Inspectors
                 return;
             }
 
-
             serializedObject.Update();
 
             EditorGUI.BeginChangeCheck();
@@ -45,6 +43,7 @@ namespace Live2D.Cubism.Editor.Inspectors
                 serializedObject.ApplyModifiedProperties();
             }
         }
-        #endregion
+
+        #endregion Editor
     }
 }

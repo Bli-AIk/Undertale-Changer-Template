@@ -5,10 +5,8 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using System.Collections.Generic;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Framework
 {
@@ -32,11 +30,9 @@ namespace Live2D.Cubism.Framework
 
             var components = new List<T>();
 
-
             for (var i = 0; i < self.Length; ++i)
             {
                 var range = self[i].GetComponents<T>();
-
 
                 // Skip empty ranges.
                 if (range == null || range.Length == 0)
@@ -44,14 +40,11 @@ namespace Live2D.Cubism.Framework
                     continue;
                 }
 
-
                 components.AddRange(range);
             }
 
-
             return components.ToArray();
         }
-
 
         /// <summary>
         /// Adds a component to multiple objects.
@@ -68,12 +61,10 @@ namespace Live2D.Cubism.Framework
 
             var components = new T[self.Length];
 
-
             for (var i = 0; i < self.Length; ++i)
             {
                 components[i] = self[i].gameObject.AddComponent<T>();
             }
-
 
             return components;
         }

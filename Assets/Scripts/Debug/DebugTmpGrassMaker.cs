@@ -1,17 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using System;
-using UnityEngine;
+using System.Collections.Generic;
 using TMPro;
+using UnityEngine;
 
 public class DebugTmpGrassMaker : MonoBehaviour
 {
-    TextMeshPro tmp;
+    private TextMeshPro tmp;
     public List<string> strings;
     public float time, timeMax;
-    bool select;
-    
-    void Start()
+    private bool select;
+
+    private void Start()
     {
         strings.Add("²Ý\n²Ý");
         strings.Add("²Ý *\n²Ý *");
@@ -19,8 +18,7 @@ public class DebugTmpGrassMaker : MonoBehaviour
         time = timeMax;
     }
 
-    
-    void Update()
+    private void Update()
     {
         if (time < 0)
         {

@@ -5,11 +5,9 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core.Unmanaged;
 using System;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Core
 {
@@ -46,7 +44,6 @@ namespace Live2D.Cubism.Core
             return null;
         }
 
-
         /// <summary>
         /// Revives (and sorts) <see cref="CubismParameter"/>s.
         /// </summary>
@@ -55,7 +52,6 @@ namespace Live2D.Cubism.Core
         internal static void Revive(this CubismParameter[] self, CubismUnmanagedModel model)
         {
             Array.Sort(self, (a, b) => a.UnmanagedIndex - b.UnmanagedIndex);
-
 
             for (var i = 0; i < self.Length; ++i)
             {
@@ -73,7 +69,6 @@ namespace Live2D.Cubism.Core
             // Get address.
             var unmanagedParameters = unmanagedModel.Parameters;
             var values = unmanagedParameters.Values;
-
 
             // Push.
             for (var i = 0; i < self.Length; ++i)
@@ -93,7 +88,6 @@ namespace Live2D.Cubism.Core
             var unmanagedParameters = unmanagedModel.Parameters;
             var values = unmanagedParameters.Values;
 
-
             // Pull.
             for (var i = 0; i < self.Length; ++i)
             {
@@ -101,7 +95,7 @@ namespace Live2D.Cubism.Core
             }
         }
 
-        #endregion
+        #endregion Parameters
 
         #region Parts
 
@@ -131,7 +125,6 @@ namespace Live2D.Cubism.Core
             return null;
         }
 
-
         /// <summary>
         /// Revives (and sorts) <see cref="CubismPart"/>s.
         /// </summary>
@@ -140,7 +133,6 @@ namespace Live2D.Cubism.Core
         internal static void Revive(this CubismPart[] self, CubismUnmanagedModel model)
         {
             Array.Sort(self, (a, b) => a.UnmanagedIndex - b.UnmanagedIndex);
-
 
             for (var i = 0; i < self.Length; ++i)
             {
@@ -159,7 +151,6 @@ namespace Live2D.Cubism.Core
             var unmanagedParts = unmanagedModel.Parts;
             var opacities = unmanagedParts.Opacities;
 
-
             // Push.
             for (var i = 0; i < self.Length; ++i)
             {
@@ -167,7 +158,7 @@ namespace Live2D.Cubism.Core
             }
         }
 
-        #endregion
+        #endregion Parts
 
         #region Drawables
 
@@ -197,7 +188,6 @@ namespace Live2D.Cubism.Core
             return null;
         }
 
-
         /// <summary>
         /// Revives (and sorts) <see cref="CubismDrawable"/>s.
         /// </summary>
@@ -207,13 +197,11 @@ namespace Live2D.Cubism.Core
         {
             Array.Sort(self, (a, b) => a.UnmanagedIndex - b.UnmanagedIndex);
 
-
             for (var i = 0; i < self.Length; ++i)
             {
                 self[i].Revive(model);
             }
         }
-
 
         /// <summary>
         /// Reads new data from a model.
@@ -237,19 +225,16 @@ namespace Live2D.Cubism.Core
             {
                 var data = self[i];
 
-
                 data.Flags = flags[i];
                 data.Opacity = opacities[i];
                 data.DrawOrder = drawOrders[i];
                 data.RenderOrder = renderOrders[i];
-
 
                 // Read vertex positions only if necessary.
                 if (!data.AreVertexPositionsDirty)
                 {
                     continue;
                 }
-
 
                 // Copy vertex positions.
                 fixed (Vector3* dataVertexPositions = data.VertexPositions)
@@ -271,11 +256,10 @@ namespace Live2D.Cubism.Core
                 data.ScreenColor = new Color(screenColors[rgbaIndex], screenColors[rgbaIndex + 1], screenColors[rgbaIndex + 2], screenColors[rgbaIndex + 3]);
             }
 
-
             // Clear dynamic flags.
             drawables.ResetDynamicFlags();
         }
 
-        #endregion
+        #endregion Drawables
     }
 }

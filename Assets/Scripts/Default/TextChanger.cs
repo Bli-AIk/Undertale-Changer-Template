@@ -1,18 +1,20 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using TMPro;
 using System;
+using TMPro;
+using UnityEngine;
+
 /// <summary>
 /// 用于字体匹配及双语字体数据修正
 /// </summary>
 public class TextChanger : MonoBehaviour
 {
     //public TMP_FontAsset assetback;
-    TMP_Text tmp;
+    private TMP_Text tmp;
+
     public bool width;//若中英混搭 则true就完事了
+
     [Header("US/CN")]
     public Vector4[] Options;
+
     //public float[] sizes;
 
     //public bool no = true;
@@ -21,6 +23,7 @@ public class TextChanger : MonoBehaviour
         Set();
         Change();
     }
+
     public void Set()
     {
         tmp = GetComponent<TMP_Text>();
@@ -38,7 +41,6 @@ public class TextChanger : MonoBehaviour
         */
     }
 
-
     public void Change()
     {
         if (tmp != null)
@@ -47,7 +49,6 @@ public class TextChanger : MonoBehaviour
             tmp.wordSpacing = Options[Convert.ToInt32(width)].y;
             tmp.lineSpacing = Options[Convert.ToInt32(width)].z;
             tmp.paragraphSpacing = Options[Convert.ToInt32(width)].w;
-
         }
         else
         {
@@ -55,5 +56,4 @@ public class TextChanger : MonoBehaviour
             Change();
         }
     }
-
 }

@@ -5,10 +5,8 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using System;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Rendering.Masking
 {
@@ -97,7 +95,6 @@ namespace Live2D.Cubism.Rendering.Masking
 
                 Subdivisions = subdivisions;
 
-
                 Slots = new bool[(int)Mathf.Pow(4, subdivisions) * Channels];
             }
             else
@@ -128,7 +125,7 @@ namespace Live2D.Cubism.Rendering.Masking
             }
         }
 
-        #endregion
+        #endregion Ctors
 
         /// <summary>
         /// Acquires tiles.
@@ -139,12 +136,10 @@ namespace Live2D.Cubism.Rendering.Masking
         {
             var result = new CubismMaskTile[count];
 
-
             // Populate container.
             for (var i = 0; i < count; ++i)
             {
                 var allocationSuccessful = false;
-
 
                 for (var j = 0; j < Slots.Length; ++j)
                 {
@@ -154,22 +149,17 @@ namespace Live2D.Cubism.Rendering.Masking
                         continue;
                     }
 
-
                     // Generate tile.
                     result[i] = ToTile(j);
-
 
                     // Flag slot as occupied.
                     Slots[j] = true;
 
-
                     // Flag allocation as successful.
                     allocationSuccessful = true;
 
-
                     break;
                 }
-
 
                 // Return as soon as one allocation fails.
                 if (!allocationSuccessful)
@@ -178,7 +168,6 @@ namespace Live2D.Cubism.Rendering.Masking
                     return null;
                 }
             }
-
 
             // Return on success.
             return result;
@@ -196,7 +185,6 @@ namespace Live2D.Cubism.Rendering.Masking
                 Slots[ToIndex(tiles[i])] = false;
             }
         }
-
 
         /// <summary>
         /// Converts from index to <see cref="CubismMaskTile"/>.
@@ -377,7 +365,6 @@ namespace Live2D.Cubism.Rendering.Masking
                 var tileCounts = (int)Mathf.Pow(4, Subdivisions - 1);
                 var tilesPerRow = (int)Mathf.Pow(2, Subdivisions - 1);
                 var tileSize = 1f / (float)tilesPerRow;
-
 
                 var channel = index / tileCounts;
                 var currentTilePosition = index - (channel * tileCounts);

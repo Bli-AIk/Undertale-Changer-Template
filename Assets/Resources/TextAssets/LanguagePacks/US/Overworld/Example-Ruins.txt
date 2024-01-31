@@ -38,16 +38,16 @@ Rich text input examples:
 */
 
 Brand\<image=-1><fx=0>* "Press <gradient="White to Yellow - UTC">[Z]</gradient> to read the sign!"<stop><stop><stop><stop><stop><stop><stop><enter>* <size=20><gradient="White to Yellow - UTC">[Enter]</gradient> works too.</size>
-<passText>* "This scene uses <gradient="White to Yellow - UTC">normal maps</gradient>! <enter>< >< >Also, try going to <enter>< >< >the <gradient="White to Red - UTC">riverside</gradient>?" ;
+<passText>* "This scene uses <gradient="White to Yellow - UTC">normal maps</gradient>! <enter><-  ->Also, try going to <enter><-  ->the <gradient="White to Red - UTC">riverside</gradient>?" ;
 
 River\<image=-1><fx=0>* This is you! ;
 
 WallBrand\<image=-1><fx=0>* Follow the path if you want. ;
 
-Text1\<image=-1><fx=0><*>< ><D><o><n><'><t>< ><p><r><e><s><s><.> ;
+Text1\<image=-1><fx=0><*><- -><D><o><n><'><t><- -><p><r><e><s><s><.> ;
 
-Text2\<image=-1><fx=0><*>< ><D><o><n><'><t>< ><p><r><e><s><s><,><t><o><o><.> ;
+Text2\<image=-1><fx=0><*><- -><D><o><n><'><t><- -><p><r><e><s><s><,><t><o><o><.> ;
 
-TextAlex\<image=-1><fx=0>* Your typewriter isn't broken<enter>< >< >lololololol<enter>* you're just being pranked 111.;
+TextAlex\<image=-1><fx=0>* Your typewriter isn't broken<enter><-  ->lololololol<enter>* you're just being pranked 111.;
 
 

@@ -5,9 +5,7 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core;
-
 
 namespace Live2D.Cubism.Framework
 {
@@ -32,7 +30,6 @@ namespace Live2D.Cubism.Framework
             parameter.Value += (value * weight);
         }
 
-
         /// <summary>
         /// Multiply blends a value in.
         /// </summary>
@@ -48,7 +45,6 @@ namespace Live2D.Cubism.Framework
 
             parameter.Value *= (1f + ((value - 1f) * weight));
         }
-
 
         /// <summary>
         /// Blends a value in.
@@ -67,19 +63,15 @@ namespace Live2D.Cubism.Framework
             {
                 self.AddToValue(value, weight);
 
-
                 return;
             }
-
 
             if (mode == CubismParameterBlendMode.Multiply)
             {
                 self.MultiplyValueBy(value, weight);
 
-
                 return;
             }
-
 
             self.Value = self.Value * (1 - weight) + value * weight;
         }
@@ -104,10 +96,8 @@ namespace Live2D.Cubism.Framework
                     self[i].AddToValue(value, weight);
                 }
 
-
                 return;
             }
-
 
             if (mode == CubismParameterBlendMode.Multiply)
             {
@@ -116,10 +106,8 @@ namespace Live2D.Cubism.Framework
                     self[i].MultiplyValueBy(value, weight);
                 }
 
-
                 return;
             }
-
 
             for (var i = 0; i < self.Length; ++i)
             {

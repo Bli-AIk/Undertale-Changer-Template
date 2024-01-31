@@ -5,11 +5,9 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core;
 using System;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Framework.Physics
 {
@@ -131,12 +129,14 @@ namespace Live2D.Cubism.Framework.Physics
                             GetInputTranslationXFromNormalizedParameterValue;
                     }
                     break;
+
                 case CubismPhysicsSourceComponent.Y:
                     {
                         GetNormalizedParameterValue =
                             GetInputTranslationYFromNormalizedParameterValue;
                     }
                     break;
+
                 case CubismPhysicsSourceComponent.Angle:
                     {
                         GetNormalizedParameterValue =

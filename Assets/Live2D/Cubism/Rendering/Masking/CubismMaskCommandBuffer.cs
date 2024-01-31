@@ -5,11 +5,9 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
-
 
 namespace Live2D.Cubism.Rendering.Masking
 {
@@ -42,7 +40,6 @@ namespace Live2D.Cubism.Rendering.Masking
             get { return Sources != null && Sources.Count > 0; }
         }
 
-
         /// <summary>
         /// Makes sure class is initialized for static usage.
         /// </summary>
@@ -54,7 +51,6 @@ namespace Live2D.Cubism.Rendering.Masking
                 Sources = new List<ICubismMaskCommandSource>();
             }
 
-
             if (Buffer == null)
             {
                 Buffer = new CommandBuffer
@@ -62,7 +58,6 @@ namespace Live2D.Cubism.Rendering.Masking
                     name = "cubism_MaskCommandBuffer"
                 };
             }
-
 
             if (Buffers == null)
             {
@@ -73,25 +68,21 @@ namespace Live2D.Cubism.Rendering.Masking
             const string _proxyName = "cubism_MaskCommandBuffer";
             var proxy = GameObject.Find(_proxyName);
 
-
             if (proxy == null)
             {
                 proxy = new GameObject(_proxyName)
                 {
-                     hideFlags = HideFlags.HideAndDontSave
+                    hideFlags = HideFlags.HideAndDontSave
                 };
-
 
                 if (!Application.isEditor || Application.isPlaying)
                 {
                     DontDestroyOnLoad(proxy);
                 }
 
-
                 proxy.AddComponent<CubismMaskCommandBuffer>();
             }
         }
-
 
         /// <summary>
         /// Registers a new draw command source.
@@ -102,13 +93,11 @@ namespace Live2D.Cubism.Rendering.Masking
             // Make sure singleton is initialized.
             Initialize();
 
-
             // Prevent same source from being added twice.
             if (Sources.Contains(source))
             {
                 return;
             }
-
 
             // Add source and force refresh.
             Sources.Add(source);
@@ -141,11 +130,9 @@ namespace Live2D.Cubism.Rendering.Masking
             // Make sure singleton is initialized.
             Initialize();
 
-
             // Remove source and force refresh.
             Sources.RemoveAll(s => s == source);
         }
-
 
         /// <summary>
         /// Forces the command buffer to be refreshed.
@@ -154,7 +141,6 @@ namespace Live2D.Cubism.Rendering.Masking
         {
             // Clear buffer.
             Buffer.Clear();
-
 
             // Enqueue sources.
             for (var i = 0; i < Sources.Count; ++i)
@@ -196,13 +182,12 @@ namespace Live2D.Cubism.Rendering.Masking
                 return;
             }
 
-
             // Refresh and execute buffer.
             RefreshCommandBuffer();
             Graphics.ExecuteCommandBuffer(Buffer);
             RefreshCommandBuffers();
         }
 
-        #endregion
+        #endregion Unity Event Handling
     }
 }

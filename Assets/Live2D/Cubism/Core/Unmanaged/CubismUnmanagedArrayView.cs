@@ -7,9 +7,7 @@
 
 /* THIS FILE WAS AUTO-GENERATED. ALL CHANGES WILL BE LOST UPON RE-GENERATION. */
 
-
 using System;
-
 
 namespace Live2D.Cubism.Core.Unmanaged
 {
@@ -26,7 +24,8 @@ namespace Live2D.Cubism.Core.Unmanaged
         /// <summary>
         /// Return true if instance is valid.
         /// </summary>
-        public unsafe bool IsValid { get { return (UnmanagedFixedAddress != (float*)0) && (Length > 0); } }
+        public unsafe bool IsValid
+        { get { return (UnmanagedFixedAddress != (float*)0) && (Length > 0); } }
 
         /// <summary>
         /// Gets element at index.
@@ -39,7 +38,6 @@ namespace Live2D.Cubism.Core.Unmanaged
             {
                 var pointer = UnmanagedFixedAddress;
 
-
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
                 {
                     // Assert instance is valid.
@@ -54,7 +52,6 @@ namespace Live2D.Cubism.Core.Unmanaged
                     }
                 }
 #endif
-
 
                 return pointer[index];
             }
@@ -63,7 +60,6 @@ namespace Live2D.Cubism.Core.Unmanaged
             {
                 var pointer = UnmanagedFixedAddress;
 
-
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
                 {
                     // Assert instance is valid.
@@ -79,11 +75,9 @@ namespace Live2D.Cubism.Core.Unmanaged
                 }
 #endif
 
-
                 pointer[index] = value;
             }
         }
-
 
         /// <summary>
         /// Unmanaged buffer address.
@@ -114,7 +108,7 @@ namespace Live2D.Cubism.Core.Unmanaged
             Length = length;
         }
 
-        #endregion
+        #endregion Ctors
 
         /// <summary>
         /// Reads data.
@@ -124,7 +118,6 @@ namespace Live2D.Cubism.Core.Unmanaged
         {
             var sourceAddress = UnmanagedFixedAddress;
             var destinationLength = buffer.Length;
-
 
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
             {
@@ -141,7 +134,6 @@ namespace Live2D.Cubism.Core.Unmanaged
                 }
             }
 #endif
-
 
             // Read data into managed.
             fixed (float* destinationAddress = buffer)
@@ -162,7 +154,6 @@ namespace Live2D.Cubism.Core.Unmanaged
             var sourceLength = buffer.Length;
             var destinationAddress = UnmanagedFixedAddress;
 
-
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
             {
                 // Assert both length.
@@ -178,7 +169,6 @@ namespace Live2D.Cubism.Core.Unmanaged
                 }
             }
 #endif
-
 
             // Write data into unmanaged.
             fixed (float* sourceAddress = buffer)
@@ -204,7 +194,8 @@ namespace Live2D.Cubism.Core.Unmanaged
         /// <summary>
         /// Return true if instance is valid.
         /// </summary>
-        public unsafe bool IsValid { get { return (UnmanagedFixedAddress != (int*)0) && (Length > 0); } }
+        public unsafe bool IsValid
+        { get { return (UnmanagedFixedAddress != (int*)0) && (Length > 0); } }
 
         /// <summary>
         /// Gets element at index.
@@ -217,7 +208,6 @@ namespace Live2D.Cubism.Core.Unmanaged
             {
                 var pointer = UnmanagedFixedAddress;
 
-
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
                 {
                     // Assert instance is valid.
@@ -232,7 +222,6 @@ namespace Live2D.Cubism.Core.Unmanaged
                     }
                 }
 #endif
-
 
                 return pointer[index];
             }
@@ -241,7 +230,6 @@ namespace Live2D.Cubism.Core.Unmanaged
             {
                 var pointer = UnmanagedFixedAddress;
 
-
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
                 {
                     // Assert instance is valid.
@@ -257,11 +245,9 @@ namespace Live2D.Cubism.Core.Unmanaged
                 }
 #endif
 
-
                 pointer[index] = value;
             }
         }
-
 
         /// <summary>
         /// Unmanaged buffer address.
@@ -292,7 +278,7 @@ namespace Live2D.Cubism.Core.Unmanaged
             Length = length;
         }
 
-        #endregion
+        #endregion Ctors
 
         /// <summary>
         /// Reads data.
@@ -302,7 +288,6 @@ namespace Live2D.Cubism.Core.Unmanaged
         {
             var sourceAddress = UnmanagedFixedAddress;
             var destinationLength = buffer.Length;
-
 
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
             {
@@ -319,7 +304,6 @@ namespace Live2D.Cubism.Core.Unmanaged
                 }
             }
 #endif
-
 
             // Read data into managed.
             fixed (int* destinationAddress = buffer)
@@ -340,7 +324,6 @@ namespace Live2D.Cubism.Core.Unmanaged
             var sourceLength = buffer.Length;
             var destinationAddress = UnmanagedFixedAddress;
 
-
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
             {
                 // Assert both length.
@@ -356,7 +339,6 @@ namespace Live2D.Cubism.Core.Unmanaged
                 }
             }
 #endif
-
 
             // Write data into unmanaged.
             fixed (int* sourceAddress = buffer)
@@ -382,7 +364,8 @@ namespace Live2D.Cubism.Core.Unmanaged
         /// <summary>
         /// Return true if instance is valid.
         /// </summary>
-        public unsafe bool IsValid { get { return (UnmanagedFixedAddress != (Byte*)0) && (Length > 0); } }
+        public unsafe bool IsValid
+        { get { return (UnmanagedFixedAddress != (Byte*)0) && (Length > 0); } }
 
         /// <summary>
         /// Gets element at index.
@@ -395,7 +378,6 @@ namespace Live2D.Cubism.Core.Unmanaged
             {
                 var pointer = UnmanagedFixedAddress;
 
-
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
                 {
                     // Assert instance is valid.
@@ -410,7 +392,6 @@ namespace Live2D.Cubism.Core.Unmanaged
                     }
                 }
 #endif
-
 
                 return pointer[index];
             }
@@ -419,7 +400,6 @@ namespace Live2D.Cubism.Core.Unmanaged
             {
                 var pointer = UnmanagedFixedAddress;
 
-
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
                 {
                     // Assert instance is valid.
@@ -435,11 +415,9 @@ namespace Live2D.Cubism.Core.Unmanaged
                 }
 #endif
 
-
                 pointer[index] = value;
             }
         }
-
 
         /// <summary>
         /// Unmanaged buffer address.
@@ -470,7 +448,7 @@ namespace Live2D.Cubism.Core.Unmanaged
             Length = length;
         }
 
-        #endregion
+        #endregion Ctors
 
         /// <summary>
         /// Reads data.
@@ -480,7 +458,6 @@ namespace Live2D.Cubism.Core.Unmanaged
         {
             var sourceAddress = UnmanagedFixedAddress;
             var destinationLength = buffer.Length;
-
 
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
             {
@@ -497,7 +474,6 @@ namespace Live2D.Cubism.Core.Unmanaged
                 }
             }
 #endif
-
 
             // Read data into managed.
             fixed (Byte* destinationAddress = buffer)
@@ -518,7 +494,6 @@ namespace Live2D.Cubism.Core.Unmanaged
             var sourceLength = buffer.Length;
             var destinationAddress = UnmanagedFixedAddress;
 
-
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
             {
                 // Assert both length.
@@ -534,7 +509,6 @@ namespace Live2D.Cubism.Core.Unmanaged
                 }
             }
 #endif
-
 
             // Write data into unmanaged.
             fixed (Byte* sourceAddress = buffer)
@@ -560,7 +534,8 @@ namespace Live2D.Cubism.Core.Unmanaged
         /// <summary>
         /// Return true if instance is valid.
         /// </summary>
-        public unsafe bool IsValid { get { return (UnmanagedFixedAddress != (ushort*)0) && (Length > 0); } }
+        public unsafe bool IsValid
+        { get { return (UnmanagedFixedAddress != (ushort*)0) && (Length > 0); } }
 
         /// <summary>
         /// Gets element at index.
@@ -573,7 +548,6 @@ namespace Live2D.Cubism.Core.Unmanaged
             {
                 var pointer = UnmanagedFixedAddress;
 
-
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
                 {
                     // Assert instance is valid.
@@ -588,7 +562,6 @@ namespace Live2D.Cubism.Core.Unmanaged
                     }
                 }
 #endif
-
 
                 return pointer[index];
             }
@@ -597,7 +570,6 @@ namespace Live2D.Cubism.Core.Unmanaged
             {
                 var pointer = UnmanagedFixedAddress;
 
-
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
                 {
                     // Assert instance is valid.
@@ -613,11 +585,9 @@ namespace Live2D.Cubism.Core.Unmanaged
                 }
 #endif
 
-
                 pointer[index] = value;
             }
         }
-
 
         /// <summary>
         /// Unmanaged buffer address.
@@ -648,7 +618,7 @@ namespace Live2D.Cubism.Core.Unmanaged
             Length = length;
         }
 
-        #endregion
+        #endregion Ctors
 
         /// <summary>
         /// Reads data.
@@ -658,7 +628,6 @@ namespace Live2D.Cubism.Core.Unmanaged
         {
             var sourceAddress = UnmanagedFixedAddress;
             var destinationLength = buffer.Length;
-
 
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
             {
@@ -675,7 +644,6 @@ namespace Live2D.Cubism.Core.Unmanaged
                 }
             }
 #endif
-
 
             // Read data into managed.
             fixed (ushort* destinationAddress = buffer)
@@ -696,7 +664,6 @@ namespace Live2D.Cubism.Core.Unmanaged
             var sourceLength = buffer.Length;
             var destinationAddress = UnmanagedFixedAddress;
 
-
 #if DEVELOPMENT_BUILD || UNITY_EDITOR
             {
                 // Assert both length.
@@ -713,7 +680,6 @@ namespace Live2D.Cubism.Core.Unmanaged
             }
 #endif
 
-
             // Write data into unmanaged.
             fixed (ushort* sourceAddress = buffer)
             {
@@ -724,5 +690,4 @@ namespace Live2D.Cubism.Core.Unmanaged
             }
         }
     }
-
 }

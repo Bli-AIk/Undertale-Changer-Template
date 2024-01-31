@@ -1,32 +1,29 @@
-﻿using UnityEngine;
-using System.Collections;
-
+﻿using System.Collections;
+using UnityEngine;
 
 namespace TMPro.Examples
 {
-
     public class SkewTextExample : MonoBehaviour
     {
-
         private TMP_Text m_TextComponent;
 
         public AnimationCurve VertexCurve = new AnimationCurve(new Keyframe(0, 0), new Keyframe(0.25f, 2.0f), new Keyframe(0.5f, 0), new Keyframe(0.75f, 2.0f), new Keyframe(1, 0f));
+
         //public float AngleMultiplier = 1.0f;
         //public float SpeedMultiplier = 1.0f;
         public float CurveScale = 1.0f;
+
         public float ShearAmount = 1.0f;
 
-        void Awake()
+        private void Awake()
         {
             m_TextComponent = gameObject.GetComponent<TMP_Text>();
         }
 
-
-        void Start()
+        private void Start()
         {
             StartCoroutine(WarpText());
         }
-
 
         private AnimationCurve CopyAnimationCurve(AnimationCurve curve)
         {
@@ -37,13 +34,12 @@ namespace TMPro.Examples
             return newCurve;
         }
 
-
         /// <summary>
         ///  Method to curve text along a Unity animation curve.
         /// </summary>
         /// <param name="textComponent"></param>
         /// <returns></returns>
-        IEnumerator WarpText()
+        private IEnumerator WarpText()
         {
             VertexCurve.preWrapMode = WrapMode.Clamp;
             VertexCurve.postWrapMode = WrapMode.Clamp;
@@ -76,7 +72,6 @@ namespace TMPro.Examples
                 TMP_TextInfo textInfo = m_TextComponent.textInfo;
                 int characterCount = textInfo.characterCount;
 
-
                 if (characterCount == 0) continue;
 
                 //vertices = textInfo.meshInfo[0].vertices;
@@ -84,8 +79,6 @@ namespace TMPro.Examples
 
                 float boundsMinX = m_TextComponent.bounds.min.x;  //textInfo.meshInfo[0].mesh.bounds.min.x;
                 float boundsMaxX = m_TextComponent.bounds.max.x;  //textInfo.meshInfo[0].mesh.bounds.max.x;
-
-
 
                 for (int i = 0; i < characterCount; i++)
                 {
@@ -119,7 +112,6 @@ namespace TMPro.Examples
                     vertices[vertexIndex + 2] += topShear;
                     vertices[vertexIndex + 3] += -bottomShear;
 
-
                     // Compute the angle of rotation for each character based on the animation curve
                     float x0 = (offsetToMidBaseline.x - boundsMinX) / (boundsMaxX - boundsMinX); // Character's position relative to the bounds of the mesh.
                     float x1 = x0 + 0.0001f;
@@ -146,7 +138,6 @@ namespace TMPro.Examples
                     vertices[vertexIndex + 2] += offsetToMidBaseline;
                     vertices[vertexIndex + 3] += offsetToMidBaseline;
                 }
-
 
                 // Upload the mesh with the revised information
                 m_TextComponent.UpdateVertexData();

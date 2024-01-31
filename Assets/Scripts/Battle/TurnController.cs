@@ -1,9 +1,8 @@
-using System.Collections;
+using DG.Tweening;
+using MEC;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
-using System;
-using MEC;
+
 /// <summary>
 /// 回合控制，同时也是弹幕的对象池
 /// </summary>
@@ -13,18 +12,18 @@ public class TurnController : MonoBehaviour
     public int turn;
     public bool isMyTurn;
 
-    GameObject mainFrame;
+    private GameObject mainFrame;
     public List<int> poolCount;
+
     //public List<string> inheritList = new List<string>();
     public List<ObjectPool> objectPools = new List<ObjectPool>();
 
     private void Awake()
     {
         instance = this;
-      
     }
-    
-    void Start()
+
+    private void Start()
     {
         GameObject saveBullet = GameObject.Find("SaveBullet");
         mainFrame = GameObject.Find("MainFrame");
@@ -42,13 +41,13 @@ public class TurnController : MonoBehaviour
         objectPools[^1].count = poolCount[1];
         objectPools[^1].obj = Resources.Load<GameObject>("Template/Board Template");
         objectPools[^1].FillPool();
+    }
 
-
-    } 
     public void KillIEnumerator()
     {
         Timing.KillCoroutines();
     }
+
     /// <summary>
     /// 进入敌方回合
     /// </summary>
@@ -62,7 +61,7 @@ public class TurnController : MonoBehaviour
     /// 回合执行系统
     /// 根据回合编号进行相应的执行
     /// </summary>
-    IEnumerator<float> _TurnExecute(int turn)
+    private IEnumerator<float> _TurnExecute(int turn)
     {
         switch (turn)
         {
@@ -90,10 +89,8 @@ public class TurnController : MonoBehaviour
                     yield return Timing.WaitForSeconds(0.5f);
                 }
 
-
-
                 Debug.Log("简单嵌套弹幕编写示例");
-                for (int i = 0; i < 5 * 20; i++) 
+                for (int i = 0; i < 5 * 20; i++)
                 {
                     Timing.RunCoroutine(_TurnNest(Nest.simpleNestBullet));
                     yield return Timing.WaitForSeconds(0.2f);
@@ -106,7 +103,6 @@ public class TurnController : MonoBehaviour
                 mainFrame.transform.GetChild(1).DOLocalMoveX(-5.93f, 0.5f).SetEase(Ease.InOutSine);
                 mainFrame.transform.GetChild(2).DOLocalMoveX(-5.93f, 0.5f).SetEase(Ease.InOutSine);
                 yield return Timing.WaitForSeconds(0.5f);
-
 
                 var obj = objectPools[0].GetFromPool().GetComponent<BulletController>();
                 obj.SetBullet(
@@ -122,7 +118,6 @@ public class TurnController : MonoBehaviour
                     SpriteMaskInteraction.None
                     );
 
-
                 for (int i = 60; i > 0; i--)
                 {
                     Debug.Log("你先别急，先等" + MainControl.instance.RandomStringColor() + i + "</color>秒");
@@ -134,14 +129,14 @@ public class TurnController : MonoBehaviour
         this.turn++;
         MainControl.instance.selectUIController.InTurn();
         yield return 0;
-
     }
+
     /// <summary>
     /// 回合嵌套
     /// 首先在枚举Nest中定义嵌套名称，然后在此编写嵌套内容
     /// 用于重复复杂弹幕的嵌套使用
     /// </summary>
-    IEnumerator<float> _TurnNest(Nest nest)
+    private IEnumerator<float> _TurnNest(Nest nest)
     {
         switch (nest)
         {
@@ -165,7 +160,7 @@ public class TurnController : MonoBehaviour
 
                 obj.transform.DOMoveY(0, 1).SetEase(Ease.OutSine).SetLoops(2, LoopType.Yoyo);
 
-                obj.transform.DORotate(new Vector3(0, 0, 360), 2,RotateMode.WorldAxisAdd).SetEase(Ease.InOutSine);
+                obj.transform.DORotate(new Vector3(0, 0, 360), 2, RotateMode.WorldAxisAdd).SetEase(Ease.InOutSine);
                 yield return Timing.WaitForSeconds(0.5f);
 
                 obj.spriteRenderer.sortingOrder = 60;
@@ -181,10 +176,10 @@ public class TurnController : MonoBehaviour
                 objectPools[0].ReturnPool(obj.gameObject);
 
                 break;
-
         }
     }
-    enum Nest 
+
+    private enum Nest
     {
         simpleNestBullet
     };

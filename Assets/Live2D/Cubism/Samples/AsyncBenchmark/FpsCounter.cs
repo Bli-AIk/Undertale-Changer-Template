@@ -5,10 +5,8 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using UnityEngine;
 using UnityEngine.UI;
-
 
 namespace Live2D.Cubism.Samples.AsyncBenchmark
 {
@@ -43,7 +41,6 @@ namespace Live2D.Cubism.Samples.AsyncBenchmark
             // Update delta time.
             DeltaTime += (Time.deltaTime - DeltaTime) * 0.1f;
 
-
             // Compute FPS and update UI.
             var fps = 1.0f / DeltaTime;
 
@@ -53,6 +50,6 @@ namespace Live2D.Cubism.Samples.AsyncBenchmark
             FpsUi.text = string.Format("({0:0.} fps)", fps);
         }
 
-        #endregion
+        #endregion Unity Event Handling
     }
 }

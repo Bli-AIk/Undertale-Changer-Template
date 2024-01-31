@@ -1,19 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
 public class DebugVideoController : MonoBehaviour
 {
-    UnityEngine.Video.VideoPlayer videoPlayer;
+    private UnityEngine.Video.VideoPlayer videoPlayer;
     public int skip;
-    
-    void Start()
+
+    private void Start()
     {
         videoPlayer = GetComponent<UnityEngine.Video.VideoPlayer>();
-
     }
 
-    
-    void Update()
+    private void Update()
     {
         if (!MainControl.instance.PlayerControl.isDebug)
             return;

@@ -5,9 +5,7 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Framework.MouthMovement
 {
@@ -22,18 +20,15 @@ namespace Live2D.Cubism.Framework.MouthMovement
         [SerializeField]
         public float Timescale = 10f;
 
-
         /// <summary>
         /// Target controller.
         /// </summary>
         private CubismMouthController Controller { get; set; }
 
-
         /// <summary>
         /// Current time.
         /// </summary>
         private float T { get; set; }
-
 
         /// <summary>
         /// Resets the input.
@@ -53,7 +48,6 @@ namespace Live2D.Cubism.Framework.MouthMovement
             Controller = GetComponent<CubismMouthController>();
         }
 
-
         /// <summary>
         /// Called by Unity. Updates controller.
         /// </summary>
@@ -68,15 +62,13 @@ namespace Live2D.Cubism.Framework.MouthMovement
                 return;
             }
 
-
             // Progress time.
             T += (Time.deltaTime * Timescale);
-
 
             // Evaluate.
             Controller.MouthOpening = Mathf.Abs(Mathf.Sin(T));
         }
 
-        #endregion
+        #endregion Unity Event Handling
     }
 }

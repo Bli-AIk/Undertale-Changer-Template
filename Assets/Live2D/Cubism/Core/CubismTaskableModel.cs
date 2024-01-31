@@ -5,11 +5,9 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core.Unmanaged;
 using System.Threading;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Core
 {
@@ -30,7 +28,7 @@ namespace Live2D.Cubism.Core
             return new CubismTaskableModel(moc);
         }
 
-        #endregion
+        #endregion Factory Methods
 
         /// <summary>
         /// Handle to unmanaged model.
@@ -41,7 +39,6 @@ namespace Live2D.Cubism.Core
         /// <see cref="CubismMoc"/> the model was instantiated from.
         /// </summary>
         public CubismMoc Moc { get; private set; }
-
 
         private CubismDynamicDrawableData[] _dynamicDrawableData;
 
@@ -61,17 +58,14 @@ namespace Live2D.Cubism.Core
                     Monitor.Exit(Lock);
                 }
 
-
                 return dynamicDrawableData;
             }
-
 
             private set
             {
                 _dynamicDrawableData = value;
             }
         }
-
 
         /// <summary>
         /// True if task is currently executing.
@@ -82,15 +76,12 @@ namespace Live2D.Cubism.Core
             {
                 var isExecuting = false;
 
-
                 if (Monitor.TryEnter(Lock))
                 {
                     isExecuting = (State == TaskState.Enqueued || State == TaskState.Executing);
 
-
                     Monitor.Exit(Lock);
                 }
-
 
                 return isExecuting;
             }
@@ -105,14 +96,12 @@ namespace Live2D.Cubism.Core
             {
                 var didExecute = false;
 
-
                 if (Monitor.TryEnter(Lock))
                 {
                     didExecute = (State == TaskState.Executed);
 
                     Monitor.Exit(Lock);
                 }
-
 
                 return didExecute;
             }
@@ -133,10 +122,8 @@ namespace Live2D.Cubism.Core
         {
             Moc = moc;
 
-
             // Instantiate unmanaged model.
             var unmanagedMoc = moc.AcquireUnmanagedMoc();
-
 
             UnmanagedModel = CubismUnmanagedModel.FromMoc(unmanagedMoc);
 
@@ -155,7 +142,7 @@ namespace Live2D.Cubism.Core
             ShouldReleaseUnmanaged = false;
         }
 
-        #endregion
+        #endregion Constructor
 
         /// <summary>
         /// Tries to read parameters into a buffer.
@@ -166,7 +153,6 @@ namespace Live2D.Cubism.Core
         {
             var didRead = false;
 
-
             if (Monitor.TryEnter(Lock))
             {
                 try
@@ -174,7 +160,6 @@ namespace Live2D.Cubism.Core
                     if (State == TaskState.Executed)
                     {
                         parameters.ReadFrom(UnmanagedModel);
-
 
                         didRead = true;
                     }
@@ -184,7 +169,6 @@ namespace Live2D.Cubism.Core
                     Monitor.Exit(Lock);
                 }
             }
-
 
             return didRead;
         }
@@ -199,7 +183,6 @@ namespace Live2D.Cubism.Core
         {
             var didWrite = false;
 
-
             if (Monitor.TryEnter(Lock))
             {
                 try
@@ -208,7 +191,6 @@ namespace Live2D.Cubism.Core
                     {
                         parameters.WriteTo(UnmanagedModel);
                         parts.WriteTo(UnmanagedModel);
-
 
                         didWrite = true;
                     }
@@ -219,10 +201,8 @@ namespace Live2D.Cubism.Core
                 }
             }
 
-
             return didWrite;
         }
-
 
         /// <summary>
         /// Dispatches the task for (maybe async) execution.
@@ -237,11 +217,9 @@ namespace Live2D.Cubism.Core
                     return;
                 }
 
-
                 // Update state.
                 State = TaskState.Enqueued;
             }
-
 
             CubismTaskQueue.Enqueue(this);
         }
@@ -259,19 +237,15 @@ namespace Live2D.Cubism.Core
                     return false;
                 }
 
-
                 // Update state.
                 State = TaskState.Enqueued;
             }
 
-
             // Run execution directly.
             Execute();
 
-
             return true;
         }
-
 
         /// <summary>
         /// Releases unmanaged resource.
@@ -279,7 +253,6 @@ namespace Live2D.Cubism.Core
         public void ReleaseUnmanaged()
         {
             ShouldReleaseUnmanaged = true;
-
 
             // Return if task is ongoing.
             lock (Lock)
@@ -290,13 +263,10 @@ namespace Live2D.Cubism.Core
                 }
             }
 
-
             OnReleaseUnmanaged();
-
 
             ShouldReleaseUnmanaged = false;
         }
-
 
         /// <summary>
         /// Runs the task.
@@ -309,20 +279,16 @@ namespace Live2D.Cubism.Core
                 State = TaskState.Executing;
             }
 
-
             // Update native backend.
             UnmanagedModel.Update();
 
-
             // Get results.
             DynamicDrawableData.ReadFrom(UnmanagedModel);
-
 
             // Update state.
             lock (Lock)
             {
                 State = TaskState.Executed;
-
 
                 // Release native if requested.
                 if (ShouldReleaseUnmanaged)
@@ -332,7 +298,6 @@ namespace Live2D.Cubism.Core
             }
         }
 
-
         /// <summary>
         /// Actually releases native resource(s).
         /// </summary>
@@ -340,7 +305,6 @@ namespace Live2D.Cubism.Core
         {
             UnmanagedModel.Release();
             Moc.ReleaseUnmanagedMoc();
-
 
             UnmanagedModel = null;
         }
@@ -352,7 +316,7 @@ namespace Live2D.Cubism.Core
             Execute();
         }
 
-        #endregion
+        #endregion Implementation of ICubismTask
 
         #region Threading
 
@@ -382,7 +346,6 @@ namespace Live2D.Cubism.Core
             Executed
         }
 
-
         /// <summary>
         /// Lock.
         /// </summary>
@@ -393,6 +356,6 @@ namespace Live2D.Cubism.Core
         /// </summary>
         private TaskState State { get; set; }
 
-        #endregion
+        #endregion Threading
     }
 }

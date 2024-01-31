@@ -5,12 +5,10 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core;
 using UnityEngine;
 
 using Object = UnityEngine.Object;
-
 
 namespace Live2D.Cubism.Framework.LookAt
 {
@@ -25,7 +23,6 @@ namespace Live2D.Cubism.Framework.LookAt
         [SerializeField]
         public CubismParameterBlendMode BlendMode = CubismParameterBlendMode.Additive;
 
-
         /// <summary>
         /// <see cref="Target"/> backing field.
         /// </summary>
@@ -39,7 +36,6 @@ namespace Live2D.Cubism.Framework.LookAt
             get { return _target; }
             set { _target = value.ToNullUnlessImplementsInterface<ICubismLookTarget>(); }
         }
-
 
         /// <summary>
         /// <see cref="TargetInterface"/> backing field.
@@ -58,11 +54,9 @@ namespace Live2D.Cubism.Framework.LookAt
                     _targetInterface = Target.GetInterface<ICubismLookTarget>();
                 }
 
-
                 return _targetInterface;
             }
         }
-
 
         /// <summary>
         /// Local center position.
@@ -74,7 +68,6 @@ namespace Live2D.Cubism.Framework.LookAt
         /// </summary>
         public float Damping = 0.15f;
 
-
         /// <summary>
         /// Source parameters.
         /// </summary>
@@ -85,7 +78,6 @@ namespace Live2D.Cubism.Framework.LookAt
         /// </summary>
         private CubismParameter[] Destinations { get; set; }
 
-
         /// <summary>
         /// Position at last frame.
         /// </summary>
@@ -95,7 +87,6 @@ namespace Live2D.Cubism.Framework.LookAt
         /// Goal position.
         /// </summary>
         private Vector3 GoalPosition { get; set; }
-
 
         /// <summary>
         /// Buffer for <see cref="Mathf.SmoothDamp(float, float, ref float, float)"/> velocity.
@@ -109,7 +100,6 @@ namespace Live2D.Cubism.Framework.LookAt
         [HideInInspector]
         public bool HasUpdateController { get; set; }
 
-
         /// <summary>
         /// Refreshes the controller. Call this method after adding and/or removing <see cref="CubismLookParameter"/>s.
         /// </summary>
@@ -117,13 +107,11 @@ namespace Live2D.Cubism.Framework.LookAt
         {
             var model = this.FindCubismModel();
 
-
             // Catch sources and destinations.
             Sources = model
                 .Parameters
                 .GetComponentsMany<CubismLookParameter>();
             Destinations = new CubismParameter[Sources.Length];
-
 
             for (var i = 0; i < Sources.Length; ++i)
             {
@@ -161,21 +149,17 @@ namespace Live2D.Cubism.Framework.LookAt
                 return;
             }
 
-
             // Return early if no target is available or if target is inactive.
             var target = TargetInterface;
-
 
             if (target == null || !target.IsActive())
             {
                 return;
             }
 
-
             // Update position.
             var position = LastPosition;
             GoalPosition = transform.InverseTransformPoint(target.GetPosition()) - Center.localPosition;
-
 
             if (position != GoalPosition)
             {
@@ -186,13 +170,11 @@ namespace Live2D.Cubism.Framework.LookAt
                     Damping);
             }
 
-
             // Update sources and destinations.
             for (var i = 0; i < Destinations.Length; ++i)
             {
                 Destinations[i].BlendToValue(BlendMode, Sources[i].TickAndEvaluate(position));
             }
-
 
             // Store position.
             LastPosition = position;
@@ -211,11 +193,9 @@ namespace Live2D.Cubism.Framework.LookAt
                 Center = transform;
             }
 
-
             // Initialize cache.
             Refresh();
         }
-
 
         /// <summary>
         /// Called by Unity. Updates controller.
@@ -228,6 +208,6 @@ namespace Live2D.Cubism.Framework.LookAt
             }
         }
 
-        #endregion
+        #endregion Unity Events Handling
     }
 }

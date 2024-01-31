@@ -154,7 +154,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a3ecd31ce8ed72499cbcef45da89694, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  notUGUI: 1
   width: 0
   Options:
   - {x: 22, y: 0, z: 57, w: 0}
@@ -806,6 +805,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   originString: 
   endString: 
+  passTextString: 0
   isTyping: 0
   hpIn: 0
   hpSave: 0
@@ -817,8 +817,7 @@ MonoBehaviour:
   fxRandomPitch: 0
   speed: 0.075
   speedSlow: 0.15
-  clock: 0.1
-  passTextString: 0
+  clock: 0.01
   passText: 0
   haveSpriteChanger: 0
   spriteChanger: {fileID: 0}

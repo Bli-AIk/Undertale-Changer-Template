@@ -1,22 +1,21 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using TMPro;
 using DG.Tweening;
+using TMPro;
+using UnityEngine;
+
 /// <summary>
 /// 最初始场景（模板信息）的控制器
 /// </summary>
 public class StartController : MonoBehaviour
 {
-    TextMeshPro textUnder, text;
-    bool textUnderOpen = false;
-    float time = 0;
-    GameObject title;
-    int layer = 0;
+    private TextMeshPro textUnder, text;
+    private bool textUnderOpen = false;
+    private float time = 0;
+    private GameObject title;
+    private int layer = 0;
 
-    float afkTimer = 20;
-    
-    void Start()
+    private float afkTimer = 20;
+
+    private void Start()
     {
         title = transform.Find("Title").gameObject;
         textUnder = transform.Find("Title/Text Message").GetComponent<TextMeshPro>();
@@ -26,16 +25,14 @@ public class StartController : MonoBehaviour
         AudioController.instance.GetFx(11, MainControl.instance.AudioControl.fxClipUI);
         text.text = MainControl.instance.OverworldControl.sceneTextsAsset;
 
-
         PlayerControl playerControl = SaveController.LoadData("Data" + MainControl.instance.dataNum);
     }
 
-    
-    void Update()
+    private void Update()
     {
         if (time < 5)
             time += Time.deltaTime;
-        else if(!textUnderOpen)
+        else if (!textUnderOpen)
         {
             textUnderOpen = true;
             textUnder.DOColor(Color.white, 0.5f).SetEase(Ease.Linear);
@@ -53,7 +50,7 @@ public class StartController : MonoBehaviour
                 case 1:
 
                     text.DOColor(Color.clear, 1).SetEase(Ease.Linear);
-                    if (MainControl.instance.PlayerControl.playerName == ""|| MainControl.instance.PlayerControl.playerName == null)
+                    if (MainControl.instance.PlayerControl.playerName == "" || MainControl.instance.PlayerControl.playerName == null)
                     {
                         MainControl.instance.OutBlack("Rename", Color.black, false, 2f);
                     }
@@ -76,16 +73,14 @@ public class StartController : MonoBehaviour
             MainControl.instance.OutBlack("Story", Color.black);
             afkTimer = 10000000000;
         }
-
-
-
     }
-    void TextAnim()
+
+    private void TextAnim()
     {
         text.DOColor(Color.white, 1).SetEase(Ease.Linear).OnKill(() => ChangeLayer(1));
     }
 
-    void ChangeLayer(int lay)
+    private void ChangeLayer(int lay)
     {
         layer = lay;
     }

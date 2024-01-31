@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 /// <summary>
 /// 内含Pool。
 /// 实现精灵的碎片化效果。
@@ -9,19 +10,21 @@ using UnityEngine;
 /// </summary>
 public class SpriteSplitController : MonoBehaviour
 {
-    Queue<GameObject> available = new Queue<GameObject>();//对象池
-    Texture2D map;
-    GameObject Mask;
+    private Queue<GameObject> available = new Queue<GameObject>();//对象池
+    private Texture2D map;
+    private GameObject Mask;
     public int poolCount;
     public List<Color> colorExclude;
     public Vector2 startPos;//粒子为计算出图片左上角的相对坐标
     public float speed;//粒子生成速度
-    void Awake()
+
+    private void Awake()
     {
         map = GetComponent<SpriteRenderer>().sprite.texture;
         Mask = transform.Find("Mask").gameObject;
     }
-    void OnEnable()
+
+    private void OnEnable()
     {
         startPos = new Vector2(-map.width / 2 * 0.05f, map.height / 2 * 0.05f);
         if (map.width % 2 == 0)
@@ -32,9 +35,9 @@ public class SpriteSplitController : MonoBehaviour
         Mask.transform.localScale = new Vector2(map.width, map.height);
         Mask.transform.localPosition = new Vector3(0, 0.05f * map.height);
         StartCoroutine(SummonPixel());
-       
     }
-    IEnumerator SummonPixel()
+
+    private IEnumerator SummonPixel()
     {
         for (int y = map.height - 1; y >= 0; y--)
         {
@@ -56,15 +59,12 @@ public class SpriteSplitController : MonoBehaviour
                 }
                 else
                 {
-
                     GameObject obj = GetFromPool();
                     obj.GetComponent<SpriteRenderer>().color = color;
                     obj.GetComponent<SpriteRenderer>().sortingOrder = GetComponent<SpriteRenderer>().sortingOrder + 1;
 
                     obj.transform.localPosition = startPos + new Vector2(x * 0.05f, -(map.height - y - 1) * 0.05f);
-               
                 }
-
             }
             Mask.transform.localPosition -= new Vector3(0, 0.05f);
             yield return new WaitForSeconds(speed);
@@ -84,6 +84,7 @@ public class SpriteSplitController : MonoBehaviour
             ReturnPool(newObj);
         }
     }
+
     /// <summary>
     /// 返回对象池
     /// </summary>
@@ -93,6 +94,7 @@ public class SpriteSplitController : MonoBehaviour
         gameObject.transform.SetParent(transform);
         available.Enqueue(gameObject);
     }
+
     /// <summary>
     /// 喜提对象 square)
     /// </summary>
@@ -106,6 +108,4 @@ public class SpriteSplitController : MonoBehaviour
         square.SetActive(true);
         return square;
     }
-
-
 }

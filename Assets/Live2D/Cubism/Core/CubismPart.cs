@@ -5,11 +5,9 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core.Unmanaged;
 using Live2D.Cubism.Framework;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Core
 {
@@ -30,36 +28,29 @@ namespace Live2D.Cubism.Core
         {
             var root = new GameObject("Parts");
 
-
             // Create parts.
             var unmanagedParts = unmanagedModel.Parts;
             var buffer = new CubismPart[unmanagedParts.Count];
-
 
             for (var i = 0; i < buffer.Length; ++i)
             {
                 var proxy = new GameObject();
 
-
                 buffer[i] = proxy.AddComponent<CubismPart>();
-
 
                 buffer[i].transform.SetParent(root.transform);
                 buffer[i].Reset(unmanagedModel, i);
             }
 
-
             return root;
         }
 
-        #endregion
-
+        #endregion Factory Methods
 
         /// <summary>
         /// Unmanaged parts from unmanaged model.
         /// </summary>
         private CubismUnmanagedParts UnmanagedParts { get; set; }
-
 
         /// <summary>
         /// <see cref="UnmanagedIndex"/> backing field.
@@ -75,7 +66,6 @@ namespace Live2D.Cubism.Core
             get { return _unmanagedIndex; }
             private set { _unmanagedIndex = value; }
         }
-
 
         /// <summary>
         /// Copy of Id.
@@ -95,7 +85,6 @@ namespace Live2D.Cubism.Core
         [SerializeField, HideInInspector]
         public float Opacity;
 
-
         /// <summary>
         /// Revives instance.
         /// </summary>
@@ -113,7 +102,6 @@ namespace Live2D.Cubism.Core
         private void Reset(CubismUnmanagedModel unmanagedModel, int unmanagedIndex)
         {
             Revive(unmanagedModel);
-
 
             UnmanagedIndex = unmanagedIndex;
             name = Id;

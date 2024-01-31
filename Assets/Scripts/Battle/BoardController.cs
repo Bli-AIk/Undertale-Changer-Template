@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,14 +8,18 @@ public class BoardController : MonoBehaviour
 {
     [Header("宽度")]
     public float width = 2.1f;
+
     [Header("是否为跟踪板")]
     public bool canMove;
+
     [Header("是否让边缘碰撞器长度随sprite宽度而变化")]
     public bool keepEdge;
+
     public List<Sprite> boards;
-    BoxCollider2D boxCollider2DUp, boxCollider2DDown;//纯纯的检测器 检测玩家在上面就把EdgeCollider掐了。具体在BattlePlayerController内控
-    EdgeCollider2D edgeCollider2D;//默认为触发器。
-    SpriteRenderer spriteRenderer;
+    private BoxCollider2D boxCollider2DUp, boxCollider2DDown;//纯纯的检测器 检测玩家在上面就把EdgeCollider掐了。具体在BattlePlayerController内控
+    private EdgeCollider2D edgeCollider2D;//默认为触发器。
+    private SpriteRenderer spriteRenderer;
+
     private void Awake()
     {
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
@@ -31,12 +34,13 @@ public class BoardController : MonoBehaviour
 
         boxCollider2DDown = gameObject.AddComponent<BoxCollider2D>();
         boxCollider2DDown.isTrigger = true;
-
     }
+
     private void Start()
     {
         //SetBoard(canMove, "board", 40, transform.position);
     }
+
     public void SetBoard(bool canMover, string setName, int layer, Vector3 startLocalPosition)
     {
         canMove = canMover;
@@ -45,7 +49,8 @@ public class BoardController : MonoBehaviour
         transform.localPosition = startLocalPosition;
         SetOriginal();
     }
-    void SetOriginal()
+
+    private void SetOriginal()
     {
         ChangeMove();
         edgeCollider2D.isTrigger = true;
@@ -55,12 +60,9 @@ public class BoardController : MonoBehaviour
         boxCollider2DUp.offset = new Vector2(0, 1.5f);
         boxCollider2DDown.size = new Vector2(spriteRenderer.size.x, 3);
         boxCollider2DDown.offset = new Vector2(0, -1.5f);
-
-
     }
 
-    
-    void Update()
+    private void Update()
     {
         if (keepEdge)
         {
@@ -72,7 +74,6 @@ public class BoardController : MonoBehaviour
             spriteRenderer.size = new Vector2(width, 0.5f);
         }
     }
-  
 
     public void ChangeMove(bool isChange = false)
     {
@@ -83,6 +84,7 @@ public class BoardController : MonoBehaviour
         else
             spriteRenderer.sprite = Resources.Load<Sprite>("Sprites/Board/Board_move");
     }
+
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.CompareTag("Player"))
@@ -93,14 +95,13 @@ public class BoardController : MonoBehaviour
                 edgeCollider2D.isTrigger = false;
         }
     }
-    
+
     /*
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.CompareTag("Player")
         {
             edgeCollider2D.isTrigger = true;
-            
         }
     }
     */

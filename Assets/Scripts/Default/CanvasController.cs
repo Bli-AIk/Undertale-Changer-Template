@@ -1,48 +1,51 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 using DG.Tweening;
-using UnityEngine.SceneManagement;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using TMPro;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
 /// <summary>
 /// UI界面，包括：FPS显示 长按ESC退出 设置界面
 /// </summary>
 public class CanvasController : MonoBehaviour
 {
-
     public int framePic;
 
     public static CanvasController instance;
     public bool openTurn;//敌人回合不能开
-    TextMeshProUGUI fps;
+    private TextMeshProUGUI fps;
     public Image frame;
-    Image exitImage;
-    float clock;
+    private Image exitImage;
+    private float clock;
     public List<Sprite> sprites;
     public List<Vector2> sizes;
 
     public Image setting;
-    Image settingSoul;
-    TextMeshProUGUI settingTmp, settingTmpSon, settingTmpUnder;
+    private Image settingSoul;
+    private TextMeshProUGUI settingTmp, settingTmpSon, settingTmpUnder;
     public RenderMode renderMode;
 
-    int settingSelect, settingSelectMax;//目前 Max仅用于配置语言包
+    private int settingSelect, settingSelectMax;//目前 Max仅用于配置语言包
+
     [HideInInspector]
     public int settingLevel;//切换层级 0层默认 1层按键设置 2层语言包配置
-    int controlPage, controlSelect;//Page是翻页 Select是切换主次按键设置
-    bool isSettingName;//是否选中
-    float saveVolume;
-    bool isSettingControl;
+
+    private int controlPage, controlSelect;//Page是翻页 Select是切换主次按键设置
+    private bool isSettingName;//是否选中
+    private float saveVolume;
+    private bool isSettingControl;
+
     [HideInInspector]
     public bool freeze;//防止切场景时整事儿
 
-    Canvas canvas;
-    TypeWritter[] typeWritters;//存储打字机以暂停协程
+    private Canvas canvas;
+    private TypeWritter[] typeWritters;//存储打字机以暂停协程
 
     public Animator animator;
+
     private void Awake()
     {
         instance = this;
@@ -60,7 +63,6 @@ public class CanvasController : MonoBehaviour
 
         frame = transform.Find("Frame").GetComponent<Image>();
         typeWritters = (TypeWritter[])Resources.FindObjectsOfTypeAll(typeof(TypeWritter));
-
     }
 
     public void Start()
@@ -70,9 +72,8 @@ public class CanvasController : MonoBehaviour
         settingTmp.color = Color.white;
         settingTmp.rectTransform.anchoredPosition = new Vector2(-610, 140);
 
-
         freeze = false;
-     
+
         canvas.renderMode = renderMode;
 
         if (canvas.renderMode == RenderMode.ScreenSpaceCamera)
@@ -83,9 +84,9 @@ public class CanvasController : MonoBehaviour
         m_LastUpdateShowTime = Time.realtimeSinceStartup;
 
         SettingText();
-
     }
-    void SettingText(bool OnlySetSon = false,bool isSetting = false)
+
+    private void SettingText(bool OnlySetSon = false, bool isSetting = false)
     {
         switch (settingLevel)
         {
@@ -124,6 +125,7 @@ public class CanvasController : MonoBehaviour
                     MainControl.instance.OverworldControl.resolution.x + '×' + MainControl.instance.OverworldControl.resolution.y + '\n' + OpenOrClose(MainControl.instance.OverworldControl.noSFX) + '\n' + OpenOrClose(MainControl.instance.OverworldControl.openFPS);
 
                 break;
+
             case 1:
                 List<string> strings = new List<string>();
 
@@ -138,16 +140,15 @@ public class CanvasController : MonoBehaviour
                 {
                     case 0:
                         settingTmp.text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Control") + "</color>" + '\n' +
-                       strings[0] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlDown") + "</color>"+ '\n' +
-                       strings[1] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlRight") + "</color>"+ '\n' +
-                       strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlUp") + "</color>" +'\n' +
+                       strings[0] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlDown") + "</color>" + '\n' +
+                       strings[1] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlRight") + "</color>" + '\n' +
+                       strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlUp") + "</color>" + '\n' +
                        strings[3] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlLeft") + "</color>" + '\n' +
                        strings[4] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlZ") + "</color>" + '\n' +
                        strings[5] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlX") + "</color>" + '\n' +
                        MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "PageDown") + '\n' +
                        MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlDefault") + '\n' +
                        MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Back");
-
 
                         settingTmpSon.text = "";
                         for (int i = 0; i < 6; i++)
@@ -161,9 +162,11 @@ public class CanvasController : MonoBehaviour
                                 case 0:
                                     settingTmpSon.text += MainControl.instance.OverworldControl.keyCodes[i] + "</color>\n";
                                     break;
+
                                 case 1:
                                     settingTmpSon.text += MainControl.instance.OverworldControl.keyCodesBack1[i] + "</color>\n";
                                     break;
+
                                 case 2:
                                     settingTmpSon.text += MainControl.instance.OverworldControl.keyCodesBack2[i] + "</color>\n";
                                     break;
@@ -171,6 +174,7 @@ public class CanvasController : MonoBehaviour
                         }
 
                         break;
+
                     case 1:
                         settingTmp.text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Control") + '\n' +
                        strings[0] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlC") + "</color>" + '\n' +
@@ -194,9 +198,11 @@ public class CanvasController : MonoBehaviour
                                 case 0:
                                     settingTmpSon.text += MainControl.instance.OverworldControl.keyCodes[i] + "</color>\n";
                                     break;
+
                                 case 1:
                                     settingTmpSon.text += MainControl.instance.OverworldControl.keyCodesBack1[i] + "</color>\n";
                                     break;
+
                                 case 2:
                                     settingTmpSon.text += MainControl.instance.OverworldControl.keyCodesBack2[i] + "</color>\n";
                                     break;
@@ -207,6 +213,7 @@ public class CanvasController : MonoBehaviour
                 }
 
                 break;
+
             case 2:
                 string pathStringSaver = "";
 
@@ -215,13 +222,13 @@ public class CanvasController : MonoBehaviour
                     MainControl.instance.Initialization(settingSelect);
                 }
                 if (!OnlySetSon)
-                    settingTmp.text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "LanguagePack")+'\n';
+                    settingTmp.text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "LanguagePack") + '\n';
                 settingTmpSon.text = "";
                 settingSelectMax = 0;
                 int settingSelectBack = settingSelect;
                 if (OnlySetSon)
                     settingSelect = MainControl.instance.languagePack;
-                
+
                 for (int i = 0; i < MainControl.instance.languagePackInsideNum; i++) //内置包信息
                 {
                     string pathString = "TextAssets/LanguagePacks/" + MainControl.instance.GetLanguageInsideId(i);
@@ -234,7 +241,6 @@ public class CanvasController : MonoBehaviour
 
                     if (!OnlySetSon)
                         settingTmp.text += GetLanguagePacksName(pathString, "LanguagePackName", false) + '\n';
-                        
                 }
                 foreach (string pathString in Directory.GetDirectories(Application.dataPath + "\\LanguagePacks"))
                 {
@@ -243,7 +249,6 @@ public class CanvasController : MonoBehaviour
                     settingSelectMax++;
                     if (!OnlySetSon)
                         settingTmp.text += GetLanguagePacksName(pathString, "LanguagePackName", true) + '\n';
-
                 }
                 if (!OnlySetSon)
                     settingTmp.text += MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Back");
@@ -253,13 +258,13 @@ public class CanvasController : MonoBehaviour
                 settingSelect = settingSelectBack;
                 break;
         }
-     
     }
+
     /// <summary>
     /// 获取语言包信息
     /// 返回returnString
     /// </summary>
-    string GetLanguagePacksName(string pathString,string returnString, bool isOutSide)
+    private string GetLanguagePacksName(string pathString, string returnString, bool isOutSide)
     {
         List<string> strings = new List<string>();
         MainControl.instance.LoadItemData(strings, ReadFile(pathString + "\\LanguagePackInformation", isOutSide));
@@ -267,8 +272,7 @@ public class CanvasController : MonoBehaviour
         return MainControl.instance.ScreenMaxToOneSon(strings, returnString);
     }
 
-
-    string ReadFile(string PathName, bool isOutSide)
+    private string ReadFile(string PathName, bool isOutSide)
     {
         string strs;
         if (!isOutSide)
@@ -281,15 +285,15 @@ public class CanvasController : MonoBehaviour
     /// <summary>
     /// 返回开/关文本
     /// </summary>
-    string OpenOrClose(bool booler)
+    private string OpenOrClose(bool booler)
     {
         if (booler)
             return MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Open");
         else
             return MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Close");
     }
-    
-    void Update()
+
+    private void Update()
     {
         if (freeze)
             return;
@@ -298,7 +302,7 @@ public class CanvasController : MonoBehaviour
         else
             fps.text = "";
 
-        if (MainControl.instance.KeyArrowToControl(KeyCode.Escape,1))
+        if (MainControl.instance.KeyArrowToControl(KeyCode.Escape, 1))
         {
             if (exitImage.color.a < 1)
                 exitImage.color += Time.deltaTime * Color.white;
@@ -317,7 +321,7 @@ public class CanvasController : MonoBehaviour
         }
 
         //设置菜单
-        if(isSettingControl)
+        if (isSettingControl)
         {
             SettingText(false, true);
             if (SettingControl() != KeyCode.None)
@@ -333,7 +337,7 @@ public class CanvasController : MonoBehaviour
                         goto default;
                     default:
                         KeyCode origin = KeyCode.None;
-                      
+
                         switch (controlSelect)
                         {
                             case 0:
@@ -382,12 +386,11 @@ public class CanvasController : MonoBehaviour
                                 SettingText();
                                 break;
                         }
-                        
+
                         break;
                 }
                 isSettingControl = false;
             }
-
 
             return;
         }
@@ -411,7 +414,6 @@ public class CanvasController : MonoBehaviour
 
         if (settingTmp.rectTransform.anchoredPosition.x > 125)
         {
-
             switch (settingLevel)
             {
                 case 0:
@@ -467,11 +469,13 @@ public class CanvasController : MonoBehaviour
                                     isSettingName = true;
                                     SettingText(false, true);
                                     break;
+
                                 case 1:
                                     settingLevel = 1;
                                     SettingText();
                                     settingSelect = 0;
                                     break;
+
                                 case 2:
                                     MainControl.instance.OverworldControl.fullScreen = !MainControl.instance.OverworldControl.fullScreen;
                                     MainControl.instance.SetResolution(MainControl.instance.OverworldControl.resolutionLevel);
@@ -503,6 +507,7 @@ public class CanvasController : MonoBehaviour
                                 case 7:
                                     ExitSetting();
                                     break;
+
                                 default:
                                     SettingText();
                                     break;
@@ -513,7 +518,7 @@ public class CanvasController : MonoBehaviour
                             isSettingName = false;
                         }
                     }
-                    else if (SceneManager.GetActiveScene().name != "Story" && (MainControl.instance.KeyArrowToControl(KeyCode.X) || MainControl.instance.KeyArrowToControl(KeyCode.V))) 
+                    else if (SceneManager.GetActiveScene().name != "Story" && (MainControl.instance.KeyArrowToControl(KeyCode.X) || MainControl.instance.KeyArrowToControl(KeyCode.V)))
                     {
                         if (!isSettingName)
                         {
@@ -539,9 +544,7 @@ public class CanvasController : MonoBehaviour
                                 else
                                     MainControl.instance.OverworldControl.vsyncMode = OverworldControl.VSyncMode.DonNotSync;
 
-
                                 PlayerPrefs.SetInt("vsyncMode", Convert.ToInt32(MainControl.instance.OverworldControl.vsyncMode));
-
                             }
                             else if (settingSelect == 3)
                             {
@@ -557,13 +560,14 @@ public class CanvasController : MonoBehaviour
                     string textForUnder = "";
                     switch (settingSelect)
                     {
-
                         case 0:
                             textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingMainVolumeTip");
                             break;
+
                         case 1:
                             textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingControlTip");
                             break;
+
                         case 2:
                             string vsyncModeAdd;
                             switch (MainControl.instance.OverworldControl.vsyncMode)
@@ -571,12 +575,15 @@ public class CanvasController : MonoBehaviour
                                 case OverworldControl.VSyncMode.DonNotSync:
                                     vsyncModeAdd = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "VSyncNone");
                                     break;
+
                                 case OverworldControl.VSyncMode.SyncToRefreshRate:
                                     vsyncModeAdd = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "VSyncFull");
                                     break;
+
                                 case OverworldControl.VSyncMode.HalfSync:
                                     vsyncModeAdd = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "VSyncHalf");
                                     break;
+
                                 default:
                                     goto case OverworldControl.VSyncMode.DonNotSync;
                             }
@@ -586,6 +593,7 @@ public class CanvasController : MonoBehaviour
                             else
                                 textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingFullScreenTipClose") + "\n" + vsyncModeAdd;
                             break;
+
                         case 3:
                             if (!MainControl.instance.OverworldControl.hdResolution)
                                 textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingResolvingTip");
@@ -593,21 +601,26 @@ public class CanvasController : MonoBehaviour
                                 textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingResolvingTipHD");
 
                             break;
+
                         case 4:
                             textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingSFXTip");
                             break;
+
                         case 5:
                             textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingFPSTip");
                             break;
+
                         case 6:
                             textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingBackMenuTip");
                             break;
+
                         case 7:
                             textForUnder = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "SettingBackGameTip");
                             break;
                     }
                     settingTmpUnder.text = textForUnder;
                     break;
+
                 case 1:
                     if (MainControl.instance.KeyArrowToControl(KeyCode.DownArrow))
                     {
@@ -634,6 +647,7 @@ public class CanvasController : MonoBehaviour
                                 case 0:
                                     controlPage = 1;
                                     break;
+
                                 case 1:
                                     controlPage = 0;
                                     break;
@@ -671,6 +685,7 @@ public class CanvasController : MonoBehaviour
                     settingTmpUnder.text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlUnder" + controlSelect);
 
                     break;
+
                 case 2:
                     if (MainControl.instance.KeyArrowToControl(KeyCode.DownArrow))
                     {
@@ -699,21 +714,17 @@ public class CanvasController : MonoBehaviour
                             ExitSetting(true);
                         }
                     }
-                    else if (SceneManager.GetActiveScene().name != "Story" && (MainControl.instance.KeyArrowToControl(KeyCode.X) || MainControl.instance.KeyArrowToControl(KeyCode.V))) 
+                    else if (SceneManager.GetActiveScene().name != "Story" && (MainControl.instance.KeyArrowToControl(KeyCode.X) || MainControl.instance.KeyArrowToControl(KeyCode.V)))
                     {
                         ExitSetting(true);
                         return;
                     }
                     break;
             }
-
-
         }
-
-
-
     }
-    void CloseSetting(bool isLan = false)
+
+    private void CloseSetting(bool isLan = false)
     {
         MainControl.instance.OverworldControl.isSetting = false;
         foreach (TypeWritter typeWritter in typeWritters)
@@ -723,7 +734,8 @@ public class CanvasController : MonoBehaviour
         if (isLan)
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
-    KeyCode SettingControl()
+
+    private KeyCode SettingControl()
     {
         if (Input.anyKeyDown)
         {
@@ -739,6 +751,7 @@ public class CanvasController : MonoBehaviour
         }
         return KeyCode.None;
     }
+
     public void InSetting()
     {
         MainControl.instance.OverworldControl.isSetting = true;
@@ -751,7 +764,8 @@ public class CanvasController : MonoBehaviour
         if (settingLevel == 2)
             SettingText(true);
     }
-    void ExitSetting(bool isLan = false)
+
+    private void ExitSetting(bool isLan = false)
     {
         settingLevel = 0;
         DOTween.To(() => setting.rectTransform.sizeDelta, x => setting.rectTransform.sizeDelta = x, new Vector2(0, setting.rectTransform.sizeDelta.y), 0.75f).SetEase(Ease.OutCirc);
@@ -759,9 +773,10 @@ public class CanvasController : MonoBehaviour
         DOTween.To(() => settingTmp.rectTransform.anchoredPosition, x => settingTmp.rectTransform.anchoredPosition = x, new Vector2(-610, 140), 1).SetEase(Ease.InSine).OnKill(() => CloseSetting(isLan));
         settingTmpUnder.text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlEggshell");
     }
-    private float m_LastUpdateShowTime = 0f;  //上一次更新帧率的时间;  
-    private float m_UpdateShowDeltaTime = 0.2f;//更新帧率的时间间隔;  
-    private int m_FrameUpdate = 0;//帧数;  
+
+    private float m_LastUpdateShowTime = 0f;  //上一次更新帧率的时间;
+    private float m_UpdateShowDeltaTime = 0.2f;//更新帧率的时间间隔;
+    private int m_FrameUpdate = 0;//帧数;
     private float m_FPS = 0;//帧率
 
     private string FPSFlash(string origin)
@@ -785,8 +800,8 @@ public class CanvasController : MonoBehaviour
     {
         Vector2 uiPos = WorldToUgui(MainControl.instance.OverworldControl.playerDeadPos);
         transform.Find("Heart").GetComponent<RectTransform>().anchoredPosition = uiPos;
-       
     }
+
     public Vector2 WorldToUgui(Vector3 position)
     {
         RectTransform canvasRectTransform = GetComponent<RectTransform>();
@@ -805,23 +820,23 @@ public class CanvasController : MonoBehaviour
         else
             transform.Find("Heart").GetComponent<Image>().color = Color.clear;
     }
+
     public void AnimHeartGo()
     {
         RectTransform i = transform.Find("Heart").GetComponent<RectTransform>();
         Image j = i.GetComponent<Image>();
         j.DOColor(new Color(j.color.r, j.color.g, j.color.b, 0), 0.75f).SetEase(Ease.Linear);
         DOTween.To(() => i.anchoredPosition, x => i.anchoredPosition = x, new Vector2(-330, -250), 1.5f).SetEase(Ease.OutCirc).OnKill(() => AnimOpen());
-        
     }
+
     public void PlayFX(int i)
     {
         AudioController.instance.GetFx(i, MainControl.instance.AudioControl.fxClipUI);
-
     }
-    void AnimOpen()
+
+    private void AnimOpen()
     {
         animator.SetBool("Open", false);
         MainControl.instance.OutBlack("Battle", Color.black, false, -0.5f);
     }
-
 }

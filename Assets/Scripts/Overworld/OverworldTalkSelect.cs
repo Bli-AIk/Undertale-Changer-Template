@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using DG.Tweening;
+
 /// <summary>
 /// 用于在OW插入选项系统，与UT的选项一致，而不同于DR的选项。
 /// 在含有选项的场景内会添加heart。
@@ -13,9 +12,9 @@ public class OverworldTalkSelect : MonoBehaviour
 {
     public static OverworldTalkSelect instance;
     public int select;
-    Image heart;
-    bool canSelect;
-    TypeWritter typeWritter;
+    private Image heart;
+    private bool canSelect;
+    private TypeWritter typeWritter;
     public List<string> texts;
     public string typeText;
 
@@ -24,13 +23,13 @@ public class OverworldTalkSelect : MonoBehaviour
         instance = this;
     }
 
-    void Start()
+    private void Start()
     {
         typeWritter = GameObject.Find("BackpackCanvas").GetComponent<TypeWritter>();
-        Transform heartTrans = transform.Find("RawImage/Talk/UITalk/Heart");
+        Transform heartTrans = BackpackBehaviour.instance.typeMessage.transform.Find("Heart");
         GameObject heartObj;
         if (!heartTrans)
-            heartObj = Instantiate(new GameObject(), transform.Find("RawImage/Talk/UITalk"));
+            heartObj = Instantiate(new GameObject(), BackpackBehaviour.instance.typeMessage.transform);
         else heartObj = heartTrans.gameObject;
 
         heart = heartObj.AddComponent<Image>() ?? heartObj.GetComponent<Image>();
@@ -38,6 +37,7 @@ public class OverworldTalkSelect : MonoBehaviour
         heart.sprite = Resources.Load<Sprite>("Sprites/Soul");
         heart.color = Color.clear;
     }
+
     public void Open()
     {
         select = 0;
@@ -46,8 +46,7 @@ public class OverworldTalkSelect : MonoBehaviour
         canSelect = true;
     }
 
-    
-    void Update()
+    private void Update()
     {
         if (canSelect)
         {
@@ -66,7 +65,6 @@ public class OverworldTalkSelect : MonoBehaviour
                 else select = 0;
                 heart.rectTransform.anchoredPosition = new Vector2(-143.3f + Convert.ToInt32(select) * 192.5f, -18.8f);
                 AudioController.instance.GetFx(0, MainControl.instance.AudioControl.fxClipUI);
-
             }
 
             if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
@@ -94,11 +92,12 @@ public class OverworldTalkSelect : MonoBehaviour
                             case "Select":
                                 AudioController.instance.GetFx(2, MainControl.instance.AudioControl.fxClipBattle);
                                 break;
-                            
+
                             default:
                                 break;
                         }
                         break;
+
                     case 1://选择了右侧选项
                         break;
                 }
@@ -106,8 +105,6 @@ public class OverworldTalkSelect : MonoBehaviour
                 canSelect = false;
                 return;
             }
-
-            
         }
     }
 }

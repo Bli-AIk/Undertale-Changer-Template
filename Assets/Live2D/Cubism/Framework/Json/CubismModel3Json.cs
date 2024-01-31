@@ -5,7 +5,6 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core;
 using System;
 using System.IO;
@@ -18,11 +17,14 @@ using Live2D.Cubism.Framework.MotionFade;
 using Live2D.Cubism.Framework.Raycasting;
 using Live2D.Cubism.Rendering;
 using Live2D.Cubism.Rendering.Masking;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
-using UnityEngine;
 
+#if UNITY_EDITOR
+
+using UnityEditor;
+
+#endif
+
+using UnityEngine;
 
 namespace Live2D.Cubism.Framework.Json
 {
@@ -30,7 +32,6 @@ namespace Live2D.Cubism.Framework.Json
     /// Exposes moc3.json asset data.
     /// </summary>
     [Serializable]
-    // ReSharper disable once ClassCannotBeInstantiated
     public sealed class CubismModel3Json
     {
         #region Delegates
@@ -42,7 +43,6 @@ namespace Live2D.Cubism.Framework.Json
         /// <param name="assetPath">The path to the asset.</param>
         /// <returns></returns>
         public delegate object LoadAssetAtPathHandler(Type assetType, string assetPath);
-
 
         /// <summary>
         /// Picks a <see cref="Material"/> for a <see cref="CubismDrawable"/>.
@@ -60,7 +60,7 @@ namespace Live2D.Cubism.Framework.Json
         /// <returns>Picked texture.</returns>
         public delegate Texture2D TexturePicker(CubismModel3Json sender, CubismDrawable drawable);
 
-        #endregion
+        #endregion Delegates
 
         #region Load Methods
 
@@ -92,15 +92,12 @@ namespace Live2D.Cubism.Framework.Json
                 return null;
             }
 
-
             // Deserialize Json.
             var modelJson = JsonUtility.FromJson<CubismModel3Json>(modelJsonAsset);
-
 
             // Finalize deserialization.
             modelJson.AssetPath = assetPath;
             modelJson.LoadAssetAtPath = loadAssetAtPath;
-
 
             // Set motion references.
             var value = CubismJsonParser.ParseFromString(modelJsonAsset);
@@ -110,7 +107,6 @@ namespace Live2D.Cubism.Framework.Json
             {
                 return modelJson;
             }
-
 
             var motionGroupNames = value.Get("FileReferences").Get("Motions").KeySet().ToArray();
             modelJson.FileReferences.Motions.GroupNames = motionGroupNames;
@@ -124,7 +120,6 @@ namespace Live2D.Cubism.Framework.Json
                 var motionCount = motionGroup.GetVector(null).ToArray().Length;
 
                 modelJson.FileReferences.Motions.Motions[i] = new SerializableMotion[motionCount];
-
 
                 for (var j = 0; j < motionCount; j++)
                 {
@@ -150,17 +145,15 @@ namespace Live2D.Cubism.Framework.Json
                 }
             }
 
-
             return modelJson;
         }
 
-        #endregion
+        #endregion Load Methods
 
         /// <summary>
         /// Path to <see langword="this"/>.
         /// </summary>
         public string AssetPath { get; private set; }
-
 
         /// <summary>
         /// Method for loading assets.
@@ -193,7 +186,7 @@ namespace Live2D.Cubism.Framework.Json
         [SerializeField]
         public SerializableHitArea[] HitAreas;
 
-        #endregion
+        #endregion Json Data
 
         /// <summary>
         /// The contents of the referenced moc3 asset.
@@ -222,7 +215,7 @@ namespace Live2D.Cubism.Framework.Json
         {
             get
             {
-                if(_pose3Json != null)
+                if (_pose3Json != null)
                 {
                     return _pose3Json;
                 }
@@ -250,7 +243,7 @@ namespace Live2D.Cubism.Framework.Json
             get
             {
                 // Fail silently...
-                if(FileReferences.Expressions == null)
+                if (FileReferences.Expressions == null)
                 {
                     return null;
                 }
@@ -324,13 +317,11 @@ namespace Live2D.Cubism.Framework.Json
                 {
                     _textures = new Texture2D[FileReferences.Textures.Length];
 
-
                     for (var i = 0; i < _textures.Length; ++i)
                     {
                         _textures[i] = LoadReferencedAsset<Texture2D>(FileReferences.Textures[i]);
                     }
                 }
-
 
                 return _textures;
             }
@@ -345,7 +336,7 @@ namespace Live2D.Cubism.Framework.Json
         {
         }
 
-        #endregion
+        #endregion Constructors
 
         /// <summary>
         /// Instantiates a <see cref="CubismMoc">model source</see> and a <see cref="CubismModel">model</see> with the default texture set.
@@ -369,15 +360,12 @@ namespace Live2D.Cubism.Framework.Json
             // Initialize model source and instantiate it.
             var mocAsBytes = Moc3;
 
-
             if (mocAsBytes == null)
             {
                 return null;
             }
 
-
             var moc = CubismMoc.CreateFrom(mocAsBytes);
-
 
             var model = CubismModel.InstantiateFrom(moc);
 
@@ -387,7 +375,6 @@ namespace Live2D.Cubism.Framework.Json
             }
 
             model.name = Path.GetFileNameWithoutExtension(FileReferences.Moc);
-
 
 #if UNITY_EDITOR
             // Add parameters and parts inspectors.
@@ -401,7 +388,7 @@ namespace Live2D.Cubism.Framework.Json
 
             var drawables = model.Drawables;
 
-            if (renderers == null || drawables  == null)
+            if (renderers == null || drawables == null)
             {
                 return null;
             }
@@ -412,13 +399,11 @@ namespace Live2D.Cubism.Framework.Json
                 renderers[i].Material = pickMaterial(this, drawables[i]);
             }
 
-
             // Initialize textures.
             for (var i = 0; i < renderers.Length; ++i)
             {
                 renderers[i].MainTexture = pickTexture(this, drawables[i]);
             }
-
 
             if (model.Parts != null)
             {
@@ -431,7 +416,6 @@ namespace Live2D.Cubism.Framework.Json
                     partColorsEditor.TryInitialize(rendererController, parts[i], model.Drawables);
                 }
             }
-
 
             // Initialize drawables.
             if (HitAreas != null)
@@ -460,7 +444,6 @@ namespace Live2D.Cubism.Framework.Json
             // Initialize groups.
             var parameters = model.Parameters;
 
-
             for (var i = 0; i < parameters.Length; ++i)
             {
                 if (IsParameterInGroup(parameters[i], "EyeBlink"))
@@ -470,10 +453,8 @@ namespace Live2D.Cubism.Framework.Json
                         model.gameObject.AddComponent<CubismEyeBlinkController>();
                     }
 
-
                     parameters[i].gameObject.AddComponent<CubismEyeBlinkParameter>();
                 }
-
 
                 // Set up mouth parameters.
                 if (IsParameterInGroup(parameters[i], "LipSync"))
@@ -483,10 +464,8 @@ namespace Live2D.Cubism.Framework.Json
                         model.gameObject.AddComponent<CubismMouthController>();
                     }
 
-
                     parameters[i].gameObject.AddComponent<CubismMouthParameter>();
                 }
-
 
                 // Setting up the parameter name for display.
                 if (cdi3Json != null)
@@ -495,7 +474,6 @@ namespace Live2D.Cubism.Framework.Json
                     cubismDisplayInfoParameterName.Name = cdi3Json.Parameters[i].Name;
                     cubismDisplayInfoParameterName.DisplayName = string.Empty;
                 }
-
             }
 
             // Setting up the part name for display.
@@ -520,21 +498,19 @@ namespace Live2D.Cubism.Framework.Json
                     continue;
                 }
 
-
                 // Add controller exactly once...
                 model.gameObject.AddComponent<CubismMaskController>();
-
 
                 break;
             }
 
             // Add original workflow component if is original workflow.
-            if(shouldImportAsOriginalWorkflow)
+            if (shouldImportAsOriginalWorkflow)
             {
                 // Add cubism update manager.
                 var updateManager = model.gameObject.GetComponent<CubismUpdateController>();
 
-                if(updateManager == null)
+                if (updateManager == null)
                 {
                     model.gameObject.AddComponent<CubismUpdateController>();
                 }
@@ -542,7 +518,7 @@ namespace Live2D.Cubism.Framework.Json
                 // Add parameter store.
                 var parameterStore = model.gameObject.GetComponent<CubismParameterStore>();
 
-                if(parameterStore == null)
+                if (parameterStore == null)
                 {
                     parameterStore = model.gameObject.AddComponent<CubismParameterStore>();
                 }
@@ -550,7 +526,7 @@ namespace Live2D.Cubism.Framework.Json
                 // Add pose controller.
                 var poseController = model.gameObject.GetComponent<CubismPoseController>();
 
-                if(poseController == null)
+                if (poseController == null)
                 {
                     poseController = model.gameObject.AddComponent<CubismPoseController>();
                 }
@@ -558,26 +534,22 @@ namespace Live2D.Cubism.Framework.Json
                 // Add expression controller.
                 var expressionController = model.gameObject.GetComponent<CubismExpressionController>();
 
-                if(expressionController == null)
+                if (expressionController == null)
                 {
                     expressionController = model.gameObject.AddComponent<CubismExpressionController>();
                 }
 
-
                 // Add fade controller.
                 var motionFadeController = model.gameObject.GetComponent<CubismFadeController>();
 
-                if(motionFadeController == null)
+                if (motionFadeController == null)
                 {
                     motionFadeController = model.gameObject.AddComponent<CubismFadeController>();
                 }
-
             }
-
 
             // Initialize physics if JSON exists.
             var physics3JsonAsString = Physics3Json;
-
 
             if (!string.IsNullOrEmpty(physics3JsonAsString))
             {
@@ -587,20 +559,16 @@ namespace Live2D.Cubism.Framework.Json
                 if (physicsController == null)
                 {
                     physicsController = model.gameObject.AddComponent<CubismPhysicsController>();
-
                 }
 
                 physicsController.Initialize(physics3Json.ToRig());
             }
 
-
             var userData3JsonAsString = UserData3Json;
-
 
             if (!string.IsNullOrEmpty(userData3JsonAsString))
             {
                 var userData3Json = CubismUserData3Json.LoadFrom(userData3JsonAsString);
-
 
                 var drawableBodies = userData3Json.ToBodyArray(CubismUserDataTargetType.ArtMesh);
 
@@ -612,12 +580,10 @@ namespace Live2D.Cubism.Framework.Json
                     {
                         var tag = drawables[i].gameObject.GetComponent<CubismUserDataTag>();
 
-
                         if (tag == null)
                         {
                             tag = drawables[i].gameObject.AddComponent<CubismUserDataTag>();
                         }
-
 
                         tag.Initialize(drawableBodies[index]);
                     }
@@ -631,7 +597,6 @@ namespace Live2D.Cubism.Framework.Json
 
             // Make sure model is 'fresh'
             model.ForceUpdateNow();
-
 
             return model;
         }
@@ -648,10 +613,8 @@ namespace Live2D.Cubism.Framework.Json
         {
             var assetPath = Path.GetDirectoryName(AssetPath) + "/" + referencedFile;
 
-
             return LoadAssetAtPath(typeof(T), assetPath) as T;
         }
-
 
         /// <summary>
         /// Builtin method for loading assets.
@@ -669,7 +632,6 @@ namespace Live2D.Cubism.Framework.Json
 #else
                 var textAsset = Resources.Load(assetPath, typeof(TextAsset)) as TextAsset;
 
-
                 return (textAsset != null)
                     ? textAsset.bytes
                     : null;
@@ -682,13 +644,11 @@ namespace Live2D.Cubism.Framework.Json
 #else
                 var textAsset = Resources.Load(assetPath, typeof(TextAsset)) as TextAsset;
 
-
                 return (textAsset != null)
                     ? textAsset.text
                     : null;
 #endif
             }
-
 
 #if UNITY_EDITOR
             return AssetDatabase.LoadAssetAtPath(assetPath, assetType);
@@ -696,7 +656,6 @@ namespace Live2D.Cubism.Framework.Json
             return Resources.Load(assetPath, assetType);
 #endif
         }
-
 
         /// <summary>
         /// Checks whether the parameter is an eye blink parameter.
@@ -712,7 +671,6 @@ namespace Live2D.Cubism.Framework.Json
                 return false;
             }
 
-
             for (var i = 0; i < Groups.Length; ++i)
             {
                 if (Groups[i].Name != groupName)
@@ -720,7 +678,7 @@ namespace Live2D.Cubism.Framework.Json
                     continue;
                 }
 
-                if(Groups[i].Ids != null)
+                if (Groups[i].Ids != null)
                 {
                     for (var j = 0; j < Groups[i].Ids.Length; ++j)
                     {
@@ -732,10 +690,8 @@ namespace Live2D.Cubism.Framework.Json
                 }
             }
 
-
             return false;
         }
-
 
         /// <summary>
         /// Get body index from body array by Id.
@@ -756,8 +712,7 @@ namespace Live2D.Cubism.Framework.Json
             return -1;
         }
 
-
-        #endregion
+        #endregion Helper Methods
 
         #region Json Helpers
 
@@ -941,6 +896,6 @@ namespace Live2D.Cubism.Framework.Json
             public string Id;
         }
 
-        #endregion
+        #endregion Json Helpers
     }
 }

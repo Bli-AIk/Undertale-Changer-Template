@@ -5,11 +5,9 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Rendering;
 using UnityEditor;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Editor.Inspectors
 {
@@ -28,17 +26,14 @@ namespace Live2D.Cubism.Editor.Inspectors
         {
             var renderer = target as CubismRenderer;
 
-
             // Fail silently.
             if (renderer == null)
             {
                 return;
             }
 
-
             // Show settings.
             EditorGUILayout.ObjectField("Mesh", renderer.Mesh, typeof(Mesh), false);
-
 
             EditorGUI.BeginChangeCheck();
 
@@ -154,7 +149,6 @@ namespace Live2D.Cubism.Editor.Inspectors
                 }
             }
 
-
             // Save any changes.
             if (EditorGUI.EndChangeCheck())
             {
@@ -166,11 +160,9 @@ namespace Live2D.Cubism.Editor.Inspectors
                 }
             }
 
-
             // Show backend toggle.
             var showBackends = (renderer.MeshRenderer.hideFlags & HideFlags.HideInInspector) != HideFlags.HideInInspector;
             var toggle = EditorGUILayout.Toggle("Show Mesh Filter & Renderer", showBackends) != showBackends;
-
 
             if (toggle)
             {
@@ -182,6 +174,6 @@ namespace Live2D.Cubism.Editor.Inspectors
             }
         }
 
-        #endregion
+        #endregion Editor
     }
 }

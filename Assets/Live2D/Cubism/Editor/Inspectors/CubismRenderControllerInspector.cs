@@ -5,12 +5,10 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Rendering;
 using System;
 using UnityEditor;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Editor.Inspectors
 {
@@ -33,22 +31,18 @@ namespace Live2D.Cubism.Editor.Inspectors
         {
             var controller = target as CubismRenderController;
 
-
             // Fail silently.
             if (controller == null)
             {
                 return;
             }
 
-
             // Show settings.
             EditorGUI.BeginChangeCheck();
-
 
             controller.Opacity = EditorGUILayout.Slider("Opacity", controller.Opacity, 0f, 1f);
             controller.OverwriteFlagForModelMultiplyColors = EditorGUILayout.Toggle("OverwriteFlagForModelMultiplyColors", controller.OverwriteFlagForModelMultiplyColors);
             controller.OverwriteFlagForModelScreenColors = EditorGUILayout.Toggle("OverwriteFlagForModelScreenColors", controller.OverwriteFlagForModelScreenColors);
-
 
             ShowSorting = EditorGUILayout.Foldout(ShowSorting, "Sorting", EditorStyles.boldFont);
 
@@ -58,7 +52,6 @@ namespace Live2D.Cubism.Editor.Inspectors
                 controller.SortingOrder = EditorGUILayout.IntField("Order In Layer", controller.SortingOrder);
                 controller.SortingMode = (CubismSortingMode)EditorGUILayout.EnumPopup("Mode", (Enum)controller.SortingMode);
             }
-
 
             ShowAdvanced = EditorGUILayout.Foldout(ShowAdvanced, "Advanced", EditorStyles.boldFont);
 
@@ -76,12 +69,10 @@ namespace Live2D.Cubism.Editor.Inspectors
                 }
             }
 
-
             // Save any changes.
             if (EditorGUI.EndChangeCheck())
             {
                 EditorUtility.SetDirty(controller);
-
 
                 foreach (var renderer in controller.Renderers)
                 {
@@ -92,6 +83,6 @@ namespace Live2D.Cubism.Editor.Inspectors
             }
         }
 
-        #endregion
+        #endregion Editor
     }
 }

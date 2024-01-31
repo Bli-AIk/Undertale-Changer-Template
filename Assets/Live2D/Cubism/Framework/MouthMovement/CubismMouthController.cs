@@ -5,10 +5,8 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Framework.MouthMovement
 {
@@ -23,13 +21,11 @@ namespace Live2D.Cubism.Framework.MouthMovement
         [SerializeField]
         public CubismParameterBlendMode BlendMode = CubismParameterBlendMode.Multiply;
 
-
         /// <summary>
         /// The opening of the mouth.
         /// </summary>
         [SerializeField, Range(0f, 1f)]
         public float MouthOpening = 1f;
-
 
         /// <summary>
         /// Mouth parameters.
@@ -42,8 +38,6 @@ namespace Live2D.Cubism.Framework.MouthMovement
         [HideInInspector]
         public bool HasUpdateController { get; set; }
 
-
-
         /// <summary>
         /// Refreshes controller. Call this method after adding and/or removing <see cref="CubismMouthParameter"/>s.
         /// </summary>
@@ -51,22 +45,18 @@ namespace Live2D.Cubism.Framework.MouthMovement
         {
             var model = this.FindCubismModel();
 
-
             // Fail silently...
             if (model == null)
             {
                 return;
             }
 
-
             // Cache destinations.
             var tags = model
                 .Parameters
                 .GetComponentsMany<CubismMouthParameter>();
 
-
             Destinations = new CubismParameter[tags.Length];
-
 
             for (var i = 0; i < tags.Length; ++i)
             {
@@ -107,7 +97,6 @@ namespace Live2D.Cubism.Framework.MouthMovement
                 return;
             }
 
-
             // Apply value.
             Destinations.BlendToValue(BlendMode, MouthOpening);
         }
@@ -128,12 +117,12 @@ namespace Live2D.Cubism.Framework.MouthMovement
         /// </summary>
         private void LateUpdate()
         {
-            if(!HasUpdateController)
+            if (!HasUpdateController)
             {
                 OnLateUpdate();
             }
         }
 
-        #endregion
+        #endregion Unity Events Handling
     }
 }

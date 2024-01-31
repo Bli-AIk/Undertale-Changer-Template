@@ -7,11 +7,9 @@
 
 /* THIS FILE WAS AUTO-GENERATED. ALL CHANGES WILL BE LOST UPON RE-GENERATION. */
 
-
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-
 
 namespace Live2D.Cubism.Core.Unmanaged
 {
@@ -38,7 +36,6 @@ namespace Live2D.Cubism.Core.Unmanaged
             public IntPtr AlignedAddress;
         }
 
-
         /// <summary>
         /// Unmanaged allocations.
         /// </summary>
@@ -51,7 +48,6 @@ namespace Live2D.Cubism.Core.Unmanaged
         {
             get { return Allocations != null && Allocations.Count > 0; }
         }
-
 
         /// <summary>
         /// Allocates unmanaged memory.
@@ -67,10 +63,8 @@ namespace Live2D.Cubism.Core.Unmanaged
                 Allocations = new List<AllocationItem>();
             }
 
-
             // Allocate unaligned memory block.
             var unalignedAddress = Marshal.AllocHGlobal(size + align);
-
 
             // Get aligned address.
             var shift = (unalignedAddress.ToInt64() & (align - 1));
@@ -79,14 +73,12 @@ namespace Live2D.Cubism.Core.Unmanaged
                 ? new IntPtr(unalignedAddress.ToInt64() + align - shift)
                 : unalignedAddress;
 
-
             // Register allocation.
             Allocations.Add(new AllocationItem
             {
                 UnalignedAddress = unalignedAddress,
                 AlignedAddress = alignedAddress
             });
-
 
             // Return aligned address.
             return alignedAddress;
@@ -104,7 +96,6 @@ namespace Live2D.Cubism.Core.Unmanaged
                 return;
             }
 
-
             // Free allocation.
             for (var i = 0; i < Allocations.Count; ++i)
             {
@@ -113,16 +104,14 @@ namespace Live2D.Cubism.Core.Unmanaged
                     continue;
                 }
 
-
                 Marshal.FreeHGlobal(Allocations[i].UnalignedAddress);
                 Allocations.RemoveAt(i);
-
 
                 break;
             }
         }
 
-        #endregion
+        #endregion Allocation
 
         /// <summary>
         /// Copies contents of a managed array into an unmanaged memory block.

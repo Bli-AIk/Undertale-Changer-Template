@@ -5,12 +5,10 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core;
 using Live2D.Cubism.Rendering;
 using System.Collections.Generic;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Framework.Raycasting
 {
@@ -29,7 +27,6 @@ namespace Live2D.Cubism.Framework.Raycasting
         /// </summary>
         private CubismRaycastablePrecision[] RaycastablePrecisions { get; set; }
 
-
         /// <summary>
         /// Refreshes the controller. Call this method after adding and/or removing <see cref="CubismRaycastable"/>.
         /// </summary>
@@ -39,11 +36,9 @@ namespace Live2D.Cubism.Framework.Raycasting
                 .FindCubismModel()
                 .Drawables;
 
-
             // Find raycastable drawables.
             var raycastables = new List<CubismRenderer>();
             var raycastablePrecisions = new List<CubismRaycastablePrecision>();
-
 
             for (var i = 0; i < candidates.Length; i++)
             {
@@ -53,11 +48,9 @@ namespace Live2D.Cubism.Framework.Raycasting
                     continue;
                 }
 
-
                 raycastables.Add(candidates[i].GetComponent<CubismRenderer>());
                 raycastablePrecisions.Add(candidates[i].GetComponent<CubismRaycastable>().Precision);
             }
-
 
             // Cache raycastables.
             Raycastables = raycastables.ToArray();
@@ -75,7 +68,7 @@ namespace Live2D.Cubism.Framework.Raycasting
             Refresh();
         }
 
-        #endregion
+        #endregion Unity Event Handling
 
         /// <summary>
         /// Casts a ray.
@@ -105,12 +98,9 @@ namespace Live2D.Cubism.Framework.Raycasting
             var intersectionInWorldSpace = ray.origin + ray.direction * (ray.direction.z / ray.origin.z);
             var intersectionInLocalSpace = transform.InverseTransformPoint(intersectionInWorldSpace);
 
-
             intersectionInLocalSpace.z = 0;
 
-
             var distance = intersectionInWorldSpace.magnitude;
-
 
             // Return non-hits.
             if (distance > maximumDistance)
@@ -121,12 +111,10 @@ namespace Live2D.Cubism.Framework.Raycasting
             // Cast against each raycastable.
             var hitCount = 0;
 
-
             for (var i = 0; i < Raycastables.Length; i++)
             {
                 var raycastable = Raycastables[i];
                 var raycastablePrecision = RaycastablePrecisions[i];
-
 
                 // Skip inactive raycastables.
                 if (!raycastable.MeshRenderer.enabled)
@@ -135,7 +123,6 @@ namespace Live2D.Cubism.Framework.Raycasting
                 }
 
                 var bounds = raycastable.Mesh.bounds;
-
 
                 // Skip non hits (bounding box)
                 if (!bounds.Contains(intersectionInLocalSpace))
@@ -152,15 +139,12 @@ namespace Live2D.Cubism.Framework.Raycasting
                     }
                 }
 
-
                 result[hitCount].Drawable = raycastable.GetComponent<CubismDrawable>();
                 result[hitCount].Distance = distance;
                 result[hitCount].LocalPosition = intersectionInLocalSpace;
                 result[hitCount].WorldPosition = intersectionInWorldSpace;
 
-
                 ++hitCount;
-
 
                 // Exit if result buffer is full.
                 if (hitCount == result.Length)
@@ -169,10 +153,8 @@ namespace Live2D.Cubism.Framework.Raycasting
                 }
             }
 
-
             return hitCount;
         }
-
 
         /// <summary>
         /// Check the point is inside polygons.
@@ -182,7 +164,7 @@ namespace Live2D.Cubism.Framework.Raycasting
         /// <returns></returns>
         private bool ContainsInTriangles(Mesh mesh, Vector3 inputPosition)
         {
-            for (var i = 0; i < mesh.triangles.Length; i+=3)
+            for (var i = 0; i < mesh.triangles.Length; i += 3)
             {
                 var vertexPositionA = mesh.vertices[mesh.triangles[i]];
                 var vertexPositionB = mesh.vertices[mesh.triangles[i + 1]];
@@ -204,7 +186,6 @@ namespace Live2D.Cubism.Framework.Raycasting
                     return true;
                 }
             }
-
 
             return false;
         }

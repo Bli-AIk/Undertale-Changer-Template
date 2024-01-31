@@ -17,7 +17,7 @@ namespace Live2D.Cubism.Framework
         /// <summary>
         /// Original name of the parameter from cdi3.json.
         /// </summary>
-        [SerializeField,HideInInspector]
+        [SerializeField, HideInInspector]
         public string Name;
 
         /// <summary>

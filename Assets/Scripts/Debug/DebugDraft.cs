@@ -1,19 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
+
 public class DebugDraft : MonoBehaviour
 {
-    bool wozhenfule;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+    private bool wozhenfule;
 
+    // Start is called before the first frame update
+    private void Start()
+    {
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         if (!wozhenfule)
         {

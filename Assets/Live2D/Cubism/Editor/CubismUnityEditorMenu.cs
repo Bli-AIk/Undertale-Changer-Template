@@ -5,15 +5,14 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
+using Live2D.Cubism.Editor.OriginalWorkflow;
+using Live2D.Cubism.Framework.MotionFade;
 using System;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Live2D.Cubism.Editor.OriginalWorkflow;
-using Live2D.Cubism.Framework.MotionFade;
 using UnityEditor;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Editor
 {
@@ -54,17 +53,16 @@ namespace Live2D.Cubism.Editor
             }
         }
 
-
         /// <summary>
         /// Unity editor menu should import as original workflow.
         /// </summary>
-        [MenuItem ("Live2D/Cubism/OriginalWorkflow/Should Import As Original Workflow")]
+        [MenuItem("Live2D/Cubism/OriginalWorkflow/Should Import As Original Workflow")]
         private static void ImportAsOriginalWorkflow()
         {
             SetImportAsOriginalWorkflow(!ShouldImportAsOriginalWorkflow);
 
             // Disable clear animation curves.
-            if(!ShouldImportAsOriginalWorkflow)
+            if (!ShouldImportAsOriginalWorkflow)
             {
                 SetClearAnimationCurves(false);
             }
@@ -73,12 +71,11 @@ namespace Live2D.Cubism.Editor
         /// <summary>
         /// Unity editor menu clear animation curves.
         /// </summary>
-        [MenuItem ("Live2D/Cubism/OriginalWorkflow/Should Clear Animation Curves")]
+        [MenuItem("Live2D/Cubism/OriginalWorkflow/Should Clear Animation Curves")]
         private static void ClearAnimationCurves()
         {
             SetClearAnimationCurves(!ShouldClearAnimationCurves);
         }
-
 
         /// <summary>
         /// Unity editor context menu create an animator controller for cubism.
@@ -99,7 +96,7 @@ namespace Live2D.Cubism.Editor
             {
                 var regex = new Regex(@"new cubism animator controller [0-9]+.controller");
                 var files = Directory.GetFiles(dataPath + assetPath, "*.controller")
-                    .Where(path=> regex.IsMatch(Path.GetFileName(path).ToLower()))
+                    .Where(path => regex.IsMatch(Path.GetFileName(path).ToLower()))
                     .OrderBy(f => f, StringComparer.OrdinalIgnoreCase)
                     .ToArray();
 
@@ -133,8 +130,8 @@ namespace Live2D.Cubism.Editor
         /// </summary>
         public static void SetImportAsOriginalWorkflow(bool isEnable)
         {
-            ShouldImportAsOriginalWorkflow= isEnable;
-            Menu.SetChecked ("Live2D/Cubism/OriginalWorkflow/Should Import As Original Workflow", ShouldImportAsOriginalWorkflow);
+            ShouldImportAsOriginalWorkflow = isEnable;
+            Menu.SetChecked("Live2D/Cubism/OriginalWorkflow/Should Import As Original Workflow", ShouldImportAsOriginalWorkflow);
         }
 
         /// <summary>
@@ -142,8 +139,8 @@ namespace Live2D.Cubism.Editor
         /// </summary>
         public static void SetClearAnimationCurves(bool isEnable)
         {
-            ShouldClearAnimationCurves= (ShouldImportAsOriginalWorkflow && isEnable);
-            Menu.SetChecked ("Live2D/Cubism/OriginalWorkflow/Should Clear Animation Curves", ShouldClearAnimationCurves);
+            ShouldClearAnimationCurves = (ShouldImportAsOriginalWorkflow && isEnable);
+            Menu.SetChecked("Live2D/Cubism/OriginalWorkflow/Should Clear Animation Curves", ShouldClearAnimationCurves);
         }
 
         /// <summary>
@@ -152,9 +149,8 @@ namespace Live2D.Cubism.Editor
         [InitializeOnLoadMethod]
         private static void Initialize()
         {
-            EditorApplication.delayCall += () => Menu.SetChecked ("Live2D/Cubism/OriginalWorkflow/Should Import As Original Workflow", ShouldImportAsOriginalWorkflow);
-            EditorApplication.delayCall += () => Menu.SetChecked ("Live2D/Cubism/OriginalWorkflow/Should Clear Animation Curves", ShouldClearAnimationCurves);
+            EditorApplication.delayCall += () => Menu.SetChecked("Live2D/Cubism/OriginalWorkflow/Should Import As Original Workflow", ShouldImportAsOriginalWorkflow);
+            EditorApplication.delayCall += () => Menu.SetChecked("Live2D/Cubism/OriginalWorkflow/Should Clear Animation Curves", ShouldClearAnimationCurves);
         }
-
     }
 }

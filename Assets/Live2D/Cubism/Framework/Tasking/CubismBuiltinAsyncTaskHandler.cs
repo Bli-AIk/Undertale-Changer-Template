@@ -5,12 +5,10 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Framework.Tasking
 {
@@ -41,7 +39,6 @@ namespace Live2D.Cubism.Framework.Tasking
         /// </summary>
         private static ManualResetEvent Signal { get; set; }
 
-
         /// <summary>
         /// <see cref="CallItADay"/> backing field. ALWAYS ACCESS THROUGH PROPERTY!
         /// </summary>
@@ -68,7 +65,6 @@ namespace Live2D.Cubism.Framework.Tasking
             }
         }
 
-
         /// <summary>
         /// Initializes async task handling.
         /// </summary>
@@ -79,10 +75,8 @@ namespace Live2D.Cubism.Framework.Tasking
             {
                 Debug.LogWarning("\"CubismTaskQueue.OnTask\" already set.");
 
-
                 return;
             }
-
 
             // Initialize fields.
             Tasks = new Queue<ICubismTask>();
@@ -91,15 +85,12 @@ namespace Live2D.Cubism.Framework.Tasking
             Signal = new ManualResetEvent(false);
             CallItADay = false;
 
-
             // Become handler.
             CubismTaskQueue.OnTask = EnqueueTask;
-
 
             // Start worker.
             Worker.Start();
         }
-
 
         /// <summary>
         /// Cleanup workers.
@@ -112,14 +103,11 @@ namespace Live2D.Cubism.Framework.Tasking
                 return;
             }
 
-
             // Unbecome handler.
             CubismTaskQueue.OnTask = null;
 
-
             // Stop worker.
             CallItADay = true;
-
 
             if (Worker != null)
             {
@@ -127,14 +115,12 @@ namespace Live2D.Cubism.Framework.Tasking
                 Worker.Join();
             }
 
-
             // Reset fields
             Tasks = null;
             Worker = null;
             Lock = null;
             Signal = null;
         }
-
 
         /// <summary>
         /// Enqueues a new task.
@@ -163,7 +149,6 @@ namespace Live2D.Cubism.Framework.Tasking
             }
         }
 
-
         /// <summary>
         /// Entry point for workers.
         /// </summary>
@@ -174,13 +159,11 @@ namespace Live2D.Cubism.Framework.Tasking
                 // Try to dequeue a task.
                 var task = DequeueTask();
 
-
                 // Execute task if available.
                 if (task != null)
                 {
                     task.Execute();
                 }
-
 
                 // Wait for a task to become available.
                 else
@@ -191,6 +174,6 @@ namespace Live2D.Cubism.Framework.Tasking
             }
         }
 
-        #endregion
+        #endregion Workers
     }
 }

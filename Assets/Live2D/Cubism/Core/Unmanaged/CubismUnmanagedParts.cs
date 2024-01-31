@@ -7,10 +7,8 @@
 
 /* THIS FILE WAS AUTO-GENERATED. ALL CHANGES WILL BE LOST UPON RE-GENERATION. */
 
-
 using System;
 using System.Runtime.InteropServices;
-
 
 namespace Live2D.Cubism.Core.Unmanaged
 {
@@ -39,8 +37,6 @@ namespace Live2D.Cubism.Core.Unmanaged
         /// </summary>>
         public CubismUnmanagedIntArrayView ParentIndices { get; private set; }
 
-
-
         #region Ctors
 
         /// <summary>
@@ -50,27 +46,23 @@ namespace Live2D.Cubism.Core.Unmanaged
         {
             var length = 0;
 
-
             Count = CubismCoreDll.GetPartCount(modelPtr);
-
 
             length = CubismCoreDll.GetPartCount(modelPtr);
             Ids = new string[length];
-            var _ids = (IntPtr *)(CubismCoreDll.GetPartIds(modelPtr));
+            var _ids = (IntPtr*)(CubismCoreDll.GetPartIds(modelPtr));
             for (var i = 0; i < length; ++i)
             {
                 Ids[i] = Marshal.PtrToStringAnsi(_ids[i]);
             }
-
 
             length = CubismCoreDll.GetPartCount(modelPtr);
             Opacities = new CubismUnmanagedFloatArrayView(CubismCoreDll.GetPartOpacities(modelPtr), length);
 
             length = CubismCoreDll.GetPartCount(modelPtr);
             ParentIndices = new CubismUnmanagedIntArrayView(CubismCoreDll.GetPartParentPartIndices(modelPtr), length);
-
         }
 
-        #endregion
+        #endregion Ctors
     }
 }

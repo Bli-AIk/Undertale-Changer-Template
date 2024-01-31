@@ -5,11 +5,9 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core;
 using Live2D.Cubism.Framework.Motion;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Framework.MotionFade
 {
@@ -68,7 +66,7 @@ namespace Live2D.Cubism.Framework.MotionFade
         /// </summary>
         private bool[] _isFading;
 
-        #endregion
+        #endregion Variable
 
         #region Function
 
@@ -200,7 +198,6 @@ namespace Live2D.Cubism.Framework.MotionFade
 
             _parameterStore.RestoreParameters();
 
-
             // Update sources and destinations.
             for (var i = 0; i < _fadeStates.Length; ++i)
             {
@@ -241,7 +238,6 @@ namespace Live2D.Cubism.Framework.MotionFade
 
                 motion.EndTime = newEndTime;
 
-
                 while (true)
                 {
                     if ((motion.StartTime + motion.Motion.MotionLength) >= time)
@@ -252,10 +248,8 @@ namespace Live2D.Cubism.Framework.MotionFade
                     motion.StartTime += motion.Motion.MotionLength;
                 }
 
-
                 playingMotions[playingMotions.Count - 1] = motion;
             }
-
 
             // Calculate MotionFade.
             for (var i = 0; i < playingMotions.Count; i++)
@@ -274,14 +268,12 @@ namespace Live2D.Cubism.Framework.MotionFade
                 var fadeInTime = fadeMotion.FadeInTime;
                 var fadeOutTime = fadeMotion.FadeOutTime;
 
-
                 var fadeInWeight = (fadeInTime <= 0.0f)
                     ? 1.0f
                     : CubismFadeMath.GetEasingSine(elapsedTime / fadeInTime);
                 var fadeOutWeight = (fadeOutTime <= 0.0f)
                     ? 1.0f
                     : CubismFadeMath.GetEasingSine((playingMotion.EndTime - Time.time) / fadeOutTime);
-
 
                 playingMotions[i] = playingMotion;
 
@@ -344,7 +336,6 @@ namespace Live2D.Cubism.Framework.MotionFade
                             fadeMotion.ParameterFadeInTimes[index], fadeMotion.ParameterFadeOutTimes[index],
                             motionWeight, DestinationParts[j].Opacity);
                 }
-
             }
         }
 
@@ -407,7 +398,7 @@ namespace Live2D.Cubism.Framework.MotionFade
             return currentValue + (curve.Evaluate(elapsedTime) - currentValue) * parameterWeight;
         }
 
-        #endregion
+        #endregion Function
 
         #region Unity Events Handling
 
@@ -431,6 +422,6 @@ namespace Live2D.Cubism.Framework.MotionFade
             }
         }
 
-        #endregion
+        #endregion Unity Events Handling
     }
 }

@@ -5,15 +5,15 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using System;
 using Live2D.Cubism.Core.Unmanaged;
 using UnityEngine;
 
 #if UNITY_EDITOR
-using UnityEditor;
-#endif
 
+using UnityEditor;
+
+#endif
 
 namespace Live2D.Cubism.Core
 {
@@ -48,14 +48,12 @@ namespace Live2D.Cubism.Core
 
             var moc = CreateInstance<CubismMoc>();
 
-
             moc.Bytes = moc3;
-
 
             return moc;
         }
 
-        #endregion
+        #endregion Factory Methods
 
         /// <summary>
         /// Resets native handle.
@@ -64,7 +62,6 @@ namespace Live2D.Cubism.Core
         public static void ResetUnmanagedMoc(CubismMoc moc)
         {
             moc.UnmanagedMoc = null;
-
 
             moc.Revive();
         }
@@ -95,7 +92,6 @@ namespace Live2D.Cubism.Core
             set { _bytes = value; }
         }
 
-
         private CubismUnmanagedMoc UnmanagedMoc { get; set; }
 
         private int ReferenceCount { get; set; }
@@ -103,7 +99,6 @@ namespace Live2D.Cubism.Core
 #if UNITY_EDITOR
         private static int CoreNotFoundCallCount { get; set; }
 #endif
-
 
         /// <summary>
         /// True if instance is revived.
@@ -116,7 +111,6 @@ namespace Live2D.Cubism.Core
             }
         }
 
-
         /// <summary>
         /// Acquires native handle.
         /// </summary>
@@ -124,7 +118,6 @@ namespace Live2D.Cubism.Core
         public CubismUnmanagedMoc AcquireUnmanagedMoc()
         {
             ++ReferenceCount;
-
 
 #if UNITY_EDITOR
             try
@@ -143,7 +136,6 @@ namespace Live2D.Cubism.Core
             }
 #endif
 
-
             return UnmanagedMoc;
         }
 
@@ -152,8 +144,7 @@ namespace Live2D.Cubism.Core
         /// </summary>
         public void ReleaseUnmanagedMoc()
         {
-            -- ReferenceCount;
-
+            --ReferenceCount;
 
             // Release instance of unmanaged moc in case the instance isn't referenced any longer.
             if (ReferenceCount == 0)
@@ -162,14 +153,12 @@ namespace Live2D.Cubism.Core
                 UnmanagedMoc = null;
             }
 
-
             // Deal with invalid reference counts.
             else if (ReferenceCount < 0)
             {
                 ReferenceCount = 0;
             }
         }
-
 
         /// <summary>
         /// Revives instance without acquiring it.
@@ -182,13 +171,11 @@ namespace Live2D.Cubism.Core
                 return;
             }
 
-
             // Return if no bytes are available.
             if (Bytes == null)
             {
                 return;
             }
-
 
             // Try revive.
             UnmanagedMoc = CubismUnmanagedMoc.FromBytes(Bytes);

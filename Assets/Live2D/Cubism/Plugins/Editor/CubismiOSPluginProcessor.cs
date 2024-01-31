@@ -5,13 +5,11 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
-
 
 namespace Live2D.Cubism.Plugins.Editor
 {
@@ -39,7 +37,6 @@ namespace Live2D.Cubism.Plugins.Editor
                 return;
             }
 
-
             // Detect the type of iOS plugin by SDK type and SDK version in the build settings.
             CubismiOSPlugin targetPlugin;
 
@@ -60,7 +57,6 @@ namespace Live2D.Cubism.Plugins.Editor
                     : CubismiOSPlugin.ReleaseIphoneSimulator;
             }
 
-
             // Extract the Cubism iOS plugin from the plugin.
             var pluginImporters = PluginImporter.GetAllImporters()
                 .Where(pluginImporter =>
@@ -71,7 +67,6 @@ namespace Live2D.Cubism.Plugins.Editor
                 )
                 .ToArray();
 
-
             // Enable only the appropriate plugins.
             foreach (var pluginImporter in pluginImporters)
             {
@@ -81,7 +76,6 @@ namespace Live2D.Cubism.Plugins.Editor
                 );
             }
         }
-
 
         /// <summary>
         /// Defines the type of plugin for iOS.
@@ -94,14 +88,17 @@ namespace Live2D.Cubism.Plugins.Editor
             {
                 get { return new CubismiOSPlugin("Debug-iphoneos"); }
             }
+
             public static CubismiOSPlugin DebugIphoneSimulator
             {
                 get { return new CubismiOSPlugin("Debug-iphonesimulator"); }
             }
+
             public static CubismiOSPlugin ReleaseIphoneos
             {
                 get { return new CubismiOSPlugin("Release-iphoneos"); }
             }
+
             public static CubismiOSPlugin ReleaseIphoneSimulator
             {
                 get { return new CubismiOSPlugin("Release-iphonesimulator"); }

@@ -5,9 +5,7 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Rendering.Masking
 {
@@ -42,11 +40,9 @@ namespace Live2D.Cubism.Rendering.Masking
                     _uniqueId = 0;
                 }
 
-
                 return (++_uniqueId);
             }
         }
-
 
         /// <summary>
         /// Converts a <see cref="CubismMaskTile"/> to a <see cref="Vector4"/>.
@@ -63,7 +59,7 @@ namespace Live2D.Cubism.Rendering.Masking
             };
         }
 
-        #endregion
+        #endregion Conversion
 
         /// <summary>
         /// Offset in model space.

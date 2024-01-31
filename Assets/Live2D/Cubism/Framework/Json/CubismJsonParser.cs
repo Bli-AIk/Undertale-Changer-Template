@@ -5,11 +5,9 @@
  * that can be found at http: //live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using System;
 using System.Collections.Generic;
 using System.Text;
-
 
 namespace Live2D.Cubism.Framework.Json
 {
@@ -47,7 +45,7 @@ namespace Live2D.Cubism.Framework.Json
         /// </summary>
         private Value root;
 
-        #endregion
+        #endregion variable
 
         /// <summary>
         /// Constructor.
@@ -80,7 +78,6 @@ namespace Live2D.Cubism.Framework.Json
             }
         }
 
-
         /// <summary>
         /// Parse JSON from byte data.
         /// </summary>
@@ -93,7 +90,6 @@ namespace Live2D.Cubism.Framework.Json
             var ret = jp.Parse();
             return ret;
         }
-
 
         /// <summary>
         /// Parse JSON from string data.
@@ -108,7 +104,6 @@ namespace Live2D.Cubism.Framework.Json
             var ret = jp.Parse();
             return ret;
         }
-
 
         /// <summary>
         /// Parse till next.
@@ -179,7 +174,6 @@ namespace Live2D.Cubism.Framework.Json
             }
             throw new Exception("parse string/illegal end");
         }
-
 
         /// <summary>
         /// Parse object, not include { at pos.
@@ -268,13 +262,11 @@ namespace Live2D.Cubism.Framework.Json
                         default: break; // skip
                     }
                 }
-                EXIT_FOR_LOOP3: ;
-
+                EXIT_FOR_LOOP3:;
             }
 
             throw new Exception("illegal end of ParseObject");
         }
-
 
         /// <summary>
         /// Parse Array, not include first[ at pos.
@@ -316,12 +308,11 @@ namespace Live2D.Cubism.Framework.Json
                         default: break; // skip
                     }
                 }
-                EXIT_FOR_LOOP3: ;
+                EXIT_FOR_LOOP3:;
             }
 
             throw new Exception("illegal end of ParseObject");
         }
-
 
         /// <summary>
         /// Parse double.
@@ -341,7 +332,7 @@ namespace Live2D.Cubism.Framework.Json
 
             // check minus
             var c = (char)(str[i] & 0xFF);
-            if(c == '-')
+            if (c == '-')
             {
                 minus = true;
                 i++;
@@ -416,7 +407,6 @@ namespace Live2D.Cubism.Framework.Json
             return v1;
         }
 
-
         /// <summary>
         /// Parse one Value(float, String, Object, Array, null, true, false).
         /// </summary>
@@ -450,35 +440,45 @@ namespace Live2D.Cubism.Framework.Json
                     case '9':
                         var f = strToDouble(buffer, length, i, endPos);
                         return new Value(f);
+
                     case '\"':
                         obj = new Value(ParseString(buffer, length, i + 1, endPos)); // next to \"
                         return obj;
+
                     case '[':
                         obj = ParseArray(buffer, length, i + 1, endPos);
                         return obj;
+
                     case ']': // It is illegal } but skip it. There seems to be unnecessary at the end of the array
                         // obj = null;
                         endPos[0] = i; // Reprocess the same letters
                         return null;
+
                     case '{':
                         obj = ParseObject(buffer, length, i + 1, endPos);
                         return obj;
+
                     case 'n': // null
                         if (i + 3 < length) obj = null;
                         else throw new Exception("parse null");
                         return obj;
+
                     case 't': // true
                         if (i + 3 < length) obj = new Value(true);
                         else throw new Exception("parse true");
                         return obj;
+
                     case 'f': // false
                         if (i + 4 < length) obj = new Value(false);
                         else throw new Exception("parse false");
                         return obj;
+
                     case ',': // Array separator
                         throw new Exception("illegal ',' position");
-                    case '\n': line_count++;
+                    case '\n':
+                        line_count++;
                         break;
+
                     case ' ':
                     case '\t':
                     case '\r':
@@ -491,9 +491,8 @@ namespace Live2D.Cubism.Framework.Json
             return null;
         }
 
-        #endregion
+        #endregion Parse Functionn
     }
-
 
     /// <summary>
     /// Json value.
@@ -548,7 +547,6 @@ namespace Live2D.Cubism.Framework.Json
             //------------ Dictionary ------------
             else if (_object is Dictionary<string, Value>)
             {
-
                 string ret = indent + "{\n";
                 Dictionary<string, Value> vmap = (Dictionary<string, Value>)_object;
                 foreach (KeyValuePair<string, Value> pair in vmap)
@@ -565,7 +563,7 @@ namespace Live2D.Cubism.Framework.Json
             }
         }
 
-        #endregion
+        #endregion toString
 
         #region toInt
 
@@ -588,7 +586,7 @@ namespace Live2D.Cubism.Framework.Json
             return (_object is Double) ? (int)((Double)_object) : defaultValue;
         }
 
-        #endregion
+        #endregion toInt
 
         #region ToFloat
 
@@ -611,7 +609,7 @@ namespace Live2D.Cubism.Framework.Json
             return (_object is Double) ? (float)((Double)_object) : defaultValue;
         }
 
-        #endregion
+        #endregion ToFloat
 
         #region ToDouble
 
@@ -634,7 +632,7 @@ namespace Live2D.Cubism.Framework.Json
             return (_object is Double) ? ((Double)_object) : defaultValue;
         }
 
-        #endregion
+        #endregion ToDouble
 
         #region toArray
 
@@ -648,7 +646,6 @@ namespace Live2D.Cubism.Framework.Json
             return (_object is List<Value>) ? (List<Value>)_object : defalutV;
         }
 
-
         /// <summary>
         /// Get from list.
         /// </summary>
@@ -659,7 +656,7 @@ namespace Live2D.Cubism.Framework.Json
             return (_object is List<Value>) ? (Value)((List<Value>)_object)[index] : null;
         }
 
-        #endregion
+        #endregion toArray
 
         #region toDictionary
 
@@ -673,7 +670,6 @@ namespace Live2D.Cubism.Framework.Json
             return (_object is Dictionary<string, Value>) ? (Dictionary<string, Value>)_object : defalutV;
         }
 
-
         /// <summary>
         /// Get data from dictionary.
         /// </summary>
@@ -681,14 +677,13 @@ namespace Live2D.Cubism.Framework.Json
         /// <returns>Key value from dictionary.</returns>
         public Value Get(string key)
         {
-            if(_object is Dictionary<string, Value>)
+            if (_object is Dictionary<string, Value>)
             {
                 if (((Dictionary<string, Value>)_object).ContainsKey(key)) return (Value)((Dictionary<string, Value>)_object)[key];
             }
 
             return null;
         }
-
 
         /// <summary>
         /// Get key list from dictionary.
@@ -699,30 +694,40 @@ namespace Live2D.Cubism.Framework.Json
             return (_object is Dictionary<string, Value>) ? new List<string>(((Dictionary<string, Value>)_object).Keys) : null;
         }
 
-
         /// <summary>
         /// Get dictionary.
         /// </summary>
         /// <returns>Value of dictionary type.</returns>
         public Dictionary<string, Value> ToMap()
         {
-            return (_object is Dictionary<string, Value>) ? (Dictionary<string, Value>)_object: null;
+            return (_object is Dictionary<string, Value>) ? (Dictionary<string, Value>)_object : null;
         }
 
-        #endregion
+        #endregion toDictionary
 
         #region check type
 
         /// <summary>
         /// Confirm the type.
         /// </summary>
-        public bool isNull()    { return _object == null; }
-        public bool isBoolean() { return _object is Boolean; }
-        public bool isDouble()  { return _object is Double; }
-        public bool isString()  { return _object is string; }
-        public bool isArray()   { return _object is List<Value>; }
-        public bool isMap()     { return _object is Dictionary<string, Value>; }
+        public bool isNull()
+        { return _object == null; }
 
-        #endregion
+        public bool isBoolean()
+        { return _object is Boolean; }
+
+        public bool isDouble()
+        { return _object is Double; }
+
+        public bool isString()
+        { return _object is string; }
+
+        public bool isArray()
+        { return _object is List<Value>; }
+
+        public bool isMap()
+        { return _object is Dictionary<string, Value>; }
+
+        #endregion check type
     }
 }

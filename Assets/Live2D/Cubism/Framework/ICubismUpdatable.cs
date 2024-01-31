@@ -15,6 +15,7 @@ namespace Live2D.Cubism.Framework
         int ExecutionOrder { get; }
         bool NeedsUpdateOnEditing { get; }
         bool HasUpdateController { get; set; }
+
         void OnLateUpdate();
     }
 }

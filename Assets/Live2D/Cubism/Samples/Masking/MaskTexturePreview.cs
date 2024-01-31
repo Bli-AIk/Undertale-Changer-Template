@@ -5,10 +5,8 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Rendering.Masking;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Samples.Masking
 {
@@ -34,10 +32,9 @@ namespace Live2D.Cubism.Samples.Masking
                 ? GetComponent<Renderer>().material
                 : GetComponent<Renderer>().sharedMaterial;
 
-
             material.mainTexture = (Texture)MaskTexture;
         }
 
-        #endregion
+        #endregion Unity Event Handling
     }
 }

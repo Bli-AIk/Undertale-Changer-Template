@@ -1,20 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemiesHpLineController : MonoBehaviour
 {
-    SpriteRenderer greenSprite;
+    private SpriteRenderer greenSprite;
+
     [Header("0¿ª")]
     public int num;
-    void Start()
+
+    private void Start()
     {
         transform.localScale = Vector2.zero;
         greenSprite = transform.GetChild(0).GetComponent<SpriteRenderer>();
     }
 
-    
-    void Update()
+    private void Update()
     {
         if (MainControl.instance.selectUIController.selectUI == 1 && MainControl.instance.selectUIController.selectLayer == 1)
         {

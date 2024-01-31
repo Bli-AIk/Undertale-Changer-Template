@@ -5,11 +5,9 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Framework.Physics;
 using System;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Framework.Json
 {
@@ -44,7 +42,6 @@ namespace Live2D.Cubism.Framework.Json
         {
             var instance = new CubismPhysicsRig();
 
-
             instance.Gravity.x = Meta.EffectiveForces.Gravity.X;
             instance.Gravity.y = Meta.EffectiveForces.Gravity.Y;
 
@@ -61,14 +58,13 @@ namespace Live2D.Cubism.Framework.Json
             {
                 instance.SubRigs[i] = new CubismPhysicsSubRig
                 {
-                    Name          = idNameTable[i].Name,
-                    Input         = ReadInput(PhysicsSettings[i].Input),
-                    Output        = ReadOutput(PhysicsSettings[i].Output),
-                    Particles     = ReadParticles(PhysicsSettings[i].Vertices),
+                    Name = idNameTable[i].Name,
+                    Input = ReadInput(PhysicsSettings[i].Input),
+                    Output = ReadOutput(PhysicsSettings[i].Output),
+                    Particles = ReadParticles(PhysicsSettings[i].Vertices),
                     Normalization = ReadNormalization(PhysicsSettings[i].Normalization)
                 };
             }
-
 
             return instance;
         }
@@ -77,22 +73,20 @@ namespace Live2D.Cubism.Framework.Json
         {
             var dataArray = new CubismPhysicsInput[source.Length];
 
-
             for (var i = 0; i < dataArray.Length; ++i)
             {
                 dataArray[i] = new CubismPhysicsInput
                 {
-                    SourceId            = source[i].Source.Id,
-                    AngleScale          = 0.0f,
-                    ScaleOfTranslation  = Vector2.zero,
-                    Weight              = source[i].Weight,
-                    SourceComponent     = (CubismPhysicsSourceComponent) Enum.Parse(
+                    SourceId = source[i].Source.Id,
+                    AngleScale = 0.0f,
+                    ScaleOfTranslation = Vector2.zero,
+                    Weight = source[i].Weight,
+                    SourceComponent = (CubismPhysicsSourceComponent)Enum.Parse(
                         typeof(CubismPhysicsSourceComponent), source[i].Type
                         ),
-                    IsInverted          = source[i].Reflect
+                    IsInverted = source[i].Reflect
                 };
             }
-
 
             return dataArray;
         }
@@ -101,25 +95,23 @@ namespace Live2D.Cubism.Framework.Json
         {
             var dataArray = new CubismPhysicsOutput[source.Length];
 
-
             for (var i = 0; i < dataArray.Length; ++i)
             {
                 dataArray[i] = new CubismPhysicsOutput
                 {
-                    DestinationId        = source[i].Destination.Id,
-                    ParticleIndex        = source[i].VertexIndex,
-                    TranslationScale     = Vector2.zero,
-                    AngleScale           = source[i].Scale,
-                    Weight               = source[i].Weight,
-                    SourceComponent      = (CubismPhysicsSourceComponent) Enum.Parse(
+                    DestinationId = source[i].Destination.Id,
+                    ParticleIndex = source[i].VertexIndex,
+                    TranslationScale = Vector2.zero,
+                    AngleScale = source[i].Scale,
+                    Weight = source[i].Weight,
+                    SourceComponent = (CubismPhysicsSourceComponent)Enum.Parse(
                         typeof(CubismPhysicsSourceComponent), source[i].Type
                         ),
-                    IsInverted           = source[i].Reflect,
-                    ValueBelowMinimum    = 0.0f,
+                    IsInverted = source[i].Reflect,
+                    ValueBelowMinimum = 0.0f,
                     ValueExceededMaximum = 0.0f
                 };
             }
-
 
             return dataArray;
         }
@@ -127,7 +119,6 @@ namespace Live2D.Cubism.Framework.Json
         private CubismPhysicsParticle[] ReadParticles(SerializableVertex[] source)
         {
             var dataArray = new CubismPhysicsParticle[source.Length];
-
 
             for (var i = 0; i < dataArray.Length; ++i)
             {
@@ -138,18 +129,17 @@ namespace Live2D.Cubism.Framework.Json
                         x = source[i].Position.X,
                         y = source[i].Position.Y
                     },
-                    Mobility          = source[i].Mobility,
-                    Delay             = source[i].Delay,
-                    Acceleration      = source[i].Acceleration,
-                    Radius            = source[i].Radius,
-                    Position          = Vector2.zero,
-                    LastPosition      = Vector2.zero,
-                    LastGravity       = Vector2.down,
-                    Force             = Vector2.zero,
-                    Velocity          = Vector2.zero
+                    Mobility = source[i].Mobility,
+                    Delay = source[i].Delay,
+                    Acceleration = source[i].Acceleration,
+                    Radius = source[i].Radius,
+                    Position = Vector2.zero,
+                    LastPosition = Vector2.zero,
+                    LastGravity = Vector2.down,
+                    Force = Vector2.zero,
+                    Velocity = Vector2.zero
                 };
             }
-
 
             return dataArray;
         }
@@ -174,7 +164,7 @@ namespace Live2D.Cubism.Framework.Json
             };
         }
 
-    #region Json Data
+        #region Json Data
 
         /// <summary>
         /// Json file format version.
@@ -194,8 +184,7 @@ namespace Live2D.Cubism.Framework.Json
         [SerializeField]
         public SerializablePhysicsSettings[] PhysicsSettings;
 
-
-        #endregion
+        #endregion Json Data
 
         #region Json Helpers
 
@@ -211,7 +200,6 @@ namespace Live2D.Cubism.Framework.Json
             [SerializeField]
             public float Y;
         }
-
 
         /// <summary>
         /// TODO Document.
@@ -238,7 +226,6 @@ namespace Live2D.Cubism.Framework.Json
             public float Maximum;
         }
 
-
         /// <summary>
         /// Target parameter of model.
         /// </summary>
@@ -257,7 +244,6 @@ namespace Live2D.Cubism.Framework.Json
             [SerializeField]
             public string Id;
         }
-
 
         /// <summary>
         /// TODO Document.
@@ -289,7 +275,6 @@ namespace Live2D.Cubism.Framework.Json
             [SerializeField]
             public bool Reflect;
         }
-
 
         /// <summary>
         /// TODO Document.
@@ -334,7 +319,6 @@ namespace Live2D.Cubism.Framework.Json
             public bool Reflect;
         }
 
-
         /// <summary>
         /// Single vertex.
         /// </summary>
@@ -372,7 +356,6 @@ namespace Live2D.Cubism.Framework.Json
             public float Radius;
         }
 
-
         /// <summary>
         /// TODO Document.
         /// </summary>
@@ -392,7 +375,6 @@ namespace Live2D.Cubism.Framework.Json
             public SerializableNormalizationValue Angle;
         }
 
-
         /// <summary>
         /// Physics Id - Name Table Item.
         /// </summary>
@@ -411,7 +393,6 @@ namespace Live2D.Cubism.Framework.Json
             [SerializeField]
             public string Name;
         }
-
 
         /// <summary>
         /// Setting of physics calculation.
@@ -449,7 +430,6 @@ namespace Live2D.Cubism.Framework.Json
             [SerializeField]
             public SerializableNormalization Normalization;
         }
-
 
         /// <summary>
         /// Additional data describing physics.
@@ -501,7 +481,6 @@ namespace Live2D.Cubism.Framework.Json
             public PhysicsDictionaryItem[] PhysicsDictionary;
         }
 
-
         /// <summary>
         /// TODO Document.
         /// </summary>
@@ -521,6 +500,6 @@ namespace Live2D.Cubism.Framework.Json
             public SerializableVector2 Wind;
         }
 
-        #endregion
+        #endregion Json Helpers
     }
 }

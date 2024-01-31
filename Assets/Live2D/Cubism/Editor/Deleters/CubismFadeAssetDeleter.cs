@@ -5,13 +5,11 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Framework.MotionFade;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEditor;
-
 
 namespace Live2D.Cubism.Editor.Deleters
 {
@@ -21,20 +19,18 @@ namespace Live2D.Cubism.Editor.Deleters
     [Serializable]
     public sealed class CubismFadeAssetDeleter : CubismDeleterBase
     {
-
         #region Unity Event Handling
 
         /// <summary>
         /// Registers deleter.
         /// </summary>
         [InitializeOnLoadMethod]
-        // ReSharper disable once UnusedMember.Local
         private static void RegisterDeleter()
         {
             CubismDeleter.RegisterDeleter<CubismFadeAssetDeleter>(".fade.asset");
         }
 
-        #endregion
+        #endregion Unity Event Handling
 
         #region CubismDeleterBase
 
@@ -75,7 +71,6 @@ namespace Live2D.Cubism.Editor.Deleters
             fadeMotionList.CubismFadeMotionObjects = fadeMotionObjects.ToArray();
         }
 
-        #endregion
-
+        #endregion CubismDeleterBase
     }
 }

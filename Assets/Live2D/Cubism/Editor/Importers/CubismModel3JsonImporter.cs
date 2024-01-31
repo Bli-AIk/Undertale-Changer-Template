@@ -5,12 +5,10 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core;
 using Live2D.Cubism.Framework;
 using Live2D.Cubism.Framework.Expression;
 using Live2D.Cubism.Framework.Json;
-using Live2D.Cubism.Framework.Motion;
 using Live2D.Cubism.Framework.MotionFade;
 using Live2D.Cubism.Framework.Pose;
 using Live2D.Cubism.Rendering.Masking;
@@ -20,7 +18,6 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
-
 
 namespace Live2D.Cubism.Editor.Importers
 {
@@ -51,7 +48,7 @@ namespace Live2D.Cubism.Editor.Importers
                 if (_modelPrefab == null)
                 {
                     _modelPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(AssetPath.Replace(".model3.json", ".prefab"));
-                    if(_modelPrefab != null)
+                    if (_modelPrefab != null)
                     {
                         _modelPrefabGuid = AssetGuid.GetGuid(_modelPrefab);
                     }
@@ -61,7 +58,6 @@ namespace Live2D.Cubism.Editor.Importers
                 return _model3Json;
             }
         }
-
 
         /// <summary>
         /// Guid of model prefab.
@@ -85,7 +81,6 @@ namespace Live2D.Cubism.Editor.Importers
                     _modelPrefab = AssetGuid.LoadAsset<GameObject>(_modelPrefabGuid);
                 }
 
-
                 return _modelPrefab;
             }
             set
@@ -94,7 +89,6 @@ namespace Live2D.Cubism.Editor.Importers
                 _modelPrefabGuid = AssetGuid.GetGuid(value);
             }
         }
-
 
         /// <summary>
         /// Guid of moc.
@@ -120,7 +114,6 @@ namespace Live2D.Cubism.Editor.Importers
                     _mocAsset = AssetGuid.LoadAsset<CubismMoc>(_mocAssetGuid);
                 }
 
-
                 return _mocAsset;
             }
             set
@@ -129,7 +122,6 @@ namespace Live2D.Cubism.Editor.Importers
                 _mocAssetGuid = AssetGuid.GetGuid(value);
             }
         }
-
 
         /// <summary>
         /// Should import as original workflow.
@@ -148,13 +140,12 @@ namespace Live2D.Cubism.Editor.Importers
         /// Registers importer.
         /// </summary>
         [InitializeOnLoadMethod]
-        // ReSharper disable once UnusedMember.Local
         private static void RegisterImporter()
         {
             CubismImporter.RegisterImporter<CubismModel3JsonImporter>(".model3.json");
         }
 
-        #endregion
+        #endregion Unity Event Handling
 
         #region CubismImporterBase
 
@@ -164,7 +155,6 @@ namespace Live2D.Cubism.Editor.Importers
         public override void Import()
         {
             var isImporterDirty = false;
-
 
             // Instantiate model source and model.
             var model = Model3Json.ToModel(CubismImporter.OnPickMaterial, CubismImporter.OnPickTexture, ShouldImportAsOriginalWorkflow);
@@ -185,20 +175,16 @@ namespace Live2D.Cubism.Editor.Importers
             {
                 AssetDatabase.CreateAsset(moc, $"{assetPath}.asset");
 
-
                 MocAsset = moc;
-
 
                 isImporterDirty = true;
             }
-
 
             // Create model prefab.
             if (ModelPrefab == null)
             {
                 // Trigger event.
                 CubismImporter.SendModelImportEvent(this, model);
-
 
                 foreach (var texture in Model3Json.Textures)
                 {
@@ -225,7 +211,6 @@ namespace Live2D.Cubism.Editor.Importers
                 isImporterDirty = true;
             }
 
-
             // Update model prefab.
             else
             {
@@ -237,24 +222,19 @@ namespace Live2D.Cubism.Editor.Importers
                             $"{assetPath}.asset"));
                 }
 
-
                 // Copy all user data over from previous model.
                 var source = Object.Instantiate(ModelPrefab).FindCubismModel();
-
 
                 CopyUserData(source, model);
                 Object.DestroyImmediate(source.gameObject, true);
 
-
                 // Trigger events.
                 CubismImporter.SendModelImportEvent(this, model);
-
 
                 foreach (var texture in Model3Json.Textures)
                 {
                     CubismImporter.SendModelTextureImportEvent(this, model, texture);
                 }
-
 
                 // Reset moc reference.
                 CubismModel.ResetMocReference(model, MocAsset);
@@ -273,20 +253,16 @@ namespace Live2D.Cubism.Editor.Importers
                 CubismImporter.LogReimport(AssetPath, AssetDatabase.GUIDToAssetPath(_modelPrefabGuid));
             }
 
-
             // Clean up.
             Object.DestroyImmediate(model.gameObject, true);
-
 
             // Update moc asset.
             if (MocAsset != null)
             {
                 EditorUtility.CopySerialized(moc, MocAsset);
 
-
                 // Revive by force to make instance using the new Moc.
                 CubismMoc.ResetUnmanagedMoc(MocAsset);
-
 
                 EditorUtility.SetDirty(MocAsset);
             }
@@ -302,7 +278,7 @@ namespace Live2D.Cubism.Editor.Importers
             }
         }
 
-        #endregion
+        #endregion CubismImporterBase
 
         private static void CopyUserData(CubismModel source, CubismModel destination, bool copyComponentsOnly = false)
         {
@@ -310,7 +286,6 @@ namespace Live2D.Cubism.Editor.Importers
             CopyUserData(source.Parameters, destination.Parameters, copyComponentsOnly);
             CopyUserData(source.Parts, destination.Parts, copyComponentsOnly);
             CopyUserData(source.Drawables, destination.Drawables, copyComponentsOnly);
-
 
             // Copy components.
             foreach (var sourceComponent in source.GetComponents(typeof(Component)))
@@ -322,7 +297,7 @@ namespace Live2D.Cubism.Editor.Importers
                 }
 
                 // skip copy original workflow component.
-                if(sourceComponent.GetType() == typeof(CubismUpdateController)
+                if (sourceComponent.GetType() == typeof(CubismUpdateController)
                 || sourceComponent.GetType() == typeof(CubismFadeController)
                 || sourceComponent.GetType() == typeof(CubismExpressionController)
                 || sourceComponent.GetType() == typeof(CubismPoseController)
@@ -334,11 +309,9 @@ namespace Live2D.Cubism.Editor.Importers
                 // Copy component.
                 var destinationComponent = destination.GetOrAddComponent(sourceComponent.GetType());
 
-
                 EditorUtility.CopySerialized(sourceComponent, destinationComponent);
             }
         }
-
 
         private static void CopyUserData<T>(T[] source, T[] destination, bool copyComponentsOnly) where T : MonoBehaviour
         {
@@ -346,13 +319,11 @@ namespace Live2D.Cubism.Editor.Importers
             {
                 var sourceT = source.FirstOrDefault(p => p.name == destinationT.name);
 
-
                 // Skip removed parameters.
                 if (sourceT == null)
                 {
                     continue;
                 }
-
 
                 // Copy any children.
                 foreach (var child in sourceT.transform
@@ -363,7 +334,6 @@ namespace Live2D.Cubism.Editor.Importers
                     Object.Instantiate(child, destinationT.transform);
                 }
 
-
                 // Copy components.
                 foreach (var sourceComponent in sourceT.GetComponents(typeof(Component)))
                 {
@@ -373,10 +343,8 @@ namespace Live2D.Cubism.Editor.Importers
                         continue;
                     }
 
-
                     // Copy component.
                     var destinationComponent = destinationT.GetOrAddComponent(sourceComponent.GetType());
-
 
                     EditorUtility.CopySerialized(sourceComponent, destinationComponent);
                 }

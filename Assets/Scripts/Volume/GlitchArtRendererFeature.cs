@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
@@ -12,8 +10,10 @@ public class CRTScreenRendererFeature : ScriptableRendererFeature
         public RenderPassEvent renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
         public Shader shader;
     }
+
     public Settings settings = new Settings();
-    CRTScreenPass pass;
+    private CRTScreenPass pass;
+
     public override void Create()
     {
         this.name = "CRTScreenPass";
@@ -25,19 +25,19 @@ public class CRTScreenRendererFeature : ScriptableRendererFeature
         pass.Setup(renderer.cameraColorTarget);
         renderer.EnqueuePass(pass);
     }
-
 }
+
 [System.Serializable]
 public class CRTScreenPass : ScriptableRenderPass
 {
-    static readonly string renderTag = "CRTScreen Effects";
-    static readonly int MainTexId = Shader.PropertyToID("_MainTex");
-    static readonly int TempTargetId = Shader.PropertyToID("_TempTargetColorTint");
-
+    private static readonly string renderTag = "CRTScreen Effects";
+    private static readonly int MainTexId = Shader.PropertyToID("_MainTex");
+    private static readonly int TempTargetId = Shader.PropertyToID("_TempTargetColorTint");
 
     private CRTScreenComponent CRTScreenVolume;
     private Material mat;
-    RenderTargetIdentifier currentTarget;
+    private RenderTargetIdentifier currentTarget;
+
     public CRTScreenPass(RenderPassEvent passEvent, Shader CRTScreenShader)
     {
         renderPassEvent = passEvent;
@@ -48,11 +48,11 @@ public class CRTScreenPass : ScriptableRenderPass
         }
         mat = CoreUtils.CreateEngineMaterial(CRTScreenShader);
     }
+
     public void Setup(in RenderTargetIdentifier currentTarget)
     {
         this.currentTarget = currentTarget;
     }
-
 
     public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
     {
@@ -87,10 +87,9 @@ public class CRTScreenPass : ScriptableRenderPass
         RenderTargetIdentifier source = currentTarget;
         int destination = TempTargetId;
 
-        mat.SetVector("_Resolution", CRTScreenVolume.resolution.value); 
+        mat.SetVector("_Resolution", CRTScreenVolume.resolution.value);
         mat.SetVector("_PixelScanlineBrightness", CRTScreenVolume.pixelScanlineBrightness.value);
-        mat.SetFloat("_Speed",CRTScreenVolume.speed.value);
-
+        mat.SetFloat("_Speed", CRTScreenVolume.speed.value);
 
         cmd.SetGlobalTexture(MainTexId, source);
         cmd.GetTemporaryRT(destination, cameraData.camera.scaledPixelWidth, cameraData.camera.scaledPixelHeight, 0, FilterMode.Trilinear, RenderTextureFormat.Default);
@@ -98,4 +97,3 @@ public class CRTScreenPass : ScriptableRenderPass
         cmd.Blit(destination, source, mat, 0);
     }
 }
-

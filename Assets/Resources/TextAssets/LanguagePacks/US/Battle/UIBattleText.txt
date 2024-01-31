@@ -60,19 +60,19 @@ Also, do not write two comments together, leave at least 3 characters of space b
 */
 
 Turn\0\* Turn 0.;
-Turn\0\* Another version of Turn 0<stop>.<stop>.<stop>.<stop>.<stop>.<stop>.<stop>;
-Turn\1\* Welcome to Turn 1<stop>.<stop>.<stop>.<enter>* Of course.;
+Turn\0\* Another version of Turn 0<stop><stop......>;
+Turn\1\* Welcome to Turn 1<stop><stop...><enter>* Of course.;
 
 
 Act\NPC1\Check\* <getEnemiesName> <stop>-<stop> ATK<stop> <getEnemiesATK><stop> DEF<stop> <getEnemiesDEF><stop><enter>* What's this?;
 Act\NPC1\Pet\* You pet <getEnemiesName>.<stop><enter>* It makes a sound like "ow.";
-Act\NPC1\Glare\* You glare at it fiercely.<stop><enter>* When you gaze into the abyss<stop>.<stop>.<stop>.;
-Act\NPC1\Ignore\* You don't look at it.<stop>.<stop>.<stop><enter>< >< >Probably.<stop>.<stop>.;
+Act\NPC1\Glare\* You glare at it fiercely.<stop><enter>* When you gaze into the abyss<stop><stop...>;
+Act\NPC1\Ignore\* You don't look at it<stop...><enter><-  ->Probably<stop...>;
 
 Act\NPC2\Check\* <getEnemiesName> <stop>-<stop> ATK<stop> <getEnemiesATK><stop> DEF<stop> <getEnemiesDEF><stop><enter>* What's this again?;
-Act\NPC2\Compliment\* You compliment <getEnemiesName> on its<enter>< >< >unique appearance.<stop><enter>* <getEnemiesName> looks very puzzled.;
-Act\NPC2\Hug\* You pick up <getEnemiesName>.<stop><enter>* <getEnemiesName> seems startled.<stop>.<stop>.<stop><passText>* But it feels happy.;
-Act\NPC2\Grin\* You let out an evil grin.<stop><enter>* <getEnemiesName> can't figure out<enter>< >< >what you're doing.;
+Act\NPC2\Compliment\* You compliment <getEnemiesName> on its<enter><-  ->unique appearance.<stop><enter>* <getEnemiesName> looks very puzzled.;
+Act\NPC2\Hug\* You pick up <getEnemiesName>.<stop><enter>* <getEnemiesName> seems startled<stop...><passText>* But it feels happy.;
+Act\NPC2\Grin\* You let out an evil grin.<stop><enter>* <getEnemiesName> can't figure out<enter><-  ->what you're doing.;
 
 Mercy\NPC1\Spare\Null;
 Mercy\NPC1\Flee\* You can't run away.;

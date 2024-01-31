@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
+
 /// <summary>
 /// Debug网格定位 用于做弹幕啥的
 /// </summary>
@@ -9,23 +8,27 @@ public class DebugGrid : ObjectPool
 {
     [Header("颜色是给到'条'上面的")]
     public Color colorX;
+
     public Color colorY;
     public Color colorXForText;
     public Color colorYForText;
 
     [Header("横纵分割几片(刀数-1) X为横着平铺竖条 Y则反之")]
     public int divisionX;
+
     public int divisionY;
+
     [Header("XY偏移 如果左右对称就和参考一样填个正的数")]
     public float deviationX;
+
     public float deviationY;
 
     [Header("参考坐标")]
-    
     public Vector2 referenceX;
+
     public Vector2 referenceY;
-    
-    void Start()
+
+    private void Start()
     {
         obj = Resources.Load<GameObject>("Template/Grid Template");
         FillPool();
@@ -33,7 +36,7 @@ public class DebugGrid : ObjectPool
         SummonGrid();
     }
 
-    void SummonGrid()
+    private void SummonGrid()
     {
         for (int i = 0; i < transform.childCount; i++)
         {
@@ -58,7 +61,7 @@ public class DebugGrid : ObjectPool
             tmp.transform.localPosition = new Vector3(0.25f, 0.00475f, 0);
             tmp.fontSize = 3;
         }
-         //x
+        //x
         for (int y = 1; y < divisionX; y++)
         {
             float length = Mathf.Abs(referenceY.y - referenceY.x);
@@ -75,12 +78,12 @@ public class DebugGrid : ObjectPool
             tmp.fontSize = 3;
         }
     }
+
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.G))
+        if (Input.GetKeyDown(KeyCode.G))
         {
             SummonGrid();
         }
     }
-
 }

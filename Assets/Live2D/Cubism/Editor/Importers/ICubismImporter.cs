@@ -5,7 +5,6 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 namespace Live2D.Cubism.Editor.Importers
 {
     /// <summary>
@@ -18,12 +17,10 @@ namespace Live2D.Cubism.Editor.Importers
         /// </summary>
         void SetAssetPath(string value);
 
-
         /// <summary>
         /// Imports the corresponding asset.
         /// </summary>
         void Import();
-
 
         /// <summary>
         /// Saves the importer.

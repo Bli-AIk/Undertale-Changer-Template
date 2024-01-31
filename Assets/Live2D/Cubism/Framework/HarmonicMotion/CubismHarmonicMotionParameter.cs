@@ -5,10 +5,8 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Framework.HarmonicMotion
 {
@@ -56,7 +54,6 @@ namespace Live2D.Cubism.Framework.HarmonicMotion
         [SerializeField, Range(0.01f, 10f)]
         public float Duration = 3f;
 
-
         /// <summary>
         /// <see langword="true"/> if <see langword="this"/> is initialized.
         /// </summary>
@@ -65,7 +62,6 @@ namespace Live2D.Cubism.Framework.HarmonicMotion
             get { return Mathf.Abs(ValueRange) >= Mathf.Epsilon; }
         }
 
-
         /// <summary>
         /// Initializes instance.
         /// </summary>
@@ -73,7 +69,6 @@ namespace Live2D.Cubism.Framework.HarmonicMotion
         {
             // Initialize value fields.
             var parameter = GetComponent<CubismParameter>();
-
 
             MaximumValue = parameter.MaximumValue;
             MinimumValue = parameter.MinimumValue;
@@ -97,12 +92,10 @@ namespace Live2D.Cubism.Framework.HarmonicMotion
         /// </summary>
         private float ValueRange { get; set; }
 
-
         /// <summary>
         /// Current time.
         /// </summary>
         private float T { get; set; }
-
 
         /// <summary>
         /// Proceeds time.
@@ -111,7 +104,6 @@ namespace Live2D.Cubism.Framework.HarmonicMotion
         internal void Play(float[] channelTimescales)
         {
             T += (Time.deltaTime * channelTimescales[Channel]);
-
 
             // Make sure time stays within duration.
             while (T > Duration)
@@ -132,21 +124,18 @@ namespace Live2D.Cubism.Framework.HarmonicMotion
                 Initialize();
             }
 
-
             // Restore origin and range.
             var origin = MinimumValue + (NormalizedOrigin * ValueRange);
-            var range  = NormalizedRange * ValueRange;
-
+            var range = NormalizedRange * ValueRange;
 
             // Clamp the range so that it stays within the limits.
             Clamp(ref origin, ref range);
-
 
             // Return result.
             return origin + (range * Mathf.Sin(T * (2 * Mathf.PI) / Duration));
         }
 
-        #endregion
+        #endregion Interface for Controller
 
         #region Helper Methods
 
@@ -160,59 +149,56 @@ namespace Live2D.Cubism.Framework.HarmonicMotion
             switch (Direction)
             {
                 case CubismHarmonicMotionDirection.Left:
-                {
-                    if ((origin - range) >= MinimumValue)
                     {
-                        range /= 2;
-                        origin -= range;
-                    }
-                    else
-                    {
-                        range           = (origin - MinimumValue) / 2f;
-                        origin          = MinimumValue + range;
-                        NormalizedRange = (range * 2f)/ValueRange;
-                    }
+                        if ((origin - range) >= MinimumValue)
+                        {
+                            range /= 2;
+                            origin -= range;
+                        }
+                        else
+                        {
+                            range = (origin - MinimumValue) / 2f;
+                            origin = MinimumValue + range;
+                            NormalizedRange = (range * 2f) / ValueRange;
+                        }
 
-
-                    break;
-                }
+                        break;
+                    }
                 case CubismHarmonicMotionDirection.Right:
-                {
-                    if ((origin + range) <= MaximumValue)
                     {
-                        range  /= 2f;
-                        origin += range;
-                    }
-                    else
-                    {
-                        range           = (MaximumValue - origin) / 2f;
-                        origin          = MaximumValue - range;
-                        NormalizedRange = (range * 2f)/ValueRange;
-                    }
+                        if ((origin + range) <= MaximumValue)
+                        {
+                            range /= 2f;
+                            origin += range;
+                        }
+                        else
+                        {
+                            range = (MaximumValue - origin) / 2f;
+                            origin = MaximumValue - range;
+                            NormalizedRange = (range * 2f) / ValueRange;
+                        }
 
-
-                    break;
-                }
+                        break;
+                    }
                 default:
-                {
-                    break;
-                }
+                    {
+                        break;
+                    }
             }
-
 
             // Clamp both range and NormalizedRange.
             if ((origin - range) < MinimumValue)
             {
-                range           = origin - MinimumValue;
+                range = origin - MinimumValue;
                 NormalizedRange = range / ValueRange;
             }
             else if ((origin + range) > MaximumValue)
             {
-                range           = MaximumValue - origin;
+                range = MaximumValue - origin;
                 NormalizedRange = range / ValueRange;
             }
         }
 
-        #endregion
+        #endregion Helper Methods
     }
 }

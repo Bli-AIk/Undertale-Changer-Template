@@ -5,7 +5,6 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Framework;
 using UnityEditor;
 
@@ -26,13 +25,11 @@ namespace Live2D.Cubism.Editor.Inspectors
         {
             var hitDrawable = target as CubismHitDrawable;
 
-
             // Fail silently.
             if (hitDrawable == null)
             {
                 return;
             }
-
 
             // Display user data.
             using (var scope = new EditorGUI.ChangeCheckScope())
@@ -43,7 +40,6 @@ namespace Live2D.Cubism.Editor.Inspectors
                 {
                     return;
                 }
-
 
                 // Apply to all selected HitDrawable.
                 foreach (CubismHitDrawable cubismRaycastable in targets)
@@ -56,6 +52,6 @@ namespace Live2D.Cubism.Editor.Inspectors
             }
         }
 
-        #endregion
+        #endregion Editor
     }
 }

@@ -5,7 +5,6 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 namespace Live2D.Cubism.Rendering
 {
     /// <summary>
@@ -22,7 +21,6 @@ namespace Live2D.Cubism.Rendering
         /// Offset by depth from front to back.
         /// </summary>
         FrontToBackZ,
-
 
         /// <summary>
         /// Offsets by Unity's sorting order from back to front.

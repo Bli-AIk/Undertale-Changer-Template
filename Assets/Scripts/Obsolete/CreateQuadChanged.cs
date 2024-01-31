@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,6 +12,7 @@ using UnityEngine.UI;
 public class CreateQuadChanged : MonoBehaviour
 {
     public static CreateQuadChanged instance;
+
     private void Awake()
     {
         instance = this;
@@ -20,22 +20,26 @@ public class CreateQuadChanged : MonoBehaviour
 
     //public float debug;
     public List<Vector3> vertPoints = new List<Vector3>();
+
     public List<Vector2> vertUV = new List<Vector2>();
     public List<Vector3> vertEdge = new List<Vector3>();
+
     //public bool havePoints;
     //public List<Vector3> noHavePoints = new List<Vector3>();
     public float noHavePointsFloat;
+
     public float width;
     public bool haveEdgeCollider2D;
-    EdgeCollider2D edgeCollider2D;
+    private EdgeCollider2D edgeCollider2D;
     public List<GameObject> points = new List<GameObject>();
     public Color color;
     [SerializeField] private Material material = null;
     [SerializeField] private Texture mainTex = null;
-    VertexHelper vh = new VertexHelper();
-    MeshFilter meshFilter;
-    MeshRenderer meshRenderer;
-    LineRenderer lineRenderer;
+    private VertexHelper vh = new VertexHelper();
+    private MeshFilter meshFilter;
+    private MeshRenderer meshRenderer;
+    private LineRenderer lineRenderer;
+
     private void Start()
     {
         meshFilter = GetComponent<MeshFilter>();
@@ -54,13 +58,14 @@ public class CreateQuadChanged : MonoBehaviour
             edgeCollider2D = gameObject.AddComponent<EdgeCollider2D>() ?? gameObject.GetComponent<EdgeCollider2D>();
         }
         ReStart();
-
     }
+
     private void Update()
     {
         ReStart();
     }
-    void ReStart()
+
+    private void ReStart()
     {
         vh.Clear();
         for (int i = 0; i < vertPoints.Count; i++)
@@ -81,7 +86,6 @@ public class CreateQuadChanged : MonoBehaviour
         meshRenderer.receiveShadows = false;
         // 设置主贴图
         meshRenderer.material.mainTexture = mainTex;
-
 
         if (haveEdgeCollider2D)
         {

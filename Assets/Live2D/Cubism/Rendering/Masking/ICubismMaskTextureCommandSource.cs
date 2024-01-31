@@ -5,7 +5,6 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 namespace Live2D.Cubism.Rendering.Masking
 {
     /// <summary>
@@ -18,7 +17,6 @@ namespace Live2D.Cubism.Rendering.Masking
         /// </summary>
         /// <returns>The necessary number of tiles needed.</returns>
         int GetNecessaryTileCount();
-
 
         /// <summary>
         /// Assigns the tiles.

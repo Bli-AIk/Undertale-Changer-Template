@@ -7,6 +7,7 @@ namespace Live2D.Cubism.Editor.Importers
     public class CubismCreatedAssetList
     {
         private List<Object> _assets;
+
         public List<Object> Assets
         {
             get
@@ -21,11 +22,12 @@ namespace Live2D.Cubism.Editor.Importers
         }
 
         private List<string> _assetPaths;
+
         public List<string> AssetPaths
         {
             get
             {
-                if(_assetPaths == null)
+                if (_assetPaths == null)
                 {
                     _assetPaths = new List<string>();
                 }
@@ -35,6 +37,7 @@ namespace Live2D.Cubism.Editor.Importers
         }
 
         private List<bool> _isImporterDirties;
+
         public List<bool> IsImporterDirties
         {
             get
@@ -51,7 +54,6 @@ namespace Live2D.Cubism.Editor.Importers
         private static CubismCreatedAssetList _instance;
         public volatile bool onPostImporting = false;
 
-
         public static CubismCreatedAssetList GetInstance()
         {
             if (_instance == null)
@@ -61,7 +63,6 @@ namespace Live2D.Cubism.Editor.Importers
 
             return _instance;
         }
-
 
         public void OnPostImport()
         {
@@ -94,7 +95,6 @@ namespace Live2D.Cubism.Editor.Importers
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
-
 
         public void Remove(int index)
         {

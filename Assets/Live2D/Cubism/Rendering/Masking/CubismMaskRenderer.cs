@@ -5,11 +5,9 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core;
 using UnityEngine;
 using UnityEngine.Rendering;
-
 
 namespace Live2D.Cubism.Rendering.Masking
 {
@@ -26,12 +24,10 @@ namespace Live2D.Cubism.Rendering.Masking
         /// </summary>
         private MaterialPropertyBlock MaskProperties { get; set; }
 
-
         /// <summary>
         /// Main renderer.
         /// </summary>
         private CubismRenderer MainRenderer { get; set; }
-
 
         /// <summary>
         /// Mask material.
@@ -68,7 +64,7 @@ namespace Live2D.Cubism.Rendering.Masking
             MaskCullingMaterial = CubismBuiltinMaterials.MaskCulling;
         }
 
-        #endregion
+        #endregion Ctors
 
         #region Interface For CubismMaskMaskedJunction
 
@@ -95,7 +91,6 @@ namespace Live2D.Cubism.Rendering.Masking
         {
             MaskProperties.SetVector(CubismShaderVariables.MaskTile, value);
 
-
             return this;
         }
 
@@ -108,10 +103,8 @@ namespace Live2D.Cubism.Rendering.Masking
         {
             MaskProperties.SetVector(CubismShaderVariables.MaskTransform, value);
 
-
             return this;
         }
-
 
         /// <summary>
         /// Enqueues
@@ -123,9 +116,7 @@ namespace Live2D.Cubism.Rendering.Masking
             var mainTexture = MainRenderer.MainTexture;
             var mesh = MainRenderer.Mesh;
 
-
             MaskProperties.SetTexture(CubismShaderVariables.MainTexture, mainTexture);
-
 
             // Add command.
             buffer.DrawMesh(mesh, Matrix4x4.identity,
@@ -135,6 +126,6 @@ namespace Live2D.Cubism.Rendering.Masking
                 0, 0, MaskProperties);
         }
 
-        #endregion
+        #endregion Interface For CubismMaskMaskedJunction
     }
 }

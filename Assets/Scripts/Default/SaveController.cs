@@ -1,8 +1,7 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using MEC;
-using Newtonsoft.Json;
 using UnityEngine;
 
 /// <summary>
@@ -47,11 +46,10 @@ public class SaveController : MonoBehaviour
         {
             return null;
         }
-
     }
+
     public static int GetDataNum()
     {
-
         if (!Directory.Exists(Application.dataPath + "/Data"))
         {
             //Debug.Log("º“»À√«À≠∂Æ∞°"+ Application.dataPath + "/Data");
@@ -127,6 +125,4 @@ public class SaveController : MonoBehaviour
             File.Move(files[i], newPath);
         }
     }
-
 }
-

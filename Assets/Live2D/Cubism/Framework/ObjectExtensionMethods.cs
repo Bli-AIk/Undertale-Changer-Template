@@ -5,9 +5,7 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Framework
 {
@@ -26,22 +24,18 @@ namespace Live2D.Cubism.Framework
         {
             var result = self as T;
 
-
             if (result != null)
             {
                 return result;
             }
 
-
             // Deal with GameObjects.
             var gameObject = self as GameObject;
-
 
             if (gameObject != null)
             {
                 result = gameObject.GetComponent<T>();
             }
-
 
             // Warn on error.
             if (self != null && result == null)
@@ -49,10 +43,8 @@ namespace Live2D.Cubism.Framework
                 Debug.LogWarning(self + " doesn't expose requested interface of type \"" + typeof(T) + "\".");
             }
 
-
             return result;
         }
-
 
         /// <summary>
         /// Nulls reference in case an <see cref="Object"/> doesn't expose an interface requested.
@@ -64,19 +56,16 @@ namespace Live2D.Cubism.Framework
         {
             var exposesInterface = self.ImplementsInterface<T>();
 
-
             // Warn on error.
             if (self != null && !exposesInterface)
             {
                 Debug.LogWarning(self + " doesn't expose requested interface of type \"" + typeof(T) + "\".");
             }
 
-
             return (exposesInterface)
                 ? self
                 : null;
         }
-
 
         /// <summary>
         /// Checks whether a <see cref="Object"/> implements an interface.
@@ -92,19 +81,15 @@ namespace Live2D.Cubism.Framework
                 return true;
             }
 
-
             // Search in components in case object is a GameObject.
             var gameObject = self as GameObject;
-
 
             if (gameObject != null)
             {
                 var components = gameObject.GetComponents<T>();
 
-
                 return components.Length > 0;
             }
-
 
             // Return on fail.
             return false;

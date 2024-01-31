@@ -1,43 +1,44 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+
 /// <summary>
 /// Overworld中的玩家控制器
 /// </summary>
 public class PlayerBehaviour : MonoBehaviour
 {
     public Animator animator;
-    Rigidbody2D rbody;
-    BoxCollider2D boxCollider;
-    TypeWritter typeWritter;
+    private Rigidbody2D rbody;
+    private BoxCollider2D boxCollider;
+    private TypeWritter typeWritter;
     public int moveDirectionX, moveDirectionY;
     public int animDirectionX, animDirectionY;
     public float distance;
     public float speed;//玩家速度 编辑器标准为13 导出为5.5
-    
+
     [Header("音效截取范围 int")]
     public Vector2 walk;
 
     [Header("开启倒影")]
     public bool isShadow;
-    SpriteRenderer shadowSprite;
+
+    private SpriteRenderer shadowSprite;
 
     //public LayerMask mask;
-    BoxCollider2D boxTrigger;
+    private BoxCollider2D boxTrigger;
 
     public OverworldObjTrigger saveOwObj;
-    GameObject backpackUI;
-    SpriteRenderer spriteRenderer;
+    private GameObject backpackUI;
+    private SpriteRenderer spriteRenderer;
     public float owTimer;//0.1秒，防止调查OW冲突
 
-    AudioMixerGroup mixer = null;//需要就弄上 整这个是因为有的项目里做了回音效果
-    
+    private AudioMixerGroup mixer = null;//需要就弄上 整这个是因为有的项目里做了回音效果
+
     private void Awake()
     {
         backpackUI = GameObject.Find("Main Camera/BackpackUI");
     }
-    void Start()
+
+    private void Start()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         animator = GetComponent<Animator>();
@@ -62,9 +63,9 @@ public class PlayerBehaviour : MonoBehaviour
         {
             OverworldObjTrigger owObj = collision.transform.GetComponent<OverworldObjTrigger>();
             saveOwObj = owObj;
-            
         }
     }
+
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.transform.CompareTag("owObjTrigger"))
@@ -79,12 +80,10 @@ public class PlayerBehaviour : MonoBehaviour
 
     private void Update()
     {
-
         if (isShadow)
         {
             shadowSprite.sprite = spriteRenderer.sprite;
         }
-
 
         MainControl.instance.OverworldControl.playerDeadPos = transform.position;
         if (typeWritter.isTyping)
@@ -112,7 +111,7 @@ public class PlayerBehaviour : MonoBehaviour
             if (saveOwObj.isTriggerMode
                 || (!saveOwObj.isTriggerMode && MainControl.instance.KeyArrowToControl(KeyCode.Z)
                 && ((saveOwObj.playerDir == Vector2.one) || (saveOwObj.playerDir.x == animDirectionX) || (saveOwObj.playerDir.y == animDirectionY))
-                && BackpackBehaviour.instance.select == 0)) 
+                && BackpackBehaviour.instance.select == 0))
             {
                 if (owTimer <= 0)
                 {
@@ -143,14 +142,11 @@ public class PlayerBehaviour : MonoBehaviour
                             AudioController.instance.GetFx(MainControl.instance.AudioControl.fxClipUI[2]);
                             if (MainControl.instance.PlayerControl.hp < MainControl.instance.PlayerControl.hpMax)
                                 MainControl.instance.PlayerControl.hp = MainControl.instance.PlayerControl.hpMax;
-
                         }
-
                     }
                 }
                 owTimer = 0.1f;
             }
-
         }
 
         /*
@@ -158,7 +154,6 @@ public class PlayerBehaviour : MonoBehaviour
         Ray2D ray = new Ray2D((Vector2)transform.position + boxCollider.offset, dirReal);
         Debug.DrawRay(ray.origin, ray.direction, Color.blue);
         RaycastHit2D info = Physics2D.Raycast(transform.position, dirReal, distance, mask);
-        
 
         if (info.collider != null && MainControl.instance.KeyArrowToControl(KeyCode.Z))
         {
@@ -180,10 +175,12 @@ public class PlayerBehaviour : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.B) && MainControl.instance.PlayerControl.isDebug)
             MainControl.instance.OutBlack("Battle", Color.black);
     }
+
     public void PlayWalkAudio()//动画器引用
     {
         AudioController.instance.GetFx(Random.Range((int)walk.x, (int)walk.y), MainControl.instance.AudioControl.fxClipWalk, 1, 1, mixer);
     }
+
     public void TriggerSpin(int i)
     {
         boxTrigger.transform.localRotation = Quaternion.Euler(0, 0, i * 90);
@@ -199,8 +196,8 @@ public class PlayerBehaviour : MonoBehaviour
             boxTrigger.size = new Vector2(0.5f, 0.575f);
         }
     }
-    
-    void FixedUpdate()
+
+    private void FixedUpdate()
     {
         float speed;
         if (MainControl.instance.KeyArrowToControl(KeyCode.X, 1))
@@ -221,13 +218,12 @@ public class PlayerBehaviour : MonoBehaviour
 
         if (MainControl.instance.PlayerControl.canMove)
         {
-
-            if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow,1))
+            if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1))
                 moveDirectionX = 1;
             else if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
                 moveDirectionX = -1;
             else moveDirectionX = 0;
-         
+
             if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
                 moveDirectionX = 0;
 
@@ -239,7 +235,6 @@ public class PlayerBehaviour : MonoBehaviour
                 moveDirectionY = 1;
                 if (!MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) && !MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
                     animDirectionX = 0;
-
             }
             else if (MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
             {
@@ -250,9 +245,7 @@ public class PlayerBehaviour : MonoBehaviour
             else moveDirectionY = 0;
 
             //if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
-                //moveDirectionX = 0;
-
-
+            //moveDirectionX = 0;
 
             if (moveDirectionX != 0 || moveDirectionY != 0)
                 animDirectionY = moveDirectionY;
@@ -261,7 +254,6 @@ public class PlayerBehaviour : MonoBehaviour
 
             if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))//&& !(MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1) || MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1)))
             {
-
                 animator.SetFloat("MoveX", Random.Range(-1, 2));
                 animator.SetFloat("MoveY", Random.Range(-1, 2));
             }
@@ -271,13 +263,13 @@ public class PlayerBehaviour : MonoBehaviour
                 animator.SetFloat("MoveY", animDirectionY);
             }
 
-            if(moveDirectionY == 0)
+            if (moveDirectionY == 0)
             {
                 if (moveDirectionX > 0)
                 {
                     TriggerSpin(1);
                 }
-                else if(moveDirectionX < 0)
+                else if (moveDirectionX < 0)
                 {
                     TriggerSpin(3);
                 }
@@ -302,12 +294,10 @@ public class PlayerBehaviour : MonoBehaviour
                 {
                     if (moveDirectionY > 0)
                         TriggerSpin(2);
-                    else if(moveDirectionY < 0)
+                    else if (moveDirectionY < 0)
                         TriggerSpin(0);
-
                 }
             }
-
 
             if (moveDirectionX == 0 && moveDirectionY == 0)
             {

@@ -5,12 +5,10 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core;
 using Live2D.Cubism.Framework;
 using UnityEditor;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Editor.Inspectors
 {
@@ -33,10 +31,8 @@ namespace Live2D.Cubism.Editor.Inspectors
                 Initialize();
             }
 
-
             // Show parts.
             var didPartsChange = false;
-
 
             for (var i = 0; i < Parts.Length; i++)
             {
@@ -53,16 +49,13 @@ namespace Live2D.Cubism.Editor.Inspectors
                     1f
                     );
 
-
                 if (EditorGUI.EndChangeCheck())
                 {
                     EditorUtility.SetDirty(Parts[i]);
 
-
                     didPartsChange = true;
                 }
             }
-
 
             // FIXME Force model update in case parameters have changed.
             if (didPartsChange)
@@ -73,7 +66,7 @@ namespace Live2D.Cubism.Editor.Inspectors
             }
         }
 
-        #endregion
+        #endregion Editor
 
         /// <summary>
         /// <see cref="CubismPart"/>s cache.
@@ -95,7 +88,6 @@ namespace Live2D.Cubism.Editor.Inspectors
                 return Parts != null;
             }
         }
-
 
         /// <summary>
         /// Initializes <see langword="this"/>.

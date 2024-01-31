@@ -5,17 +5,19 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using System;
 using System.Collections.Generic;
 using Live2D.Cubism.Core;
 using Live2D.Cubism.Framework.MouthMovement;
 using Live2D.Cubism.Rendering;
-#if UNITY_EDITOR
-using UnityEditor;
-#endif
-using UnityEngine;
 
+#if UNITY_EDITOR
+
+using UnityEditor;
+
+#endif
+
+using UnityEngine;
 
 namespace Live2D.Cubism.Framework.Json
 {
@@ -23,7 +25,6 @@ namespace Live2D.Cubism.Framework.Json
     /// Contains Cubism motion3.json data.
     /// </summary>
     [Serializable]
-    // ReSharper disable once ClassCannotBeInstantiated
     public sealed class CubismMotion3Json
     {
         #region Load Methods
@@ -66,7 +67,7 @@ namespace Live2D.Cubism.Framework.Json
                 : LoadFrom(motion3JsonAsset.text);
         }
 
-        #endregion
+        #endregion Load Methods
 
         #region Json Data
 
@@ -94,7 +95,7 @@ namespace Live2D.Cubism.Framework.Json
         [SerializeField]
         public SerializableUserData[] UserData;
 
-        #endregion
+        #endregion Json Data
 
         #region Constructors
 
@@ -105,7 +106,7 @@ namespace Live2D.Cubism.Framework.Json
         {
         }
 
-        #endregion
+        #endregion Constructors
 
         /// <summary>
         /// Converts motion curve segments into <see cref="Keyframe"/>s.
@@ -123,13 +124,11 @@ namespace Live2D.Cubism.Framework.Json
             // Initialize container for keyframes.
             var keyframes = new List<Keyframe> { new Keyframe(segments[0], segments[1]) };
 
-
             // Parse segments.
             for (var i = 2; i < segments.Length;)
             {
                 Parsers[segments[i]](segments, keyframes, ref i);
             }
-
 
             // Return result.
             return keyframes.ToArray();
@@ -147,7 +146,7 @@ namespace Live2D.Cubism.Framework.Json
             var segments = curve.Segments;
             var segmentsCount = 2;
 
-            for(var index = 2; index < curve.Segments.Length; index += 3)
+            for (var index = 2; index < curve.Segments.Length; index += 3)
             {
                 // if current segment type is stepped and
                 // next segment type is stepped or next segment is last segment
@@ -156,7 +155,7 @@ namespace Live2D.Cubism.Framework.Json
                 var currentSegmentIsLast = (index == (curve.Segments.Length - 3));
                 var nextSegmentTypeIsStepped = (currentSegmentIsLast) ? false : (curve.Segments[index + 3] == 2);
                 var nextSegmentIsLast = (currentSegmentIsLast) ? false : ((index + 3) == (curve.Segments.Length - 3));
-                if ( currentSegmentTypeIsStepped && (nextSegmentTypeIsStepped || nextSegmentIsLast) )
+                if (currentSegmentTypeIsStepped && (nextSegmentTypeIsStepped || nextSegmentIsLast))
                 {
                     Array.Resize(ref segments, segments.Length + 3);
                     segments[segmentsCount + 0] = 0;
@@ -167,7 +166,7 @@ namespace Live2D.Cubism.Framework.Json
                     segments[segmentsCount + 5] = curve.Segments[index + 2];
                     segmentsCount += 6;
                 }
-                else if(curve.Segments[index] == 1)
+                else if (curve.Segments[index] == 1)
                 {
                     segments[segmentsCount + 0] = curve.Segments[index + 0];
                     segments[segmentsCount + 1] = curve.Segments[index + 1];
@@ -191,7 +190,6 @@ namespace Live2D.Cubism.Framework.Json
             return new AnimationCurve(ConvertCurveSegmentsToKeyframes(segments));
         }
 
-
         /// <summary>
         /// Instantiates an <see cref="AnimationClip"/>.
         /// </summary>
@@ -211,7 +209,6 @@ namespace Live2D.Cubism.Framework.Json
             {
                 Debug.LogWarning("Béziers are not restricted and curves might be off. Please export motions from Cubism in restricted mode for perfect match.");
             }
-
 
             // Create animation clip.
             var animationClip = new AnimationClip
@@ -267,7 +264,6 @@ namespace Live2D.Cubism.Framework.Json
                 var propertyName = string.Empty;
                 var animationCurve = new AnimationCurve(ConvertCurveSegmentsToKeyframes(curve.Segments));
 
-
                 // Create model binding.
                 if (curve.Target == "Model")
                 {
@@ -318,7 +314,6 @@ namespace Live2D.Cubism.Framework.Json
                     }
                 }
 
-
 #if UNITY_EDITOR
                 var curveBinding = new EditorCurveBinding
                 {
@@ -327,13 +322,11 @@ namespace Live2D.Cubism.Framework.Json
                     type = type
                 };
 
-
                 AnimationUtility.SetEditorCurve(animationClip, curveBinding, animationCurve);
 #else
                 animationClip.SetCurve(relativePath, type, propertyName, animationCurve);
 #endif
             }
-
 
 #if UNITY_EDITOR
             // Apply settings.
@@ -343,17 +336,14 @@ namespace Live2D.Cubism.Framework.Json
                 stopTime = Meta.Duration
             };
 
-
             AnimationUtility.SetAnimationClipSettings(animationClip, animationClipSettings);
 #endif
-
 
 #if UNITY_EDITOR
             // Add animation events from user data.
             if (UserData != null)
             {
                 var animationEvents = new List<AnimationEvent>();
-
 
                 for (var i = 0; i < UserData.Length; ++i)
                 {
@@ -363,10 +353,8 @@ namespace Live2D.Cubism.Framework.Json
                         stringParameter = UserData[i].Value,
                     };
 
-
                     animationEvents.Add(animationEvent);
                 }
-
 
                 if (animationEvents.Count > 0)
                 {
@@ -393,7 +381,6 @@ namespace Live2D.Cubism.Framework.Json
         /// <param name="position">Offset of segment.</param>
         private delegate void SegmentParser(float[] segments, List<Keyframe> result, ref int position);
 
-
         /// <summary>
         /// Available segment parsers.
         /// </summary>
@@ -405,7 +392,6 @@ namespace Live2D.Cubism.Framework.Json
             {2f, ParseSteppedSegment},
             {3f, ParseInverseSteppedSegment}
         };
-
 
         /// <summary>
         /// Parses a linear segment.
@@ -419,11 +405,9 @@ namespace Live2D.Cubism.Framework.Json
             var length = (segments[position + 1] - result[result.Count - 1].time);
             var slope = (segments[position + 2] - result[result.Count - 1].value) / length;
 
-
             // Determine tangents.
             var outTangent = slope;
             var inTangent = outTangent;
-
 
             // Create keyframes.
             var keyframe = new Keyframe(
@@ -434,7 +418,6 @@ namespace Live2D.Cubism.Framework.Json
 
             result[result.Count - 1] = keyframe;
 
-
             keyframe = new Keyframe(
                 segments[position + 1],
                 segments[position + 2],
@@ -442,7 +425,6 @@ namespace Live2D.Cubism.Framework.Json
                 0);
 
             result.Add(keyframe);
-
 
             // Update position.
             position += 3;
@@ -459,10 +441,8 @@ namespace Live2D.Cubism.Framework.Json
             // Compute tangents.
             var tangentLength = Mathf.Abs(result[result.Count - 1].time - segments[position + 5]) * 0.333333f;
 
-
             var outTangent = (segments[position + 2] - result[result.Count - 1].value) / tangentLength;
             var inTangent = (segments[position + 6] - segments[position + 4]) / tangentLength;
-
 
             // Create keyframes.
             var keyframe = new Keyframe(
@@ -473,7 +453,6 @@ namespace Live2D.Cubism.Framework.Json
 
             result[result.Count - 1] = keyframe;
 
-
             keyframe = new Keyframe(
                 segments[position + 5],
                 segments[position + 6],
@@ -481,7 +460,6 @@ namespace Live2D.Cubism.Framework.Json
                 0);
 
             result.Add(keyframe);
-
 
             // Update position.
             position += 7;
@@ -502,7 +480,6 @@ namespace Live2D.Cubism.Framework.Json
                     inTangent = float.PositiveInfinity
                 });
 
-
             // Update position.
             position += 3;
         }
@@ -522,10 +499,8 @@ namespace Live2D.Cubism.Framework.Json
                 (segments[position + 2] - keyframe.value),
                 (segments[position + 1] - keyframe.time));
 
-
             keyframe.outTangent = tangent;
             result[result.Count - 1] = keyframe;
-
 
             result.Add(
                 new Keyframe(keyframe.time + OffsetGranularity, segments[position + 2])
@@ -540,12 +515,11 @@ namespace Live2D.Cubism.Framework.Json
                     inTangent = 0
                 });
 
-
             // Update position.
             position += 3;
         }
 
-        #endregion
+        #endregion Segment Parsing
 
         #region Json Object Types
 
@@ -678,6 +652,6 @@ namespace Live2D.Cubism.Framework.Json
             public string Value;
         }
 
-        #endregion
+        #endregion Json Object Types
     }
 }

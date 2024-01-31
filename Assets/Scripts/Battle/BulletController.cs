@@ -1,8 +1,5 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 /// <summary>
 /// 弹幕控制器
@@ -18,6 +15,7 @@ public class BulletController : MonoBehaviour
     public BattleControl.BulletColor bulletColor;//含有属性的颜色 读取BattleControl中的enum BulletColor
 
     public FollowMode followMode;
+
     //public bool useExtra;
     //public Collider2D extra;
     /// <summary>
@@ -31,15 +29,18 @@ public class BulletController : MonoBehaviour
         CutFollow,
         NoFollow,
     }
+
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
-    void Start()
+
+    private void Start()
     {
-        //if (useExtra) 
+        //if (useExtra)
         //    extra = GetComponent<Collider2D>();
     }
+
     /// <summary>
     /// 初始化弹幕（单个碰撞模式）。
     /// </summary>
@@ -74,7 +75,6 @@ public class BulletController : MonoBehaviour
     {
         gameObject.name = name;
 
-
         spriteRenderer.sortingOrder = layer;
 
         this.bulletColor = bulletColor;
@@ -88,7 +88,6 @@ public class BulletController : MonoBehaviour
             startScale = Vector3.one;
 
         transform.localScale = startScale;
-
 
         spriteRenderer.sprite = sprite;
         SetMask(startMask);
@@ -122,7 +121,6 @@ public class BulletController : MonoBehaviour
         save.offset = offset;
 
         boxColliderList.Add(save);
-
     }
 
     /// <summary>
@@ -145,7 +143,7 @@ public class BulletController : MonoBehaviour
     public void SetBullet(
         string name,
         string typeName,
-        int layer, 
+        int layer,
         Sprite sprite,
         List<Vector2> sizes,
         List<int> hits,
@@ -179,12 +177,8 @@ public class BulletController : MonoBehaviour
 
         if (this.typeName != typeName)
             this.typeName = typeName;
-        else 
+        else
             return;
-
-
-
-
 
         for (int i = 0; i < boxColliderList.Count; i++)
         {
@@ -210,10 +204,11 @@ public class BulletController : MonoBehaviour
             }
 
             save.offset = offsets[i];
-            
+
             boxColliderList.Add(save);
         }
     }
+
     private void Update()
     {
         if (followMode != FollowMode.NoFollow)
@@ -226,13 +221,13 @@ public class BulletController : MonoBehaviour
                         boxColliderList[i].size = boxColliderList[i].transform.GetComponent<SpriteRenderer>().size - boxColliderSizes[i];
                         break;
                 }
-
             }
         }
     }
+
     private void OnTriggerStay2D(Collider2D collision)//伤害判定
     {
-        if (collision.transform.CompareTag("Player") && collision.name == "CheckCollider") 
+        if (collision.transform.CompareTag("Player") && collision.name == "CheckCollider")
         {
             //if(!useExtra)
             for (int i = 0; i < boxColliderList.Count; i++)
@@ -245,7 +240,7 @@ public class BulletController : MonoBehaviour
                     {
                         HitPlayer(i);
                         if (!MainControl.instance.OverworldControl.noSFX)
-                                MainControl.instance.battlePlayerController.hitVolume.weight = 1;
+                            MainControl.instance.battlePlayerController.hitVolume.weight = 1;
                     }
                     break;
                 }
@@ -266,7 +261,7 @@ public class BulletController : MonoBehaviour
         }
     }
 
-    void HitPlayer(int i)
+    private void HitPlayer(int i)
     {
         if (MainControl.instance.PlayerControl.missTime < 0)
         {
@@ -276,14 +271,13 @@ public class BulletController : MonoBehaviour
 
             MainControl.instance.selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
 
-
             float r = UnityEngine.Random.Range(0.025f, 0.05f);
             Vector3 v3 = new Vector3(r * MainControl.instance.Get1Or_1(), r * MainControl.instance.Get1Or_1());
-            MainControl.instance.cameraShake.Shake(v3);
-            MainControl.instance.cameraShake3D.Shake(v3);
-
+            MainControl.instance.cameraShake.Shake(v3, 4, 1f / 60f * 4f, 5, true);
+            MainControl.instance.cameraShake3D.Shake(v3, 4, 1f / 60f * 4f, 5, true);
         }
     }
+
     public void SetMask(SpriteMaskInteraction spriteMaskInteraction)
     {
         switch (spriteMaskInteraction)
@@ -291,24 +285,24 @@ public class BulletController : MonoBehaviour
             case SpriteMaskInteraction.None:
                 spriteRenderer.material.SetFloat("_IsMask", 0);
                 break;
+
             case SpriteMaskInteraction.VisibleInsideMask:
                 spriteRenderer.material.SetFloat("_IsMask", 1);
                 spriteRenderer.material.SetFloat("_IsOutSide", 0);
                 break;
+
             case SpriteMaskInteraction.VisibleOutsideMask:
                 spriteRenderer.material.SetFloat("_IsMask", 1);
                 spriteRenderer.material.SetFloat("_IsOutSide", 1);
                 break;
+
             default:
                 break;
         }
     }
 
-
     private void OnDisable()
     {
         name = "Bullet";
     }
-
-
 }

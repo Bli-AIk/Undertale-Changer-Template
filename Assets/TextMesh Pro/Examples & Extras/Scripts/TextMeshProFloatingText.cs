@@ -1,10 +1,8 @@
-using UnityEngine;
 using System.Collections;
-
+using UnityEngine;
 
 namespace TMPro.Examples
 {
-
     public class TextMeshProFloatingText : MonoBehaviour
     {
         public Font TheFont;
@@ -17,16 +15,17 @@ namespace TMPro.Examples
         private Transform m_floatingText_Transform;
         private Transform m_cameraTransform;
 
-        Vector3 lastPOS = Vector3.zero;
-        Quaternion lastRotation = Quaternion.identity;
+        private Vector3 lastPOS = Vector3.zero;
+        private Quaternion lastRotation = Quaternion.identity;
 
         public int SpawnType;
         public bool IsTextObjectScaleStatic;
 
         //private int m_frame = 0;
 
-        static WaitForEndOfFrame k_WaitForEndOfFrame = new WaitForEndOfFrame();
-        static WaitForSeconds[] k_WaitForSecondsRandom = new WaitForSeconds[]
+        private static WaitForEndOfFrame k_WaitForEndOfFrame = new WaitForEndOfFrame();
+
+        private static WaitForSeconds[] k_WaitForSecondsRandom = new WaitForSeconds[]
         {
             new WaitForSeconds(0.05f), new WaitForSeconds(0.1f), new WaitForSeconds(0.15f), new WaitForSeconds(0.2f), new WaitForSeconds(0.25f),
             new WaitForSeconds(0.3f), new WaitForSeconds(0.35f), new WaitForSeconds(0.4f), new WaitForSeconds(0.45f), new WaitForSeconds(0.5f),
@@ -34,7 +33,7 @@ namespace TMPro.Examples
             new WaitForSeconds(0.8f), new WaitForSeconds(0.85f), new WaitForSeconds(0.9f), new WaitForSeconds(0.95f), new WaitForSeconds(1.0f),
         };
 
-        void Awake()
+        private void Awake()
         {
             m_transform = transform;
             m_floatingText = new GameObject(this.name + " floating text");
@@ -46,7 +45,7 @@ namespace TMPro.Examples
             m_cameraTransform = Camera.main.transform;
         }
 
-        void Start()
+        private void Start()
         {
             if (SpawnType == 0)
             {
@@ -89,11 +88,8 @@ namespace TMPro.Examples
             }
             else if (SpawnType == 2)
             {
-
             }
-
         }
-
 
         //void Update()
         //{
@@ -109,7 +105,6 @@ namespace TMPro.Examples
 
         //}
 
-
         public IEnumerator DisplayTextMeshProFloatingText()
         {
             float CountDuration = 2.0f; // How long is the countdown alive.
@@ -120,7 +115,6 @@ namespace TMPro.Examples
             Color32 start_color = m_textMeshPro.color;
             float alpha = 255;
             int int_counter = 0;
-
 
             float fadeDuration = 3 / starting_Count * CountDuration;
 
@@ -164,7 +158,6 @@ namespace TMPro.Examples
 
             StartCoroutine(DisplayTextMeshProFloatingText());
         }
-
 
         public IEnumerator DisplayTextMeshFloatingText()
         {

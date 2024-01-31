@@ -5,7 +5,6 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 namespace Live2D.Cubism.Editor.Deleters
 {
     /// <summary>
@@ -17,7 +16,6 @@ namespace Live2D.Cubism.Editor.Deleters
         /// Sets the asset path.
         /// </summary>
         void SetAssetPath(string value);
-
 
         /// <summary>
         /// Delete the corresponding asset.

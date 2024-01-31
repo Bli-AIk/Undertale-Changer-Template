@@ -5,7 +5,6 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using System;
 using UnityEngine;
 
@@ -38,7 +37,7 @@ namespace Live2D.Cubism.Framework.Json
 
             var groups = (value.Get("Groups") == null) ? null : value.Get("Groups").GetVector(null);
 
-            if(groups != null)
+            if (groups != null)
             {
                 ret.Groups = new SerializablePoseGroup[groups.Count][];
 
@@ -52,14 +51,14 @@ namespace Live2D.Cubism.Framework.Json
                         ret.Groups[i][j].Id = groups[i].GetVector(null)[j].Get("Id").toString();
                         var link = groups[i].GetVector(null)[j].Get("Link").GetVector(null);
 
-                        if(link.Count == 0)
+                        if (link.Count == 0)
                         {
                             continue;
                         }
 
                         ret.Groups[i][j].Link = new string[link.Count];
 
-                        for (var linkCount = 0; linkCount < link.Count; ++ linkCount)
+                        for (var linkCount = 0; linkCount < link.Count; ++linkCount)
                         {
                             ret.Groups[i][j].Link[linkCount] = link[linkCount].toString();
                         }
@@ -102,7 +101,7 @@ namespace Live2D.Cubism.Framework.Json
         [SerializeField]
         public SerializablePoseGroup[][] Groups;
 
-        #endregion
+        #endregion Json Data
 
         #region Json Helpers
 
@@ -122,8 +121,6 @@ namespace Live2D.Cubism.Framework.Json
             public string[] Link;
         }
 
-        #endregion
-
+        #endregion Json Helpers
     }
-
 }

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-5947638485911503964
+--- !u!114 &-5300385520825834808
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
@@ -14,26 +14,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   active: 1
   threshold:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0.9
   intensity:
-    m_OverrideState: 1
-    m_Value: 1
-  scatter:
-    m_OverrideState: 1
+    m_OverrideState: 0
     m_Value: 0
+  scatter:
+    m_OverrideState: 0
+    m_Value: 0.7
   clamp:
     m_OverrideState: 0
     m_Value: 65472
   tint:
-    m_OverrideState: 1
-    m_Value: {r: 0.6509434, g: 0.5434802, b: 0.31011927, a: 1}
+    m_OverrideState: 0
+    m_Value: {r: 1, g: 1, b: 1, a: 1}
   highQualityFiltering:
-    m_OverrideState: 1
-    m_Value: 1
+    m_OverrideState: 0
+    m_Value: 0
   skipIterations:
-    m_OverrideState: 1
-    m_Value: 5
+    m_OverrideState: 0
+    m_Value: 1
   dirtTexture:
     m_OverrideState: 0
     m_Value: {fileID: 0}
@@ -54,8 +54,8 @@ MonoBehaviour:
   m_Name: Corridor Volume Profile
   m_EditorClassIdentifier: 
   components:
-  - {fileID: -5947638485911503964}
   - {fileID: 6652427737064729133}
+  - {fileID: -5300385520825834808}
 --- !u!114 &6652427737064729133
 MonoBehaviour:
   m_ObjectHideFlags: 3

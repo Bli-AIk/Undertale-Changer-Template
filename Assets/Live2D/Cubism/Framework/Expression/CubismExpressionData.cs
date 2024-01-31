@@ -5,7 +5,6 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Framework.Json;
 using System;
 using UnityEngine;
@@ -76,32 +75,32 @@ namespace Live2D.Cubism.Framework.Expression
             expressionData.FadeOutTime = json.FadeOutTime;
             expressionData.Parameters = new SerializableExpressionParameter[json.Parameters.Length];
 
-            for(var i = 0; i < json.Parameters.Length; ++i)
+            for (var i = 0; i < json.Parameters.Length; ++i)
             {
                 expressionData.Parameters[i].Id = json.Parameters[i].Id;
                 expressionData.Parameters[i].Value = json.Parameters[i].Value;
 
-                switch(json.Parameters[i].Blend)
+                switch (json.Parameters[i].Blend)
                 {
                     case "Add":
                         expressionData.Parameters[i].Blend = CubismParameterBlendMode.Additive;
                         break;
+
                     case "Multiply":
                         expressionData.Parameters[i].Blend = CubismParameterBlendMode.Multiply;
                         break;
+
                     case "Overwrite":
                         expressionData.Parameters[i].Blend = CubismParameterBlendMode.Override;
                         break;
+
                     default:
                         expressionData.Parameters[i].Blend = CubismParameterBlendMode.Additive;
                         break;
-
                 }
             }
 
             return expressionData;
         }
-
     }
-
 }

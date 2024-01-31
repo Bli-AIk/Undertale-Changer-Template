@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,14 +6,14 @@ public class FramePlotterScript : MonoBehaviour
     public Vector3[] points;
     public Color[] colors;
     public Vector4[] UVs;
-    MeshFilter meshFilter;
-    MeshRenderer meshRenderer;
-    VertexHelper vh = new VertexHelper();
+    private MeshFilter meshFilter;
+    private MeshRenderer meshRenderer;
+    private VertexHelper vh = new VertexHelper();
 
     [SerializeField] private Material material = null;
     [SerializeField] private Texture mainTex = null;
-    
-    void Start()
+
+    private void Start()
     {
         vh.Clear();
         meshFilter = GetComponent<MeshFilter>();
@@ -27,18 +25,13 @@ public class FramePlotterScript : MonoBehaviour
 
         meshRenderer.material.mainTexture = mainTex;
 
-
-
         Mesh mesh = new Mesh();
         mesh.name = "Quad";
         vh.FillMesh(mesh);
         meshFilter.mesh = mesh;
-
-
     }
 
-    
-    void Update()
+    private void Update()
     {
         vh.Clear();
         for (int i = 0; i < points.Length; i++)

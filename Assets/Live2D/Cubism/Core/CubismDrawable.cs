@@ -5,11 +5,9 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core.Unmanaged;
 using Live2D.Cubism.Framework;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Core
 {
@@ -30,36 +28,29 @@ namespace Live2D.Cubism.Core
         {
             var root = new GameObject("Drawables");
 
-
             // Create drawables.
             var unmanagedDrawables = unmanagedModel.Drawables;
             var buffer = new CubismDrawable[unmanagedDrawables.Count];
-
 
             for (var i = 0; i < buffer.Length; ++i)
             {
                 var proxy = new GameObject();
 
-
                 buffer[i] = proxy.AddComponent<CubismDrawable>();
-
 
                 buffer[i].transform.SetParent(root.transform);
                 buffer[i].Reset(unmanagedModel, i);
             }
 
-
             return root;
         }
 
-        #endregion
-
+        #endregion Factory Methods
 
         /// <summary>
         /// Unmanaged drawables from unmanaged model.
         /// </summary>
         private CubismUnmanagedDrawables UnmanagedDrawables { get; set; }
-
 
         /// <summary>
         /// <see cref="UnmanagedIndex"/> backing field.
@@ -75,7 +66,6 @@ namespace Live2D.Cubism.Core
             get { return _unmanagedIndex; }
             private set { _unmanagedIndex = value; }
         }
-
 
         /// <summary>
         /// Copy of Id.
@@ -156,15 +146,12 @@ namespace Live2D.Cubism.Core
                     .FindCubismModel(true)
                     .Drawables;
 
-
                 // Get addresses.
                 var counts = UnmanagedDrawables.MaskCounts;
                 var indices = UnmanagedDrawables.Masks;
 
-
                 // Pull data.
                 var buffer = new CubismDrawable[counts[UnmanagedIndex]];
-
 
                 for (var i = 0; i < buffer.Length; ++i)
                 {
@@ -175,14 +162,11 @@ namespace Live2D.Cubism.Core
                             continue;
                         }
 
-
                         buffer[i] = drawables[j];
-
 
                         break;
                     }
                 }
-
 
                 return buffer;
             }
@@ -199,10 +183,8 @@ namespace Live2D.Cubism.Core
                 var counts = UnmanagedDrawables.VertexCounts;
                 var positions = UnmanagedDrawables.VertexPositions;
 
-
                 // Pull data.
                 var buffer = new Vector3[counts[UnmanagedIndex]];
-
 
                 for (var i = 0; i < buffer.Length; ++i)
                 {
@@ -211,7 +193,6 @@ namespace Live2D.Cubism.Core
                         positions[UnmanagedIndex][(i * 2) + 1]
                     );
                 }
-
 
                 return buffer;
             }
@@ -228,10 +209,8 @@ namespace Live2D.Cubism.Core
                 var counts = UnmanagedDrawables.VertexCounts;
                 var uvs = UnmanagedDrawables.VertexUvs;
 
-
                 // Pull data.
                 var buffer = new Vector2[counts[UnmanagedIndex]];
-
 
                 for (var i = 0; i < buffer.Length; ++i)
                 {
@@ -240,7 +219,6 @@ namespace Live2D.Cubism.Core
                         uvs[UnmanagedIndex][(i * 2) + 1]
                     );
                 }
-
 
                 return buffer;
             }
@@ -257,21 +235,17 @@ namespace Live2D.Cubism.Core
                 var counts = UnmanagedDrawables.IndexCounts;
                 var indices = UnmanagedDrawables.Indices;
 
-
                 // Pull data.
                 var buffer = new int[counts[UnmanagedIndex]];
-
 
                 for (var i = 0; i < buffer.Length; ++i)
                 {
                     buffer[i] = indices[UnmanagedIndex][i];
                 }
 
-
                 return buffer;
             }
         }
-
 
         /// <summary>
         /// True if double-sided.
@@ -282,7 +256,6 @@ namespace Live2D.Cubism.Core
             {
                 // Get address.
                 var flags = UnmanagedDrawables.ConstantFlags;
-
 
                 // Pull data.
                 return flags[UnmanagedIndex].HasIsDoubleSidedFlag();
@@ -299,7 +272,6 @@ namespace Live2D.Cubism.Core
                 // Get address.
                 var counts = UnmanagedDrawables.MaskCounts;
 
-
                 // Pull data.
                 return counts[UnmanagedIndex] > 0;
             }
@@ -314,7 +286,6 @@ namespace Live2D.Cubism.Core
             {
                 // Get address.
                 var flags = UnmanagedDrawables.ConstantFlags;
-
 
                 // Pull data.
                 return flags[UnmanagedIndex].HasIsInvertedMaskFlag();
@@ -331,7 +302,6 @@ namespace Live2D.Cubism.Core
                 // Get address.
                 var flags = UnmanagedDrawables.ConstantFlags;
 
-
                 // Pull data.
                 return flags[UnmanagedIndex].HasBlendAdditiveFlag();
             }
@@ -347,12 +317,10 @@ namespace Live2D.Cubism.Core
                 // Get address.
                 var flags = UnmanagedDrawables.ConstantFlags;
 
-
                 // Pull data.
                 return flags[UnmanagedIndex].HasBlendMultiplicativeFlag();
             }
         }
-
 
         /// <summary>
         /// Revives instance.

@@ -37,21 +37,21 @@ Rich text input examples:
 </color>Remove color.
 */
 
-DemoBox1\<image=-1><fx=0>* This is a <gradient="White to Yellow - UTC">broken box</gradient><stop>.<stop>.<stop>.<enter>* Haha, we didn't<enter>< >< >make the interface.
-<passText><image=0><fx=3>* <gradient="White to Red - UTC">Huh???</gradient><fx=2><stop><stop><stop><enter>* Well, <stop><image=1><fx=3>you<stop> just<stop> <enter>< >< >take<stop> it<stop> easy<stop>.
-<passText><image=2><fx=2>* Right now,<stop>this dialogue<enter>< >< >is a test for<gradient="White to Yellow - UTC"> <enter>< >< >the typewriter</gradient>.
-<passText><image=0><fx=3>* <j><u><s><t>< ><l><i><k><e>< ><t><h><i><s><stop>.
-<passText><image=0><fx=2><*>< ><S><n><a><p><stop> and it's <d><o><n><e> <stop><enter>< >< ><s><p><e><a><k><stop> a<stop> whole<stop>sentence.<stop><enter>* <stop><stop><stop><gradient="White to Red - UTC">Cool.</gradient>
-<passText><image=2>* What? <stop>Didn't you see it<enter>< >< >clearly?<stop><enter>* Should I slow down then? 
-<passText><image=2><*>< ><stop><S><n><a><p><stop> and it's <d><o><n><e>.<stop><stop><stop>Huh?;
+DemoBox1\<image=-1><fx=0>* This is a <gradient="White to Yellow - UTC">broken box</gradient><stop><stop...><enter>* Haha, we didn't<enter><-  ->make the interface.
+<passText><image=0><fx=3>* <gradient="White to Red - UTC">Huh???</gradient><fx=2><stop><stop><stop><enter>* Well, <stop><image=1><fx=3>you<stop> just<stop> <enter><-  ->take<stop> it<stop> easy<stop>.
+<passText><image=2><fx=2>* Right now,<stop>this dialogue<enter><-  ->is a test for<gradient="White to Yellow - UTC"> <enter><-  ->the typewriter</gradient>.
+<passText><image=0><fx=3>* <j><u><s><t><- -><l><i><k><e><- -><t><h><i><s><stop>.
+<passText><image=0><fx=2><*><- -><S><n><a><p><stop> and it's <d><o><n><e> <stop><enter><-  -><s><p><e><a><k><stop> a<stop> whole<stop>sentence.<stop><enter>* <stop><stop><stop><gradient="White to Red - UTC">Cool.</gradient>
+<passText><image=2>* What? <stop>Didn't you see it<enter><-  ->clearly?<stop><enter>* Should I slow down then? 
+<passText><image=2><*><- -><stop><S><n><a><p><stop> and it's <d><o><n><e>.<stop><stop><stop>Huh?;
 
-Plot\<image=-1><fx=0>* .<stop>.<stop>.<stop>.<stop>.<stop>.
-<passText>* Ah<stop>.<stop>.<stop>.Is there nobody here?<stop>?
+Plot\<image=-1><fx=0>* <stop...><stop...>
+<passText>* Ah<stop><stop...>Is there nobody here?<stop>?
 <passText><image=0><fx=2>* Hello.
-<passText><image=-1><fx=0>* Ah?<stop>Flowey!<stop><enter>* Where have you been hiding,<enter>< >< >you scoundrel?
-<passText><image=2><fx=2>* None of your business.<stop><stop><stop><stop><stop><image=1><enter>* It's time for a battle<enter>< >< >now!;
+<passText><image=-1><fx=0>* Ah?<stop>Flowey!<stop><enter>* Where have you been hiding,<enter><-  ->you scoundrel?
+<passText><image=2><fx=2>* None of your business.<stop><stop><stop><stop><stop><image=1><enter>* It's time for a battle<enter><-  ->now!;
 
 
-Save\<image=-1><fx=0>* (The floor of corridor was<enter>< >< >covered in golden light,filling<enter>< >< >you with <gradient="White to Red - UTC">determination</gradient>.);
+Save\<image=-1><fx=0>* (The floor of corridor was<enter><-  ->covered in golden light,filling<enter><-  ->you with <gradient="White to Red - UTC">determination</gradient>.);
 
-BackMenu\<image=-1><fx=1>* (This is a test text, meow.)<enter>* (Wanna back to the MENU, meow?)<enter><fx=-1><size=5> </size>< >< >< >< >< >< >   Meow<size=5> </size>< >< >< >< >< >< >< > Annoyed<select>BackMenu;
+BackMenu\<image=-1><fx=1>* (This is a test text, meow.)<enter>* (Wanna back to the MENU, meow?)<enter><fx=-1><size=5> </size><-      ->   Meow<size=5> </size><-       -> Annoyed<select>BackMenu;

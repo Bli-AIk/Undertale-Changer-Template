@@ -5,7 +5,7 @@ public class CameraLightController : MonoBehaviour
 {
     public float viewDistance = 10f; // ¿ÉÊÓ·¶Î§µÄ°ë¾¶
 
-    Camera mainCamera;
+    private Camera mainCamera;
 
     private void Start()
     {

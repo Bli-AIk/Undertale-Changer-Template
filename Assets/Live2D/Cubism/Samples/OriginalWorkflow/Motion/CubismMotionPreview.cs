@@ -5,7 +5,6 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core;
 using Live2D.Cubism.Framework.Motion;
 using UnityEngine;
@@ -23,7 +22,7 @@ namespace Live2D.Cubism.Samples.OriginalWorkflow.Motion
         /// <summary>
         /// MotionController to be operated.
         /// </summary>
-        CubismMotionController _motionController;
+        private CubismMotionController _motionController;
 
         /// <summary>
         /// Get motion controller.
@@ -44,14 +43,10 @@ namespace Live2D.Cubism.Samples.OriginalWorkflow.Motion
             PlayIdleAnimation();
         }
 
-
-
         private void PlayIdleAnimation(float index = 0.0f)
         {
             _motionController.PlayAnimation(Animation, isLoop: false, priority: CubismMotionPriority.PriorityIdle);
         }
-
-
 
         /// <summary>
         /// Play specified animation.

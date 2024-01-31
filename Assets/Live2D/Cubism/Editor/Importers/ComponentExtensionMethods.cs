@@ -5,12 +5,10 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Framework;
 using System;
 using System.Linq;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Editor.Importers
 {
@@ -23,16 +21,13 @@ namespace Live2D.Cubism.Editor.Importers
         {
             var component = self.GetComponent(type);
 
-
             if (component != null)
             {
                 return component;
             }
 
-
             return self.gameObject.AddComponent(type);
         }
-
 
         /// <summary>
         /// Checks whether a component should be moved on reimport.

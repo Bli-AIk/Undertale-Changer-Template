@@ -5,11 +5,10 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
+using Live2D.Cubism.Core;
 using System;
 using System.Linq;
-using Live2D.Cubism.Core;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Rendering
 {
@@ -58,7 +57,8 @@ namespace Live2D.Cubism.Rendering
         public bool OverwriteColorForPartMultiplyColors
         {
             get { return _isOverwrittenPartMultiplyColors; }
-            set {
+            set
+            {
                 _isOverwrittenPartMultiplyColors = value;
                 for (int i = 0; i < ChildDrawableRenderers.Length; i++)
                 {
@@ -82,7 +82,8 @@ namespace Live2D.Cubism.Rendering
         public bool OverwriteColorForPartScreenColors
         {
             get { return _isOverwrittenPartScreenColors; }
-            set {
+            set
+            {
                 _isOverwrittenPartScreenColors = value;
                 for (int i = 0; i < ChildDrawableRenderers.Length; i++)
                 {
@@ -186,7 +187,7 @@ namespace Live2D.Cubism.Rendering
             }
         }
 
-#region Unity Events
+        #region Unity Events
 
         private void OnEnable()
         {
@@ -215,6 +216,6 @@ namespace Live2D.Cubism.Rendering
             TryInitialize(_renderController, _part, drawables);
         }
 
-#endregion
+        #endregion Unity Events
     }
 }

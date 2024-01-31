@@ -5,9 +5,7 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Rendering.Masking
 {
@@ -26,11 +24,9 @@ namespace Live2D.Cubism.Rendering.Masking
             var min = self[0].MeshBounds.min;
             var max = self[0].MeshBounds.max;
 
-
             for (var i = 1; i < self.Length; ++i)
             {
                 var boundsI = self[i].MeshBounds;
-
 
                 if (boundsI.min.x < min.x)
                 {
@@ -42,7 +38,6 @@ namespace Live2D.Cubism.Rendering.Masking
                     max.x = boundsI.max.x;
                 }
 
-
                 if (boundsI.min.y < min.y)
                 {
                     min.y = boundsI.min.y;
@@ -53,7 +48,6 @@ namespace Live2D.Cubism.Rendering.Masking
                     max.y = boundsI.max.y;
                 }
             }
-
 
             return new Bounds
             {

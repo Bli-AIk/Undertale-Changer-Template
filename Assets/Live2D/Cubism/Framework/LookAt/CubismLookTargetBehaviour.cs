@@ -5,9 +5,7 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Framework.LookAt
 {
@@ -36,6 +34,6 @@ namespace Live2D.Cubism.Framework.LookAt
             return isActiveAndEnabled;
         }
 
-        #endregion
+        #endregion Implementation of ICubismLookTarget
     }
 }

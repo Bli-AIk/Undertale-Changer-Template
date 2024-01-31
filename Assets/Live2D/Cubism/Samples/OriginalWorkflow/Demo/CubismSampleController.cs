@@ -5,7 +5,6 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core;
 using Live2D.Cubism.Framework;
 using Live2D.Cubism.Framework.Expression;
@@ -88,7 +87,6 @@ namespace Live2D.Cubism.Samples.OriginalWorkflow.Demo
             public HitArea hitArea;
         }
 
-
         /// <summary>
         /// Load model.
         /// </summary>
@@ -101,14 +99,11 @@ namespace Live2D.Cubism.Samples.OriginalWorkflow.Demo
             _expressionController = model.GetComponent<CubismExpressionController>();
             _raycaster = model.GetComponent<CubismRaycaster>();
 
-
             // Set behavior at the end of animation.
             _motionController.AnimationEndHandler = AnimationEnded;
 
-
             // Get up to 4 results of collision detection.
             _raycastResults = new CubismRaycastHit[4];
-
 
             // Cache the drawable in which the component is set.
             {
@@ -116,7 +111,6 @@ namespace Live2D.Cubism.Samples.OriginalWorkflow.Demo
 
                 var hitAreas = Enum.GetValues(typeof(HitArea));
                 var drawables = model.Drawables;
-
 
                 for (var i = 0; i < hitAreas.Length; i++)
                 {
@@ -141,7 +135,6 @@ namespace Live2D.Cubism.Samples.OriginalWorkflow.Demo
             }
         }
 
-
         /// <summary>
         /// Update.
         /// </summary>
@@ -150,17 +143,14 @@ namespace Live2D.Cubism.Samples.OriginalWorkflow.Demo
             // Play if animation is specified.
             SpecifiedAnimationCheck();
 
-
-            if(!Input.GetMouseButtonDown(0))
+            if (!Input.GetMouseButtonDown(0))
             {
                 return;
             }
 
-
             // Cast ray from pointer position.
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             var hitCount = _raycaster.Raycast(ray, _raycastResults);
-
 
             // Motion playback according to the hit location.
             for (var i = 0; i < hitCount; i++)
@@ -173,7 +163,6 @@ namespace Live2D.Cubism.Samples.OriginalWorkflow.Demo
                     {
                         var hitArea = _hasHitDrawables[j].hitArea;
 
-
                         // Tap body.
                         if (hitArea == HitArea.Body)
                         {
@@ -182,7 +171,7 @@ namespace Live2D.Cubism.Samples.OriginalWorkflow.Demo
 
                             Debug.Log("Tap body : Play : " + _tapBodyMotions[motionIndex].name);
 
-                            _motionController.PlayAnimation(_tapBodyMotions[motionIndex], isLoop: false, priority:CubismMotionPriority.PriorityNormal);
+                            _motionController.PlayAnimation(_tapBodyMotions[motionIndex], isLoop: false, priority: CubismMotionPriority.PriorityNormal);
                         }
                         // Tap head.
                         else if (hitArea == HitArea.Head)
@@ -202,22 +191,20 @@ namespace Live2D.Cubism.Samples.OriginalWorkflow.Demo
             }
         }
 
-
         /// <summary>
         /// Check the specified animation and play it.
         /// </summary>
         private void SpecifiedAnimationCheck()
         {
-            if(_bodyAnimation != _loopMotion)
+            if (_bodyAnimation != _loopMotion)
             {
                 _loopMotion = _bodyAnimation;
 
                 Debug.Log("Body animation : Play : " + _loopMotion.name);
 
-                _motionController.PlayAnimation(_loopMotion, priority:CubismMotionPriority.PriorityIdle);
+                _motionController.PlayAnimation(_loopMotion, priority: CubismMotionPriority.PriorityIdle);
             }
         }
-
 
         /// <summary>
         /// Called at the end of the animation.
@@ -226,7 +213,7 @@ namespace Live2D.Cubism.Samples.OriginalWorkflow.Demo
         private void AnimationEnded(float instanceId)
         {
             // Play loop motion.
-            _motionController.PlayAnimation(_loopMotion, priority:CubismMotionPriority.PriorityIdle);
+            _motionController.PlayAnimation(_loopMotion, priority: CubismMotionPriority.PriorityIdle);
 
             Debug.Log("Body animation : Play : " + _loopMotion.name);
         }

@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,6 +13,7 @@ public class PlayerControl : ScriptableObject
 
     [Header("OW背包内显示的AT和DF会-10")]
     public int atk;
+
     public int def;
 
     public string playerName;
@@ -23,14 +23,14 @@ public class PlayerControl : ScriptableObject
 
     public float gameTime;
 
-
     [Header("场景衔接存储")]
     public string lastScene;
-    public string saveScene;
 
+    public string saveScene;
 
     [Header("开启调试")]
     public bool isDebug;
+
     [Header("--调试模式设定--")]
     [Header("锁血")]
     public bool invincible;

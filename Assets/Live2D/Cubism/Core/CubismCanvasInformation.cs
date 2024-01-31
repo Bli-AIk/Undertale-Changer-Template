@@ -5,11 +5,8 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core.Unmanaged;
 using Live2D.Cubism.Framework;
-using UnityEngine;
-
 
 namespace Live2D.Cubism.Core
 {
@@ -28,12 +25,10 @@ namespace Live2D.Cubism.Core
             Reset(unmanagedModel);
         }
 
-
         /// <summary>
         /// Unmanaged canvas information from unmanaged model.
         /// </summary>
         private CubismUnmanagedCanvasInformation UnmanagedCanvasInformation { get; set; }
-
 
         /// <summary>
         /// Width of native model canvas.
@@ -47,7 +42,6 @@ namespace Live2D.Cubism.Core
             }
         }
 
-
         /// <summary>
         /// Height of native model canvas.
         /// </summary>
@@ -59,7 +53,6 @@ namespace Live2D.Cubism.Core
                 return UnmanagedCanvasInformation.CanvasHeight;
             }
         }
-
 
         /// <summary>
         /// Coordinate origin of X axis.
@@ -73,7 +66,6 @@ namespace Live2D.Cubism.Core
             }
         }
 
-
         /// <summary>
         /// Coordinate origin of Y axis.
         /// </summary>
@@ -86,7 +78,6 @@ namespace Live2D.Cubism.Core
             }
         }
 
-
         /// <summary>
         /// Pixels per unit of native model.
         /// </summary>
@@ -98,7 +89,6 @@ namespace Live2D.Cubism.Core
                 return UnmanagedCanvasInformation.PixelsPerUnit;
             }
         }
-
 
         /// <summary>
         /// Revives the instance.

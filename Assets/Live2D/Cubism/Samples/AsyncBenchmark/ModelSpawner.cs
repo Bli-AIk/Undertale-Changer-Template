@@ -5,15 +5,12 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core;
 using Live2D.Cubism.Rendering;
 using System.Collections.Generic;
-using Live2D.Cubism.Framework.Tasking;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = System.Random;
-
 
 namespace Live2D.Cubism.Samples.AsyncBenchmark
 {
@@ -27,7 +24,6 @@ namespace Live2D.Cubism.Samples.AsyncBenchmark
         /// </summary>
         [SerializeField]
         public GameObject ModelPrefab;
-
 
         /// <summary>
         /// UI component representing current model count.
@@ -65,11 +61,9 @@ namespace Live2D.Cubism.Samples.AsyncBenchmark
             // Spawn new instance.
             var instance = Instantiate(ModelPrefab);
 
-
             var random = new Random();
             var offsetX = (float)random.Next(-1000, 1000) / 1000f;
             var offsetY = (float)random.Next(-1000, 1000) / 1000f;
-
 
             var screenToWorld = Camera.main.ScreenToWorldPoint(
                 new Vector3(
@@ -77,16 +71,13 @@ namespace Live2D.Cubism.Samples.AsyncBenchmark
                     Screen.height,
                     Camera.main.nearClipPlane));
 
-
             instance.transform.position = new Vector3(
                 screenToWorld.x * offsetX,
                 screenToWorld.y * offsetY,
                 instance.transform.position.z);
 
-
             // Register instance and update UI.
             Instances.Add(instance);
-
 
             // Make sure to assign a unique sorting order to the instance.
             instance.GetComponent<CubismRenderController>().SortingOrder = Instances.Count;
@@ -111,16 +102,14 @@ namespace Live2D.Cubism.Samples.AsyncBenchmark
                 return;
             }
 
-
             // Remove last instance and update UI.
             DestroyImmediate(Instances[Instances.Count - 1]);
             Instances.RemoveAt(Instances.Count - 1);
 
-
             ModelCountUi.text = Instances.Count.ToString();
         }
 
-        #endregion
+        #endregion Interface for UI Elements
 
         #region Unity Event Handling
 
@@ -133,6 +122,6 @@ namespace Live2D.Cubism.Samples.AsyncBenchmark
             BenchmarkController = GetComponent<BenchmarkController>();
         }
 
-        #endregion
+        #endregion Unity Event Handling
     }
 }

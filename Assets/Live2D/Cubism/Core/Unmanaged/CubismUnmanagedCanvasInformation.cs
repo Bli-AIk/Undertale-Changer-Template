@@ -7,9 +7,7 @@
 
 /* THIS FILE WAS AUTO-GENERATED. ALL CHANGES WILL BE LOST UPON RE-GENERATION. */
 
-
 using System;
-
 
 namespace Live2D.Cubism.Core.Unmanaged
 {
@@ -60,7 +58,7 @@ namespace Live2D.Cubism.Core.Unmanaged
             float[] canvasOrigin = new float[2];
             float[] pixelsPerUnitBuffer = new float[1];
 
-            fixed( float* canvasSizePtr = canvasSize, canvasOriginPtr = canvasOrigin, pixelsPerUnitPtr = pixelsPerUnitBuffer )
+            fixed (float* canvasSizePtr = canvasSize, canvasOriginPtr = canvasOrigin, pixelsPerUnitPtr = pixelsPerUnitBuffer)
             {
                 CubismCoreDll.ReadCanvasInfo(modelPtr, (IntPtr)canvasSizePtr, (IntPtr)canvasOriginPtr, (IntPtr)pixelsPerUnitPtr);
 
@@ -72,7 +70,6 @@ namespace Live2D.Cubism.Core.Unmanaged
             }
         }
 
-        #endregion
-
+        #endregion Ctors
     }
 }

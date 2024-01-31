@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+
 /// <summary>
 /// 基于对象池 控制音频
 /// </summary>
@@ -9,10 +10,10 @@ public class AudioController : ObjectPool
 {
     public static AudioController instance;
     public AudioSource audioSource;
+
     private void Awake()
     {
         instance = this;
-
 
         obj = new GameObject();
         AudioPlayer audioPlayer = obj.AddComponent<AudioPlayer>();
@@ -22,10 +23,8 @@ public class AudioController : ObjectPool
         obj.SetActive(false);
         FillPool();
         audioSource = GetComponent<AudioSource>();
-
-
-
     }
+
     public void GetFx(AudioClip list, float volume = 0.5f, float pitch = 1, AudioMixerGroup audioMixerGroup = null)
     {
         GameObject fx = GetFromPool();

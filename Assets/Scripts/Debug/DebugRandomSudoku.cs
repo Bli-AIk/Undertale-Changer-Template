@@ -1,24 +1,25 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class DebugRandomSudoku : MonoBehaviour
 {
-
     //æ≈π¨∏Ò≤‚ ‘
     public List<DebugSudoku> sudokos;
+
     public int randomNum;
-    
-    void Start()
+
+    private void Start()
     {
         Randomer();
     }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Space))
             Randomer();
     }
-    void Randomer()
+
+    private void Randomer()
     {
         if (randomNum > 0)
             for (int i = 0; i < randomNum; i++)

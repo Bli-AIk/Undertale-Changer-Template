@@ -5,11 +5,9 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Rendering.Masking;
 using UnityEditor;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Editor.Inspectors
 {
@@ -30,13 +28,11 @@ namespace Live2D.Cubism.Editor.Inspectors
         {
             var texture = target as CubismMaskTexture;
 
-
             // Fail silently.
             if (texture == null)
             {
                 return;
             }
-
 
             // Show settings.
             EditorGUI.BeginChangeCheck();
@@ -51,7 +47,7 @@ namespace Live2D.Cubism.Editor.Inspectors
             EditorGUI.indentLevel++;
             texture.Size = EditorGUILayout.IntField("Size (In Pixels)", texture.Size);
             texture.Subdivisions = EditorGUILayout.IntSlider("Subdivisions", texture.Subdivisions, 1, 5);
-            EditorGUILayout.ObjectField("Render Texture (Read-only)", (RenderTexture) texture, typeof(RenderTexture), false);
+            EditorGUILayout.ObjectField("Render Texture (Read-only)", (RenderTexture)texture, typeof(RenderTexture), false);
             EditorGUI.indentLevel--;
 
             EditorGUILayout.Space();
@@ -77,7 +73,6 @@ namespace Live2D.Cubism.Editor.Inspectors
             }
             EditorGUI.indentLevel--;
 
-
             // Save any changes.
             if (EditorGUI.EndChangeCheck())
             {
@@ -85,6 +80,6 @@ namespace Live2D.Cubism.Editor.Inspectors
             }
         }
 
-        #endregion
+        #endregion Editor
     }
 }

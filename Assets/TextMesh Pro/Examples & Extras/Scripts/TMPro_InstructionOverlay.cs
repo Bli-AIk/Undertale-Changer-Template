@@ -1,14 +1,11 @@
 ﻿using UnityEngine;
-using System.Collections;
-
 
 namespace TMPro.Examples
 {
-    
     public class TMPro_InstructionOverlay : MonoBehaviour
     {
-
-        public enum FpsCounterAnchorPositions { TopLeft, BottomLeft, TopRight, BottomRight };
+        public enum FpsCounterAnchorPositions
+        { TopLeft, BottomLeft, TopRight, BottomRight };
 
         public FpsCounterAnchorPositions AnchorPosition = FpsCounterAnchorPositions.BottomLeft;
 
@@ -21,7 +18,7 @@ namespace TMPro.Examples
 
         //private FpsCounterAnchorPositions last_AnchorPosition;
 
-        void Awake()
+        private void Awake()
         {
             if (!enabled)
                 return;
@@ -32,7 +29,6 @@ namespace TMPro.Examples
             m_frameCounter_transform = frameCounter.transform;
             m_frameCounter_transform.parent = m_camera.transform;
             m_frameCounter_transform.localRotation = Quaternion.identity;
-
 
             m_TextMeshPro = frameCounter.AddComponent<TextMeshPro>();
             m_TextMeshPro.font = Resources.Load<TMP_FontAsset>("Fonts & Materials/LiberationSans SDF");
@@ -47,15 +43,10 @@ namespace TMPro.Examples
             //last_AnchorPosition = AnchorPosition;
 
             m_TextMeshPro.text = instructions;
-
         }
 
-
-
-
-        void Set_FrameCounter_Position(FpsCounterAnchorPositions anchor_position)
+        private void Set_FrameCounter_Position(FpsCounterAnchorPositions anchor_position)
         {
-
             switch (anchor_position)
             {
                 case FpsCounterAnchorPositions.TopLeft:
@@ -63,16 +54,19 @@ namespace TMPro.Examples
                     m_textContainer.anchorPosition = TextContainerAnchors.TopLeft;
                     m_frameCounter_transform.position = m_camera.ViewportToWorldPoint(new Vector3(0, 1, 100.0f));
                     break;
+
                 case FpsCounterAnchorPositions.BottomLeft:
                     //m_TextMeshPro.anchor = AnchorPositions.BottomLeft;
                     m_textContainer.anchorPosition = TextContainerAnchors.BottomLeft;
                     m_frameCounter_transform.position = m_camera.ViewportToWorldPoint(new Vector3(0, 0, 100.0f));
                     break;
+
                 case FpsCounterAnchorPositions.TopRight:
                     //m_TextMeshPro.anchor = AnchorPositions.TopRight;
                     m_textContainer.anchorPosition = TextContainerAnchors.TopRight;
                     m_frameCounter_transform.position = m_camera.ViewportToWorldPoint(new Vector3(1, 1, 100.0f));
                     break;
+
                 case FpsCounterAnchorPositions.BottomRight:
                     //m_TextMeshPro.anchor = AnchorPositions.BottomRight;
                     m_textContainer.anchorPosition = TextContainerAnchors.BottomRight;

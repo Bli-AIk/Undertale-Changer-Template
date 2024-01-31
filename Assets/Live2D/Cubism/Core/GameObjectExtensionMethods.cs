@@ -5,9 +5,7 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Core
 {
@@ -29,7 +27,6 @@ namespace Live2D.Cubism.Core
             {
                 return null;
             }
-
 
             return self.transform.FindCubismModel(includeParents);
         }

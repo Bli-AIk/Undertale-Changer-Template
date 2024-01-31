@@ -5,11 +5,9 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using System;
 using UnityEditor;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Editor.Importers
 {
@@ -24,12 +22,10 @@ namespace Live2D.Cubism.Editor.Importers
         /// </summary>
         public string AssetPath { get; private set; }
 
-
         /// <summary>
         /// Imports the corresponding asset.
         /// </summary>
         public abstract void Import();
-
 
         /// <summary>
         /// Saves the importer state and reimports the asset.
@@ -38,14 +34,12 @@ namespace Live2D.Cubism.Editor.Importers
         {
             var assetImporter = AssetImporter.GetAtPath(AssetPath);
 
-
             assetImporter.userData = JsonUtility.ToJson(this);
-
 
             assetImporter.SaveAndReimport();
         }
 
-#region ICubismImporter
+        #region ICubismImporter
 
         /// <summary>
         /// Sets the asset path.
@@ -71,6 +65,6 @@ namespace Live2D.Cubism.Editor.Importers
             Save();
         }
 
-#endregion
+        #endregion ICubismImporter
     }
 }

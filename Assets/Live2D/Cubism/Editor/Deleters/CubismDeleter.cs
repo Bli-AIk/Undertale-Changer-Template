@@ -5,11 +5,8 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using System;
 using System.Collections.Generic;
-using UnityEngine;
-
 
 namespace Live2D.Cubism.Editor.Deleters
 {
@@ -38,13 +35,11 @@ namespace Live2D.Cubism.Editor.Deleters
         {
             var deleterEntry = _registry.Find(e => assetPath.EndsWith(e.FileExtension));
 
-
             // Return early in case no valid deleter is registered.
             if (deleterEntry.DeleterType == null)
             {
                 return null;
             }
-
 
             var deleter = Activator.CreateInstance(deleterEntry.DeleterType) as ICubismDeleter;
 
@@ -54,10 +49,8 @@ namespace Live2D.Cubism.Editor.Deleters
                 deleter.SetAssetPath(assetPath);
             }
 
-
             return deleter;
         }
-
 
         #region Registry
 
@@ -77,12 +70,10 @@ namespace Live2D.Cubism.Editor.Deleters
             public string FileExtension;
         }
 
-
         /// <summary>
         /// List of registered <see cref="ICubismDeleter"/>s.
         /// </summary>
         private static List<DeleterEntry> _registry = new List<DeleterEntry>();
-
 
         /// <summary>
         /// Registers an deleter type.
@@ -98,6 +89,6 @@ namespace Live2D.Cubism.Editor.Deleters
             });
         }
 
-        #endregion
+        #endregion Registry
     }
 }

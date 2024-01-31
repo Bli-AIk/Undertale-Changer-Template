@@ -5,10 +5,8 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Framework.Tasking;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Samples.AsyncBenchmark
 {
@@ -27,7 +25,7 @@ namespace Live2D.Cubism.Samples.AsyncBenchmark
         /// </summary>
         private bool LastEnableSync { get; set; }
 
-       #region Unity Event Handling
+        #region Unity Event Handling
 
         /// <summary>
         /// Called by Unity. Enables/Disables async task handler.
@@ -39,7 +37,6 @@ namespace Live2D.Cubism.Samples.AsyncBenchmark
                 return;
             }
 
-
             if (EnableAsync)
             {
                 CubismBuiltinAsyncTaskHandler.Activate();
@@ -49,10 +46,8 @@ namespace Live2D.Cubism.Samples.AsyncBenchmark
                 CubismBuiltinAsyncTaskHandler.Deactivate();
             }
 
-
             LastEnableSync = EnableAsync;
         }
-
 
         /// <summary>
         /// Called by Unity. Disables async task handler.
@@ -61,10 +56,9 @@ namespace Live2D.Cubism.Samples.AsyncBenchmark
         {
             EnableAsync = false;
 
-
             Update();
         }
 
-        #endregion
+        #endregion Unity Event Handling
     }
 }

@@ -5,7 +5,6 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 namespace Live2D.Cubism.Core
 {
     /// <summary>
@@ -21,7 +20,7 @@ namespace Live2D.Cubism.Core
         /// <param name="task"></param>
         public delegate void CubismTaskHandler(ICubismTask task);
 
-        #endregion
+        #endregion Delegates
 
         #region Events
 
@@ -30,7 +29,7 @@ namespace Live2D.Cubism.Core
         /// </summary>
         public static CubismTaskHandler OnTask;
 
-        #endregion
+        #endregion Events
 
         /// <summary>
         /// Enqeues a <see cref="ICubismTask"/>.
@@ -43,10 +42,8 @@ namespace Live2D.Cubism.Core
             {
                 task.Execute();
 
-
                 return;
             }
-
 
             OnTask(task);
         }

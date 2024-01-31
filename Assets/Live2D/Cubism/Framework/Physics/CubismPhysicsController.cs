@@ -5,13 +5,11 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
-using System;
 using Live2D.Cubism.Core;
 using Live2D.Cubism.Rendering;
 using Live2D.Cubism.Rendering.Masking;
+using System;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Framework.Physics
 {
@@ -33,19 +31,16 @@ namespace Live2D.Cubism.Framework.Physics
         [SerializeField]
         private CubismPhysicsRig _rig;
 
-
         /// <summary>
         /// Cubism model parameters for simulation.
         /// </summary>
         public CubismParameter[] Parameters { get; private set; }
-
 
         /// <summary>
         /// Model has update controller component.
         /// </summary>
         [HideInInspector]
         public bool HasUpdateController { get; set; }
-
 
         public int ExecutionOrder
         {
@@ -61,13 +56,11 @@ namespace Live2D.Cubism.Framework.Physics
         {
             var deltaTime = Time.deltaTime;
 
-
             // Use fixed delta time if required.
             if (CubismPhysics.UseFixedDeltaTime)
             {
                 deltaTime = Time.fixedDeltaTime;
             }
-
 
             // Evaluate rig.
             Rig.Evaluate(deltaTime);
@@ -156,16 +149,13 @@ namespace Live2D.Cubism.Framework.Physics
                 return;
             }
 
-
             // Initialize rig.
             Rig.Controller = this;
-
 
             for (var i = 0; i < Rig.SubRigs.Length; ++i)
             {
                 Rig.SubRigs[i].Rig = Rig;
             }
-
 
             Parameters = this.FindCubismModel().Parameters;
 
@@ -193,6 +183,6 @@ namespace Live2D.Cubism.Framework.Physics
             }
         }
 
-    #endregion
+        #endregion Unity Event Handling
     }
 }

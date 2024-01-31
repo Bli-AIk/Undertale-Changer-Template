@@ -40,18 +40,18 @@
 </color>去除颜色
 */
 
-DemoBox1\<image=-1><fx=0>* 这是个<gradient="White to Yellow - UTC">破箱子</gradient><stop>.<stop>.<stop>.<enter>* 哈哈，咱没做界面。
-<passText><image=0><fx=3>* <gradient="White to Red - UTC">啊？？？</gradient><fx=2><stop><stop><stop>怎么说，<stop><image=1><fx=3><enter>< >< >你<stop>先<stop>别<stop>急<stop>。
-<passText><image=2><fx=2>* 现在捏，<stop>这个对话是测试<gradient="White to Yellow - UTC"><enter>< >< >打字机</gradient>来的，<fx=3><stop><image=0><就><像><这><样>。
-<passText><image=0><fx=2><*>< ><啪><的><一><下><就><说><完><了><一><句><话><。><enter>< >< ><stop><stop><stop><gradient="White to Red - UTC">炫。</gradient>
-<passText><image=2>* 啥？<stop>你没看清？<stop><enter>< >< >那我慢点？<stop><stop><stop><stop><stop><enter><*>< ><stop><啪><的><stop><一><下><stop><就><说><stop><完><了><stop><。><stop><stop><stop>蛤？;
+DemoBox1\<image=-1><fx=0>* 这是个<gradient="White to Yellow - UTC">破箱子</gradient><stop><stop...><enter>* 哈哈，咱没做界面。
+<passText><image=0><fx=3>* <gradient="White to Red - UTC">啊？？？</gradient><fx=2><stop*3>怎么说，<stop><image=1><fx=3><enter><-  ->你<stop>先<stop>别<stop>急<stop>。
+<passText><image=2><fx=2>* 现在捏，<stop>这个对话是测试<gradient="White to Yellow - UTC"><enter><-  ->打字机</gradient>来的，<fx=3><stop><image=0><-就像这样->。
+<passText><image=0><fx=2><-* 啪的一下就说完了一句话。-><enter><-  -><stop*3><gradient="White to Red - UTC">炫。</gradient>
+<passText><image=2>* 啥？<stop>你没看清？<stop><enter><-  ->那我慢点？<stop*5><enter><-* -><stop><-啪的-><stop><-一下-><stop><-就说-><stop><-完了-><stop><-。-><stop*3>蛤？;
 
-Plot\<image=-1><fx=0>* .<stop>.<stop>.<stop>.<stop>.<stop>.
-<passText>* 啊<stop>.<stop>.<stop>.没有人？<stop>？
+Plot\<image=-1><fx=0>* <stop...><stop...>
+<passText>* 啊<stop><stop...>没有人？<stop>？
 <passText><image=0><fx=2>* 你好。
 <passText><image=-1><fx=0>* 啊？<stop>Flowey！<stop><enter>* 你这家伙躲哪去了？
-<passText><image=2><fx=2>* 要你管。<stop><stop><stop><stop><stop><image=1>现在该对战辣！;
+<passText><image=2><fx=2>* 要你管。<stop*5><image=1>现在该对战辣！;
 
-Save\<image=-1><fx=0>* (长廊的地板上铺满了金色的光芒，<enter>< >< >这使你充满了<gradient="White to Red - UTC">决心</gradient>。);
+Save\<image=-1><fx=0>* (长廊的地板上铺满了金色的光芒，<enter><-  ->这使你充满了<gradient="White to Red - UTC">决心</gradient>。);
 
-BackMenu\<image=-1><fx=1>* (这是测试文本喵。)<enter>* (要回到MENU场景喵？)<enter><fx=-1><size=5> </size>< >< >< >< >< >< >  喵<size=5> </size>< >< >< >< >< >< >< >  嬲<select>BackMenu;
+BackMenu\<image=-1><fx=1>* (这是测试文本喵。)<enter>* (要回到MENU场景喵？)<enter><fx=-1><size=5> </size><-      ->  喵<size=5> </size><-       ->  嬲<select>BackMenu;

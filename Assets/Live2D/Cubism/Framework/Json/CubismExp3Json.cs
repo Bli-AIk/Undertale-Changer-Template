@@ -5,10 +5,8 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using System;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Framework.Json
 {
@@ -44,7 +42,7 @@ namespace Live2D.Cubism.Framework.Json
                 : LoadFrom(exp3JsonAsset.text);
         }
 
-        #endregion
+        #endregion Load Methods
 
         #region Json Data
 
@@ -72,7 +70,7 @@ namespace Live2D.Cubism.Framework.Json
         [SerializeField]
         public SerializableExpressionParameter[] Parameters;
 
-        #endregion
+        #endregion Json Data
 
         #region Json Helpers
 
@@ -101,7 +99,6 @@ namespace Live2D.Cubism.Framework.Json
             public string Blend;
         }
 
-        #endregion
-
+        #endregion Json Helpers
     }
 }

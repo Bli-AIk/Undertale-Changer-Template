@@ -5,7 +5,6 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core;
 using UnityEngine;
 
@@ -42,8 +41,6 @@ namespace Live2D.Cubism.Framework
         [HideInInspector]
         public bool HasUpdateController { get; set; }
 
-
-
         /// <summary>
         /// Called by cubism update controller. Order to invoke OnLateUpdate.
         /// </summary>
@@ -59,7 +56,6 @@ namespace Live2D.Cubism.Framework
         {
             get { return false; }
         }
-
 
         public void Refresh()
         {
@@ -95,42 +91,40 @@ namespace Live2D.Cubism.Framework
             SaveParameters();
         }
 
-
-
         /// <summary>
         /// Save model parameters value and parts opacity.
         /// </summary>
         public void SaveParameters()
         {
             // Fail silently...
-            if(!enabled)
+            if (!enabled)
             {
                 return;
             }
 
             // save parameters value
-            if(DestinationParameters != null && _parameterValues == null)
+            if (DestinationParameters != null && _parameterValues == null)
             {
                 _parameterValues = new float[DestinationParameters.Length];
             }
 
-            if(_parameterValues != null)
+            if (_parameterValues != null)
             {
-                for(var i = 0; i < _parameterValues.Length; ++i)
+                for (var i = 0; i < _parameterValues.Length; ++i)
                 {
                     _parameterValues[i] = DestinationParameters[i].Value;
                 }
             }
 
             // save parts opacity
-            if(DestinationParts != null && _partOpacities == null)
+            if (DestinationParts != null && _partOpacities == null)
             {
                 _partOpacities = new float[DestinationParts.Length];
             }
 
-            if(_partOpacities != null)
+            if (_partOpacities != null)
             {
-                for(var i = 0; i < _partOpacities.Length; ++i)
+                for (var i = 0; i < _partOpacities.Length; ++i)
                 {
                     _partOpacities[i] = DestinationParts[i].Opacity;
                 }
@@ -143,24 +137,24 @@ namespace Live2D.Cubism.Framework
         public void RestoreParameters()
         {
             // Fail silently...
-            if(!enabled)
+            if (!enabled)
             {
                 return;
             }
 
             // restore parameters value
-            if(_parameterValues != null)
+            if (_parameterValues != null)
             {
-                for(var i = 0; i < _parameterValues.Length; ++i)
+                for (var i = 0; i < _parameterValues.Length; ++i)
                 {
                     DestinationParameters[i].Value = _parameterValues[i];
                 }
             }
 
             // restore parts opacity
-            if(_partOpacities != null)
+            if (_partOpacities != null)
             {
-                for(var i = 0; i < _partOpacities.Length; ++i)
+                for (var i = 0; i < _partOpacities.Length; ++i)
                 {
                     DestinationParts[i].Opacity = _partOpacities[i];
                 }
@@ -175,6 +169,5 @@ namespace Live2D.Cubism.Framework
             // Initialize cache.
             Refresh();
         }
-
     }
 }

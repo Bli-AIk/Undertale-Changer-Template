@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using TMPro;
 using System;
-using DG.Tweening.Core.Easing;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+
 /// <summary>
 /// 控制Menu，sodayo)
 /// </summary>
@@ -11,9 +10,10 @@ public class MenuController : MonoBehaviour
 {
     [Header("玩家名-LV-时间-位置-具体选项-底部字")]
     public List<TextMeshPro> tmps;
-    int select, selectMax = 5;
+
+    private int select, selectMax = 5;
     public int layer;
-    bool setData;
+    private bool setData;
 
     public int saveNum;
 
@@ -26,8 +26,8 @@ public class MenuController : MonoBehaviour
             tmps.Add(transform.GetChild(i).GetComponent<TextMeshPro>());
         }
     }
-    
-    void Start()
+
+    private void Start()
     {
         setData = false;
         layer = 0;
@@ -37,7 +37,8 @@ public class MenuController : MonoBehaviour
         saveNum = MainControl.instance.dataNum;
         LoadLayer0();
     }
-    void LoadLayer0()
+
+    private void LoadLayer0()
     {
         PlayerControl playerControl = SaveController.LoadData("Data" + saveNum);
         tmps[0].text = playerControl.playerName;
@@ -52,7 +53,6 @@ public class MenuController : MonoBehaviour
 
     private void Update()
     {
-
         if (MainControl.instance.OverworldControl.isSetting || MainControl.instance.OverworldControl.pause)
             return;
 
@@ -106,12 +106,15 @@ public class MenuController : MonoBehaviour
                         case 0:
                             MainControl.instance.OutBlack(MainControl.instance.PlayerControl.saveScene, Color.black, true);
                             break;
+
                         case 1:
                             MainControl.instance.OutBlack("Rename", Color.black, true);
                             break;
+
                         case 2:
                             CanvasController.instance.InSetting();
                             break;
+
                         case 3:
                             CanvasController.instance.settingLevel = 2;
                             goto case 2;
@@ -123,9 +126,11 @@ public class MenuController : MonoBehaviour
                             Flash();
                             AudioController.instance.GetFx(1, MainControl.instance.AudioControl.fxClipUI);
                             break;
+
                         case 5:
                             Application.Quit();
                             break;
+
                         default:
                             goto case 5;
                     }
@@ -139,6 +144,7 @@ public class MenuController : MonoBehaviour
                             select = 3;
                             LoadLayer0();
                             break;
+
                         case 3:
                             AudioController.instance.GetFx(1, MainControl.instance.AudioControl.fxClipUI);
                             if (saveNum == (SaveController.GetDataNum() - 1))//新建
@@ -156,6 +162,7 @@ public class MenuController : MonoBehaviour
                                 LoadLayer0();
                             }
                             break;
+
                         case 4:
                             if (SaveController.GetDataNum() - 1 <= 0)
                                 goto case 5;
@@ -164,6 +171,7 @@ public class MenuController : MonoBehaviour
                                 saveNum = SaveController.GetDataNum() - 1;
                             LoadLayer0();
                             break;
+
                         case 5:
                             if (MainControl.instance.dataNum == saveNum)
                             {
@@ -188,10 +196,9 @@ public class MenuController : MonoBehaviour
                 AudioController.instance.GetFx(1, MainControl.instance.AudioControl.fxClipUI);
             }
         }
-          
-
     }
-   void Flash()
+
+    private void Flash()
     {
         List<string> list = new List<string>();
         for (int i = 0; i < 6; i++)
@@ -218,9 +225,9 @@ public class MenuController : MonoBehaviour
                      + list[4] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, 0 == (SaveController.GetDataNum() - 1) ? "Menu8" : "Menu11") + "</color> "
                      + list[5] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Menu9") + "</color>";
     }
-    void FixedUpdate()
+
+    private void FixedUpdate()
     {
         tmps[2].text = MainControl.instance.GetRealTime((int)MainControl.instance.PlayerControl.gameTime);
     }
-   
 }

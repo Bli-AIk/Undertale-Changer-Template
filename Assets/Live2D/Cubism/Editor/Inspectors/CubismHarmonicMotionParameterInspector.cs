@@ -5,7 +5,6 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Framework.HarmonicMotion;
 using UnityEditor;
 
@@ -30,11 +29,9 @@ namespace Live2D.Cubism.Editor.Inspectors
                 return;
             }
 
-
             serializedObject.Update();
 
             EditorGUI.BeginChangeCheck();
-
 
             // Display channel.
             var channel = serializedObject.FindProperty("Channel");
@@ -56,7 +53,6 @@ namespace Live2D.Cubism.Editor.Inspectors
             var duration = serializedObject.FindProperty("Duration");
             EditorGUILayout.PropertyField(duration);
 
-
             // Save any changes.
             if (EditorGUI.EndChangeCheck())
             {
@@ -64,6 +60,6 @@ namespace Live2D.Cubism.Editor.Inspectors
             }
         }
 
-        #endregion
+        #endregion Editor
     }
 }

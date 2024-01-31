@@ -5,11 +5,9 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core;
 using System;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Framework.Physics
 {
@@ -107,7 +105,6 @@ namespace Live2D.Cubism.Framework.Physics
         {
             var parentGravity = Vector2.zero;
 
-
             if (CubismPhysics.UseAngleCorrection)
             {
                 if (particleIndex < 2)
@@ -127,9 +124,7 @@ namespace Live2D.Cubism.Framework.Physics
                 parentGravity.y *= -1.0f;
             }
 
-
             var outputValue = CubismPhysicsMath.DirectionToRadian(parentGravity, translation);
-
 
             if (IsInverted)
             {
@@ -179,6 +174,7 @@ namespace Live2D.Cubism.Framework.Physics
                             GetOutputTranslationX;
                     }
                     break;
+
                 case CubismPhysicsSourceComponent.Y:
                     {
                         GetScale =
@@ -188,6 +184,7 @@ namespace Live2D.Cubism.Framework.Physics
                             GetOutputTranslationY;
                     }
                     break;
+
                 case CubismPhysicsSourceComponent.Angle:
                     {
                         GetScale =

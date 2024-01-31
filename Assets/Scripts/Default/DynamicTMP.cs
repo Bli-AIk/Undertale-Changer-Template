@@ -1,19 +1,22 @@
-﻿using UnityEngine;
-using TMPro;
+﻿using TMPro;
+using UnityEngine;
+
 /// <summary>
 /// 给字体添加各种奇奇怪怪的变形/位移/抖动 巴拉巴拉
 /// </summary>
 public class DynamicTMP : MonoBehaviour
 {
-    TMP_Text tmp;
+    private TMP_Text tmp;
     public int mode;
-    float randomStart;
+    private float randomStart;
+
     private void Start()
     {
         tmp = GetComponent<TMP_Text>();
         randomStart = Random.Range(2, 2.5f);
     }
-    void FixedUpdate()
+
+    private void FixedUpdate()
     {
         tmp.ForceMeshUpdate();
 
@@ -34,10 +37,10 @@ public class DynamicTMP : MonoBehaviour
                         var orig = verts[charInfo.vertexIndex + j];
                         //动画
                         verts[charInfo.vertexIndex + j] = orig + random;
-
                     }
                 }
                 break;
+
             case 1://类似于原版战斗内的我方对话抖动：字符随机时间随机一个抖那么一下
 
                 int randomIs = Random.Range(0, 120);
@@ -54,12 +57,11 @@ public class DynamicTMP : MonoBehaviour
                             var orig = verts[charInfo.vertexIndex + i];
                             //动画
                             verts[charInfo.vertexIndex + i] = orig + random;
-
                         }
                     }
-
                 }
                 break;
+
             case 2://整齐划一的抖动
                 Vector3 randomer = new Vector3(Random.Range(-0.05f, 0.05f), Random.Range(-0.05f, 0.05f), 0);
                 for (int i = 0; i < textInfo.characterCount; i++)
@@ -68,16 +70,16 @@ public class DynamicTMP : MonoBehaviour
                     if (!charInfo.isVisible) continue;
 
                     var verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
-                    
+
                     for (int j = 0; j < 4; j++)
                     {
                         var orig = verts[charInfo.vertexIndex + j];
                         //动画
                         verts[charInfo.vertexIndex + j] = orig + randomer;
-
                     }
                 }
                 break;
+
             case 3://抽搐的抖动
                 for (int i = 0; i < textInfo.characterCount; i++)
                 {
@@ -87,19 +89,18 @@ public class DynamicTMP : MonoBehaviour
                     var verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
                     for (int j = 0; j < 4; j++)
                     {
-
                         var orig = verts[charInfo.vertexIndex + j];
                         //动画
-                        verts[charInfo.vertexIndex + j] = orig + new Vector3(0, 0.025f * Mathf.Sin(Random.Range(1,2.5f) * Time.time + orig.x * 0.45f), 0);
+                        verts[charInfo.vertexIndex + j] = orig + new Vector3(0, 0.025f * Mathf.Sin(Random.Range(1, 2.5f) * Time.time + orig.x * 0.45f), 0);
 
                         orig = verts[charInfo.vertexIndex + j];
                         if (Random.Range(0, 5) != 0)
                             continue;
                         verts[charInfo.vertexIndex + j] = orig + new Vector3(Random.Range(-0.05f, 0.05f), Random.Range(-0.05f, 0.05f), 0);
-
                     }
                 }
                 break;
+
             case 4://小幽灵式抽搐的抖动
                 for (int i = 0; i < textInfo.characterCount; i++)
                 {
@@ -109,16 +110,15 @@ public class DynamicTMP : MonoBehaviour
                     var verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
                     for (int j = 0; j < 4; j++)
                     {
-
                         var orig = verts[charInfo.vertexIndex + j];
                         //动画
                         verts[charInfo.vertexIndex + j] = orig + new Vector3(0, 0.05f * Mathf.Cos(randomStart * (Time.time) + orig.x * 0.45f), 0);
                         orig = verts[charInfo.vertexIndex + j];
                         verts[charInfo.vertexIndex + j] = orig + new Vector3(Random.Range(-0.01f, 0.01f), Random.Range(-0.01f, 0.01f), 0);
-
                     }
                 }
                 break;
+
             case 5://小幽灵字符漂浮
                 for (int i = 0; i < textInfo.characterCount; i++)
                 {
@@ -128,7 +128,6 @@ public class DynamicTMP : MonoBehaviour
                     var verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
                     for (int j = 0; j < 4; j++)
                     {
-
                         var orig = verts[charInfo.vertexIndex + j];
                         //动画
                         verts[charInfo.vertexIndex + j] = orig + new Vector3(0, 0.05f * Mathf.Sin(randomStart * (Time.time) + orig.x * 0.45f), 0);

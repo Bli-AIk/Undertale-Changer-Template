@@ -7,7 +7,6 @@
 
 /* THIS FILE WAS AUTO-GENERATED. ALL CHANGES WILL BE LOST UPON RE-GENERATION. */
 
-
 namespace Live2D.Cubism.Core.Unmanaged
 {
     /// <summary>
@@ -124,6 +123,5 @@ namespace Live2D.Cubism.Core.Unmanaged
         {
             return (self & (1 << 6)) == (1 << 6);
         }
-
     }
 }

@@ -5,10 +5,8 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Rendering.Masking;
 using UnityEditor;
-
 
 namespace Live2D.Cubism.Editor.Inspectors
 {
@@ -27,24 +25,19 @@ namespace Live2D.Cubism.Editor.Inspectors
         {
             var controller = target as CubismMaskController;
 
-
             // Fail silently.
             if (controller == null)
             {
                 return;
             }
 
-
             // Draw default inspector.
             base.OnInspectorGUI();
-
 
             // Draw mask texture.
             EditorGUI.BeginChangeCheck();
 
-
             controller.MaskTexture = EditorGUILayout.ObjectField("Mask Texture", controller.MaskTexture, typeof(CubismMaskTexture), true) as CubismMaskTexture;
-
 
             // Apply changes.
             if (EditorGUI.EndChangeCheck())
@@ -53,6 +46,6 @@ namespace Live2D.Cubism.Editor.Inspectors
             }
         }
 
-        #endregion
+        #endregion Editor
     }
 }

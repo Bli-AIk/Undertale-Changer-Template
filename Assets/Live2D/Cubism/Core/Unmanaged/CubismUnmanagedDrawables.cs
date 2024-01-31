@@ -7,10 +7,8 @@
 
 /* THIS FILE WAS AUTO-GENERATED. ALL CHANGES WILL BE LOST UPON RE-GENERATION. */
 
-
 using System;
 using System.Runtime.InteropServices;
-
 
 namespace Live2D.Cubism.Core.Unmanaged
 {
@@ -109,7 +107,6 @@ namespace Live2D.Cubism.Core.Unmanaged
         /// </summary>>
         public CubismUnmanagedIntArrayView ParentPartIndices { get; private set; }
 
-
         /// <summary>
         /// Resets all dynamic drawable flags.
         /// </summary>
@@ -118,12 +115,10 @@ namespace Live2D.Cubism.Core.Unmanaged
             CubismCoreDll.ResetDrawableDynamicFlags(ModelPtr);
         }
 
-
         /// <summary>
         /// Native model pointer.
         /// </summary>
-        private IntPtr ModelPtr {get; set;}
-
+        private IntPtr ModelPtr { get; set; }
 
         #region Ctors
 
@@ -134,22 +129,18 @@ namespace Live2D.Cubism.Core.Unmanaged
         {
             ModelPtr = modelPtr;
 
-
             var length = 0;
             CubismUnmanagedIntArrayView length2;
 
-
             Count = CubismCoreDll.GetDrawableCount(modelPtr);
-
 
             length = CubismCoreDll.GetDrawableCount(modelPtr);
             Ids = new string[length];
-            var _ids = (IntPtr *)(CubismCoreDll.GetDrawableIds(modelPtr));
+            var _ids = (IntPtr*)(CubismCoreDll.GetDrawableIds(modelPtr));
             for (var i = 0; i < length; ++i)
             {
                 Ids[i] = Marshal.PtrToStringAnsi(_ids[i]);
             }
-
 
             length = CubismCoreDll.GetDrawableCount(modelPtr);
             ConstantFlags = new CubismUnmanagedByteArrayView(CubismCoreDll.GetDrawableConstantFlags(modelPtr), length);
@@ -187,11 +178,10 @@ namespace Live2D.Cubism.Core.Unmanaged
             length = CubismCoreDll.GetDrawableCount(modelPtr);
             ParentPartIndices = new CubismUnmanagedIntArrayView(CubismCoreDll.GetDrawableParentPartIndices(modelPtr), length);
 
-
             length = CubismCoreDll.GetDrawableCount(modelPtr);
             length2 = new CubismUnmanagedIntArrayView(CubismCoreDll.GetDrawableMaskCounts(modelPtr), length);
             Masks = new CubismUnmanagedIntArrayView[length];
-            var _masks = (IntPtr *)(CubismCoreDll.GetDrawableMasks(modelPtr));
+            var _masks = (IntPtr*)(CubismCoreDll.GetDrawableMasks(modelPtr));
             for (var i = 0; i < length; ++i)
             {
                 Masks[i] = new CubismUnmanagedIntArrayView(_masks[i], length2[i]);
@@ -200,7 +190,7 @@ namespace Live2D.Cubism.Core.Unmanaged
             length = CubismCoreDll.GetDrawableCount(modelPtr);
             length2 = new CubismUnmanagedIntArrayView(CubismCoreDll.GetDrawableVertexCounts(modelPtr), length);
             VertexPositions = new CubismUnmanagedFloatArrayView[length];
-            var _vertexPositions = (IntPtr *)(CubismCoreDll.GetDrawableVertexPositions(modelPtr));
+            var _vertexPositions = (IntPtr*)(CubismCoreDll.GetDrawableVertexPositions(modelPtr));
             for (var i = 0; i < length; ++i)
             {
                 VertexPositions[i] = new CubismUnmanagedFloatArrayView(_vertexPositions[i], length2[i] * 2);
@@ -209,7 +199,7 @@ namespace Live2D.Cubism.Core.Unmanaged
             length = CubismCoreDll.GetDrawableCount(modelPtr);
             length2 = new CubismUnmanagedIntArrayView(CubismCoreDll.GetDrawableVertexCounts(modelPtr), length);
             VertexUvs = new CubismUnmanagedFloatArrayView[length];
-            var _vertexUvs = (IntPtr *)(CubismCoreDll.GetDrawableVertexUvs(modelPtr));
+            var _vertexUvs = (IntPtr*)(CubismCoreDll.GetDrawableVertexUvs(modelPtr));
             for (var i = 0; i < length; ++i)
             {
                 VertexUvs[i] = new CubismUnmanagedFloatArrayView(_vertexUvs[i], length2[i] * 2);
@@ -218,13 +208,13 @@ namespace Live2D.Cubism.Core.Unmanaged
             length = CubismCoreDll.GetDrawableCount(modelPtr);
             length2 = new CubismUnmanagedIntArrayView(CubismCoreDll.GetDrawableIndexCounts(modelPtr), length);
             Indices = new CubismUnmanagedUshortArrayView[length];
-            var _indices = (IntPtr *)(CubismCoreDll.GetDrawableIndices(modelPtr));
+            var _indices = (IntPtr*)(CubismCoreDll.GetDrawableIndices(modelPtr));
             for (var i = 0; i < length; ++i)
             {
                 Indices[i] = new CubismUnmanagedUshortArrayView(_indices[i], length2[i]);
             }
         }
 
-        #endregion
+        #endregion Ctors
     }
 }

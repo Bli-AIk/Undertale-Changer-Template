@@ -1,5 +1,5 @@
 CrackedWall\<image=-1><fx=0>* This is a cracked wall.;
 
-Select\<image=-1><fx=1>* (This is a select text.)<enter><enter><fx=-1><size=5> </size>< >< >< >< >< >< >   Ok<size=5> </size>< >< >< >< >< >< >< >< >< > Nope<select>Select;
+Select\<image=-1><fx=1>* (This is a select text.)<enter><enter><fx=-1><size=5> </size><-      ->   Ok<size=5> </size><-    -><-    -><- -> Nope<select>Select;
 
-Save\<image=-1><fx=0>* (The save filling you<enter>< >< >with <gradient="White to Red - UTC">determination</gradient>.);
+Save\<image=-1><fx=0>* (The save filling you<enter><-  ->with <gradient="White to Red - UTC">determination</gradient>.);

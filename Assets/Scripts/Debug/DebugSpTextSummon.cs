@@ -1,8 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-
 
 /// <summary>
 /// 生成一系列脑梗加密文本
@@ -10,17 +7,19 @@ using UnityEngine;
 public class DebugSpTextSummon : MonoBehaviour
 {
     public List<string> puter;
-    void Start()
+
+    private void Start()
     {
         puter.Add(LetterToNum(puter[0]));
         puter.Add(NumToNumLetter(puter[1]));
         puter.Add(NineToNum(puter[2]));
         puter.Add(backString(puter[3]));
     }
+
     /// <summary>
     /// 原字母文本转化为数字
     /// </summary>
-    string LetterToNum(string str)
+    private string LetterToNum(string str)
     {
         string returnText = "";
         string text = " abcdefghijklmnopqrstuvwxyz";
@@ -29,7 +28,7 @@ public class DebugSpTextSummon : MonoBehaviour
         {
             for (int j = 0; j < text.Length; j++)
             {
-                if (str[i] == text[j]|| str[i] == textCap[j])
+                if (str[i] == text[j] || str[i] == textCap[j])
                 {
                     if (j > 9)
                         returnText += j.ToString();
@@ -41,11 +40,12 @@ public class DebugSpTextSummon : MonoBehaviour
         }
         return returnText;
     }
+
     /// <summary>
     /// 数字的首字母表示数字
     /// 数字换算为字母
     /// </summary>
-    string NumToNumLetter(string str)
+    private string NumToNumLetter(string str)
     {
         string returnText = "";
         string text = "0123456789 ";
@@ -64,10 +64,11 @@ public class DebugSpTextSummon : MonoBehaviour
         }
         return returnText;
     }
+
     /// <summary>
     /// 26字母换算为九键数字
     /// </summary>
-    string NineToNum(string str)
+    private string NineToNum(string str)
     {
         string returnText = "";
         string text = " abcdefghijklmnopqrstuvwxyz";
@@ -77,7 +78,6 @@ public class DebugSpTextSummon : MonoBehaviour
         {
             for (int j = 0; j < text.Length; j++)
             {
-
                 if (str[i] == text[j] || str[i] == textCap[j])
                 {
                     returnText += back[2 * j].ToString() + back[2 * j + 1].ToString();
@@ -91,7 +91,7 @@ public class DebugSpTextSummon : MonoBehaviour
     /// <summary>
     /// 倒车请注意
     /// </summary>
-    string backString(string str)
+    private string backString(string str)
     {
         string returnText = "";
 

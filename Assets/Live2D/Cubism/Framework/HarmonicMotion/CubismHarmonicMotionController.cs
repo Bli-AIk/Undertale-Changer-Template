@@ -5,10 +5,8 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Framework.HarmonicMotion
 {
@@ -22,20 +20,17 @@ namespace Live2D.Cubism.Framework.HarmonicMotion
         /// </summary>
         private const int DefaultChannelCount = 1;
 
-
         /// <summary>
         /// Blend mode.
         /// </summary>
         [SerializeField]
         public CubismParameterBlendMode BlendMode = CubismParameterBlendMode.Additive;
 
-
         /// <summary>
         /// The timescales for each channel.
         /// </summary>
         [SerializeField]
         public float[] ChannelTimescales;
-
 
         /// <summary>
         /// Sources.
@@ -53,7 +48,6 @@ namespace Live2D.Cubism.Framework.HarmonicMotion
         [HideInInspector]
         public bool HasUpdateController { get; set; }
 
-
         /// <summary>
         /// Refreshes the controller. Call this method after adding and/or removing <see cref="CubismHarmonicMotionParameter"/>.
         /// </summary>
@@ -61,13 +55,11 @@ namespace Live2D.Cubism.Framework.HarmonicMotion
         {
             var model = this.FindCubismModel();
 
-
             // Catch sources and destinations.
             Sources = model
                 .Parameters
                 .GetComponentsMany<CubismHarmonicMotionParameter>();
             Destinations = new CubismParameter[Sources.Length];
-
 
             for (var i = 0; i < Sources.Length; ++i)
             {
@@ -105,12 +97,10 @@ namespace Live2D.Cubism.Framework.HarmonicMotion
                 return;
             }
 
-
             // Update sources and destinations.
             for (var i = 0; i < Sources.Length; ++i)
             {
                 Sources[i].Play(ChannelTimescales);
-
 
                 Destinations[i].BlendToValue(BlendMode, Sources[i].Evaluate());
             }
@@ -127,7 +117,6 @@ namespace Live2D.Cubism.Framework.HarmonicMotion
             Refresh();
         }
 
-
         /// <summary>
         /// Called by Unity. Updates controller.
         /// </summary>
@@ -139,7 +128,6 @@ namespace Live2D.Cubism.Framework.HarmonicMotion
             }
         }
 
-
         /// <summary>
         /// Called by Unity. Resets channels.
         /// </summary>
@@ -148,13 +136,12 @@ namespace Live2D.Cubism.Framework.HarmonicMotion
             // Reset/Initialize channel timescales.
             ChannelTimescales = new float[DefaultChannelCount];
 
-
             for (var s = 0; s < DefaultChannelCount; ++s)
             {
                 ChannelTimescales[s] = 1f;
             }
         }
 
-        #endregion
+        #endregion Unity Events Handling
     }
 }

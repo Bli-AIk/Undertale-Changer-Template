@@ -93,8 +93,8 @@ In addition, do not write two comments consecutively at least 3 characters apart
 */
 
 /* I T E M */
-Item\baaaaaaaaaaaaaaaa\Two servings\<autoFoodFull><enter>* Another test, ahhhhh<stop>.<stop>.<stop>.<passText>* But it went well.\<autoCheckFood><enter>* An indescribable gadget<stop>.<stop>.<stop>.<passText><color=yellow>* Oh, my God, the test was successful!!!\<autoLoseFood>;
-Item\bang\A serving of food\* You tasted the rest of this stuff.<stop><enter><autoFood>\<autoCheckFood><enter>* Still nameless<stop>.<stop>.<stop>.\<autoLoseFood>;
+Item\baaaaaaaaaaaaaaaa\Two servings\<autoFoodFull><enter>* Another test, ahhhhh<stop><stop...><passText>* But it went well.\<autoCheckFood><enter>* An indescribable gadget<stop><stop...><passText><color=yellow>* Oh, my God, the test was successful!!!\<autoLoseFood>;
+Item\bang\A serving of food\* You tasted the rest of this stuff.<stop><enter><autoFood>\<autoCheckFood><enter>* Still nameless<stop><stop...>\<autoLoseFood>;
 
 Item\pia1\Broken t.knife\<autoArm>\<autoCheckArm>\<autoLoseArm>;
 Item\pia2\<color=yellow>Golden Sword PLUS</color>\<autoArm><enter>* Golden Legend This is.\<autoCheckArm><enter>* Um... wtf is that(\* <color=red>You just throw it away?<stop>?<stop>?</color>;

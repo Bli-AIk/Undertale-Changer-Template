@@ -5,9 +5,7 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Rendering.Masking
 {
@@ -33,7 +31,7 @@ namespace Live2D.Cubism.Rendering.Masking
             };
         }
 
-        #endregion
+        #endregion Conversion
 
         /// <summary>
         /// Color channel of the tile.

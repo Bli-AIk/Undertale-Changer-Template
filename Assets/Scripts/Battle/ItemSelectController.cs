@@ -1,7 +1,7 @@
-using System.Collections;
+using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
+
 /// <summary>
 /// ◊÷√Ê“‚Àº
 /// </summary>
@@ -13,10 +13,10 @@ public class ItemSelectController : MonoBehaviour
     public int myItemMax;
     public int myItemSelect;
     public int myItemRealSelect;
-    Tween tweenSave;
+    private Tween tweenSave;
 
     //SelectUIController selectUIController;
-    void Awake()
+    private void Awake()
     {
         //selectUIController = transform.parent.GetComponent<SelectUIController>();
         for (int i = 0; i < transform.childCount; i++)
@@ -24,6 +24,7 @@ public class ItemSelectController : MonoBehaviour
             sons.Add(transform.GetChild(i).GetComponent<SpriteRenderer>());
         }
     }
+
     public void Open()
     {
         for (int i = 2; i < sons.Count; i++)
@@ -45,6 +46,7 @@ public class ItemSelectController : MonoBehaviour
         sons[1].transform.DOLocalMoveY(sons[1].transform.localPosition.y - 0.05f, 0.75f, false).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutQuad);
         PressDown(true);
     }
+
     private void Update()
     {
         if (myItemRealSelect > 0 && sons[0].color.a == 0)
@@ -64,8 +66,8 @@ public class ItemSelectController : MonoBehaviour
         {
             DOTween.To(() => sons[1].color, x => sons[1].color = x, new Color(1, 1, 1, 0), 0.1f).SetEase(Ease.Linear);
         }
-
     }
+
     public void PressDown(bool isUp)
     {
         tweenSave.Kill(true);
@@ -74,12 +76,14 @@ public class ItemSelectController : MonoBehaviour
         else if (myItemSelect < myItemMax - 1)
             sonsChanged[myItemSelect + 1].transform.localScale = Vector3.one * 2;
         sonsChanged[myItemSelect].transform.localScale = Vector3.one * 2;
-        tweenSave = DOTween.To(() => sonsChanged[myItemSelect].transform.localScale,x => sonsChanged[myItemSelect].transform.localScale = x, Vector3.one * 3, 0.5f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
+        tweenSave = DOTween.To(() => sonsChanged[myItemSelect].transform.localScale, x => sonsChanged[myItemSelect].transform.localScale = x, Vector3.one * 3, 0.5f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
     }
+
     public void Close()
     {
         transform.DOLocalMoveX(0.65f, 0.25f).SetEase(Ease.InCirc).OnKill(SetNoActive);
     }
+
     public void SetNoActive()
     {
         sons[0].color = Color.clear;

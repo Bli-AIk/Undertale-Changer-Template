@@ -5,12 +5,10 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core;
 using Live2D.Cubism.Framework;
 using UnityEditor;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Editor.Inspectors
 {
@@ -33,10 +31,8 @@ namespace Live2D.Cubism.Editor.Inspectors
                 Initialize();
             }
 
-
             // Show parameters.
             var didParametersChange = false;
-
 
             for (var i = 0; i < Parameters.Length; i++)
             {
@@ -53,24 +49,19 @@ namespace Live2D.Cubism.Editor.Inspectors
                     Parameters[i].MaximumValue
                     );
 
-
                 if (EditorGUI.EndChangeCheck())
                 {
                     EditorUtility.SetDirty(Parameters[i]);
-
 
                     didParametersChange = true;
                 }
             }
 
-
             // Show reset button.
             var resetPosition = EditorGUILayout.GetControlRect();
 
-
             resetPosition.width *= 0.25f;
-            resetPosition.x += (resetPosition.width*3f);
-
+            resetPosition.x += (resetPosition.width * 3f);
 
             if (GUI.Button(resetPosition, "Reset"))
             {
@@ -78,14 +69,11 @@ namespace Live2D.Cubism.Editor.Inspectors
                 {
                     parameter.Value = parameter.DefaultValue;
 
-
                     EditorUtility.SetDirty(parameter);
                 }
 
-
                 didParametersChange = true;
             }
-
 
             if (didParametersChange)
             {
@@ -95,7 +83,7 @@ namespace Live2D.Cubism.Editor.Inspectors
             }
         }
 
-        #endregion
+        #endregion Editor
 
         /// <summary>
         /// <see cref="CubismParameter"/>s cache.
@@ -117,7 +105,6 @@ namespace Live2D.Cubism.Editor.Inspectors
                 return Parameters != null;
             }
         }
-
 
         /// <summary>
         /// Initializes <see langword="this"/>.

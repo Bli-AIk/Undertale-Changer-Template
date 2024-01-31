@@ -1,13 +1,15 @@
+using DG.Tweening;
+using Log;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-using DG.Tweening;
-using UnityEngine.SceneManagement;
-using UnityEngine.Rendering.Universal;
-using System.IO;
 using System.Globalization;
-using System;
+using System.IO;
+using UnityEngine;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
 /// <summary>
 /// 调用所有ScriptableObject 并负责对数据和语言包的导入
 /// 还包括大部分常用的函数
@@ -21,36 +23,37 @@ public class MainControl : MonoBehaviour
     public readonly int languagePackInsideNum = 3;//内置语言包总数
 
     public bool blacking = false;
+
     [Header("-MainControl设置-")]
-
     [Space]
-
     [Header("状态:正常,战斗内")]
     public SceneState sceneState;
+
     public bool haveInOutBlack, noInBlack;
     public bool notPauseIn;
-    
 
-    Image inOutBlack;
+    private Image inOutBlack;
+
     [Header("引用用的")]
     [Header("战斗外")]
     public PlayerBehaviour playerBehaviour;
+
     [Header("战斗内")]
     public DrawFrameController drawFrameController;
-    Camera cameraMainInBattle;
+
+    private Camera cameraMainInBattle;
+
     public enum SceneState
     {
         Normal,
         InBattle,
     };
+
     public OverworldControl OverworldControl { get; private set; }
     public ItemControl ItemControl { get; private set; }
     public PlayerControl PlayerControl { get; private set; }
     public AudioControl AudioControl { get; private set; }
     public BattleControl BattleControl { get; private set; }
-
-
-
 
     public BattlePlayerController battlePlayerController;
 
@@ -82,9 +85,8 @@ public class MainControl : MonoBehaviour
         PlayerControl.saveScene = playerControl.saveScene;
         PlayerControl.isDebug = playerControl.isDebug;
         PlayerControl.invincible = playerControl.invincible;
-
-
     }
+
     /// <summary>
     /// 获取内置语言包ID
     /// </summary>
@@ -94,18 +96,21 @@ public class MainControl : MonoBehaviour
         {
             case 0:
                 return "CN";
+
             case 1:
                 return "TCN";
+
             case 2:
                 goto default;
             default:
                 return "US";
         }
     }
+
     /// <summary>
     /// 加载对应语言包的数据
     /// </summary>
-    string LoadLanguageData(string path)
+    private string LoadLanguageData(string path)
     {
         if (languagePack < languagePackInsideNum)
         {
@@ -116,7 +121,8 @@ public class MainControl : MonoBehaviour
             return File.ReadAllText(Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[languagePack - languagePackInsideNum] + "\\" + path + ".txt");
         }
     }
-    void LanguagePackDetection()
+
+    private void LanguagePackDetection()
     {
         if ((languagePack < 0)
             || (languagePack >= Directory.GetDirectories(Application.dataPath + "\\LanguagePacks").Length + languagePackInsideNum))
@@ -124,6 +130,7 @@ public class MainControl : MonoBehaviour
             languagePack = 2;
         }
     }
+
     public void InitializationLoad()
     {
         //调用ScriptableObject
@@ -134,6 +141,7 @@ public class MainControl : MonoBehaviour
         //Initialization内调用ItemControl
         //--------------------------------------------------------------------------------
     }
+
     /// <summary>
     /// 初始化加载一大堆数据
     /// </summary>
@@ -142,12 +150,10 @@ public class MainControl : MonoBehaviour
         if (ItemControl == null)
             ItemControl = Resources.Load<ItemControl>("ItemControl");
 
-
         if (lan != languagePack)
             languagePack = lan;
 
         LanguagePackDetection();
-
 
         //ItemControl加载
         //--------------------------------------------------------------------------------
@@ -165,8 +171,8 @@ public class MainControl : MonoBehaviour
 
         MaxToOneSon(ItemControl.itemTextMaxItem, ItemControl.itemTextMaxItemSon);
         //--------------------------------------------------------------------------------
-
     }
+
     public void InitializationOverworld()
     {
         LanguagePackDetection();
@@ -184,15 +190,12 @@ public class MainControl : MonoBehaviour
             return;
         //OverworldControl加载
         //--------------------------------------------------------------------------------
-       
-
-
 
         OverworldControl.sceneTextsAsset = LoadLanguageData("Overworld\\" + SceneManager.GetActiveScene().name);
 
         if (SceneManager.GetActiveScene().name == "Start")
             return;
-            LoadItemData(OverworldControl.sceneTextsSave, OverworldControl.sceneTextsAsset);
+        LoadItemData(OverworldControl.sceneTextsSave, OverworldControl.sceneTextsAsset);
 
         OverworldControl.settingSave = ChangeItemData(OverworldControl.settingSave, true, new List<string>());
 
@@ -200,12 +203,11 @@ public class MainControl : MonoBehaviour
 
         //--------------------------------------------------------------------------------
 
-
         OverworldControl.hdResolution = Convert.ToBoolean(PlayerPrefs.GetInt("hdResolution", 0));
         OverworldControl.noSFX = Convert.ToBoolean(PlayerPrefs.GetInt("noSFX", 0));
         OverworldControl.vsyncMode = (OverworldControl.VSyncMode)PlayerPrefs.GetInt("vsyncMode", 0);
-
     }
+
     public void InitializationLanguagePackFullWidth()
     {
         //检测语言包全半角
@@ -222,6 +224,7 @@ public class MainControl : MonoBehaviour
 
         CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture(ScreenMaxToOneSon(OverworldControl.settingSave, "CultureInfo"));
     }
+
     public void InitializationBattle()
     {
         //BattleControl加载
@@ -273,7 +276,7 @@ public class MainControl : MonoBehaviour
         if (cameraMainInBattle == null)
             cameraMainInBattle = cameraShake.GetComponent<Camera>();
     }
-    
+
     private void Awake()
     {
         languagePack = PlayerPrefs.GetInt("languagePack", 2);
@@ -289,18 +292,16 @@ public class MainControl : MonoBehaviour
             dataNum = (SaveController.GetDataNum() - 1);
         }
 
-
         instance = this;
         InitializationLoad();
         Initialization(languagePack);
-
 
         if (dataNum == -1)
         {
             SetPlayerControl(ScriptableObject.CreateInstance<PlayerControl>());
         }
-
     }
+
     public void Start()
     {
         if (PlayerControl.isDebug && PlayerControl.invincible)
@@ -332,14 +333,13 @@ public class MainControl : MonoBehaviour
                     //CanvasController.instance.frame.DOKill();
                     //CanvasController.instance.frame.DOColor(Color.white, 0.5f);
                     CanvasController.instance.frame.color = new Color(1, 1, 1, 1);
-
                 }
                 else CanvasController.instance.frame.color = new Color(1, 1, 1, 0);
             }
-            else 
+            else
             {
                 inOutBlack.color = Color.clear;
-            } 
+            }
         }
         SetCanvasFrameSprite(CanvasController.instance.framePic);
 
@@ -347,9 +347,8 @@ public class MainControl : MonoBehaviour
         OverworldControl.isSetting = false;
 
         FindAndChangeAllSFX(OverworldControl.noSFX);
-
-
     }
+
     /// <summary>
     /// 生成字符串形式的随机颜色。
     /// </summary>
@@ -364,10 +363,11 @@ public class MainControl : MonoBehaviour
         return text;
     }
 
-    void EndBlack()
+    private void EndBlack()
     {
         OverworldControl.pause = false;
     }
+
     private void Update()
     {
         PlayerControl.gameTime += Time.deltaTime;
@@ -384,7 +384,7 @@ public class MainControl : MonoBehaviour
         }
         if (PlayerControl.hpMax < PlayerControl.hp)
             PlayerControl.hp = PlayerControl.hpMax;
-       
+
         if (OverworldControl.isSetting)
             return;
         if (KeyArrowToControl(KeyCode.Tab))
@@ -402,6 +402,7 @@ public class MainControl : MonoBehaviour
             SetResolution(OverworldControl.resolutionLevel);
         }
     }
+
     /// <summary>
     /// 应用默认键位
     /// </summary>
@@ -437,7 +438,7 @@ public class MainControl : MonoBehaviour
             KeyCode.None,
             KeyCode.None,
             KeyCode.None
-        }; 
+        };
         OverworldControl.keyCodesBack2 = new List<KeyCode>
         {
             KeyCode.None,
@@ -459,8 +460,9 @@ public class MainControl : MonoBehaviour
     /// 传入默认KeyCode并转换为游戏内键位。
     /// mode:0按下 1持续 2抬起
     /// </summary>
-    public bool KeyArrowToControl(KeyCode key,int mode = 0)
+    public bool KeyArrowToControl(KeyCode key, int mode = 0)
     {
+
         switch (mode)
         {
             case 0:
@@ -468,26 +470,37 @@ public class MainControl : MonoBehaviour
                 {
                     case KeyCode.DownArrow:
                         return Input.GetKeyDown(OverworldControl.keyCodes[0]) || Input.GetKeyDown(OverworldControl.keyCodesBack1[0]) || Input.GetKeyDown(OverworldControl.keyCodesBack2[0]);
+
                     case KeyCode.RightArrow:
                         return Input.GetKeyDown(OverworldControl.keyCodes[1]) || Input.GetKeyDown(OverworldControl.keyCodesBack1[1]) || Input.GetKeyDown(OverworldControl.keyCodesBack2[1]);
+
                     case KeyCode.UpArrow:
                         return Input.GetKeyDown(OverworldControl.keyCodes[2]) || Input.GetKeyDown(OverworldControl.keyCodesBack1[2]) || Input.GetKeyDown(OverworldControl.keyCodesBack2[2]);
+
                     case KeyCode.LeftArrow:
                         return Input.GetKeyDown(OverworldControl.keyCodes[3]) || Input.GetKeyDown(OverworldControl.keyCodesBack1[3]) || Input.GetKeyDown(OverworldControl.keyCodesBack2[3]);
+
                     case KeyCode.Z:
                         return Input.GetKeyDown(OverworldControl.keyCodes[4]) || Input.GetKeyDown(OverworldControl.keyCodesBack1[4]) || Input.GetKeyDown(OverworldControl.keyCodesBack2[4]);
+
                     case KeyCode.X:
                         return Input.GetKeyDown(OverworldControl.keyCodes[5]) || Input.GetKeyDown(OverworldControl.keyCodesBack1[5]) || Input.GetKeyDown(OverworldControl.keyCodesBack2[5]);
+
                     case KeyCode.C:
                         return Input.GetKeyDown(OverworldControl.keyCodes[6]) || Input.GetKeyDown(OverworldControl.keyCodesBack1[6]) || Input.GetKeyDown(OverworldControl.keyCodesBack2[6]);
+
                     case KeyCode.V:
                         return Input.GetKeyDown(OverworldControl.keyCodes[7]) || Input.GetKeyDown(OverworldControl.keyCodesBack1[7]) || Input.GetKeyDown(OverworldControl.keyCodesBack2[7]);
+
                     case KeyCode.F4:
                         return Input.GetKeyDown(OverworldControl.keyCodes[8]) || Input.GetKeyDown(OverworldControl.keyCodesBack1[8]) || Input.GetKeyDown(OverworldControl.keyCodesBack2[8]);
+
                     case KeyCode.Tab:
                         return Input.GetKeyDown(OverworldControl.keyCodes[9]) || Input.GetKeyDown(OverworldControl.keyCodesBack1[9]) || Input.GetKeyDown(OverworldControl.keyCodesBack2[9]);
+
                     case KeyCode.Semicolon:
                         return Input.GetKeyDown(OverworldControl.keyCodes[10]) || Input.GetKeyDown(OverworldControl.keyCodesBack1[10]) || Input.GetKeyDown(OverworldControl.keyCodesBack2[10]);
+
                     case KeyCode.Escape:
                         return Input.GetKeyDown(OverworldControl.keyCodes[11]) || Input.GetKeyDown(OverworldControl.keyCodesBack1[11]) || Input.GetKeyDown(OverworldControl.keyCodesBack2[11]);
 
@@ -499,26 +512,37 @@ public class MainControl : MonoBehaviour
                 {
                     case KeyCode.DownArrow:
                         return Input.GetKey(OverworldControl.keyCodes[0]) || Input.GetKey(OverworldControl.keyCodesBack1[0]) || Input.GetKey(OverworldControl.keyCodesBack2[0]);
+
                     case KeyCode.RightArrow:
                         return Input.GetKey(OverworldControl.keyCodes[1]) || Input.GetKey(OverworldControl.keyCodesBack1[1]) || Input.GetKey(OverworldControl.keyCodesBack2[1]);
+
                     case KeyCode.UpArrow:
                         return Input.GetKey(OverworldControl.keyCodes[2]) || Input.GetKey(OverworldControl.keyCodesBack1[2]) || Input.GetKey(OverworldControl.keyCodesBack2[2]);
+
                     case KeyCode.LeftArrow:
                         return Input.GetKey(OverworldControl.keyCodes[3]) || Input.GetKey(OverworldControl.keyCodesBack1[3]) || Input.GetKey(OverworldControl.keyCodesBack2[3]);
+
                     case KeyCode.Z:
                         return Input.GetKey(OverworldControl.keyCodes[4]) || Input.GetKey(OverworldControl.keyCodesBack1[4]) || Input.GetKey(OverworldControl.keyCodesBack2[4]);
+
                     case KeyCode.X:
                         return Input.GetKey(OverworldControl.keyCodes[5]) || Input.GetKey(OverworldControl.keyCodesBack1[5]) || Input.GetKey(OverworldControl.keyCodesBack2[5]);
+
                     case KeyCode.C:
                         return Input.GetKey(OverworldControl.keyCodes[6]) || Input.GetKey(OverworldControl.keyCodesBack1[6]) || Input.GetKey(OverworldControl.keyCodesBack2[6]);
+
                     case KeyCode.V:
                         return Input.GetKey(OverworldControl.keyCodes[7]) || Input.GetKey(OverworldControl.keyCodesBack1[7]) || Input.GetKey(OverworldControl.keyCodesBack2[7]);
+
                     case KeyCode.F4:
                         return Input.GetKey(OverworldControl.keyCodes[8]) || Input.GetKey(OverworldControl.keyCodesBack1[8]) || Input.GetKey(OverworldControl.keyCodesBack2[8]);
+
                     case KeyCode.Tab:
                         return Input.GetKey(OverworldControl.keyCodes[9]) || Input.GetKey(OverworldControl.keyCodesBack1[9]) || Input.GetKey(OverworldControl.keyCodesBack2[9]);
+
                     case KeyCode.Semicolon:
                         return Input.GetKey(OverworldControl.keyCodes[10]) || Input.GetKey(OverworldControl.keyCodesBack1[10]) || Input.GetKey(OverworldControl.keyCodesBack2[10]);
+
                     case KeyCode.Escape:
                         return Input.GetKey(OverworldControl.keyCodes[11]) || Input.GetKey(OverworldControl.keyCodesBack1[11]) || Input.GetKey(OverworldControl.keyCodesBack2[11]);
 
@@ -530,26 +554,37 @@ public class MainControl : MonoBehaviour
                 {
                     case KeyCode.DownArrow:
                         return Input.GetKeyUp(OverworldControl.keyCodes[0]) || Input.GetKeyUp(OverworldControl.keyCodesBack1[0]) || Input.GetKeyUp(OverworldControl.keyCodesBack2[0]);
+
                     case KeyCode.RightArrow:
                         return Input.GetKeyUp(OverworldControl.keyCodes[1]) || Input.GetKeyUp(OverworldControl.keyCodesBack1[1]) || Input.GetKeyUp(OverworldControl.keyCodesBack2[1]);
+
                     case KeyCode.UpArrow:
                         return Input.GetKeyUp(OverworldControl.keyCodes[2]) || Input.GetKeyUp(OverworldControl.keyCodesBack1[2]) || Input.GetKeyUp(OverworldControl.keyCodesBack2[2]);
+
                     case KeyCode.LeftArrow:
                         return Input.GetKeyUp(OverworldControl.keyCodes[3]) || Input.GetKeyUp(OverworldControl.keyCodesBack1[3]) || Input.GetKeyUp(OverworldControl.keyCodesBack2[3]);
+
                     case KeyCode.Z:
                         return Input.GetKeyUp(OverworldControl.keyCodes[4]) || Input.GetKeyUp(OverworldControl.keyCodesBack1[4]) || Input.GetKeyUp(OverworldControl.keyCodesBack2[4]);
+
                     case KeyCode.X:
                         return Input.GetKeyUp(OverworldControl.keyCodes[5]) || Input.GetKeyUp(OverworldControl.keyCodesBack1[5]) || Input.GetKeyUp(OverworldControl.keyCodesBack2[5]);
+
                     case KeyCode.C:
                         return Input.GetKeyUp(OverworldControl.keyCodes[6]) || Input.GetKeyUp(OverworldControl.keyCodesBack1[6]) || Input.GetKeyUp(OverworldControl.keyCodesBack2[6]);
+
                     case KeyCode.V:
                         return Input.GetKeyUp(OverworldControl.keyCodes[7]) || Input.GetKeyUp(OverworldControl.keyCodesBack1[7]) || Input.GetKeyUp(OverworldControl.keyCodesBack2[7]);
+
                     case KeyCode.F4:
                         return Input.GetKeyUp(OverworldControl.keyCodes[8]) || Input.GetKeyUp(OverworldControl.keyCodesBack1[8]) || Input.GetKeyUp(OverworldControl.keyCodesBack2[8]);
+
                     case KeyCode.Tab:
                         return Input.GetKeyUp(OverworldControl.keyCodes[9]) || Input.GetKeyUp(OverworldControl.keyCodesBack1[9]) || Input.GetKeyUp(OverworldControl.keyCodesBack2[9]);
+
                     case KeyCode.Semicolon:
                         return Input.GetKeyUp(OverworldControl.keyCodes[10]) || Input.GetKeyUp(OverworldControl.keyCodesBack1[10]) || Input.GetKeyUp(OverworldControl.keyCodesBack2[10]);
+
                     case KeyCode.Escape:
                         return Input.GetKeyUp(OverworldControl.keyCodes[11]) || Input.GetKeyUp(OverworldControl.keyCodesBack1[11]) || Input.GetKeyUp(OverworldControl.keyCodesBack2[11]);
 
@@ -559,8 +594,8 @@ public class MainControl : MonoBehaviour
             default:
                 return false;
         }
-        
     }
+
     /// <summary>
     /// 开/关 SFX
     /// </summary>
@@ -587,10 +622,9 @@ public class MainControl : MonoBehaviour
                 cameraMainInBattle = cameraShake.GetComponent<Camera>();
             }
             cameraMainInBattle.GetUniversalAdditionalCameraData().renderPostProcessing = !isClose;
-
-
         }
     }
+
     /// <summary>
     /// 按按tab改改分辨率那样子))
     /// </summary>
@@ -611,23 +645,25 @@ public class MainControl : MonoBehaviour
                 OverworldControl.resolutionLevel = 5;
         }
         SetResolution(OverworldControl.resolutionLevel);
-
     }
+
     /// <summary>
     /// 和分辨率设置配套的换算
     /// </summary>
-    int ScreenSet(int y)
+    private int ScreenSet(int y)
     {
         //if (OverworldControl.background)
         //    y = y / 9 * 16;
-        //else 
-            y = y / 3 * 4;
+        //else
+        y = y / 3 * 4;
         return y;
     }
-    void SetCanvasFrameSprite(int framePic = 2)//一般为CanvasController.instance.framePic
+
+    private void SetCanvasFrameSprite(int framePic = 2)//一般为CanvasController.instance.framePic
     {
         CanvasController.instance.frame.sprite = OverworldControl.frames[framePic];
     }
+
     /// <summary>
     /// 分辨率设置
     /// </summary>
@@ -644,10 +680,9 @@ public class MainControl : MonoBehaviour
                 OverworldControl.resolutionLevel = 5;
         }
 
-
         if (!OverworldControl.hdResolution)
         {
-            Camera.main.rect = new Rect(0, 0, 1, 1); 
+            Camera.main.rect = new Rect(0, 0, 1, 1);
             if (sceneState == SceneState.InBattle)
             {
                 if (cameraMainInBattle == null)
@@ -700,14 +735,11 @@ public class MainControl : MonoBehaviour
             //在SetCanvasFrameSprite内设定
             //CanvasController.instance.frame.sprite = OverworldControl.frames[CanvasController.instance.framePic];
 
-
             CanvasController.instance.DOKill();
             CanvasController.instance.frame.DOColor(new Color(1, 1, 1, 1), 1f);
             CanvasController.instance.setting.transform.localScale = Vector3.one * 0.89f;
             CanvasController.instance.setting.rectTransform.anchoredPosition = new Vector2(142.5f, CanvasController.instance.setting.rectTransform.anchoredPosition.y);
-
         }
-
 
         switch (resolution)
         {
@@ -715,34 +747,42 @@ public class MainControl : MonoBehaviour
                 Screen.SetResolution(ScreenSet(480), 480, OverworldControl.fullScreen);
                 OverworldControl.resolution = new Vector2(ScreenSet(480), 480);
                 break;
+
             case 1:
                 Screen.SetResolution(ScreenSet(768), 768, OverworldControl.fullScreen);
                 OverworldControl.resolution = new Vector2(ScreenSet(768), 768);
                 break;
+
             case 2:
                 Screen.SetResolution(ScreenSet(864), 864, OverworldControl.fullScreen);
                 OverworldControl.resolution = new Vector2(ScreenSet(864), 864);
                 break;
+
             case 3:
                 Screen.SetResolution(ScreenSet(960), 960, OverworldControl.fullScreen);
                 OverworldControl.resolution = new Vector2(ScreenSet(960), 960);
                 break;
+
             case 4:
                 Screen.SetResolution(ScreenSet(1080), 1080, OverworldControl.fullScreen);
                 OverworldControl.resolution = new Vector2(ScreenSet(1080), 1080);
                 break;
+
             case 5:
                 Screen.SetResolution(1920 / 2, 1080 / 2, OverworldControl.fullScreen);
                 OverworldControl.resolution = new Vector2(1920 / 2, 1080 / 2);
                 break;
+
             case 6:
                 Screen.SetResolution(1920, 1080, OverworldControl.fullScreen);
                 OverworldControl.resolution = new Vector2(1920, 1080);
                 break;
+
             default:
                 break;
         }
     }
+
     /// <summary>
     /// 淡出 输入跳转场景名称
     /// banMusic是渐出
@@ -756,14 +796,14 @@ public class MainControl : MonoBehaviour
             AudioSource bgm = AudioController.instance.transform.GetComponent<AudioSource>();
             if (time > 0)
                 DOTween.To(() => bgm.volume, x => bgm.volume = x, 0, time).SetEase(Ease.Linear);
-            else if(time == 0)
+            else if (time == 0)
                 bgm.volume = 0;
             else
                 DOTween.To(() => bgm.volume, x => bgm.volume = x, 0, Mathf.Abs(time)).SetEase(Ease.Linear);
         }
         OverworldControl.pause = true;
-        if (time > 0) 
-        { 
+        if (time > 0)
+        {
             inOutBlack.DOColor(color, time).SetEase(Ease.Linear).OnKill(() => SwitchScene(scene));
             if (!OverworldControl.hdResolution)
                 CanvasController.instance.frame.color = new Color(1, 1, 1, 0);
@@ -782,6 +822,7 @@ public class MainControl : MonoBehaviour
                 CanvasController.instance.frame.color = new Color(1, 1, 1, 0);
         }
     }
+
     public void OutWhite(string scene)
     {
         blacking = true;
@@ -789,6 +830,7 @@ public class MainControl : MonoBehaviour
         AudioController.instance.GetFx(6, AudioControl.fxClipUI);
         inOutBlack.DOColor(Color.white, 5.5f).SetEase(Ease.Linear).OnKill(() => SwitchScene(scene));
     }
+
     public void SwitchScene(string name, bool Async = true)
     {
         SetCanvasFrameSprite(2);
@@ -801,6 +843,7 @@ public class MainControl : MonoBehaviour
         SetResolution(instance.OverworldControl.resolutionLevel);
         blacking = false;
     }
+
     /// <summary>
     /// 传入string，返回删去末尾i个字符的string
     /// </summary>
@@ -809,32 +852,30 @@ public class MainControl : MonoBehaviour
         str = str.Substring(0, str.Length - i);
         return str;
     }
+
     /// <summary>
     /// 随机生成一个六位长的英文
     /// </summary>
     public string RandomName(int l = 6, string abc = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM")
     {
         string text = "";
-      
+
         for (int i = 0; i < l; i++)
         {
             text += abc[UnityEngine.Random.Range(0, abc.Length)];
         }
         return text;
-
     }
 
     [Space]
     public bool forceJumpLoadTurn;
 
-  
     public IEnumerator _LoadItemDataForTurn(List<string> list, TextAsset texter)//保存的list 导入的text
     {
         list.Clear();
         string text = "";
         for (int i = 0; i < texter.text.Length; i++)
         {
-
             if (texter.text[i] == '/' && texter.text[i + 1] == '*')
             {
                 i++;
@@ -855,8 +896,6 @@ public class MainControl : MonoBehaviour
             if ((i + 1) % 2 == 0 && !forceJumpLoadTurn)
                 yield return 0;
         }
-
-
     }
 
     /// <summary>
@@ -868,7 +907,6 @@ public class MainControl : MonoBehaviour
         string text = "";
         for (int i = 0; i < texter.text.Length; i++)
         {
-            
             if (texter.text[i] == '/' && texter.text[i + 1] == '*')
             {
                 i++;
@@ -886,10 +924,9 @@ public class MainControl : MonoBehaviour
                 list.Add(text + ";");
                 text = "";
             }
-
         }
-
     }
+
     /// <summary>
     /// 调入数据(传入string)
     /// </summary>
@@ -899,7 +936,6 @@ public class MainControl : MonoBehaviour
         string text = "";
         for (int i = 0; i < texter.Length; i++)
         {
-
             if (texter[i] == '/' && texter[i + 1] == '*')
             {
                 i++;
@@ -916,17 +952,16 @@ public class MainControl : MonoBehaviour
                 list.Add(text + ";");
                 text = "";
             }
-
         }
-
     }
+
     /// <summary>
     /// 传入使用背包的哪个物体
     /// 然后就使用 打true会顺带把背包顺序整理下
     /// 然后再让打字机打个字
     /// plusText填0就自己计算
     /// </summary>
-    public void UseItem(TypeWritter typeWritter, TMPro.TMP_Text tmp_Text,int sonSelect, int plusText = 0)
+    public void UseItem(TypeWritter typeWritter, TMPro.TMP_Text tmp_Text, int sonSelect, int plusText = 0)
     {
         if (plusText == 0)
         {
@@ -946,7 +981,6 @@ public class MainControl : MonoBehaviour
             PlayerControl.myItems[sonSelect - 1] = wearInt;
 
             AudioController.instance.GetFx(3, AudioControl.fxClipUI);
-
         }
         else if (PlayerControl.myItems[sonSelect - 1] >= 10000)
         {
@@ -957,7 +991,6 @@ public class MainControl : MonoBehaviour
             PlayerControl.myItems[sonSelect - 1] = wearInt;
 
             AudioController.instance.GetFx(3, AudioControl.fxClipUI);
-
         }
         else//食物
         {
@@ -968,10 +1001,7 @@ public class MainControl : MonoBehaviour
             typeWritter.TypeOpen(ItemControl.itemTextMaxItemSon[PlayerControl.myItems[sonSelect - 1] * 5 - 3], false,
                 plusHp, 0, tmp_Text);
 
-
-
             PlayerControl.hp += plusHp;
-
 
             if (PlayerControl.hp > PlayerControl.hpMax)
                 PlayerControl.hp = PlayerControl.hpMax;
@@ -984,12 +1014,9 @@ public class MainControl : MonoBehaviour
                     PlayerControl.myItems[sonSelect - 1] = ItemNameGetId(text, "Foods");
                     break;
                 }
-
             }
             AudioController.instance.GetFx(2, AudioControl.fxClipUI);
-
         }
-
     }
 
     /// <summary>
@@ -1015,7 +1042,6 @@ public class MainControl : MonoBehaviour
                         j++;
                         if (j >= list[i].Length)
                             break;
-                        
                     }
                     j = k;
                     //Debug.Log(list[i] +"/"+ name);
@@ -1024,7 +1050,7 @@ public class MainControl : MonoBehaviour
                 while (list[i][j] == '<')
                 {
                     string texters = "";
-                    while ((j !=0 && list[i][j - 1] != '>' && !isXH) || isXH)
+                    while ((j != 0 && list[i][j - 1] != '>' && !isXH) || isXH)
                     {
                         texters += list[i][j];
                         j++;
@@ -1048,17 +1074,15 @@ public class MainControl : MonoBehaviour
                 {
                     text += list[i][j];
                 }
-
             }
         }
         return newList;
     }
 
-
     /// <summary>
     /// ChangeItemData中检测'<''>'符号的Switch语句
     /// </summary>
-    string ChangeItemDataSwitch(string text, string texters, bool isData, string name, List<string> ex)
+    private string ChangeItemDataSwitch(string text, string texters, bool isData, string name, List<string> ex)
     {
         //Debug.Log(text + "/" + texters + "/" + isData);
         switch (texters)
@@ -1067,46 +1091,22 @@ public class MainControl : MonoBehaviour
                 text += PlayerControl.playerName;
                 break;
 
-
-
             case "<enter>"://回车
                 text += "\n";
                 break;
 
-            case "<stop>"://打字机停顿
-                text += "龘";
+            case "<stop...>":
+                text += ".<stop>.<stop>.<stop>";
+                break;
+
+            case "<stop......>":
+                text += ".<stop>.<stop>.<stop>.<stop>.<stop>.<stop>";
                 break;
 
             case "<autoFoodFull>":
                 text += ItemControl.itemTextMaxData[11].Substring(0, ItemControl.itemTextMaxData[11].Length - 1) + "\n";
-                goto case "<autoFood>";
-
-            case "<autoFood>":
-                text += "齉";
+                text += "<autoFood>";
                 break;
-
-            case "<passText>":
-                text += "轂";
-                break;
-
-            case "<select>":
-                text += "禤";
-                break;
-            case "<changeX>":
-                text += "鯈";
-                break;
-
-            /*
-            此部分留给打字机实现，因为hp是变量。
-
-            case "<autoFood>":
-                int hp = int.Parse(ItemIdGetName(id + 1, "Foods", 2));
-                if (hp + PlayerControl.hp >= PlayerControl.hpMax)
-                    texters = "<data22>";
-                else
-                    texters = "<data12>";
-                goto default;
-            */
 
             case "<autoCheckFood>":
                 texters = "<data13>";
@@ -1147,7 +1147,7 @@ public class MainControl : MonoBehaviour
                     break;
                 }
                 else goto default;
-                
+
             case "<itemAtk>":
                 if (name != "" && !isData)
                 {
@@ -1187,12 +1187,8 @@ public class MainControl : MonoBehaviour
                 else goto default;
 
             default:
-                if (texters.Length == 3 && texters[0] == '<' && texters[2] == '>')
-                {
-                    text += "粜" + texters[1].ToString();
-                    break;
-                }
-               
+                /*
+
                 if (IsFrontCharactersMatch("<fx", texters))
                 {
                     texters = texters.Substring(4);
@@ -1207,10 +1203,10 @@ public class MainControl : MonoBehaviour
                     texters = texters.Substring(7);
                     texters = texters.Substring(0, texters.Length - 1);
                     int q = int.Parse(texters);
-                    text += "鼵" + q + "鼵";
+                    text += "" + q + "";
                     break;
                 }
-
+                */
                 if (IsFrontCharactersMatch("<data", texters))
                 {
                     text += ItemControl.itemTextMaxData[int.Parse(texters.Substring(5, texters.Length - 6))].Substring(0, ItemControl.itemTextMaxData[int.Parse(texters.Substring(5, texters.Length - 6))].Length - 1);
@@ -1225,7 +1221,6 @@ public class MainControl : MonoBehaviour
                                 text += ItemIdGetName(ItemNameGetId(name, texters.Substring(9, texters.Length - 10) + 's'), texters.Substring(9, texters.Length - 10) + 's', 0);
                             else text += ItemIdGetName(ItemNameGetId(name, texters.Substring(9, texters.Length - 10) + 's'), "Auto", 0);
                         }
-
                     }
                     else if (texters.Substring(0, 9) == "<autoLose")
                     {
@@ -1260,10 +1255,11 @@ public class MainControl : MonoBehaviour
         return text;
     }
 
-    public bool IsFrontCharactersMatch(string original,string texters)
+    public bool IsFrontCharactersMatch(string original, string texters)
     {
         return texters.Length > original.Length && texters.Substring(0, original.Length) == original;
     }
+
     /// <summary>
     /// 检测输入文本内的大写字母，转为全小写。
     /// </summary>
@@ -1284,7 +1280,6 @@ public class MainControl : MonoBehaviour
                 }
                 else if (j == bet.Length - 1)
                     isPlus = true;
-                   
             }
             if (isPlus)
                 final += origin[i];
@@ -1312,18 +1307,18 @@ public class MainControl : MonoBehaviour
                 }
                 else if (j == bet.Length - 1)
                     isPlus = true;
-
             }
             if (isPlus)
                 final += origin[i];
         }
         return final;
     }
+
     /// <summary>
     /// 输入形如(x,y)的向量
     /// 若向量形如(xRx，yRy)或(xrx，yry)，则在R左右取随机数
     /// </summary>
-    public Vector2 StringVector2ToRealVector2(string stringVector2,Vector3 origin)
+    public Vector2 StringVector2ToRealVector2(string stringVector2, Vector3 origin)
     {
         stringVector2 = stringVector2.Substring(1, stringVector2.Length - 2) + ",";
         Vector2 realVector2 = Vector2.zero;
@@ -1344,17 +1339,17 @@ public class MainControl : MonoBehaviour
                     realVector2.y = RandomFloatChange(save, origin.y, true);
                     break;
                 }
-
             }
-            else 
+            else
                 save += stringVector2[i];
         }
         return realVector2;
     }
+
     /// <summary>
     /// 形如xRx / xrx / O   随机分开
     /// 如果没有r或R的话就会返回原本的，非常的实用
-    /// 
+    ///
     /// 额外添加：P/p获取玩家位置 通过isY确定是X还是Y
     /// 通过xxx + xRx的形式实现一定程度上的固定。
     /// </summary>
@@ -1365,7 +1360,6 @@ public class MainControl : MonoBehaviour
         float x1 = 0, x2 = 0;
         if (text[0] != 'O' && text[0] != 'o' && text[0] != 'P' && text[0] != 'p')
         {
-
             for (int i = 0; i < text.Length; i++)
             {
                 if ((text[i] == 'r' || text[i] == 'R') && !isHaveR)
@@ -1409,19 +1403,17 @@ public class MainControl : MonoBehaviour
                 //Debug.LogWarning(text.Substring(2));
                 //Debug.Log(RandomFloatChange(text.Substring(2), origin, isY, origin));
                 return RandomFloatChange(text.Substring(2), origin, isY, origin);
-
             }
             else
                 return origin;
-
         }
     }
 
     /*之后回来翻才意识到这不就一个强制转换的事儿）
-     * 
+     *
     /// <summary>
     /// 输入形如(x,y)的向量
-    /// 
+    ///
     /// </summary>
     public Vector3 StringVector2ToRealVector3(string stringVector2)
     {
@@ -1467,13 +1459,13 @@ public class MainControl : MonoBehaviour
                         save = "";
                         break;
                 }
-
             }
-            else 
+            else
                 save += stringVector4[i];
         }
         return realVector4;
     }
+
     /// <summary>
     /// 在num1与num2之间判断 符合后返回num2.否则传回num1.
     /// </summary>
@@ -1495,7 +1487,7 @@ public class MainControl : MonoBehaviour
     /// <summary>
     /// 分配Item数据
     /// </summary>
-    void ItemClassificatio()
+    private void ItemClassificatio()
     {
         ItemControl.itemFoods.Clear();
         ItemControl.itemArms.Clear();
@@ -1525,10 +1517,11 @@ public class MainControl : MonoBehaviour
             }
         }
     }
+
     /// <summary>
     /// ItemClassificatio的一个子void
     /// </summary>
-    void ItemClassificatioAdd(string i, string origin)
+    private void ItemClassificatioAdd(string i, string origin)
     {
         if (origin != "null")
             switch (i)
@@ -1536,20 +1529,25 @@ public class MainControl : MonoBehaviour
                 case "Foods":
                     ItemControl.itemFoods.Add(origin);
                     break;
+
                 case "Arms":
                     ItemControl.itemArms.Add(origin);
                     break;
+
                 case "Armors":
                     ItemControl.itemArmors.Add(origin);
                     break;
+
                 case "Others":
                     ItemControl.itemOthers.Add(origin);
                     break;
+
                 default:
                     ItemControl.itemOthers.Add(origin);
                     break;
             }
     }
+
     /// <summary>
     /// 检测 '\'字符然后分割文本到子List
     /// 批量处理string
@@ -1590,8 +1588,8 @@ public class MainControl : MonoBehaviour
             }
             else text += parentString[j];
         }
-
     }
+
     /// <summary>
     /// 检测到第一个'\'字符就传出
     /// </summary>
@@ -1606,6 +1604,7 @@ public class MainControl : MonoBehaviour
         }
         return final;
     }
+
     /// <summary>
     /// 反向检测第一个'\'字符就传出，可选忽视掉最后的 ; 号。
     /// </summary>
@@ -1629,6 +1628,7 @@ public class MainControl : MonoBehaviour
         else
             return 99999999;
     }
+
     /// <summary>
     /// 用于游戏内文本读取
     /// 传入数据名称返回文本包文本
@@ -1646,7 +1646,7 @@ public class MainControl : MonoBehaviour
 
         return "null";
     }
-    
+
     /// <summary>
     /// 用于游戏内文本读取
     /// 传入数据名称返回所有同名的文本包文本
@@ -1654,7 +1654,7 @@ public class MainControl : MonoBehaviour
     public List<string> ScreenMaxToAllSon(List<string> parentList, string screen)
     {
         List<string> list = new List<string>();
-        for (int i = 0; i < parentList.Count; i++) 
+        for (int i = 0; i < parentList.Count; i++)
         {
             if (parentList[i].Length > screen.Length && MaxToOneSon(parentList[i]) == screen)
             {
@@ -1664,11 +1664,12 @@ public class MainControl : MonoBehaviour
 
         return list;
     }
+
     /// <summary>
     /// 检测list的前几个字符是否与传入的string screen相同。
     /// 若相同则分割文本到子List
     /// </summary>
-    public void ScreenMaxToOneSon(List<string> parentList, List<string> sonList,string screen)
+    public void ScreenMaxToOneSon(List<string> parentList, List<string> sonList, string screen)
     {
         sonList.Clear();
         for (int i = 0; i < parentList.Count; i++)
@@ -1679,10 +1680,11 @@ public class MainControl : MonoBehaviour
             }
         }
     }
+
     /// <summary>
     /// 再分配文本包
     /// </summary>
-    void MaxToSon(List<string> max, string[] text, List<string>[] son)
+    private void MaxToSon(List<string> max, string[] text, List<string>[] son)
     {
         //max.Clear();
         for (int i = 0; i < son.Length; i++)
@@ -1693,14 +1695,14 @@ public class MainControl : MonoBehaviour
         {
             for (int j = 0; j < text.Length; j++)
             {
-                if (max[i].Substring(0,text[j].Length) == text[j])
+                if (max[i].Substring(0, text[j].Length) == text[j])
                 {
                     son[j].Add(max[i].Substring(text[j].Length + 1));
                 }
             }
-
         }
     }
+
     public List<int> ListOrderChanger(List<int> original)
     {
         List<int> newList = new List<int>();
@@ -1720,10 +1722,11 @@ public class MainControl : MonoBehaviour
 
         return newList;
     }
+
     /// <summary>
     /// 通过Id获取Item信息：
     /// type：Foods Arms Armors Others Auto
-    /// num：0语言包名称 
+    /// num：0语言包名称
     ///     1/2：data1/2.
     ///     请勿多输.
     ///     Arm和Armor只有1
@@ -1740,23 +1743,33 @@ public class MainControl : MonoBehaviour
                 realId = id * 3 - 3;
                 idName = list[realId];
                 break;
+
             case "Arms":
                 list = ItemControl.itemArms;
                 realId = id * 2 - 2;
                 idName = list[realId];
                 break;
+
             case "Armors":
                 list = ItemControl.itemArmors;
                 realId = id * 2 - 2;
                 idName = list[realId];
                 break;
+
             case "Others":
                 list = ItemControl.itemOthers;
                 realId = id * 3 - 3;
                 idName = list[realId];
                 break;
+
             case "Auto":
-                if (id < 10000)
+                if (id <= 0)
+                {
+                    list = null;
+                    realId = 0;
+                    idName = "null";
+                }
+                else if (id < 10000)
                 {
                     list = ItemControl.itemFoods;
                     realId = id * 3 - 3;
@@ -1781,10 +1794,10 @@ public class MainControl : MonoBehaviour
                     idName = list[realId];
                 }
                 break;
+
             default:
                 goto case "Others";
         }
-
 
         string subText = "";
         if (num == 0)//获取语言包内的名称
@@ -1838,6 +1851,7 @@ public class MainControl : MonoBehaviour
                 else
                     idData = list[realId];
                 break;
+
             case "Arms":
                 list = ItemControl.itemArms;
                 realId = id * 2 - 1;
@@ -1851,6 +1865,7 @@ public class MainControl : MonoBehaviour
                 else
                     idData = list[realId];
                 break;
+
             case "Armors":
                 list = ItemControl.itemArmors;
                 realId = id * 2 - 1;
@@ -1864,11 +1879,13 @@ public class MainControl : MonoBehaviour
                 else
                     idData = list[realId];
                 break;
+
             case "Others":
                 list = ItemControl.itemOthers;
                 realId = id * 3 - 1;
                 idData = list[realId];
                 break;
+
             case "Auto":
                 if (id < 10000)
                 {
@@ -1919,6 +1936,7 @@ public class MainControl : MonoBehaviour
                     idData = list[realId];
                 }
                 break;
+
             default:
                 goto case "Others";
         }
@@ -1946,7 +1964,7 @@ public class MainControl : MonoBehaviour
     /// 通过物品数据名称搞到它的id.
     /// type：Foods Arms Armors Others
     /// </summary>
-    public int ItemNameGetId(string name,string type)
+    public int ItemNameGetId(string name, string type)
     {
         int id = 0, listInt = 0;
         List<string> list;
@@ -1974,10 +1992,11 @@ public class MainControl : MonoBehaviour
                 listInt = 3;
                 id += 30000;
                 break;
+
             default:
                 return 0;
         }
-        if (list != null) 
+        if (list != null)
         {
             for (int i = 0; i < list.Count / listInt; i++)
             {
@@ -1986,14 +2005,10 @@ public class MainControl : MonoBehaviour
                     id += i + 1;
                     break;
                 }
-                    
             }
         }
         return id;
-
     }
-
-
 
     /// <summary>
     /// 给List<Int>，检测到空的返回
@@ -2021,8 +2036,6 @@ public class MainControl : MonoBehaviour
         return origin;
     }
 
-
-
     /// <summary>
     /// 随机获取-1或1
     /// </summary>
@@ -2036,8 +2049,8 @@ public class MainControl : MonoBehaviour
         while (i == 0);
 
         return i;
-
     }
+
     /// <summary>
     /// 传入数根据正负返回1/-1。
     /// 传0返1。
@@ -2046,11 +2059,11 @@ public class MainControl : MonoBehaviour
     {
         if (i >= 0)
             i = 1;
-        else 
+        else
             i = -1;
         return (int)i;
-
     }
+
     /// <summary>
     /// 给一个指定长度，然后会用空格填充原字符串
     /// </summary>
@@ -2091,4 +2104,18 @@ public class MainControl : MonoBehaviour
         return (shiS + ":" + fenS);
     }
 
+    public string StringRemover(string inputString, int startIndex, int endIndex, string add = "")
+    {
+        if (startIndex < 0 || endIndex >= inputString.Length || startIndex > endIndex)
+        {
+            Debug.LogError("无效的起始和结束位置");
+            return inputString;
+        }
+
+        string part1 = inputString.Substring(0, startIndex); // 从开头到A之前的部分
+        string part2 = inputString.Substring(endIndex + 1); // 从B之后到字符串末尾的部分
+
+        string result = part1 + add + part2; // 合并两部分
+        return result;
+    }
 }

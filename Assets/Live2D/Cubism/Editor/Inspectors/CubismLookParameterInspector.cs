@@ -5,7 +5,6 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Framework.LookAt;
 using UnityEditor;
 
@@ -18,6 +17,7 @@ namespace Live2D.Cubism.Editor.Inspectors
     public class CubismLookParameterInspector : UnityEditor.Editor
     {
         #region Editor
+
         /// <summary>
         /// Draws inspector.
         /// </summary>
@@ -29,21 +29,17 @@ namespace Live2D.Cubism.Editor.Inspectors
                 return;
             }
 
-
             serializedObject.Update();
 
             EditorGUI.BeginChangeCheck();
-
 
             // Display axis.
             var axis = serializedObject.FindProperty("Axis");
             EditorGUILayout.PropertyField(axis);
 
-
             // Display factor.
             var factor = serializedObject.FindProperty("Factor");
             EditorGUILayout.PropertyField(factor);
-
 
             // Save any changes.
             if (EditorGUI.EndChangeCheck())
@@ -51,6 +47,7 @@ namespace Live2D.Cubism.Editor.Inspectors
                 serializedObject.ApplyModifiedProperties();
             }
         }
-        #endregion
+
+        #endregion Editor
     }
 }

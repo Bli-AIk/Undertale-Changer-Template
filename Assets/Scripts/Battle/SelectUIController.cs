@@ -1,57 +1,67 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using TMPro;
-using System;
 using DG.Tweening;
+using System;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
+
 /// <summary>
 /// Battle场景中的UI控制器
 /// 也负责玩家回合的控制
 /// </summary>
 public class SelectUIController : MonoBehaviour
 {
-    TextMeshPro nameUI, hpUI, textUI, textUIBack;
-    SpriteRenderer hpSpr;
+    private TextMeshPro nameUI, hpUI, textUI, textUIBack;
+    private SpriteRenderer hpSpr;
+
     [Header("HP条配色")]
     public Color hpColorUnder;
+
     public Color hpColorOn;
     public Color hpColorHit;
 
-
     [Header("对话气泡载入数")]//载入actSave
     public int numDialog;
+
     public bool isDialog;
 
     [Header("暂存未使用的Sprite")]
     public List<Sprite> spriteUI;
+
     public List<SpriteRenderer> buttons;
     public List<Vector2> playerUIPos;
 
     [Header("四个按钮UI的选择 0开")]
     public int selectUI;
+
     [Header("层")]
     public int selectLayer;//0选择按钮 1选择名称 2Act选项/背包层 3执行层 进入敌方回合后归零
+
     [Header("子选择")]
     public int selectSon;
+
     public int selectGrandSon;//Item&Mercy:1 2 3三个位置 ACT:四个位置
-    ItemSelectController itemSelectController;
-    TypeWritter typeWritter;
-    GameObject enemiesHpLine;
+    private ItemSelectController itemSelectController;
+    private TypeWritter typeWritter;
+    private GameObject enemiesHpLine;
+
     [Header("暂存ACT选项以便调用")]
     public List<string> actSave;
 
     [Header("自动寻找战斗总控的怪物 需保证名称一致")]
     public List<EnemiesController> enemiesControllers;
-    TargetController target;
-    DialogBubbleBehaviour dialog;
 
-    int saveTurn = -1;
-    string saveTurnText = "";
+    private TargetController target;
+    private DialogBubbleBehaviour dialog;
+
+    private int saveTurn = -1;
+    private string saveTurnText = "";
+
     [Header("首次进入回合的时候播放自定义的回合文本")]
     public bool firstIn = false;
+
     public int firstInDiy = -1;
-    
-    void Start()
+
+    private void Start()
     {
         target = transform.Find("Target").GetComponent<TargetController>();
         target.gameObject.SetActive(false);
@@ -83,13 +93,12 @@ public class SelectUIController : MonoBehaviour
                 enemiesControllers.Add(enemies);
                 enemiesControllers[i].atk = MainControl.instance.BattleControl.enemiesATK[i];
                 enemiesControllers[i].def = MainControl.instance.BattleControl.enemiesDEF[i];
-
             }
         }
         selectUI = 1;
         TurnTextLoad(true, 0);
         enemiesHpLine.SetActive(false);
-        
+
         UITextUpdate(0);
 
         hpFood = MainControl.instance.PlayerControl.hp;
@@ -97,12 +106,10 @@ public class SelectUIController : MonoBehaviour
         InTurn();
     }
 
-    
-    void Update()
+    private void Update()
     {
         if (MainControl.instance.OverworldControl.isSetting || MainControl.instance.OverworldControl.pause)
             return;
-
 
         if (TurnController.instance.isMyTurn)
             MyTurn();
@@ -111,7 +118,7 @@ public class SelectUIController : MonoBehaviour
 
         if (isDialog)
         {
-            if ((!dialog.typeWritter.isTyping && (MainControl.instance.KeyArrowToControl(KeyCode.Z))) || ((selectUI == 1 || textUI.text == "") && numDialog == 0)) 
+            if ((!dialog.typeWritter.isTyping && (MainControl.instance.KeyArrowToControl(KeyCode.Z))) || ((selectUI == 1 || textUI.text == "") && numDialog == 0))
             {
                 if (numDialog < actSave.Count)
                     KeepDialogBubble();
@@ -128,28 +135,30 @@ public class SelectUIController : MonoBehaviour
             }
         }
     }
+
     /// <summary>
     /// UI打字 打字完成后不会强制控死文本
     /// </summary>
-    void Type(string text)
+    private void Type(string text)
     {
         typeWritter.TypeOpen(text, false, 0, 0, textUI);
     }
+
     /// <summary>
     /// 战术互换
     /// </summary>
-    void SpriteChange()
+    private void SpriteChange()
     {
         Sprite sprSave = buttons[selectUI - 1].sprite;
         buttons[selectUI - 1].sprite = spriteUI[selectUI - 1];
         spriteUI[selectUI - 1] = sprSave;
     }
-    
+
     /// <summary>
     /// selectUI=1时的设定
     /// 主要为选定怪物
     /// </summary>
-    void LayerOneSet()
+    private void LayerOneSet()
     {
         MainControl.instance.battlePlayerController.transform.position = new Vector3(-5.175f, -0.96f - selectSon * 0.66f);
         if (MainControl.instance.KeyArrowToControl(KeyCode.DownArrow) && selectSon < MainControl.instance.BattleControl.enemies.Count - 1)
@@ -163,6 +172,7 @@ public class SelectUIController : MonoBehaviour
             AudioController.instance.GetFx(0, MainControl.instance.AudioControl.fxClipUI);
         }
     }
+
     /// <summary>
     ///进我方回合
     /// </summary>
@@ -177,19 +187,16 @@ public class SelectUIController : MonoBehaviour
         TurnTextLoad();
         itemSelectController.gameObject.SetActive(true);
 
-
         MainControl.instance.forceJumpLoadTurn = false;
 
         MainControl.instance.battlePlayerController.collideCollider.enabled = false;
-
     }
 
     /// <summary>
     /// 我的回合！抽卡)
     /// </summary>
-    void MyTurn()
+    private void MyTurn()
     {
-
         switch (selectLayer)
         {
             case 0:
@@ -243,19 +250,19 @@ public class SelectUIController : MonoBehaviour
                         textUIBack.rectTransform.anchoredPosition = new Vector2(-5, -3.3f);
                         textUIBack.alignment = TextAlignmentOptions.TopRight;
                         hpSpr.material.SetFloat("_IsFlashing", 1);
-                        hpSpr.material.SetColor("_ColorFlash", hpColorOn); 
+                        hpSpr.material.SetColor("_ColorFlash", hpColorOn);
 
                         hpFood = MainControl.instance.PlayerControl.hp;
-                    }                        
-                    
+                    }
+
                     if (MainControl.instance.PlayerControl.myItems[0] == 0 && selectUI == 3)
                         selectLayer = 0;
-                    
                 }
 
                 //if (hpFood != MainControl.instance.PlayerControl.hp)
-                    hpUI.text = UIHPVoid(hpFood) + " / " + UIHPVoid(MainControl.instance.PlayerControl.hpMax);
+                hpUI.text = UIHPVoid(hpFood) + " / " + UIHPVoid(MainControl.instance.PlayerControl.hpMax);
                 break;
+
             case 1:
                 if (MainControl.instance.KeyArrowToControl(KeyCode.X))
                 {
@@ -278,7 +285,6 @@ public class SelectUIController : MonoBehaviour
                         SpriteChange();
                     }
 
-
                     selectGrandSon = 1;
                     textUI.text = "";
                     AudioController.instance.GetFx(1, MainControl.instance.AudioControl.fxClipUI);
@@ -300,6 +306,7 @@ public class SelectUIController : MonoBehaviour
                             MainControl.instance.battlePlayerController.transform.position = Vector2.one * 10000;
                         }
                         break;
+
                     case 2://ACT：选择敌人
                         LayerOneSet();
                         if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
@@ -321,24 +328,24 @@ public class SelectUIController : MonoBehaviour
                                 actSave[i] += ';';
                             }
 
-                            actSave = MainControl.instance.ChangeItemData(actSave, false, new List<string> { enemiesControllers[selectSon].name , enemiesControllers[selectSon].atk.ToString(), enemiesControllers[selectSon].def.ToString()});
+                            actSave = MainControl.instance.ChangeItemData(actSave, false, new List<string> { enemiesControllers[selectSon].name, enemiesControllers[selectSon].atk.ToString(), enemiesControllers[selectSon].def.ToString() });
 
                             for (int i = 0; i < actSave.Count; i++)
                             {
                                 actSave[i] = actSave[i].Substring(0, actSave[i].Length - 1);
                             }
 
-
                             textUIBack.rectTransform.anchoredPosition = new Vector2(10.75f, -3.3f);
                             textUIBack.alignment = TextAlignmentOptions.TopLeft;
-
                         }
                         break;
+
                     case 3://ITEM：跳2
                         itemSelectController.myItemMax = MainControl.instance.FindMax(MainControl.instance.PlayerControl.myItems); ;
                         itemSelectController.Open();
                         selectLayer = 2;
                         break;
+
                     case 4://MERCY：选择敌人
                         LayerOneSet();
                         if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
@@ -421,56 +428,66 @@ public class SelectUIController : MonoBehaviour
                                         case 1:
 
                                             break;
+
                                         case 2:
 
                                             Debug.Log(1);
                                             AudioController.instance.GetFx(3, MainControl.instance.AudioControl.fxClipBattle);
 
                                             break;
+
                                         case 3:
 
                                             break;
+
                                         case 4:
 
                                             break;
                                     }
                                     break;
+
                                 case 1://怪物1
                                     switch (selectGrandSon)//选项
                                     {
                                         case 1:
 
                                             break;
+
                                         case 2:
 
                                             break;
+
                                         case 3:
 
                                             break;
+
                                         case 4:
 
                                             break;
                                     }
                                     break;
+
                                 case 2://怪物2
                                     switch (selectGrandSon)//选项
                                     {
                                         case 1:
 
                                             break;
+
                                         case 2:
 
                                             break;
+
                                         case 3:
 
                                             break;
+
                                         case 4:
 
                                             break;
                                     }
                                     break;
                             }
-
 
                             textUIBack.text = "";
                             selectLayer = 3;
@@ -479,10 +496,9 @@ public class SelectUIController : MonoBehaviour
                             SpriteChange();
                             itemSelectController.Close();
                         }
-                   
-
 
                         break;
+
                     case 3:
                         if (MainControl.instance.KeyArrowToControl(KeyCode.X))
                         {
@@ -493,7 +509,6 @@ public class SelectUIController : MonoBehaviour
                             else
                                 TurnTextLoad(true, firstInDiy);
                             itemSelectController.Close();
-
 
                             textUIBack.rectTransform.anchoredPosition = new Vector2(10.75f, -3.3f);
                             textUIBack.alignment = TextAlignmentOptions.TopLeft;
@@ -517,7 +532,6 @@ public class SelectUIController : MonoBehaviour
                             UITextUpdate(UITextMode.Food);
                             break;
                         }
-                      
 
                         //hpSpr.material.SetFloat("_Crop", 1);
 
@@ -528,7 +542,7 @@ public class SelectUIController : MonoBehaviour
                         string textUIDataChanger2 = "";
 
                         int myItemMax = MainControl.instance.FindMax(MainControl.instance.PlayerControl.myItems);
-                    
+
                         if (myItemMax > 1)
                         {
                             textUITextChanger1 = "<color=#00000000>aa*</color>* " + MainControl.instance.ItemIdGetName(MainControl.instance.PlayerControl.myItems[selectSon + 1 - (selectGrandSon - 1)], "Auto", 0) + "\n";
@@ -577,8 +591,6 @@ public class SelectUIController : MonoBehaviour
                                        textUITextChanger1 + textUITextChanger2;
                         textUIBack.text = MainControl.instance.ItemIdGetData(MainControl.instance.PlayerControl.myItems[selectSon - (selectGrandSon - 1)], "Auto", true) + "\n" + textUIDataChanger1 + textUIDataChanger2;
 
-
-
                         if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow) && selectSon > 0)
                         {
                             if (selectGrandSon > 1)
@@ -594,7 +606,7 @@ public class SelectUIController : MonoBehaviour
                         }
                         if (MainControl.instance.KeyArrowToControl(KeyCode.DownArrow) && selectSon < myItemMax - 1)
                         {
-                            if (selectGrandSon <3)
+                            if (selectGrandSon < 3)
                                 selectGrandSon++;
                             itemSelectController.PressDown(false);
                             selectSon++;
@@ -633,10 +645,9 @@ public class SelectUIController : MonoBehaviour
                                 MainControl.instance.battlePlayerController.transform.position = new Vector3(0, -1.5f);
                                 OpenDialogBubble(MainControl.instance.BattleControl.turnDialogAsset[TurnController.instance.turn]);
                             }
-                                SpriteChange();
+                            SpriteChange();
                             itemSelectController.Close();
                         }
-
 
                         if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow) && selectGrandSon - 1 >= 1)
                         {
@@ -652,6 +663,7 @@ public class SelectUIController : MonoBehaviour
                         break;
                 }
                 break;
+
             case 3:
                 MainControl.instance.forceJumpLoadTurn = true;
                 firstIn = false;
@@ -667,7 +679,6 @@ public class SelectUIController : MonoBehaviour
                 }
                 else if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
                 {
-
                     MainControl.instance.battlePlayerController.collideCollider.enabled = true;
                     if (!isDialog)
                     {
@@ -684,20 +695,16 @@ public class SelectUIController : MonoBehaviour
                                 textUI.text = "";
                                 MainControl.instance.battlePlayerController.transform.position = new Vector2(0, -1.5f);
                                 OpenDialogBubble(MainControl.instance.BattleControl.turnDialogAsset[TurnController.instance.turn]);
-
                             }
                         }
                     }
-
                 }
-
-
 
                 break;
         }
-        
     }
-    void OpenDialogBubble(string textAsset)
+
+    private void OpenDialogBubble(string textAsset)
     {
         MainControl.instance.BattleControl.randomTurnDir = MainControl.instance.Get1Or_1();
         MainControl.instance.LoadItemData(actSave, textAsset);
@@ -707,7 +714,8 @@ public class SelectUIController : MonoBehaviour
         //if (selectUI == 1)
         //    KeepDialogBubble();
     }
-    void KeepDialogBubble()
+
+    private void KeepDialogBubble()
     {
         List<string> save = new List<string>();
         MainControl.instance.MaxToOneSon(actSave[numDialog], save);
@@ -722,7 +730,7 @@ public class SelectUIController : MonoBehaviour
 
         dialog.size = MainControl.instance.StringVector2ToRealVector2(save[0], dialog.size);
         dialog.position = MainControl.instance.StringVector2ToRealVector2(save[1], dialog.position);
-       
+
         dialog.isBackRight = Convert.ToBoolean(save[3]);
         dialog.backY = float.Parse(save[4]);
         dialog.typeWritter.TypeOpen(save[5], false, 0, 1, dialog.tmp);
@@ -730,7 +738,8 @@ public class SelectUIController : MonoBehaviour
         dialog.tmp.text = "";
         dialog.PositionChange();
     }
-    void TurnTextLoad(bool isDiy = false, int diy = 0)
+
+    private void TurnTextLoad(bool isDiy = false, int diy = 0)
     {
         if (TurnController.instance.turn != saveTurn || saveTurnText == "")
         {
@@ -745,13 +754,13 @@ public class SelectUIController : MonoBehaviour
             {
                 load = TurnTextLoad(MainControl.instance.BattleControl.turnTextSave, saveTurn);
             }
-            
+
             saveTurnText = load[UnityEngine.Random.Range(0, load.Count)];
         }
         Type(saveTurnText);
     }
 
-    List<string> TurnTextLoad(List<string> TurnTextSave, int turn)
+    private List<string> TurnTextLoad(List<string> TurnTextSave, int turn)
     {
         List<string> TurnTextSaveChanged = new List<string>();
         for (int i = 0; i < TurnTextSave.Count; i++)
@@ -770,8 +779,10 @@ public class SelectUIController : MonoBehaviour
         Hit,
         Food
     }
-    Tween hpFoodTween;
-    int hpFood;
+
+    private Tween hpFoodTween;
+    private int hpFood;
+
     /// <summary>
     /// 更新UI文字与血条
     /// </summary>
@@ -789,6 +800,7 @@ public class SelectUIController : MonoBehaviour
                 hpSpr.material.SetFloat("_Crop", (float)MainControl.instance.PlayerControl.hp / MainControl.instance.PlayerControl.hpMax);
                 hpSpr.material.SetFloat("_Flash", (float)MainControl.instance.PlayerControl.hp / MainControl.instance.PlayerControl.hpMax);
                 break;
+
             case UITextMode.Hit:
                 hpSpr.material.DOKill();
 
@@ -798,6 +810,7 @@ public class SelectUIController : MonoBehaviour
                 hpSpr.material.DOFloat((float)MainControl.instance.PlayerControl.hp / MainControl.instance.PlayerControl.hpMax, "_Flash", 0.5f).SetEase(Ease.OutCirc);
 
                 break;
+
             case UITextMode.Food:
                 hpSpr.material.DOKill();
 
@@ -808,12 +821,10 @@ public class SelectUIController : MonoBehaviour
                     addNum = MainControl.instance.PlayerControl.hpMax;
                 hpSpr.material.DOFloat(addNum / MainControl.instance.PlayerControl.hpMax, "_Flash", 0.5f).SetEase(Ease.OutCirc);
                 break;
-        
         }
 
         hpUI.transform.localPosition = new Vector3(9.85f + 0.0265f * (MainControl.instance.PlayerControl.hpMax - 20), -5.825f);
         nameUI.text = MainControl.instance.PlayerControl.playerName + " lv<size=3><color=#00000000>0</size></color>" + MainControl.instance.PlayerControl.lv;
-
 
         if (uiTextMode != UITextMode.Food)
             hpUI.text = UIHPVoid(MainControl.instance.PlayerControl.hp) + " / " + UIHPVoid(MainControl.instance.PlayerControl.hpMax);
@@ -825,12 +836,12 @@ public class SelectUIController : MonoBehaviour
                 addNum = MainControl.instance.PlayerControl.hpMax;
             hpFoodTween = DOTween.To(() => hpFood, x => hpFood = x, addNum, 0.5f);
         }
-
     }
+
     /// <summary>
     /// 解决hpUI把01显示成1的问题)
     /// </summary>
-    string UIHPVoid(int i)
+    private string UIHPVoid(int i)
     {
         if (0 <= i && i < 10)
             return "0" + i;
@@ -838,4 +849,3 @@ public class SelectUIController : MonoBehaviour
             return i.ToString();
     }
 }
-

@@ -1,26 +1,25 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using TMPro;
 using DG.Tweening;
+using System;
+using System.Collections.Generic;
+using TMPro;
+using UnityEngine;
 
 /// <summary>
 /// Gameover控制器
 /// </summary>
 public class GameoverController : MonoBehaviour
 {
-    GameObject player;
-    ParticleSystem m_ParticleSystem;
-    AudioSource bgm;
-    TypeWritter typeWritter;
+    private GameObject player;
+    private ParticleSystem m_ParticleSystem;
+    private AudioSource bgm;
+    private TypeWritter typeWritter;
     public List<AudioClip> clips;
-    TextMeshPro tmp;
+    private TextMeshPro tmp;
     public bool canChangeSence, canChangeSenceForC;
 
-    bool foolDay;
-    
-    void Start()
+    private bool foolDay;
+
+    private void Start()
     {
         canChangeSence = false;
         canChangeSenceForC = true;
@@ -28,7 +27,7 @@ public class GameoverController : MonoBehaviour
         m_ParticleSystem = transform.Find("Player/Particle System").GetComponent<ParticleSystem>();
         tmp = transform.Find("Text Options").GetComponent<TextMeshPro>();
         player = m_ParticleSystem.transform.parent.gameObject;
-        
+
         m_ParticleSystem.transform.localPosition = new Vector3(0, 0, -5);
         foolDay = DateTime.Now.Month == 4 && DateTime.Now.Day == 1;
         bgm = AudioController.instance.audioSource;
@@ -37,7 +36,6 @@ public class GameoverController : MonoBehaviour
         m_ParticleSystem.transform.position = MainControl.instance.OverworldControl.playerDeadPos;
         m_ParticleSystem.Pause();
         m_ParticleSystem.gameObject.SetActive(false);
-
     }
 
     //接下来交给Animator表演
@@ -49,7 +47,6 @@ public class GameoverController : MonoBehaviour
         }
         else
             AudioController.instance.GetFx(i, MainControl.instance.AudioControl.fxClipUI);
-
     }
 
     public void StartParticleSystem()
@@ -71,6 +68,7 @@ public class GameoverController : MonoBehaviour
         typeWritter.TypeOpen(strings[UnityEngine.Random.Range(0, 4)], false, 0, 4, tmp);
         canChangeSence = true;
     }
+
     public void Follish()
     {
         if (foolDay)
@@ -85,13 +83,11 @@ public class GameoverController : MonoBehaviour
 
             m_ParticleSystem.transform.DOMoveX(UnityEngine.Random.Range(-6.85f, 6.85f), time).SetEase((Ease)UnityEngine.Random.Range(1, 35));
             m_ParticleSystem.transform.DOMoveY(UnityEngine.Random.Range(-5.25f, 5.25f), time).SetEase((Ease)UnityEngine.Random.Range(1, 35)).OnKill(Follish);
-
-
         }
     }
+
     private void Update()
     {
-
         if (!typeWritter.isTyping && MainControl.instance.KeyArrowToControl(KeyCode.Z) && canChangeSence)
         {
             tmp.text = "";

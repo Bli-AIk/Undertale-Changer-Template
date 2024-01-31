@@ -1,6 +1,6 @@
 /* 
 
-<passText=x> - Show text for x seconds, if you want no text afterwards, type < >.
+<passText=x> - Show text for x seconds, if you want no text afterwards, type <- ->.
 <storyFade=x> - Fade out and then fade in to the Xth image. The specific IDs are built into the game. Negative numbers fade in without an image.
 <storyMove=(x,y,z)> - Move the image to a certain position, where z-axis specifies the time of movement. Negative value will be taken as an absolute value (You're really crazy, man!).
 <storyMaskT><storyMaskF> - Turn on/off the background mask (used to display only a specific area when the background image moves).

@@ -5,12 +5,10 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Framework.LookAt;
 using UnityEditor;
 
 using Object = UnityEngine.Object;
-
 
 namespace Live2D.Cubism.Editor.Inspectors
 {
@@ -29,24 +27,19 @@ namespace Live2D.Cubism.Editor.Inspectors
         {
             var controller = target as CubismLookController;
 
-
             // Fail silently.
             if (controller == null)
             {
                 return;
             }
 
-
             EditorGUI.BeginChangeCheck();
-
 
             // Draw default inspector.
             base.OnInspectorGUI();
 
-
             // Draw target.
             controller.Target = EditorGUILayout.ObjectField("Target", controller.Target, typeof(Object), true);
-
 
             // Apply changes.
             if (EditorGUI.EndChangeCheck())
@@ -55,6 +48,6 @@ namespace Live2D.Cubism.Editor.Inspectors
             }
         }
 
-        #endregion
+        #endregion Editor
     }
 }

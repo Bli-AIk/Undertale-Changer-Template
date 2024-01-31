@@ -5,14 +5,12 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core;
-using Live2D.Cubism.Rendering;
 using Live2D.Cubism.Editor.Importers;
+using Live2D.Cubism.Rendering;
 using System.Linq;
-using UnityEngine;
 using UnityEditor;
-
+using UnityEngine;
 
 namespace Live2D.Cubism.Samples.Editor
 {
@@ -36,7 +34,7 @@ namespace Live2D.Cubism.Samples.Editor
             CubismImporter.OnDidImportModel += OnModelImport;
         }
 
-        #endregion
+        #endregion Unity Event Handling
 
         #region Cubism Import Event Handling
 
@@ -50,10 +48,10 @@ namespace Live2D.Cubism.Samples.Editor
             // Lets pretend we want to change the vertex colors of all drawables to green...
             foreach (var renderer in model.Drawables.Select(d => d.GetComponent<CubismRenderer>()))
             {
-              renderer.Color = Color.green;
+                renderer.Color = Color.green;
             }
         }
 
-        #endregion
+        #endregion Cubism Import Event Handling
     }
 }

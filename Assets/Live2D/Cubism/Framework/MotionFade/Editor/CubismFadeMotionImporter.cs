@@ -5,7 +5,6 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core;
 using Live2D.Cubism.Editor;
 using Live2D.Cubism.Editor.Importers;
@@ -14,7 +13,6 @@ using System.IO;
 using UnityEditor;
 using UnityEditor.Animations;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Framework.MotionFade
 {
@@ -32,7 +30,7 @@ namespace Live2D.Cubism.Framework.MotionFade
             CubismImporter.OnDidImportMotion += OnFadeMotionImport;
         }
 
-        #endregion
+        #endregion Unity Event Handling
 
         #region Cubism Import Event Handling
 
@@ -112,7 +110,6 @@ namespace Live2D.Cubism.Framework.MotionFade
                 instanceId = animationClip.GetInstanceID();
             }
 
-
             var motionName = Path.GetFileName(importer.AssetPath);
             var motionIndex = -1;
 
@@ -176,9 +173,9 @@ namespace Live2D.Cubism.Framework.MotionFade
                 var sourceAnimationEvents = AnimationUtility.GetAnimationEvents(animationClip);
                 var index = -1;
 
-                for(var i = 0; i < sourceAnimationEvents.Length; ++i)
+                for (var i = 0; i < sourceAnimationEvents.Length; ++i)
                 {
-                    if(sourceAnimationEvents[i].functionName != "InstanceId")
+                    if (sourceAnimationEvents[i].functionName != "InstanceId")
                     {
                         continue;
                     }
@@ -187,7 +184,7 @@ namespace Live2D.Cubism.Framework.MotionFade
                     break;
                 }
 
-                if(index == -1)
+                if (index == -1)
                 {
                     index = sourceAnimationEvents.Length;
                     Array.Resize(ref sourceAnimationEvents, sourceAnimationEvents.Length + 1);
@@ -203,8 +200,7 @@ namespace Live2D.Cubism.Framework.MotionFade
             }
         }
 
-        #endregion
-
+        #endregion Cubism Import Event Handling
 
         #region Functions
 
@@ -261,6 +257,6 @@ namespace Live2D.Cubism.Framework.MotionFade
             return fadeMotions;
         }
 
-        #endregion
+        #endregion Functions
     }
 }

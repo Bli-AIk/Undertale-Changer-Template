@@ -80,8 +80,8 @@ Data\顯示名稱;   用於其餘顯示
 */
 
 /* I T E M */
-Item\baaaaaaaaaaaaaaaa\兩份喫的\<autoFoodFull><enter>* 又得測試，寄了<stop>.<stop>.<stop>.<passText>* 不過還是蠻順利的嘛。\<autoCheckFood><enter>* 不可名狀的玩意兒<stop>.<stop>.<stop>.<passText><color=yellow>* 草測試成功了我操！！！\<autoLoseFood>;
-Item\bang\一份喫的\* 你嚐了一口這剩下的玩意兒。<stop><enter><autoFood>\<autoCheckFood><enter>* 仍舊是不可名狀<stop>.<stop>.<stop>.\<autoLoseFood>;
+Item\baaaaaaaaaaaaaaaa\兩份喫的\<autoFoodFull><enter>* 又得測試，寄了<stop><stop...><passText>* 不過還是蠻順利的嘛。\<autoCheckFood><enter>* 不可名狀的玩意兒<stop><stop...><passText><color=yellow>* 草測試成功了我操！！！\<autoLoseFood>;
+Item\bang\一份喫的\* 你嚐了一口這剩下的玩意兒。<stop><enter><autoFood>\<autoCheckFood><enter>* 仍舊是不可名狀<stop><stop...>\<autoLoseFood>;
 
 Item\pia1\破爛玩具刀\<autoArm>\<autoCheckArm>\<autoLoseArm>;
 Item\pia2\<color=yellow>黃金聖劍普拉斯</color>\<autoArm><enter>* 金色傳說了屬於是。\<autoCheckArm><enter>* 嗯...你媽的什麼玩意(\* <color=red>你就這麼丟了？<stop>？<stop>？</color>;
@@ -115,8 +115,8 @@ Data\* 你回覆了<autoFood>HP！<stop>;/*未用到<itemHp>。這一步需要�
 Data\* “<itemNameFood>”-治癒 <itemHp> HP<stop>;
 Data\* 你裝備了<itemNameArm>。<stop>;
 Data\* 你裝備了<itemNameArmor>。<stop>;
-Data\* “<itemNameArm>”- 武器 <stop>AT <itemAtk><stop>;
-Data\* “<itemNameArmor>”- 防具 <stop>DF <itemDef><stop>;
+Data\* “<itemNameArm>” - 武器 <stop>AT <itemAtk><stop>;
+Data\* “<itemNameArmor>” - 防具 <stop>DF <itemDef><stop>;
 Data\* <itemNameFood>被你扔掉了。<stop>;
 Data\* <itemNameArm>被你扔掉了。<stop>;
 Data\* <itemNameArmor>被你扔掉了。<stop>;/*20*/

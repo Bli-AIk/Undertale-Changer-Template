@@ -5,9 +5,7 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Framework.MouthMovement
 {
@@ -23,13 +21,11 @@ namespace Live2D.Cubism.Framework.MouthMovement
         [SerializeField]
         public AudioSource AudioInput;
 
-
         /// <summary>
         /// Sampling quality.
         /// </summary>
         [SerializeField]
         public CubismAudioSamplingQuality SamplingQuality;
-
 
         /// <summary>
         /// Audio gain.
@@ -42,7 +38,6 @@ namespace Live2D.Cubism.Framework.MouthMovement
         /// </summary>
         [Range(0.0f, 1.0f)]
         public float Smoothing;
-
 
         /// <summary>
         /// Current samples.
@@ -65,7 +60,6 @@ namespace Live2D.Cubism.Framework.MouthMovement
         /// </summary>
         private CubismMouthController Target { get; set; }
 
-
         /// <summary>
         /// True if instance is initialized.
         /// </summary>
@@ -73,7 +67,6 @@ namespace Live2D.Cubism.Framework.MouthMovement
         {
             get { return Samples != null; }
         }
-
 
         /// <summary>
         /// Makes sure instance is initialized.
@@ -86,33 +79,28 @@ namespace Live2D.Cubism.Framework.MouthMovement
                 return;
             }
 
-
             // Initialize samples buffer.
             switch (SamplingQuality)
             {
                 case (CubismAudioSamplingQuality.VeryHigh):
-                {
+                    {
                         Samples = new float[256];
-
 
                         break;
                     }
                 case (CubismAudioSamplingQuality.Maximum):
-                {
-                    Samples = new float[512];
+                    {
+                        Samples = new float[512];
 
-
-                    break;
-                }
+                        break;
+                    }
                 default:
-                {
-                    Samples = new float[256];
+                    {
+                        Samples = new float[256];
 
-
-                    break;
-                }
+                        break;
+                    }
             }
-
 
             // Cache target.
             Target = GetComponent<CubismMouthController>();
@@ -131,42 +119,32 @@ namespace Live2D.Cubism.Framework.MouthMovement
                 return;
             }
 
-
             // Sample audio.
             var total = 0f;
 
-
             AudioInput.GetOutputData(Samples, 0);
-
 
             for (var i = 0; i < Samples.Length; ++i)
             {
                 var sample = Samples[i];
 
-
                 total += (sample * sample);
             }
-
 
             // Compute root mean square over samples.
             var rms = Mathf.Sqrt(total / Samples.Length) * Gain;
 
-
             // Clamp root mean square.
             rms = Mathf.Clamp(rms, 0.0f, 1.0f);
-
 
             // Smooth rms.
             rms = Mathf.SmoothDamp(LastRms, rms, ref VelocityBuffer, Smoothing * 0.1f);
 
-
             // Set rms as mouth opening and store it for next evaluation.
             Target.MouthOpening = rms;
 
-
             LastRms = rms;
         }
-
 
         /// <summary>
         /// Initializes instance.
@@ -176,6 +154,6 @@ namespace Live2D.Cubism.Framework.MouthMovement
             TryInitialize();
         }
 
-        #endregion
+        #endregion Unity Event Handling
     }
 }

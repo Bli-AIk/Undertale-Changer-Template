@@ -60,18 +60,18 @@ Item相关选项必须在Item文本处配置。
 */
 
 Turn\0\* 回合0.;
-Turn\0\* 回合0<stop>.<stop>.<stop>.<stop>.<stop>.<stop>.<stop>的另一种版本。;
-Turn\1\* 欢迎来到回合1<stop>.<stop>.<stop>.<enter>* 当然。;
+Turn\0\* 回合0<stop><stop......>的另一种版本。;
+Turn\1\* 欢迎来到回合1<stop><stop...><enter>* 当然。;
 
 
 Act\NPC1\查看\* <getEnemiesName> <stop>-<stop> 攻击<stop> <getEnemiesATK><stop> 防御<stop> <getEnemiesDEF><stop><enter>* 这是啥啊？;
 Act\NPC1\摸摸\* 你摸了摸<getEnemiesName>。<stop><enter>* 它发出了“嗷”的声音。;
-Act\NPC1\瞪眼\* 你狠狠的瞪了它一眼。<stop><enter>* 当你凝视深渊的时候<stop>.<stop>.<stop>.;
-Act\NPC1\无视\* 你没在看它.<stop>.<stop>.<stop>大概.<stop>.<stop>.;
+Act\NPC1\瞪眼\* 你狠狠的瞪了它一眼。<stop><enter>* 当你凝视深渊的时候<stop><stop...>;
+Act\NPC1\无视\* 你没在看它<stop...>大概<stop...>;
 
 Act\NPC2\查看\* <getEnemiesName> <stop>-<stop> 攻击<stop> <getEnemiesATK><stop> 防御<stop> <getEnemiesDEF><stop><enter>* 这又啥啊？;
 Act\NPC2\夸夸\* 你对<getEnemiesName>说它长得很别致。<stop><enter>* <getEnemiesName>感到非常疑惑。;
-Act\NPC2\抱抱\* 你一把抱起了<getEnemiesName>。<stop><enter>* <getEnemiesName>似乎被吓到了<stop>.<stop>.<stop>.<passText>* 不过它感到很开心。;
+Act\NPC2\抱抱\* 你一把抱起了<getEnemiesName>。<stop><enter>* <getEnemiesName>似乎被吓到了<stop><stop...><passText>* 不过它感到很开心。;
 Act\NPC2\坏笑\* 你发出了一声坏笑。<stop><enter><getEnemiesName>搞不明白你在干啥。;
 
 Mercy\NPC1\饶恕\Null;

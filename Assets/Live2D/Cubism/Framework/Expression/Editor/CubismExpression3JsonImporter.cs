@@ -5,14 +5,13 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
+using Live2D.Cubism.Core;
 using Live2D.Cubism.Framework.Expression;
 using Live2D.Cubism.Framework.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Live2D.Cubism.Core;
 using UnityEditor;
 using UnityEngine;
 
@@ -30,12 +29,12 @@ namespace Live2D.Cubism.Editor.Importers
         {
             get
             {
-                if(_expressionJson != null)
+                if (_expressionJson != null)
                 {
                     return _expressionJson;
                 }
 
-                if(string.IsNullOrEmpty(AssetPath))
+                if (string.IsNullOrEmpty(AssetPath))
                 {
                     return null;
                 }
@@ -53,14 +52,13 @@ namespace Live2D.Cubism.Editor.Importers
         /// Registers importer.
         /// </summary>
         [InitializeOnLoadMethod]
-        // ReSharper disable once UnusedMember.Local
         private static void RegisterImporter()
         {
             CubismImporter.RegisterImporter<CubismExpression3JsonImporter>(".exp3.json");
             CubismImporter.OnDidImportModel += OnModelImport;
         }
 
-        #endregion
+        #endregion Unity Event Handling
 
         #region Cubism Import Event Handling
 
@@ -74,7 +72,7 @@ namespace Live2D.Cubism.Editor.Importers
             // Create expression data.
             CubismExpressionData expressionData;
 
-            if(oldExpressionData == null)
+            if (oldExpressionData == null)
             {
                 expressionData = CubismExpressionData.CreateInstance(ExpressionJson);
                 AssetDatabase.CreateAsset(expressionData, AssetPath.Replace(".exp3.json", ".exp3.asset"));
@@ -151,9 +149,7 @@ namespace Live2D.Cubism.Editor.Importers
             }
 
             EditorUtility.SetDirty(expressionList);
-
         }
-
 
         /// <summary>
         /// Set expression list.
@@ -168,7 +164,7 @@ namespace Live2D.Cubism.Editor.Importers
                 return;
             }
 
-            var modelDir = Path.GetDirectoryName(importer.AssetPath).Replace("\\","/");
+            var modelDir = Path.GetDirectoryName(importer.AssetPath).Replace("\\", "/");
             var modelName = Path.GetFileName(modelDir);
             var expressionListPath = modelDir + "/" + modelName + ".expressionList.asset";
 
@@ -182,7 +178,7 @@ namespace Live2D.Cubism.Editor.Importers
             expressionController.ExpressionsList = expressionList;
         }
 
-        #endregion
+        #endregion Cubism Import Event Handling
 
         /// <summary>
         /// Load the .expressionList.

@@ -5,10 +5,8 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
-using UnityEditor;
 using Live2D.Cubism.Rendering;
-
+using UnityEditor;
 
 namespace Live2D.Cubism.Editor.Inspectors
 {
@@ -102,7 +100,6 @@ namespace Live2D.Cubism.Editor.Inspectors
                 }
             }
 
-
             // Save any changes.
             if (EditorGUI.EndChangeCheck())
             {
@@ -120,6 +117,6 @@ namespace Live2D.Cubism.Editor.Inspectors
             }
         }
 
-        #endregion
+        #endregion Editor
     }
 }

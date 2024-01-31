@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,16 +14,17 @@ public class SpriteChanger : MonoBehaviour
     public float backFrame;
     public bool inOverWorld;
 
-    TypeWritter typeWritter;
-    SpriteRenderer sprite;
-    Image spriteImage;
-    TalkUIPositionChanger talkUIPositionChanger;
-    int num;
-    float clock;
-    bool back;
+    public bool justSaying;
 
-    
-    void Start()
+    private TypeWritter typeWritter;
+    private SpriteRenderer sprite;
+    private Image spriteImage;
+    private TalkUIPositionChanger talkUIPositionChanger;
+    private int num;
+    private float clock;
+    private bool back;
+
+    private void Start()
     {
         clock = backFrame / 60f;
         if (inOverWorld)
@@ -34,38 +34,36 @@ public class SpriteChanger : MonoBehaviour
 
         if (path != "")
         {
-
             if (!useImage)
                 sprite = transform.Find(path).GetComponent<SpriteRenderer>();
             else
                 spriteImage = transform.Find(path).GetComponent<Image>();
-
         }
         else
         {
-
             if (!useImage)
                 sprite = GetComponent<SpriteRenderer>();
             else
                 spriteImage = GetComponent<Image>();
         }
     }
+
     private void Update()
     {
-        if (haveBack && typeWritter.isTyping && !typeWritter.passText && !typeWritter.isStop)
+        if (clock > 0)
         {
-            if (clock > 0)
-            {
-                clock -= Time.deltaTime;
-            }
-            else if (num >= 0)
+            clock -= Time.deltaTime;
+        }
+        if (justSaying || (haveBack && typeWritter.isTyping && !typeWritter.passText && !typeWritter.isStop))
+        {
+            if (clock <= 0 && num >= 0)
             {
                 back = !back;
                 ChangeImage(num, back);
                 clock = backFrame / 60f;
             }
         }
-        else
+        else if (clock <= 0)
         {
             if (back)
             {
@@ -74,11 +72,10 @@ public class SpriteChanger : MonoBehaviour
             }
             clock = backFrame / 60f;
         }
-        
     }
+
     public void ChangeImage(int i, bool back = false)
     {
-
         talkUIPositionChanger.haveHead = i >= 0;
         if (i >= 0)
         {
@@ -98,27 +95,21 @@ public class SpriteChanger : MonoBehaviour
                 spriteImage.rectTransform.sizeDelta = new Vector2(spriter.texture.width, spriter.texture.height);
                 spriteImage.color = Color.white;
             }
-
         }
         else
         {
-
             if (!useImage)
             {
                 sprite.sprite = null;
                 sprite.color = Color.clear;
-
             }
             else
             {
                 spriteImage.sprite = null;
                 spriteImage.color = Color.clear;
-
             }
-
         }
 
         num = i;
     }
-
 }

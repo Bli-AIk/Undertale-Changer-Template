@@ -5,11 +5,9 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
-using System;
 using Live2D.Cubism.Core;
+using System;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Framework.Physics
 {
@@ -25,17 +23,14 @@ namespace Live2D.Cubism.Framework.Physics
         [SerializeField]
         public CubismPhysicsSubRig[] SubRigs;
 
-
         [SerializeField]
         public Vector2 Gravity = CubismPhysics.Gravity;
-
 
         [SerializeField]
         public Vector2 Wind = CubismPhysics.Wind;
 
         [SerializeField]
         public float Fps = 0.0f;
-
 
         private float _currentRemainTime; // Time not processed by physics.
 

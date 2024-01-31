@@ -5,12 +5,10 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Framework.UserData;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Framework.Json
 {
@@ -53,7 +51,6 @@ namespace Live2D.Cubism.Framework.Json
         {
             var userDataList = new List<CubismUserDataBody>();
 
-
             for (var i = 0; i < UserData.Length; ++i)
             {
                 var body = new CubismUserDataBody
@@ -65,26 +62,24 @@ namespace Live2D.Cubism.Framework.Json
                 switch (targetType)
                 {
                     case CubismUserDataTargetType.ArtMesh:
-                    {
-                        // Only drawables.
-                        if (UserData[i].Target == "ArtMesh")
                         {
-                            userDataList.Add(body);
-                        }
+                            // Only drawables.
+                            if (UserData[i].Target == "ArtMesh")
+                            {
+                                userDataList.Add(body);
+                            }
 
-                        break;
-                    }
+                            break;
+                        }
                     default:
-                    {
-                        break;
-                    }
+                        {
+                            break;
+                        }
                 }
             }
 
-
             return userDataList.ToArray();
         }
-
 
         #region Json Data
 
@@ -106,8 +101,7 @@ namespace Live2D.Cubism.Framework.Json
         [SerializeField]
         public SerializableUserData[] UserData;
 
-        #endregion
-
+        #endregion Json Data
 
         #region Json Helpers
 
@@ -155,6 +149,6 @@ namespace Live2D.Cubism.Framework.Json
             public string Value;
         }
 
-        #endregion
+        #endregion Json Helpers
     }
 }

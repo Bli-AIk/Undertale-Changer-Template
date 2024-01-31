@@ -5,9 +5,7 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Samples.LookAt
 {
@@ -38,6 +36,6 @@ namespace Live2D.Cubism.Samples.LookAt
             }
         }
 
-        #endregion
+        #endregion Unity Event Handling
     }
 }

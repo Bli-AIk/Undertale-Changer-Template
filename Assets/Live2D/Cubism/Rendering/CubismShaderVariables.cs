@@ -5,7 +5,6 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 namespace Live2D.Cubism.Rendering
 {
     /// <summary>
@@ -18,24 +17,20 @@ namespace Live2D.Cubism.Rendering
         /// </summary>
         public const string MainTexture = "_MainTex";
 
-
         /// <summary>
         /// Model opacity shader variable name.
         /// </summary>
         public const string ModelOpacity = "cubism_ModelOpacity";
-
 
         /// <summary>
         /// Diffuse color shader variable name.
         /// </summary>
         public const string MultiplyColor = "cubism_MultiplyColor";
 
-
         /// <summary>
         /// Tint color shader variable name.
         /// </summary>
         public const string ScreenColor = "cubism_ScreenColor";
-
 
         /// <summary>
         /// Mask texture shader variable name.

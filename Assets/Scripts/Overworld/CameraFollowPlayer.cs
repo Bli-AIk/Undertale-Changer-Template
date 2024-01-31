@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening;
 
 /// <summary>
 /// OverworldÉãÏñ»ú¸úËæ
@@ -14,13 +11,15 @@ public class CameraFollowPlayer : MonoBehaviour
     public GameObject player;
     public bool isFollow;
     public Vector3 followPosition;
-    void Start()
+
+    private void Start()
     {
         player = GameObject.Find("Player");
     }
-    void Update()
+
+    private void Update()
     {
-        if (!isFollow) 
+        if (!isFollow)
         {
             return;
         }
@@ -59,5 +58,4 @@ public class CameraFollowPlayer : MonoBehaviour
         else
             transform.position = new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z);
     }
-    
 }

@@ -5,7 +5,6 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEditor;
@@ -33,7 +32,6 @@ public class CubismWebGLPluginProcessor : IPreprocessBuildWithReport
             return;
         }
 
-
         // Detect the type of WebGL plugin by SDK type and SDK version in the build settings.
         var targetPlugin =
 #if UNITY_2021_2_OR_NEWER
@@ -41,7 +39,6 @@ public class CubismWebGLPluginProcessor : IPreprocessBuildWithReport
 #else
             CubismWebGLPlugin.Previous;
 #endif
-
 
         // Extract the Cubism WebGL plugin from the plugin.
         var pluginImporters = PluginImporter.GetAllImporters()
@@ -53,7 +50,6 @@ public class CubismWebGLPluginProcessor : IPreprocessBuildWithReport
             )
             .ToArray();
 
-
         // Enable only the appropriate plugins.
         foreach (var pluginImporter in pluginImporters)
         {
@@ -63,7 +59,6 @@ public class CubismWebGLPluginProcessor : IPreprocessBuildWithReport
             );
         }
     }
-
 
     /// <summary>
     /// Defines the version of the plugin for WebGL.
@@ -76,6 +71,7 @@ public class CubismWebGLPluginProcessor : IPreprocessBuildWithReport
         {
             get { return new CubismWebGLPlugin("latest"); }
         }
+
         public static CubismWebGLPlugin Previous
         {
             get { return new CubismWebGLPlugin("1_38_48"); }

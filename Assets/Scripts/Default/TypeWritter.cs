@@ -1,17 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
+using Log;
 using MEC;
-using UnityEngine;
 using System;
-using UnityEngine.Audio;
+using System.Collections.Generic;
 using TMPro;
+using UnityEngine;
+using UnityEngine.Audio;
+
 /// <summary>
 /// 打字机系统
 /// </summary>
 public class TypeWritter : MonoBehaviour
 {
-    public string originString, endString;
-    public bool isTyping;
+    public string originString, endString, passTextString;
+    public bool isRunning;//打字机是否在运行
+    public bool isTyping;//是否在 打出字符
     public int hpIn;
     public int hpSave;
     public bool canNotX;
@@ -20,35 +22,39 @@ public class TypeWritter : MonoBehaviour
     public bool isStop;
     public int fx;//音效
     public bool fxRandomPitch;
-    
+
     [Header("打字速度与检测停顿字符后的打字速度")]
     public float speed = 0.075f, speedSlow = 0.15f;
+
     [Header("打字后多少秒可以按X跳过，0为不能跳")]
-    public float clock = 0.1f;//设置
-    public int passTextString;
+    public float clock = 0.01f;//设置
+
     public bool passText;
-    [Header("有就勾上")]
-    public bool haveSpriteChanger;
+
+
     public SpriteChanger spriteChanger;
+
     [Header("适配OW框")]
     public bool isOverworld;
-    TalkUIPositionChanger talkUIPositionChanger;
+
+    private TalkUIPositionChanger talkUIPositionChanger;
 
     public float pitch = 1;
     public float volume = 0.5f;
     public AudioMixerGroup audioMixerGroup;
 
     public int useFont;
+
     [Header("总有那么一些情况需要强硬手段（拔枪")]
     public bool forceReturn = false;
 
-    TMP_Text tmp_Text;
+    private TMP_Text tmp_Text;
+
     private void Start()
     {
         if (isOverworld)
             talkUIPositionChanger = TalkUIPositionChanger.instance;
-        if (haveSpriteChanger)
-            spriteChanger = GetComponent<SpriteChanger>();
+        spriteChanger = GetComponent<SpriteChanger>();
     }
 
     public enum TypeMode
@@ -56,14 +62,17 @@ public class TypeWritter : MonoBehaviour
         Normal,//正常的打字机
         CantZX,//不能按ZX的打字机，使用富文本进行控制。
     }
-    TypeMode typeMode = TypeMode.Normal;
+
+    private TypeMode typeMode = TypeMode.Normal;
+
     /// <summary>
     /// 开启打字机。若打字正在进行，可强行终止。
     /// 一般情况下不需要强行打断对话。
-    /// 若传入的语句中含有 齉 字符，请输入hp。若输入0，此字符将跳过。
+    /// 若传入的语句中含有<autoFood>，请输入hp。若输入0，此字符将跳过。
     /// </summary>
     public void TypeOpen(string text, bool force, int hp, int fx, TMP_Text tmp_Text, TypeMode typeMode = TypeMode.Normal)
     {
+        isRunning = true;
         this.typeMode = typeMode;
 
         if (!force && isTyping)
@@ -73,7 +82,7 @@ public class TypeWritter : MonoBehaviour
         passText = false;
         endString = "";
         tmp_Text.text = "";
-        passTextString = 0;
+        passTextString = "";
         originString = text;
         hpIn = hp;
         hpSave = MainControl.instance.PlayerControl.hp;
@@ -82,13 +91,15 @@ public class TypeWritter : MonoBehaviour
         isStop = false;
         this.fx = fx;
         if (isOverworld)
-            talkUIPositionChanger.Change(true, originString[0] == '鼵' && originString[1] != '-', true, this);
+            talkUIPositionChanger.Change(true, originString.Substring(0, "<passText>".Length) == "<passText>", true, this);
 
         this.tmp_Text = tmp_Text;
         Timing.RunCoroutine(_Typing(this.tmp_Text));
     }
+
     public void TypeStop()
     {
+        isRunning = false;
         Timing.KillCoroutines();
         isTyping = false;
         endString = "";
@@ -96,8 +107,9 @@ public class TypeWritter : MonoBehaviour
         {
             tmp_Text.text = "";
         }
-        passTextString = 0;
+        passTextString = "";
     }
+
     public void TypePause(bool pause)
     {
         if (pause)
@@ -109,18 +121,25 @@ public class TypeWritter : MonoBehaviour
             Timing.ResumeCoroutines();
         }
     }
-    IEnumerator<float> _Typing(TMP_Text tmp_Text)
+
+    private bool isUsedFx;
+
+    private IEnumerator<float> _Typing(TMP_Text tmp_Text)
     {
-
-        isTyping = true;
-
+        isRunning = true;
         for (int i = 0; i < originString.Length; i++)
         {
+            if (spriteChanger != null)
+                spriteChanger.justSaying = false;
+
+            isTyping = true;
+            isUsedFx = false;
+
             if (fxRandomPitch)
                 pitch = UnityEngine.Random.Range(0.25f, 1.25f);
 
-            if (originString[i] != '齉')
-                passTextString++;
+            //if (originString[i] != '齉')
+
             if (originString[i] == '<')
             {
                 bool fix0 = false;
@@ -137,22 +156,79 @@ public class TypeWritter : MonoBehaviour
                         if (fix0)
                             fix0 = false;
                     }
-                    if (MainControl.instance.IsFrontCharactersMatch("<Font", spText))
+
+                    passTextString += spText;
+
+                    if (MainControl.instance.IsFrontCharactersMatch("<fx=", spText))
                     {
-                        string fontSave = spText.Substring(6);
-                        fontSave = fontSave.Substring(0, fontSave.Length - 1);
-                        useFont = int.Parse(fontSave);
-                        tmp_Text.font = MainControl.instance.OverworldControl.tmpFonts[useFont];
-                        passTextString += spText.Length;
+                        string save = spText.Substring(4);
+                        save = save.Substring(0, save.Length - 1);
+                        fx = int.Parse(save);
                     }
-                    else if (MainControl.instance.IsFrontCharactersMatch("<passText", spText))
+                    else if (MainControl.instance.IsFrontCharactersMatch("<font=", spText))
+                    {
+                        string save = spText.Substring(6);
+                        save = save.Substring(0, save.Length - 1);
+                        useFont = int.Parse(save);
+                        tmp_Text.font = MainControl.instance.OverworldControl.tmpFonts[useFont];
+                    }
+                    else if (MainControl.instance.IsFrontCharactersMatch("<stop*", spText))
+                    {
+                        if (!pressX)
+                        {
+                            isTyping = false;
+                            float num = float.Parse(spText.Substring(6, spText.Length - 7));
+                            for (int p = 0; p < num; p++)
+                            {
+                                if (pressX)
+                                    break;
+                                yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f * Convert.ToInt32(!MainControl.instance.OverworldControl.textWidth));
+                            }
+                            isTyping = false;
+                        }
+
+                        isStop = true;
+                    }
+                    else if (MainControl.instance.IsFrontCharactersMatch("<image=", spText))
+                    {
+                        string save = spText.Substring(7);
+                        save = save.Substring(0, save.Length - 1);
+                        int s = int.Parse(save);
+                        if (spriteChanger != null)
+                            spriteChanger.ChangeImage(s);
+                        talkUIPositionChanger.Change(true, s >= 0, false);
+                    }
+                    else if (MainControl.instance.IsFrontCharactersMatch("<stop...*", spText))
+                    {
+                        if (!pressX)
+                        {
+                            isTyping = false;
+
+                            float num = float.Parse(spText.Substring(9, spText.Length - 10));
+                            for (int l = 0; l < 3; l++)
+                            {
+                                for (int p = 0; p < num; p++)
+                                {
+                                    if (pressX)
+                                        break;
+                                    yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f * Convert.ToInt32(!MainControl.instance.OverworldControl.textWidth));
+                                }
+                                AudioController.instance.GetFx(fx, MainControl.instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
+                                endString += '.';
+                                tmp_Text.text = endString;
+                            }
+                        }
+                        else endString += "...";
+                        isStop = true;
+                        tmp_Text.text = endString;
+                    }
+                    else if (MainControl.instance.IsFrontCharactersMatch("<passText=", spText))
                     {
                         string save = spText.Substring(10);
                         save = save.Substring(0, save.Length - 1);
 
                         Invoke(nameof(PassText), float.Parse(save));
 
-                        passTextString += spText.Length;
                         passText = true;
                     }
                     else if (MainControl.instance.IsFrontCharactersMatch("<storyFade", spText))
@@ -160,37 +236,110 @@ public class TypeWritter : MonoBehaviour
                         string save = spText.Substring(11);
                         save = save.Substring(0, save.Length - 1);
                         StorySceneController.instance.Fade(int.Parse(save));
-                        passTextString += spText.Length;
+                    }
+                    else if (MainControl.instance.IsFrontCharactersMatch("<stop......*", spText))
+                    {
+                        if (!pressX)
+                        {
+                            isTyping = false;
+
+                            float num = float.Parse(spText.Substring(12, spText.Length - 13));
+                            for (int l = 0; l < 6; l++)
+                            {
+                                for (int p = 0; p < num; p++)
+                                {
+                                    if (pressX)
+                                        break;
+                                    yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f * Convert.ToInt32(!MainControl.instance.OverworldControl.textWidth));
+                                }
+                                AudioController.instance.GetFx(fx, MainControl.instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
+                                endString += '.';
+                                tmp_Text.text = endString;
+                            }
+                        }
+                        else endString += "......";
+                        isStop = true;
+                        tmp_Text.text = endString;
                     }
                     else
                     {
                         switch (spText)
                         {
-                            case "<StoryStart1>":
-                                GameObject.Find("Grid/Fog").GetComponent<Animator>().enabled = true;
-                                passTextString += spText.Length;
-                                break;
                             case "<storyMaskT>":
                                 StorySceneController.instance.mask.SetActive(true);
                                 break;
+
                             case "<storyMaskF>":
                                 StorySceneController.instance.mask.SetActive(false);
                                 break;
+
                             case "<storyExit>":
                                 TypeStop();
                                 MainControl.instance.OutBlack("Start", Color.black, true);
                                 break;
+
                             case "<sprite=0>":
                                 if (!pressX)
                                     AudioController.instance.GetFx(fx, MainControl.instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
                                 goto default;
+                            case "<stop>":
+                                if (!pressX)
+                                {
+                                    //单独一个Stop的时候，不设置isTyping，这是因为有的时候这个stop的时间很短，如果true看起来有点怪。
+                                    //如果需要长的Stop，建议你还是使用<stop*x>的方式来做。
+                                    //isTyping = false;
+                                    yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f * Convert.ToInt32(!MainControl.instance.OverworldControl.textWidth));
+                                }
+                                isStop = true;
+                                break;
+
+                            case "<autoFood>":
+                                string plusString;
+                                if (hpIn + hpSave >= MainControl.instance.PlayerControl.hpMax)
+                                {
+                                    plusString = MainControl.instance.ItemControl.itemTextMaxData[22];
+                                    plusString = plusString.Substring(0, plusString.Length - 1);
+                                }
+                                else
+                                {
+                                    plusString = MainControl.instance.ItemControl.itemTextMaxData[12];
+                                    plusString = plusString.Substring(0, plusString.Length - 1);
+                                }
+                                originString = MainControl.instance.StringRemover(originString, passTextString.Length - 1, passTextString.Length - 2 + "<autoFood>".Length, plusString);
+                                i -= spText.Length;
+                                break;
+
+                            case "<changeX>":
+                                canNotX = !canNotX;
+                                break;
+
+                            case "<passText>":
+                                passText = true;
+                                passTextString = passTextString.Substring(0, passTextString.Length - spText.Length);
+                                //passTextString += spText.Length * 2 - 5;
+                                goto PassText;
                             default://富文本
+
+                                if (spText.Length - 2 > 0 && spText[1] == '-' && spText[spText.Length - 2] == '-')
+                                {
+                                    spText = spText.Substring(2, spText.Length - 4);
+                                    if (!pressX)
+                                    {
+                                        AudioController.instance.GetFx(fx, MainControl.instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
+                                        isUsedFx = true;
+
+                                        if (spriteChanger != null)
+                                            spriteChanger.justSaying = true;
+                                    }
+                                }
+
                                 endString += spText;
-                                passTextString += spText.Length;
+                                tmp_Text.text = endString;
+
                                 break;
                         }
                     }
-                   
+
                     if (i >= originString.Length)
                     {
                         originString += " ";
@@ -199,172 +348,62 @@ public class TypeWritter : MonoBehaviour
                     fix0 = true;
                 }
             }
-            
-            while (originString[i] == '粜')//跳字
-            {
-                endString += originString[i + 1];
-                passTextString += 2;
-                i += 2;
-            }
-            isStop = originString[i] == '龘';
-            if (originString[i] == '鯈')
-            {
-                canNotX = !canNotX;
-            }
-            else if (originString[i] == '禤')
-            {
-                int q = i;
-                string text = "";
-                while (i < originString.Length - 1)
-                {
-                    i++;
-                    text += originString[i];
-                }
-                i = q;
-                originString = originString.Substring(0, originString.Length - text.Length);
-                //passTextString--;
-                originString += '轂';
-                OverworldTalkSelect.instance.typeText = text;
-                OverworldTalkSelect.instance.Open();
-                isTyping = false;
-            }
-            else if (originString[i] == '龘')//停顿
-            {
-                if (!pressX)
-                    yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f * Convert.ToInt32(!MainControl.instance.OverworldControl.textWidth));
-               
-            }
-            else if (originString[i] == '鼵')//变脸
-            {
-                string num = "";
-                i++;
-                while (originString[i] != '鼵')
-                {
-                    num += originString[i];
-                    i++;
-                    passTextString++;
-                }
-                passTextString++;
-                spriteChanger.ChangeImage(int.Parse(num));
-                continue;
-            }
-            else if (originString[i] == '菔')//改打字机FX
-            {
-                string num = "";
-                i++;
-                while (originString[i] != '菔')
-                {
-                    num += originString[i];
-                    i++;
-                    passTextString++;
-                }
-                passTextString++;
-                fx = int.Parse(num);
-                continue;
-            }
-            else
-            {
-                if (originString[i] == '齉'&& hpIn != 0)//检测hp状态并插字儿
-                {
-                    i -= 2;
-                    string plusString;
-                    if (hpIn + hpSave >= MainControl.instance.PlayerControl.hpMax)
-                    {
-                        plusString = MainControl.instance.ItemControl.itemTextMaxData[22];
-                        plusString = plusString.Substring(0, plusString.Length - 1);
-                    }
-                    else
-                    {
-                        plusString = MainControl.instance.ItemControl.itemTextMaxData[12];
-                        plusString = plusString.Substring(0, plusString.Length - 1);
-                        string plusStringChanger = "";
-                        for (int j = 0; j < plusString.Length; j++) 
-                        {
-                            if (plusString[j] == '齉')
-                                plusStringChanger += hpIn;
-                            else
-                                plusStringChanger += plusString[j];
 
-                        }
-                        plusString = plusStringChanger;
-                    }
-                    string lengthString = "";
-                    
-                    if (originString.Length - (endString.Length + 1) > 0) 
-                    {
-                        lengthString = originString.Substring(endString.Length + 1, originString.Length - (endString.Length + 1));
-                        
-                    }
-                    originString = endString + plusString + lengthString;
-                    string correctString = "";
-                    for (int j = 0; j < originString.Length; j++)
-                    {
-                        if (originString[j] != '齉')
-                        {
-                            correctString += originString[j];
-                        }
-                    }
+            //string cantString = ",.:;!?，。：；！？ \n\r";
 
-                    originString = correctString;
-                }
-                else if (originString[i] == '轂')
+            string cantString = "* \n\r";
+            for (int j = 0; j < cantString.Length; j++)
+            {
+                if (cantString[j] == originString[i])
                 {
-                    passText = true;
+                    cantString = "";
                 }
-                else 
-                {
-                    //string cantString = ",.:;!?，。：；！？ \n\r";
-                    string cantString = "* \n\r";
-                    for (int j = 0; j < cantString.Length; j++)
-                    {
-                        if(cantString[j] == originString[i])
-                        {
-                            cantString = "";
-                        }
-                    }
-                    if (cantString != "" && !pressX)
-                        AudioController.instance.GetFx(fx, MainControl.instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
-                    endString += originString[i];
-                }
-
-                if (passText)
-                    break;
-
-                if (!pressX)
-                    yield return Timing.WaitForSeconds(speed - speed * 0.25f * Convert.ToInt32(!MainControl.instance.OverworldControl.textWidth));
             }
+            if (cantString != "" && !pressX && !isUsedFx)
+                AudioController.instance.GetFx(fx, MainControl.instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
+
+            if (!passText)
+            {
+                endString += originString[i];
+                passTextString += originString[i];
+            }
+
+            if (!pressX)
+                yield return Timing.WaitForSeconds(speed - speed * 0.25f * Convert.ToInt32(!MainControl.instance.OverworldControl.textWidth));
 
             if (tmp_Text != null)
             {
-
                 tmp_Text.text = endString;
                 if (tmp_Text.font != MainControl.instance.OverworldControl.tmpFonts[useFont])
                     tmp_Text.font = MainControl.instance.OverworldControl.tmpFonts[useFont];
-
             }
-            else Debug.Log("你tmp_Text呢");
+            else DebugLogger.Log("缺失tmp_Text", DebugLogger.type.war, "#FFFF00");
 
-        }
-
-        if (!passText)
-        {
-            isTyping = false;
-        }
-        else if (passTextString < originString.Length) 
-        {
-            if (originString[passTextString] != '<')
+            if (!passText)
             {
-                originString = originString.Substring(passTextString - 1);
+                isTyping = false;
             }
-            else
+            else if (passText && passTextString.Length < originString.Length)
             {
-                originString = originString.Substring(passTextString);
+                if (originString[passTextString.Length] != '<')
+                {
+                    originString = originString.Substring(passTextString.Length - 1);
+                }
+                else
+                {
+                    originString = originString.Substring(passTextString.Length);
+                }
+                break;
             }
+            //pressX = false;
+            canNotX = false;
+            isStop = false;
+            PassText:;
         }
-        pressX = false;
-        canNotX = false;
-        isStop = false;
+
+        isRunning = false;
     }
+
     private void Update()
     {
         if (MainControl.instance.OverworldControl.isSetting || forceReturn)//pause在OW检测的时候会用
@@ -372,13 +411,12 @@ public class TypeWritter : MonoBehaviour
 
         if (clockTime > 0)
             clockTime -= Time.deltaTime;
-        if (!passText && !isTyping && MainControl.instance.KeyArrowToControl(KeyCode.Z) && typeMode != TypeMode.CantZX)
+        if (!isRunning && !passText && !isTyping && MainControl.instance.KeyArrowToControl(KeyCode.Z) && typeMode != TypeMode.CantZX)
         {
-            if (haveSpriteChanger)
+            if (spriteChanger != null)
                 spriteChanger.ChangeImage(-1);
             if (endInBattle)
                 canvasAnim.SetBool("Open", true);
-
         }
         if (passText && MainControl.instance.KeyArrowToControl(KeyCode.Z) && typeMode != TypeMode.CantZX)
         {
@@ -386,48 +424,39 @@ public class TypeWritter : MonoBehaviour
         }
         else if (!pressX && !canNotX && MainControl.instance.KeyArrowToControl(KeyCode.X) && typeMode != TypeMode.CantZX)//跳字
         {
-            if (clock != 0 && clockTime <= 0 && isTyping)
+            if (clock != 0 && clockTime <= 0)
+            {
                 pressX = true;
+            }
         }
-
     }
 
-    void PassText()
+    private void PassText()
     {
-        //Debug.Log(2);
         endString = "";
         if (tmp_Text != null)
         {
             tmp_Text.text = "";
         }
         passText = !passText;
-        if (originString[0] == '轂')
-        {
-            originString = originString.Substring(1);
-        }
-        passTextString = 0;
+
+        passTextString = "";
         if (isOverworld)
         {
-            talkUIPositionChanger.Change(true, originString[0] == '鼵' && originString[1] != '-', true, this);
+            talkUIPositionChanger.Change(false, false, true, this);
+            if (originString.Substring(0, "<passText>".Length) == "<passText>")
+                originString = originString.Substring("<passText>".Length);
         }
         pressX = false;
         Timing.RunCoroutine(_Typing(tmp_Text));
     }
-    bool endInBattle;
-    Animator canvasAnim;
+
+    private bool endInBattle;
+    private Animator canvasAnim;
+
     public void EndInBattle()
     {
         canvasAnim = CanvasController.instance.animator;
         endInBattle = true;
     }
-    /*
-     * 测试用
-    void Update()
-    {
-        if (Input.GetKeyDown("c"))
-        {
-            TypeOpen("OK", false);
-        }   
-    }
-    */
 }

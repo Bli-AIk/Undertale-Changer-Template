@@ -1,6 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 /// <summary>
 /// 战斗系统管理器，仅使用于战斗场景。
 /// </summary>
@@ -13,19 +13,26 @@ public class BattleControl : ScriptableObject
 
     [Header("HP 偶为目前血量 奇为最大Max 下同")]
     public List<int> enemiesHp;
+
     public List<int> enemiesATK, enemiesDEF;
+
     [Header("战斗内UIText读取")]
     public string uiText;
+
     public List<string> uiTextSave;
 
     [Header("存储ACT选项和选择后文本")]
     public List<string> actSave;//4个一对应 根据enemies而排序
+
     [Header("存储MERCY选项和选择后文本")]
     public List<string> mercySave;
+
     [Header("按回合存储旁白")]
     public List<string> turnTextSave;
+
     [Header("存储敌人对话文件")]
     public List<string> turnDialogAsset;//直接在战斗场景内读取
+
     public List<TextAsset> otherDialogAsset;
 
     /// <summary>
@@ -38,7 +45,9 @@ public class BattleControl : ScriptableObject
         orange,
         green
     }
+
     public List<Color> bulletColorList;
+
     /// <summary>
     /// 玩家数据颜色
     /// </summary>
@@ -52,12 +61,9 @@ public class BattleControl : ScriptableObject
         blue,
         purple,
     }
+
     public List<Color> playerColorList, playerMissColorList;
-
-    
-
 
     [Header("项目附加")]
     public int randomTurnDir;
-    
 }

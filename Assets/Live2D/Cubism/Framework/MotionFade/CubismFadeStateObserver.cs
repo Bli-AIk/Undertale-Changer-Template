@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
 
-
 namespace Live2D.Cubism.Framework.MotionFade
 {
     public class CubismFadeStateObserver : StateMachineBehaviour, ICubismFadeState
@@ -46,8 +45,7 @@ namespace Live2D.Cubism.Framework.MotionFade
         /// </summary>
         private bool _isStateTransitionFinished;
 
-        #endregion
-
+        #endregion variable
 
         #region Fade State Interface
 
@@ -105,8 +103,7 @@ namespace Live2D.Cubism.Framework.MotionFade
             _playingMotions.RemoveAt(index);
         }
 
-        #endregion
-
+        #endregion Fade State Interface
 
         #region Unity Event Handling
 
@@ -168,7 +165,6 @@ namespace Live2D.Cubism.Framework.MotionFade
 
                 motion.EndTime = newEndTime;
 
-
                 while (motion.IsLooping)
                 {
                     if ((motion.StartTime + motion.Motion.MotionLength) >= time)
@@ -179,7 +175,6 @@ namespace Live2D.Cubism.Framework.MotionFade
                     motion.StartTime += motion.Motion.MotionLength;
                 }
 
-
                 _playingMotions[_playingMotions.Count - 1] = motion;
             }
 
@@ -187,12 +182,11 @@ namespace Live2D.Cubism.Framework.MotionFade
             {
                 CubismFadePlayingMotion playingMotion;
 
-
                 var instanceId = -1;
                 var events = animatorClipInfo[i].clip.events;
-                for(var k = 0; k < events.Length; ++k)
+                for (var k = 0; k < events.Length; ++k)
                 {
-                    if(events[k].functionName != "InstanceId")
+                    if (events[k].functionName != "InstanceId")
                     {
                         continue;
                     }
@@ -241,6 +235,6 @@ namespace Live2D.Cubism.Framework.MotionFade
             _isStateTransitionFinished = true;
         }
 
-        #endregion
+        #endregion Unity Event Handling
     }
 }

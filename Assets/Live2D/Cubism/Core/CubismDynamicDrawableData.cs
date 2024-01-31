@@ -5,10 +5,8 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core.Unmanaged;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Core
 {
@@ -29,10 +27,8 @@ namespace Live2D.Cubism.Core
             var unmanagedDrawables = unmanagedModel.Drawables;
             var buffer = new CubismDynamicDrawableData[unmanagedDrawables.Count];
 
-
             // Initialize buffers.
             var vertexCounts = unmanagedDrawables.VertexCounts;
-
 
             for (var i = 0; i < buffer.Length; ++i)
             {
@@ -42,17 +38,15 @@ namespace Live2D.Cubism.Core
                 };
             }
 
-
             return buffer;
         }
 
-        #endregion
+        #endregion Factory Methods
 
         /// <summary>
         /// Dirty flags.
         /// </summary>
         internal byte Flags { private get; set; }
-
 
         /// <summary>
         /// Current opacity.
@@ -77,13 +71,12 @@ namespace Live2D.Cubism.Core
         /// <summary>
         /// Current multiply color.
         /// </summary>
-        public Color MultiplyColor{ get; internal set; }
+        public Color MultiplyColor { get; internal set; }
 
         /// <summary>
         /// Current screen color.
         /// </summary>
         public Color ScreenColor { get; internal set; }
-
 
         /// <summary>
         /// True if currently visible.
@@ -92,7 +85,6 @@ namespace Live2D.Cubism.Core
         {
             get { return Flags.HasIsVisibleFlag(); }
         }
-
 
         /// <summary>
         /// True if <see cref="IsVisible"/> did change.

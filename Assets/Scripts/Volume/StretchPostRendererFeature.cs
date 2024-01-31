@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -12,8 +10,10 @@ public class StretchPostRendererFeature : ScriptableRendererFeature
         public RenderPassEvent renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
         public Shader shader;
     }
+
     public Settings settings = new Settings();
-    StretchPostPass pass;
+    private StretchPostPass pass;
+
     public override void Create()
     {
         this.name = "StretchPostPass";
@@ -25,19 +25,19 @@ public class StretchPostRendererFeature : ScriptableRendererFeature
         pass.Setup(renderer.cameraColorTarget);
         renderer.EnqueuePass(pass);
     }
-
 }
+
 [System.Serializable]
 public class StretchPostPass : ScriptableRenderPass
 {
-    static readonly string renderTag = "StretchPost Effects";
-    static readonly int MainTexId = Shader.PropertyToID("_MainTex");
-    static readonly int TempTargetId = Shader.PropertyToID("_TempTargetColorTint");
-
+    private static readonly string renderTag = "StretchPost Effects";
+    private static readonly int MainTexId = Shader.PropertyToID("_MainTex");
+    private static readonly int TempTargetId = Shader.PropertyToID("_TempTargetColorTint");
 
     private StretchPostComponent StretchPostVolume;
     private Material mat;
-    RenderTargetIdentifier currentTarget;
+    private RenderTargetIdentifier currentTarget;
+
     public StretchPostPass(RenderPassEvent passEvent, Shader StretchPostShader)
     {
         renderPassEvent = passEvent;
@@ -48,11 +48,11 @@ public class StretchPostPass : ScriptableRenderPass
         }
         mat = CoreUtils.CreateEngineMaterial(StretchPostShader);
     }
+
     public void Setup(in RenderTargetIdentifier currentTarget)
     {
         this.currentTarget = currentTarget;
     }
-
 
     public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
     {
@@ -89,11 +89,9 @@ public class StretchPostPass : ScriptableRenderPass
 
         mat.SetVector("_Draw", StretchPostVolume.draw.value);
 
-
         cmd.SetGlobalTexture(MainTexId, source);
         cmd.GetTemporaryRT(destination, cameraData.camera.scaledPixelWidth, cameraData.camera.scaledPixelHeight, 0, FilterMode.Trilinear, RenderTextureFormat.Default);
         cmd.Blit(source, destination);
         cmd.Blit(destination, source, mat, 0);
     }
 }
-

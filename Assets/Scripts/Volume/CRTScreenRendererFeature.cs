@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
@@ -12,8 +10,10 @@ public class GlitchArtRendererFeature : ScriptableRendererFeature
         public RenderPassEvent renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
         public Shader shader;
     }
+
     public Settings settings = new Settings();
-    GlitchArtPass pass;
+    private GlitchArtPass pass;
+
     public override void Create()
     {
         this.name = "GlitchArtPass";
@@ -25,19 +25,19 @@ public class GlitchArtRendererFeature : ScriptableRendererFeature
         pass.Setup(renderer.cameraColorTarget);
         renderer.EnqueuePass(pass);
     }
-
 }
+
 [System.Serializable]
 public class GlitchArtPass : ScriptableRenderPass
 {
-    static readonly string renderTag = "GlitchArt Effects";
-    static readonly int MainTexId = Shader.PropertyToID("_MainTex");
-    static readonly int TempTargetId = Shader.PropertyToID("_TempTargetColorTint");
-
+    private static readonly string renderTag = "GlitchArt Effects";
+    private static readonly int MainTexId = Shader.PropertyToID("_MainTex");
+    private static readonly int TempTargetId = Shader.PropertyToID("_TempTargetColorTint");
 
     private GlitchArtComponent GlitchArtVolume;
     private Material mat;
-    RenderTargetIdentifier currentTarget;
+    private RenderTargetIdentifier currentTarget;
+
     public GlitchArtPass(RenderPassEvent passEvent, Shader GlitchArtShader)
     {
         renderPassEvent = passEvent;
@@ -48,11 +48,11 @@ public class GlitchArtPass : ScriptableRenderPass
         }
         mat = CoreUtils.CreateEngineMaterial(GlitchArtShader);
     }
+
     public void Setup(in RenderTargetIdentifier currentTarget)
     {
         this.currentTarget = currentTarget;
     }
-
 
     public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
     {
@@ -88,7 +88,7 @@ public class GlitchArtPass : ScriptableRenderPass
         int destination = TempTargetId;
 
         mat.SetFloat("_AnalogGlitchMode", System.Convert.ToInt32(GlitchArtVolume.analogGlitchMode.value));
-        mat.SetVector("_ScanLineJitter", GlitchArtVolume.scanLineJitter.value); 
+        mat.SetVector("_ScanLineJitter", GlitchArtVolume.scanLineJitter.value);
         mat.SetFloat("_HorizontalShakeMode", System.Convert.ToInt32(GlitchArtVolume.horizontalShakeMode.value));
         mat.SetFloat("_HorizontalShake", GlitchArtVolume.horizontalShake.value);
         mat.SetFloat("_ColorDriftMode", System.Convert.ToInt32(GlitchArtVolume.colorDriftMode.value));
@@ -96,11 +96,9 @@ public class GlitchArtPass : ScriptableRenderPass
         mat.SetFloat("_VerticalJumpMode", System.Convert.ToInt32(GlitchArtVolume.verticalJumpMode.value));
         mat.SetFloat("_VerticalJump", GlitchArtVolume.verticalJump.value);
 
-
         cmd.SetGlobalTexture(MainTexId, source);
         cmd.GetTemporaryRT(destination, cameraData.camera.scaledPixelWidth, cameraData.camera.scaledPixelHeight, 0, FilterMode.Trilinear, RenderTextureFormat.Default);
         cmd.Blit(source, destination);
         cmd.Blit(destination, source, mat, 0);
     }
 }
-

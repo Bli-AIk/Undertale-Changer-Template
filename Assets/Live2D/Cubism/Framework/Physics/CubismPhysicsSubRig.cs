@@ -5,11 +5,9 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core;
 using System;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Framework.Physics
 {
@@ -73,7 +71,6 @@ namespace Live2D.Cubism.Framework.Physics
         [NonSerialized]
         private CubismPhysicsRig _rig;
 
-
         /// <summary>
         /// Output result of physics operations before applying to parameters.
         /// </summary>
@@ -132,14 +129,12 @@ namespace Live2D.Cubism.Framework.Physics
 
             var value = translation * outputScale;
 
-
             if (value < parameter.MinimumValue)
             {
                 if (value < output.ValueBelowMinimum)
                 {
                     output.ValueBelowMinimum = value;
                 }
-
 
                 value = parameter.MinimumValue;
             }
@@ -150,10 +145,8 @@ namespace Live2D.Cubism.Framework.Physics
                     output.ValueExceededMaximum = value;
                 }
 
-
                 value = parameter.MaximumValue;
             }
-
 
             var weight = (output.Weight / CubismPhysics.MaximumWeight);
 
@@ -167,7 +160,6 @@ namespace Live2D.Cubism.Framework.Physics
                 parameterValue = value;
             }
         }
-
 
         /// <summary>
         /// Updates particles in every frame.
@@ -205,25 +197,19 @@ namespace Live2D.Cubism.Framework.Physics
                 var direction = strand[i].Position - strand[i - 1].Position;
                 var radian = CubismPhysicsMath.DirectionToRadian(strand[i].LastGravity, currentGravity) / CubismPhysics.AirResistance;
 
-
                 direction.x = ((Mathf.Cos(radian) * direction.x) - (direction.y * Mathf.Sin(radian)));
                 direction.y = ((Mathf.Sin(radian) * direction.x) + (direction.y * Mathf.Cos(radian)));
 
-
                 strand[i].Position = strand[i - 1].Position + direction;
-
 
                 var velocity = strand[i].Velocity * delay;
                 var force = strand[i].Force * delay * delay;
 
-
                 strand[i].Position = strand[i].Position + velocity + force;
-
 
                 var newDirection = strand[i].Position - strand[i - 1].Position;
 
                 newDirection.Normalize();
-
 
                 strand[i].Position = strand[i - 1].Position + newDirection * strand[i].Radius;
 
@@ -232,13 +218,11 @@ namespace Live2D.Cubism.Framework.Physics
                     strand[i].Position.x = 0.0f;
                 }
 
-
                 if (delay != 0.0f)
                 {
                     strand[i].Velocity =
                             ((strand[i].Position - strand[i].LastPosition) / delay) * strand[i].Mobility;
                 }
-
 
                 strand[i].Force = Vector2.zero;
                 strand[i].LastGravity = currentGravity;
@@ -302,7 +286,6 @@ namespace Live2D.Cubism.Framework.Physics
             strand[0].LastGravity = Rig.Gravity;
             strand[0].LastGravity.y *= -1.0f;
 
-
             // Initialize particles.
             for (var i = 1; i < strand.Length; ++i)
             {
@@ -314,7 +297,6 @@ namespace Live2D.Cubism.Framework.Physics
                 strand[i].LastGravity = Rig.Gravity;
                 strand[i].LastGravity.y *= -1.0f;
             }
-
 
             // Initialize inputs.
             OriginalInput = new CubismPhysicsInput[Input.Length];
@@ -338,7 +320,6 @@ namespace Live2D.Cubism.Framework.Physics
                 Output[i].InitializeGetter();
             }
         }
-
 
         /// <summary>
         /// Evaluate rig in every frame.
@@ -371,13 +352,10 @@ namespace Live2D.Cubism.Framework.Physics
                     );
             }
 
-
             var radAngle = CubismPhysicsMath.DegreesToRadian(-totalAngle);
-
 
             totalTranslation.x = (totalTranslation.x * Mathf.Cos(radAngle) - totalTranslation.y * Mathf.Sin(radAngle));
             totalTranslation.y = (totalTranslation.x * Mathf.Sin(radAngle) + totalTranslation.y * Mathf.Cos(radAngle));
-
 
             UpdateParticles(
                 Particles,
@@ -387,7 +365,6 @@ namespace Live2D.Cubism.Framework.Physics
                 CubismPhysics.MovementThreshold * Normalization.Position.Maximum,
                 deltaTime
                 );
-
 
             for (var i = 0; i < Output.Length; ++i)
             {
@@ -463,13 +440,10 @@ namespace Live2D.Cubism.Framework.Physics
                 Rig.ParametersCache[index] = Input[i].Source.Value;
             }
 
-
             var radAngle = CubismPhysicsMath.DegreesToRadian(-totalAngle);
-
 
             totalTranslation.x = (totalTranslation.x * Mathf.Cos(radAngle) - totalTranslation.y * Mathf.Sin(radAngle));
             totalTranslation.y = (totalTranslation.x * Mathf.Sin(radAngle) + totalTranslation.y * Mathf.Cos(radAngle));
-
 
             UpdateParticlesForStabilization(
                 Particles,
@@ -478,7 +452,6 @@ namespace Live2D.Cubism.Framework.Physics
                 Rig.Wind,
                 CubismPhysics.MovementThreshold * Normalization.Position.Maximum
                 );
-
 
             for (var i = 0; i < Output.Length; ++i)
             {

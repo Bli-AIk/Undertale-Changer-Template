@@ -5,9 +5,7 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Framework
 {
@@ -34,7 +32,6 @@ namespace Live2D.Cubism.Framework
         [SerializeField, Range(1f, 20f)]
         public float Timescale = 10f;
 
-
         /// <summary>
         /// Target controller.
         /// </summary>
@@ -55,7 +52,6 @@ namespace Live2D.Cubism.Framework
         /// </summary>
         private float LastValue { get; set; }
 
-
         /// <summary>
         /// Resets the input.
         /// </summary>
@@ -74,7 +70,6 @@ namespace Live2D.Cubism.Framework
             Controller = GetComponent<CubismEyeBlinkController>();
         }
 
-
         /// <summary>
         /// Called by Unity. Updates controller.
         /// </summary>
@@ -89,12 +84,10 @@ namespace Live2D.Cubism.Framework
                 return;
             }
 
-
             // Wait for time until blink.
             if (CurrentPhase == Phase.Idling)
             {
                 T -= Time.deltaTime;
-
 
                 if (T < 0f)
                 {
@@ -108,11 +101,9 @@ namespace Live2D.Cubism.Framework
                 }
             }
 
-
             // Evaluate eye blinking.
             T += (Time.deltaTime * Timescale);
             var value = Mathf.Abs(Mathf.Sin(T));
-
 
             if (CurrentPhase == Phase.ClosingEyes && value > LastValue)
             {
@@ -125,12 +116,11 @@ namespace Live2D.Cubism.Framework
                 T = Mean + Random.Range(-MaximumDeviation, MaximumDeviation);
             }
 
-
             Controller.EyeOpening = value;
             LastValue = value;
         }
 
-        #endregion
+        #endregion Unity Event Handling
 
         /// <summary>
         /// Internal states.

@@ -5,10 +5,8 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Framework.LookAt
 {
@@ -22,7 +20,6 @@ namespace Live2D.Cubism.Framework.LookAt
         /// </summary>
         [SerializeField]
         public CubismLookAxis Axis;
-
 
         /// <summary>
         /// Factor.
@@ -39,13 +36,11 @@ namespace Live2D.Cubism.Framework.LookAt
         {
             var parameter = GetComponent<CubismParameter>();
 
-
             // Fail silently.
             if (parameter == null)
             {
                 return;
             }
-
 
             // Guess axis.
             if (parameter.name.EndsWith("Y"))
@@ -61,12 +56,11 @@ namespace Live2D.Cubism.Framework.LookAt
                 Axis = CubismLookAxis.X;
             }
 
-
             // Guess factor.
             Factor = parameter.MaximumValue;
         }
 
-        #endregion
+        #endregion Unity Event Handling
 
         #region Interface for Controller
 
@@ -81,16 +75,14 @@ namespace Live2D.Cubism.Framework.LookAt
                 ? targetOffset.x
                 : targetOffset.y;
 
-
             if (Axis == CubismLookAxis.Z)
             {
                 result = targetOffset.z;
             }
 
-
             return result * Factor;
         }
 
-        #endregion
+        #endregion Interface for Controller
     }
 }

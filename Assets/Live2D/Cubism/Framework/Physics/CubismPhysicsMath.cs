@@ -5,10 +5,8 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Framework.Physics
 {
@@ -37,7 +35,6 @@ namespace Live2D.Cubism.Framework.Physics
             return (radian * 180.0f) / Mathf.PI;
         }
 
-
         /// <summary>
         /// Gets angle from both vector direction.
         /// </summary>
@@ -52,7 +49,6 @@ namespace Live2D.Cubism.Framework.Physics
             return GetAngleDiff(q1, q2);
         }
 
-
         /// <summary>
         /// Gets difference of angle.
         /// </summary>
@@ -62,7 +58,6 @@ namespace Live2D.Cubism.Framework.Physics
         public static float GetAngleDiff(float q1, float q2)
         {
             var ret = q1 - q2;
-
 
             while (ret < -Mathf.PI)
             {
@@ -74,28 +69,24 @@ namespace Live2D.Cubism.Framework.Physics
                 ret -= (Mathf.PI * 2.0f);
             }
 
-
             return ret;
         }
 
-
         /// <summary>
-    /// Gets angle from both vector direction.
-    /// </summary>
-    /// <param name="from">From vector.</param>
-    /// <param name="to">To vector.</param>
-    /// <returns>Angle of degrees.</returns>
-    public static float DirectionToDegrees(Vector2 from, Vector2 to)
+        /// Gets angle from both vector direction.
+        /// </summary>
+        /// <param name="from">From vector.</param>
+        /// <param name="to">To vector.</param>
+        /// <returns>Angle of degrees.</returns>
+        public static float DirectionToDegrees(Vector2 from, Vector2 to)
         {
             var radian = DirectionToRadian(from, to);
             var degree = (float)RadianToDegrees(radian);
-
 
             if ((to.x - from.x) > 0.0f)
             {
                 degree = -degree;
             }
-
 
             return degree;
         }
@@ -109,14 +100,11 @@ namespace Live2D.Cubism.Framework.Physics
         {
             var ret = Vector2.zero;
 
-
             ret.x = Mathf.Sin(totalAngle);
             ret.y = (float)Mathf.Cos(totalAngle);
 
-
             return ret;
         }
-
 
         /// <summary>
         /// Gets range of value.
@@ -194,7 +182,6 @@ namespace Live2D.Cubism.Framework.Physics
                             result += middleNormValue;
                         }
 
-
                         break;
                     }
                 case -1:
@@ -207,13 +194,11 @@ namespace Live2D.Cubism.Framework.Physics
                             result += middleNormValue;
                         }
 
-
                         break;
                     }
                 case 0:
                     {
                         result = middleNormValue;
-
 
                         break;
                     }
@@ -223,5 +208,3 @@ namespace Live2D.Cubism.Framework.Physics
         }
     }
 }
-
-

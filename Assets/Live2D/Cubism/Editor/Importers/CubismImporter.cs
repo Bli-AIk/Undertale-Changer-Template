@@ -5,14 +5,12 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core;
 using Live2D.Cubism.Framework.Json;
 using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Editor.Importers
 {
@@ -30,12 +28,10 @@ namespace Live2D.Cubism.Editor.Importers
         /// <param name="model">Imported model.</param>
         public delegate void ModelImportListener(CubismModel3JsonImporter importer, CubismModel model);
 
-
         /// <summary>
         /// Callback for textures used by Cubism model on <see cref="CubismModel"/> import.
         /// </summary>
         public delegate void TextureImportHandler(CubismModel3JsonImporter importer, CubismModel model, Texture2D texture);
-
 
         /// <summary>
         /// Callback on Cubism motions import as<see cref="AnimationClip"/>.
@@ -44,7 +40,7 @@ namespace Live2D.Cubism.Editor.Importers
         /// <param name="animationClip">Generated animation.</param>
         public delegate void MotionImportHandler(CubismMotion3JsonImporter importer, AnimationClip animationClip);
 
-        #endregion
+        #endregion Delegates
 
         #region Events
 
@@ -61,7 +57,6 @@ namespace Live2D.Cubism.Editor.Importers
         /// </remarks>
         public static TextureImportHandler OnDidImportTexture = BuiltinTextureImportHandler;
 
-
         /// <summary>
         /// Material picker to use when importing models.
         /// </summary>
@@ -72,19 +67,17 @@ namespace Live2D.Cubism.Editor.Importers
         /// </summary>
         public static CubismModel3Json.TexturePicker OnPickTexture = CubismBuiltinPickers.TexturePicker;
 
-
         /// <summary>
         /// Allows getting called back whenever a Cubism motions is imported (and before it is saved).
         /// </summary>
         public static event MotionImportHandler OnDidImportMotion;
 
-        #endregion
+        #endregion Events
 
         /// <summary>
         /// Enables logging of import events.
         /// </summary>
         public static bool LogImportEvents = true;
-
 
         /// <summary>
         /// Tries to get an importer for a Cubism asset.
@@ -106,22 +99,18 @@ namespace Live2D.Cubism.Editor.Importers
         {
             var importerEntry = _registry.Find(e => assetPath.EndsWith(e.FileExtension));
 
-
             // Return early in case no valid importer is registered.
             if (importerEntry.ImporterType == null)
             {
                 return null;
             }
 
-
             var userData = AssetImporter
                 .GetAtPath(assetPath)
                 .userData;
 
-
             // Try to deserialize a importer from the user data.
             var importer = JsonUtility.FromJson(userData, importerEntry.ImporterType) as ICubismImporter;
-
 
             // Activate an instance in case Json deserialization magically fails...
             if (importer == null)
@@ -129,17 +118,14 @@ namespace Live2D.Cubism.Editor.Importers
                 importer = Activator.CreateInstance(importerEntry.ImporterType) as ICubismImporter;
             }
 
-
             // Finalize importer initialization.
             if (importer != null)
             {
                 importer.SetAssetPath(assetPath);
             }
 
-
             return importer;
         }
-
 
         /// <summary>
         /// Safely triggers <see cref="OnDidImportModel"/>.
@@ -152,7 +138,6 @@ namespace Live2D.Cubism.Editor.Importers
             {
                 return;
             }
-
 
             OnDidImportModel(importer, model);
         }
@@ -170,7 +155,6 @@ namespace Live2D.Cubism.Editor.Importers
                 return;
             }
 
-
             OnDidImportTexture(importer, model, texture);
         }
 
@@ -186,10 +170,8 @@ namespace Live2D.Cubism.Editor.Importers
                 return;
             }
 
-
             OnDidImportMotion(importer, animationClip);
         }
-
 
         /// <summary>
         /// Logs a reimport event.
@@ -202,7 +184,6 @@ namespace Live2D.Cubism.Editor.Importers
             {
                 return;
             }
-
 
             Debug.LogFormat("[Cubism] Reimport: \"{0}\" was synced with \"{1}\".", destinationName, sourceName);
         }
@@ -219,24 +200,21 @@ namespace Live2D.Cubism.Editor.Importers
         {
             var textureImporter = AssetImporter.GetAtPath(AssetDatabase.GetAssetPath(texture)) as TextureImporter;
 
-
             // Return early if texture already seems to be set up.
             if (textureImporter.alphaIsTransparency)
             {
                 return;
             }
 
-
             // Set up texture importing.
             textureImporter.alphaIsTransparency = true;
             textureImporter.textureType = TextureImporterType.Default;
-
 
             EditorUtility.SetDirty(texture);
             textureImporter.SaveAndReimport();
         }
 
-        #endregion
+        #endregion Builtin Texture Import Handler
 
         #region Registry
 
@@ -256,12 +234,10 @@ namespace Live2D.Cubism.Editor.Importers
             public string FileExtension;
         }
 
-
         /// <summary>
         /// List of registered <see cref="ICubismImporter"/>s.
         /// </summary>
         private static List<ImporterEntry> _registry = new List<ImporterEntry>();
-
 
         /// <summary>
         /// Registers an importer type.
@@ -277,6 +253,6 @@ namespace Live2D.Cubism.Editor.Importers
             });
         }
 
-        #endregion
+        #endregion Registry
     }
 }

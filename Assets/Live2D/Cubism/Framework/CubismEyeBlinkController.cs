@@ -5,10 +5,8 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Framework
 {
@@ -23,19 +21,16 @@ namespace Live2D.Cubism.Framework
         [SerializeField]
         public CubismParameterBlendMode BlendMode = CubismParameterBlendMode.Multiply;
 
-
         /// <summary>
         /// Opening of the eyes.
         /// </summary>
         [SerializeField, Range(0f, 1f)]
         public float EyeOpening = 1f;
 
-
         /// <summary>
         /// Eye blink parameters cache.
         /// </summary>
         private CubismParameter[] Destinations { get; set; }
-
 
         /// <summary>
         /// Model has update controller component.
@@ -50,22 +45,18 @@ namespace Live2D.Cubism.Framework
         {
             var model = this.FindCubismModel();
 
-
             // Fail silently...
             if (model == null)
             {
                 return;
             }
 
-
             // Cache destinations.
             var tags = model
                 .Parameters
                 .GetComponentsMany<CubismEyeBlinkParameter>();
 
-
             Destinations = new CubismParameter[tags.Length];
-
 
             for (var i = 0; i < tags.Length; ++i)
             {
@@ -103,13 +94,11 @@ namespace Live2D.Cubism.Framework
                 return;
             }
 
-
             // Apply value.
             Destinations.BlendToValue(BlendMode, EyeOpening);
         }
 
         #region Unity Event Handling
-
 
         /// <summary>
         /// Called by Unity. Makes sure cache is initialized.
@@ -125,12 +114,12 @@ namespace Live2D.Cubism.Framework
         /// </summary>
         private void LateUpdate()
         {
-            if(!HasUpdateController)
+            if (!HasUpdateController)
             {
                 OnLateUpdate();
             }
         }
 
-        #endregion
+        #endregion Unity Event Handling
     }
 }

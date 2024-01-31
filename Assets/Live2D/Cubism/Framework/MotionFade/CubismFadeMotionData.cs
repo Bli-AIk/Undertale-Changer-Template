@@ -5,10 +5,8 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Framework.Json;
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Framework.MotionFade
 {
@@ -61,7 +59,6 @@ namespace Live2D.Cubism.Framework.MotionFade
         /// </summary>
         [SerializeField]
         public float MotionLength;
-
 
         /// <summary>
         /// Create CubismFadeMotionData from CubismMotion3Json.

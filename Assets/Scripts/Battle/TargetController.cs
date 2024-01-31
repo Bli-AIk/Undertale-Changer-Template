@@ -1,27 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using TMPro;
 using DG.Tweening;
+using TMPro;
+using UnityEngine;
+
 /// <summary>
 /// 控制Target
 /// </summary>
 public class TargetController : MonoBehaviour
 {
-    Animator anim;
-    bool pressZ;
+    private Animator anim;
+    private bool pressZ;
+
     [Header("攻击造成的伤害")]
     public int hitDamage;
-    TextMeshPro hitUI, hitUIb;
-    GameObject bar;
+
+    private TextMeshPro hitUI, hitUIb;
+    private GameObject bar;
     public GameObject hpBar;
+
     [Header("父级传入")]
     public int select;
 
     [Header("父级传入 要击打的怪物")]
     public EnemiesController hitMonster;
-    
-    void Start()
+
+    private void Start()
     {
         anim = GetComponent<Animator>();
         hitUIb = transform.Find("Move/HitTextB").GetComponent<TextMeshPro>();
@@ -29,9 +31,10 @@ public class TargetController : MonoBehaviour
         bar = transform.Find("Bar").gameObject;
         hpBar = transform.Find("Move/EnemiesHp/EnemiesHpOn").gameObject;
     }
+
     private void OnEnable()
     {
-        if(anim == null)
+        if (anim == null)
             anim = GetComponent<Animator>();
 
         //anim.enabled = true;
@@ -39,8 +42,8 @@ public class TargetController : MonoBehaviour
         anim.SetFloat("MoveSpeed", 1);
         pressZ = true;
     }
-    
-    void Update()
+
+    private void Update()
     {
         if (!pressZ)
         {
@@ -51,14 +54,14 @@ public class TargetController : MonoBehaviour
                 anim.SetFloat("MoveSpeed", 0);
                 AudioController.instance.GetFx(0, MainControl.instance.AudioControl.fxClipBattle);
                 Hit();
-
             }
         }
     }
+
     /// <summary>
     /// 攻击敌人时进行的计算
     /// </summary>
-    void Hit()
+    private void Hit()
     {
         if (Mathf.Abs(bar.transform.localPosition.x) > 0.8f)
             hitDamage = (int)
@@ -83,28 +86,29 @@ public class TargetController : MonoBehaviour
             hitUI.text = "<color=red>" + hitDamage.ToString();
             hitUIb.text = hitDamage.ToString();
         }
-
     }
-    //以下皆用于anim
-    void HitAnim()
-    {
 
+    //以下皆用于anim
+    private void HitAnim()
+    {
         hitMonster.anim.SetBool("Hit", true);
         hpBar.transform.localScale = new Vector3((float)MainControl.instance.BattleControl.enemiesHp[select * 2] / MainControl.instance.BattleControl.enemiesHp[select * 2 + 1], 1);
         MainControl.instance.BattleControl.enemiesHp[select * 2] -= hitDamage;
-        DOTween.To(() => hpBar.transform.localScale, x => hpBar.transform.localScale = x, new Vector3((float)MainControl.instance.BattleControl.enemiesHp[select * 2] / MainControl.instance.BattleControl.enemiesHp[select * 2 + 1], 1), 
+        DOTween.To(() => hpBar.transform.localScale, x => hpBar.transform.localScale = x, new Vector3((float)MainControl.instance.BattleControl.enemiesHp[select * 2] / MainControl.instance.BattleControl.enemiesHp[select * 2 + 1], 1),
             0.75f).SetEase(Ease.OutSine);
     }
-    void OpenPressZ()
+
+    private void OpenPressZ()
     {
         pressZ = false;
     }
-    void ClosePressZ()
+
+    private void ClosePressZ()
     {
         pressZ = true;
     }
 
-    void NotActive()
+    private void NotActive()
     {
         //anim.enabled = false;
         gameObject.SetActive(false);

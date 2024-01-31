@@ -5,9 +5,7 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using UnityEngine;
-
 
 namespace Live2D.Cubism.Rendering
 {
@@ -40,7 +38,6 @@ namespace Live2D.Cubism.Rendering
             get { return LoadUnlitMaterial("UnlitMultiply"); }
         }
 
-
         /// <summary>
         /// Default unlit masked material.
         /// </summary>
@@ -64,7 +61,6 @@ namespace Live2D.Cubism.Rendering
         {
             get { return LoadUnlitMaterial("UnlitMultiplyMasked"); }
         }
-
 
         /// <summary>
         /// Default unlit masked inverted material.
@@ -90,7 +86,6 @@ namespace Live2D.Cubism.Rendering
             get { return LoadUnlitMaterial("UnlitMultiplyMaskedInverted"); }
         }
 
-
         /// <summary>
         /// Default unlit material.
         /// </summary>
@@ -114,7 +109,6 @@ namespace Live2D.Cubism.Rendering
         {
             get { return LoadUnlitMaterial("UnlitMultiplyCulling"); }
         }
-
 
         /// <summary>
         /// Default unlit masked material.
@@ -140,7 +134,6 @@ namespace Live2D.Cubism.Rendering
             get { return LoadUnlitMaterial("UnlitMultiplyMaskedCulling"); }
         }
 
-
         /// <summary>
         /// Default unlit masked inverted material.
         /// </summary>
@@ -165,8 +158,6 @@ namespace Live2D.Cubism.Rendering
             get { return LoadUnlitMaterial("UnlitMultiplyMaskedInvertedCulling"); }
         }
 
-
-
         /// <summary>
         /// Default mask material.
         /// </summary>
@@ -183,14 +174,12 @@ namespace Live2D.Cubism.Rendering
             get { return LoadMaskCullingMaterial(); }
         }
 
-
         #region Helper Methods
 
         /// <summary>
         /// Resource directory of builtin <see cref="Material"/>s.
         /// </summary>
         private const string ResourcesDirectory = "Live2D/Cubism/Materials";
-
 
         /// <summary>
         /// Loads an unlit material.
@@ -220,6 +209,6 @@ namespace Live2D.Cubism.Rendering
             return Resources.Load<Material>(ResourcesDirectory + "/MaskCulling");
         }
 
-        #endregion
+        #endregion Helper Methods
     }
 }

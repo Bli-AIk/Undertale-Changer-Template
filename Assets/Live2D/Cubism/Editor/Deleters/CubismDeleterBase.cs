@@ -5,7 +5,6 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using System;
 
 namespace Live2D.Cubism.Editor.Deleters
@@ -44,6 +43,6 @@ namespace Live2D.Cubism.Editor.Deleters
             Delete();
         }
 
-        #endregion
+        #endregion ICubismDeleter
     }
 }

@@ -5,11 +5,9 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using UnityEditor;
 
 using Object = UnityEngine.Object;
-
 
 namespace Live2D.Cubism.Editor.Importers
 {
@@ -18,7 +16,6 @@ namespace Live2D.Cubism.Editor.Importers
     /// </summary>
     internal static class AssetGuid
     {
-
         /// <summary>
         /// Loads an asset by Guid.
         /// </summary>

@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using DG.Tweening;
 using System;
+using UnityEngine;
 using UnityEngine.Rendering;
-using MEC;
 
 /// <summary>
 /// 控制战斗内玩家(心)的相关属性
@@ -12,9 +9,10 @@ using MEC;
 public class BattlePlayerController : MonoBehaviour
 {
     public float speed, speedWeightX, speedWeightY;//速度与权重(按X乘以倍数)，速度测试为3，权重0.5f
-    float speedWeight = 0.5f;
+    private float speedWeight = 0.5f;
     public float hitCD, hitCDMax;//无敌时间
     public bool isMoveing;//用于蓝橙骨判断：玩家是否真的在移动
+
     public enum PlayerDirEnum
     {
         up,
@@ -22,8 +20,8 @@ public class BattlePlayerController : MonoBehaviour
         left,
         right,
         nullDir
-
     };
+
     public PlayerDirEnum playerDir;//方向
     public Vector3 moveing;
     public bool isJump;//是否处于“跳起”状态
@@ -32,15 +30,16 @@ public class BattlePlayerController : MonoBehaviour
     public float jumpRayDistanceForBoard;
     public float jumpFrozen, jumpFrozenMax;//用于跳跃中途松开时的悬空帧计时。
 
-    Rigidbody2D rigidBody;
+    private Rigidbody2D rigidBody;
     public CircleCollider2D collideCollider;//圆形碰撞体
-    SpriteRenderer spriteRenderer;
+    private SpriteRenderer spriteRenderer;
     public BattleControl.PlayerColor playerColor;//含有属性的颜色 读取BattleControl中的enum PlayerColor.颜色变换通过具体变换的函数来执行
-    Tween missAnim = null;
+    private Tween missAnim = null;
 
     public Volume hitVolume;
+
     //LayerMask mask;
-    void Start()
+    private void Start()
     {
         speedWeightX = 1;
         speedWeightY = 1;
@@ -58,6 +57,7 @@ public class BattlePlayerController : MonoBehaviour
         //mask = 1 << 6;
         MainControl.instance.PlayerControl.missTime = 0;
     }
+
     private void Update()
     {
         if (!MainControl.instance.OverworldControl.noSFX && hitVolume.weight > 0)
@@ -79,11 +79,10 @@ public class BattlePlayerController : MonoBehaviour
                 MainControl.instance.selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
         }
 
-
         if (MainControl.instance.OverworldControl.isSetting || MainControl.instance.OverworldControl.pause)
             return;
 
-        if (MainControl.instance.PlayerControl.missTime >= 0) 
+        if (MainControl.instance.PlayerControl.missTime >= 0)
         {
             MainControl.instance.PlayerControl.missTime -= Time.deltaTime;
             if (missAnim == null && MainControl.instance.PlayerControl.missTimeMax >= 0.4f)
@@ -99,11 +98,9 @@ public class BattlePlayerController : MonoBehaviour
             }
         }
 
-
         //Debug
         if (MainControl.instance.PlayerControl.isDebug)
         {
-
             if (Input.GetKeyDown(KeyCode.Keypad1))
                 ChangePlayerColor(MainControl.instance.BattleControl.playerColorList[0], 0);
             else if (Input.GetKeyDown(KeyCode.Keypad2))
@@ -122,36 +119,34 @@ public class BattlePlayerController : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.P))
                 MainControl.instance.PlayerControl.hp = 0;
-
         }
     }
-    
-    void FixedUpdate()
+
+    private void FixedUpdate()
     {
         if (MainControl.instance.OverworldControl.isSetting || MainControl.instance.OverworldControl.pause)
             return;
         if (!TurnController.instance.isMyTurn)
             Moveing();
-
-       
-
-
     }
-    void Moveing()
-    {
 
+    private void Moveing()
+    {
         Vector2 dirReal = new Vector2();
         switch (playerDir)
         {
             case PlayerDirEnum.up:
                 dirReal = Vector2.up;
                 break;
+
             case PlayerDirEnum.down:
                 dirReal = Vector2.down;
                 break;
+
             case PlayerDirEnum.left:
                 dirReal = Vector2.left;
                 break;
+
             case PlayerDirEnum.right:
                 dirReal = Vector2.right;
                 break;
@@ -168,7 +163,7 @@ public class BattlePlayerController : MonoBehaviour
         switch (playerColor)
         {
             case BattleControl.PlayerColor.red:
-                if (MainControl.instance.KeyArrowToControl(KeyCode.X, 1)) 
+                if (MainControl.instance.KeyArrowToControl(KeyCode.X, 1))
                 {
                     speedWeightX = speedWeight;
                     speedWeightY = speedWeight;
@@ -189,9 +184,8 @@ public class BattlePlayerController : MonoBehaviour
                 else
                     moveing = new Vector3(moveing.x, 0);
 
-                if(MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1)&& MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
+                if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
                     moveing = new Vector3(moveing.x, 0);
-
 
                 if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1))
                 {
@@ -207,6 +201,7 @@ public class BattlePlayerController : MonoBehaviour
                 if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
                     moveing = new Vector3(0, moveing.y);
                 break;
+
             case BattleControl.PlayerColor.orange:
                 /*同时按下两个方向键有bug
                 if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow))
@@ -237,12 +232,16 @@ public class BattlePlayerController : MonoBehaviour
                     moveing = new Vector3(UnityEngine.Random.Range(-1, 2), UnityEngine.Random.Range(-1, 2));
                 */
                 break;
+
             case BattleControl.PlayerColor.yellow:
                 break;
+
             case BattleControl.PlayerColor.green:
                 break;
+
             case BattleControl.PlayerColor.cyan:
                 break;
+
             case BattleControl.PlayerColor.blue:
                 RaycastHit2D infoForBoard = Physics2D.Raycast(transform.position, dirReal, jumpRayDistanceForBoard);
                 if (infoForBoard.collider != null)
@@ -260,12 +259,11 @@ public class BattlePlayerController : MonoBehaviour
                 else
                 {
                     transform.SetParent(null);
-
                 }
 
                 int gravity = 10;
                 if (rigidBody.gravityScale != gravity)
-                rigidBody.gravityScale = gravity;
+                    rigidBody.gravityScale = gravity;
                 switch (playerDir)
                 {
                     case PlayerDirEnum.up:
@@ -282,21 +280,19 @@ public class BattlePlayerController : MonoBehaviour
                         Physics2D.gravity = new Vector2(0, 9.8f);
                         if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1))
                         {
-
                             moveing = new Vector3(1, moveing.y);
                         }
                         else if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
                         {
-
                             moveing = new Vector3(-1, moveing.y);
                         }
                         else
                             moveing = new Vector3(0, moveing.y);
 
-                        if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow,1))
+                        if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
                             moveing = new Vector3(0, moveing.y);
 
-                        if (!MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) || !MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow,1))
+                        if (!MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) || !MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
                             jumpRayDistanceForBoard = 0.2f;
                         if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) || MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
                         {
@@ -304,7 +300,7 @@ public class BattlePlayerController : MonoBehaviour
                             transform.SetParent(null);
                         }
 
-                        if (MainControl.instance.KeyArrowToControl(KeyCode.DownArrow,1) && !isJump && moveing.y == 0)
+                        if (MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1) && !isJump && moveing.y == 0)
                         {
                             transform.SetParent(null);
 
@@ -314,7 +310,7 @@ public class BattlePlayerController : MonoBehaviour
                             jumpRayDistance = 0.2f;
                             jumpRayDistanceForBoard = 0;
                         }
-                        if (isJump && (!MainControl.instance.KeyArrowToControl(KeyCode.DownArrow,1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("frame"))) && moveing.y < -0.55f)
+                        if (isJump && (!MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("frame"))) && moveing.y < -0.55f)
                         {
                             jumpRayDistanceForBoard = 0.2f;
                             moveing = new Vector3(moveing.x, -0.55f);
@@ -322,7 +318,6 @@ public class BattlePlayerController : MonoBehaviour
                         }
                         if (isJump)
                         {
-
                             if (info.collider != null)
                             {
                                 GameObject obj = info.collider.gameObject;
@@ -343,9 +338,8 @@ public class BattlePlayerController : MonoBehaviour
                         jumpAcceleration += Time.deltaTime * 0.425f;
                         break;
 
-
                     case PlayerDirEnum.down:////////////////////////////////////////////////
-                        if (MainControl.instance.KeyArrowToControl(KeyCode.X,1))
+                        if (MainControl.instance.KeyArrowToControl(KeyCode.X, 1))
                         {
                             speedWeightX = speedWeight;
                         }
@@ -361,7 +355,6 @@ public class BattlePlayerController : MonoBehaviour
                         }
                         else if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
                         {
-
                             moveing = new Vector3(-1, moveing.y);
                         }
                         else
@@ -376,7 +369,6 @@ public class BattlePlayerController : MonoBehaviour
                             jumpRayDistanceForBoard = 0;
                             transform.SetParent(null);
                         }
-
 
                         if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) && !isJump && moveing.y == 0)
                         {
@@ -396,7 +388,6 @@ public class BattlePlayerController : MonoBehaviour
                         }
                         if (isJump)
                         {
-
                             if (info.collider != null)
                             {
                                 GameObject obj = info.collider.gameObject;
@@ -404,7 +395,6 @@ public class BattlePlayerController : MonoBehaviour
                                 {
                                     jumpRayDistance = 0;
                                     isJump = false;
-
                                 }
                             }
 
@@ -417,7 +407,6 @@ public class BattlePlayerController : MonoBehaviour
                         }
                         jumpAcceleration += Time.deltaTime * 0.425f;
                         break;
-
 
                     case PlayerDirEnum.left:////////////////////////////////////////////////
                         if (MainControl.instance.KeyArrowToControl(KeyCode.X, 1))
@@ -432,12 +421,10 @@ public class BattlePlayerController : MonoBehaviour
                         Physics2D.gravity = new Vector2(-9.8f, 0);
                         if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1))
                         {
-
                             moveing = new Vector3(moveing.x, 1);
                         }
                         else if (MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
                         {
-
                             moveing = new Vector3(moveing.x, -1);
                         }
                         else
@@ -452,7 +439,6 @@ public class BattlePlayerController : MonoBehaviour
                             jumpRayDistanceForBoard = 0;
                             transform.SetParent(null);
                         }
-
 
                         if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) && !isJump && moveing.x == 0)
                         {
@@ -472,7 +458,6 @@ public class BattlePlayerController : MonoBehaviour
                         }
                         if (isJump)
                         {
-
                             if (info.collider != null)
                             {
                                 GameObject obj = info.collider.gameObject;
@@ -493,7 +478,6 @@ public class BattlePlayerController : MonoBehaviour
                         jumpAcceleration += Time.deltaTime * 0.425f;
                         break;
 
-
                     case PlayerDirEnum.right:
                         if (MainControl.instance.KeyArrowToControl(KeyCode.X, 1))
                         {
@@ -507,12 +491,10 @@ public class BattlePlayerController : MonoBehaviour
                         Physics2D.gravity = new Vector2(9.8f, 0);
                         if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1))
                         {
-
                             moveing = new Vector3(moveing.x, 1);
                         }
                         else if (MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
                         {
-
                             moveing = new Vector3(moveing.x, -1);
                         }
                         else
@@ -527,7 +509,6 @@ public class BattlePlayerController : MonoBehaviour
                             jumpRayDistanceForBoard = 0;
                             transform.SetParent(null);
                         }
-
 
                         if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1) && !isJump && moveing.x == 0)
                         {
@@ -547,7 +528,6 @@ public class BattlePlayerController : MonoBehaviour
                         }
                         if (isJump)
                         {
-
                             if (info.collider != null)
                             {
                                 GameObject obj = info.collider.gameObject;
@@ -569,10 +549,11 @@ public class BattlePlayerController : MonoBehaviour
                         break;
                 }
 
-
                 break;
+
             case BattleControl.PlayerColor.purple:
                 break;
+
             default:
                 break;
         }
@@ -581,10 +562,6 @@ public class BattlePlayerController : MonoBehaviour
         {
             jumpFrozen -= Time.deltaTime;
         }
-
-
-
-        
 
         //蓝橙骨所用的是否移动判定
         Vector2 dirMoveX = new Vector2();
@@ -600,7 +577,7 @@ public class BattlePlayerController : MonoBehaviour
             dirMoveY = Vector2.down;
             isMoveY = true;
         }
-        
+
         if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
             isMoveY = false;
 
@@ -618,7 +595,6 @@ public class BattlePlayerController : MonoBehaviour
         if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1))
             isMoveX = false;
 
-
         Ray2D rayMoveX = new Ray2D(transform.position, dirMoveX);
         Debug.DrawRay(rayMoveX.origin, rayMoveX.direction, Color.green);
         RaycastHit2D infoMoveX = Physics2D.Raycast(transform.position, dirMoveX, 0.2f);
@@ -633,11 +609,10 @@ public class BattlePlayerController : MonoBehaviour
         {
             bool x = (isMoveX || isMoveY) && infoMoveX.collider != null && (infoMoveX.collider.gameObject.CompareTag("frame") || infoMoveX.collider.gameObject.CompareTag("board"));
             bool y = (isMoveX || isMoveY) && infoMoveY.collider != null && (infoMoveY.collider.gameObject.CompareTag("frame") || infoMoveY.collider.gameObject.CompareTag("board"));
-            if (x && !y && (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) || MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))) 
+            if (x && !y && (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) || MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1)))
                 x = y;
-            if (y && !x && (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1) || MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1))) 
+            if (y && !x && (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1) || MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1)))
                 y = x;
-
 
             isMoveing = !(x || y);
 
@@ -664,41 +639,38 @@ public class BattlePlayerController : MonoBehaviour
                     moveing.y = -0.5f * jumpFrozen;
                     rigidBody.gravityScale = 0;
                     break;
+
                 case PlayerDirEnum.down:
                     moveingSave = moveing.y;
                     moveing.y = 0.5f * jumpFrozen;
                     rigidBody.gravityScale = 0;
                     break;
+
                 case PlayerDirEnum.left:
                     moveingSave = moveing.x;
                     moveing.x = 0.5f * jumpFrozen;
                     rigidBody.gravityScale = 0;
                     break;
+
                 case PlayerDirEnum.right:
                     moveingSave = moveing.x;
                     moveing.x = -0.5f * jumpFrozen;
                     rigidBody.gravityScale = 0;
                     break;
             }
-
-            
         }
-      
+
         moveing.x = MainControl.instance.JudgmentNumber(false, moveing.x, -5);
         moveing.y = MainControl.instance.JudgmentNumber(false, moveing.y, -5);
         moveing.x = MainControl.instance.JudgmentNumber(true, moveing.x, 5);
         moveing.y = MainControl.instance.JudgmentNumber(true, moveing.y, 5);
 
-
         rigidBody.MovePosition(transform.position + new Vector3(speedWeightX * speed * moveing.x * Time.deltaTime, speedWeightY * speed * moveing.y * Time.deltaTime));//速度参考：3
         //transform.position = transform.position + new Vector3(speed * moveing.x * Time.deltaTime, speed * moveing.y * Time.deltaTime);//蓝心会有巨大偏差 不采用
         if (moveingSave != 0)
             moveing.y = moveingSave;
-
-
-
     }
-    
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         //蓝心碰板子确保再次可以跳
@@ -706,9 +678,9 @@ public class BattlePlayerController : MonoBehaviour
         {
             jumpRayDistance = 0;
             isJump = false;
-
         }
     }
+
     /*
     private void OnCollisionStay2D(Collision2D collision)
     {
@@ -718,6 +690,7 @@ public class BattlePlayerController : MonoBehaviour
         }
     }
     */
+
     /// <summary>
     /// 掉出
     /// </summary>
@@ -732,20 +705,20 @@ public class BattlePlayerController : MonoBehaviour
                 case PlayerDirEnum.up:
                     moveing = new Vector3(moveing.x, -0.55f);
                     break;
+
                 case PlayerDirEnum.down:
                     moveing = new Vector3(moveing.x, 0.55f);
                     break;
+
                 case PlayerDirEnum.left:
                     moveing = new Vector3(0.55f, moveing.y);
                     break;
+
                 case PlayerDirEnum.right:
                     moveing = new Vector3(-0.55f, moveing.y);
                     break;
             }
-           
-
         }
-
     }
 
     /// <summary>
@@ -780,18 +753,20 @@ public class BattlePlayerController : MonoBehaviour
                     case PlayerDirEnum.up:
                         moveing = new Vector3(moveing.x, -0.55f);
                         break;
+
                     case PlayerDirEnum.down:
                         moveing = new Vector3(moveing.x, 0.55f);
                         break;
+
                     case PlayerDirEnum.left:
                         moveing = new Vector3(0.55f, moveing.y);
                         break;
+
                     case PlayerDirEnum.right:
                         moveing = new Vector3(-0.55f, moveing.y);
                         break;
                 }
             }
-            
         }
         if (dir != PlayerDirEnum.nullDir)
         {
@@ -804,12 +779,15 @@ public class BattlePlayerController : MonoBehaviour
                 case PlayerDirEnum.up:
                     moveing = new Vector3(moveing.x, -0.55f);
                     break;
+
                 case PlayerDirEnum.down:
                     moveing = new Vector3(moveing.x, 0.55f);
                     break;
+
                 case PlayerDirEnum.left:
                     moveing = new Vector3(0.55f, moveing.y);
                     break;
+
                 case PlayerDirEnum.right:
                     moveing = new Vector3(-0.55f, moveing.y);
                     break;
@@ -817,9 +795,6 @@ public class BattlePlayerController : MonoBehaviour
         }
     }
 }
-
-
-
 
 //杂项
 /*
@@ -835,7 +810,6 @@ public class BattlePlayerController : MonoBehaviour
                         transform.rotation = Quaternion.Euler(0, 0, 180);
                         Physics2D.gravity = new Vector2(0, 9.8f);
                         break;
-
 
                     case PlayerDirEnum.down:
                         transform.rotation = Quaternion.Euler(0, 0, 0);
@@ -867,12 +841,15 @@ public class BattlePlayerController : MonoBehaviour
                                 case PlayerDirEnum.up:
                                     dirReal = Vector2.up;
                                     break;
+
                                 case PlayerDirEnum.down:
                                     dirReal = Vector2.down;
                                     break;
+
                                 case PlayerDirEnum.left:
                                     dirReal = Vector2.left;
                                     break;
+
                                 case PlayerDirEnum.right:
                                     dirReal = Vector2.right;
                                     break;
@@ -899,12 +876,10 @@ public class BattlePlayerController : MonoBehaviour
                         jumpAcceleration += Time.deltaTime * 0.425f;
                             break;
 
-
                     case PlayerDirEnum.left:
                         transform.rotation = Quaternion.Euler(0, 0, 270);
                         Physics2D.gravity = new Vector2(-9.8f, 0);
                         break;
-
 
                     case PlayerDirEnum.right:
                         transform.rotation = Quaternion.Euler(0, 0, 90);

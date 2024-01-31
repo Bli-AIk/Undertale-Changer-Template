@@ -5,14 +5,12 @@
  * that can be found at https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html.
  */
 
-
 using Live2D.Cubism.Core;
 using Live2D.Cubism.Framework;
 using System;
 using UnityEngine;
 
 using Object = UnityEngine.Object;
-
 
 namespace Live2D.Cubism.Rendering
 {
@@ -143,13 +141,10 @@ namespace Live2D.Cubism.Rendering
                     return;
                 }
 
-
                 _sortingLayerId = value;
-
 
                 // Apply sorting layer.
                 var renderers = Renderers;
-
 
                 for (var i = 0; i < renderers.Length; ++i)
                 {
@@ -157,7 +152,6 @@ namespace Live2D.Cubism.Rendering
                 }
             }
         }
-
 
         /// <summary>
         /// <see cref="SortingMode"/> backing field.
@@ -182,13 +176,10 @@ namespace Live2D.Cubism.Rendering
                     return;
                 }
 
-
                 _sortingMode = value;
-
 
                 // Flip sorting.
                 var renderers = Renderers;
-
 
                 for (var i = 0; i < renderers.Length; ++i)
                 {
@@ -196,7 +187,6 @@ namespace Live2D.Cubism.Rendering
                 }
             }
         }
-
 
         /// <summary>
         /// Order in sorting layer.
@@ -221,13 +211,10 @@ namespace Live2D.Cubism.Rendering
                     return;
                 }
 
-
                 _sortingOrder = value;
-
 
                 // Apply new sorting order.
                 var renderers = Renderers;
-
 
                 for (var i = 0; i < renderers.Length; ++i)
                 {
@@ -236,14 +223,11 @@ namespace Live2D.Cubism.Rendering
             }
         }
 
-
         /// <summary>
         /// [Optional] Camera to face.
         /// </summary>
         [SerializeField]
         public Camera CameraToFace;
-
-
 
         /// <summary>
         /// <see cref="DrawOrderHandler"/> backing field.
@@ -259,7 +243,6 @@ namespace Live2D.Cubism.Rendering
             get { return _drawOrderHandler; }
             set { _drawOrderHandler = value.ToNullUnlessImplementsInterface<ICubismDrawOrderHandler>(); }
         }
-
 
         /// <summary>
         /// <see cref="DrawOrderHandlerInterface"/> backing field.
@@ -279,11 +262,9 @@ namespace Live2D.Cubism.Rendering
                     _drawOrderHandlerInterface = DrawOrderHandler.GetInterface<ICubismDrawOrderHandler>();
                 }
 
-
                 return _drawOrderHandlerInterface;
             }
         }
-
 
         /// <summary>
         /// <see cref="OpacityHandler"/> backing field.
@@ -299,7 +280,6 @@ namespace Live2D.Cubism.Rendering
             get { return _opacityHandler; }
             set { _opacityHandler = value.ToNullUnlessImplementsInterface<ICubismOpacityHandler>(); }
         }
-
 
         /// <summary>
         /// <see cref="OpacityHandler"/> backing field.
@@ -318,11 +298,9 @@ namespace Live2D.Cubism.Rendering
                     _opacityHandlerInterface = OpacityHandler.GetInterface<ICubismOpacityHandler>();
                 }
 
-
                 return _opacityHandlerInterface;
             }
         }
-
 
         /// <summary>
         /// <see cref="MultiplyColorHandler"/> backing field.
@@ -338,7 +316,6 @@ namespace Live2D.Cubism.Rendering
             get { return _multiplyColorHandler; }
             set { _multiplyColorHandler = value.ToNullUnlessImplementsInterface<ICubismBlendColorHandler>(); }
         }
-
 
         /// <summary>
         /// <see cref="MultiplyColorHandler"/> backing field.
@@ -356,7 +333,6 @@ namespace Live2D.Cubism.Rendering
                 {
                     _multiplyColorHandlerInterface = MultiplyColorHandler?.GetInterface<ICubismBlendColorHandler>();
                 }
-
 
                 return _multiplyColorHandlerInterface;
             }
@@ -377,7 +353,6 @@ namespace Live2D.Cubism.Rendering
             set { _screenColorHandler = value.ToNullUnlessImplementsInterface<ICubismBlendColorHandler>(); }
         }
 
-
         /// <summary>
         /// <see cref="MultiplyColorHandler"/> backing field.
         /// </summary>
@@ -394,7 +369,6 @@ namespace Live2D.Cubism.Rendering
                 {
                     _screenColorHandlerInterface = ScreenColorHandler?.GetInterface<ICubismBlendColorHandler>();
                 }
-
 
                 return _screenColorHandlerInterface;
             }
@@ -423,14 +397,11 @@ namespace Live2D.Cubism.Rendering
                     return;
                 }
 
-
                 // Store value.
                 _depthOffset = value;
 
-
                 // Apply it.
                 var renderers = Renderers;
-
 
                 for (var i = 0; i < renderers.Length; ++i)
                 {
@@ -439,7 +410,6 @@ namespace Live2D.Cubism.Rendering
             }
         }
 
-
         /// <summary>
         /// Model the controller belongs to.
         /// </summary>
@@ -447,7 +417,6 @@ namespace Live2D.Cubism.Rendering
         {
             get { return this.FindCubismModel(); }
         }
-
 
         /// <summary>
         /// <see cref="DrawablesRootTransform"/> backing field.
@@ -466,11 +435,9 @@ namespace Live2D.Cubism.Rendering
                     _drawablesRootTransform = Model.Drawables[0].transform.parent;
                 }
 
-
                 return _drawablesRootTransform;
             }
         }
-
 
         /// <summary>
         /// <see cref="Renderers"/>s backing field.
@@ -495,7 +462,6 @@ namespace Live2D.Cubism.Rendering
             private set { _renderers = value; }
         }
 
-
         /// <summary>
         /// multiply color buffer.
         /// </summary>
@@ -506,13 +472,11 @@ namespace Live2D.Cubism.Rendering
         /// </summary>
         private Color[] _newScreenColors;
 
-
         /// <summary>
         /// Model has update controller component.
         /// </summary>
         [HideInInspector]
         public bool HasUpdateController { get; set; }
-
 
         /// <summary>
         /// Makes sure all <see cref="CubismDrawable"/>s have <see cref="CubismRenderer"/>s attached to them.
@@ -530,12 +494,10 @@ namespace Live2D.Cubism.Rendering
                 .FindCubismModel()
                 .Drawables;
 
-
                 renderers = drawables.AddComponentEach<CubismRenderer>();
 
                 // Store renderers.
                 Renderers = renderers;
-
             }
 
             if (renderers == null)
@@ -549,14 +511,12 @@ namespace Live2D.Cubism.Rendering
                 renderers[i].TryInitialize(this);
             }
 
-
             // Initialize sorting layer.
             // We set the backing field here directly because we pull the sorting layer directly from the renderer.
             _sortingLayerId = renderers[0]
                 .MeshRenderer
                 .sortingLayerID;
         }
-
 
         /// <summary>
         /// Updates opacity if necessary.
@@ -569,27 +529,22 @@ namespace Live2D.Cubism.Rendering
                 return;
             }
 
-
             // Store value.
             Opacity = Mathf.Clamp(Opacity, 0f, 1f);
             LastOpacity = Opacity;
 
-
             // Apply opacity.
             var applyOpacityToRenderers = (OpacityHandlerInterface == null || Opacity > (1f - Mathf.Epsilon));
-
 
             if (applyOpacityToRenderers && Renderers != null)
             {
                 var renderers = Renderers;
-
 
                 for (var i = 0; i < renderers.Length; ++i)
                 {
                     renderers[i].OnModelOpacityDidChange(Opacity);
                 }
             }
-
 
             // Call handler.
             if (OpacityHandlerInterface != null)
@@ -728,7 +683,6 @@ namespace Live2D.Cubism.Rendering
                 return;
             }
 
-
             // Face camera.
             DrawablesRootTransform.rotation = (Quaternion.LookRotation(CameraToFace.transform.forward, Vector3.up));
         }
@@ -755,10 +709,8 @@ namespace Live2D.Cubism.Rendering
                 return;
             }
 
-
             // Make sure renderers are available.
             TryInitializeRenderers();
-
 
             // Register listener.
             Model.OnDynamicDrawableData += OnDynamicDrawableData;
@@ -775,12 +727,11 @@ namespace Live2D.Cubism.Rendering
                 return;
             }
 
-
             // Deregister listener.
             Model.OnDynamicDrawableData -= OnDynamicDrawableData;
         }
 
-        #endregion
+        #endregion Unity Event Handling
 
         #region Cubism Event Handling
 
@@ -806,28 +757,23 @@ namespace Live2D.Cubism.Rendering
             var drawables = sender.Drawables;
             var renderers = Renderers;
 
-
             // Handle render data changes.
             for (var i = 0; i < data.Length; ++i)
             {
                 // Controls whether mesh buffers are to be swapped.
                 var swapMeshes = false;
 
-
                 // Update visibility if last SwapInfo flag is true.
                 renderers[i].UpdateVisibility();
 
-
                 // Update render order if last SwapInfo flags is true.
                 renderers[i].UpdateRenderOrder();
-
 
                 // Skip completely non-dirty data.
                 if (!data[i].IsAnyDirty)
                 {
                     continue;
                 }
-
 
                 // Update visibility.
                 if (data[i].IsVisibilityDirty)
@@ -837,36 +783,29 @@ namespace Live2D.Cubism.Rendering
                     swapMeshes = true;
                 }
 
-
                 // Update render order.
                 if (data[i].IsRenderOrderDirty)
                 {
                     renderers[i].OnDrawableRenderOrderDidChange(data[i].RenderOrder);
 
-
                     swapMeshes = true;
                 }
-
 
                 // Update opacity.
                 if (data[i].IsOpacityDirty)
                 {
                     renderers[i].OnDrawableOpacityDidChange(data[i].Opacity);
 
-
                     swapMeshes = true;
                 }
-
 
                 // Update vertex positions.
                 if (data[i].AreVertexPositionsDirty)
                 {
                     renderers[i].OnDrawableVertexPositionsDidChange(data[i].VertexPositions);
 
-
                     swapMeshes = true;
                 }
-
 
                 // Swap buffers if necessary.
                 // [INV] Swapping only half of the meshes might improve performance even. Would that be visually feasible?
@@ -876,10 +815,8 @@ namespace Live2D.Cubism.Rendering
                 }
             }
 
-
             // Pass draw order changes to handler (if available).
             var drawOrderHandler = DrawOrderHandlerInterface;
-
 
             if (drawOrderHandler != null)
             {
@@ -944,6 +881,6 @@ namespace Live2D.Cubism.Rendering
             }
         }
 
-        #endregion
+        #endregion Cubism Event Handling
     }
 }

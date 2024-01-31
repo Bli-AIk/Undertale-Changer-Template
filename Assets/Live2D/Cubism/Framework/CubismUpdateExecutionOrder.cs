@@ -7,7 +7,6 @@
 
 using System.Collections.Generic;
 
-
 namespace Live2D.Cubism.Framework
 {
     /// <summary>
