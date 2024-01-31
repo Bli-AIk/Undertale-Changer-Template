@@ -273,8 +273,8 @@ public class BulletController : MonoBehaviour
 
             float r = UnityEngine.Random.Range(0.025f, 0.05f);
             Vector3 v3 = new Vector3(r * MainControl.instance.Get1Or_1(), r * MainControl.instance.Get1Or_1());
-            MainControl.instance.cameraShake.Shake(v3, 4, 1f / 60f * 4f, 5, true);
-            MainControl.instance.cameraShake3D.Shake(v3, 4, 1f / 60f * 4f, 5, true);
+            MainControl.instance.cameraShake.Shake(v3, 4, 1f / 60f * 4f, 2.5f, true);
+            MainControl.instance.cameraShake3D.Shake(v3, 4, 1f / 60f * 4f, 2.5f, true, "3D CameraPoint");
         }
     }
 
