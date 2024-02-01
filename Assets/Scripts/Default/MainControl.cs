@@ -681,7 +681,8 @@ public class MainControl : MonoBehaviour
         {
             if (cameraShake == null)
                 cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
-            cameraMainInBattle = cameraShake.GetComponent<Camera>();
+            if (cameraShake != null)
+                cameraMainInBattle = cameraShake.GetComponent<Camera>();
         }
 
         if (!OverworldControl.hdResolution)
@@ -717,6 +718,7 @@ public class MainControl : MonoBehaviour
                 BackpackBehaviour.instance.SuitResolution();
 
             CanvasController.instance.DOKill();
+            CanvasController.instance.fps.rectTransform.anchoredPosition = new Vector2();
             CanvasController.instance.frame.color = new Color(1, 1, 1, 0);
             CanvasController.instance.setting.transform.localScale = Vector3.one;
             CanvasController.instance.setting.rectTransform.anchoredPosition = new Vector2(0, CanvasController.instance.setting.rectTransform.anchoredPosition.y);
@@ -748,7 +750,12 @@ public class MainControl : MonoBehaviour
             CanvasController.instance.DOKill();
 
             if (CanvasController.instance.framePic < 0)
+            {
                 CanvasController.instance.frame.color = Color.black;
+                CanvasController.instance.fps.rectTransform.anchoredPosition = new Vector2(0, -30f);
+            }
+            else 
+                CanvasController.instance.fps.rectTransform.anchoredPosition = new Vector2();
 
             CanvasController.instance.frame.DOColor(new Color(1, 1, 1, 1) * Convert.ToInt32(CanvasController.instance.framePic >= 0), 1f);
             CanvasController.instance.setting.transform.localScale = Vector3.one * 0.89f;
@@ -2128,7 +2135,7 @@ public class MainControl : MonoBehaviour
 
         string part1 = inputString.Substring(0, startIndex); // 从开头到A之前的部分
         string part2 = inputString.Substring(endIndex + 1); // 从B之后到字符串末尾的部分
-
+        DebugLogger.Log(inputString.Substring(startIndex + 1));
         string result = part1 + add + part2; // 合并两部分
         return result;
     }

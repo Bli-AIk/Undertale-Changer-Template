@@ -271,7 +271,7 @@ public class BulletController : MonoBehaviour
 
             MainControl.instance.selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
 
-            float r = Random.Range(0.025f, 0.05f);
+            float r = Random.Range(0, 0.025f);
             Vector3 v3move = new Vector3(r * MainControl.instance.Get1Or_1(), r * MainControl.instance.Get1Or_1());
             Vector3 v3spin = new Vector3(Random.Range(-2.5f, 2.5f), Random.Range(-2.5f, 2.5f), Random.Range(-2.5f, 2.5f));
             MainControl.instance.cameraShake.Shake(v3move, v3spin, 4, 1f / 60f * 4f, "", (DG.Tweening.Ease)Random.Range(0, 20));

@@ -253,6 +253,7 @@ public class SelectUIController : MonoBehaviour
                         hpSpr.material.SetColor("_ColorFlash", hpColorOn);
 
                         hpFood = MainControl.instance.PlayerControl.hp;
+
                     }
 
                     if (MainControl.instance.PlayerControl.myItems[0] == 0 && selectUI == 3)
@@ -344,6 +345,11 @@ public class SelectUIController : MonoBehaviour
                         itemSelectController.myItemMax = MainControl.instance.FindMax(MainControl.instance.PlayerControl.myItems); ;
                         itemSelectController.Open();
                         selectLayer = 2;
+
+                        if (MainControl.instance.PlayerControl.myItems[selectSon] < 10000)
+                            UITextUpdate(UITextMode.Food, int.Parse(MainControl.instance.ItemIdGetData(MainControl.instance.PlayerControl.myItems[selectSon], "Auto")));
+                        else
+                            UITextUpdate(UITextMode.Food);
                         break;
 
                     case 4://MERCY£ºÑ¡ÔñµÐÈË

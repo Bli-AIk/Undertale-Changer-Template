@@ -6,13 +6,36 @@ using Random = UnityEngine.Random;
 public class CameraShake : MonoBehaviour
 {
     private Tween tweenMove, tweenSpin;
+    private Tween tweenMoveBack;
 
+    public bool moveWithHeart;
+    public Vector3 heartBasicPos = new Vector3(0, -1.5f);
+    [Header("moveExtent的Y轴对应摄像机Z轴")]
+    public Vector2 moveExtent = new Vector2(0.5f, 0.5f);
+
+    private void Update()
+    {
+        if (moveWithHeart && !TurnController.instance.isMyTurn)
+        {
+            transform.position = new Vector3(moveExtent.x * (MainControl.instance.battlePlayerController.transform.position.x - heartBasicPos.x),
+                                             MainControl.instance.battlePlayerController.transform.position.z, 
+                                             moveExtent.y * (MainControl.instance.battlePlayerController.transform.position.y - heartBasicPos.y));
+        }
+        if (moveWithHeart && tweenMoveBack == null && TurnController.instance.isMyTurn && transform.position != Vector3.zero)
+        {
+            tweenMoveBack = transform.DOMove(Vector3.zero, 0.5f).OnKill(KillTweenMoveBack);
+        }
+    }
+    void KillTweenMoveBack()
+    {
+        tweenMoveBack = null;
+    }
     /// <summary>
     /// 摄像机摇晃
     /// loops会自动转换为偶数。
     /// </summary>
 
-    public void Shake(Vector3 v3move, Vector3 v3spin, int loops = 4, float shakeTime = 1f / 60f * 4f, string getSon = "", Ease easeMove = Ease.Linear, Ease easeSpin = Ease.InOutCubic)
+    public void Shake(Vector3 v3move, Vector3 v3spin, int loops = 4, float shakeTime = 1f / 60f * 4f, string getSon = "", Ease easeMove = Ease.OutCubic, Ease easeSpin = Ease.InOutCubic)
     {
         Transform transformer;
         if (getSon == "")

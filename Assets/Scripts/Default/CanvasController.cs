@@ -16,7 +16,7 @@ public class CanvasController : MonoBehaviour
 
     public static CanvasController instance;
     public bool openTurn;//敌人回合不能开
-    private TextMeshProUGUI fps;
+    public TextMeshProUGUI fps;
     public Image frame;
     private Image exitImage;
     private float clock;

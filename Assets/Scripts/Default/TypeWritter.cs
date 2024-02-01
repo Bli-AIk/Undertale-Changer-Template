@@ -138,7 +138,6 @@ public class TypeWritter : MonoBehaviour
             if (fxRandomPitch)
                 pitch = UnityEngine.Random.Range(0.25f, 1.25f);
 
-            //if (originString[i] != 'ýQ')
 
             if (originString[i] == '<')
             {
@@ -294,6 +293,7 @@ public class TypeWritter : MonoBehaviour
                                 break;
 
                             case "<autoFood>":
+
                                 string plusString;
                                 if (hpIn + hpSave >= MainControl.instance.PlayerControl.hpMax)
                                 {
@@ -305,8 +305,9 @@ public class TypeWritter : MonoBehaviour
                                     plusString = MainControl.instance.ItemControl.itemTextMaxData[12];
                                     plusString = plusString.Substring(0, plusString.Length - 1);
                                 }
-                                originString = MainControl.instance.StringRemover(originString, passTextString.Length - 1, passTextString.Length - 2 + "<autoFood>".Length, plusString);
+                                originString = MainControl.instance.StringRemover(originString, i - "<autoFood>".Length, i - 1, plusString);
                                 i -= spText.Length;
+                                passTextString = passTextString.Substring(0, passTextString.Length - spText.Length);
                                 break;
 
                             case "<changeX>":
@@ -383,15 +384,18 @@ public class TypeWritter : MonoBehaviour
             {
                 isTyping = false;
             }
-            else if (passText && passTextString.Length < originString.Length)
+            else
             {
                 if (originString[passTextString.Length] != '<')
                 {
                     originString = originString.Substring(passTextString.Length - 1);
+                    i -= passTextString.Length - 1;
                 }
-                else
+                else// == '<'
                 {
                     originString = originString.Substring(passTextString.Length);
+                    i -= passTextString.Length;
+
                 }
                 break;
             }
@@ -402,6 +406,7 @@ public class TypeWritter : MonoBehaviour
         }
 
         isRunning = false;
+        originString = originString.Substring("<passText>".Length);
     }
 
     private void Update()
@@ -438,7 +443,7 @@ public class TypeWritter : MonoBehaviour
         {
             tmp_Text.text = "";
         }
-        passText = !passText;
+        passText = false;
 
         passTextString = "";
         if (isOverworld)
