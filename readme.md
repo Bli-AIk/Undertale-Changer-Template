@@ -1,3 +1,9 @@
+# Look at me before downloading!!
+UCT will undergo a large-scale update in the near future.
+If you want to use it, you can download the current version of the gamejolt page first.
+But this version has some issues, especially for English users, it may generate some bugs.
+Please do not use the current version for your game production. This version is for learning only, please look forward to the new version of UCT!
+
 # Undetale-Changer-Template
 An UNDERTALE fan game template based on unity engine.
 
