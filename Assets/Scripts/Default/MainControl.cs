@@ -661,7 +661,15 @@ public class MainControl : MonoBehaviour
 
     private void SetCanvasFrameSprite(int framePic = 2)//一般为CanvasController.instance.framePic
     {
-        CanvasController.instance.frame.sprite = OverworldControl.frames[framePic];
+        Image frame = CanvasController.instance.frame;
+        if (framePic < 0)
+        {
+            frame.sprite = null;
+        }
+        else
+        {
+            frame.sprite = OverworldControl.frames[framePic];
+        }
     }
 
     /// <summary>
@@ -669,6 +677,13 @@ public class MainControl : MonoBehaviour
     /// </summary>
     public void SetResolution(int resolution)
     {
+        if (cameraMainInBattle == null)
+        {
+            if (cameraShake == null)
+                cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
+            cameraMainInBattle = cameraShake.GetComponent<Camera>();
+        }
+
         if (!OverworldControl.hdResolution)
         {
             if (OverworldControl.resolutionLevel > 4)
@@ -685,12 +700,7 @@ public class MainControl : MonoBehaviour
             Camera.main.rect = new Rect(0, 0, 1, 1);
             if (sceneState == SceneState.InBattle)
             {
-                if (cameraMainInBattle == null)
-                {
-                    if (cameraShake == null)
-                        cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
-                    cameraMainInBattle = cameraShake.GetComponent<Camera>();
-                }
+                
                 cameraMainInBattle.rect = new Rect(0, 0, 1, 1);
             }
             // BackpackBehaviour rawImage在其脚本中控制
@@ -736,7 +746,11 @@ public class MainControl : MonoBehaviour
             //CanvasController.instance.frame.sprite = OverworldControl.frames[CanvasController.instance.framePic];
 
             CanvasController.instance.DOKill();
-            CanvasController.instance.frame.DOColor(new Color(1, 1, 1, 1), 1f);
+
+            if (CanvasController.instance.framePic < 0)
+                CanvasController.instance.frame.color = Color.black;
+
+            CanvasController.instance.frame.DOColor(new Color(1, 1, 1, 1) * Convert.ToInt32(CanvasController.instance.framePic >= 0), 1f);
             CanvasController.instance.setting.transform.localScale = Vector3.one * 0.89f;
             CanvasController.instance.setting.rectTransform.anchoredPosition = new Vector2(142.5f, CanvasController.instance.setting.rectTransform.anchoredPosition.y);
         }
