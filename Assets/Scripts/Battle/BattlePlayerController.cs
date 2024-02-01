@@ -2,7 +2,7 @@ using DG.Tweening;
 using System;
 using UnityEngine;
 using UnityEngine.Rendering;
-
+using Log;
 /// <summary>
 /// 控制战斗内玩家(心)的相关属性
 /// </summary>
@@ -617,8 +617,8 @@ public class BattlePlayerController : MonoBehaviour
             isMoveing = !(x || y);
 
             /*
-            //Debug.Log("X:" + x);
-            //Debug.Log("Y:" + y);
+            //DebugLogger.Log("X:" + x);
+            //DebugLogger.Log("Y:" + y);
             */
         }
         else

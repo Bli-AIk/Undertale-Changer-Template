@@ -1,7 +1,6 @@
 using DG.Tweening;
 using UnityEngine;
-using System;
-using Random = UnityEngine.Random;
+using Log;
 
 public class CameraShake : MonoBehaviour
 {
@@ -43,7 +42,7 @@ public class CameraShake : MonoBehaviour
         else
             transformer = transform.Find(getSon);
 
-        Debug.Log(transformer, transformer);
+        DebugLogger.Log(transformer, transformer);
 
         tweenMove.Kill(true);
         tweenSpin.Kill(true);

@@ -72,7 +72,7 @@ namespace TMPro.Examples
             }
             else if (SpawnType == 1)
             {
-                //Debug.Log("Spawning TextMesh Objects.");
+                //DebugLogger.Log("Spawning TextMesh Objects.");
 
                 m_floatingText_Transform = m_floatingText.transform;
                 m_floatingText_Transform.position = m_transform.position + new Vector3(0, 15f, 0);
@@ -124,7 +124,7 @@ namespace TMPro.Examples
 
                 if (current_Count <= 3)
                 {
-                    //Debug.Log("Fading Counter ... " + current_Count.ToString("f2"));
+                    //DebugLogger.Log("Fading Counter ... " + current_Count.ToString("f2"));
                     alpha = Mathf.Clamp(alpha - (Time.deltaTime / fadeDuration) * 255, 0, 255);
                 }
 
@@ -150,7 +150,7 @@ namespace TMPro.Examples
                 yield return k_WaitForEndOfFrame;
             }
 
-            //Debug.Log("Done Counting down.");
+            //DebugLogger.Log("Done Counting down.");
 
             yield return k_WaitForSecondsRandom[Random.Range(0, 19)];
 
@@ -178,13 +178,13 @@ namespace TMPro.Examples
 
                 if (current_Count <= 3)
                 {
-                    //Debug.Log("Fading Counter ... " + current_Count.ToString("f2"));
+                    //DebugLogger.Log("Fading Counter ... " + current_Count.ToString("f2"));
                     alpha = Mathf.Clamp(alpha - (Time.deltaTime / fadeDuration) * 255, 0, 255);
                 }
 
                 int_counter = (int)current_Count;
                 m_textMesh.text = int_counter.ToString();
-                //Debug.Log("Current Count:" + current_Count.ToString("f2"));
+                //DebugLogger.Log("Current Count:" + current_Count.ToString("f2"));
 
                 m_textMesh.color = new Color32(start_color.r, start_color.g, start_color.b, (byte)alpha);
 
@@ -204,7 +204,7 @@ namespace TMPro.Examples
                 yield return k_WaitForEndOfFrame;
             }
 
-            //Debug.Log("Done Counting down.");
+            //DebugLogger.Log("Done Counting down.");
 
             yield return k_WaitForSecondsRandom[Random.Range(0, 20)];
 

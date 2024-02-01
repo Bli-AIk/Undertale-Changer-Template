@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using Log;
 
 public class StretchPostRendererFeature : ScriptableRendererFeature
 {
@@ -43,7 +44,7 @@ public class StretchPostPass : ScriptableRenderPass
         renderPassEvent = passEvent;
         if (StretchPostShader == null)
         {
-            Debug.LogError("Shader不存在");
+            DebugLogger.Log("Shader不存在", DebugLogger.Type.err);
             return;
         }
         mat = CoreUtils.CreateEngineMaterial(StretchPostShader);

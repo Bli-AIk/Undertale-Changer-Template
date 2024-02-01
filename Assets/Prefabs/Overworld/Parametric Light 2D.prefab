@@ -91,7 +91,7 @@ MonoBehaviour:
   - {x: -1.5, y: -2.4, z: 0}
   m_ShapePathHash: 46968211
   m_Mesh: {fileID: 0}
-  m_InstanceId: -1710
+  m_InstanceId: -184348
 --- !u!61 &827274840424608389
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -182,7 +182,7 @@ MonoBehaviour:
   m_AlphaBlendOnOverlap: 0
   m_OverlapOperation: 0
   m_NormalMapDistance: 3
-  m_NormalMapQuality: 1
+  m_NormalMapQuality: 2
   m_UseNormalMap: 0
   m_ShadowIntensityEnabled: 1
   m_ShadowIntensity: 0.95
@@ -884,7 +884,7 @@ MonoBehaviour:
   m_AlphaBlendOnOverlap: 0
   m_OverlapOperation: 0
   m_NormalMapDistance: 3
-  m_NormalMapQuality: 1
+  m_NormalMapQuality: 2
   m_UseNormalMap: 0
   m_ShadowIntensityEnabled: 1
   m_ShadowIntensity: 0.25
@@ -5897,7 +5897,7 @@ MonoBehaviour:
   - {x: -1.5, y: -2.4, z: 0}
   m_ShapePathHash: 526383947
   m_Mesh: {fileID: 0}
-  m_InstanceId: -1718
+  m_InstanceId: -184356
 --- !u!61 &3406816189019008868
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -1,4 +1,5 @@
 using DG.Tweening;
+using Log;
 using MEC;
 using System.Collections.Generic;
 using UnityEngine;
@@ -65,44 +66,8 @@ public class TurnController : MonoBehaviour
     {
         switch (turn)
         {
-            case 0://示例回合
-                Debug.Log("这是一个示例回合");
-                yield return Timing.WaitForSeconds(0.5f);
-                Debug.Log("请注意查看控制台发出的Debug文本介绍");
-                yield return Timing.WaitForSeconds(1.5f);
-
-                Debug.Log("战斗框缩放：更改四个点的坐标");
-                mainFrame.transform.GetChild(0).DOLocalMoveX(1.4f, 0.5f).SetEase(Ease.InOutSine);
-                mainFrame.transform.GetChild(3).DOLocalMoveX(1.4f, 0.5f).SetEase(Ease.InOutSine);
-                mainFrame.transform.GetChild(1).DOLocalMoveX(-1.4f, 0.5f).SetEase(Ease.InOutSine);
-                mainFrame.transform.GetChild(2).DOLocalMoveX(-1.4f, 0.5f).SetEase(Ease.InOutSine);
-
-                yield return Timing.WaitForSeconds(1);
-
-                Debug.Log("通过更改点坐标实现的战斗框轴点旋转");
-                for (int i = 0; i < 4; i++)
-                {
-                    mainFrame.transform.GetChild(0).DOLocalMove(mainFrame.transform.GetChild(3).transform.localPosition, 0.5f).SetEase(Ease.InOutSine);
-                    mainFrame.transform.GetChild(1).DOLocalMove(mainFrame.transform.GetChild(0).transform.localPosition, 0.5f).SetEase(Ease.InOutSine);
-                    mainFrame.transform.GetChild(2).DOLocalMove(mainFrame.transform.GetChild(1).transform.localPosition, 0.5f).SetEase(Ease.InOutSine);
-                    mainFrame.transform.GetChild(3).DOLocalMove(mainFrame.transform.GetChild(2).transform.localPosition, 0.5f).SetEase(Ease.InOutSine);
-                    yield return Timing.WaitForSeconds(0.5f);
-                }
-
-                Debug.Log("简单嵌套弹幕编写示例");
-                for (int i = 0; i < 5 * 20; i++)
-                {
-                    Timing.RunCoroutine(_TurnNest(Nest.simpleNestBullet));
-                    yield return Timing.WaitForSeconds(0.2f);
-                }
-
-                Debug.Log("战斗框缩放回初始坐标以结束回合");
-                yield return Timing.WaitForSeconds(1f);
-                mainFrame.transform.GetChild(0).DOLocalMoveX(5.93f, 0.5f).SetEase(Ease.InOutSine);
-                mainFrame.transform.GetChild(3).DOLocalMoveX(5.93f, 0.5f).SetEase(Ease.InOutSine);
-                mainFrame.transform.GetChild(1).DOLocalMoveX(-5.93f, 0.5f).SetEase(Ease.InOutSine);
-                mainFrame.transform.GetChild(2).DOLocalMoveX(-5.93f, 0.5f).SetEase(Ease.InOutSine);
-                yield return Timing.WaitForSeconds(0.5f);
+            case 0:
+                DebugLogger.Log("这是个摆烂回合……也许吧。");
 
                 var obj = objectPools[0].GetFromPool().GetComponent<BulletController>();
                 obj.SetBullet(
@@ -113,16 +78,70 @@ public class TurnController : MonoBehaviour
                     Vector2.zero,
                     (int)(92 / 2.5f),
                     Vector2.zero,
-                    new Vector3(0, -1.6f),
+                    new Vector3(1, -1.6f),
                     BattleControl.BulletColor.white,
                     SpriteMaskInteraction.None
                     );
-
+                var obj2 = objectPools[0].GetFromPool().GetComponent<BulletController>();
+                obj2.SetBullet(
+                    "DemoBullet",
+                    "CupCake",
+                    40,
+                    Resources.Load<Sprite>("Sprites/Bullet/CupCake"),
+                    Vector2.zero,
+                    (int)(92 / 2.5f),
+                    Vector2.zero,
+                    new Vector3(-1, -1.6f),
+                    BattleControl.BulletColor.white,
+                    SpriteMaskInteraction.None
+                    );
                 for (int i = 60; i > 0; i--)
                 {
-                    Debug.Log("你先别急，先等" + MainControl.instance.RandomStringColor() + i + "</color>秒");
+                    DebugLogger.Log("你先别急，先摆" + MainControl.instance.RandomStringColor() + i + "</color>秒");
                     yield return Timing.WaitForSeconds(1f);
                 }
+
+                break;
+
+            case 1://示例回合
+                DebugLogger.Log("这是一个示例回合");
+                yield return Timing.WaitForSeconds(0.5f);
+                DebugLogger.Log("请注意查看控制台发出的Debug文本介绍");
+                yield return Timing.WaitForSeconds(1.5f);
+
+                DebugLogger.Log("战斗框缩放：更改四个点的坐标");
+                mainFrame.transform.GetChild(0).DOLocalMoveX(1.4f, 0.5f).SetEase(Ease.InOutSine);
+                mainFrame.transform.GetChild(3).DOLocalMoveX(1.4f, 0.5f).SetEase(Ease.InOutSine);
+                mainFrame.transform.GetChild(1).DOLocalMoveX(-1.4f, 0.5f).SetEase(Ease.InOutSine);
+                mainFrame.transform.GetChild(2).DOLocalMoveX(-1.4f, 0.5f).SetEase(Ease.InOutSine);
+
+                yield return Timing.WaitForSeconds(1);
+
+                DebugLogger.Log("通过更改点坐标实现的战斗框轴点旋转");
+                for (int i = 0; i < 4; i++)
+                {
+                    mainFrame.transform.GetChild(0).DOLocalMove(mainFrame.transform.GetChild(3).transform.localPosition, 0.5f).SetEase(Ease.InOutSine);
+                    mainFrame.transform.GetChild(1).DOLocalMove(mainFrame.transform.GetChild(0).transform.localPosition, 0.5f).SetEase(Ease.InOutSine);
+                    mainFrame.transform.GetChild(2).DOLocalMove(mainFrame.transform.GetChild(1).transform.localPosition, 0.5f).SetEase(Ease.InOutSine);
+                    mainFrame.transform.GetChild(3).DOLocalMove(mainFrame.transform.GetChild(2).transform.localPosition, 0.5f).SetEase(Ease.InOutSine);
+                    yield return Timing.WaitForSeconds(0.5f);
+                }
+
+                DebugLogger.Log("简单嵌套弹幕编写示例");
+                for (int i = 0; i < 5 * 20; i++)
+                {
+                    Timing.RunCoroutine(_TurnNest(Nest.simpleNestBullet));
+                    yield return Timing.WaitForSeconds(0.2f);
+                }
+
+                DebugLogger.Log("战斗框缩放回初始坐标以结束回合");
+                yield return Timing.WaitForSeconds(1f);
+                mainFrame.transform.GetChild(0).DOLocalMoveX(5.93f, 0.5f).SetEase(Ease.InOutSine);
+                mainFrame.transform.GetChild(3).DOLocalMoveX(5.93f, 0.5f).SetEase(Ease.InOutSine);
+                mainFrame.transform.GetChild(1).DOLocalMoveX(-5.93f, 0.5f).SetEase(Ease.InOutSine);
+                mainFrame.transform.GetChild(2).DOLocalMoveX(-5.93f, 0.5f).SetEase(Ease.InOutSine);
+                yield return Timing.WaitForSeconds(0.5f);
+
                 break;
         }
 

@@ -165,8 +165,8 @@ should be:
 
 • VectorLine.continuous is removed. Instead, use VectorLine.lineType. Code like this:
 
-	if (myLine.continuous) Debug.Log ("Continuous");
+	if (myLine.continuous) DebugLogger.Log ("Continuous");
 
 should be:
 
-	if (myLine.lineType == LineType.Continuous) Debug.Log ("Continuous");
+	if (myLine.lineType == LineType.Continuous) DebugLogger.Log ("Continuous");

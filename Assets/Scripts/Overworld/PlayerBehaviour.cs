@@ -158,7 +158,7 @@ public class PlayerBehaviour : MonoBehaviour
         if (info.collider != null && MainControl.instance.KeyArrowToControl(KeyCode.Z))
         {
             GameObject obj = info.collider.gameObject;
-            //Debug.Log(obj.transform.tag);
+            //DebugLogger.Log(obj.transform.tag);
             if (obj.transform.CompareTag("owObjTrigger")
             {
                 OverworldObjTrigger owObj = obj.transform.GetComponent<OverworldObjTrigger>();

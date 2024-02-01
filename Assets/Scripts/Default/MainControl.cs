@@ -1065,7 +1065,7 @@ public class MainControl : MonoBehaviour
                             break;
                     }
                     j = k;
-                    //Debug.Log(list[i] +"/"+ name);
+                    //DebugLogger.Log(list[i] +"/"+ name);
                 }
 
                 while (list[i][j] == '<')
@@ -1105,7 +1105,7 @@ public class MainControl : MonoBehaviour
     /// </summary>
     private string ChangeItemDataSwitch(string text, string texters, bool isData, string name, List<string> ex)
     {
-        //Debug.Log(text + "/" + texters + "/" + isData);
+        //DebugLogger.Log(text + "/" + texters + "/" + isData);
         switch (texters)
         {
             case "<playerName>":
@@ -1421,8 +1421,8 @@ public class MainControl : MonoBehaviour
         {
             if (text.Length > 1 && (text[0] == 'O' || text[0] == 'o') && text[1] == '+')
             {
-                //Debug.LogWarning(text.Substring(2));
-                //Debug.Log(RandomFloatChange(text.Substring(2), origin, isY, origin));
+                //DebugLogger.LogWarning(text.Substring(2));
+                //DebugLogger.Log(RandomFloatChange(text.Substring(2), origin, isY, origin));
                 return RandomFloatChange(text.Substring(2), origin, isY, origin);
             }
             else
@@ -2129,7 +2129,7 @@ public class MainControl : MonoBehaviour
     {
         if (startIndex < 0 || endIndex >= inputString.Length || startIndex > endIndex)
         {
-            Debug.LogError("无效的起始和结束位置");
+            DebugLogger.Log("无效的起始和结束位置", DebugLogger.Type.err);
             return inputString;
         }
 

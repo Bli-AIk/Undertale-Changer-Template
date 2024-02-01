@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-
+using Log;
 /// <summary>
 /// Battle场景中的UI控制器
 /// 也负责玩家回合的控制
@@ -303,7 +303,7 @@ public class SelectUIController : MonoBehaviour
                             target.transform.Find("Move").transform.position = new Vector3(MainControl.instance.BattleControl.enemies[selectSon].transform.position.x, target.transform.Find("Move").transform.position.y);
                             target.hitMonster = enemiesControllers[selectSon];
 
-                            Debug.Log(1111);
+                            DebugLogger.Log(1111);
                             MainControl.instance.battlePlayerController.transform.position = Vector2.one * 10000;
                         }
                         break;
@@ -437,7 +437,7 @@ public class SelectUIController : MonoBehaviour
 
                                         case 2:
 
-                                            Debug.Log(1);
+                                            DebugLogger.Log(1);
                                             AudioController.instance.GetFx(3, MainControl.instance.AudioControl.fxClipBattle);
 
                                             break;

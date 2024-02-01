@@ -1,3 +1,4 @@
+using Log;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -43,7 +44,7 @@ public class ChromaticAberrationPass : ScriptableRenderPass
         renderPassEvent = passEvent;
         if (ChromaticAberrationShader == null)
         {
-            Debug.LogError("Shader不存在");
+            DebugLogger.Log("Shader不存在", DebugLogger.Type.err);
             return;
         }
         mat = CoreUtils.CreateEngineMaterial(ChromaticAberrationShader);

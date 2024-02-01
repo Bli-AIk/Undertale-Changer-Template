@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
-
+using Log;
 /// <summary>
 /// 存档存储的数据
 /// </summary>
@@ -13,10 +13,10 @@ public class SaveController : MonoBehaviour
 
     public static void SaveData(PlayerControl data, string dataName)
     {
-        //Debug.Log("save");
+        //DebugLogger.Log("save");
         if (!Directory.Exists(Application.dataPath + "/Data"))
         {
-            //Debug.Log("create");
+            //DebugLogger.Log("create");
             Directory.CreateDirectory(Application.dataPath + "/Data");
         }
         usersData[data.name] = data;
@@ -29,7 +29,7 @@ public class SaveController : MonoBehaviour
     // 读取用户数据到内存
     public static PlayerControl LoadData(string dataName)
     {
-        //Debug.Log("load");
+        //DebugLogger.Log("load");
 
         SortAndRenameData();
         string path = Application.dataPath + string.Format("/Data/{0}.json", dataName);
@@ -52,7 +52,7 @@ public class SaveController : MonoBehaviour
     {
         if (!Directory.Exists(Application.dataPath + "/Data"))
         {
-            //Debug.Log("家人们谁懂啊"+ Application.dataPath + "/Data");
+            //DebugLogger.Log("家人们谁懂啊"+ Application.dataPath + "/Data");
             return 0;
         }
 
@@ -84,7 +84,7 @@ public class SaveController : MonoBehaviour
         }
         else
         {
-            Debug.LogWarningFormat("存档 '{0}' 不存在，无法删除。", dataName);
+            DebugLogger.Log("存档"+ dataName+"不存在，无法删除。",DebugLogger.Type.war);
         }
         SortAndRenameData();
     }
@@ -95,7 +95,7 @@ public class SaveController : MonoBehaviour
 
         if (!Directory.Exists(dataPath))
         {
-            Debug.LogWarning("存档目录不存在，无法进行排序和重命名。");
+            DebugLogger.Log("存档目录不存在，无法进行排序和重命名。", DebugLogger.Type.war);
             return;
         }
 

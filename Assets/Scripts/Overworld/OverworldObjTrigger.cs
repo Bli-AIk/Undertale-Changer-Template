@@ -159,7 +159,6 @@ public class OverworldObjTrigger : MonoBehaviour
         isTyping = false;
         BackpackBehaviour.instance.typeMessage.text = "";
         TalkUIPositionChanger.instance.transform.localPosition = new Vector3(TalkUIPositionChanger.instance.transform.localPosition.x, TalkUIPositionChanger.instance.transform.localPosition.y, -50);
-        //Debug.Log(talkUI.transform.localPosition.z);
         if (isSave && !saveOpen)
         {
             Save();
@@ -174,7 +173,7 @@ public class OverworldObjTrigger : MonoBehaviour
             MethodInfo methodInfo = typeof(OverworldObjTrigger).GetMethod(item);
             if (methodInfo == null)
             {
-                Debug.LogError(item + "ºÏ≤‚ ß∞‹", gameObject);
+                DebugLogger.Log(item + "ºÏ≤‚ ß∞‹", gameObject, DebugLogger.Type.err);
             }
             else
             {

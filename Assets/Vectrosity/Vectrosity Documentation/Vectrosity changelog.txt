@@ -542,7 +542,7 @@ Additions:
 	• Vector.GetLinePoint01 and Vector.GetLinePoint3D01: as above, but you can use a 0..1 percentage length instead of unit length. e.g., using 0.5 returns a point halfway along the line.
 	• Vector.GetLineLength, which returns the total length of a given line.
 	• Vector.SetLineDistances: use this if you've changed the position of any points in a VectorLine after using GetLineLength, GetLinePoint, etc. and want to use those functions again. For performance reasons this isn't done automatically.
-	• In addition to being used for GameObject and mesh names, the "name" property is now directly available for VectorLines. e.g., Debug.Log(myLine.name);. Changing the VectorLine name property will change the GameObject and mesh names appropriately.
+	• In addition to being used for GameObject and mesh names, the "name" property is now directly available for VectorLines. e.g., DebugLogger.Log(myLine.name);. Changing the VectorLine name property will change the GameObject and mesh names appropriately.
 
 Changes:
 	• Requires Unity 3.4.
