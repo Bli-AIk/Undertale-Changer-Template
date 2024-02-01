@@ -1,7 +1,7 @@
 # Look at me before downloading!!
 UCT will undergo a large-scale update in the near future.
-If you want to use it, you can download the current version of the [gamejolt page](https://gamejolt.com/games/undertale_changer_template/771575) first.
-But this version has some issues, especially for English users, it may generate some bugs.
+At present, the Github version of UCT is frequently updated. If you want a stable version, please visit gamejolt, you can download the current version of the [gamejolt page](https://gamejolt.com/games/undertale_changer_template/771575) first.
+But gamejolt version has some issues, especially for English users, it may generate some bugs.
 Please do not use the current version for your game production. This version is for learning only, please look forward to the new version of UCT!
 
 # Undetale-Changer-Template
