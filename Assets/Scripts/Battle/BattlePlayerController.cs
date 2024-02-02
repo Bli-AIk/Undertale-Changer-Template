@@ -8,10 +8,12 @@ using Log;
 /// </summary>
 public class BattlePlayerController : MonoBehaviour
 {
+    float saveTime;
     public float speed, speedWeightX, speedWeightY;//速度与权重(按X乘以倍数)，速度测试为3，权重0.5f
     private float speedWeight = 0.5f;
     public float hitCD, hitCDMax;//无敌时间
     public bool isMoving;//用于蓝橙骨判断：玩家是否真的在移动
+    public float timeInterpolation = -0.225f;
 
     public enum PlayerDirEnum
     {
@@ -28,7 +30,6 @@ public class BattlePlayerController : MonoBehaviour
     public float jumpAcceleration;//跳跃的加速度
     public float jumpRayDistance;//射线距离
     public float jumpRayDistanceForBoard;
-    public float jumpFrozen, jumpFrozenMax;//用于跳跃中途松开时的悬空帧计时。
 
     private Rigidbody2D rigidBody;
     public CircleCollider2D collideCollider;//圆形碰撞体
@@ -43,7 +44,6 @@ public class BattlePlayerController : MonoBehaviour
     {
         speedWeightX = 1;
         speedWeightY = 1;
-        jumpFrozenMax = 0.25f;
         jumpRayDistance = 0.2f;
         jumpRayDistanceForBoard = 0.2f;
         jumpAcceleration = 1.25f;
@@ -314,7 +314,7 @@ public class BattlePlayerController : MonoBehaviour
                         {
                             jumpRayDistanceForBoard = 0.2f;
                             moving = new Vector3(moving.x, -0.55f);
-                            jumpFrozen = jumpFrozenMax;
+                            
                         }
                         if (isJump)
                         {
@@ -328,14 +328,14 @@ public class BattlePlayerController : MonoBehaviour
                                 }
                             }
 
-                            moving.y += Time.deltaTime * (float)Math.Pow(2, jumpAcceleration);
+                            moving.y += Time.deltaTime * (float)Math.Pow(3, jumpAcceleration);
                         }
                         else
                         {
                             jumpAcceleration = 1.25f;
                             moving.y = 0;
                         }
-                        jumpAcceleration += Time.deltaTime * 0.425f;
+                        jumpAcceleration += Time.deltaTime * timeInterpolation;
                         break;
 
                     case PlayerDirEnum.down:////////////////////////////////////////////////
@@ -379,12 +379,16 @@ public class BattlePlayerController : MonoBehaviour
                             isJump = true;
                             jumpRayDistance = 0.2f;
                             jumpRayDistanceForBoard = 0;
+
+
+                            DebugLogger.Log(Time.time - saveTime,DebugLogger.Type.war,"#FF0000");
+                            saveTime = Time.time; ;
                         }
                         if (isJump && (!MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("frame"))) && moving.y > 0.55f)
                         {
                             jumpRayDistanceForBoard = 0.2f;
                             moving = new Vector3(moving.x, 0.55f);
-                            jumpFrozen = jumpFrozenMax;
+
                         }
                         if (isJump)
                         {
@@ -398,14 +402,14 @@ public class BattlePlayerController : MonoBehaviour
                                 }
                             }
 
-                            moving.y -= Time.deltaTime * (float)Math.Pow(2, jumpAcceleration);
+                            moving.y -= Time.deltaTime * (float)Math.Pow(3, jumpAcceleration);
                         }
                         else
                         {
                             jumpAcceleration = 1.25f;
                             moving.y = 0;
                         }
-                        jumpAcceleration += Time.deltaTime * 0.425f;
+                        jumpAcceleration += Time.deltaTime * timeInterpolation;
                         break;
 
                     case PlayerDirEnum.left:////////////////////////////////////////////////
@@ -454,7 +458,7 @@ public class BattlePlayerController : MonoBehaviour
                         {
                             jumpRayDistanceForBoard = 0.2f;
                             moving = new Vector3(0.55f, moving.y);
-                            jumpFrozen = jumpFrozenMax;
+                            
                         }
                         if (isJump)
                         {
@@ -468,14 +472,14 @@ public class BattlePlayerController : MonoBehaviour
                                 }
                             }
 
-                            moving.x -= Time.deltaTime * (float)Math.Pow(2, jumpAcceleration);
+                            moving.x -= Time.deltaTime * (float)Math.Pow(3, jumpAcceleration);
                         }
                         else
                         {
                             jumpAcceleration = 1.25f;
                             moving.x = 0;
                         }
-                        jumpAcceleration += Time.deltaTime * 0.425f;
+                        jumpAcceleration += Time.deltaTime * timeInterpolation;
                         break;
 
                     case PlayerDirEnum.right:
@@ -524,7 +528,7 @@ public class BattlePlayerController : MonoBehaviour
                         {
                             jumpRayDistanceForBoard = 0.2f;
                             moving = new Vector3(-0.55f, moving.y);
-                            jumpFrozen = jumpFrozenMax;
+                            
                         }
                         if (isJump)
                         {
@@ -538,14 +542,14 @@ public class BattlePlayerController : MonoBehaviour
                                 }
                             }
 
-                            moving.x += Time.deltaTime * (float)Math.Pow(2, jumpAcceleration);
+                            moving.x += Time.deltaTime * (float)Math.Pow(3, jumpAcceleration);
                         }
                         else
                         {
                             jumpAcceleration = 1.25f;
                             moving.x = 0;
                         }
-                        jumpAcceleration += Time.deltaTime * 0.425f;
+                        jumpAcceleration += Time.deltaTime * timeInterpolation;
                         break;
                 }
 
@@ -558,10 +562,6 @@ public class BattlePlayerController : MonoBehaviour
                 break;
         }
 
-        if (jumpFrozen > 0)
-        {
-            jumpFrozen -= Time.deltaTime;
-        }
 
         //蓝橙骨所用的是否移动判定
         Vector2 dirMoveX = new Vector2();
@@ -630,31 +630,27 @@ public class BattlePlayerController : MonoBehaviour
         }
 
         float movingSave = 0;
-        if (playerColor == BattleControl.PlayerColor.blue && isJump && jumpFrozen > 0)
+        if (playerColor == BattleControl.PlayerColor.blue && isJump)
         {
             switch (playerDir)
             {
                 case PlayerDirEnum.up:
                     movingSave = moving.y;
-                    moving.y = -0.5f * jumpFrozen;
                     rigidBody.gravityScale = 0;
                     break;
 
                 case PlayerDirEnum.down:
                     movingSave = moving.y;
-                    moving.y = 0.5f * jumpFrozen;
                     rigidBody.gravityScale = 0;
                     break;
 
                 case PlayerDirEnum.left:
                     movingSave = moving.x;
-                    moving.x = 0.5f * jumpFrozen;
                     rigidBody.gravityScale = 0;
                     break;
 
                 case PlayerDirEnum.right:
                     movingSave = moving.x;
-                    moving.x = -0.5f * jumpFrozen;
                     rigidBody.gravityScale = 0;
                     break;
             }

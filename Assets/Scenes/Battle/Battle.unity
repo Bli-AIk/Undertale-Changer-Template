@@ -6623,15 +6623,14 @@ MonoBehaviour:
   speedWeightY: 0
   hitCD: 0
   hitCDMax: 0
-  isMoveing: 0
+  isMoving: 0
+  timeInterpolation: -0.225
   playerDir: 0
-  moveing: {x: 0, y: 0, z: 0}
+  moving: {x: 0, y: 0, z: 0}
   isJump: 0
   jumpAcceleration: 0
   jumpRayDistance: 0
   jumpRayDistanceForBoard: 0
-  jumpFrozen: 0
-  jumpFrozenMax: 0.25
   collideCollider: {fileID: 0}
   playerColor: 5
   hitVolume: {fileID: 0}
