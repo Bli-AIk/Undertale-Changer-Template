@@ -34,4 +34,5 @@ public class PlayerControl : ScriptableObject
     [Header("--调试模式设定--")]
     [Header("锁血")]
     public bool invincible;
+    public bool keepInvincible;
 }

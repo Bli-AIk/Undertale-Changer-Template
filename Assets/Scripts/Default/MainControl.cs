@@ -377,7 +377,7 @@ public class MainControl : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.F5))
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
-            if (PlayerControl.invincible)
+            if (PlayerControl.keepInvincible)
                 PlayerControl.hp = PlayerControl.hpMax;
 
             PlayerControl.playerName = "Debug";
@@ -2138,5 +2138,25 @@ public class MainControl : MonoBehaviour
         DebugLogger.Log(inputString.Substring(startIndex + 1));
         string result = part1 + add + part2; // 合并两部分
         return result;
+    }
+
+    public void KillPlayer()
+    {
+        PlayerControl.hp = PlayerControl.hpMax;
+
+        if (!(PlayerControl.isDebug && PlayerControl.invincible))
+        {
+            //spriteRenderer.color = Color.red;
+            OverworldControl.playerDeadPos = transform.position;
+            OverworldControl.pause = true;
+            TurnController.instance.KillIEnumerator();
+            SwitchScene("Gameover", false);
+        }
+        else
+        {
+            selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
+            DebugLogger.Log("Debug无敌模式已将您的血量恢复", DebugLogger.Type.nor, "#FF0000");
+        }
+
     }
 }

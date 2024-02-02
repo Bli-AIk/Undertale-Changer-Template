@@ -406,7 +406,8 @@ public class TypeWritter : MonoBehaviour
         }
 
         isRunning = false;
-        originString = originString.Substring("<passText>".Length);
+        if (originString.Length > "<passText>".Length)
+            originString = originString.Substring("<passText>".Length);
     }
 
     private void Update()

@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -235,12 +236,10 @@ public class BulletController : MonoBehaviour
                 if (boxColliderList[i].IsTouching(collision))
                 {
                     if (bulletColor == BattleControl.BulletColor.white
-                        || (bulletColor == BattleControl.BulletColor.orange && !MainControl.instance.battlePlayerController.isMoveing)
-                        || (bulletColor == BattleControl.BulletColor.blue && MainControl.instance.battlePlayerController.isMoveing))
+                        || (bulletColor == BattleControl.BulletColor.orange && !MainControl.instance.battlePlayerController.isMoving)
+                        || (bulletColor == BattleControl.BulletColor.blue && MainControl.instance.battlePlayerController.isMoving))
                     {
                         HitPlayer(i);
-                        if (!MainControl.instance.OverworldControl.noSFX)
-                            MainControl.instance.battlePlayerController.hitVolume.weight = 1;
                     }
                     break;
                 }
@@ -249,8 +248,8 @@ public class BulletController : MonoBehaviour
             else if (extra.IsTouching(collision))
             {
                 if (bulletColor == BattleControl.BulletColor.white
-                    || (bulletColor == BattleControl.BulletColor.orange && !MainControl.instance.battlePlayerController.isMoveing)
-                    || (bulletColor == BattleControl.BulletColor.blue && MainControl.instance.battlePlayerController.isMoveing))
+                    || (bulletColor == BattleControl.BulletColor.orange && !MainControl.instance.battlePlayerController.isMoving)
+                    || (bulletColor == BattleControl.BulletColor.blue && MainControl.instance.battlePlayerController.isMoving))
                 {
                     HitPlayer(0);
                     if (!MainControl.instance.OverworldControl.noSFX)
@@ -272,10 +271,15 @@ public class BulletController : MonoBehaviour
             MainControl.instance.selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
 
             float r = Random.Range(0, 0.025f);
-            Vector3 v3move = new Vector3(r * MainControl.instance.Get1Or_1(), r * MainControl.instance.Get1Or_1());
             Vector3 v3spin = new Vector3(Random.Range(-2.5f, 2.5f), Random.Range(-2.5f, 2.5f), Random.Range(-2.5f, 2.5f));
-            MainControl.instance.cameraShake.Shake(v3move, v3spin, 4, 1f / 60f * 4f, "", (DG.Tweening.Ease)Random.Range(0, 20));
-            MainControl.instance.cameraShake3D.Shake(v3move, v3spin, 4, 1f / 60f * 4f, "3D CameraPoint", (DG.Tweening.Ease)Random.Range(0, 20));
+            MainControl.instance.cameraShake.Shake(new Vector3(r * MainControl.instance.Get1Or_1(), r * MainControl.instance.Get1Or_1(), 0), v3spin, 4, 1f / 60f * 4f * 1.5f, "", Ease.OutElastic);
+            MainControl.instance.cameraShake3D.Shake(new Vector3(r * MainControl.instance.Get1Or_1(), 0, r * MainControl.instance.Get1Or_1()), v3spin, 4, 1f / 60f * 4f * 1.5f, "3D CameraPoint", Ease.OutElastic);
+            if (MainControl.instance.PlayerControl.hp <= 0)
+                MainControl.instance.KillPlayer();
+
+
+            if (!MainControl.instance.OverworldControl.noSFX)
+                MainControl.instance.battlePlayerController.hitVolume.weight = 1;
         }
     }
 

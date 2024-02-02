@@ -6633,7 +6633,7 @@ MonoBehaviour:
   jumpFrozen: 0
   jumpFrozenMax: 0.25
   collideCollider: {fileID: 0}
-  playerColor: 0
+  playerColor: 5
   hitVolume: {fileID: 0}
 --- !u!114 &1570390502
 MonoBehaviour:

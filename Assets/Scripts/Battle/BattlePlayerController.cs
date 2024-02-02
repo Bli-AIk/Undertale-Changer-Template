@@ -11,7 +11,7 @@ public class BattlePlayerController : MonoBehaviour
     public float speed, speedWeightX, speedWeightY;//速度与权重(按X乘以倍数)，速度测试为3，权重0.5f
     private float speedWeight = 0.5f;
     public float hitCD, hitCDMax;//无敌时间
-    public bool isMoveing;//用于蓝橙骨判断：玩家是否真的在移动
+    public bool isMoving;//用于蓝橙骨判断：玩家是否真的在移动
 
     public enum PlayerDirEnum
     {
@@ -23,7 +23,7 @@ public class BattlePlayerController : MonoBehaviour
     };
 
     public PlayerDirEnum playerDir;//方向
-    public Vector3 moveing;
+    public Vector3 moving;
     public bool isJump;//是否处于“跳起”状态
     public float jumpAcceleration;//跳跃的加速度
     public float jumpRayDistance;//射线距离
@@ -127,10 +127,10 @@ public class BattlePlayerController : MonoBehaviour
         if (MainControl.instance.OverworldControl.isSetting || MainControl.instance.OverworldControl.pause)
             return;
         if (!TurnController.instance.isMyTurn)
-            Moveing();
+            Moving();
     }
 
-    private void Moveing()
+    private void Moving()
     {
         Vector2 dirReal = new Vector2();
         switch (playerDir)
@@ -175,61 +175,61 @@ public class BattlePlayerController : MonoBehaviour
                 }
                 if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1))
                 {
-                    moveing = new Vector3(moveing.x, 1);
+                    moving = new Vector3(moving.x, 1);
                 }
                 else if (MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
                 {
-                    moveing = new Vector3(moveing.x, -1);
+                    moving = new Vector3(moving.x, -1);
                 }
                 else
-                    moveing = new Vector3(moveing.x, 0);
+                    moving = new Vector3(moving.x, 0);
 
                 if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
-                    moveing = new Vector3(moveing.x, 0);
+                    moving = new Vector3(moving.x, 0);
 
                 if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1))
                 {
-                    moveing = new Vector3(1, moveing.y);
+                    moving = new Vector3(1, moving.y);
                 }
                 else if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
                 {
-                    moveing = new Vector3(-1, moveing.y);
+                    moving = new Vector3(-1, moving.y);
                 }
                 else
-                    moveing = new Vector3(0, moveing.y);
+                    moving = new Vector3(0, moving.y);
 
                 if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
-                    moveing = new Vector3(0, moveing.y);
+                    moving = new Vector3(0, moving.y);
                 break;
 
             case BattleControl.PlayerColor.orange:
                 /*同时按下两个方向键有bug
                 if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow))
                 {
-                    moveing = new Vector3(moveing.x, 1);
+                    moving = new Vector3(moving.x, 1);
                 }
                 else if (MainControl.instance.KeyArrowToControl(KeyCode.DownArrow))
                 {
-                    moveing = new Vector3(moveing.x, -1);
+                    moving = new Vector3(moving.x, -1);
                 }
                 else if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow) || MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow))
                 {
-                    moveing = new Vector3(moveing.x, 0);
+                    moving = new Vector3(moving.x, 0);
                 }
 
                 if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow))
                 {
-                    moveing = new Vector3(1, moveing.y);
+                    moving = new Vector3(1, moving.y);
                 }
                 else if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow))
                 {
-                    moveing = new Vector3(-1, moveing.y);
+                    moving = new Vector3(-1, moving.y);
                 }
                 else if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow) || MainControl.instance.KeyArrowToControl(KeyCode.DownArrow))
-                    moveing = new Vector3(0, moveing.y);
+                    moving = new Vector3(0, moving.y);
 
-                while (moveing == Vector3.zero || (moveing.x != 0 && moveing.y != 0))
-                    moveing = new Vector3(UnityEngine.Random.Range(-1, 2), UnityEngine.Random.Range(-1, 2));
+                while (moving == Vector3.zero || (moving.x != 0 && moving.y != 0))
+                    moving = new Vector3(UnityEngine.Random.Range(-1, 2), UnityEngine.Random.Range(-1, 2));
                 */
                 break;
 
@@ -280,17 +280,17 @@ public class BattlePlayerController : MonoBehaviour
                         Physics2D.gravity = new Vector2(0, 9.8f);
                         if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1))
                         {
-                            moveing = new Vector3(1, moveing.y);
+                            moving = new Vector3(1, moving.y);
                         }
                         else if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
                         {
-                            moveing = new Vector3(-1, moveing.y);
+                            moving = new Vector3(-1, moving.y);
                         }
                         else
-                            moveing = new Vector3(0, moveing.y);
+                            moving = new Vector3(0, moving.y);
 
                         if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
-                            moveing = new Vector3(0, moveing.y);
+                            moving = new Vector3(0, moving.y);
 
                         if (!MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) || !MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
                             jumpRayDistanceForBoard = 0.2f;
@@ -300,20 +300,20 @@ public class BattlePlayerController : MonoBehaviour
                             transform.SetParent(null);
                         }
 
-                        if (MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1) && !isJump && moveing.y == 0)
+                        if (MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1) && !isJump && moving.y == 0)
                         {
                             transform.SetParent(null);
 
                             rigidBody.gravityScale = 0;
-                            moveing = new Vector3(moveing.x, -2.15f);
+                            moving = new Vector3(moving.x, -2.15f);
                             isJump = true;
                             jumpRayDistance = 0.2f;
                             jumpRayDistanceForBoard = 0;
                         }
-                        if (isJump && (!MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("frame"))) && moveing.y < -0.55f)
+                        if (isJump && (!MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("frame"))) && moving.y < -0.55f)
                         {
                             jumpRayDistanceForBoard = 0.2f;
-                            moveing = new Vector3(moveing.x, -0.55f);
+                            moving = new Vector3(moving.x, -0.55f);
                             jumpFrozen = jumpFrozenMax;
                         }
                         if (isJump)
@@ -328,12 +328,12 @@ public class BattlePlayerController : MonoBehaviour
                                 }
                             }
 
-                            moveing.y += Time.deltaTime * (float)Math.Pow(2, jumpAcceleration);
+                            moving.y += Time.deltaTime * (float)Math.Pow(2, jumpAcceleration);
                         }
                         else
                         {
                             jumpAcceleration = 1.25f;
-                            moveing.y = 0;
+                            moving.y = 0;
                         }
                         jumpAcceleration += Time.deltaTime * 0.425f;
                         break;
@@ -351,16 +351,16 @@ public class BattlePlayerController : MonoBehaviour
                         Physics2D.gravity = new Vector2(0, -9.8f);
                         if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1))
                         {
-                            moveing = new Vector3(1, moveing.y);
+                            moving = new Vector3(1, moving.y);
                         }
                         else if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
                         {
-                            moveing = new Vector3(-1, moveing.y);
+                            moving = new Vector3(-1, moving.y);
                         }
                         else
-                            moveing = new Vector3(0, moveing.y);
+                            moving = new Vector3(0, moving.y);
                         if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
-                            moveing = new Vector3(0, moveing.y);
+                            moving = new Vector3(0, moving.y);
 
                         if (!MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) || !MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
                             jumpRayDistanceForBoard = 0.2f;
@@ -370,20 +370,20 @@ public class BattlePlayerController : MonoBehaviour
                             transform.SetParent(null);
                         }
 
-                        if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) && !isJump && moveing.y == 0)
+                        if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) && !isJump && moving.y == 0)
                         {
                             transform.SetParent(null);
 
                             rigidBody.gravityScale = 0;
-                            moveing = new Vector3(moveing.x, 2.15f);
+                            moving = new Vector3(moving.x, 2.15f);
                             isJump = true;
                             jumpRayDistance = 0.2f;
                             jumpRayDistanceForBoard = 0;
                         }
-                        if (isJump && (!MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("frame"))) && moveing.y > 0.55f)
+                        if (isJump && (!MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("frame"))) && moving.y > 0.55f)
                         {
                             jumpRayDistanceForBoard = 0.2f;
-                            moveing = new Vector3(moveing.x, 0.55f);
+                            moving = new Vector3(moving.x, 0.55f);
                             jumpFrozen = jumpFrozenMax;
                         }
                         if (isJump)
@@ -398,12 +398,12 @@ public class BattlePlayerController : MonoBehaviour
                                 }
                             }
 
-                            moveing.y -= Time.deltaTime * (float)Math.Pow(2, jumpAcceleration);
+                            moving.y -= Time.deltaTime * (float)Math.Pow(2, jumpAcceleration);
                         }
                         else
                         {
                             jumpAcceleration = 1.25f;
-                            moveing.y = 0;
+                            moving.y = 0;
                         }
                         jumpAcceleration += Time.deltaTime * 0.425f;
                         break;
@@ -421,16 +421,16 @@ public class BattlePlayerController : MonoBehaviour
                         Physics2D.gravity = new Vector2(-9.8f, 0);
                         if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1))
                         {
-                            moveing = new Vector3(moveing.x, 1);
+                            moving = new Vector3(moving.x, 1);
                         }
                         else if (MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
                         {
-                            moveing = new Vector3(moveing.x, -1);
+                            moving = new Vector3(moving.x, -1);
                         }
                         else
-                            moveing = new Vector3(moveing.x, 0);
+                            moving = new Vector3(moving.x, 0);
                         if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
-                            moveing = new Vector3(moveing.x, 0);
+                            moving = new Vector3(moving.x, 0);
 
                         if (!MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) || !MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
                             jumpRayDistanceForBoard = 0.2f;
@@ -440,20 +440,20 @@ public class BattlePlayerController : MonoBehaviour
                             transform.SetParent(null);
                         }
 
-                        if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) && !isJump && moveing.x == 0)
+                        if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) && !isJump && moving.x == 0)
                         {
                             transform.SetParent(null);
 
                             rigidBody.gravityScale = 0;
-                            moveing = new Vector3(2.15f, moveing.y);
+                            moving = new Vector3(2.15f, moving.y);
                             isJump = true;
                             jumpRayDistance = 0.2f;
                             jumpRayDistanceForBoard = 0;
                         }
-                        if (isJump && (!MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("frame"))) && moveing.x > 0.55f)
+                        if (isJump && (!MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("frame"))) && moving.x > 0.55f)
                         {
                             jumpRayDistanceForBoard = 0.2f;
-                            moveing = new Vector3(0.55f, moveing.y);
+                            moving = new Vector3(0.55f, moving.y);
                             jumpFrozen = jumpFrozenMax;
                         }
                         if (isJump)
@@ -468,12 +468,12 @@ public class BattlePlayerController : MonoBehaviour
                                 }
                             }
 
-                            moveing.x -= Time.deltaTime * (float)Math.Pow(2, jumpAcceleration);
+                            moving.x -= Time.deltaTime * (float)Math.Pow(2, jumpAcceleration);
                         }
                         else
                         {
                             jumpAcceleration = 1.25f;
-                            moveing.x = 0;
+                            moving.x = 0;
                         }
                         jumpAcceleration += Time.deltaTime * 0.425f;
                         break;
@@ -491,16 +491,16 @@ public class BattlePlayerController : MonoBehaviour
                         Physics2D.gravity = new Vector2(9.8f, 0);
                         if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1))
                         {
-                            moveing = new Vector3(moveing.x, 1);
+                            moving = new Vector3(moving.x, 1);
                         }
                         else if (MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
                         {
-                            moveing = new Vector3(moveing.x, -1);
+                            moving = new Vector3(moving.x, -1);
                         }
                         else
-                            moveing = new Vector3(moveing.x, 0);
+                            moving = new Vector3(moving.x, 0);
                         if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
-                            moveing = new Vector3(moveing.x, 0);
+                            moving = new Vector3(moving.x, 0);
 
                         if (!MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) || !MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
                             jumpRayDistanceForBoard = 0.2f;
@@ -510,20 +510,20 @@ public class BattlePlayerController : MonoBehaviour
                             transform.SetParent(null);
                         }
 
-                        if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1) && !isJump && moveing.x == 0)
+                        if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1) && !isJump && moving.x == 0)
                         {
                             transform.SetParent(null);
 
                             rigidBody.gravityScale = 0;
-                            moveing = new Vector3(-2.15f, moveing.y);
+                            moving = new Vector3(-2.15f, moving.y);
                             isJump = true;
                             jumpRayDistance = 0.2f;
                             jumpRayDistanceForBoard = 0;
                         }
-                        if (isJump && (!MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("frame"))) && moveing.x < -0.55f)
+                        if (isJump && (!MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("frame"))) && moving.x < -0.55f)
                         {
                             jumpRayDistanceForBoard = 0.2f;
-                            moveing = new Vector3(-0.55f, moveing.y);
+                            moving = new Vector3(-0.55f, moving.y);
                             jumpFrozen = jumpFrozenMax;
                         }
                         if (isJump)
@@ -538,12 +538,12 @@ public class BattlePlayerController : MonoBehaviour
                                 }
                             }
 
-                            moveing.x += Time.deltaTime * (float)Math.Pow(2, jumpAcceleration);
+                            moving.x += Time.deltaTime * (float)Math.Pow(2, jumpAcceleration);
                         }
                         else
                         {
                             jumpAcceleration = 1.25f;
-                            moveing.x = 0;
+                            moving.x = 0;
                         }
                         jumpAcceleration += Time.deltaTime * 0.425f;
                         break;
@@ -603,7 +603,7 @@ public class BattlePlayerController : MonoBehaviour
         RaycastHit2D infoMoveY = Physics2D.Raycast(transform.position, dirMoveY, 0.2f);
 
         if (isMoveX && infoMoveX.collider != null && (infoMoveX.collider.gameObject.CompareTag("frame") || infoMoveX.collider.gameObject.CompareTag("board")))
-            isMoveing = false;
+            isMoving = false;
 
         if (isMoveX || isMoveY)
         {
@@ -614,7 +614,7 @@ public class BattlePlayerController : MonoBehaviour
             if (y && !x && (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1) || MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1)))
                 y = x;
 
-            isMoveing = !(x || y);
+            isMoving = !(x || y);
 
             /*
             //DebugLogger.Log("X:" + x);
@@ -624,51 +624,51 @@ public class BattlePlayerController : MonoBehaviour
         else
         {
             if (playerColor == BattleControl.PlayerColor.blue && jumpRayDistance != 0)
-                isMoveing = true;
+                isMoving = true;
             else
-                isMoveing = false;
+                isMoving = false;
         }
 
-        float moveingSave = 0;
+        float movingSave = 0;
         if (playerColor == BattleControl.PlayerColor.blue && isJump && jumpFrozen > 0)
         {
             switch (playerDir)
             {
                 case PlayerDirEnum.up:
-                    moveingSave = moveing.y;
-                    moveing.y = -0.5f * jumpFrozen;
+                    movingSave = moving.y;
+                    moving.y = -0.5f * jumpFrozen;
                     rigidBody.gravityScale = 0;
                     break;
 
                 case PlayerDirEnum.down:
-                    moveingSave = moveing.y;
-                    moveing.y = 0.5f * jumpFrozen;
+                    movingSave = moving.y;
+                    moving.y = 0.5f * jumpFrozen;
                     rigidBody.gravityScale = 0;
                     break;
 
                 case PlayerDirEnum.left:
-                    moveingSave = moveing.x;
-                    moveing.x = 0.5f * jumpFrozen;
+                    movingSave = moving.x;
+                    moving.x = 0.5f * jumpFrozen;
                     rigidBody.gravityScale = 0;
                     break;
 
                 case PlayerDirEnum.right:
-                    moveingSave = moveing.x;
-                    moveing.x = -0.5f * jumpFrozen;
+                    movingSave = moving.x;
+                    moving.x = -0.5f * jumpFrozen;
                     rigidBody.gravityScale = 0;
                     break;
             }
         }
 
-        moveing.x = MainControl.instance.JudgmentNumber(false, moveing.x, -5);
-        moveing.y = MainControl.instance.JudgmentNumber(false, moveing.y, -5);
-        moveing.x = MainControl.instance.JudgmentNumber(true, moveing.x, 5);
-        moveing.y = MainControl.instance.JudgmentNumber(true, moveing.y, 5);
+        moving.x = MainControl.instance.JudgmentNumber(false, moving.x, -5);
+        moving.y = MainControl.instance.JudgmentNumber(false, moving.y, -5);
+        moving.x = MainControl.instance.JudgmentNumber(true, moving.x, 5);
+        moving.y = MainControl.instance.JudgmentNumber(true, moving.y, 5);
 
-        rigidBody.MovePosition(transform.position + new Vector3(speedWeightX * speed * moveing.x * Time.deltaTime, speedWeightY * speed * moveing.y * Time.deltaTime));//速度参考：3
-        //transform.position = transform.position + new Vector3(speed * moveing.x * Time.deltaTime, speed * moveing.y * Time.deltaTime);//蓝心会有巨大偏差 不采用
-        if (moveingSave != 0)
-            moveing.y = moveingSave;
+        rigidBody.MovePosition(transform.position + new Vector3(speedWeightX * speed * moving.x * Time.deltaTime, speedWeightY * speed * moving.y * Time.deltaTime));//速度参考：3
+        //transform.position = transform.position + new Vector3(speed * moving.x * Time.deltaTime, speed * moving.y * Time.deltaTime);//蓝心会有巨大偏差 不采用
+        if (movingSave != 0)
+            moving.y = movingSave;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -703,19 +703,19 @@ public class BattlePlayerController : MonoBehaviour
             switch (playerDir)
             {
                 case PlayerDirEnum.up:
-                    moveing = new Vector3(moveing.x, -0.55f);
+                    moving = new Vector3(moving.x, -0.55f);
                     break;
 
                 case PlayerDirEnum.down:
-                    moveing = new Vector3(moveing.x, 0.55f);
+                    moving = new Vector3(moving.x, 0.55f);
                     break;
 
                 case PlayerDirEnum.left:
-                    moveing = new Vector3(0.55f, moveing.y);
+                    moving = new Vector3(0.55f, moving.y);
                     break;
 
                 case PlayerDirEnum.right:
-                    moveing = new Vector3(-0.55f, moveing.y);
+                    moving = new Vector3(-0.55f, moving.y);
                     break;
             }
         }
@@ -739,7 +739,7 @@ public class BattlePlayerController : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, 0, 0);
             transform.SetParent(null);
             playerColor = aimPlayerColor;
-            moveing = Vector3.zero;
+            moving = Vector3.zero;
             isJump = false;
             jumpAcceleration = 1.25f;
             rigidBody.gravityScale = 0;
@@ -751,19 +751,19 @@ public class BattlePlayerController : MonoBehaviour
                 switch (playerDir)
                 {
                     case PlayerDirEnum.up:
-                        moveing = new Vector3(moveing.x, -0.55f);
+                        moving = new Vector3(moving.x, -0.55f);
                         break;
 
                     case PlayerDirEnum.down:
-                        moveing = new Vector3(moveing.x, 0.55f);
+                        moving = new Vector3(moving.x, 0.55f);
                         break;
 
                     case PlayerDirEnum.left:
-                        moveing = new Vector3(0.55f, moveing.y);
+                        moving = new Vector3(0.55f, moving.y);
                         break;
 
                     case PlayerDirEnum.right:
-                        moveing = new Vector3(-0.55f, moveing.y);
+                        moving = new Vector3(-0.55f, moving.y);
                         break;
                 }
             }
@@ -777,19 +777,19 @@ public class BattlePlayerController : MonoBehaviour
             switch (playerDir)
             {
                 case PlayerDirEnum.up:
-                    moveing = new Vector3(moveing.x, -0.55f);
+                    moving = new Vector3(moving.x, -0.55f);
                     break;
 
                 case PlayerDirEnum.down:
-                    moveing = new Vector3(moveing.x, 0.55f);
+                    moving = new Vector3(moving.x, 0.55f);
                     break;
 
                 case PlayerDirEnum.left:
-                    moveing = new Vector3(0.55f, moveing.y);
+                    moving = new Vector3(0.55f, moving.y);
                     break;
 
                 case PlayerDirEnum.right:
-                    moveing = new Vector3(-0.55f, moveing.y);
+                    moving = new Vector3(-0.55f, moving.y);
                     break;
             }
         }
@@ -816,23 +816,23 @@ public class BattlePlayerController : MonoBehaviour
                         Physics2D.gravity = new Vector2(0, -9.8f);
                         if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow))
                         {
-                            moveing = new Vector3(1, moveing.y);
+                            moving = new Vector3(1, moving.y);
                         }
                         else if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow))
                         {
-                            moveing = new Vector3(-1, moveing.y);
+                            moving = new Vector3(-1, moving.y);
                         }
                         else
-                            moveing = new Vector3(0, moveing.y);
+                            moving = new Vector3(0, moving.y);
 
                         if(MainControl.instance.KeyArrowToControl(KeyCode.UpArrow) && !isJump)
                         {
                             rigidBody.gravityScale = 0;
-                            moveing = new Vector3(moveing.x, 2.15f);
+                            moving = new Vector3(moving.x, 2.15f);
                             isJump = true;
                         }
-                        if (isJump && !MainControl.instance.KeyArrowToControl(KeyCode.UpArrow) && moveing.y > 0.55f)
-                            moveing = new Vector3(moveing.x, 0.55f);
+                        if (isJump && !MainControl.instance.KeyArrowToControl(KeyCode.UpArrow) && moving.y > 0.55f)
+                            moving = new Vector3(moving.x, 0.55f);
                         if (isJump)
                         {
                             Vector2 dirReal = new Vector2();
@@ -866,12 +866,12 @@ public class BattlePlayerController : MonoBehaviour
                                 }
                             }
 
-                            moveing.y -= Time.deltaTime * (float)Math.Pow(1.85f,jumpAcceleration);
+                            moving.y -= Time.deltaTime * (float)Math.Pow(1.85f,jumpAcceleration);
                         }
                         else
                         {
                             jumpAcceleration = 1.25f;
-                            moveing.y = 0;
+                            moving.y = 0;
                         }
                         jumpAcceleration += Time.deltaTime * 0.425f;
                             break;
