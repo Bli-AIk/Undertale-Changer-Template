@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.guazu.lib-tess-dot-net": "https://github.com/pacoelayudante/com.guazu.lib-tess-dot-net.git",
     "com.unity.2d.animation": "7.0.9",
     "com.unity.2d.psdimporter": "6.0.6",
     "com.unity.2d.sprite": "1.0.0",
