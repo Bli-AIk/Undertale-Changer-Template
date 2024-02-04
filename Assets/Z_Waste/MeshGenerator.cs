@@ -4,6 +4,7 @@ using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using Log;
 using Color = UnityEngine.Color;
+using UnityEditor.U2D.Path;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -14,7 +15,7 @@ using UnityEditor;
 [RequireComponent(typeof(LineRenderer))]
 public class MeshGenerator : MonoBehaviour
 {
-    [Header("线长")]
+    [Header("线宽")]
     public float width;
     public List<Vector2> polygonVertices;
 
@@ -22,7 +23,7 @@ public class MeshGenerator : MonoBehaviour
     public bool isBesselInterpolation;
     public List<Vector2> besselVertices;
     public int besselVerticesPointNum = 16;
-    List<Vector2> besselVerticesReal;//真正的曲线插值，插入点数由besselVerticesPointNum决定
+    public List<Vector2> realPoints;//真正的曲线插值，插入点数由besselVerticesPointNum决定
     public int besselNum = 2;
 
     MeshFilter meshFilter;
@@ -180,25 +181,32 @@ public class MeshGenerator : MonoBehaviour
 
 
         if (isBesselInterpolation)
-            besselVerticesReal = GenerateBezierCurve(besselVertices, besselNum, besselVerticesPointNum);
+            realPoints = GenerateBezierCurve(besselVertices, besselNum, besselVerticesPointNum);
+        else
+            realPoints = polygonVertices;
 
-        List<Vector2> polygon = isBesselInterpolation ? besselVerticesReal : polygonVertices;
-
-        GenerateMesh(polygon.ToArray());
-        lineRenderer.positionCount = polygon.Count;
-
-        for (int i = 0; i < polygon.Count; i++)
-        {
-            lineRenderer.SetPosition(i, polygon[i]);
-        }
-
+        SummonBox(realPoints);
 
         if (Input.GetKeyDown(KeyCode.F5))
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
     }
+    public void SummonBox(List<Vector2> polygon)
+    {
+        GenerateMesh(polygon.ToArray());//最核心代码：构建Mesh！！
+
+        lineRenderer.positionCount = polygon.Count;
+
+        for (int i = 0; i < polygon.Count; i++)
+        {
+            lineRenderer.SetPosition(i, polygon[i] + (Vector2)transform.position);
+        }
 
 
+    }
+    /// <summary>
+    /// 构造Mesh
+    /// </summary>
     public void GenerateMesh(Vector2[] polygonVertices)
     {
 
@@ -237,6 +245,16 @@ public class MeshGenerator : MonoBehaviour
         mesh.vertices = vertices;
         mesh.triangles = triangles;
 
+        // 为mesh设置UV坐标
+        Vector2[] uvs = new Vector2[vertices.Length];
+        for (int i = 0; i < vertices.Length; i++)
+        {
+            // 这里是一个简单的映射，将顶点坐标映射到UV空间
+            // 通常，你需要根据具体情况来调整这部分代码
+            uvs[i] = new Vector2(vertices[i].x, vertices[i].y);
+        }
+        mesh.uv = uvs;
+
         // 为了更好的渲染效果，可以计算法线和边界
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
@@ -255,7 +273,7 @@ public class MeshGenerator : MonoBehaviour
         All
     };
 
-    [Header("是否展示Mesh（红线）")]
+    [Header("展示哪些点的坐标")]
     public ShowGizmosPoint showGizmosPoint;
 
     public void OnDrawGizmos()
@@ -270,7 +288,7 @@ public class MeshGenerator : MonoBehaviour
         if (showGizmosPoint == ShowGizmosPoint.All)
         {
             Gizmos.color = Color.yellow;
-            foreach (var point in besselVerticesReal)
+            foreach (var point in realPoints)
             {
                 Gizmos.DrawSphere(transform.TransformPoint(new Vector3(point.x, point.y, 0)), 0.1f);
             }
