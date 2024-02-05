@@ -9,12 +9,17 @@ using UnityEditor.U2D.Path;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
+/// <summary>
+/// 战斗框绘制
+/// </summary>
 
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(LineRenderer))]
-public class MeshGenerator : MonoBehaviour
+public class BoxDrawer : MonoBehaviour
 {
+    [Header("别用Transform的旋转")]
+    public Quaternion rotation; // 获取当前物体的旋转
     [Header("线宽")]
     public float width;
     public List<Vector2> polygonVertices;
@@ -41,8 +46,139 @@ public class MeshGenerator : MonoBehaviour
     void Start()
     {
         GetComponents();
+        BoxController.instance.boxes.Add(this);
 
     }
+
+
+    public void Update()
+    {
+        lineRenderer.startWidth = width;
+        lineRenderer.endWidth = width;
+
+
+        if (isBesselInterpolation)
+            realPoints = GenerateBezierCurve(besselVertices, besselNum, besselVerticesPointNum);
+        else
+            realPoints = polygonVertices;
+
+        realPoints = SummonBox(realPoints);
+
+        if (Input.GetKeyDown(KeyCode.F5))
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+    }
+    /// <summary>
+    /// 生成框
+    /// </summary>
+    public List<Vector2> SummonBox(List<Vector2> list)
+    {
+        List<Vector2> polygon = new List<Vector2>(list);
+        // 将每个点先旋转，然后再加上物体的位置
+        for (int i = 0; i < polygon.Count; i++)
+        {
+            polygon[i] = rotation * polygon[i];
+        }
+
+        polygon = RemoveDuplicates(polygon);
+
+        GenerateMesh(polygon.ToArray()); // 最核心代码：构建Mesh！！
+
+        lineRenderer.positionCount = polygon.Count;
+
+
+        for (int i = 0; i < polygon.Count; i++)
+        {
+            //Vector2 rotatedPoint = rotation * polygon[i];
+            lineRenderer.SetPosition(i, polygon[i] + (Vector2)transform.position);
+        }
+
+        return polygon;
+    }
+    /// <summary>
+    /// 构造Mesh
+    /// </summary>
+    public void GenerateMesh(Vector2[] polygonVertices)
+    {
+
+
+        // 将Vector数组转换为LibTessDotNet所需的ContourVertex数组
+        ContourVertex[] contourVertices = new ContourVertex[polygonVertices.Length];
+        for (int i = 0; i < polygonVertices.Length; i++)
+        {
+            contourVertices[i].Position = new Vec3 { X = polygonVertices[i].x, Y = polygonVertices[i].y, Z = 0 };
+        }
+
+        // 创建Tess对象并添加轮廓
+        Tess tess = new Tess();
+        tess.AddContour(contourVertices, ContourOrientation.Original);
+
+        // 进行三角剖分
+        tess.Tessellate(WindingRule.NonZero, ElementType.Polygons, 3);
+
+        // 创建Mesh对象
+        Mesh mesh = new Mesh();
+
+        // 将Tess结果转换为Unity Mesh格式
+        Vector3[] vertices = new Vector3[tess.Vertices.Length];
+        for (int i = 0; i < tess.Vertices.Length; i++)
+        {
+            vertices[i] = new Vector3(tess.Vertices[i].Position.X, tess.Vertices[i].Position.Y, 0);
+        }
+
+        int[] triangles = new int[tess.Elements.Length];
+        for (int i = 0; i < tess.Elements.Length; i++)
+        {
+            triangles[i] = tess.Elements[i];
+        }
+
+        // 应用顶点和三角形到mesh
+        mesh.vertices = vertices;
+        mesh.triangles = triangles;
+
+        // 为mesh设置UV坐标
+        Vector2[] uvs = new Vector2[vertices.Length];
+        for (int i = 0; i < vertices.Length; i++)
+        {
+            // 这里是一个简单的映射，将顶点坐标映射到UV空间
+            // 通常，你需要根据具体情况来调整这部分代码
+
+
+            uvs[i] = new Vector2(vertices[i].x, vertices[i].y);
+
+
+        }
+        mesh.uv = uvs;
+
+        // 为了更好的渲染效果，可以计算法线和边界
+        mesh.RecalculateNormals();
+        mesh.RecalculateBounds();
+
+        // 将mesh应用到GameObject
+        meshFilter.mesh = mesh;
+    }
+    /// <summary>
+    /// 剔除重复项
+    /// </summary>
+    public List<Vector2> RemoveDuplicates(List<Vector2> originalList)
+    {
+        // 使用HashSet<Vector2>来存储已经遇到的Vector2元素，因为HashSet自动去重
+        HashSet<Vector2> seen = new HashSet<Vector2>();
+        // 用来存储去重后的列表
+        List<Vector2> resultList = new List<Vector2>();
+
+        foreach (var item in originalList)
+        {
+            // 如果HashSet中添加成功（即之前未遇到过这个元素），则将其添加到结果列表中
+            if (seen.Add(item))
+            {
+                resultList.Add(item);
+            }
+        }
+
+        return resultList;
+    }
+
     /// <summary>
     /// 获取meshFilter
     /// </summary>
@@ -129,7 +265,6 @@ public class MeshGenerator : MonoBehaviour
             for (int k = 0; k < besselNum + 2; k++)
             {
                 pointList.Add(controlPoints[i + k]);
-                Debug.Log(i + k);
             }
             // 根据所需点的数量在当前曲线段上生成点
             for (int j = 0; j <= numPoints; j++)
@@ -172,96 +307,6 @@ public class MeshGenerator : MonoBehaviour
         return result;
     }
 
-
-
-    public void Update()
-    {
-        lineRenderer.startWidth = width;
-        lineRenderer.endWidth = width;
-
-
-        if (isBesselInterpolation)
-            realPoints = GenerateBezierCurve(besselVertices, besselNum, besselVerticesPointNum);
-        else
-            realPoints = polygonVertices;
-
-        SummonBox(realPoints);
-
-        if (Input.GetKeyDown(KeyCode.F5))
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-
-    }
-    public void SummonBox(List<Vector2> polygon)
-    {
-        GenerateMesh(polygon.ToArray());//最核心代码：构建Mesh！！
-
-        lineRenderer.positionCount = polygon.Count;
-
-        for (int i = 0; i < polygon.Count; i++)
-        {
-            lineRenderer.SetPosition(i, polygon[i] + (Vector2)transform.position);
-        }
-
-
-    }
-    /// <summary>
-    /// 构造Mesh
-    /// </summary>
-    public void GenerateMesh(Vector2[] polygonVertices)
-    {
-
-
-        // 将Vector数组转换为LibTessDotNet所需的ContourVertex数组
-        ContourVertex[] contourVertices = new ContourVertex[polygonVertices.Length];
-        for (int i = 0; i < polygonVertices.Length; i++)
-        {
-            contourVertices[i].Position = new Vec3 { X = polygonVertices[i].x, Y = polygonVertices[i].y, Z = 0 };
-        }
-
-        // 创建Tess对象并添加轮廓
-        Tess tess = new Tess();
-        tess.AddContour(contourVertices, ContourOrientation.Original);
-
-        // 进行三角剖分
-        tess.Tessellate(WindingRule.NonZero, ElementType.Polygons, 3);
-
-        // 创建Mesh对象
-        Mesh mesh = new Mesh();
-
-        // 将Tess结果转换为Unity Mesh格式
-        Vector3[] vertices = new Vector3[tess.Vertices.Length];
-        for (int i = 0; i < tess.Vertices.Length; i++)
-        {
-            vertices[i] = new Vector3(tess.Vertices[i].Position.X, tess.Vertices[i].Position.Y, 0);
-        }
-
-        int[] triangles = new int[tess.Elements.Length];
-        for (int i = 0; i < tess.Elements.Length; i++)
-        {
-            triangles[i] = tess.Elements[i];
-        }
-
-        // 应用顶点和三角形到mesh
-        mesh.vertices = vertices;
-        mesh.triangles = triangles;
-
-        // 为mesh设置UV坐标
-        Vector2[] uvs = new Vector2[vertices.Length];
-        for (int i = 0; i < vertices.Length; i++)
-        {
-            // 这里是一个简单的映射，将顶点坐标映射到UV空间
-            // 通常，你需要根据具体情况来调整这部分代码
-            uvs[i] = new Vector2(vertices[i].x, vertices[i].y);
-        }
-        mesh.uv = uvs;
-
-        // 为了更好的渲染效果，可以计算法线和边界
-        mesh.RecalculateNormals();
-        mesh.RecalculateBounds();
-
-        // 将mesh应用到GameObject
-        meshFilter.mesh = mesh;
-    }
 
 
 #if UNITY_EDITOR
@@ -318,7 +363,7 @@ public class MeshGenerator : MonoBehaviour
 
                 }
 
-                Gizmos.DrawSphere(transform.TransformPoint(new Vector3(point.x, point.y, 0)), 0.1f);
+                Gizmos.DrawSphere(transform.TransformPoint(rotation * new Vector3(point.x, point.y, 0)), 0.1f);
             }
             return;
         }
@@ -329,7 +374,7 @@ public class MeshGenerator : MonoBehaviour
         Gizmos.color = Color.white;
         foreach (var point in polygonVertices)
         {
-            Gizmos.DrawSphere(transform.TransformPoint(new Vector3(point.x, point.y, 0)), 0.1f);
+            Gizmos.DrawSphere(transform.TransformPoint(rotation * new Vector3(point.x, point.y, 0)), 0.1f);
         }
 
 
@@ -342,12 +387,12 @@ public class MeshGenerator : MonoBehaviour
 #if UNITY_EDITOR
 
 
-[CustomEditor(typeof(MeshGenerator))]
+[CustomEditor(typeof(BoxDrawer))]
 public class SceneExtEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-        MeshGenerator example = (MeshGenerator)target;
+        BoxDrawer example = (BoxDrawer)target;
 
         base.OnInspectorGUI(); //绘制一次GUI。
         if (GUILayout.Button("切分(不强制刷新)"))
@@ -422,7 +467,7 @@ public class SceneExtEditor : Editor
     bool isUndoRedoPerformed = false;
     private void OnSceneGUI()
     {
-        MeshGenerator example = (MeshGenerator)target;
+        BoxDrawer example = (BoxDrawer)target;
 
         List<Vector2> vertices;
         if (example.isBesselInterpolation && example.besselVertices.Count > 0)
@@ -437,7 +482,7 @@ public class SceneExtEditor : Editor
 
 
 
-            Vector3 newPolygonVertices = Handles.PositionHandle((Vector2)example.transform.position + vertices[i], Quaternion.identity) - example.transform.position;
+            Vector3 newPolygonVertices = Quaternion.Inverse(example.rotation) * (Handles.PositionHandle(example.transform.position + example.rotation * vertices[i], example.rotation) - example.transform.position);
 
             if (EditorGUI.EndChangeCheck())
             {
