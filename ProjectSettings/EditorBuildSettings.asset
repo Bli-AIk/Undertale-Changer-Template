@@ -32,4 +32,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Battle/Gameover.unity
     guid: 687bf4d749eb683428e824bfe8efe648
+  - enabled: 1
+    path: Assets/Dynagon/Samples/Scenes/Test.unity
+    guid: f53fddf25fe1bf5489e4f1851d80803f
   m_configObjects: {}
