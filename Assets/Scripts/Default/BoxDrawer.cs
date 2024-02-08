@@ -18,25 +18,43 @@ using UnityEditor;
 
 public class BoxDrawer : MonoBehaviour
 {
+    public Vector3 localPosition;
     [Header("别用Transform的旋转")]
     public Quaternion rotation; // 获取当前物体的旋转
     [Header("线宽")]
     public float width = 0.15f;
-    public List<Vector2> polygonVertices;
+    public List<Vector2> vertexPoints;
 
     [Header("是否启用贝塞尔插值")]
-    public bool isBesselInterpolation;
-    public List<Vector2> besselVertices;
-    public int besselVerticesPointNum = 16;
-    public List<Vector2> realPoints;//真正的曲线插值，插入点数由besselVerticesPointNum决定
-    public int besselNum = 2;
+    public bool isBessel;
+    public List<Vector2> besselPoints;
+    public int besselPointsNum = 16;
+    [Header("真正组框所用的点")]
+    public List<Vector2> realPoints;//真正的曲线插值，插入点数由besselPointsNum决定
+    public int besselInsertNum = 2;
 
-    MeshFilter meshFilter;
-    MeshRenderer meshRenderer;
-    LineRenderer lineRenderer;
+    public MeshFilter meshFilter;
+    public MeshRenderer meshRenderer;
+    public LineRenderer lineRenderer;
+
+
+    [Header("当该Box为父级时，以此存储子级的相关计算后数据")]
+    public BoxController.BoxType boxType;
+
+    [Header("子级realPoints之和")]
+    public List<Vector2> pointsSonSum;
+
+    [Header("交点")]
+    public List<Vector2> pointsCross;
+    [Header("非重合点")]
+    public List<Vector2> pointsOutCross;
+    [Header("重合点")]
+    public List<Vector2> pointsInCross;//交点/非重合点/重合点
+
+    public List<BoxDrawer> sonBoxDrawer;//存储孩子们
 
 #if UNITY_EDITOR
-   [Header("给Editor用的")]
+    [Header("给Editor用的")]
     public int regularEdge;
     public float regularAngle;
     [Header("是否展示Mesh（红线）")]
@@ -46,7 +64,7 @@ public class BoxDrawer : MonoBehaviour
     void Start()
     {
         GetComponents();
-        BoxController.instance.boxes.Add(this);
+        //BoxController.instance.boxes.Add(this);
 
 
         lineRenderer = transform.GetComponent<LineRenderer>();
@@ -65,25 +83,120 @@ public class BoxDrawer : MonoBehaviour
 
     public void Update()
     {
+        if (sonBoxDrawer.Count == 0)//作为子级
+        {
+            if (isBessel)
+                realPoints = GenerateBezierCurve(besselPoints, besselInsertNum, besselPointsNum);
+            else
+                realPoints = vertexPoints;
+
+        }
+        else if (sonBoxDrawer.Count == 2)//作为父级
+        {
+            pointsSonSum.Clear();
+
+            List<Vector2> realPointsBack0 = BoxController.instance.GetRealPoints(sonBoxDrawer[0].realPoints, sonBoxDrawer[0].rotation, sonBoxDrawer[0].transform);
+            List<Vector2> realPointsBack1 = BoxController.instance.GetRealPoints(sonBoxDrawer[1].realPoints, sonBoxDrawer[1].rotation, sonBoxDrawer[1].transform);
+
+            pointsSonSum = BoxController.instance.AddLists(realPointsBack0, realPointsBack1);
 
 
-        if (isBesselInterpolation)
-            realPoints = GenerateBezierCurve(besselVertices, besselNum, besselVerticesPointNum);
-        else
-            realPoints = polygonVertices;
+            //计算三大List
+
+            pointsCross = BoxController.instance.FindIntersections(realPointsBack0, realPointsBack1);
+
+            pointsOutCross = BoxController.instance.ProcessPolygons(realPointsBack0, realPointsBack1, pointsCross);
+
+            pointsInCross = BoxController.instance.AddAndSubLists(realPointsBack0, realPointsBack1, pointsCross, pointsOutCross);
+
+
+            //重合时合并
+            if (!(pointsCross.Count == 0 && pointsInCross.Count == 0))
+            {
+                List<Vector2> points;
+
+                points = BoxController.instance.AddLists(pointsCross, pointsSonSum);
+                points = BoxController.instance.SubLists(points, pointsInCross);
+                List<Vector2> pointsFinal = BoxController.instance.SortPoints(BoxController.instance.CalculatePolygonCenter(BoxController.instance.AddLists(pointsCross, pointsInCross)), points);
+
+                realPoints = pointsFinal;
+            }
+            else//不重合就解散
+            {
+                ExitParent();
+                return;
+            }
 
 
 
+        }
+        else ExitParent();
+
+
+
+        transform.localPosition = localPosition;
+        if (transform.parent == BoxController.instance.transform)//只有父物体为BoxController时生成框
+            SummonBox();
+        else transform.localPosition = localPosition + transform.parent.localPosition * -1;
     }
+
+    void ExitParent()
+    {
+        ClearComponentsData();
+        BoxController.instance.ReturnPool(gameObject);
+        BoxController.instance.boxes.Remove(this);
+
+
+
+        pointsCross.Clear();
+        pointsInCross.Clear();
+        pointsOutCross.Clear();
+
+
+        sonBoxDrawer[0].transform.SetParent(BoxController.instance.transform);
+        sonBoxDrawer[1].transform.SetParent(BoxController.instance.transform);
+        sonBoxDrawer[0].IsOpenComponentsData(true);
+        sonBoxDrawer[1].IsOpenComponentsData(true);
+
+        BoxController.instance.boxes.Add(sonBoxDrawer[0]);
+        BoxController.instance.boxes.Add(sonBoxDrawer[1]);
+
+        sonBoxDrawer[0].SummonBox();
+        sonBoxDrawer[1].SummonBox();
+
+        sonBoxDrawer.Clear();
+        transform.SetParent(BoxController.instance.transform);
+    }
+
     /// <summary>
     /// 通过BoxController生成框
     /// </summary>
-    public void SummonBox(bool justVector = false)
+    public List<Vector2> SummonBox()
     {
-        if (!justVector)
-            realPoints = BoxController.instance.SummonBox(realPoints, rotation, transform, width, lineRenderer, meshFilter);
-        else
-            realPoints = BoxController.instance.SummonBox(realPoints, rotation, transform);
+        return BoxController.instance.SummonBox(realPoints, rotation, transform, width, lineRenderer, meshFilter);
+
+    }
+    public List<Vector2> GetRealPoints() 
+    {
+        return BoxController.instance.GetRealPoints(realPoints, rotation, transform);
+    }
+    
+    /// <summary>
+    /// 开关组件
+    /// </summary>
+    public void IsOpenComponentsData(bool isOpen = false)
+    {
+        //meshFilter.mesh = null;
+        //lineRenderer.positionCount = 0;
+        meshRenderer.enabled = isOpen;
+        lineRenderer.enabled = isOpen;
+
+    }
+    public void ClearComponentsData(bool onlyMesh = false)
+    {
+        meshFilter.mesh = null;
+        lineRenderer.positionCount = 0;
+
     }
 
     /// <summary>
@@ -94,16 +207,16 @@ public class BoxDrawer : MonoBehaviour
     {
         if (!forceBesselFlash)
         {
-            if (!isBesselInterpolation)
-                besselVertices.Clear();
-            else if (besselVertices.Count == 0 || besselVertices.Count != polygonVertices.Count * (besselNum + 1))
-                besselVertices = InterpolatePoints(polygonVertices, besselNum);
+            if (!isBessel)
+                besselPoints.Clear();
+            else if (besselPoints.Count == 0 || besselPoints.Count != vertexPoints.Count * (besselInsertNum + 1))
+                besselPoints = InterpolatePoints(vertexPoints, besselInsertNum);
         }
         else
         {
-            besselVertices.Clear();
-            if (isBesselInterpolation)
-                besselVertices = InterpolatePoints(polygonVertices, besselNum);
+            besselPoints.Clear();
+            if (isBessel)
+                besselPoints = InterpolatePoints(vertexPoints, besselInsertNum);
         }
 
     }
@@ -149,7 +262,7 @@ public class BoxDrawer : MonoBehaviour
     /// <summary>
     /// 生成贝塞尔曲线上的点
     /// </summary>
-    public static List<Vector2> GenerateBezierCurve(List<Vector2> points, int besselNum, int numPoints)
+    public static List<Vector2> GenerateBezierCurve(List<Vector2> points, int besselInsertNum, int numPoints)
     {
         List<Vector2> controlPoints = new List<Vector2>(points);
 
@@ -163,11 +276,11 @@ public class BoxDrawer : MonoBehaviour
             return bezierPoints; // 返回空的贝塞尔点列表
         }
 
-        // 遍历控制点列表，每次取出besselNum + 1个点生成贝塞尔曲线段
+        // 遍历控制点列表，每次取出besselInsertNum + 1个点生成贝塞尔曲线段
         List<Vector2> pointList = new List<Vector2>();
-        for (int i = 0; i < controlPoints.Count - besselNum; i += besselNum + 1)
+        for (int i = 0; i < controlPoints.Count - besselInsertNum; i += besselInsertNum + 1)
         {
-            for (int k = 0; k < besselNum + 2; k++)
+            for (int k = 0; k < besselInsertNum + 2; k++)
             {
                 pointList.Add(controlPoints[i + k]);
             }
@@ -231,7 +344,7 @@ public class BoxDrawer : MonoBehaviour
 
     public void OnDrawGizmos()
     {
-        if (polygonVertices == null)
+        if (vertexPoints == null)
             return;
         /*
         if (meshFilter != null && showMesh && showGizmosPoint != ShowGizmosPoint.Nope)
@@ -240,22 +353,22 @@ public class BoxDrawer : MonoBehaviour
             Gizmos.DrawWireMesh(meshFilter.sharedMesh, 0, transform.position);
         }
         */
-        if (showGizmosPoint == ShowGizmosPoint.All && isBesselInterpolation)
+        if (showGizmosPoint == ShowGizmosPoint.All && isBessel)
         {
             Gizmos.color = Color.yellow;
             foreach (var point in realPoints)
             {
-                Gizmos.DrawSphere(transform.TransformPoint(rotation * (new Vector3(point.x, point.y, 0) - transform.position)), 0.1f / 2);
+                Gizmos.DrawSphere(transform.TransformPoint(rotation * (new Vector3(point.x, point.y, 0))), 0.1f / 2);
             }
         }
 
-        if (isBesselInterpolation)
+        if (isBessel)
         {
 
-            for (int i = 0; i < besselVertices.Count; i++)
+            for (int i = 0; i < besselPoints.Count; i++)
             {
-                var point = besselVertices[i];
-                if (i % (besselNum + 1) != 0)
+                var point = besselPoints[i];
+                if (i % (besselInsertNum + 1) != 0)
                 {
                     if (showGizmosPoint == ShowGizmosPoint.JustVertexBessel || showGizmosPoint == ShowGizmosPoint.All)
                         Gizmos.color = Color.cyan;
@@ -282,7 +395,7 @@ public class BoxDrawer : MonoBehaviour
             return;
 
         Gizmos.color = Color.white;
-        foreach (var point in polygonVertices)
+        foreach (var point in vertexPoints)
         {
             Gizmos.DrawSphere(transform.TransformPoint(rotation * new Vector3(point.x, point.y, 0)), 0.1f);
         }
@@ -318,7 +431,7 @@ public class SceneExtEditor : Editor
 
         if (GUILayout.Button("生成标准战斗框"))
         {
-            example.polygonVertices = new List<Vector2>
+            example.vertexPoints = new List<Vector2>
             {
                 new Vector2(5.93f,1.4f),
                 new Vector2(5.93f,-1.4f),
@@ -331,7 +444,7 @@ public class SceneExtEditor : Editor
 
         if (GUILayout.Button("生成正方战斗框"))
         {
-            example.polygonVertices = new List<Vector2>
+            example.vertexPoints = new List<Vector2>
             {
                 new Vector2(1.4f,1.4f),
                 new Vector2(1.4f,-1.4f),
@@ -343,7 +456,7 @@ public class SceneExtEditor : Editor
         }
         if (GUILayout.Button("生成正多边形"))
         {
-            example.polygonVertices.Clear();
+            example.vertexPoints.Clear();
             int sides = 3;
             if (example.regularEdge >= 3)
                 sides = example.regularEdge;
@@ -354,7 +467,7 @@ public class SceneExtEditor : Editor
                 float angle = (2 * Mathf.PI * i) / sides - example.regularAngle * Mathf.PI / 180;
                 float x = radius * Mathf.Cos(angle);
                 float y = radius * Mathf.Sin(angle);
-                example.polygonVertices.Add(new Vector2(x, y));
+                example.vertexPoints.Add(new Vector2(x, y));
             }
             example.GetComponents(true);
             example.Update();
@@ -363,10 +476,10 @@ public class SceneExtEditor : Editor
         /*
         if (GUILayout.Button("R A N D O M"))
         {
-            example.polygonVertices.Clear();
+            example.vertexPoints.Clear();
             for (int i = 0; i < Random.Range(3,100); i++)
             {
-                example.polygonVertices.Add(new Vector2(Random.Range(-5, 5f), Random.Range(-5, 5f)));
+                example.vertexPoints.Add(new Vector2(Random.Range(-5, 5f), Random.Range(-5, 5f)));
             }
             example.Update();
         }
@@ -380,30 +493,25 @@ public class SceneExtEditor : Editor
         BoxDrawer example = (BoxDrawer)target;
 
         List<Vector2> vertices;
-        if (example.isBesselInterpolation && example.besselVertices.Count > 0)
-            vertices = example.besselVertices;
+        if (example.isBessel && example.besselPoints.Count > 0)
+            vertices = example.besselPoints;
         else
-            vertices = example.polygonVertices;
+            vertices = example.vertexPoints;
 
 
         for (int i = 0; i < vertices.Count; i++)
         {
             EditorGUI.BeginChangeCheck();
-
-
-
-            Vector3 newPolygonVertices = Quaternion.Inverse(example.rotation) * (Handles.PositionHandle(example.transform.position + example.rotation * vertices[i], example.rotation) - example.transform.position);
+            Vector3 newvertexPoints = Quaternion.Inverse(example.rotation) * (Handles.PositionHandle(example.transform.position + example.rotation * vertices[i], example.rotation) - example.transform.position);
 
             if (EditorGUI.EndChangeCheck())
             {
                 example.GetComponents();
                 Undo.RecordObject(example, "Changed point " + i);
-                vertices[i] = newPolygonVertices;
-
-                if (i % (example.besselNum + 1) == 0)
-                {
-                    example.polygonVertices[i / (example.besselNum + 1)] = newPolygonVertices;
-                }
+                vertices[i] = newvertexPoints;
+                if (example.isBessel)
+                    if (i % (example.besselInsertNum + 1) == 0)
+                        example.vertexPoints[i / (example.besselInsertNum + 1)] = newvertexPoints;
                 example.Update();
                 if (!isUndoRedoPerformed)
                 {

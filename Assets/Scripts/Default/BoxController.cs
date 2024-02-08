@@ -1,65 +1,182 @@
 using LibTessDotNet;
-using Log;
-using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using Color = UnityEngine.Color;
 /// <summary>
 /// 战斗框总控
 /// </summary>
-public class BoxController : MonoBehaviour
+public class BoxController : ObjectPool
 {
     public static BoxController instance;
 
     public List<BoxDrawer> boxes = new List<BoxDrawer>();
 
-    public List<Vector2> pointsCross, pointsOutCross, pointsInCross;//交点/非重合点/重合点
+    public List<Vector2> pointsCrossSave, pointsOutCrossSave, pointsInCrossSave;//交点/非重合点/重合点
+
+    public enum BoxType
+    {
+        None,
+        Add,
+        Sub
+    }
 
     private void Awake()
     {
         instance = this;
-        boxes.Clear();
+
+        obj = new GameObject();
+        obj.name = "Box";
+        obj.AddComponent<BoxDrawer>();
+        obj.SetActive(false);
+        FillPool();
+    }
+    public BoxDrawer GetFromThePool()
+    {
+        List<Vector2> points = new List<Vector2>
+            {
+                new Vector2(5.93f,1.4f),
+                new Vector2(5.93f,-1.4f),
+                new Vector2(-5.93f,-1.4f),
+                new Vector2(-5.93f,1.4f),
+            };
+
+        BoxDrawer newBoxDrawer = GetFromPool().GetComponent<BoxDrawer>();
+        newBoxDrawer.vertexPoints = points;
+        boxes.Add(newBoxDrawer);
+        return newBoxDrawer;
     }
 
     void Start()
     {
-
+        GetFromThePool();
     }
 
     void Update()
     {
-        boxes[0].SummonBox(true);
-        boxes[1].SummonBox(true);
+        if(Input.GetKeyDown(KeyCode.Y))
+            GetFromThePool();
+        //return;
 
-        pointsCross = FindIntersections(boxes[0].realPoints, boxes[1].realPoints);
-        pointsOutCross = ProcessPolygons(boxes[0].realPoints, boxes[1].realPoints, pointsCross);
-        pointsInCross = AddAndSubLists(boxes[0].realPoints, boxes[1].realPoints, pointsCross, pointsOutCross);
-        
-        List<Vector2> points;
-        //if (pointsInCross.Count == 0)
-        //    points = AddLists(pointsCross, pointsOutCross);
-        //else
-        points = AddLists(boxes[0].realPoints, boxes[1].realPoints);
-        points = AddLists(pointsCross, points);
-        points = SubLists(points, pointsInCross);
 
-        SummonBox(SortPoints(CalculatePolygonCenter(AddLists(pointsCross,pointsInCross)), points), transform.rotation, transform, 0.15f);
+        for (int i = 0; i < boxes.Count; i++)
+        {
+            for (int j = 0; j < boxes.Count; j++)
+            {
+                if (i >= j)
+                    continue;
 
-        if (Input.GetKeyDown(KeyCode.F5))
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+                if (boxes[i].transform.parent != transform || boxes[j].transform.parent != transform)
+                    continue;
+
+
+
+                BoxDrawer box0 = boxes[i];
+                BoxDrawer box1 = boxes[j];
+
+                List<Vector2> realPointsBack0, realPointsBack1;
+                //获取两个Box的realPoints
+                realPointsBack0 = box0.GetRealPoints();
+                realPointsBack1 = box1.GetRealPoints();
+
+                //计算三大List
+
+                pointsCrossSave = FindIntersections(realPointsBack0, realPointsBack1);
+
+                pointsOutCrossSave = ProcessPolygons(realPointsBack0, realPointsBack1, pointsCrossSave);
+
+                pointsInCrossSave = AddAndSubLists(realPointsBack0, realPointsBack1, pointsCrossSave, pointsOutCrossSave);
+
+
+
+                //两个框重合时合并，剩下的交给父BoxDrawer
+                if (!(pointsCrossSave.Count == 0 && pointsInCrossSave.Count == 0))
+                {
+                    BoxDrawer boxParent = GetFromThePool();
+                    box0.transform.SetParent(boxParent.transform);
+                    box1.transform.SetParent(boxParent.transform);
+
+                    box0.IsOpenComponentsData();
+                    box1.IsOpenComponentsData();
+
+                    boxParent.pointsSonSum = AddLists(box0.realPoints, box1.realPoints);
+                    boxParent.pointsCross = pointsCrossSave;
+                    boxParent.pointsOutCross = pointsOutCrossSave;
+                    boxParent.pointsInCross = pointsInCrossSave;
+
+                    boxParent.sonBoxDrawer = new List<BoxDrawer> { box0, box1 };
+
+
+                    //先删了，在父BoxDrawer内加回来
+                    boxes.Remove(box0);
+                    boxes.Remove(box1);
+
+                    //先生成一下
+                    List<Vector2> points;
+                    points = AddLists(realPointsBack0, realPointsBack1);
+                    points = AddLists(points, pointsCrossSave);
+                    points = SubLists(points, pointsInCrossSave);
+
+                    List<Vector2> pointsFinal = SortPoints(CalculatePolygonCenter(AddLists(pointsCrossSave, pointsInCrossSave)), points);
+                 
+                    boxParent.realPoints = pointsFinal;
+                    SummonBox(pointsFinal, boxParent.rotation, boxParent.transform, 0.15f, boxParent.lineRenderer, boxParent.meshFilter);
+
+
+                    pointsCrossSave.Clear();
+                    pointsInCrossSave.Clear();
+                    pointsOutCrossSave.Clear();
+                }
+
+
+
+
+                /*
+                continue;
+                if (pointsCrossSave.Count == 0 && pointsInCrossSave.Count == 0)
+                {
+                    ResetBox();
+                    boxes[i].realPoints = boxes[i].SummonBox();
+                    boxes[j].realPoints = boxes[j].SummonBox();
+
+                    boxes[i].transform.SetParent(transform);
+                    boxes[j].transform.SetParent(transform);
+                }
+                else
+                {
+                    Debug.Log(i + " / " + j);
+
+                    boxes[i].realPoints = realPointsBack0;
+                    boxes[j].realPoints = realPointsBack1;
+                    boxes[i].ClearComponentsData();
+                    boxes[j].ClearComponentsData();
+
+                    List<Vector2> points;
+
+                    points = AddLists(boxes[i].realPoints, boxes[j].realPoints);
+                    points = AddLists(pointsCrossSave, points);
+                    points = SubLists(points, pointsInCrossSave);
+                    List<Vector2> pointsFinal = SortPoints(CalculatePolygonCenter(AddLists(pointsCrossSave, pointsInCrossSave)), points);
+                    SummonBox(pointsFinal, transform.rotation, transform, 0.15f);
+                }
+                */
+            }
+        }
+
+     
+
+
+
 
 
     }
+
     /// <summary>
     /// 生成框
     /// </summary>
     public List<Vector2> SummonBox(List<Vector2> list, Quaternion rotation, Transform transform, float width = 0.15f, LineRenderer lineRenderer = null, MeshFilter meshFilter = null)
     {
-
-
         if (lineRenderer == null)
         {
             lineRenderer = transform.GetComponent<LineRenderer>();
@@ -101,46 +218,75 @@ public class BoxController : MonoBehaviour
 
         polygon = RemoveDuplicates(polygon);
 
-        meshFilter.mesh = GenerateMesh(polygon.ToArray(), meshFilter); // 最核心代码：构建Mesh！！
-
         lineRenderer.positionCount = polygon.Count;
 
 
         for (int i = 0; i < polygon.Count; i++)
         {
-            polygon[i] += (Vector2)transform.position;
-            lineRenderer.SetPosition(i, polygon[i]);
+            lineRenderer.SetPosition(i, polygon[i] + (Vector2)transform.position);
         }
+
+        meshFilter.mesh = GenerateMesh(polygon.ToArray(), meshFilter); // 最核心代码：构建Mesh！！
+
+        
 
         return polygon;
     }
     /// <summary>
-    /// 生成框（仅计算坐标）
+    /// 计算坐标获取RealPoints
     /// </summary>
-    public List<Vector2> SummonBox(List<Vector2> list, Quaternion rotation, Transform transform)
+    public List<Vector2> GetRealPoints(List<Vector2> list, Quaternion rotation, Transform transform)
     {
         List<Vector2> polygon = new List<Vector2>(list);
         // 将每个点先旋转，然后再加上物体的位置
         for (int i = 0; i < polygon.Count; i++)
         {
-            polygon[i] = rotation * polygon[i] + transform.position; 
+            polygon[i] = rotation * polygon[i] + transform.position;
         }
 
         polygon = RemoveDuplicates(polygon);
 
         return polygon;
     }
+    /*
+    /// <summary>
+    /// 重置框
+    /// </summary>
+    public void ResetBox(LineRenderer lineRenderer = null, MeshFilter meshFilter = null)
+    {
+        if (lineRenderer == null)
+        {
+            lineRenderer = transform.GetComponent<LineRenderer>();
+            if (lineRenderer == null)
+            {
+                lineRenderer = transform.gameObject.AddComponent<LineRenderer>();
+            }
+        }
+        if (meshFilter == null)
+        {
+
+            meshFilter = transform.GetComponent<MeshFilter>();
+            if (meshFilter == null)
+            {
+                meshFilter = transform.gameObject.AddComponent<MeshFilter>();
+            }
+        }
+
+        meshFilter.mesh = null;
+        lineRenderer.positionCount = 0;
+    }
+    */
     /// <summary>
     /// 构造Mesh
     /// </summary>
-    public Mesh GenerateMesh(Vector2[] polygonVertices, MeshFilter meshFilter)
+    public Mesh GenerateMesh(Vector2[] vertexPoints, MeshFilter meshFilter)
     {
 
         // 将Vector数组转换为LibTessDotNet所需的ContourVertex数组
-        ContourVertex[] contourVertices = new ContourVertex[polygonVertices.Length];
-        for (int i = 0; i < polygonVertices.Length; i++)
+        ContourVertex[] contourVertices = new ContourVertex[vertexPoints.Length];
+        for (int i = 0; i < vertexPoints.Length; i++)
         {
-            contourVertices[i].Position = new Vec3 { X = polygonVertices[i].x, Y = polygonVertices[i].y, Z = 0 };
+            contourVertices[i].Position = new Vec3 { X = vertexPoints[i].x, Y = vertexPoints[i].y, Z = 0 };
         }
 
         // 创建Tess对象并添加轮廓
@@ -219,7 +365,7 @@ public class BoxController : MonoBehaviour
     /// <summary>
     /// 主函数，计算两组线段的所有交点
     /// </summary>
-    public static List<Vector2> FindIntersections(List<Vector2> poly1, List<Vector2> poly2)
+    public List<Vector2> FindIntersections(List<Vector2> poly1, List<Vector2> poly2)
     {
         List<Vector2> intersections = new List<Vector2>();
 
@@ -249,7 +395,7 @@ public class BoxController : MonoBehaviour
     /// <summary>
     ///  计算向量叉乘
     /// </summary>
-    private static float Cross(Vector2 a, Vector2 b, Vector2 c)
+    private static float CrossSave(Vector2 a, Vector2 b, Vector2 c)
     {
         return (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
     }
@@ -259,7 +405,7 @@ public class BoxController : MonoBehaviour
     /// </summary>
     private static bool IsPointOnLineSegment(Vector2 a, Vector2 b, Vector2 c)
     {
-        return Cross(a, b, c) == 0 && (c.x - a.x) * (c.x - b.x) <= 0 && (c.y - a.y) * (c.y - b.y) <= 0;
+        return CrossSave(a, b, c) == 0 && (c.x - a.x) * (c.x - b.x) <= 0 && (c.y - a.y) * (c.y - b.y) <= 0;
     }
 
     /// <summary>
@@ -273,7 +419,7 @@ public class BoxController : MonoBehaviour
             return true;
         }
 
-        return Cross(a, b, c) * Cross(a, b, d) < 0 && Cross(c, d, a) * Cross(c, d, b) < 0;
+        return CrossSave(a, b, c) * CrossSave(a, b, d) < 0 && CrossSave(c, d, a) * CrossSave(c, d, b) < 0;
     }
 
     /// <summary>
@@ -295,7 +441,7 @@ public class BoxController : MonoBehaviour
     /// <summary>
     /// 计算非重合点
     /// </summary>
-    public static List<Vector2> ProcessPolygons(List<Vector2> box1, List<Vector2> box2, List<Vector2> intersection)
+    public List<Vector2> ProcessPolygons(List<Vector2> box1, List<Vector2> box2, List<Vector2> intersection)
     {
         List<Vector2> filteredBox1 = RemovePointsInsideOtherPolygon(box1, box2);
         List<Vector2> filteredBox2 = RemovePointsInsideOtherPolygon(box2, box1);
@@ -340,29 +486,30 @@ public class BoxController : MonoBehaviour
     /// <summary>
     /// 计算多边形中点
     /// </summary>
-    public Vector2 CalculatePolygonCenter(List<Vector2> polygonVertices)
+    public Vector2 CalculatePolygonCenter(List<Vector2> vertexPoints)
     {
         Vector2 center = Vector2.zero;
 
-        if (polygonVertices == null || polygonVertices.Count == 0)
+        if (vertexPoints == null || vertexPoints.Count == 0)
         {
             return center;
         }
 
-        foreach (Vector2 vertex in polygonVertices)
+        foreach (Vector2 vertex in vertexPoints)
         {
             center += vertex;
         }
 
-        center /= polygonVertices.Count;
+        center /= vertexPoints.Count;
 
         return center;
     }
     /// <summary>
-    /// 排序列表各点
+    /// 以initialPoint为圆心，若干长度为半径，顺时针旋转，排序列表各点。
     /// </summary>
     public List<Vector2> SortPoints(Vector2 initialPoint, List<Vector2> points)
     {
+
         return points.OrderBy(p => Mathf.Atan2(initialPoint.y - p.y, initialPoint.x - p.x))
                       .ThenBy(p => (p - initialPoint).sqrMagnitude)
                       .ToList();
@@ -370,7 +517,7 @@ public class BoxController : MonoBehaviour
     /// <summary>
     /// 前面两个相加，减去后面两个
     /// </summary>
-    public static List<Vector2> AddAndSubLists(List<Vector2> list1, List<Vector2> list2, List<Vector2> list3, List<Vector2> list4)
+    public List<Vector2> AddAndSubLists(List<Vector2> list1, List<Vector2> list2, List<Vector2> list3, List<Vector2> list4)
     {
         List<Vector2> concatenatedList = AddLists(list1, list2);
         List<Vector2> subtractedResult = SubLists(concatenatedList, list3);
@@ -381,7 +528,7 @@ public class BoxController : MonoBehaviour
     /// <summary>
     /// 把List相加
     /// </summary>
-    public static List<T> AddLists<T>(List<T> list1, List<T> list2)
+    public List<T> AddLists<T>(List<T> list1, List<T> list2)
     {
         List<T> concatenatedList = new List<T>(list1);
         concatenatedList.AddRange(list2);
@@ -390,7 +537,7 @@ public class BoxController : MonoBehaviour
     /// <summary>
     /// 把List相减
     /// </summary>
-    public static List<T> SubLists<T>(List<T> sourceList, List<T> subtractedList)
+    public List<T> SubLists<T>(List<T> sourceList, List<T> subtractedList)
     {
         List<T> result = new List<T>(sourceList);
 
@@ -404,29 +551,30 @@ public class BoxController : MonoBehaviour
 #if UNITY_EDITOR
     public void OnDrawGizmos()
     {
-        if (pointsCross == null)
+        if (pointsCrossSave == null)
             return;
         Gizmos.color = Color.blue;
-        foreach (var point in pointsCross)
+        foreach (var point in pointsCrossSave)
         {
             Gizmos.DrawSphere(transform.TransformPoint(new Vector3(point.x, point.y, 0)), 0.15f);
         }
 
-        if (pointsOutCross == null)
+        if (pointsOutCrossSave == null)
             return;
         Gizmos.color = Color.green;
-        foreach (var point in pointsOutCross)
+        foreach (var point in pointsOutCrossSave)
         {
             Gizmos.DrawSphere(transform.TransformPoint(new Vector3(point.x, point.y, 0)), 0.15f);
         }
 
-        if (pointsInCross == null)
+        if (pointsInCrossSave == null)
             return;
         Gizmos.color = Color.magenta;
-        foreach (var point in pointsInCross)
+        foreach (var point in pointsInCrossSave)
         {
             Gizmos.DrawSphere(transform.TransformPoint(new Vector3(point.x, point.y, 0)), 0.15f);
         }
+
     }
 #endif
 
