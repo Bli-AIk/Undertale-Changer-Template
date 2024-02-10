@@ -1,9 +1,7 @@
 using LibTessDotNet;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
-using Color = UnityEngine.Color;
+using Clipper2Lib;
 /// <summary>
 /// 战斗框总控
 /// </summary>
@@ -32,6 +30,7 @@ public class BoxController : ObjectPool
         obj.SetActive(false);
         FillPool();
     }
+    int num;
     public BoxDrawer GetFromThePool()
     {
         List<Vector2> points = new List<Vector2>
@@ -45,12 +44,18 @@ public class BoxController : ObjectPool
         BoxDrawer newBoxDrawer = GetFromPool().GetComponent<BoxDrawer>();
         newBoxDrawer.vertexPoints = points;
         boxes.Add(newBoxDrawer);
+        num++;
+        newBoxDrawer.name = "Box" + num;
         return newBoxDrawer;
     }
 
     void Start()
     {
         GetFromThePool();
+        BoxDrawer a = GetFromThePool();
+        a.localPosition += Vector3.right + Vector3.up;
+        a = GetFromThePool();
+        a.localPosition -= Vector3.right + Vector3.up;
     }
 
     void Update()
@@ -94,8 +99,14 @@ public class BoxController : ObjectPool
                 if (!(pointsCrossSave.Count == 0 && pointsInCrossSave.Count == 0))
                 {
                     BoxDrawer boxParent = GetFromThePool();
+
+                    Debug.Log(boxParent);
+
                     box0.transform.SetParent(boxParent.transform);
                     box1.transform.SetParent(boxParent.transform);
+
+                    box0.parent = boxParent;
+                    box1.parent = boxParent;
 
                     box0.IsOpenComponentsData();
                     box1.IsOpenComponentsData();
@@ -107,7 +118,6 @@ public class BoxController : ObjectPool
 
                     boxParent.sonBoxDrawer = new List<BoxDrawer> { box0, box1 };
 
-
                     //先删了，在父BoxDrawer内加回来
                     boxes.Remove(box0);
                     boxes.Remove(box1);
@@ -118,8 +128,8 @@ public class BoxController : ObjectPool
                     points = AddLists(points, pointsCrossSave);
                     points = SubLists(points, pointsInCrossSave);
 
-                    List<Vector2> pointsFinal = SortPoints(CalculatePolygonCenter(AddLists(pointsCrossSave, pointsInCrossSave)), points);
-                 
+                    //List<Vector2> pointsFinal = SortPoints(CalculatePolygonCenter(AddLists(pointsCrossSave, pointsInCrossSave)), points);
+                    List<Vector2> pointsFinal = GetUnion(realPointsBack0, realPointsBack1);
                     boxParent.realPoints = pointsFinal;
                     SummonBox(pointsFinal, boxParent.rotation, boxParent.transform, 0.15f, boxParent.lineRenderer, boxParent.meshFilter);
 
@@ -483,6 +493,7 @@ public class BoxController : ObjectPool
         }
         return inside;
     }
+    /*
     /// <summary>
     /// 计算多边形中点
     /// </summary>
@@ -514,6 +525,7 @@ public class BoxController : ObjectPool
                       .ThenBy(p => (p - initialPoint).sqrMagnitude)
                       .ToList();
     }
+    */
     /// <summary>
     /// 前面两个相加，减去后面两个
     /// </summary>
@@ -548,6 +560,52 @@ public class BoxController : ObjectPool
 
         return result;
     }
+
+    //Clipper2 API 相关
+    public PathsD ConvertVectorToPath(List<Vector2> vector)
+    {
+        List<double> doubles = new List<double>();
+        int j = 0;
+        for (int i = 0; i < vector.Count * 2; i++)
+        {
+            if (i % 2 == 0)//X
+            {
+                doubles.Add(vector[j].x);
+            }
+            else//Y
+            {
+                doubles.Add(vector[j].y);
+                j++;
+            }
+        }
+
+        return new PathsD() { Clipper.MakePath(doubles.ToArray()) };
+    }
+
+    public List<Vector2> ConvertPathToVector(PathsD path)
+    {
+        List<Vector2> list = new List<Vector2>();
+        for (int i = 0; i < path[0].Count; i++)
+        {
+            list.Add(new Vector2((float)path[0][i].x, (float)path[0][i].y));
+        }
+        return list;
+    }
+
+
+    /// <summary>
+    /// 取交集
+    /// </summary>
+    public List<Vector2> GetUnion(List<Vector2> a, List<Vector2> b)
+    {
+        PathsD subj = ConvertVectorToPath(a);
+        PathsD clip = ConvertVectorToPath(b);
+        PathsD solution = Clipper.Union(subj, clip, FillRule.NonZero, 2);
+
+        return ConvertPathToVector(solution);
+    }
+
+    /*
 #if UNITY_EDITOR
     public void OnDrawGizmos()
     {
@@ -577,5 +635,6 @@ public class BoxController : ObjectPool
 
     }
 #endif
+    */
 
 }

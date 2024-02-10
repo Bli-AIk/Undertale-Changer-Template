@@ -1,10 +1,8 @@
 using UnityEngine;
-using LibTessDotNet;
-using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using Log;
 using Color = UnityEngine.Color;
-using UnityEditor.U2D.Path;
+using UnityEngine.UIElements;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -18,6 +16,12 @@ using UnityEditor;
 
 public class BoxDrawer : MonoBehaviour
 {
+    public enum Test
+    {
+        n,a,b,c,d,e,
+    }
+    public Test test = Test.n;
+
     public Vector3 localPosition;
     [Header("别用Transform的旋转")]
     public Quaternion rotation; // 获取当前物体的旋转
@@ -51,6 +55,7 @@ public class BoxDrawer : MonoBehaviour
     [Header("重合点")]
     public List<Vector2> pointsInCross;//交点/非重合点/重合点
 
+    public BoxDrawer parent;//你不许说他 他是我爹
     public List<BoxDrawer> sonBoxDrawer;//存储孩子们
 
 #if UNITY_EDITOR
@@ -80,10 +85,49 @@ public class BoxDrawer : MonoBehaviour
         meshRenderer.material = Resources.Load<Material>("Materials/BoxBack");
     }
 
-
+    float testTimer;
     public void Update()
     {
-        if (sonBoxDrawer.Count == 0)//作为子级
+        switch (test)
+        {
+            case Test.a:
+                localPosition = new Vector3(Mathf.Cos(Time.time * 6) * 5, Mathf.Sin(Time.time * 6) * 5);
+                break;
+            case Test.b:
+                rotation = Quaternion.Euler(0, 0, Mathf.Cos(Time.time * 10) * 180);
+                break;
+            case Test.c:
+                testTimer += Time.deltaTime;
+                if (testTimer > 1)
+                {
+                    localPosition = new Vector3(Random.Range(-5, 5), Random.Range(-5, 5));
+                    testTimer = 0;
+                }
+                break;
+            case Test.d:
+                for (int i = 0; i < vertexPoints.Count; i++)
+                {
+                    vertexPoints[i] = new Vector2(Random.Range(-10, 10), Random.Range(-10, 10));
+                }
+                break;
+            case Test.e:
+                localPosition = new Vector3(0, Mathf.Tan(Time.time));
+                break;
+            default:
+                break;
+        }
+        /*
+        foreach (var item in sonBoxDrawer)
+        {
+            if (!item.gameObject.activeSelf)
+            {
+                ExitParent();
+            }
+
+        }
+        */
+
+        if (sonBoxDrawer.Count == 0 && transform.childCount == 0)//作为纯子级
         {
             if (isBessel)
                 realPoints = GenerateBezierCurve(besselPoints, besselInsertNum, besselPointsNum);
@@ -91,9 +135,13 @@ public class BoxDrawer : MonoBehaviour
                 realPoints = vertexPoints;
 
         }
-        else if (sonBoxDrawer.Count == 2)//作为父级
+        else if (sonBoxDrawer.Count == 2 && transform.childCount == 2)//作为父级
         {
             pointsSonSum.Clear();
+
+            //更新一下两个子级的位置坐标
+            sonBoxDrawer[0].transform.localPosition = sonBoxDrawer[0].localPosition - localPosition;
+            sonBoxDrawer[1].transform.localPosition = sonBoxDrawer[1].localPosition - localPosition;
 
             List<Vector2> realPointsBack0 = BoxController.instance.GetRealPoints(sonBoxDrawer[0].realPoints, sonBoxDrawer[0].rotation, sonBoxDrawer[0].transform);
             List<Vector2> realPointsBack1 = BoxController.instance.GetRealPoints(sonBoxDrawer[1].realPoints, sonBoxDrawer[1].rotation, sonBoxDrawer[1].transform);
@@ -117,8 +165,8 @@ public class BoxDrawer : MonoBehaviour
 
                 points = BoxController.instance.AddLists(pointsCross, pointsSonSum);
                 points = BoxController.instance.SubLists(points, pointsInCross);
-                List<Vector2> pointsFinal = BoxController.instance.SortPoints(BoxController.instance.CalculatePolygonCenter(BoxController.instance.AddLists(pointsCross, pointsInCross)), points);
-
+                //List<Vector2> pointsFinal = BoxController.instance.SortPoints(BoxController.instance.CalculatePolygonCenter(BoxController.instance.AddLists(pointsCross, pointsInCross)), points);
+                List<Vector2> pointsFinal = BoxController.instance.GetUnion(realPointsBack0, realPointsBack1);
                 realPoints = pointsFinal;
             }
             else//不重合就解散
@@ -134,40 +182,80 @@ public class BoxDrawer : MonoBehaviour
 
 
 
-        transform.localPosition = localPosition;
         if (transform.parent == BoxController.instance.transform)//只有父物体为BoxController时生成框
+        {
+            transform.localPosition = localPosition;
             SummonBox();
-        else transform.localPosition = localPosition + transform.parent.localPosition * -1;
+        }
+        else transform.localPosition = localPosition - parent.localPosition;
     }
 
-    void ExitParent()
+    void ExitParent()//离开的那个 的爹 会触发这个
     {
+        //Debug.Log(transform.childCount);
+
         ClearComponentsData();
+
         BoxController.instance.ReturnPool(gameObject);
         BoxController.instance.boxes.Remove(this);
+        if (sonBoxDrawer.Count != 0)
+        {
+            pointsCross.Clear();
+            pointsInCross.Clear();
+            pointsOutCross.Clear();
 
+            sonBoxDrawer[0].transform.SetParent(BoxController.instance.transform);
+            sonBoxDrawer[1].transform.SetParent(BoxController.instance.transform);
+            sonBoxDrawer[0].parent = null;
+            sonBoxDrawer[1].parent = null;
+            sonBoxDrawer[0].localPosition = sonBoxDrawer[0].localPosition + localPosition;
+            sonBoxDrawer[1].localPosition = sonBoxDrawer[1].localPosition + localPosition;
+            sonBoxDrawer[0].transform.localPosition = sonBoxDrawer[0].localPosition;
+            sonBoxDrawer[1].transform.localPosition = sonBoxDrawer[1].localPosition;
+            sonBoxDrawer[0].rotation = AddQuaternions(rotation, sonBoxDrawer[0].rotation);
+            sonBoxDrawer[1].rotation = AddQuaternions(rotation, sonBoxDrawer[1].rotation);
+            sonBoxDrawer[0].IsOpenComponentsData(true);
+            sonBoxDrawer[1].IsOpenComponentsData(true);
+            BoxController.instance.boxes.Add(sonBoxDrawer[0]);
+            BoxController.instance.boxes.Add(sonBoxDrawer[1]);
+            sonBoxDrawer[0].SummonBox();
+            sonBoxDrawer[1].SummonBox();
 
+            sonBoxDrawer.Clear();
+        }
 
-        pointsCross.Clear();
-        pointsInCross.Clear();
-        pointsOutCross.Clear();
+        localPosition = new Vector3();
+        rotation = Quaternion.identity;
 
-
-        sonBoxDrawer[0].transform.SetParent(BoxController.instance.transform);
-        sonBoxDrawer[1].transform.SetParent(BoxController.instance.transform);
-        sonBoxDrawer[0].IsOpenComponentsData(true);
-        sonBoxDrawer[1].IsOpenComponentsData(true);
-
-        BoxController.instance.boxes.Add(sonBoxDrawer[0]);
-        BoxController.instance.boxes.Add(sonBoxDrawer[1]);
-
-        sonBoxDrawer[0].SummonBox();
-        sonBoxDrawer[1].SummonBox();
-
-        sonBoxDrawer.Clear();
+        if (parent != null)
+            parent.ExitParent();
+        //SubListsWhenExitParent(GetRealPoints());
+        if (BoxController.instance.boxes.Find(x => x == this))
+            BoxController.instance.boxes.Remove(this);
         transform.SetParent(BoxController.instance.transform);
+        parent = null;
     }
 
+    // 函数用于将两个四元数相加
+    public Quaternion AddQuaternions(Quaternion quat1, Quaternion quat2)
+    {
+        // 将两个四元数转换为欧拉角，并相加
+        Vector3 euler1 = quat1.eulerAngles;
+        Vector3 euler2 = quat2.eulerAngles;
+        Vector3 summedEulerAngles = euler1 + euler2;
+
+        // 将相加后的欧拉角转换为四元数
+        return Quaternion.Euler(summedEulerAngles);
+    }
+
+    /*
+    public void SubListsWhenExitParent(List<Vector2> subList)
+    {
+        parent.realPoints = BoxController.instance.SubLists(parent.realPoints, subList);
+        if (parent.parent != null)
+            parent.SubListsWhenExitParent(subList);
+    }
+    */
     /// <summary>
     /// 通过BoxController生成框
     /// </summary>
@@ -394,12 +482,28 @@ public class BoxDrawer : MonoBehaviour
         if (showGizmosPoint == ShowGizmosPoint.Nope)
             return;
 
-        Gizmos.color = Color.white;
-        foreach (var point in vertexPoints)
+
+        Gizmos.color = Color.blue;
+        foreach (var point in pointsCross)
         {
-            Gizmos.DrawSphere(transform.TransformPoint(rotation * new Vector3(point.x, point.y, 0)), 0.1f);
+            Gizmos.DrawSphere(transform.TransformPoint(new Vector3(point.x, point.y, 0)), 0.15f);
         }
 
+        if (pointsOutCross == null)
+            return;
+        Gizmos.color = Color.green;
+        foreach (var point in pointsOutCross)
+        {
+            Gizmos.DrawSphere(transform.TransformPoint(new Vector3(point.x, point.y, 0)), 0.15f);
+        }
+
+        if (pointsInCross == null)
+            return;
+        Gizmos.color = Color.magenta;
+        foreach (var point in pointsInCross)
+        {
+            Gizmos.DrawSphere(transform.TransformPoint(new Vector3(point.x, point.y, 0)), 0.15f);
+        }
 
 
     }
@@ -498,11 +602,24 @@ public class SceneExtEditor : Editor
         else
             vertices = example.vertexPoints;
 
+        Vector3 localPosition;
+        if (example.parent == null)
+            localPosition = example.localPosition;
+        else localPosition = example.localPosition + example.parent.localPosition;
+
+        Quaternion rotation = example.rotation;
+        BoxDrawer parent = example.parent;
+        while (parent != null)
+        {
+            rotation = example.AddQuaternions(rotation, parent.rotation);
+            parent = parent.parent;
+        }
 
         for (int i = 0; i < vertices.Count; i++)
         {
             EditorGUI.BeginChangeCheck();
-            Vector3 newvertexPoints = Quaternion.Inverse(example.rotation) * (Handles.PositionHandle(example.transform.position + example.rotation * vertices[i], example.rotation) - example.transform.position);
+
+            Vector3 newvertexPoints = Quaternion.Inverse(rotation) * (Handles.PositionHandle(localPosition + rotation * vertices[i], rotation));
 
             if (EditorGUI.EndChangeCheck())
             {
@@ -522,6 +639,17 @@ public class SceneExtEditor : Editor
         }
 
 
+        EditorGUI.BeginChangeCheck();
+        Vector3 gameObjectPos = Handles.PositionHandle(localPosition, rotation);
+        if (EditorGUI.EndChangeCheck())
+        {
+
+            if (example.parent == null) 
+                example.localPosition = gameObjectPos;
+            else example.localPosition = gameObjectPos - example.parent.localPosition;
+
+           
+        }
     }
 }
 #endif
