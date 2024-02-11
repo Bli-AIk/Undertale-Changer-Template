@@ -95,48 +95,63 @@ public class BoxController : ObjectPool
 
 
 
-                //两个框重合时合并，剩下的交给父BoxDrawer
+                //两个 特殊框 重合时合并，剩下的交给父BoxDrawer。
                 if (!(pointsCrossSave.Count == 0 && pointsInCrossSave.Count == 0))
                 {
-                    BoxDrawer boxParent = GetFromThePool();
+                    if (!(box0.boxType == BoxType.None || box1.boxType == BoxType.None) && !(box0.boxType == BoxType.Sub && box1.boxType == BoxType.Sub))
+                    {
+                        BoxDrawer boxParent = GetFromThePool();
 
-                    Debug.Log(boxParent);
+                        boxParent.localPosition = new Vector3(0, 0, (box0.localPosition.z + box1.localPosition.z) / 2);
 
-                    box0.transform.SetParent(boxParent.transform);
-                    box1.transform.SetParent(boxParent.transform);
+                        Debug.Log(boxParent);
 
-                    box0.parent = boxParent;
-                    box1.parent = boxParent;
+                        box0.transform.SetParent(boxParent.transform);
+                        box1.transform.SetParent(boxParent.transform);
 
-                    box0.IsOpenComponentsData();
-                    box1.IsOpenComponentsData();
+                        box0.parent = boxParent;
+                        box1.parent = boxParent;
 
-                    boxParent.pointsSonSum = AddLists(box0.realPoints, box1.realPoints);
-                    boxParent.pointsCross = pointsCrossSave;
-                    boxParent.pointsOutCross = pointsOutCrossSave;
-                    boxParent.pointsInCross = pointsInCrossSave;
+                        box0.IsOpenComponentsData();
+                        box1.IsOpenComponentsData();
 
-                    boxParent.sonBoxDrawer = new List<BoxDrawer> { box0, box1 };
+                        boxParent.pointsSonSum = AddLists(box0.realPoints, box1.realPoints);
+                        boxParent.pointsCross = pointsCrossSave;
+                        boxParent.pointsOutCross = pointsOutCrossSave;
+                        boxParent.pointsInCross = pointsInCrossSave;
 
-                    //先删了，在父BoxDrawer内加回来
-                    boxes.Remove(box0);
-                    boxes.Remove(box1);
+                        boxParent.sonBoxDrawer = new List<BoxDrawer> { box0, box1 };
 
-                    //先生成一下
-                    List<Vector2> points;
-                    points = AddLists(realPointsBack0, realPointsBack1);
-                    points = AddLists(points, pointsCrossSave);
-                    points = SubLists(points, pointsInCrossSave);
+                        //先删了，在父BoxDrawer内加回来
+                        boxes.Remove(box0);
+                        boxes.Remove(box1);
 
-                    //List<Vector2> pointsFinal = SortPoints(CalculatePolygonCenter(AddLists(pointsCrossSave, pointsInCrossSave)), points);
-                    List<Vector2> pointsFinal = GetUnion(realPointsBack0, realPointsBack1);
-                    boxParent.realPoints = pointsFinal;
-                    SummonBox(pointsFinal, boxParent.rotation, boxParent.transform, 0.15f, boxParent.lineRenderer, boxParent.meshFilter);
+                        /*
+                        //先生成一下
+                        List<Vector2> points;
+                        points = AddLists(realPointsBack0, realPointsBack1);
+                        points = AddLists(points, pointsCrossSave);
+                        points = SubLists(points, pointsInCrossSave);
+
+                        //List<Vector2> pointsFinal = SortPoints(CalculatePolygonCenter(AddLists(pointsCrossSave, pointsInCrossSave)), points);
+                        */
+                        List<Vector2> pointsFinal;
+                        if (box0.boxType == BoxType.Add && box1.boxType == BoxType.Sub)
+                            pointsFinal = GetDifference(realPointsBack0, realPointsBack1);
+                        else if (box0.boxType == BoxType.Sub && box1.boxType == BoxType.Add)
+                            pointsFinal = GetDifference(realPointsBack1, realPointsBack0);
+                        else
+                            pointsFinal = GetUnion(realPointsBack0, realPointsBack1);
 
 
-                    pointsCrossSave.Clear();
-                    pointsInCrossSave.Clear();
-                    pointsOutCrossSave.Clear();
+                        boxParent.realPoints = pointsFinal;
+                        SummonBox(pointsFinal, boxParent.rotation, boxParent.transform, 0.15f, boxParent.lineRenderer, boxParent.meshFilter);
+
+
+                        pointsCrossSave.Clear();
+                        pointsInCrossSave.Clear();
+                        pointsOutCrossSave.Clear();
+                    }
                 }
 
 
@@ -233,7 +248,7 @@ public class BoxController : ObjectPool
 
         for (int i = 0; i < polygon.Count; i++)
         {
-            lineRenderer.SetPosition(i, polygon[i] + (Vector2)transform.position);
+            lineRenderer.SetPosition(i, (Vector3)polygon[i] + transform.position);
         }
 
         meshFilter.mesh = GenerateMesh(polygon.ToArray(), meshFilter); // 最核心代码：构建Mesh！！
@@ -493,7 +508,7 @@ public class BoxController : ObjectPool
         }
         return inside;
     }
-    /*
+
     /// <summary>
     /// 计算多边形中点
     /// </summary>
@@ -515,17 +530,18 @@ public class BoxController : ObjectPool
 
         return center;
     }
-    /// <summary>
-    /// 以initialPoint为圆心，若干长度为半径，顺时针旋转，排序列表各点。
-    /// </summary>
-    public List<Vector2> SortPoints(Vector2 initialPoint, List<Vector2> points)
-    {
+    /*
+/// <summary>
+/// 以initialPoint为圆心，若干长度为半径，顺时针旋转，排序列表各点。
+/// </summary>
+public List<Vector2> SortPoints(Vector2 initialPoint, List<Vector2> points)
+{
 
-        return points.OrderBy(p => Mathf.Atan2(initialPoint.y - p.y, initialPoint.x - p.x))
-                      .ThenBy(p => (p - initialPoint).sqrMagnitude)
-                      .ToList();
-    }
-    */
+    return points.OrderBy(p => Mathf.Atan2(initialPoint.y - p.y, initialPoint.x - p.x))
+                  .ThenBy(p => (p - initialPoint).sqrMagnitude)
+                  .ToList();
+}
+*/
     /// <summary>
     /// 前面两个相加，减去后面两个
     /// </summary>
@@ -602,6 +618,13 @@ public class BoxController : ObjectPool
         PathsD clip = ConvertVectorToPath(b);
         PathsD solution = Clipper.Union(subj, clip, FillRule.NonZero, 2);
 
+        return ConvertPathToVector(solution);
+    }
+    public List<Vector2> GetDifference(List<Vector2> origin, List<Vector2> sub)
+    {
+        PathsD subj = ConvertVectorToPath(origin);
+        PathsD clip = ConvertVectorToPath(sub);
+        PathsD solution = Clipper.Difference(subj, clip, FillRule.NonZero, 2);
         return ConvertPathToVector(solution);
     }
 

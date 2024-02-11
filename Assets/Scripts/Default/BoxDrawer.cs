@@ -16,12 +16,14 @@ using UnityEditor;
 
 public class BoxDrawer : MonoBehaviour
 {
+    /*
     public enum Test
     {
         n,a,b,c,d,e,
     }
     public Test test = Test.n;
 
+    */
     public Vector3 localPosition;
     [Header("别用Transform的旋转")]
     public Quaternion rotation; // 获取当前物体的旋转
@@ -42,9 +44,10 @@ public class BoxDrawer : MonoBehaviour
     public LineRenderer lineRenderer;
 
 
-    [Header("当该Box为父级时，以此存储子级的相关计算后数据")]
+    [Header("设置其是否为特殊框")]
     public BoxController.BoxType boxType;
 
+    [Header("当该Box为父级时，以此存储子级的相关计算后数据")]
     [Header("子级realPoints之和")]
     public List<Vector2> pointsSonSum;
 
@@ -85,9 +88,10 @@ public class BoxDrawer : MonoBehaviour
         meshRenderer.material = Resources.Load<Material>("Materials/BoxBack");
     }
 
-    float testTimer;
+    //float testTimer;
     public void Update()
     {
+        /*
         switch (test)
         {
             case Test.a:
@@ -116,7 +120,6 @@ public class BoxDrawer : MonoBehaviour
             default:
                 break;
         }
-        /*
         foreach (var item in sonBoxDrawer)
         {
             if (!item.gameObject.activeSelf)
@@ -133,7 +136,6 @@ public class BoxDrawer : MonoBehaviour
                 realPoints = GenerateBezierCurve(besselPoints, besselInsertNum, besselPointsNum);
             else
                 realPoints = vertexPoints;
-
         }
         else if (sonBoxDrawer.Count == 2 && transform.childCount == 2)//作为父级
         {
@@ -161,12 +163,22 @@ public class BoxDrawer : MonoBehaviour
             //重合时合并
             if (!(pointsCross.Count == 0 && pointsInCross.Count == 0))
             {
+                /*
                 List<Vector2> points;
 
                 points = BoxController.instance.AddLists(pointsCross, pointsSonSum);
                 points = BoxController.instance.SubLists(points, pointsInCross);
-                //List<Vector2> pointsFinal = BoxController.instance.SortPoints(BoxController.instance.CalculatePolygonCenter(BoxController.instance.AddLists(pointsCross, pointsInCross)), points);
-                List<Vector2> pointsFinal = BoxController.instance.GetUnion(realPointsBack0, realPointsBack1);
+                List<Vector2> pointsFinal = BoxController.instance.SortPoints(BoxController.instance.CalculatePolygonCenter(BoxController.instance.AddLists(pointsCross, pointsInCross)), points);
+                */
+                List<Vector2> pointsFinal;
+
+                if (sonBoxDrawer[0].boxType == BoxController.BoxType.Add && sonBoxDrawer[1].boxType == BoxController.BoxType.Sub)
+                    pointsFinal = BoxController.instance.GetDifference(realPointsBack0, realPointsBack1);
+                else if (sonBoxDrawer[0].boxType == BoxController.BoxType.Sub && sonBoxDrawer[1].boxType == BoxController.BoxType.Add)
+                    pointsFinal = BoxController.instance.GetDifference(realPointsBack1, realPointsBack0);
+                else
+                    pointsFinal = BoxController.instance.GetUnion(realPointsBack0, realPointsBack1);
+
                 realPoints = pointsFinal;
             }
             else//不重合就解散
@@ -185,7 +197,9 @@ public class BoxDrawer : MonoBehaviour
         if (transform.parent == BoxController.instance.transform)//只有父物体为BoxController时生成框
         {
             transform.localPosition = localPosition;
-            SummonBox();
+
+            if (boxType != BoxController.BoxType.Sub)//减框不绘制
+                SummonBox();
         }
         else transform.localPosition = localPosition - parent.localPosition;
     }
@@ -208,8 +222,8 @@ public class BoxDrawer : MonoBehaviour
             sonBoxDrawer[1].transform.SetParent(BoxController.instance.transform);
             sonBoxDrawer[0].parent = null;
             sonBoxDrawer[1].parent = null;
-            sonBoxDrawer[0].localPosition = sonBoxDrawer[0].localPosition + localPosition;
-            sonBoxDrawer[1].localPosition = sonBoxDrawer[1].localPosition + localPosition;
+            sonBoxDrawer[0].localPosition = (Vector3)(Vector2)(sonBoxDrawer[0].localPosition + localPosition) + new Vector3(0, 0, sonBoxDrawer[0].localPosition.z);
+            sonBoxDrawer[1].localPosition = (Vector3)(Vector2)(sonBoxDrawer[1].localPosition + localPosition) + new Vector3(0, 0, sonBoxDrawer[1].localPosition.z);
             sonBoxDrawer[0].transform.localPosition = sonBoxDrawer[0].localPosition;
             sonBoxDrawer[1].transform.localPosition = sonBoxDrawer[1].localPosition;
             sonBoxDrawer[0].rotation = AddQuaternions(rotation, sonBoxDrawer[0].rotation);
@@ -224,7 +238,7 @@ public class BoxDrawer : MonoBehaviour
             sonBoxDrawer.Clear();
         }
 
-        localPosition = new Vector3();
+        localPosition = Vector3.zero;
         rotation = Quaternion.identity;
 
         if (parent != null)
