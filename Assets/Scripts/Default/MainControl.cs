@@ -2159,6 +2159,27 @@ public class MainControl : MonoBehaviour
         }
 
     }
+    
+    /// <summary>
+    /// 计算多边形中点
+    /// </summary>
+    public Vector2 CalculatePolygonCenter(List<Vector2> vertexPoints)
+    {
+        Vector2 center = Vector2.zero;
 
-   
+        if (vertexPoints == null || vertexPoints.Count == 0)
+        {
+            return center;
+        }
+
+        foreach (Vector2 vertex in vertexPoints)
+        {
+            center += vertex;
+        }
+
+        center /= vertexPoints.Count;
+
+        return center;
+    }
+    
 }

@@ -3,6 +3,8 @@ using System;
 using UnityEngine;
 using UnityEngine.Rendering;
 using Log;
+using System.Collections.Generic;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 /// <summary>
 /// 控制战斗内玩家(心)的相关属性
 /// </summary>
@@ -56,8 +58,10 @@ public class BattlePlayerController : MonoBehaviour
         hitVolume.weight = 0;
         //mask = 1 << 6;
         MainControl.instance.PlayerControl.missTime = 0;
-    }
 
+        lineRenderer = GetComponent<LineRenderer>();
+    }
+    LineRenderer lineRenderer;
     private void Update()
     {
         if (!MainControl.instance.OverworldControl.noSFX && hitVolume.weight > 0)
@@ -129,7 +133,6 @@ public class BattlePlayerController : MonoBehaviour
         if (!TurnController.instance.isMyTurn)
             Moving();
     }
-
     private void Moving()
     {
         Vector2 dirReal = new Vector2();
@@ -661,12 +664,16 @@ public class BattlePlayerController : MonoBehaviour
         moving.x = MainControl.instance.JudgmentNumber(true, moving.x, 5);
         moving.y = MainControl.instance.JudgmentNumber(true, moving.y, 5);
 
-        rigidBody.MovePosition(transform.position + new Vector3(speedWeightX * speed * moving.x * Time.deltaTime, speedWeightY * speed * moving.y * Time.deltaTime));//速度参考：3
+        Vector3 newPos = transform.position + new Vector3(speedWeightX * speed * moving.x * Time.deltaTime, speedWeightY * speed * moving.y * Time.deltaTime);//速度参考：3
+        Vector3 checkPos = CheckPoint(newPos, 0.175f + BoxController.instance.width / 2);
+        if (newPos == checkPos)
+            rigidBody.MovePosition(newPos);
+        else
+            transform.localPosition = checkPos;
         //transform.position = transform.position + new Vector3(speed * moving.x * Time.deltaTime, speed * moving.y * Time.deltaTime);//蓝心会有巨大偏差 不采用
         if (movingSave != 0)
             moving.y = movingSave;
     }
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
         //蓝心碰板子确保再次可以跳
@@ -790,6 +797,168 @@ public class BattlePlayerController : MonoBehaviour
             }
         }
     }
+    // 判断点是否在多边形内
+    private bool IsPointInPolygon(Vector2 point, List<Vector2> polygon)
+    {
+        bool isInside = false;
+        for (int i = 0, j = polygon.Count - 1; i < polygon.Count; j = i++)
+        {
+            if (((polygon[i].y > point.y) != (polygon[j].y > point.y)) &&
+             (point.x < (polygon[j].x - polygon[i].x) * (point.y - polygon[i].y) / (polygon[j].y - polygon[i].y) + polygon[i].x))
+            {
+                isInside = !isInside;
+            }
+        }
+        return isInside;
+    }
+
+    // 计算点到线段的最近点（垂足）
+    private Vector2 GetNearestPointOnLine(Vector2 point, Vector2 start, Vector2 end)
+    {
+        Vector2 line = end - start;
+        float len = line.magnitude;
+        line.Normalize();
+
+        Vector2 v = point - start;
+        float d = Vector2.Dot(v, line);
+        d = Mathf.Clamp(d, 0f, len);
+        return start + line * d;
+    }
+
+    // 计算位移后的垂点位置
+    private Vector2 CalculateDisplacedPoint(Vector2 nearestPoint, Vector2 point, Vector2 lineStart, Vector2 lineEnd, float displacement)
+    {
+        // 计算线段方向向量
+        Vector2 lineDirection = (lineEnd - lineStart).normalized;
+        // 计算垂线方向（即线段方向的逆时针90度旋转）
+        Vector2 perpendicularDirection = new Vector2(-lineDirection.y, lineDirection.x);
+
+        // 计算位移后的位置
+        return nearestPoint + perpendicularDirection * -displacement;
+    }
+    /// //////////////////////////////////////
+    public List<Vector2> CalculateInwardOffset(List<Vector2> vertices, float offset)
+    {
+        if (vertices == null || vertices.Count < 3) return null; // 需要至少三个顶点来构成多边形
+
+        List<Vector2> offsetVertices = new List<Vector2>();
+        List<Vector2> intersectionPoints = new List<Vector2>();
+
+        int count = vertices.Count;
+        for (int i = 0; i < count; i++)
+        {
+            // 获取当前边的两个顶点
+            Vector2 currentVertex = vertices[i];
+            Vector2 nextVertex = vertices[(i + 1) % count]; // 环形列表，确保最后一个顶点连接到第一个顶点
+
+            // 计算边的方向向量并旋转90度（垂直）
+            Vector2 edgeDirection = (nextVertex - currentVertex).normalized;
+            Vector2 perpendicularDirection = new Vector2(-edgeDirection.y, edgeDirection.x);
+
+            // 平移顶点
+            Vector2 offsetCurrentVertex = currentVertex + perpendicularDirection * offset;
+            Vector2 offsetNextVertex = nextVertex + perpendicularDirection * offset;
+
+            // 存储平移后的顶点，稍后用于计算交点
+            offsetVertices.Add(offsetCurrentVertex);
+            offsetVertices.Add(offsetNextVertex);
+
+            // 计算交点
+            if (i > 0) // 从第二条边开始计算交点
+            {
+                bool foundIntersection = LineLineIntersection(out Vector2 intersection, offsetVertices[i * 2 - 2], offsetVertices[i * 2 - 1], offsetCurrentVertex, offsetNextVertex);
+                if (foundIntersection)
+                {
+                    intersectionPoints.Add(intersection);
+                }
+            }
+        }
+
+        // 计算首尾两条边的交点
+        bool foundFinalIntersection = LineLineIntersection(out Vector2 finalIntersection, offsetVertices[offsetVertices.Count - 2], offsetVertices[offsetVertices.Count - 1], offsetVertices[0], offsetVertices[1]);
+        if (foundFinalIntersection)
+        {
+            intersectionPoints.Add(finalIntersection);
+        }
+
+        return intersectionPoints;
+    }
+
+    private bool LineLineIntersection(out Vector2 intersection, Vector2 point1, Vector2 point2, Vector2 point3, Vector2 point4)
+    {
+        intersection = new Vector2();
+
+        float d = (point1.x - point2.x) * (point3.y - point4.y) - (point1.y - point2.y) * (point3.x - point4.x);
+        if (d == 0) return false; // 平行或共线，无交点
+
+        float pre = (point1.x * point2.y - point1.y * point2.x), post = (point3.x * point4.y - point3.y * point4.x);
+        intersection.x = (pre * (point3.x - point4.x) - (point1.x - point2.x) * post) / d;
+        intersection.y = (pre * (point3.y - point4.y) - (point1.y - point2.y) * post) / d;
+
+        return true;
+    }
+
+    //////////////////////////////////////////
+
+    public Vector2 CheckPoint(Vector2 point, float displacement)
+    {
+        foreach (var box in BoxController.instance.boxes)
+        {
+            // 缩放多边形顶点
+            List<Vector2> movedVertices = CalculateInwardOffset(box.GetRealPoints(), -displacement);
+            lineRenderer.positionCount = movedVertices.Count;
+            for (int i = 0; i < movedVertices.Count; i++)
+            {
+                lineRenderer.SetPosition(i, movedVertices[i]);
+            }
+
+            
+            foreach (var item in movedVertices)
+            {
+                DebugLogger.Log(item, DebugLogger.Type.err);
+            }
+            // 使用移动后的顶点来判断点是否在多边形内
+            if (IsPointInPolygon(point, movedVertices))
+            {
+                // 点在调整后的多边形内，返回原始坐标
+                DebugLogger.Log(point, DebugLogger.Type.war, "#FF00FF");
+                return point;
+            }
+        }
+
+        // 点不在任何多边形内，计算最近的垂点
+        Vector2 nearestPoint = Vector2.zero;
+        Vector2 lineStart = Vector2.zero;
+        Vector2 lineEnd = Vector2.zero;
+        float nearestDistance = float.MaxValue;
+        foreach (var box in BoxController.instance.boxes)
+        {
+            for (int i = 0, j = box.GetRealPoints().Count - 1; i < box.GetRealPoints().Count; j = i++)
+            {
+                Vector2 tempNearestPoint = GetNearestPointOnLine(point, box.GetRealPoints()[i], box.GetRealPoints()[j]);
+                float tempDistance = Vector2.Distance(point, tempNearestPoint);
+                if (tempDistance < nearestDistance)
+                {
+                    nearestPoint = tempNearestPoint;
+                    lineStart = box.GetRealPoints()[i];
+                    lineEnd = box.GetRealPoints()[j];
+                    nearestDistance = tempDistance;
+                }
+            }
+        }
+
+        // 如果找到最近点，则计算位移后的垂点
+        if (nearestDistance < float.MaxValue)
+        {
+            DebugLogger.Log(CalculateDisplacedPoint(nearestPoint, point, lineStart, lineEnd, -displacement), DebugLogger.Type.war, "#FF0000");
+
+            return CalculateDisplacedPoint(nearestPoint, point, lineStart, lineEnd, -displacement);
+        }
+        DebugLogger.Log(2, DebugLogger.Type.war);
+
+        return point; // 如果没有找到更近的点，返回原点
+    }
+
 }
 
 //杂项

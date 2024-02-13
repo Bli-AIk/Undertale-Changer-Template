@@ -8,6 +8,8 @@ using Clipper2Lib;
 public class BoxController : ObjectPool
 {
     public static BoxController instance;
+    [Header("线宽")]
+    public float width = 0.15f;
 
     [Header("起始时生成框，名字为空不生成")]
     public string startSummonName;
@@ -51,6 +53,7 @@ public class BoxController : ObjectPool
         boxes.Add(newBoxDrawer);
         num++;
         newBoxDrawer.name = "Box" + num;
+        newBoxDrawer.width = width;
         return newBoxDrawer;
     }
 
@@ -117,8 +120,6 @@ public class BoxController : ObjectPool
                         BoxDrawer boxParent = GetFromThePool();
 
                         boxParent.localPosition = new Vector3(0, 0, (box0.localPosition.z + box1.localPosition.z) / 2);
-
-                        Debug.Log(boxParent);
 
                         box0.transform.SetParent(boxParent.transform);
                         box1.transform.SetParent(boxParent.transform);
@@ -523,27 +524,6 @@ public class BoxController : ObjectPool
         return inside;
     }
 
-    /// <summary>
-    /// 计算多边形中点
-    /// </summary>
-    public Vector2 CalculatePolygonCenter(List<Vector2> vertexPoints)
-    {
-        Vector2 center = Vector2.zero;
-
-        if (vertexPoints == null || vertexPoints.Count == 0)
-        {
-            return center;
-        }
-
-        foreach (Vector2 vertex in vertexPoints)
-        {
-            center += vertex;
-        }
-
-        center /= vertexPoints.Count;
-
-        return center;
-    }
     /*
 /// <summary>
 /// 以initialPoint为圆心，若干长度为半径，顺时针旋转，排序列表各点。
