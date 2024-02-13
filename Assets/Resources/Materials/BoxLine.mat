@@ -8,15 +8,14 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: BoxLine
-  m_Shader: {fileID: 4800000, guid: 650dd9526735d5b46b79224bc6e94025, type: 3}
+  m_Shader: {fileID: 4800000, guid: cf81c85f95fe47e1a27f6ae460cf182c, type: 3}
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
-  stringTagMap:
-    RenderType: Opaque
+  stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
@@ -62,7 +61,9 @@ Material:
     - _AlphaClip: 0
     - _Blend: 0
     - _BlendOp: 0
+    - _ColorMask: 15
     - _Cull: 2
+    - _CullMode: 0
     - _Cutoff: 0.5
     - _DstBlend: 0
     - _EnableExternalAlpha: 0
@@ -70,11 +71,18 @@ Material:
     - _QueueOffset: 0
     - _SampleGI: 0
     - _SrcBlend: 1
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
     - _Surface: 0
     - _UV: 0
+    - _UseUIAlphaClip: 0
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ClipRect: {r: -32767, g: -32767, b: 32767, a: 32767}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}

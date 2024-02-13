@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -6,13 +7,9 @@ using UnityEngine;
 public class BulletShaderController : MonoBehaviour
 {
     private Material material;
-
-    [Header("IDºÏ≤‚£∫ π”√_Point (0)")]
-    public bool useBracketId;
-
     private void Start()
     {
-        material = Instantiate(Resources.Load<Material>("Materials/SpriteBattleMask"));
+        material = Instantiate(Resources.Load<Material>("Materials/Bullet"));
 
         GetComponent<SpriteRenderer>().material = material;
     }
@@ -23,20 +20,5 @@ public class BulletShaderController : MonoBehaviour
             return;
         if (MainControl.instance.OverworldControl.isSetting || MainControl.instance.OverworldControl.pause)
             return;
-
-        Set();
-    }
-
-    private void Set()
-    {
-        for (int i = 0; i < MainControl.instance.drawFrameController.points.Count; i++)
-        {
-            string id;
-            if (!useBracketId)
-                id = "_Point" + i;
-            else
-                id = "_Point_" + i;
-            material.SetVector(id, MainControl.instance.drawFrameController.points[i].transform.position);
-        }
     }
 }

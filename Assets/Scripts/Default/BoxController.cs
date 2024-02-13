@@ -9,6 +9,11 @@ public class BoxController : ObjectPool
 {
     public static BoxController instance;
 
+    [Header("起始时生成框，名字为空不生成")]
+    public string startSummonName;
+    public Vector3 startSummonPos;
+
+
     public List<BoxDrawer> boxes = new List<BoxDrawer>();
 
     public List<Vector2> pointsCrossSave, pointsOutCrossSave, pointsInCrossSave;//交点/非重合点/重合点
@@ -51,11 +56,20 @@ public class BoxController : ObjectPool
 
     void Start()
     {
+        if (startSummonName != null && startSummonName != "")
+        {
+            BoxDrawer start = GetFromThePool();
+            start.name = startSummonName;
+            start.localPosition = startSummonPos;
+        }
+
+        /*测试使用
         GetFromThePool();
         BoxDrawer a = GetFromThePool();
         a.localPosition += Vector3.right + Vector3.up;
         a = GetFromThePool();
         a.localPosition -= Vector3.right + Vector3.up;
+        */
     }
 
     void Update()

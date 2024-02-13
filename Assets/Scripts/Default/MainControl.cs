@@ -38,8 +38,8 @@ public class MainControl : MonoBehaviour
     [Header("战斗外")]
     public PlayerBehaviour playerBehaviour;
 
-    [Header("战斗内")]
-    public DrawFrameController drawFrameController;
+    //[Header("战斗内")]
+    //public OldBoxController OldBoxController;
 
     private Camera cameraMainInBattle;
 
@@ -267,7 +267,7 @@ public class MainControl : MonoBehaviour
 
         BattleControl.turnTextSave = ChangeItemData(BattleControl.turnTextSave, true, new List<string>());
         //--------------------------------------------------------------------------------
-        drawFrameController = GameObject.Find("MainFrame").GetComponent<DrawFrameController>();
+        //OldBoxController = GameObject.Find("MainFrame").GetComponent<OldBoxController>();
         battlePlayerController = GameObject.Find("Player").GetComponent<BattlePlayerController>();
         selectUIController = GameObject.Find("SelectUI").GetComponent<SelectUIController>();
         if (cameraShake == null)

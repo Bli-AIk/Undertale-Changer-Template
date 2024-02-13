@@ -91,6 +91,8 @@ public class BoxDrawer : MonoBehaviour
     //float testTimer;
     public void Update()
     {
+        if (boxType == BoxController.BoxType.Sub)
+            ClearComponentsData();
         /*
         switch (test)
         {
@@ -218,24 +220,25 @@ public class BoxDrawer : MonoBehaviour
             pointsInCross.Clear();
             pointsOutCross.Clear();
 
-            sonBoxDrawer[0].transform.SetParent(BoxController.instance.transform);
-            sonBoxDrawer[1].transform.SetParent(BoxController.instance.transform);
-            sonBoxDrawer[0].parent = null;
-            sonBoxDrawer[1].parent = null;
-            sonBoxDrawer[0].localPosition = (Vector3)(Vector2)(sonBoxDrawer[0].localPosition + localPosition) + new Vector3(0, 0, sonBoxDrawer[0].localPosition.z);
-            sonBoxDrawer[1].localPosition = (Vector3)(Vector2)(sonBoxDrawer[1].localPosition + localPosition) + new Vector3(0, 0, sonBoxDrawer[1].localPosition.z);
-            sonBoxDrawer[0].transform.localPosition = sonBoxDrawer[0].localPosition;
-            sonBoxDrawer[1].transform.localPosition = sonBoxDrawer[1].localPosition;
-            sonBoxDrawer[0].rotation = AddQuaternions(rotation, sonBoxDrawer[0].rotation);
-            sonBoxDrawer[1].rotation = AddQuaternions(rotation, sonBoxDrawer[1].rotation);
-            sonBoxDrawer[0].IsOpenComponentsData(true);
-            sonBoxDrawer[1].IsOpenComponentsData(true);
-            BoxController.instance.boxes.Add(sonBoxDrawer[0]);
-            BoxController.instance.boxes.Add(sonBoxDrawer[1]);
-            sonBoxDrawer[0].SummonBox();
-            sonBoxDrawer[1].SummonBox();
+            for (int i = 0; i < 2; i++)
+            {
+                sonBoxDrawer[i].transform.SetParent(BoxController.instance.transform);
+                sonBoxDrawer[i].parent = null;
+                sonBoxDrawer[i].localPosition = (Vector3)(Vector2)(sonBoxDrawer[i].localPosition + localPosition) + new Vector3(0, 0, sonBoxDrawer[i].localPosition.z);
+                sonBoxDrawer[i].transform.localPosition = sonBoxDrawer[i].localPosition;
+                sonBoxDrawer[i].rotation = AddQuaternions(rotation, sonBoxDrawer[i].rotation);
+                sonBoxDrawer[i].IsOpenComponentsData(true);
+                BoxController.instance.boxes.Add(sonBoxDrawer[i]);
+                sonBoxDrawer[i].SummonBox();
+
+                if (sonBoxDrawer[i].boxType == BoxController.BoxType.Sub)
+                    sonBoxDrawer[i].ClearComponentsData();
+            }
+
 
             sonBoxDrawer.Clear();
+
+
         }
 
         localPosition = Vector3.zero;
@@ -294,7 +297,7 @@ public class BoxDrawer : MonoBehaviour
         lineRenderer.enabled = isOpen;
 
     }
-    public void ClearComponentsData(bool onlyMesh = false)
+    public void ClearComponentsData()
     {
         meshFilter.mesh = null;
         lineRenderer.positionCount = 0;
@@ -448,13 +451,13 @@ public class BoxDrawer : MonoBehaviour
     {
         if (vertexPoints == null)
             return;
-        /*
-        if (meshFilter != null && showMesh && showGizmosPoint != ShowGizmosPoint.Nope)
+        
+        if (meshFilter != null && showMesh)
         {
             Gizmos.color = Color.red;
             Gizmos.DrawWireMesh(meshFilter.sharedMesh, 0, transform.position);
         }
-        */
+        
         if (showGizmosPoint == ShowGizmosPoint.All && isBessel)
         {
             Gizmos.color = Color.yellow;
@@ -633,16 +636,16 @@ public class SceneExtEditor : Editor
         {
             EditorGUI.BeginChangeCheck();
 
-            Vector3 newvertexPoints = Quaternion.Inverse(rotation) * (Handles.PositionHandle(localPosition + rotation * vertices[i], rotation));
+            Vector3 newVertexPoints = Quaternion.Inverse(rotation) * Handles.PositionHandle(example.localPosition + rotation * vertices[i], rotation);
 
             if (EditorGUI.EndChangeCheck())
             {
                 example.GetComponents();
                 Undo.RecordObject(example, "Changed point " + i);
-                vertices[i] = newvertexPoints;
+                vertices[i] = newVertexPoints;
                 if (example.isBessel)
                     if (i % (example.besselInsertNum + 1) == 0)
-                        example.vertexPoints[i / (example.besselInsertNum + 1)] = newvertexPoints;
+                        example.vertexPoints[i / (example.besselInsertNum + 1)] = newVertexPoints;
                 example.Update();
                 if (!isUndoRedoPerformed)
                 {

@@ -2,10 +2,12 @@ using DG.Tweening;
 using System.Collections.Generic;
 using UnityEngine;
 using Log;
+using System;
 /// <summary>
 /// 使用LineRenderer与多边形shader绘制多边形框，用于战斗框、UI等。
 /// </summary>
-public class DrawFrameController : MonoBehaviour
+[Obsolete]
+public class OldBoxController : MonoBehaviour
 {
     [Header("线长")]
     public float width;

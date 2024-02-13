@@ -68,7 +68,7 @@ public class TurnController : MonoBehaviour
         {
             case 0:
                 DebugLogger.Log("这是个摆烂回合……也许吧。");
-                MainControl.instance.battlePlayerController.ChangePlayerColor(MainControl.instance.BattleControl.playerColorList[5], BattleControl.PlayerColor.blue,0,BattlePlayerController.PlayerDirEnum.down);
+                //MainControl.instance.battlePlayerController.ChangePlayerColor(MainControl.instance.BattleControl.playerColorList[5], BattleControl.PlayerColor.blue,0,BattlePlayerController.PlayerDirEnum.down);
                 var obj = objectPools[0].GetFromPool().GetComponent<BulletController>();
                 obj.SetBullet(
                     "DemoBullet",
