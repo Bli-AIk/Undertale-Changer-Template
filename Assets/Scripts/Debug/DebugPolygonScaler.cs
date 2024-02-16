@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PolygonScaler : MonoBehaviour
+public class DebugPolygonScaler : MonoBehaviour
 {
     public LineRenderer originalLineRenderer; // 用于绘制原始多边形
     public LineRenderer movedLineRenderer; // 用于绘制移动后的多边形
