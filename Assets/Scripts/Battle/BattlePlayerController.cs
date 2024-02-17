@@ -315,7 +315,7 @@ public class BattlePlayerController : MonoBehaviour
                         {
                             jumpRayDistanceForBoard = 0.2f;
                             moving = new Vector3(moving.x, -0.55f);
-                            
+
                         }
                         if (isJump)
                         {
@@ -382,7 +382,7 @@ public class BattlePlayerController : MonoBehaviour
                             jumpRayDistanceForBoard = 0;
 
 
-                            DebugLogger.Log(Time.time - saveTime,DebugLogger.Type.war,"#FF0000");
+                            //DebugLogger.Log(Time.time - saveTime, DebugLogger.Type.war, "#FF0000");
                             saveTime = Time.time; ;
                         }
                         if (isJump && (!MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("frame"))) && moving.y > 0.55f)
@@ -459,7 +459,7 @@ public class BattlePlayerController : MonoBehaviour
                         {
                             jumpRayDistanceForBoard = 0.2f;
                             moving = new Vector3(0.55f, moving.y);
-                            
+
                         }
                         if (isJump)
                         {
@@ -529,7 +529,7 @@ public class BattlePlayerController : MonoBehaviour
                         {
                             jumpRayDistanceForBoard = 0.2f;
                             moving = new Vector3(-0.55f, moving.y);
-                            
+
                         }
                         if (isJump)
                         {
@@ -618,8 +618,8 @@ public class BattlePlayerController : MonoBehaviour
             isMoving = !(x || y);
 
             /*
-            //DebugLogger.Log("X:" + x);
-            //DebugLogger.Log("Y:" + y);
+            ////DebugLogger.Log("X:" + x);
+            ////DebugLogger.Log("Y:" + y);
             */
         }
         else
@@ -893,22 +893,27 @@ public class BattlePlayerController : MonoBehaviour
 
         return true; // 返回true，表示找到交点
     }
-
+    int num;
     // 定义根据位移检查并调整点位置的方法
-    public Vector2 CheckPoint(Vector2 point, float displacement, bool isInitialCall = true)
+    public Vector2 CheckPoint(Vector2 point, float displacement, int maxDepth = 10, int currentDepth = 0, bool isInitialCall = true)
     {
         Vector2 originalPoint = point; // 保存原始点位置
+        if (currentDepth >= maxDepth) // 检查是否达到递归次数限制
+        {
+            return point; // 如果达到最大次数，返回当前点
+        }
+
         foreach (var box in BoxController.instance.boxes) // 遍历所有盒子对象
         {
             List<Vector2> movedVertices = CalculateInwardOffset(box.GetRealPoints(), -displacement); // 计算缩放后的多边形顶点
 
             foreach (var item in movedVertices) // 遍历移动后的顶点
             {
-                DebugLogger.Log(item, DebugLogger.Type.err); // 记录日志
+                //DebugLogger.Log(item, DebugLogger.Type.err); // 记录日志
             }
             if (IsPointInPolygon(point, movedVertices)) // 如果点在调整后的多边形内
             {
-                DebugLogger.Log(point, DebugLogger.Type.war, "#FF00FF"); // 记录日志
+                //DebugLogger.Log(point, DebugLogger.Type.war, "#FF00FF"); // 记录日志
                 return point; // 返回原始坐标
             }
         }
@@ -936,32 +941,22 @@ public class BattlePlayerController : MonoBehaviour
         if (nearestDistance < float.MaxValue) // 如果找到最近点
         {
             Vector2 moved = CalculateDisplacedPoint(nearestPoint, point, lineStart, lineEnd, -displacement); // 计算位移后的点位置
-            DebugLogger.Log(moved, DebugLogger.Type.war, "#FF0000"); // 记录日志
+            //DebugLogger.Log(moved, DebugLogger.Type.war, "#FF0000"); // 记录日志
 
-            if (isInitialCall) // 如果是初次调用
+            if (isInitialCall || moved != originalPoint) // 如果是初次调用或移动后的点不等于原点
             {
-                Vector2 newCheck = CheckPoint(moved, displacement, false); // 递归调用，但禁止进一步的额外检测
-                if (newCheck == moved) // 如果移动后的点通过了检测
+                Vector2 newCheck = CheckPoint(moved, displacement, maxDepth, currentDepth + 1, false); // 递归调用，增加递归深度
+                if (newCheck != moved) // 如果移动后的点未通过检测
                 {
-                    return moved; // 返回这个点
+                    // 因为已经在递归中处理递归深度，所以这里不需要再次调用CheckPoint
+                    return newCheck; // 返回新检查点
                 }
-                else // 如果移动后的点未通过检测
-                {
-                    return CheckPoint(newCheck, displacement, false); // 再次递归调用，但禁止进一步的额外检测
-                }
-            }
-            else // 如果不是初次调用
-            {
-                return moved; // 直接返回计算后的点
+                return moved; // 返回移动后的点
             }
         }
 
         return originalPoint; // 如果没有找到更近的点，返回原点
     }
-
-
-    /////////////////////////////////////////
-
 }
 
 //杂项
