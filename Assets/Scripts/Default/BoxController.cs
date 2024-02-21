@@ -54,6 +54,7 @@ public class BoxController : ObjectPool
         num++;
         newBoxDrawer.name = "Box" + num;
         newBoxDrawer.width = width;
+        newBoxDrawer.tag = "frame";
         return newBoxDrawer;
     }
 
@@ -160,7 +161,7 @@ public class BoxController : ObjectPool
 
 
                         boxParent.realPoints = pointsFinal;
-                        SummonBox(pointsFinal, boxParent.rotation, boxParent.transform, 0.15f, boxParent.lineRenderer, boxParent.meshFilter);
+                        SummonBox(pointsFinal, boxParent.rotation, boxParent.transform, 0.15f, boxParent.lineRenderer, boxParent.edgeCollider2D, boxParent.meshFilter);
 
 
                         pointsCrossSave.Clear();
@@ -215,7 +216,7 @@ public class BoxController : ObjectPool
     /// <summary>
     /// 生成框
     /// </summary>
-    public List<Vector2> SummonBox(List<Vector2> list, Quaternion rotation, Transform transform, float width = 0.15f, LineRenderer lineRenderer = null, MeshFilter meshFilter = null)
+    public List<Vector2> SummonBox(List<Vector2> list, Quaternion rotation, Transform transform, float width = 0.15f, LineRenderer lineRenderer = null, EdgeCollider2D edgeCollider2D = null, MeshFilter meshFilter = null)
     {
         if (lineRenderer == null)
         {
@@ -227,6 +228,15 @@ public class BoxController : ObjectPool
                 lineRenderer.endWidth = width;
                 lineRenderer.material = Resources.Load<Material>("Materials/BoxLine");
                 lineRenderer.loop = true;
+            }
+        }
+
+        if (edgeCollider2D == null)
+        {
+            edgeCollider2D = transform.GetComponent<EdgeCollider2D>();
+            if (edgeCollider2D == null)
+            {
+                edgeCollider2D = transform.gameObject.AddComponent<EdgeCollider2D>();
             }
         }
 
@@ -247,8 +257,6 @@ public class BoxController : ObjectPool
             }
         }
 
-
-
         List<Vector2> polygon = new List<Vector2>(list);
         // 将每个点先旋转，然后再加上物体的位置
         for (int i = 0; i < polygon.Count; i++)
@@ -260,15 +268,15 @@ public class BoxController : ObjectPool
 
         lineRenderer.positionCount = polygon.Count;
 
-
         for (int i = 0; i < polygon.Count; i++)
         {
             lineRenderer.SetPosition(i, (Vector3)polygon[i] + transform.position);
         }
 
-        meshFilter.mesh = GenerateMesh(polygon.ToArray(), meshFilter); // 最核心代码：构建Mesh！！
+        meshFilter.mesh = GenerateMesh(polygon.ToArray()); // 最核心代码：构建Mesh！！
 
-        
+        edgeCollider2D.SetPoints(AddLists(polygon, new List<Vector2>() { polygon[0] }));
+        edgeCollider2D.edgeRadius = width / 2;
 
         return polygon;
     }
@@ -319,7 +327,7 @@ public class BoxController : ObjectPool
     /// <summary>
     /// 构造Mesh
     /// </summary>
-    public Mesh GenerateMesh(Vector2[] vertexPoints, MeshFilter meshFilter)
+    public Mesh GenerateMesh(Vector2[] vertexPoints)
     {
 
         // 将Vector数组转换为LibTessDotNet所需的ContourVertex数组

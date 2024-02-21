@@ -20,6 +20,7 @@ public class BoardController : MonoBehaviour
     private EdgeCollider2D edgeCollider2D;//Ä¬ÈÏÎª´¥·¢Æ÷¡£
     private SpriteRenderer spriteRenderer;
 
+    //public bool test;
     private void Awake()
     {
         spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
@@ -38,7 +39,7 @@ public class BoardController : MonoBehaviour
 
     private void Start()
     {
-        //SetBoard(canMove, "board", 40, transform.position);
+        SetBoard(canMove, "board", 40, transform.position);
     }
 
     public void SetBoard(bool canMover, string setName, int layer, Vector3 startLocalPosition)
@@ -73,6 +74,8 @@ public class BoardController : MonoBehaviour
 
             spriteRenderer.size = new Vector2(width, 0.5f);
         }
+
+        //if (test)  transform.position = new Vector3(Time.time, transform.position.y);
     }
 
     public void ChangeMove(bool isChange = false)

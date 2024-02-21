@@ -437,8 +437,8 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -401.99993896484377,
-            "y": 121.99996948242188,
+            "x": -409.0000305175781,
+            "y": 188.0,
             "width": 208.00003051757813,
             "height": 350.0
         }
@@ -481,10 +481,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -553.0,
-            "y": 153.99998474121095,
-            "width": 104.99996948242188,
-            "height": 34.00001525878906
+            "x": -549.9999389648438,
+            "y": 222.0,
+            "width": 105.0,
+            "height": 34.0
         }
     },
     "m_Slots": [
@@ -664,9 +664,9 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -683.0000610351563,
-            "y": 36.99998474121094,
-            "width": 208.00003051757813,
+            "x": -1097.0,
+            "y": 4.999971866607666,
+            "width": 207.99993896484376,
             "height": 435.0
         }
     },
@@ -900,7 +900,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "Fuzziness",
     "m_StageCapability": 3,
-    "m_Value": 0.0,
+    "m_Value": 1.0,
     "m_DefaultValue": 0.0,
     "m_Labels": []
 }
@@ -1077,10 +1077,10 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -851.0000610351563,
-            "y": -60.000003814697269,
+            "x": -1230.0,
+            "y": -108.0,
             "width": 129.0,
-            "height": 34.000003814697269
+            "height": 33.99999237060547
         }
     },
     "m_Slots": [

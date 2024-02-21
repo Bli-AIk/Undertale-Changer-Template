@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 982987391135615427}
   - component: {fileID: 982987391135615424}
   - component: {fileID: 982987391135615429}
+  - component: {fileID: -3986950880560235883}
   m_Layer: 0
   m_Name: Board Template
   m_TagString: board
@@ -97,8 +98,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f03e0026e1a83dc43a0a42ec371ed070, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  width: 2.1
   canMove: 0
   keepEdge: 0
   boards:
   - {fileID: 21300000, guid: b55a24d718987964e807164c259fa549, type: 3}
   - {fileID: 21300000, guid: 00fdb8a813f47c74ab5ac877f0448b8f, type: 3}
+--- !u!114 &-3986950880560235883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 982987391135615425}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0ab0ccf84302814c95fe0feb2247a96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

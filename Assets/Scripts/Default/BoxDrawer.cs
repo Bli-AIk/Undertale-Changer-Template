@@ -13,6 +13,7 @@ using UnityEditor;
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(LineRenderer))]
+[RequireComponent(typeof(EdgeCollider2D))]
 
 public class BoxDrawer : MonoBehaviour
 {
@@ -42,6 +43,7 @@ public class BoxDrawer : MonoBehaviour
     public MeshFilter meshFilter;
     public MeshRenderer meshRenderer;
     public LineRenderer lineRenderer;
+    public EdgeCollider2D edgeCollider2D;
 
 
     [Header("设置其是否为特殊框")]
@@ -75,17 +77,18 @@ public class BoxDrawer : MonoBehaviour
         //BoxController.instance.boxes.Add(this);
 
 
-        lineRenderer = transform.GetComponent<LineRenderer>();
+        lineRenderer = GetComponent<LineRenderer>();
 
         lineRenderer.startWidth = width;
         lineRenderer.endWidth = width;
         lineRenderer.material = Resources.Load<Material>("Materials/BoxLine");
         lineRenderer.loop = true;
 
-        meshFilter = transform.GetComponent<MeshFilter>();
-
-        meshRenderer = transform.GetComponent<MeshRenderer>();
+        edgeCollider2D = GetComponent<EdgeCollider2D>();
+        meshFilter = GetComponent<MeshFilter>();
+        meshRenderer = GetComponent<MeshRenderer>();
         meshRenderer.material = Resources.Load<Material>("Materials/BoxBack");
+
     }
 
     //float testTimer;
@@ -278,7 +281,7 @@ public class BoxDrawer : MonoBehaviour
     /// </summary>
     public List<Vector2> SummonBox()
     {
-        return BoxController.instance.SummonBox(realPoints, rotation, transform, width, lineRenderer, meshFilter);
+        return BoxController.instance.SummonBox(realPoints, rotation, transform, width, lineRenderer, edgeCollider2D, meshFilter);
 
     }
     public List<Vector2> GetRealPoints() 
@@ -636,7 +639,7 @@ public class SceneExtEditor : Editor
         {
             EditorGUI.BeginChangeCheck();
 
-            Vector3 newVertexPoints = Quaternion.Inverse(rotation) * Handles.PositionHandle(example.localPosition + rotation * vertices[i], rotation);
+            Vector3 newVertexPoints = Quaternion.Inverse(rotation) * Handles.PositionHandle(example.transform.parent.localPosition + example.localPosition + rotation * vertices[i], rotation) - example.transform.parent.localPosition;
 
             if (EditorGUI.EndChangeCheck())
             {
@@ -657,7 +660,7 @@ public class SceneExtEditor : Editor
 
 
         EditorGUI.BeginChangeCheck();
-        Vector3 gameObjectPos = Handles.PositionHandle(localPosition, rotation);
+        Vector3 gameObjectPos = Handles.PositionHandle(example.transform.parent.localPosition + localPosition, rotation) - example.transform.parent.localPosition;
         if (EditorGUI.EndChangeCheck())
         {
 

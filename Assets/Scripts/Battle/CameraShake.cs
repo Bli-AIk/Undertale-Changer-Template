@@ -42,8 +42,6 @@ public class CameraShake : MonoBehaviour
         else
             transformer = transform.Find(getSon);
 
-        DebugLogger.Log(transformer, transformer);
-
         tweenMove.Kill(true);
         tweenSpin.Kill(true);
 

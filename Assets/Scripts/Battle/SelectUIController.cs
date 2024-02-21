@@ -648,7 +648,7 @@ public class SelectUIController : MonoBehaviour
                             else
                             {
                                 textUI.text = "";
-                                MainControl.instance.battlePlayerController.transform.position = new Vector3(0, -1.5f);
+                                MainControl.instance.battlePlayerController.transform.position = MainControl.instance.battlePlayerController.sceneDrift;
                                 OpenDialogBubble(MainControl.instance.BattleControl.turnDialogAsset[TurnController.instance.turn]);
                             }
                             SpriteChange();
@@ -676,10 +676,10 @@ public class SelectUIController : MonoBehaviour
 
                 if (((selectUI == 1) && !target.gameObject.activeSelf))
                 {
-                    if (MainControl.instance.battlePlayerController.transform.position != new Vector3(0, -1.5f))
+                    if (MainControl.instance.battlePlayerController.transform.position != MainControl.instance.battlePlayerController.sceneDrift)
                     {
                         textUI.text = "";
-                        MainControl.instance.battlePlayerController.transform.position = new Vector3(0, -1.5f);
+                        MainControl.instance.battlePlayerController.transform.position = MainControl.instance.battlePlayerController.sceneDrift;
                         OpenDialogBubble(MainControl.instance.BattleControl.turnDialogAsset[TurnController.instance.turn]);
                     }
                 }
@@ -691,7 +691,7 @@ public class SelectUIController : MonoBehaviour
                         if (selectUI != 1 && textUI.text == "")
                         {
                             OpenDialogBubble(MainControl.instance.BattleControl.turnDialogAsset[TurnController.instance.turn]);
-                            MainControl.instance.battlePlayerController.transform.position = new Vector2(0, -1.5f);
+                            MainControl.instance.battlePlayerController.transform.position = MainControl.instance.battlePlayerController.sceneDrift;
                             break;
                         }
                         if (selectUI != 1 && !typeWritter.isTyping)
@@ -699,7 +699,7 @@ public class SelectUIController : MonoBehaviour
                             if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
                             {
                                 textUI.text = "";
-                                MainControl.instance.battlePlayerController.transform.position = new Vector2(0, -1.5f);
+                                MainControl.instance.battlePlayerController.transform.position = MainControl.instance.battlePlayerController.sceneDrift;
                                 OpenDialogBubble(MainControl.instance.BattleControl.turnDialogAsset[TurnController.instance.turn]);
                             }
                         }

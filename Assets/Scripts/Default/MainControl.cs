@@ -362,6 +362,13 @@ public class MainControl : MonoBehaviour
         text += "FF>";
         return text;
     }
+    /// <summary>
+    /// 生成字符串形式的随机颜色。
+    /// </summary>
+    public string RandomStringColor(string origin)
+    {
+        return RandomStringColor() + origin + "</color>";
+    }
 
     private void EndBlack()
     {
@@ -2147,7 +2154,7 @@ public class MainControl : MonoBehaviour
         if (!(PlayerControl.isDebug && PlayerControl.invincible))
         {
             //spriteRenderer.color = Color.red;
-            OverworldControl.playerDeadPos = transform.position;
+            OverworldControl.playerDeadPos = transform.position - battlePlayerController.sceneDrift;
             OverworldControl.pause = true;
             TurnController.instance.KillIEnumerator();
             SwitchScene("Gameover", false);
@@ -2181,5 +2188,18 @@ public class MainControl : MonoBehaviour
 
         return center;
     }
-    
+
+    /// <summary>
+    /// 在球体表面上生成随机点
+    /// </summary>
+    public Vector3 RandomPointOnSphereSurface(float minRandomValue, float maxRandomValue, float sphereRadius, Vector3 sphereCenter)
+    {
+        Vector3 randomDirection = UnityEngine.Random.onUnitSphere;
+
+        randomDirection *= sphereRadius;
+
+        Vector3 randomPointOnSphere = sphereCenter + randomDirection;
+
+        return randomPointOnSphere;
+    }
 }
