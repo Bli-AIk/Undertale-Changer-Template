@@ -289,7 +289,7 @@ public class BoxController : ObjectPool
         // 将每个点先旋转，然后再加上物体的位置
         for (int i = 0; i < polygon.Count; i++)
         {
-            polygon[i] = rotation * polygon[i] + transform.position;
+            polygon[i] = rotation * polygon[i] + transform.localPosition;
         }
 
         polygon = RemoveDuplicates(polygon);
