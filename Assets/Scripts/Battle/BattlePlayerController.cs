@@ -304,7 +304,7 @@ public class BattlePlayerController : MonoBehaviour
                         }
                         if (isJump && (!MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("frame"))) && moving.y < -0)
                         {
-                            if (infoF.transform.position.z == transform.position.z)
+                            if (infoF.collider != null && infoF.transform.position.z == transform.position.z)
                             {
                                 jumpRayDistanceForBoard = 0.2f;
                                 moving = new Vector3(moving.x, -0);
@@ -376,7 +376,7 @@ public class BattlePlayerController : MonoBehaviour
                         }
                         if (isJump && (!MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("frame"))) && moving.y > 0)
                         {
-                            if (infoF.transform.position.z == transform.position.z)
+                            if (infoF.collider != null && infoF.transform.position.z == transform.position.z)
                             {
                                 jumpRayDistanceForBoard = 0.2f;
                                 moving = new Vector3(moving.x, 0);
@@ -450,7 +450,7 @@ public class BattlePlayerController : MonoBehaviour
                         if (isJump && (!MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("frame"))) && moving.x > 0)
                         {
 
-                            if (infoF.transform.position.z == transform.position.z)
+                            if (infoF.collider != null && infoF.transform.position.z == transform.position.z)
                             {
                                 jumpRayDistanceForBoard = 0.2f;
                                 moving = new Vector3(0, moving.y);
@@ -523,7 +523,7 @@ public class BattlePlayerController : MonoBehaviour
                         }
                         if (isJump && (!MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("frame"))) && moving.x < -0)
                         {
-                            if (infoF.transform.position.z == transform.position.z)
+                            if (infoF.collider != null && infoF.transform.position.z == transform.position.z)
                             {
                                 jumpRayDistanceForBoard = 0.2f;
                                 moving = new Vector3(-0, moving.y);
@@ -925,6 +925,7 @@ public class BattlePlayerController : MonoBehaviour
                 //DebugLogger.Log(point, DebugLogger.Type.war, "#FF00FF"); // 记录日志
                 return point; // 返回原始坐标
             }
+
         }
 
         Vector2 nearestPoint = Vector2.zero; // 初始化最近点
