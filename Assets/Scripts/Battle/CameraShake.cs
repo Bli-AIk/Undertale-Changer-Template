@@ -17,7 +17,7 @@ public class CameraShake : MonoBehaviour
         if (moveWithHeart && !TurnController.instance.isMyTurn)
         {
             transform.position = new Vector3(moveExtent.x * (MainControl.instance.battlePlayerController.transform.position.x - heartBasicPos.x),
-                                             MainControl.instance.battlePlayerController.transform.position.z, 
+                                             0, 
                                              moveExtent.y * (MainControl.instance.battlePlayerController.transform.position.y - heartBasicPos.y));
         }
         if (moveWithHeart && tweenMoveBack == null && TurnController.instance.isMyTurn && transform.position != Vector3.zero)

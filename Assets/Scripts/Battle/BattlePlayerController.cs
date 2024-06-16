@@ -21,7 +21,7 @@ public class BattlePlayerController : MonoBehaviour
     public float hitCD, hitCDMax;//无敌时间
     public bool isMoving;//用于蓝橙骨判断：玩家是否真的在移动
     public float timeInterpolation = -0.225f;
-    public Vector3 sceneDrift = new Vector3(-1000, 0);
+    public Vector2 sceneDrift = new Vector2(-1000, 0);
     public enum PlayerDirEnum
     {
         up,
@@ -79,7 +79,7 @@ public class BattlePlayerController : MonoBehaviour
             if (!(MainControl.instance.PlayerControl.isDebug && MainControl.instance.PlayerControl.invincible))
             {
                 spriteRenderer.color = Color.red;
-                MainControl.instance.OverworldControl.playerDeadPos = transform.position - sceneDrift;
+                MainControl.instance.OverworldControl.playerDeadPos = transform.position - (Vector3)sceneDrift;
                 MainControl.instance.OverworldControl.pause = true;
                 TurnController.instance.KillIEnumerator();
                 MainControl.instance.SwitchScene("Gameover", false);
@@ -304,13 +304,15 @@ public class BattlePlayerController : MonoBehaviour
                         }
                         if (isJump && (!MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("frame"))) && moving.y < -0)
                         {
-                            jumpRayDistanceForBoard = 0.2f;
-                            moving = new Vector3(moving.x, -0);
-
+                            if (infoF.transform.position.z == transform.position.z)
+                            {
+                                jumpRayDistanceForBoard = 0.2f;
+                                moving = new Vector3(moving.x, -0);
+                            }
                         }
                         if (isJump)
                         {
-                            if (info.collider != null)
+                            if (info.collider != null && info.transform.position.z == transform.position.z)
                             {
                                 GameObject obj = info.collider.gameObject;
                                 if (obj.transform.CompareTag("frame"))
@@ -374,12 +376,16 @@ public class BattlePlayerController : MonoBehaviour
                         }
                         if (isJump && (!MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("frame"))) && moving.y > 0)
                         {
-                            jumpRayDistanceForBoard = 0.2f;
-                            moving = new Vector3(moving.x, 0);
+                            if (infoF.transform.position.z == transform.position.z)
+                            {
+                                jumpRayDistanceForBoard = 0.2f;
+                                moving = new Vector3(moving.x, 0);
+                            }
+
                         }
                         if (isJump)
                         {
-                            if (info.collider != null)
+                            if (info.collider != null && info.transform.position.z == transform.position.z)
                             {
                                 GameObject obj = info.collider.gameObject;
                                 if (obj.transform.CompareTag("frame"))
@@ -443,13 +449,16 @@ public class BattlePlayerController : MonoBehaviour
                         }
                         if (isJump && (!MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("frame"))) && moving.x > 0)
                         {
-                            jumpRayDistanceForBoard = 0.2f;
-                            moving = new Vector3(0, moving.y);
 
+                            if (infoF.transform.position.z == transform.position.z)
+                            {
+                                jumpRayDistanceForBoard = 0.2f;
+                                moving = new Vector3(0, moving.y);
+                            }
                         }
                         if (isJump)
                         {
-                            if (info.collider != null)
+                            if (info.collider != null && info.transform.position.z == transform.position.z)
                             {
                                 GameObject obj = info.collider.gameObject;
                                 if (obj.transform.CompareTag("frame"))
@@ -514,13 +523,15 @@ public class BattlePlayerController : MonoBehaviour
                         }
                         if (isJump && (!MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("frame"))) && moving.x < -0)
                         {
-                            jumpRayDistanceForBoard = 0.2f;
-                            moving = new Vector3(-0, moving.y);
-
+                            if (infoF.transform.position.z == transform.position.z)
+                            {
+                                jumpRayDistanceForBoard = 0.2f;
+                                moving = new Vector3(-0, moving.y);
+                            }
                         }
                         if (isJump)
                         {
-                            if (info.collider != null)
+                            if (info.collider != null && info.transform.position.z == transform.position.z)
                             {
                                 GameObject obj = info.collider.gameObject;
                                 if (obj.transform.CompareTag("frame"))
@@ -642,15 +653,17 @@ public class BattlePlayerController : MonoBehaviour
         moving.y = MainControl.instance.JudgmentNumber(false, moving.y, -5);
         moving.x = MainControl.instance.JudgmentNumber(true, moving.x, 5);
         moving.y = MainControl.instance.JudgmentNumber(true, moving.y, 5);
-
+        
         Vector3 newPos = transform.position + new Vector3(speedWeightX * speed * moving.x * Time.deltaTime, speedWeightY * speed * moving.y * Time.deltaTime);//速度参考：3
+
         Vector3 checkPos = CheckPoint(newPos, 0.175f + BoxController.instance.width / 2);
 
         if (newPos == checkPos)
             rigidBody.MovePosition(newPos);
         else
             transform.position = checkPos;
-        //transform.position = transform.position + new Vector3(speed * moving.x * Time.deltaTime, speed * moving.y * Time.deltaTime);//蓝心会有巨大偏差 不采用
+
+
         if (movingSave != 0)
             moving.y = movingSave;
     }
@@ -886,22 +899,27 @@ public class BattlePlayerController : MonoBehaviour
         return true; // 返回true，表示找到交点
     }
     // 定义根据位移检查并调整点位置的方法
-    public Vector2 CheckPoint(Vector2 point, float displacement, int maxDepth = 10, int currentDepth = 0, bool isInitialCall = true)
+    public Vector3 CheckPoint(Vector3 point, float displacement, int maxDepth = 10, int currentDepth = 0, bool isInitialCall = true)
     {
         Vector2 originalPoint = point; // 保存原始点位置
+        float z = point.z;
         if (currentDepth >= maxDepth) // 检查是否达到递归次数限制
         {
             return point; // 如果达到最大次数，返回当前点
         }
 
-        foreach (var box in BoxController.instance.boxes) // 遍历所有盒子对象
+        foreach (var box in BoxController.instance.boxes) // 遍历所有战斗框
         {
-            List<Vector2> movedVertices = CalculateInwardOffset(box.GetRealPoints(), -displacement); // 计算缩放后的多边形顶点
+            if (box.localPosition.z != z)//排除Z轴不同的
+                continue;
 
+            List<Vector2> movedVertices = CalculateInwardOffset(box.GetRealPoints(false), -displacement); // 计算缩放后的多边形顶点
+            /*
             foreach (var item in movedVertices) // 遍历移动后的顶点
             {
                 //DebugLogger.Log(item, DebugLogger.Type.err); // 记录日志
             }
+            */
             if (IsPointInPolygon(point, movedVertices)) // 如果点在调整后的多边形内
             {
                 //DebugLogger.Log(point, DebugLogger.Type.war, "#FF00FF"); // 记录日志
@@ -913,17 +931,21 @@ public class BattlePlayerController : MonoBehaviour
         Vector2 lineStart = Vector2.zero; // 初始化线段起点
         Vector2 lineEnd = Vector2.zero; // 初始化线段终点
         float nearestDistance = float.MaxValue; // 初始化最近距离为最大值
-        foreach (var box in BoxController.instance.boxes) // 遍历所有盒子
+        foreach (var box in BoxController.instance.boxes) // 遍历所有战斗框
         {
-            for (int i = 0, j = box.GetRealPoints().Count - 1; i < box.GetRealPoints().Count; j = i++) // 遍历盒子的所有边
+            if (box.localPosition.z != z)//排除Z轴不同的
+                continue;
+
+
+            for (int i = 0, j = box.GetRealPoints(false).Count - 1; i < box.GetRealPoints(false).Count; j = i++) // 遍历盒子的所有边
             {
-                Vector2 tempNearestPoint = GetNearestPointOnLine(point, box.GetRealPoints()[i], box.GetRealPoints()[j]); // 计算到当前边的最近点
+                Vector2 tempNearestPoint = GetNearestPointOnLine(point, box.GetRealPoints(false)[i], box.GetRealPoints(false)[j]); // 计算到当前边的最近点
                 float tempDistance = Vector2.Distance(point, tempNearestPoint); // 计算距离
                 if (tempDistance < nearestDistance) // 如果距离更短
                 {
                     nearestPoint = tempNearestPoint; // 更新最近点
-                    lineStart = box.GetRealPoints()[i]; // 更新线段起点
-                    lineEnd = box.GetRealPoints()[j]; // 更新线段终点
+                    lineStart = box.GetRealPoints(false)[i]; // 更新线段起点
+                    lineEnd = box.GetRealPoints(false)[j]; // 更新线段终点
                     nearestDistance = tempDistance; // 更新最近距离
                 }
             }
@@ -931,12 +953,12 @@ public class BattlePlayerController : MonoBehaviour
 
         if (nearestDistance < float.MaxValue) // 如果找到最近点
         {
-            Vector2 moved = CalculateDisplacedPoint(nearestPoint, point, lineStart, lineEnd, -displacement); // 计算位移后的点位置
+            Vector3 moved = (Vector3)CalculateDisplacedPoint(nearestPoint, point, lineStart, lineEnd, -displacement) + new Vector3(0, 0, z); // 计算位移后的点位置
             //DebugLogger.Log(moved, DebugLogger.Type.war, "#FF0000"); // 记录日志
 
-            if (isInitialCall || moved != originalPoint) // 如果是初次调用或移动后的点不等于原点
+            if (isInitialCall || (Vector2)moved != originalPoint) // 如果是初次调用或移动后的点不等于原点
             {
-                Vector2 newCheck = CheckPoint(moved, displacement, maxDepth, currentDepth + 1, false); // 递归调用，增加递归深度
+                Vector3 newCheck = (Vector3)(Vector2)CheckPoint(moved, displacement, maxDepth, currentDepth + 1, false) + new Vector3(0, 0, z); // 递归调用，增加递归深度
                 if (newCheck != moved) // 如果移动后的点未通过检测
                 {
                     // 因为已经在递归中处理递归深度，所以这里不需要再次调用CheckPoint
@@ -946,7 +968,7 @@ public class BattlePlayerController : MonoBehaviour
             }
         }
 
-        return originalPoint; // 如果没有找到更近的点，返回原点
+        return point;// 如果没有找到更近的点，返回原点
     }
 }
 
@@ -1007,7 +1029,7 @@ public class BattlePlayerController : MonoBehaviour
                             Ray2D ray = new Ray2D(transform.position, dirReal);
                             Debug.DrawRay(ray.origin, ray.direction, Color.blue, collideCollider.radius + 0.05f);
                             RaycastHit2D info = Physics2D.Raycast(transform.position, dirReal, collideCollider.radius + 0.05f);//距离为圆碰撞器+0.05f
-                            if (info.collider != null)
+                            if (info.collider != null && info.transform.position.z == transform.position.z)
                             {
                                 GameObject obj = info.collider.gameObject;
                                 if (obj.transform.CompareTag("frame")

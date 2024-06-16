@@ -160,7 +160,7 @@ public class SelectUIController : MonoBehaviour
     /// </summary>
     private void LayerOneSet()
     {
-        MainControl.instance.battlePlayerController.transform.position = new Vector3(-5.175f, -0.96f - selectSon * 0.66f);
+        MainControl.instance.battlePlayerController.transform.position = new Vector3(-5.175f, -0.96f - selectSon * 0.66f, MainControl.instance.battlePlayerController.transform.position.z);
         if (MainControl.instance.KeyArrowToControl(KeyCode.DownArrow) && selectSon < MainControl.instance.BattleControl.enemies.Count - 1)
         {
             selectSon++;
@@ -201,7 +201,7 @@ public class SelectUIController : MonoBehaviour
         {
             case 0:
 
-                MainControl.instance.battlePlayerController.transform.position = playerUIPos[selectUI - 1];
+                MainControl.instance.battlePlayerController.transform.position = (Vector3)playerUIPos[selectUI - 1] + new Vector3(0, 0, MainControl.instance.battlePlayerController.transform.position.z);
                 if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow))
                 {
                     AudioController.instance.GetFx(0, MainControl.instance.AudioControl.fxClipUI);
@@ -302,9 +302,7 @@ public class SelectUIController : MonoBehaviour
                             target.select = selectSon;
                             target.transform.Find("Move").transform.position = new Vector3(MainControl.instance.BattleControl.enemies[selectSon].transform.position.x, target.transform.Find("Move").transform.position.y);
                             target.hitMonster = enemiesControllers[selectSon];
-
-                            DebugLogger.Log(1111);
-                            MainControl.instance.battlePlayerController.transform.position = Vector2.one * 10000;
+                            MainControl.instance.battlePlayerController.transform.position = (Vector3)(Vector2.one * 10000) + new Vector3(0, 0, MainControl.instance.battlePlayerController.transform.position.z); 
                         }
                         break;
 
@@ -342,7 +340,7 @@ public class SelectUIController : MonoBehaviour
                         break;
 
                     case 3://ITEM£ºÌø2
-                        itemSelectController.myItemMax = MainControl.instance.FindMax(MainControl.instance.PlayerControl.myItems); ;
+                        itemSelectController.myItemMax = MainControl.instance.FindMax(MainControl.instance.PlayerControl.myItems);
                         itemSelectController.Open();
                         selectLayer = 2;
 
@@ -412,7 +410,7 @@ public class SelectUIController : MonoBehaviour
                         {
                             playerPosY = -0.96f - 1 * 0.66f;
                         }
-                        MainControl.instance.battlePlayerController.transform.position = new Vector3(playerPosX, playerPosY);
+                        MainControl.instance.battlePlayerController.transform.position = new Vector3(playerPosX, playerPosY, MainControl.instance.battlePlayerController.transform.position.z);
                         if (MainControl.instance.KeyArrowToControl(KeyCode.X))
                         {
                             selectLayer = 1;
@@ -497,7 +495,7 @@ public class SelectUIController : MonoBehaviour
 
                             textUIBack.text = "";
                             selectLayer = 3;
-                            MainControl.instance.battlePlayerController.transform.position = Vector2.one * 10000;
+                            MainControl.instance.battlePlayerController.transform.position = (Vector3)(Vector2.one * 10000) + new Vector3(0, 0, MainControl.instance.battlePlayerController.transform.position.z);
                             Type(actSave[2 * (selectGrandSon + 1) - 3]);
                             SpriteChange();
                             itemSelectController.Close();
@@ -525,8 +523,8 @@ public class SelectUIController : MonoBehaviour
                         }
                         else if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
                         {
-                            selectLayer = 3;
-                            MainControl.instance.battlePlayerController.transform.position = Vector2.one * 10000;
+                            selectLayer = 3; 
+                            MainControl.instance.battlePlayerController.transform.position = (Vector3)(Vector2.one * 10000) + new Vector3(0, 0, MainControl.instance.battlePlayerController.transform.position.z);
                             MainControl.instance.UseItem(typeWritter, textUI, selectSon + 1);
                             SpriteChange();
                             itemSelectController.Close();
@@ -591,7 +589,7 @@ public class SelectUIController : MonoBehaviour
                                 itemSelectController.myItemSelect = selectSon + (num - myItemMax);
                         }
                         itemSelectController.myItemRealSelect = selectSon;
-                        MainControl.instance.battlePlayerController.transform.position = new Vector3(-5.175f, -0.96f - (selectGrandSon - 1) * 0.66f);
+                        MainControl.instance.battlePlayerController.transform.position = new Vector3(-5.175f, -0.96f - (selectGrandSon - 1) * 0.66f, MainControl.instance.battlePlayerController.transform.position.z);
 
                         textUI.text = "<color=#00000000>aa*</color>* " + MainControl.instance.ItemIdGetName(MainControl.instance.PlayerControl.myItems[selectSon - (selectGrandSon - 1)], "Auto", 0) + "\n" +
                                        textUITextChanger1 + textUITextChanger2;
@@ -628,7 +626,7 @@ public class SelectUIController : MonoBehaviour
                         break;
 
                     case 4:
-                        MainControl.instance.battlePlayerController.transform.position = new Vector3(-5.175f, -0.96f - (selectGrandSon - 1) * 0.66f);
+                        MainControl.instance.battlePlayerController.transform.position = new Vector3(-5.175f, -0.96f - (selectGrandSon - 1) * 0.66f, MainControl.instance.battlePlayerController.transform.position.z);
                         if (MainControl.instance.KeyArrowToControl(KeyCode.X))
                         {
                             selectLayer = 1;
@@ -642,13 +640,13 @@ public class SelectUIController : MonoBehaviour
                         else if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
                         {
                             selectLayer = 3;
-                            MainControl.instance.battlePlayerController.transform.position = Vector2.one * 10000;
+                            MainControl.instance.battlePlayerController.transform.position = (Vector3)(Vector2.one * 10000) + new Vector3(0, 0, MainControl.instance.battlePlayerController.transform.position.z);
                             if (actSave[2 * (selectGrandSon + 1) - 3] != "Null")
                                 Type(actSave[2 * (selectGrandSon + 1) - 3]);
                             else
                             {
                                 textUI.text = "";
-                                MainControl.instance.battlePlayerController.transform.position = MainControl.instance.battlePlayerController.sceneDrift;
+                                MainControl.instance.battlePlayerController.transform.position = (Vector3)MainControl.instance.battlePlayerController.sceneDrift + new Vector3(0, 0, MainControl.instance.battlePlayerController.transform.position.z);
                                 OpenDialogBubble(MainControl.instance.BattleControl.turnDialogAsset[TurnController.instance.turn]);
                             }
                             SpriteChange();
@@ -676,10 +674,10 @@ public class SelectUIController : MonoBehaviour
 
                 if (((selectUI == 1) && !target.gameObject.activeSelf))
                 {
-                    if (MainControl.instance.battlePlayerController.transform.position != MainControl.instance.battlePlayerController.sceneDrift)
+                    if (MainControl.instance.battlePlayerController.transform.position != (Vector3)MainControl.instance.battlePlayerController.sceneDrift + new Vector3(0, 0, MainControl.instance.battlePlayerController.transform.position.z))
                     {
                         textUI.text = "";
-                        MainControl.instance.battlePlayerController.transform.position = MainControl.instance.battlePlayerController.sceneDrift;
+                        MainControl.instance.battlePlayerController.transform.position = (Vector3)MainControl.instance.battlePlayerController.sceneDrift + new Vector3(0, 0, MainControl.instance.battlePlayerController.transform.position.z);
                         OpenDialogBubble(MainControl.instance.BattleControl.turnDialogAsset[TurnController.instance.turn]);
                     }
                 }
@@ -691,7 +689,7 @@ public class SelectUIController : MonoBehaviour
                         if (selectUI != 1 && textUI.text == "")
                         {
                             OpenDialogBubble(MainControl.instance.BattleControl.turnDialogAsset[TurnController.instance.turn]);
-                            MainControl.instance.battlePlayerController.transform.position = MainControl.instance.battlePlayerController.sceneDrift;
+                            MainControl.instance.battlePlayerController.transform.position = (Vector3)MainControl.instance.battlePlayerController.sceneDrift + new Vector3(0, 0, MainControl.instance.battlePlayerController.transform.position.z);
                             break;
                         }
                         if (selectUI != 1 && !typeWritter.isTyping)
@@ -699,7 +697,7 @@ public class SelectUIController : MonoBehaviour
                             if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
                             {
                                 textUI.text = "";
-                                MainControl.instance.battlePlayerController.transform.position = MainControl.instance.battlePlayerController.sceneDrift;
+                                MainControl.instance.battlePlayerController.transform.position = (Vector3)MainControl.instance.battlePlayerController.sceneDrift + new Vector3(0, 0, MainControl.instance.battlePlayerController.transform.position.z);
                                 OpenDialogBubble(MainControl.instance.BattleControl.turnDialogAsset[TurnController.instance.turn]);
                             }
                         }

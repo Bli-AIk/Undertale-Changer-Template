@@ -2154,7 +2154,7 @@ public class MainControl : MonoBehaviour
         if (!(PlayerControl.isDebug && PlayerControl.invincible))
         {
             //spriteRenderer.color = Color.red;
-            OverworldControl.playerDeadPos = transform.position - battlePlayerController.sceneDrift;
+            OverworldControl.playerDeadPos = transform.position - (Vector3)battlePlayerController.sceneDrift;
             OverworldControl.pause = true;
             TurnController.instance.KillIEnumerator();
             SwitchScene("Gameover", false);

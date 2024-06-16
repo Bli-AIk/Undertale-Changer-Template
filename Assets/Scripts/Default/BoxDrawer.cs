@@ -85,6 +85,8 @@ public class BoxDrawer : MonoBehaviour
         lineRenderer.loop = true;
 
         edgeCollider2D = GetComponent<EdgeCollider2D>();
+        edgeCollider2D.isTrigger = true;
+
         meshFilter = GetComponent<MeshFilter>();
         meshRenderer = GetComponent<MeshRenderer>();
         meshRenderer.material = Resources.Load<Material>("Materials/BoxBack");
@@ -284,9 +286,9 @@ public class BoxDrawer : MonoBehaviour
         return BoxController.instance.SummonBox(realPoints, rotation, transform, width, lineRenderer, edgeCollider2D, meshFilter);
 
     }
-    public List<Vector2> GetRealPoints() 
+    public List<Vector2> GetRealPoints(bool isLocal = true) 
     {
-        return BoxController.instance.GetRealPoints(realPoints, rotation, transform);
+        return BoxController.instance.GetRealPoints(realPoints, rotation, transform, isLocal);
     }
     
     /// <summary>

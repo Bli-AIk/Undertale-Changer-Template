@@ -283,13 +283,15 @@ public class BoxController : ObjectPool
     /// <summary>
     /// 计算坐标获取RealPoints
     /// </summary>
-    public List<Vector2> GetRealPoints(List<Vector2> list, Quaternion rotation, Transform transform)
+    public List<Vector2> GetRealPoints(List<Vector2> list, Quaternion rotation, Transform transform, bool isLocal = true)
     {
+        Vector3 local = isLocal ? transform.localPosition : transform.position;
+
         List<Vector2> polygon = new List<Vector2>(list);
         // 将每个点先旋转，然后再加上物体的位置
         for (int i = 0; i < polygon.Count; i++)
         {
-            polygon[i] = rotation * polygon[i] + transform.localPosition;
+            polygon[i] = rotation * polygon[i] + local;
         }
 
         polygon = RemoveDuplicates(polygon);
