@@ -6888,6 +6888,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9f39c8fbace57c4b9fb0522a52a9bbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  test1: -0.5
+  test2: 0.05
   dingTime: 0.5
   gradientTime: 0.5
   speed: 3
@@ -6897,7 +6899,7 @@ MonoBehaviour:
   hitCDMax: 0
   isMoving: 0
   timeInterpolation: -0.225
-  sceneDrift: {x: -1000, y: 0, z: 0}
+  sceneDrift: {x: -1000, y: 0}
   playerDir: 0
   moving: {x: 0, y: 0, z: 0}
   isJump: 0

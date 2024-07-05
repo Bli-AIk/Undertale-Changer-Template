@@ -60,8 +60,8 @@ public class BoxDrawer : MonoBehaviour
     [Header("重合点")]
     public List<Vector2> pointsInCross;//交点/非重合点/重合点
 
-    public BoxDrawer parent;//你不许说他 他是我爹
-    public List<BoxDrawer> sonBoxDrawer;//存储孩子们
+    public BoxDrawer parent;//此框的复合父级
+    public List<BoxDrawer> sonBoxDrawer;//此框的子级
 
 #if UNITY_EDITOR
     [Header("给Editor用的")]
@@ -96,6 +96,11 @@ public class BoxDrawer : MonoBehaviour
     //float testTimer;
     public void Update()
     {
+        if (parent != null)
+            transform.tag = "Untagged";
+        else
+            transform.tag = "frame";
+
         if (boxType == BoxController.BoxType.Sub)
             ClearComponentsData();
         /*
@@ -139,13 +144,16 @@ public class BoxDrawer : MonoBehaviour
 
         if (sonBoxDrawer.Count == 0 && transform.childCount == 0)//作为纯子级
         {
+
             if (isBessel)
                 realPoints = GenerateBezierCurve(besselPoints, besselInsertNum, besselPointsNum);
             else
                 realPoints = vertexPoints;
+
         }
         else if (sonBoxDrawer.Count == 2 && transform.childCount == 2)//作为父级
         {
+
             pointsSonSum.Clear();
 
             //更新一下两个子级的位置坐标
