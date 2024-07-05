@@ -5,9 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - bullet
-  - frame
   - board
   - owObjTrigger
+  - Box
   layers:
   - Default
   - TransparentFX

@@ -61,7 +61,7 @@ public class CanvasController : MonoBehaviour
         settingTmpUnder = settingTmp.transform.Find("Setting Under").GetComponent<TextMeshProUGUI>();
         setting = transform.Find("Setting").GetComponent<Image>();
 
-        frame = transform.Find("Frame").GetComponent<Image>();
+        frame = transform.Find("Box").GetComponent<Image>();
         typeWritters = (TypeWritter[])Resources.FindObjectsOfTypeAll(typeof(TypeWritter));
     }
 

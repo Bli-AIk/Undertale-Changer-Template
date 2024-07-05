@@ -54,7 +54,7 @@ public class BoxController : ObjectPool
         num++;
         newBoxDrawer.name = "Box" + num;
         newBoxDrawer.width = width;
-        newBoxDrawer.tag = "frame";
+        newBoxDrawer.tag = "Box";
         return newBoxDrawer;
     }
 

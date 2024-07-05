@@ -306,7 +306,7 @@ public class BattlePlayerController : MonoBehaviour
                             jumpRayDistance = 0.2f;
                             jumpRayDistanceForBoard = 0;
                         }
-                        if (isJump && (!MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("frame"))) && moving.y < -0)
+                        if (isJump && (!MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("Box"))) && moving.y < -0)
                         {
                             if (infoF.collider != null && infoF.transform.position.z == transform.position.z)
                             {
@@ -319,7 +319,7 @@ public class BattlePlayerController : MonoBehaviour
                             if (info.collider != null && info.transform.position.z == transform.position.z)
                             {
                                 GameObject obj = info.collider.gameObject;
-                                if (obj.transform.CompareTag("frame"))
+                                if (obj.transform.CompareTag("Box"))
                                 {
                                     BlueJumpReady();
                                 }
@@ -378,7 +378,7 @@ public class BattlePlayerController : MonoBehaviour
                             jumpRayDistance = 0.2f;
                             jumpRayDistanceForBoard = 0;
                         }
-                        if (isJump && (!MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("frame"))) && moving.y > 0)
+                        if (isJump && (!MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("Box"))) && moving.y > 0)
                         {
                             if (infoF.collider != null && infoF.transform.position.z == transform.position.z)
                             {
@@ -392,7 +392,7 @@ public class BattlePlayerController : MonoBehaviour
                             if (info.collider != null && info.transform.position.z == transform.position.z)
                             {
                                 GameObject obj = info.collider.gameObject;
-                                if (obj.transform.CompareTag("frame"))
+                                if (obj.transform.CompareTag("Box"))
                                 {
                                     BlueJumpReady();
                                 }
@@ -451,7 +451,7 @@ public class BattlePlayerController : MonoBehaviour
                             jumpRayDistance = 0.2f;
                             jumpRayDistanceForBoard = 0;
                         }
-                        if (isJump && (!MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("frame"))) && moving.x > 0)
+                        if (isJump && (!MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("Box"))) && moving.x > 0)
                         {
 
                             if (infoF.collider != null && infoF.transform.position.z == transform.position.z)
@@ -465,7 +465,7 @@ public class BattlePlayerController : MonoBehaviour
                             if (info.collider != null && info.transform.position.z == transform.position.z)
                             {
                                 GameObject obj = info.collider.gameObject;
-                                if (obj.transform.CompareTag("frame"))
+                                if (obj.transform.CompareTag("Box"))
                                 {
                                     BlueJumpReady();
                                 }
@@ -525,7 +525,7 @@ public class BattlePlayerController : MonoBehaviour
                             jumpRayDistance = 0.2f;
                             jumpRayDistanceForBoard = 0;
                         }
-                        if (isJump && (!MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("frame"))) && moving.x < -0)
+                        if (isJump && (!MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("Box"))) && moving.x < -0)
                         {
                             if (infoF.collider != null && infoF.transform.position.z == transform.position.z)
                             {
@@ -538,7 +538,7 @@ public class BattlePlayerController : MonoBehaviour
                             if (info.collider != null && info.transform.position.z == transform.position.z)
                             {
                                 GameObject obj = info.collider.gameObject;
-                                if (obj.transform.CompareTag("frame"))
+                                if (obj.transform.CompareTag("Box"))
                                 {
                                     BlueJumpReady();
                                 }
@@ -603,13 +603,13 @@ public class BattlePlayerController : MonoBehaviour
         Debug.DrawRay(rayMoveY.origin, rayMoveY.direction, new Color(0, 0.5f, 0, 1));
         RaycastHit2D infoMoveY = Physics2D.Raycast(transform.position, dirMoveY, 0.2f);
 
-        if (isMoveX && infoMoveX.collider != null && (infoMoveX.collider.gameObject.CompareTag("frame") || infoMoveX.collider.gameObject.CompareTag("board")))
+        if (isMoveX && infoMoveX.collider != null && (infoMoveX.collider.gameObject.CompareTag("Box") || infoMoveX.collider.gameObject.CompareTag("board")))
             isMoving = false;
 
         if (isMoveX || isMoveY)
         {
-            bool x = (isMoveX || isMoveY) && infoMoveX.collider != null && (infoMoveX.collider.gameObject.CompareTag("frame") || infoMoveX.collider.gameObject.CompareTag("board"));
-            bool y = (isMoveX || isMoveY) && infoMoveY.collider != null && (infoMoveY.collider.gameObject.CompareTag("frame") || infoMoveY.collider.gameObject.CompareTag("board"));
+            bool x = (isMoveX || isMoveY) && infoMoveX.collider != null && (infoMoveX.collider.gameObject.CompareTag("Box") || infoMoveX.collider.gameObject.CompareTag("board"));
+            bool y = (isMoveX || isMoveY) && infoMoveY.collider != null && (infoMoveY.collider.gameObject.CompareTag("Box") || infoMoveY.collider.gameObject.CompareTag("board"));
             if (x && !y && (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) || MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1)))
                 x = y;
             if (y && !x && (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1) || MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1)))
@@ -1050,7 +1050,7 @@ public class BattlePlayerController : MonoBehaviour
                             if (info.collider != null && info.transform.position.z == transform.position.z)
                             {
                                 GameObject obj = info.collider.gameObject;
-                                if (obj.transform.CompareTag("frame")
+                                if (obj.transform.CompareTag("Box")
                                 {
                                     isJump = false;
                                 }

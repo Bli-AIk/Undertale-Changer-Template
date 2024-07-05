@@ -99,7 +99,7 @@ public class BoxDrawer : MonoBehaviour
         if (parent != null)
             transform.tag = "Untagged";
         else
-            transform.tag = "frame";
+            transform.tag = "Box";
 
         if (boxType == BoxController.BoxType.Sub)
             ClearComponentsData();
