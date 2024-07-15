@@ -450,8 +450,8 @@ public class MainControl : MonoBehaviour
 
         return beats;
     }
-    int currentBeatIndex = 0;
-    float nextBeatTime = 0f;
+    public int currentBeatIndex = 0;
+    public float nextBeatTime = 0f;
     /// <summary>
     /// 控制节拍器
     /// </summary>
@@ -460,9 +460,10 @@ public class MainControl : MonoBehaviour
         if (beatTimes.Count <= 0)
             return;
 
-        if (currentBeatIndex < beatTimes.Count)
+        bool firstIn = true;
+        while (currentBeatIndex < beatTimes.Count && AudioController.instance.audioSource.time >= nextBeatTime)
         {
-            if (AudioController.instance.audioSource.time >= nextBeatTime)
+            if (firstIn)
             {
                 if (currentBeatIndex % 4 == 0)
                 {
@@ -472,16 +473,23 @@ public class MainControl : MonoBehaviour
                 {
                     AudioController.instance.GetFx(14, AudioControl.fxClipUI);
                 }
-
-                // 更新到下一个节拍时间
-                currentBeatIndex++;
-                if (currentBeatIndex < beatTimes.Count)
-                {
-                    nextBeatTime = beatTimes[currentBeatIndex];
-                }
             }
+            currentBeatIndex++;
+
+            if (currentBeatIndex < beatTimes.Count)
+            {
+                nextBeatTime = beatTimes[currentBeatIndex];
+            }
+            firstIn = false;
+        }
+
+        if (currentBeatIndex >= beatTimes.Count)
+        {
+            nextBeatTime = beatTimes[0];
+            currentBeatIndex = 0;
         }
     }
+
     /// <summary>
     /// 应用默认键位
     /// </summary>

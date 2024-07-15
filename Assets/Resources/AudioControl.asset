@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a3c08356e096c1e4dad5a50bfe5f03d2, type: 3}
   m_Name: AudioControl
   m_EditorClassIdentifier: 
+  globalAudioMixer: {fileID: 24100000, guid: a6cf569acc9617c4cbb8dfcbfdd23f21, type: 2}
   fxClipUI:
   - {fileID: 8300000, guid: 1f81fb3dfe91f2f4f98ef5e136cbe3b5, type: 3}
   - {fileID: 8300000, guid: 36ca1ecab2d402c4489630bcfed943e0, type: 3}
