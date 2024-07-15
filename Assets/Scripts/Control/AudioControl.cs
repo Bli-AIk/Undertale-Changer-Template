@@ -1,9 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 [CreateAssetMenu(fileName = "AudioControl", menuName = "AudioControl")]
 public class AudioControl : ScriptableObject
 {
+    public AudioMixer globalAudioMixer;
+    
     //public List<AudioClip> bgmClip;
     [Header("”√”⁄UI“Ù–ß")]
     public List<AudioClip> fxClipUI;

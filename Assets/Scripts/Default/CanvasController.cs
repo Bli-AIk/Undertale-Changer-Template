@@ -46,7 +46,7 @@ public class CanvasController : MonoBehaviour
 
     public Animator animator;
 
-    public float animSpeed = 0.5f;
+    public float animSpeed = 0.25f;
     private void Awake()
     {
         instance = this;

@@ -25,7 +25,12 @@ public class AudioController : ObjectPool
         audioSource = GetComponent<AudioSource>();
     }
 
-    public void GetFx(AudioClip list, float volume = 0.5f, float pitch = 1, AudioMixerGroup audioMixerGroup = null)
+    private void Start()
+    {
+        audioSource.outputAudioMixerGroup = MainControl.instance.AudioControl.globalAudioMixer.FindMatchingGroups("BGM")[0];
+    }
+    /*
+    public void GetFx(AudioClip list, float volume = 0.5f, float pitch = 1, AudioMixerGroup audioMixerGroup = default)
     {
         GameObject fx = GetFromPool();
         fx.GetComponent<AudioSource>().volume = volume;
@@ -34,14 +39,35 @@ public class AudioController : ObjectPool
         //AudioPlayer是字类！！不是unity自带的
         fx.GetComponent<AudioPlayer>().Playing(list);
     }
-
-    public void GetFx(int fxNum, List<AudioClip> list, float volume = 0.5f, float pitch = 1, AudioMixerGroup audioMixerGroup = null)
+    */
+    public void GetFx(int fxNum, List<AudioClip> list, float volume = 0.5f, float pitch = 1, AudioMixerGroup audioMixerGroup = default)
     {
         if (fxNum < 0)
             return;
         GameObject fx = GetFromPool();
         fx.GetComponent<AudioSource>().volume = volume;
         fx.GetComponent<AudioSource>().pitch = pitch;
+        if (audioMixerGroup == default)
+        {
+            if (list == MainControl.instance.AudioControl.fxClipUI)
+            {
+                audioMixerGroup = MainControl.instance.AudioControl.globalAudioMixer.FindMatchingGroups("FX/UI")[0];
+            }
+            else if (list == MainControl.instance.AudioControl.fxClipWalk)
+            {
+                audioMixerGroup = MainControl.instance.AudioControl.globalAudioMixer.FindMatchingGroups("FX/Walk")[0];
+
+            }
+            else if (list == MainControl.instance.AudioControl.fxClipBattle)
+            {
+                audioMixerGroup = MainControl.instance.AudioControl.globalAudioMixer.FindMatchingGroups("FX/Battle")[0];
+            }
+            else if (list == MainControl.instance.AudioControl.fxClipType)
+            {
+                audioMixerGroup = MainControl.instance.AudioControl.globalAudioMixer.FindMatchingGroups("FX/Type")[0];
+            }
+        }
+
         fx.GetComponent<AudioSource>().outputAudioMixerGroup = audioMixerGroup;
         //AudioPlayer是字类！！不是unity自带的
         fx.GetComponent<AudioPlayer>().Playing(list[fxNum]);

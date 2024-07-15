@@ -139,7 +139,7 @@ public class PlayerBehaviour : MonoBehaviour
 
                         if (saveOwObj.isSave)
                         {
-                            AudioController.instance.GetFx(MainControl.instance.AudioControl.fxClipUI[2]);
+                            AudioController.instance.GetFx(2, MainControl.instance.AudioControl.fxClipUI);
                             if (MainControl.instance.PlayerControl.hp < MainControl.instance.PlayerControl.hpMax)
                                 MainControl.instance.PlayerControl.hp = MainControl.instance.PlayerControl.hpMax;
                         }
