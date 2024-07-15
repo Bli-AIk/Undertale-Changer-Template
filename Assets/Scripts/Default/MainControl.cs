@@ -24,6 +24,21 @@ public class MainControl : MonoBehaviour
 
     public bool blacking = false;
 
+    [Header("-BGM BPM设置-")]
+    [Space]
+    [Header("BGM BPM")]
+    public float bpm;
+
+    [Header("BGM BPM偏移")]
+    public float bpmDeviation;
+
+    [Header("开启节拍器")]
+    public bool isMetronome;
+
+    [Header("-BGM BPM计算结果-")]
+    [Space]
+    public List<float> beatTimes;
+
     [Header("-MainControl设置-")]
     [Space]
     [Header("状态:正常,战斗内")]
@@ -347,6 +362,8 @@ public class MainControl : MonoBehaviour
         OverworldControl.isSetting = false;
 
         FindAndChangeAllSFX(OverworldControl.noSFX);
+
+        beatTimes = BGMBPMCount(bpm, bpmDeviation);
     }
 
     /// <summary>
@@ -408,8 +425,63 @@ public class MainControl : MonoBehaviour
             OverworldControl.fullScreen = !OverworldControl.fullScreen;
             SetResolution(OverworldControl.resolutionLevel);
         }
-    }
 
+        if (isMetronome)
+            Metronome();
+    }
+    /// <summary>
+    /// 计算BGM节拍
+    /// </summary>
+    List<float> BGMBPMCount(float bpm, float bpmDeviation, float musicDuration = 0)
+    {
+        if (musicDuration <= 0)
+            musicDuration = AudioController.instance.audioSource.clip.length;
+
+        float beatInterval = 60f / bpm;
+        float currentTime = bpmDeviation;
+        List<float> beats = new List<float>();
+
+        // 计算每个拍子的时间点，直到达到音乐时长
+        while (currentTime < musicDuration)
+        {
+            beats.Add(currentTime);
+            currentTime += beatInterval;
+        }
+
+        return beats;
+    }
+    int currentBeatIndex = 0;
+    float nextBeatTime = 0f;
+    /// <summary>
+    /// 控制节拍器
+    /// </summary>
+    void Metronome()
+    {
+        if (beatTimes.Count <= 0)
+            return;
+
+        if (currentBeatIndex < beatTimes.Count)
+        {
+            if (AudioController.instance.audioSource.time >= nextBeatTime)
+            {
+                if (currentBeatIndex % 4 == 0)
+                {
+                    AudioController.instance.GetFx(13, AudioControl.fxClipUI);
+                }
+                else
+                {
+                    AudioController.instance.GetFx(14, AudioControl.fxClipUI);
+                }
+
+                // 更新到下一个节拍时间
+                currentBeatIndex++;
+                if (currentBeatIndex < beatTimes.Count)
+                {
+                    nextBeatTime = beatTimes[currentBeatIndex];
+                }
+            }
+        }
+    }
     /// <summary>
     /// 应用默认键位
     /// </summary>

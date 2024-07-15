@@ -30,6 +30,15 @@ public class MainControlSummon : MonoBehaviour
     [Header("BGM循环播放初始状态")]
     public bool loop = true;
 
+    [Header("BGM BPM")]
+    public float bpm = 120;
+
+    [Header("BGM BPM偏移")]
+    public float bpmDeviation = 0;
+
+    [Header("初始化时开启节拍器")]
+    public bool openMetronome = false;
+
     [Header("-MainControl设置-")]
     [Space]
     [Header("黑场状态相关")]
@@ -93,6 +102,11 @@ public class MainControlSummon : MonoBehaviour
             mainControl.haveInOutBlack = haveInOutBlack;
             mainControl.noInBlack = noInBlack;
             mainControl.notPauseIn = notPauseIn;
+
+            mainControl.bpm = bpm;
+            mainControl.bpmDeviation = bpmDeviation;
+            mainControl.isMetronome = openMetronome;
+
             mainControl.InitializationOverworld();
             mainControl.Start();
             mainControl.SetResolution(instance.OverworldControl.resolutionLevel);
@@ -106,6 +120,10 @@ public class MainControlSummon : MonoBehaviour
         mainControl.haveInOutBlack = haveInOutBlack;
         mainControl.noInBlack = noInBlack;
         mainControl.notPauseIn = notPauseIn;
+
+        mainControl.bpm = bpm;
+        mainControl.bpmDeviation = bpmDeviation;
+        mainControl.isMetronome = openMetronome;
 
         mainControl.gameObject.name = "MainControl";
         mainControl.InitializationOverworld();

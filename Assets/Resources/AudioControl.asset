@@ -26,6 +26,8 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 6855e055d39e08147b377b32d5a0ce7e, type: 3}
   - {fileID: 8300000, guid: 39c857b261c543e4bb037f0aae775047, type: 3}
   - {fileID: 8300000, guid: a2e72c4ea1a51be4bbb38c5e082293e3, type: 3}
+  - {fileID: 8300000, guid: cfadb13ab8955414f8148d84f44a350e, type: 3}
+  - {fileID: 8300000, guid: 23b25bfcaf7895a4790f91ba378cab18, type: 3}
   fxClipType:
   - {fileID: 8300000, guid: c07dbf7b874d8fd4eb8e857020e37bfb, type: 3}
   - {fileID: 8300000, guid: 9fac4480efb59c149b9b251a63a6b7ee, type: 3}

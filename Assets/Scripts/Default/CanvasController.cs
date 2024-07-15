@@ -46,6 +46,7 @@ public class CanvasController : MonoBehaviour
 
     public Animator animator;
 
+    public float animSpeed = 0.5f;
     private void Awake()
     {
         instance = this;
@@ -61,7 +62,7 @@ public class CanvasController : MonoBehaviour
         settingTmpUnder = settingTmp.transform.Find("Setting Under").GetComponent<TextMeshProUGUI>();
         setting = transform.Find("Setting").GetComponent<Image>();
 
-        frame = transform.Find("Box").GetComponent<Image>();
+        frame = transform.Find("Frame").GetComponent<Image>();
         typeWritters = (TypeWritter[])Resources.FindObjectsOfTypeAll(typeof(TypeWritter));
     }
 
@@ -499,7 +500,7 @@ public class CanvasController : MonoBehaviour
                                         goto case 7;
                                     else
                                     {
-                                        MainControl.instance.OutBlack("Menu", Color.black, true, 0.75f);
+                                        MainControl.instance.OutBlack("Menu", Color.black, true, animSpeed);
                                         CloseSetting();
                                         freeze = true;
                                         break;
@@ -755,9 +756,9 @@ public class CanvasController : MonoBehaviour
     public void InSetting()
     {
         MainControl.instance.OverworldControl.isSetting = true;
-        DOTween.To(() => setting.rectTransform.sizeDelta, x => setting.rectTransform.sizeDelta = x, new Vector2(6000, setting.rectTransform.sizeDelta.y), 0.75f).SetEase(Ease.InCirc);
+        DOTween.To(() => setting.rectTransform.sizeDelta, x => setting.rectTransform.sizeDelta = x, new Vector2(6000, setting.rectTransform.sizeDelta.y), animSpeed).SetEase(Ease.InCirc);
         settingTmp.DOColor(Color.white, 1).SetEase(Ease.InCubic);
-        DOTween.To(() => settingTmp.rectTransform.anchoredPosition, x => settingTmp.rectTransform.anchoredPosition = x, new Vector2(140, 140), 1).SetEase(Ease.OutCubic);
+        DOTween.To(() => settingTmp.rectTransform.anchoredPosition, x => settingTmp.rectTransform.anchoredPosition = x, new Vector2(140, 140), animSpeed + 0.25f).SetEase(Ease.OutCubic);
         settingSelect = 0;
         settingTmpUnder.text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlEggshell");
         SettingText();
@@ -768,9 +769,9 @@ public class CanvasController : MonoBehaviour
     private void ExitSetting(bool isLan = false)
     {
         settingLevel = 0;
-        DOTween.To(() => setting.rectTransform.sizeDelta, x => setting.rectTransform.sizeDelta = x, new Vector2(0, setting.rectTransform.sizeDelta.y), 0.75f).SetEase(Ease.OutCirc);
+        DOTween.To(() => setting.rectTransform.sizeDelta, x => setting.rectTransform.sizeDelta = x, new Vector2(0, setting.rectTransform.sizeDelta.y), animSpeed).SetEase(Ease.OutCirc);
         settingTmp.DOColor(Color.white, 0).SetEase(Ease.OutCubic);
-        DOTween.To(() => settingTmp.rectTransform.anchoredPosition, x => settingTmp.rectTransform.anchoredPosition = x, new Vector2(-610, 140), 1).SetEase(Ease.InSine).OnKill(() => CloseSetting(isLan));
+        DOTween.To(() => settingTmp.rectTransform.anchoredPosition, x => settingTmp.rectTransform.anchoredPosition = x, new Vector2(-610, 140), animSpeed + 0.25f).SetEase(Ease.InSine).OnKill(() => CloseSetting(isLan));
         settingTmpUnder.text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlEggshell");
     }
 
@@ -825,7 +826,7 @@ public class CanvasController : MonoBehaviour
     {
         RectTransform i = transform.Find("Heart").GetComponent<RectTransform>();
         Image j = i.GetComponent<Image>();
-        j.DOColor(new Color(j.color.r, j.color.g, j.color.b, 0), 0.75f).SetEase(Ease.Linear);
+        j.DOColor(new Color(j.color.r, j.color.g, j.color.b, 0), animSpeed).SetEase(Ease.Linear);
         DOTween.To(() => i.anchoredPosition, x => i.anchoredPosition = x, new Vector2(-330, -250), 1.5f).SetEase(Ease.OutCirc).OnKill(() => AnimOpen());
     }
 

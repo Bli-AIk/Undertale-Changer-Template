@@ -2232,6 +2232,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2735931670647202130, guid: 85a3edc090f79fb4780a6e2f72de7957,
         type: 3}
+      propertyPath: bpm
+      value: 172
+      objectReference: {fileID: 0}
+    - target: {fileID: 2735931670647202130, guid: 85a3edc090f79fb4780a6e2f72de7957,
+        type: 3}
       propertyPath: volume
       value: 0.5
       objectReference: {fileID: 0}
@@ -2253,6 +2258,11 @@ PrefabInstance:
     - target: {fileID: 2735931670647202130, guid: 85a3edc090f79fb4780a6e2f72de7957,
         type: 3}
       propertyPath: sceneState
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2735931670647202130, guid: 85a3edc090f79fb4780a6e2f72de7957,
+        type: 3}
+      propertyPath: openMetronome
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2735931670647202130, guid: 85a3edc090f79fb4780a6e2f72de7957,
@@ -6897,6 +6907,7 @@ MonoBehaviour:
   speedWeightY: 0
   hitCD: 0
   hitCDMax: 0
+  displacement: 0.175
   isMoving: 0
   timeInterpolation: -0.225
   sceneDrift: {x: -1000, y: 0}
