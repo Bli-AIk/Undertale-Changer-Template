@@ -342,6 +342,7 @@ MonoBehaviour:
   originString: 
   endString: 
   passTextString: 0
+  isRunning: 0
   isTyping: 0
   hpIn: 0
   hpSave: 0
@@ -355,13 +356,13 @@ MonoBehaviour:
   speedSlow: 0.15
   clock: 0.01
   passText: 0
-  haveSpriteChanger: 0
   spriteChanger: {fileID: 0}
   isOverworld: 0
   pitch: 1
   volume: 0.5
   audioMixerGroup: {fileID: 0}
   useFont: 0
+  dynamicType: 0
   forceReturn: 0
 --- !u!114 &459077734
 MonoBehaviour:

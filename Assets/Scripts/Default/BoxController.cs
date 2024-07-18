@@ -78,13 +78,14 @@ public class BoxController : ObjectPool
 
     void Update()
     {
+        /*
         if (Input.GetKeyDown(KeyCode.Y))
         {
             BoxDrawer a = GetFromThePool();
             a.rotation = Quaternion.Euler(0, 0, Random.Range(0, 360));
             a.boxType = BoxType.Add;
         }
-        //return;
+        */
 
 
         for (int i = 0; i < boxes.Count; i++)

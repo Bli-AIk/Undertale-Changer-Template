@@ -1,10 +1,14 @@
 using Log;
 using MEC;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
+using static Unity.Burst.Intrinsics.X86.Avx;
+using Random = UnityEngine.Random;
 
 /// <summary>
 /// 打字机系统
@@ -43,7 +47,11 @@ public class TypeWritter : MonoBehaviour
     public float volume = 0.5f;
     public AudioMixerGroup audioMixerGroup;
 
+    [Header("字体")]
     public int useFont;
+
+    [Header("打字动效")]
+    public OverworldControl.DynamicType dynamicType;
 
     [Header("总有那么一些情况需要强硬手段（拔枪")]
     public bool forceReturn = false;
@@ -367,6 +375,7 @@ public class TypeWritter : MonoBehaviour
             {
                 endString += originString[i];
                 passTextString += originString[i];
+                
             }
 
             if (!pressX)
@@ -374,7 +383,10 @@ public class TypeWritter : MonoBehaviour
 
             if (tmp_Text != null)
             {
+                Timing.RunCoroutine(_Dynamic(endString.Length - 1));
                 tmp_Text.text = endString;
+
+
                 if (tmp_Text.font != MainControl.instance.OverworldControl.tmpFonts[useFont])
                     tmp_Text.font = MainControl.instance.OverworldControl.tmpFonts[useFont];
             }
@@ -402,7 +414,7 @@ public class TypeWritter : MonoBehaviour
             //pressX = false;
             canNotX = false;
             isStop = false;
-            PassText:;
+            PassText:;//这是个标签注意
         }
 
         isRunning = false;
@@ -410,6 +422,63 @@ public class TypeWritter : MonoBehaviour
             originString = originString.Substring("<passText>".Length);
     }
 
+    private IEnumerator<float> _Dynamic(int num)
+    {
+        if (dynamicType != OverworldControl.DynamicType.None)//动效相关
+        {
+            var textInfo = tmp_Text.textInfo;
+
+            Debug.LogWarning(num);
+            Vector3 orig = default;
+            TMP_CharacterInfo charInfo = default;
+            Vector3[] verts = default;
+            switch (dynamicType)
+            {
+                case OverworldControl.DynamicType.Shake:
+                    for (int i = 0; i < 30; i++)
+                    {
+                        if (pressX)
+                            break;
+
+                        tmp_Text.ForceMeshUpdate();
+
+                        Vector3 randomer = new Vector3(Random.Range(-0.05f, 0.05f), Random.Range(-0.05f, 0.05f), 0);
+
+                         charInfo = textInfo.characterInfo[num];
+
+                        if (!charInfo.isVisible) break;
+
+                        verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
+
+                        for (int j = 0; j < 4; j++)
+                        {
+                            orig = verts[charInfo.vertexIndex + j];
+                            //动画
+                            verts[charInfo.vertexIndex + j] = orig + randomer;
+                        }
+
+                        for (int k = 0; k < textInfo.meshInfo.Length; k++)
+                        {
+                            var meshInfo = textInfo.meshInfo[k];
+                            meshInfo.mesh.vertices = meshInfo.vertices;
+                            tmp_Text.UpdateGeometry(meshInfo.mesh, k);
+                        }
+                        yield return 0;
+                    }
+
+
+                    break;
+                case OverworldControl.DynamicType.Fade:
+                    break;
+                case OverworldControl.DynamicType.FadeUp:
+                    break;
+                case OverworldControl.DynamicType.Garbled:
+                    break;
+            }
+
+        }
+        yield return 0;
+    }
     private void Update()
     {
         if (MainControl.instance.OverworldControl.isSetting || forceReturn)//pause在OW检测的时候会用
@@ -435,6 +504,7 @@ public class TypeWritter : MonoBehaviour
                 pressX = true;
             }
         }
+
     }
 
     private void PassText()

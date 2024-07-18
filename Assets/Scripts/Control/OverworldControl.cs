@@ -68,4 +68,27 @@ public class OverworldControl : ScriptableObject
         SyncToRefreshRate, // 同步到屏幕刷新率
         HalfSync // 同步到屏幕刷新率的一半
     }
+
+    public enum DynamicTMP
+    {
+        None,
+        RandomShake,
+        RandomShakeSingle,
+        RandomShakeAll,
+        CrazyShake,
+        NapShake,
+        NapFloat,
+        Wave,//这仨
+        Explode,//是
+        Bounce,//AI做的 
+    }
+
+    public enum DynamicType
+    {
+        None,
+        Shake,
+        Fade,
+        FadeUp,
+        Garbled
+    }
 }

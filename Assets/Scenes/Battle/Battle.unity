@@ -2263,7 +2263,7 @@ PrefabInstance:
     - target: {fileID: 2735931670647202130, guid: 85a3edc090f79fb4780a6e2f72de7957,
         type: 3}
       propertyPath: openMetronome
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2735931670647202130, guid: 85a3edc090f79fb4780a6e2f72de7957,
         type: 3}
@@ -3692,6 +3692,7 @@ MonoBehaviour:
   volume: 0.5
   audioMixerGroup: {fileID: 0}
   useFont: 0
+  dynamicType: 0
   forceReturn: 0
 --- !u!1001 &1013083398
 PrefabInstance:
@@ -7669,7 +7670,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 004b7bcff67749046bb833215590b08e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mode: 1
+  dynamicMode: 0
 --- !u!1 &1724226489
 GameObject:
   m_ObjectHideFlags: 0
@@ -7787,6 +7788,7 @@ MonoBehaviour:
   volume: 0.5
   audioMixerGroup: {fileID: 0}
   useFont: 0
+  dynamicType: 1
   forceReturn: 0
 --- !u!1 &1735849019
 GameObject:
@@ -8893,7 +8895,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 004b7bcff67749046bb833215590b08e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mode: 1
+  dynamicMode: 2
 --- !u!114 &1969973186
 MonoBehaviour:
   m_ObjectHideFlags: 0

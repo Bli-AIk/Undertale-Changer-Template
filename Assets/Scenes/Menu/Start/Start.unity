@@ -372,6 +372,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mode: 1
+  dynamicMode: 2
 --- !u!114 &658997762
 MonoBehaviour:
   m_ObjectHideFlags: 0

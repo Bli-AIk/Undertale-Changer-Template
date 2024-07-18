@@ -152,7 +152,7 @@ strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.Overwor
 
                                     animMove = DOTween.To(() => tmps[1].transform.localPosition, x => tmps[1].transform.localPosition = x, new Vector3(26.95f, -7.85f), 5).SetEase(Ease.Linear);
                                     animScale = DOTween.To(() => tmps[1].transform.localScale, x => tmps[1].transform.localScale = x, Vector3.one * 3, 5).SetEase(Ease.Linear);
-                                    tmps[1].GetComponent<DynamicTMP>().mode = 2;
+                                    tmps[1].GetComponent<DynamicTMP>().dynamicMode = OverworldControl.DynamicTMP.RandomShakeSingle;
                                     tmps[2].text = "";
                                     tmps[4].text = "";
                                     tmps[5].text = "";
@@ -268,7 +268,7 @@ strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.Overwor
                             animScale.Kill();
                             tmps[1].transform.localPosition = new Vector3(8.95f, 0.6f);
                             tmps[1].transform.localScale = Vector3.one;
-                            tmps[1].GetComponent<DynamicTMP>().mode = -1;
+                            tmps[1].GetComponent<DynamicTMP>().dynamicMode = 0;
                             tmps[3].text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Rename1") +
                                            MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Rename2") +
                                            MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Rename3");
@@ -302,7 +302,7 @@ strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.Overwor
                     animScale.Kill();
                     tmps[1].transform.localPosition = new Vector3(8.95f, 0.6f);
                     tmps[1].transform.localScale = Vector3.one;
-                    tmps[1].GetComponent<DynamicTMP>().mode = -1;
+                    tmps[1].GetComponent<DynamicTMP>().dynamicMode = 0;
                     tmps[3].text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Rename1") +
                                    MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Rename2") +
                                    MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Rename3");
