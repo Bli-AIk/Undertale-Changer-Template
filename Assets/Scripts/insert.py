@@ -32,7 +32,7 @@ def remove_comments_from_line(line):
     line = re.sub(r'///.*', '', line)
     # Remove [Header("...")]
     line = re.sub(r'\[Header\(.*?\)\]', '', line)
-    return line
+    return line.rstrip()
 
 def insert_comments_into_file(file_path, comments):
     try:
@@ -44,13 +44,25 @@ def insert_comments_into_file(file_path, comments):
         with open(file_path, 'r', encoding=encoding) as file:
             lines = file.readlines()
 
+        new_lines = []
+        line_offset = 0
+        for i, line in enumerate(lines, start=1):
+            new_line = remove_comments_from_line(line)
+            if new_line.strip() != '':
+                new_lines.append(new_line + "\n")
+            elif line.strip() == '':
+                new_lines.append("\n")
+
+            # Insert new comment if current line (i) matches comment line
+            if i in [line_num for line_num, _ in comments]:
+                indent = re.match(r'\s*', line).group()
+                for line_num, comment in comments:
+                    if line_num == i:
+                        new_lines.append(f"{indent}{comment}\n")
+                        line_offset += 1
+
         with open(file_path, 'w', encoding=encoding) as file:
-            for line_num, comment in sorted(comments, reverse=True):
-                # Remove original comment from the line, but keep the code
-                lines[line_num - 1] = remove_comments_from_line(lines[line_num - 1]).rstrip() + "\n"
-                # Insert new comment
-                lines.insert(line_num, f"{comment}\n")
-            file.writelines(lines)
+            file.writelines(new_lines)
     except Exception as e:
         print(f"Failed to insert comments into {file_path}: {e}")
 
