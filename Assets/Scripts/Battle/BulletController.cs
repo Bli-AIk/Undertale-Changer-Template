@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 弹幕控制器
+/// Pop-up controller
 /// </summary>
 public class BulletController : MonoBehaviour
 {
@@ -13,17 +13,18 @@ public class BulletController : MonoBehaviour
     public List<BoxCollider2D> boxColliderList = new List<BoxCollider2D>();
     public List<Vector2> boxColliderSizes = new List<Vector2>();
     public List<int> boxHitList = new List<int>();
-    public BattleControl.BulletColor bulletColor;//含有属性的颜色 读取BattleControl中的enum BulletColor
+    public BattleControl.BulletColor bulletColor;
+    // Containing the color of the attribute Read the enum BulletColor in BattleControl
 
     public FollowMode followMode;
 
     //public bool useExtra;
     //public Collider2D extra;
     /// <summary>
-    /// 设置碰撞箱跟随SpriteRenderer缩放的模式。
-    /// CutFollow:切去boxColliderSizes内存储的数据；
-    /// NoFollow:不跟随缩放。
-    /// FullFollow:完全跟随缩放，即启用盒碰撞器的自动拼接。
+    /// Sets the mode in which the collision box follows the SpriteRenderer's scaling.
+    /// CutFollow: cuts the data stored in boxColliderSizes;
+    /// NoFollow: does not follow the zoom.
+    /// FullFollow: fully follow the zoom, i.e. enable auto-stitching of box colliders.
     /// </summary>
     public enum FollowMode
     {
@@ -39,25 +40,25 @@ public class BulletController : MonoBehaviour
     private void Start()
     {
         //if (useExtra)
-        //    extra = GetComponent<Collider2D>();
+        // extra = GetComponent<Collider2D>();
     }
 
     /// <summary>
-    /// 初始化弹幕（单个碰撞模式）。
+    /// Initialize popups (single collision mode).
     /// </summary>
-    /// <param name="name">设置弹幕的Obj的名称，以便查找。</param>
-    /// <param name="typeName">设置弹幕的种类名称，如果种类名称与当前的弹幕一致，则保留原有的碰撞相关参数，反之清空。</param>
-    /// <param name="layer">玩家为100，战斗框边缘为50。可参考。</param>
-    /// <param name="sprite">一般在Resources内导入。</param>
-    /// <param name="size">设置判定箱大小，可设定多个List，但多数情况下需要避免其重叠。（NoFollow情况下设为(0,0)，会自动与sprite大小同步）</param>
-    /// <param name="offset">设定判定箱偏移，List大小必须与sizes相等。</param>
-    /// <param name="hit">设定碰撞箱伤害，List大小必须与sizes相等。</param>
-    /// <param name="followMode">设置碰撞箱跟随SpriteRenderer缩放的模式。</param>
-    /// <param name="startMask">设置Sprite遮罩模式。</param>
-    /// <param name="bulletColor">设置弹幕属性颜色数据</param>
-    /// <param name="startPosition">设置起始位置（相对坐标）。</param>
-    /// <param name="startRotation">设置旋转角度，一般只需更改Z轴。</param>
-    /// <param name="startScale">若弹幕不需拉伸，StartScale一般设置(1,1,1)。检测到Z为0时会归位到(1,1,1)。</param>
+    /// <param name="name">Set the name of the Obj for the popup to look up. </param>
+    /// <param name="typeName">Set the type name of the popup, if the type name is the same as the current popup, then keep the original collision related parameters, otherwise clear. </param
+    /// <param name="layer">100 for the player, 50 for the edge of the combat box. referenced. </param
+    /// <param name="sprite">Generally imported within Resources. </param
+    /// <param name="size">Set the size of the judgment box, can be set to multiple lists, but most of the time you need to avoid overlapping them. (In NoFollow case, set it to (0,0), it will be automatically synchronized with the size of the sprite)</param>.
+    /// <param name="offset">Set the offset of the judgment box, list size must be equal to sizes. </param
+    /// <param name="hit"> Set collision box damage, list size must be equal to sizes. </param
+    /// <param name="followMode"> Set the mode in which the collision box follows the SpriteRenderer's scaling. </param>
+    /// <param name="startMask">Set the Sprite mask mode. </param>
+    /// <param name="bulletColor">Set the bullet attribute color data</param>
+    /// <param name="startPosition">Set the start position (relative coordinate). </param>
+    /// <param name="startRotation">Set the rotation angle, usually just change the Z axis. </param>
+    /// <param name="startScale"> If the popup does not need to be stretched, startScale is usually set to (1,1,1). When Z is detected to be 0, it will be normalized to (1,1,1). </param>
     public void SetBullet(
        string name,
        string typeName,
@@ -125,21 +126,21 @@ public class BulletController : MonoBehaviour
     }
 
     /// <summary>
-    /// 初始化弹幕（循环生成盒状碰撞模式）。
+    /// Initialize popups (loop generating box collision patterns).
     /// </summary>
-    /// <param name="name">设置弹幕的Obj的名称，以便查找。</param>
-    /// <param name="typeName">设置弹幕的种类名称，如果种类名称与当前的弹幕一致，则保留原有的碰撞相关参数，反之清空。</param>
-    /// <param name="layer">玩家为100，战斗框边缘为50。可参考。</param>
-    /// <param name="sprite">一般在Resources内导入。</param>
-    /// <param name="sizes">设置判定箱大小，可设定多个List，但多数情况下需要避免其重叠。（NoFollow情况下设为(0,0)，会自动与sprite大小同步）</param>
-    /// <param name="offsets">设定判定箱偏移，List大小必须与sizes相等。</param>
-    /// <param name="hits">设定碰撞箱伤害，List大小必须与sizes相等。</param>
-    /// <param name="followMode">设置碰撞箱跟随SpriteRenderer缩放的模式。</param>
-    /// <param name="startMask">设置Sprite遮罩模式。</param>
-    /// <param name="bulletColor">设置弹幕属性颜色数据</param>
-    /// <param name="startPosition">设置起始位置（相对坐标）。</param>
-    /// <param name="startRotation">设置旋转角度，一般只需更改Z轴。</param>
-    /// <param name="startScale">若弹幕不需拉伸，StartScale一般设置(1,1,1)。检测到Z为0时会归位到(1,1,1)。</param>
+    /// <param name="name"> Sets the name of the Obj for the popup to look up. </param>
+    /// <param name="typeName">Set the type name of the popup, if the type name is the same as the current popup, keep the original collision related parameter, otherwise clear. </param
+    /// <param name="layer">100 for the player and 50 for the edge of the combat box. can be referenced. </param
+    /// <param name="sprite">Generally imported within Resources. </param
+    /// <param name="sizes">Set the size of the judgment box, can be set to multiple lists, but most of the time you need to avoid overlapping them. (Set to (0,0) in NoFollow case, it will be automatically synchronized with sprite size)</param>
+    /// <param name="offsets">Set judgment box offset, list size must be equal to sizes. </param
+    /// <param name="hits"> Set collision box damage, list size must be equal to sizes. </param
+    /// <param name="followMode"> Sets the mode in which the collision box follows the SpriteRenderer's scaling. </param>
+    /// <param name="startMask">Set the Sprite mask mode. </param>
+    /// <param name="bulletColor">Set the bullet attribute color data</param>
+    /// <param name="startPosition">Set the start position (relative coordinates). </param>
+    /// <param name="startRotation">Set the rotation angle, usually just change the Z axis. </param>
+    /// <param name="startScale"> If the popup does not need to be stretched, startScale is usually set to (1,1,1). When Z is detected to be 0, it will be normalized to (1,1,1). </param>
 
     public void SetBullet(
         string name,
@@ -192,7 +193,7 @@ public class BulletController : MonoBehaviour
 
         boxColliderSizes = sizes;
         boxHitList = hits;
-        //循环生成box碰撞
+        // Loop to generate box collisions
         for (int i = 0; i < sizes.Count; i++)
         {
             BoxCollider2D save = gameObject.AddComponent<BoxCollider2D>();
@@ -226,7 +227,8 @@ public class BulletController : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay2D(Collider2D collision)//伤害判定
+    private void OnTriggerStay2D(Collider2D collision)
+    //Damage Determination
     {
         if (collision.transform.CompareTag("Player") && collision.name.Substring(0, "CheckCollider".Length) == "CheckCollider")
         {

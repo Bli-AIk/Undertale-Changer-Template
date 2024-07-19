@@ -6,17 +6,17 @@ using UnityEngine.Audio;
 public class AudioControl : ScriptableObject
 {
     public AudioMixer globalAudioMixer;
-    
+
     //public List<AudioClip> bgmClip;
-    [Header("用于UI音效")]
+    [Header("for UI sound")]
     public List<AudioClip> fxClipUI;
 
-    [Header("用于打字机音效")]
+    [Header("For typewriter sound effects")]
     public List<AudioClip> fxClipType;
 
-    [Header("用于战斗音效")]
+    [Header("for combat sound effects")]
     public List<AudioClip> fxClipBattle;
 
-    [Header("用于走路脚步音效")]
+    [Header("For walking footsteps sound effect")]
     public List<AudioClip> fxClipWalk;
 }

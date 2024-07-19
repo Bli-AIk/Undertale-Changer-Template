@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 using UnityEditor;
 #endif
 /// <summary>
-/// 战斗框绘制
+/// Combat box drawing
 /// </summary>
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
@@ -26,18 +26,20 @@ public class BoxDrawer : MonoBehaviour
 
     */
     public Vector3 localPosition;
-    [Header("别用Transform的旋转")]
-    public Quaternion rotation; // 获取当前物体的旋转
-    [Header("线宽")]
+    [Header("Don't use Transform's rotation")]
+    public Quaternion rotation;
+    // Get the rotation of the current object
+    [Header("Line Width")]
     public float width = 0.15f;
     public List<Vector2> vertexPoints;
 
-    [Header("是否启用贝塞尔插值")]
+    [Header("Whether to enable Bessel interpolation")]
     public bool isBessel;
     public List<Vector2> besselPoints;
     public int besselPointsNum = 16;
-    [Header("真正组框所用的点")]
-    public List<Vector2> realPoints;//真正的曲线插值，插入点数由besselPointsNum决定
+    [Header("Points used for true group box")]
+    public List<Vector2> realPoints;
+    //The real curve interpolation, the number of insertion points is determined by besselPointsNum.
     public int besselInsertNum = 2;
 
     public MeshFilter meshFilter;
@@ -46,28 +48,31 @@ public class BoxDrawer : MonoBehaviour
     public EdgeCollider2D edgeCollider2D;
 
 
-    [Header("设置其是否为特殊框")]
+    [Header("Set whether it is a special box")]
     public BoxController.BoxType boxType;
 
-    [Header("当该Box为父级时，以此存储子级的相关计算后数据")]
-    [Header("子级realPoints之和")]
+    [Header("When this Box is the parent, use this to store the relevant post-calculation data for the child.")]
+    [Header("Sum of sub-level realPoints")]
     public List<Vector2> pointsSonSum;
 
-    [Header("交点")]
+    [Header("Intersection")]
     public List<Vector2> pointsCross;
-    [Header("非重合点")]
+    [Header ("non-recombining points")]
     public List<Vector2> pointsOutCross;
-    [Header("重合点")]
-    public List<Vector2> pointsInCross;//交点/非重合点/重合点
+    [Header("Point of coincidence")]
+    public List<Vector2> pointsInCross;
+    //intersection/non-overlapping/overlapping points
 
-    public BoxDrawer parent;//此框的复合父级
-    public List<BoxDrawer> sonBoxDrawer;//此框的子级
+    public BoxDrawer parent;
+    // Compound parent of this box
+    public List<BoxDrawer> sonBoxDrawer;
+    //Sublevel of this box
 
 #if UNITY_EDITOR
-    [Header("给Editor用的")]
+    [Header("for Editor")]
     public int regularEdge;
     public float regularAngle;
-    [Header("是否展示Mesh（红线）")]
+    [Header("Whether to display mesh (red line)")]
     public bool showMesh;
 #endif
 
@@ -93,7 +98,7 @@ public class BoxDrawer : MonoBehaviour
 
     }
 
-    //float testTimer;
+    //float testTimer; //float testTimer.
     public void Update()
     {
         if (parent != null)
@@ -142,7 +147,8 @@ public class BoxDrawer : MonoBehaviour
         }
         */
 
-        if (sonBoxDrawer.Count == 0 && transform.childCount == 0)//作为纯子级
+        if (sonBoxDrawer.Count == 0 && transform.childCount == 0)
+        //as a pure sub-level
         {
 
             if (isBessel)
@@ -151,12 +157,13 @@ public class BoxDrawer : MonoBehaviour
                 realPoints = vertexPoints;
 
         }
-        else if (sonBoxDrawer.Count == 2 && transform.childCount == 2)//作为父级
+        else if (sonBoxDrawer.Count == 2 && transform.childCount == 2)
+        //as parent
         {
 
             pointsSonSum.Clear();
 
-            //更新一下两个子级的位置坐标
+            //Update the positional coordinates of the two sub-levels.
             sonBoxDrawer[0].transform.localPosition = sonBoxDrawer[0].localPosition - localPosition;
             sonBoxDrawer[1].transform.localPosition = sonBoxDrawer[1].localPosition - localPosition;
 
@@ -166,7 +173,7 @@ public class BoxDrawer : MonoBehaviour
             pointsSonSum = BoxController.instance.AddLists(realPointsBack0, realPointsBack1);
 
 
-            //计算三大List
+            //Calculate the three major lists
 
             pointsCross = BoxController.instance.FindIntersections(realPointsBack0, realPointsBack1);
 
@@ -175,7 +182,7 @@ public class BoxDrawer : MonoBehaviour
             pointsInCross = BoxController.instance.AddAndSubLists(realPointsBack0, realPointsBack1, pointsCross, pointsOutCross);
 
 
-            //重合时合并
+            //Merge when overlapping
             if (!(pointsCross.Count == 0 && pointsInCross.Count == 0))
             {
                 /*
@@ -196,7 +203,8 @@ public class BoxDrawer : MonoBehaviour
 
                 realPoints = pointsFinal;
             }
-            else//不重合就解散
+            else
+            // Dismissed if not overlapping
             {
                 ExitParent();
                 return;
@@ -209,17 +217,20 @@ public class BoxDrawer : MonoBehaviour
 
 
 
-        if (transform.parent == BoxController.instance.transform)//只有父物体为BoxController时生成框
+        if (transform.parent == BoxController.instance.transform)
+        //Only generate box when parent object is BoxController.
         {
             transform.localPosition = localPosition;
 
-            if (boxType != BoxController.BoxType.Sub)//减框不绘制
+            if (boxType != BoxController.BoxType.Sub)
+            //Subtracted boxes are not drawn.
                 SummonBox();
         }
         else transform.localPosition = localPosition - parent.localPosition;
     }
 
-    void ExitParent()//离开的那个 的爹 会触发这个
+    void ExitParent()
+    //The father of the one who left will trigger this.
     {
         //Debug.Log(transform.childCount);
 
@@ -266,15 +277,15 @@ public class BoxDrawer : MonoBehaviour
         parent = null;
     }
 
-    // 函数用于将两个四元数相加
+    // Function to add two quaternions together
     public Quaternion AddQuaternions(Quaternion quat1, Quaternion quat2)
     {
-        // 将两个四元数转换为欧拉角，并相加
+        // Convert two quaternions to Euler angles and add them together
         Vector3 euler1 = quat1.eulerAngles;
         Vector3 euler2 = quat2.eulerAngles;
         Vector3 summedEulerAngles = euler1 + euler2;
 
-        // 将相加后的欧拉角转换为四元数
+        // convert summed Euler angles to quaternions
         return Quaternion.Euler(summedEulerAngles);
     }
 
@@ -287,20 +298,20 @@ public class BoxDrawer : MonoBehaviour
     }
     */
     /// <summary>
-    /// 通过BoxController生成框
+    /// Generating boxes via BoxController
     /// </summary>
     public List<Vector2> SummonBox()
     {
         return BoxController.instance.SummonBox(realPoints, rotation, transform, width, lineRenderer, edgeCollider2D, meshFilter);
 
     }
-    public List<Vector2> GetRealPoints(bool isLocal = true) 
+    public List<Vector2> GetRealPoints(bool isLocal = true)
     {
         return BoxController.instance.GetRealPoints(realPoints, rotation, transform, isLocal);
     }
-    
+
     /// <summary>
-    /// 开关组件
+    /// Switch assembly
     /// </summary>
     public void IsOpenComponentsData(bool isOpen = false)
     {
@@ -318,9 +329,9 @@ public class BoxDrawer : MonoBehaviour
     }
 
     /// <summary>
-    /// 获取组件
+    /// Get component
     /// </summary>
-    /// 
+    ///
     public void GetComponents(bool forceBesselFlash = false)
     {
         if (!forceBesselFlash)
@@ -339,10 +350,10 @@ public class BoxDrawer : MonoBehaviour
 
     }
     /// <summary>
-    /// 插值函数
+    /// Interpolation function
     /// </summary>
-    /// <param name="points">原始List</param>
-    /// <param name="interpolation">平分点数</param>
+    /// <param name="points">Raw List</param>
+    //// <param name="interpolation">Equalizing points</param>
     /// <returns></returns>
     List<Vector2> InterpolatePoints(List<Vector2> points, int interpolation)
     {
@@ -367,7 +378,7 @@ public class BoxDrawer : MonoBehaviour
             }
         }
 
-        // 插入首尾之间的插值
+        // Insert first and last interpolations
         for (int j = 1; j <= interpolation; j++)
         {
             float t = (float)j / (float)(interpolation + 1);
@@ -378,23 +389,26 @@ public class BoxDrawer : MonoBehaviour
     }
 
     /// <summary>
-    /// 生成贝塞尔曲线上的点
+    /// Generate points on Bézier curve
     /// </summary>
     public static List<Vector2> GenerateBezierCurve(List<Vector2> points, int besselInsertNum, int numPoints)
     {
         List<Vector2> controlPoints = new List<Vector2>(points);
 
         controlPoints.Add(controlPoints[0]);
-        List<Vector2> bezierPoints = new List<Vector2>(); // 创建一个Vector2列表用于存储生成的贝塞尔曲线上的点
+        List<Vector2> bezierPoints = new List<Vector2>();
+        // Create a Vector2 list to store the points on the generated Bézier curve.
 
-        // 检查控制点的数量，至少需要4个控制点才能形成一个立方贝塞尔曲线
+        // Check the number of control points, at least 4 are needed to form a cubic Bezier curve.
         if (controlPoints.Count < 4)
         {
-            DebugLogger.Log("至少需要4个控制点才能形成立方贝塞尔曲线。", DebugLogger.Type.err); // 在控制台显示错误消息
-            return bezierPoints; // 返回空的贝塞尔点列表
+            DebugLogger.Log("至少需要4个控制点才能形成立方贝塞尔曲线。", DebugLogger.Type.err);
+            // Display an error message on the console
+            return bezierPoints;
+            // Returns an empty list of Bessel points.
         }
 
-        // 遍历控制点列表，每次取出besselInsertNum + 1个点生成贝塞尔曲线段
+        // Iterate through the list of control points, taking out besselInsertNum + 1 point at a time to generate Bessel segments.
         List<Vector2> pointList = new List<Vector2>();
         for (int i = 0; i < controlPoints.Count - besselInsertNum; i += besselInsertNum + 1)
         {
@@ -402,17 +416,21 @@ public class BoxDrawer : MonoBehaviour
             {
                 pointList.Add(controlPoints[i + k]);
             }
-            // 根据所需点的数量在当前曲线段上生成点
+            // Generate points on the current curve segment according to the number of points needed.
             for (int j = 0; j <= numPoints; j++)
             {
-                float t = j / (float)numPoints; // 计算参数t的值，用于插值
-                Vector2 point = CalculateNthDegreeBezierPoint(pointList, t); // 调用计算贝塞尔点的函数
-                bezierPoints.Add(point); // 将计算得到的点添加到贝塞尔点列表中
+                float t = j / (float)numPoints;
+                // Calculate the value of parameter t for interpolation.
+                Vector2 point = CalculateNthDegreeBezierPoint(pointList, t);
+                // Call the function that calculates the Bessel point.
+                bezierPoints.Add(point);
+                // Add the calculated points to the list of Bessel points.
             }
             pointList.Clear();
         }
 
-        return bezierPoints; // 返回生成的贝塞尔点列表
+        return bezierPoints;
+        // Returns a list of generated Bessel points.
     }
 
     private static Vector2 CalculateNthDegreeBezierPoint(List<Vector2> controlPoints, float t)
@@ -431,7 +449,7 @@ public class BoxDrawer : MonoBehaviour
     }
 
     /// <summary>
-    /// 计算组合数 C(n, k)
+    /// Calculate the number of combinations C(n, k)
     /// </summary>
     private static float BinomialCoefficient(int n, int k)
     {
@@ -446,7 +464,7 @@ public class BoxDrawer : MonoBehaviour
     }
 
 
-  
+
 
 #if UNITY_EDITOR
     public enum ShowGizmosPoint
@@ -457,20 +475,20 @@ public class BoxDrawer : MonoBehaviour
         All
     };
 
-    [Header("展示哪些点的坐标")]
+    [Header("Show coordinates of which points")]
     public ShowGizmosPoint showGizmosPoint;
 
     public void OnDrawGizmos()
     {
         if (vertexPoints == null)
             return;
-        
+
         if (meshFilter != null && showMesh)
         {
             Gizmos.color = Color.red;
             Gizmos.DrawWireMesh(meshFilter.sharedMesh, 0, transform.position);
         }
-        
+
         if (showGizmosPoint == ShowGizmosPoint.All && isBessel)
         {
             Gizmos.color = Color.yellow;
@@ -551,7 +569,8 @@ public class SceneExtEditor : Editor
     {
         BoxDrawer example = (BoxDrawer)target;
 
-        base.OnInspectorGUI(); //绘制一次GUI。
+        base.OnInspectorGUI();
+        // Draw the GUI once.
         if (GUILayout.Button("切分(不强制刷新)"))
         {
             example.GetComponents(false);
@@ -674,11 +693,11 @@ public class SceneExtEditor : Editor
         if (EditorGUI.EndChangeCheck())
         {
 
-            if (example.parent == null) 
+            if (example.parent == null)
                 example.localPosition = gameObjectPos;
             else example.localPosition = gameObjectPos - example.parent.localPosition;
 
-           
+
         }
     }
 }

@@ -6,7 +6,7 @@ public class TriggerChangeLayer : MonoBehaviour
     private SpriteRenderer spriteRenderer, spriteRendererP;
     public int upLayer = 5, downLayer = -2;
 
-    [Header("跟随父父物体的层级变化而加上1")]
+    [Header("Add 1 to follow the hierarchy of the parent object")]
     public bool followParentPlus;
 
     private void Start()

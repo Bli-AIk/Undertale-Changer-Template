@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 
 /// <summary>
-/// 基于对象池 控制音频
+/// Based on object pools Control Audio
 /// </summary>
 public class AudioController : ObjectPool
 {
@@ -36,7 +36,7 @@ public class AudioController : ObjectPool
         fx.GetComponent<AudioSource>().volume = volume;
         fx.GetComponent<AudioSource>().pitch = pitch;
         fx.GetComponent<AudioSource>().outputAudioMixerGroup = audioMixerGroup;
-        //AudioPlayer是字类！！不是unity自带的
+        //AudioPlayer is a word class! It doesn't come with unity.
         fx.GetComponent<AudioPlayer>().Playing(list);
     }
     */
@@ -69,7 +69,7 @@ public class AudioController : ObjectPool
         }
 
         fx.GetComponent<AudioSource>().outputAudioMixerGroup = audioMixerGroup;
-        //AudioPlayer是字类！！不是unity自带的
+        //AudioPlayer is a word class! It doesn't come with unity.
         fx.GetComponent<AudioPlayer>().Playing(list[fxNum]);
     }
 

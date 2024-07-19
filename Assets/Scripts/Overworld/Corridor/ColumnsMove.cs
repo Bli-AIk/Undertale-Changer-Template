@@ -1,12 +1,13 @@
 using UnityEngine;
 
 /// <summary>
-/// 长廊柱子移动
+/// Promenade Columns Moving
 /// </summary>
 public class ColumnsMove : MonoBehaviour
 {
     private CameraFollowPlayer parentCamera;
-    public float speed;//包括方向(正负)
+    public float speed;
+    //including direction (positive and negative)
 
     private void Start()
     {

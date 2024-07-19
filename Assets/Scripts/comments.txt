@@ -1,274 +1,285 @@
+
 File: Battle\BattlePlayerController.cs
 Line 7: ///<summary>
-Line 8: ///Control the relevant properties of the player (heart) in the battle
+Line 8: ////Controls the relevant attributes of the player (heart) in the battle.
 Line 9: ///</summary>
-Line 15: [Header("Ding animation speed when the heart changes color, 0 is off")]
+Line 15: [Header("Speed of ding animation when heart changes color, 0 is off")]
 Line 17: [Header("Heart gradient animation speed, 0 is off")]
-Line 20: [Header("Basic property adjustment")]
-Line 22: //Speed ​​and weight (by multiplying X by multiples), speed test is 3, weight 0.5f
-Line 24: //Invincible time
-Line 25: //Collision distance judgment
-Line 26: //Used for blue-orange bone judgment: whether the player is really moving
+Line 20: [Header("Basic Attribute Adjustment")]
+Line 22: // speed and weight (multiplied by X), speed test is 3, weight 0.5f
+Line 24: //Invincibility time
+Line 25: //Collision distance determination
+Line 26: // for blue and orange bone judgment: whether the player is really moving or not
 Line 38: //Direction
-Line 40: //Whether it is in the "jump" state
-Line 41: //Jump acceleration
+Line 40: //Whether it is in the "jump up" state.
+Line 41: //Jumping acceleration
 Line 42: //Ray distance
 Line 46: //Circular collision body
-Line 48: //Color with attributes Read enum PlayerColor in BattleControl. Color transformation is performed through specific transformation functions
-Line 53: //LayerMask mask;
-Line 70: //mask = 1 << 6;
+Line 48: //Color with attributes Read enum PlayerColor from BattleControl. color transformations are performed by the function of the specific transformation
+Line 53: //LayerMask mask.
+Line 70: //mask = 1 << 6.
 Line 114: //Debug
-Line 172: //Reverse detection (head)
-Line 174: //------------------------Move------------------------
-Line 338: /////////////////////////////////////////////////////
-Line 411: /// ... ////DebugLogger.Log("Y:" + y);
-Line 661: //Speed ​​reference: 3
-Line 676: //Blue heart touches the board to ensure that it can jump again
+Line 172: //Reverse detection (top head)
+Line 174: //------------------------ moving ------------------------
+Line 338: ////////////////////////////////////////////////
+Line 411: ////////////////////////////////////////////////
+Line 567: //Whether to move or not for blue and orange bones
+Line 621: ////DebugLogger.Log("X:" + x);
+Line 622: ////DebugLogger.Log("Y:" + y);
+Line 661: //Speed reference: 3
+Line 676: //Blue heart touches the board to make sure it's possible to jump again.
 Line 702: ///<summary>
-Line 703: ///Fall out
+Line 703: //// Dropped out
 Line 704: ///</summary>
 Line 713: ///<summary>
-Line 714: ///Change the player's color through gradient animation.
-Line 715: ///If gradientTime/dingTime is equal to 0, there will be no gradient animation/ding animation;
-Line 716: ///If gradientTime/dingTime is less than 0, the gradientTime/dingTime variables in the script are used.
-Line 717: ///If the PlayerColor input is nullColor, the actual color attribute of the player will not be changed.
+Line 714: /// Changes the player's color through a gradient animation.
+Line 715: /// If gradientTime/dingTime is equal to 0 then there will be no gradient/ding animation;
+Line 716: /// If gradientTime/dingTime is less than 0 then use the gradientTime/dingTime variable within this script.
+Line 717: /// If PlayerColor is entered as nullColor, the actual color attribute of the player is not changed.
 Line 718: ///</summary>
 Line 778: ///<summary>
-Line 779: ///Let the blue heart fall
+Line 779: /// Let the Blue Heart Fall
 Line 780: ///</summary>
-Line 808: /// ... //Calculate the vector of the line segment
-Line 830: //Get the length of the line segment
-Line 831: //Standardize the line segment vector
-Line 833: //Calculate the vector from the point to the starting point of the line segment
-Line 834: //Calculate the projection length of the point on the line segment vector
-Line 835: //Limit the projection length between 0 and the line segment length
-Line 836: //Calculate and return the coordinates of the nearest point
-Line 839: //Define the method for calculating the position of the vertical point after displacement
-Line 842: //Calculate the direction vector of the line segment
-Line 843: //Calculate the vertical direction vector (rotate 90 degrees counterclockwise)
-Line 845: //Calculate and return the position of the vertical point after displacement
-Line 848: //Define the method for calculating the vertices of the indented polygon
-Line 851: //If the vertex list is empty or less than 3, return null
-Line 853: //Initialize the list of vertices stored after displacement
-Line 854: //Initialize the list of intersection points
-Line 856: //Get the number of vertices
-Line 859: //Get the current vertex
-Line 860: //Get the next vertex (ring list)
-Line 862: //Calculate the direction vector of the edge
-Line 863: //Calculate the vertical direction vector
-Line 865: //Calculate the displacement of the current vertex
-Line 866: //Calculate the displacement of the next vertex
-Line 868: //Add the current vertex after displacement to the list
-Line 869: //Add the next vertex after displacement to the list
-Line 871: //Calculate the intersection starting from the second edge
-Line 876: //If the intersection is found, add it to the intersection list
-Line 881: //Calculate the intersection of the first and last edges
-Line 885: //If the intersection is found, add it to the intersection list
-Line 888: //Return the intersection list, that is, the vertices of the indented polygon
-Line 891: //Define the method of calculating line-line intersections
-Line 894: //Initialize the intersection coordinates
-Line 896: //Calculate the denominator
-Line 897: //If the denominator is 0, the line segments are parallel or overlapped, and there is no intersection
-Line 900: //Calculate the X coordinate of the intersection
-Line 901: //Calculate the Y coordinate of the intersection
-Line 903: //Return true, indicating that the intersection is found
-Line 905: //Define a method to check and adjust the point position based on the displacement
+Line 808: ///////////////////////////////////////// decision related
+Line 809: // Define the method used to determine if a point is inside a polygon.
+Line 812: //false flag to initialize whether the point is inside the polygon or not
+Line 813: // Iterate over each edge of the polygon and use the ray method to determine if the point is inside the polygon.
+Line 816: //If the point is on either side of the Y-axis with one of the two endpoints of the current edge and to the left of the X-axis, reverse the internal flag
+Line 823: //returns the final result of whether the point is inside the polygon or not
+Line 826: // Define the method of calculating the nearest point to a line segment (calculating the vertical foot)
+Line 829: //Calculate the vector of the line segments
+Line 830: //get the length of the line segment
+Line 831: //Normalized line vectors
+Line 833: //calculate the vector from the point to the start of the line segment
+Line 834: // Calculate the length of the projection of the point on the line vector
+Line 835: // Limit the projection length to between 0 and the length of the line segment
+Line 836: //calculate and return the coordinates of the nearest point
+Line 839: // Define the method to calculate the position of the vertical point after displacement.
+Line 842: //calculate line direction vector
+Line 843: //calculate vertical vector (rotate 90 degrees counterclockwise)
+Line 845: //calculate and return the position of the vertical point after displacement
+Line 848: // Define the method for calculating the vertices of an interior polygon.
+Line 851: // Return null if the vertex list is empty or has less than 3 vertices.
+Line 853: //Initialize the list of vertices after storing the displacement.
+Line 854: //Initialize list of stored intersection points
+Line 856: //get the number of vertices
+Line 859: //get current vertex
+Line 860: //get next vertex (ring list)
+Line 862: //Calculate the direction vectors of the edges.
+Line 863: //calculate the vertical vector
+Line 865: //Calculate the displacement of the current vertex.
+Line 866: //calculate the displacement of the next vertex
+Line 868: //Add the displaced vertex to the list.
+Line 869: //add the next vertex to the list after displacement
+Line 871: //calculate the intersection from the second edge
+Line 876: // if intersection is found, add to intersection list
+Line 881: //calculate the intersection of the first and last edges
+Line 885: // if intersection is found, add to intersection list
+Line 888: //returns a list of intersections, i.e. the vertices of the interior polygon.
+Line 891: // Define the method for calculating the intersection of lines.
+Line 894: //Initialize intersection coordinates
+Line 896: //calculate the denominator
+Line 897: // if the denominator is 0, the lines are parallel or coincident, no intersection
+Line 900: //calculate the X coordinate of the intersection point
+Line 901: //calculate the Y coordinate of the intersection point
+Line 903: //returns true, indicating that the intersection is found
+Line 905: //define the method of checking and adjusting the position of the point according to the displacement
 Line 908: //Save the original point position
-Line 910: //Check whether the recursive limit is reached
-Line 912: //If the maximum number is reached, return the current point
-Line 915: //Traverse all battle boxes
-Line 917: //Exclude different Z axes
-Line 925: //Calculate the scaled polygon vertices
-Line 927: //Traverse the moved vertices
-Line 929: //DebugLogger.Log(item, DebugLogger.Type.err); //Record log
-Line 932: //If the point is inside the adjusted polygon
-Line 934: //DebugLogger.Log(point, DebugLogger.Type.war, "#FF00FF"); //Record log
-Line 935: //Return original coordinates
+Line 910: //Check to see if the recursion limit has been reached.
+Line 912: //If the maximum number of times is reached, return the current point
+Line 915: //Iterate through all combat boxes
+Line 917: //exclude Z-axis different
+Line 925: //calculate scaled polygon vertices
+Line 927: //Iterate over the moved vertices.
+Line 929: //DebugLogger.Log(item, DebugLogger.Type.err); // logging logs
+Line 932: //If the point is within the adjusted polygon
+Line 934: //DebugLogger.Log(point, DebugLogger.Type.war, "#FF00FF"); //logging the logs
+Line 935: //return original coordinates
 Line 939: //If the point is not in the adjusted polygon
-Line 941: //Nearest point
-Line 944: //Set the closest distance to the maximum value
-Line 945: //Determine whether the box is a composite box. If so, adjust the moving distance
-Line 947: //Traverse all battle boxes
-Line 949: //Exclude those with different Z axes
-Line 953: //Traverse all edges of the box
-Line 955: //Calculate the nearest point to the current edge
-Line 956: //Calculate the distance
+Line 941: //nearest point
+Line 944: //Maximize the closest distance.
+Line 945: // Determine if the box is a composite box, if so, you need to additionally adjust the movement distance
+Line 947: //Iterate through all combat boxes
+Line 949: //Excluding Z-axis different
+Line 953: // Iterate over all sides of the box
+Line 955: //calculate the closest point to the current edge
+Line 956: //calculate the distance
 Line 957: //If the distance is shorter
-Line 959: //Update the nearest point
-Line 960: //Update the starting point of the line segment
-Line 961: //Update the end point of the line segment
-Line 962: //Update the nearest distance
-Line 969: //If the nearest point is found
-Line 974: //Calculate the position of the point after displacement
-Line 975: //DebugLogger.Log(moved, DebugLogger.Type.war, "#FF0000"); //Log
-Line 977: //If it is the first call or the point after moving is not equal to the origin
-Line 979: //Recursive call, increase the recursion depth
-Line 980: //If the point after moving does not pass the test
-Line 982: //Because the recursion depth has been processed in the recursion, there is no need to call CheckPoint again here
-Line 983: //Return the new checkpoint
-Line 985: //Return the point after moving
-Line 989: //If no closer point is found, return to the origin
+Line 959: //Update most recent point
+Line 960: //update the starting point of the line segment
+Line 961: //Update end of line segment
+Line 962: //Update closest distance
+Line 969: //If the closest point is found
+Line 974: //calculate the position of the point after displacement
+Line 975: //DebugLogger.Log(moved, DebugLogger.Type.war, "#FF0000"); //logging the logs
+Line 977: // if it is the first call or the point after the move is not equal to the original point
+Line 979: //recursive call, increase recursion depth
+Line 980: //If the moved point does not pass the test
+Line 982: // Since recursion depth is already handled in the recursion, there is no need to call CheckPoint again.
+Line 983: //return to new checkpoints
+Line 985: //return to the point after the move
+Line 989: // if no closer point is found, return to the origin
 Line 993: //Miscellaneous
-Line 1049: //The distance is the circle collider + 0.05f
+Line 1049: // Distance to circle collider +0.05f
 
 File: Battle\BoardController.cs
 Line 4: /// <summary>
-Line 5: /// Set the baffle, the specific data is controlled in BattlePlayerController
+Line 5: /// Setting up the baffle, which is controlled by the BattlePlayerController.
 Line 6: /// </summary>
 Line 9: [Header("Width")]
-Line 12: [Header("Is it a trackpad")]
-Line 15: [Header("Whether to make the edge collider length vary with the sprite width")]
-Line 19: //Pure detector. Detect the player on it and pinch the EdgeCollider. Specific control in BattlePlayerController
-Line 20: //Default is trigger.
+Line 12: [Header("Is it a tracking board")]
+Line 15: [Header("Whether to make edge collider length vary with sprite width")]
+Line 19: // Pure and simple detector Detects that the player pinched the EdgeCollider right above. This is controlled in the BattlePlayerController.
+Line 20: // Defaults to trigger.
 Line 23: //public bool test;
 Line 78: //if (test) transform.position = new Vector3(Time.time, transform.position.y);
-Line 95: //Enter the following
+Line 95: //The entry is below
 
 File: Battle\BulletController.cs
 Line 5: /// <summary>
-Line 6: /// Bullet Controller
+Line 6: /// Pop-up controller
 Line 7: /// </summary>
-Line 16: //Color with attributes Read enum BulletColor in BattleControl
+Line 16: // Containing the color of the attribute Read the enum BulletColor in BattleControl
 Line 20: //public bool useExtra;
 Line 21: //public Collider2D extra;
 Line 22: /// <summary>
-Line 23: /// Set the collision box to follow the SpriteRenderer scaling mode.
-Line 24: /// CutFollow: Cut off the data stored in boxColliderSizes;
-Line 25: /// NoFollow: Do not follow scaling.
-Line 26: /// FullFollow: Fully follow the scaling, that is, enable automatic splicing of the box collider.
+Line 23: /// Sets the mode in which the collision box follows the SpriteRenderer's scaling.
+Line 24: /// CutFollow: cuts the data stored in boxColliderSizes;
+Line 25: /// NoFollow: does not follow the zoom.
+Line 26: /// FullFollow: fully follow the zoom, i.e. enable auto-stitching of box colliders.
 Line 27: /// </summary>
 Line 41: //if (useExtra)
 Line 42: // extra = GetComponent<Collider2D>();
 Line 45: /// <summary>
-Line 46: /// Initialize the bullet screen (single collision mode).
+Line 46: /// Initialize popups (single collision mode).
 Line 47: /// </summary>
-Line 48: /// <param name="name">Set the name of the bullet screen's Obj for easy search. </param>
-Line 49: /// <param name="typeName">Set the type name of the bullet screen. If the type name is the same as the current bullet screen, the original collision-related parameters are retained, otherwise they are cleared. </param>
-Line 50: /// <param name="layer">The player is 100 and the battle box edge is 50. For reference. </param>
-Line 51: /// <param name="sprite">Usually imported in Resources. </param>
-Line 52: /// <param name="size">Set the size of the hitbox. You can set multiple lists, but in most cases you need to avoid overlapping. (Set to (0,0) in the case of NoFollow, which will automatically synchronize with the sprite size) </param>
-Line 53: /// <param name="offset">Set the hitbox offset. The List size must be equal to sizes. </param>
-Line 54: /// <param name="hit">Set the collision box damage. The List size must be equal to sizes. </param>
-Line 55: /// <param name="followMode">Set the collision box to follow the SpriteRenderer scaling mode. </param>
+Line 48: /// <param name="name">Set the name of the Obj for the popup to look up. </param>
+Line 49: /// <param name="typeName">Set the type name of the popup, if the type name is the same as the current popup, then keep the original collision related parameters, otherwise clear. </param
+Line 50: /// <param name="layer">100 for the player, 50 for the edge of the combat box. referenced. </param
+Line 51: /// <param name="sprite">Generally imported within Resources. </param
+Line 52: /// <param name="size">Set the size of the judgment box, can be set to multiple lists, but most of the time you need to avoid overlapping them. (In NoFollow case, set it to (0,0), it will be automatically synchronized with the size of the sprite)</param>.
+Line 53: /// <param name="offset">Set the offset of the judgment box, list size must be equal to sizes. </param
+Line 54: /// <param name="hit"> Set collision box damage, list size must be equal to sizes. </param
+Line 55: /// <param name="followMode"> Set the mode in which the collision box follows the SpriteRenderer's scaling. </param>
 Line 56: /// <param name="startMask">Set the Sprite mask mode. </param>
 Line 57: /// <param name="bulletColor">Set the bullet attribute color data</param>
-Line 58: /// <param name="startPosition">Set the starting position (relative coordinates). </param>
-Line 59: /// <param name="startRotation">Set the rotation angle, generally only need to change the Z axis. </param>
-Line 60: /// <param name="startScale">If the bullet does not need to be stretched, StartScale is generally set to (1,1,1). When it detects that Z is 0, it will return to (1,1,1). </param>
+Line 58: /// <param name="startPosition">Set the start position (relative coordinate). </param>
+Line 59: /// <param name="startRotation">Set the rotation angle, usually just change the Z axis. </param>
+Line 60: /// <param name="startScale"> If the popup does not need to be stretched, startScale is usually set to (1,1,1). When Z is detected to be 0, it will be normalized to (1,1,1). </param>
 Line 127: /// <summary>
-Line 128: /// Initialize the bullet (loop to generate a box collision mode).
+Line 128: /// Initialize popups (loop generating box collision patterns).
 Line 129: /// </summary>
-Line 130: /// <param name="name">Set the name of the bullet screen's Obj for easy search. </param>
-Line 131: /// <param name="typeName">Set the type name of the bullet screen. If the type name is the same as the current bullet screen, the original collision-related parameters are retained, otherwise they are cleared. </param>
-Line 132: /// <param name="layer">The player is 100, and the battle box edge is 50. For reference. </param>
-Line 133: /// <param name="sprite">Usually imported in Resources. </param>
-Line 134: /// <param name="sizes">Set the judgment box size. Multiple Lists can be set, but in most cases, it is necessary to avoid overlapping. (NoFollow is set to (0,0), which will automatically synchronize with the sprite size) </param>
-Line 135: /// <param name="offsets">Set the judgment box offset, the List size must be equal to sizes. </param>
-Line 136: /// <param name="hits">Set the collision box damage, the List size must be equal to sizes. </param>
-Line 137: /// <param name="followMode">Set the collision box to follow the SpriteRenderer scaling mode. </param>
+Line 130: /// <param name="name"> Sets the name of the Obj for the popup to look up. </param>
+Line 131: /// <param name="typeName">Set the type name of the popup, if the type name is the same as the current popup, keep the original collision related parameter, otherwise clear. </param
+Line 132: /// <param name="layer">100 for the player and 50 for the edge of the combat box. can be referenced. </param
+Line 133: /// <param name="sprite">Generally imported within Resources. </param
+Line 134: /// <param name="sizes">Set the size of the judgment box, can be set to multiple lists, but most of the time you need to avoid overlapping them. (Set to (0,0) in NoFollow case, it will be automatically synchronized with sprite size)</param>
+Line 135: /// <param name="offsets">Set judgment box offset, list size must be equal to sizes. </param
+Line 136: /// <param name="hits"> Set collision box damage, list size must be equal to sizes. </param
+Line 137: /// <param name="followMode"> Sets the mode in which the collision box follows the SpriteRenderer's scaling. </param>
 Line 138: /// <param name="startMask">Set the Sprite mask mode. </param>
-Line 139: /// <param name="bulletColor">Set the bullet attribute color data </param>
-Line 140: /// <param name="startPosition">Set the starting position (relative coordinates). </param>
-Line 141: /// <param name="startRotation">Set the rotation angle, usually only need to change the Z axis. </param>
-Line 142: /// <param name="startScale">If the bullet screen does not need to be stretched, StartScale is usually set to (1,1,1). When Z is detected to be 0, it will return to (1,1,1). </param>
-Line 195: //Loop to generate box collisions
-Line 229: //Damage determination
+Line 139: /// <param name="bulletColor">Set the bullet attribute color data</param>
+Line 140: /// <param name="startPosition">Set the start position (relative coordinates). </param>
+Line 141: /// <param name="startRotation">Set the rotation angle, usually just change the Z axis. </param>
+Line 142: /// <param name="startScale"> If the popup does not need to be stretched, startScale is usually set to (1,1,1). When Z is detected to be 0, it will be normalized to (1,1,1). </param>
+Line 195: // Loop to generate box collisions
+Line 229: //Damage Determination
 Line 233: //if(!useExtra)
 
 File: Battle\BulletShaderController.cs
 Line 4: /// <summary>
-Line 5: /// µ¯Ä»Shader¿ ØÖÆÆ÷
+Line 5: /// ??? "Shader?????÷
 Line 6: /// </summary>
 
 File: Battle\CameraShake.cs
-Line 12: [Header("moveExtent's Y axis corresponds to the camera's Z axis")]
+Line 12: [Header("The Y-axis of moveExtent corresponds to the Z-axis of the camera.")]
 Line 32: /// <summary>
 Line 33: /// Camera shake
-Line 34: /// loops will automatically convert to even numbers.
+Line 34: /// Loops are automatically converted to even numbers.
 Line 35: /// </summary>
 
 File: Battle\DialogBubbleBehaviour.cs
 Line 4: /// <summary>
-Line 5: /// Control of enemy dialogue bubbles in battle
+Line 5: /// In-combat enemy dialog bubble control
 Line 6: /// </summary>
 Line 30: /// <summary>
-Line 31: /// Change the size of the bubble and the left and right arrows, assign values, etc.
+Line 31: /// Change the size of the bubbles and the left and right arrows to assign values and so on.
 Line 32: /// </summary>
 
 File: Battle\EnemiesController.cs
 Line 3: /// <summary>
-Line 4: /// Monster control script
-Line 5: /// Mainly used for animation control and storage of ATKDEF
+Line 4: /// Monster Control Script
+Line 5: /// Mainly used for animation control and storage ATKDEF
 Line 6: /// </summary>
 
 File: Battle\EnemiesHpLineController.cs
-Line 7: [Header("0¿ª")]
+@ -216,237 +206,237 @@ Line 7: [Header("0??")]
 
 File: Battle\GameoverController.cs
 Line 7: /// <summary>
 Line 8: /// Gameover controller
 Line 9: /// </summary>
-Line 41: // Next, let Animator perform
+Line 41: //The Animator is next.
 Line 81: //m_ParticleSystem.transform.position = new Vector3(UnityEngine.Random.Range(-6.85f, 6.85f), UnityEngine.Random.Range(-5.25f, 5.25f));
 
 File: Battle\ItemSelectController.cs
 Line 5: /// <summary>
-Line 6: /// Literal meaning
+Line 6: /// Literally
 Line 7: /// </summary>
 Line 18: //SelectUIController selectUIController;
 Line 21: //selectUIController = transform.parent.GetComponent<SelectUIController>();
-Line 34: // Up
+Line 34: //up
 
 File: Battle\ProjectionCheckCollider.cs
 Line 5: /// <summary>
-Line 6: /// Determination of the original center of the projection.
-Line 7: /// If you place the bullet comment directly at the original center position (minus one thousand), it may cause display problems.
+Line 6: /// The projection was originally centered.
+Line 7: /// If you put the popup directly where the original center was (minus a thousand), it may cause display problems.
 Line 8: /// </summary>
 Line 14: // Start is called before the first frame update
 Line 27: // Update is called once per frame
 
 File: Battle\SelectUIController.cs
 Line 7: /// <summary>
-Line 8: /// UI controller in Battle scene
-Line 9: /// Also responsible for controlling the player's turn
+Line 8: /// UI Controller in Battle Scene
+Line 9: /// Also responsible for player turn control.
 Line 10: /// </summary>
-Line 16: [Header("HP bar color")]
-Line 22: [Header("Number of dialogue bubbles loaded")]
+Line 16: [Header("HP Article Color Scheme")]
+Line 22: [Header("Number of dialog bubbles loaded")]
 Line 22: //Load actSave
-Line 27: [Header("Temporarily save unused Sprite")]
-Line 33: [Header("Four button UI selection 0 open")]
+Line 27: [Header("Storing unused Sprite")]
+Line 33: [Header("Selection of four buttons UI 0 on")]
 Line 36: [Header("Layer")]
-Line 37: //0 Select button 1 Select name 2 Act option/backpack layer 3 Execution layer Reset to zero after entering the enemy's turn
+Line 37: //0 Select Button 1 Select Name 2 Act Option/Backpack Layer 3 Execute Layer Zeroed after entering enemy turn
 Line 39: [Header("Subselect")]
-Line 42: //Item&Mercy: 1 2 3 three positions ACT: four positions
-Line 47: [Header("Temporarily save ACT options for easy recall")]
-Line 50: [Header("Automatically search for monsters with overall combat control. Ensure consistent names")]
-Line 59: [Header("Play custom turn text when entering a turn for the first time")]
-Line 125: //Enemy turn: On!
+Line 42: //Item&Mercy:1 2 3 three positions ACT:four positions
+Line 47: [Header("Save ACT option for invocation")]
+Line 50: [Header("Automatically find monsters for battle masters. Make sure they have the same name.")]
+Line 59: [Header("Play customized turn text the first time you enter a turn")]
+Line 125: //Enemy turn: open!
 Line 139: /// <summary>
-Line 140: /// UI typing. After typing is completed, the text will not be forced to freeze.
+Line 140: //// UI typing No forced text control after typing is complete
 Line 141: /// </summary>
 Line 147: /// <summary>
-Line 148: /// Tactical swap
+Line 148: /// Tactical exchange
 Line 149: /// </summary>
 Line 157: /// <summary>
-Line 158: /// Settings when selectUI=1
-Line 159: /// Mainly for selecting monsters
+Line 158: /// Setting when selectUI=1
+Line 159: /// Mainly for selected monsters.
 Line 160: /// </summary>
 Line 176: /// <summary>
-Line 177: /// Enter my turn
+Line 177: //// Into our turn.
 Line 178: /// </summary>
 Line 195: /// <summary>
-Line 196: /// My turn! Draw card)
+Line 196: /// My turn! Draw Cards)
 Line 197: /// </summary>
-Line 263: //if (hpFood != MainControl.instance.PlayerControl.hp)
-Line 295: //FIGHT: Select enemy
-Line 309: //ACT: Select enemy
+Line 263: //if (hpFood ! = MainControl.instance.PlayerControl.hp)
+Line 295: //FIGHT: Select the enemy.
+Line 309: //ACT: Selecting Enemies
 Line 342: //ITEM: Jump 2
-Line 353: //MERCY: Select enemy
-Line 427: //Write ACT related trigger code here
+Line 353: //MERCY: Selection of the enemy
+Line 427: // Write the ACT trigger code here.
 Line 429: //Monster 0
-Line 430: //Options
+Line 430: //Option
 Line 453: //Monster 1
 Line 454: //Options
 Line 474: //Monster 2
@@ -276,33 +287,33 @@ Line 475: //Options
 Line 540: //hpSpr.material.SetFloat("_Crop", 1);
 Line 566: //if (myItemMax < num)
 Line 718: //if (selectUI == 1)
-Line 719: // KeepDialogBubble();
+Line 719: // KeepDialogBubble(); // KeepDialogBubble().
 Line 790: /// <summary>
-Line 791: /// Update UI text and health bar
+Line 791: /// Updated UI text and blood bars.
 Line 792: /// </summary>
 Line 845: /// <summary>
-Line 846: /// Solve the problem that hpUI displays 01 as 1)
+Line 846: /// Fix hpUI showing 01 as 1)
 Line 847: /// </summary>
 
 File: Battle\SpriteSplitController.cs
 Line 5: /// <summary>
-Line 6: /// Contains Pool.
-Line 7: /// Realize the fragmentation effect of the sprite.
-Line 8: /// Line by line from top to bottom.
-Line 9: /// This script will take effect immediately after activation
+Line 6: /// Contained Pool.
+Line 7: /// Implementing the sprites' fragmentation effect.
+Line 8: /// Line by line, top to bottom.
+Line 9: /// Effective immediately after starting this script.
 Line 10: /// </summary>
-Line 13: //Object pool
-Line 18: //The particle is the relative coordinate of the upper left corner of the image
+Line 13: //Object Pool
+Line 18: //Particle to calculate the relative coordinates of the upper-left corner of the image
 Line 19: //Particle generation speed
-Line 74: //-----Object pool part-----
+Line 74: //----- object pool section -----
 Line 76: /// <summary>
-Line 77: /// Initialize/fill the object pool
+Line 77: /// Initializing/filling the object pool
 Line 78: /// </summary>
 Line 88: /// <summary>
-Line 89: /// Return to the object pool
+Line 89: /// Returns the object pool
 Line 90: /// </summary>
 Line 98: /// <summary>
-Line 99: /// Get the object square)
+Line 99: /// Hippie object square)
 Line 100: /// </summary>
 
 File: Battle\SpriteSplitFly.cs
@@ -314,330 +325,324 @@ File: Battle\TargetController.cs
 Line 5: /// <summary>
 Line 6: /// Control Target
 Line 7: /// </summary>
-Line 13: [Header("Damage caused by attack")]
-Line 20: [Header("Parent passed")]
-Line 23: [Header("Parent passed Monster to hit")]
-Line 40: //anim.enabled = true;
+Line 13: [Header("Damage from attack")]
+Line 20: [Header("parent incoming")]
+Line 23: [Header("Parent passes in monster to hit")]
+Line 40: //anim.enabled = true;; //anim.enabled = true
 Line 61: /// <summary>
-Line 62: /// Calculation when attacking the enemy
+Line 62: /// Calculations performed when attacking an enemy
 Line 63: /// </summary>
-Line 68: //Accuracy coefficient
-Line 73: //Accuracy coefficient
-Line 91: //The following are all used for anim
-Line 113: //anim.enabled = false;
+Line 68: //accuracy factor
+Line 73: //accuracy factor
+Line 91: // All of the following are for anim
+Line 113: //anim.enabled = false;; //anim.enabled = false.
 
 File: Battle\TurnController.cs
 Line 7: /// <summary>
-Line 8: /// Turn control, also the object pool of bullet screen
+Line 8: /// Round control, which also serves as the object pool for the pop-ups.
 Line 9: /// </summary>
 Line 19: //public List<string> inheritList = new List<string>();
-Line 31: //OutYourTurn();
-Line 32: //Bullet screen
+Line 31: //OutYourTurn().
+Line 32: //Bouncer
 Line 39: //Baffle
 Line 52: /// <summary>
-Line 53: /// Enter the enemy's turn
+Line 53: /// Enters the enemy's turn
 Line 54: /// </summary>
 Line 61: /// <summary>
-Line 62: /// Turn execution system
-Line 63: /// Execute according to the turn number
+Line 62: /// Round execution system
+Line 63: /// Execute according to the round number.
 Line 64: /// </summary>
 Line 71: //MainControl.instance.battlePlayerController.ChangePlayerColor(MainControl.instance.BattleControl.playerColorList[5], BattleControl.PlayerColor.blue,0,BattlePlayerController.PlayerDirEnum.down);
-Line 110: //Example round
+Line 110: //Example Round
 Line 157: /// <summary>
 Line 158: /// Round nesting
-Line 159: /// First define the nested name in the enumeration Nest, and then write the nested content here
-Line 160: /// Used for repeated nesting of complex bullet screens
+Line 159: /// First define the nested name in the enumeration Nest, and then write the nested content here.
+Line 160: /// Used to repeat the nested use of complex popups.
 Line 161: /// </summary>
 
 File: Control\AudioControl.cs
 Line 10: //public List<AudioClip> bgmClip;
-Line 11: [Header("For UI sound effects")]
+Line 11: [Header("for UI sound")]
 Line 14: [Header("For typewriter sound effects")]
-Line 17: [Header("For combat sound effects")]
-Line 20: [Header("For walking footsteps sound effects")]
+Line 17: [Header("for combat sound effects")]
+Line 20: [Header("For walking footsteps sound effect")]
 
 File: Control\BattleControl.cs
 Line 4: /// <summary>
-Line 5: /// Battle system manager, only used in battle scenes.
+Line 5: /// Combat System Manager, used only for combat scenarios.
 Line 6: /// </summary>
 Line 10: [Header("Enemy OBJ")]
 Line 11: [Header("Object name will be recognized as enemy name")]
-Line 12: //Enemy's Obj.
-Line 14: [Header("HP, even is the current HP, odd is the maximum Max, the same below")]
-Line 19: [Header("UIText read in battle")]
-Line 24: [Header("Store ACT options and text after selection")]
-Line 25: //4-to-one correspondence, sorted by enemies
-Line 27: [Header("Store MERCY options and text after selection")]
-Line 30: [Header("Store narration by turn")]
-Line 33: [Header("Store enemy dialogue file")]
+Line 12: // Enemy Obj.
+Line 14: [Header("HP Even is Current Blood Odd is Max. Same below")]
+Line 19: [Header("In-combat UIText read")]
+Line 24: [Header("Store ACT options and post selection text")]
+Line 25: //4 one to one, sorted by enemies.
+Line 27: [Header("Store MERCY options and post-selection text")]
+Line 30: [Header("Store narration by round")]
+Line 33: [Header("Store enemy dialog file")]
 Line 34: //Read directly in the battle scene
 Line 38: /// <summary>
-Line 39: /// Barrage color data (original special barrage), non-visual color
+Line 39: /// Pop-up color data (original special pop-ups), non-visual colors
 Line 40: /// </summary>
 Line 51: /// <summary>
 Line 52: /// Player data color
 Line 53: /// </summary>
-Line 67: [Header("Item Attachment")]
+Line 67: [Header("Project Attachment")]
 
 File: Control\ItemControl.cs
 Line 4: /// <summary>
 Line 5: /// Stores all item information.
 Line 6: /// </summary>
-Line 10: //Data package (built-in data import)
-Line 11: //Language package
-Line 12: //Total List storage will be assigned to MainControl
-Line 14: //@ + name/attribute1/attribute2 List is sorted as ID 3 loops 0+ 2 loops 10000+ 2 loops 20000+ 3 loops 30000+
+Line 10: // Data packet (built-in data transfer)
+Line 11: //Language packs
+Line 12: //Total List storage to be assigned to MainControl
+Line 14: //@ + Name/Attribute1/Attribute2 Sorted in List as ID 3 by 0+ 2 by 10000+ 2 by 20000+ 3 by 30000+
 Line 16: //-------------------------------------------------------
-Line 18: //Box data storage number
+Line 18: // Box data Storage number
 
 File: Control\OverworldControl.cs
 Line 4: /// <summary>
-Line 5: /// Mainly used for Overworld data and general basic data
+Line 5: //// Mainly used for Overworld data and generalized basic data.
 Line 6: /// </summary>
 Line 10: //public int languagePack;
-Line 11: //Prevent player operations from causing errors when the screen is black
+Line 11: //Prevent players from reporting errors during black cut-scenes.
 Line 13: [Header("--UI--")]
-Line 14: [Header("Font storage")]
-Line 17: [Header("Font full and half width")]
-Line 18: //Font full and half width
-Line 20: [Header("Resolution level")]
+Line 14: [Header("Font Storage")]
+Line 17: [Header("Font Full Half")]
+Line 18: //Font full half-angle
+Line 20: [Header("Resolution Level")]
 Line 21: //Resolution level
-Line 23: [Header("Full screen")]
-Line 24: //Full screen switch
-Line 26: [Header("Global volume")]
-Line 27: //Global volume
-Line 29: [Header("Simplified special effects")]
-Line 30: //Light effect Post-processing special effects display
+Line 23: [Header("Full Screen")]
+Line 24: //Full Screen Switch
+Line 26: [Header("Global Volume")]
+Line 27: //Global Volume
+Line 29: [Header("Simplify Effects")]
+Line 30: //Lighting effect Post-processing effect display
 Line 32: [Header("Show FPS")]
-Line 33: //Show FPS
+Line 33: //Display FPS
 Line 35: [Header("Resolution (for display)")]
 Line 36: //Resolution
-Line 38: [Header("Text packet reading")]
-Line 46: //According to the setting order
-Line 48: [Header("Player related")]
-Line 51: [Header("Scene connection storage")]
-Line 56: [Header("HD border")]
-Line 61: //[Header("The data that needs to be saved in the game is written below")]
-Line 62: [Header("Vertical sync")]
-Line 67: // Asynchronous
-Line 68: // Synchronize to the screen refresh rate
-Line 69: // Synchronize to half of the screen refresh rate
+Line 38: [Header("Packet read")]
+Line 46: //In the order of setting
+Line 48: [Header("Player Related")]
+Line 51: [Header("Scene articulation store")]
+Line 56: [Header("HD Border")]
+Line 61: //[Header("In-game data that needs to be archived is written below.")]
+Line 62: [Header("Vertical Synchronization")]
+Line 67: // Unsynchronized
+Line 68: // Synchronize to screen refresh rate
+Line 69: // Synchronize to half the screen refresh rate
 Line 81: //These three
 Line 82: //Yes
-Line 83: //AI did it
+Line 83: // AI did it
 
 File: Control\PlayerControl.cs
 Line 4: /// <summary>
 Line 5: /// Player information
-Line 6: /// And some related settings
+Line 6: /// and some related settings
 Line 7: /// </summary>
-Line 14: [Header("AT and DF displayed in OW backpack will be -10")]
-Line 20: //Player backpack data storage number
-Line 26: [Header("Scene connection storage")]
-Line 31: [Header("Open debugging")]
-Line 34: [Header("--Debug mode settings--")]
-Line 35: [Header("Lock blood")]
+Line 14: [Header("AT and DF shown in OW backpack will be -10")]
+Line 20: //Player backpack data Storage number
+Line 26: [Header("Scene articulation store")]
+Line 31: [Header("Enable debugging")]
+Line 34: [Header("--debug mode setting--")]
+Line 35: [Header("Blood lock")]
 
 File: Debug\DebugDraft.cs
 Line 8: // Start is called before the first frame update
-Line 13: // Update is called once per frame
+@ -454,32 +444,32 @@ Line 13: // Update is called once per frame
 
 File: Debug\DebugGrid.cs
 Line 4: /// <summary>
-Line 5: /// Debug grid positioning, used for bullet screens
+Line 5: /// Debug grid positioning for pop-ups and stuff.
 Line 6: /// </summary>
-Line 9: [Header("Color is given to the 'bar'")]
-Line 16: [Header("How many pieces are divided horizontally and vertically (number of knives - 1) X is horizontally laid vertical strips, Y is the opposite")]
-Line 21: [Header("XY offset, if left-right symmetric, fill in a positive number like the reference")]
-Line 26: [Header("reference coordinates")]
+Line 9: [Header("Color is given to the top of the 'bar'")]
+Line 16: [Header("Split the slices horizontally and vertically (number of cuts - 1) X is horizontal with flat vertical strips Y and vice versa.")]
+Line 21: [Header("XY offset If left/right symmetric fill in a positive number as for reference")]
+Line 26: [Header("Reference coordinates")]
 Line 48: //x
 Line 52: //DebugLogger.Log(length);
 Line 64: //x
 Line 68: //DebugLogger.Log(length);
 
 File: Debug\DebugPolygonScaler.cs
-Line 6: // Used to draw the original polygon
-Line 7: // Used to draw the moved polygon
-Line 8: // Distance to move to the center
-Line 9: // Create a simple list of polygon vertices
-Line 22: // Calculate the midpoint of the polygon and move the vertex
+Line 6: // Used to draw the original polygon.
+Line 7: // Used to draw the polygon after the move.
+Line 8: // Distance to center
+Line 9: // Create a simple list of polygon vertices.
+Line 22: // Calculate the polygon midpoint and move the vertices.
 Line 25: // Draw the original polygon
-Line 28: // Draw the moved polygon
-Line 32: // Method to move the polygon vertex to the center
-Line 39: // Direction from the vertex to the center
-Line 40: // Move a fixed distance to the center
-Line 46: // Method to calculate the center of the polygon
-Line 57: // Method to draw the polygon using LineRenderer
-Line 60: // Set the number of vertices (+1 is to close the polygon)
+Line 28: // Draw the moved polygon.
+Line 32: // Method to move polygon vertices to the center
+Line 39: // Direction from vertex to center
+Line 40: // Move a fixed distance to the center.
+Line 46: // Method for calculating the center of a polygon
+Line 57: // Method for drawing polygons with the LineRenderer.
+Line 60: // set the number of vertices (+1 to close the polygon)
 Line 65: // Closed polygon
 
 File: Debug\DebugRandomSudoku.cs
-Line 6: //æ≈π¨∏Ò≤‚ ‘
-Line 30: ///DebugLogger.Log(j + 1);
+Line 6: //?≈π¨∏?≤' '
+@ -487,20 +477,20 @@ Line 30: ///DebugLogger.Log(j + 1);
 
 File: Debug\DebugSpTextSummon.cs
 Line 4: /// <summary>
-Line 5: /// Generate a series of encrypted texts
+Line 5: /// Generate a series of cerebral infarct encrypted texts
 Line 6: /// </summary>
 Line 19: /// <summary>
-Line 20: /// Convert the original letter text to numbers
+Line 20: /// Original alphabetic text converted to numbers
 Line 21: /// </summary>
 Line 44: /// <summary>
-Line 45: /// The first letter of the number represents the number
-Line 46: /// Convert the number to letters
+Line 45: /// The first letter of a number indicates a number.
+Line 46: /// Converting numbers to letters
 Line 47: /// </summary>
 Line 68: /// <summary>
-Line 69: /// 26 letters converted to nine-key numbers
+Line 69: /// 26 letters converted to 9-key numbers
 Line 70: /// </summary>
 Line 91: /// <summary>
-Line 92: /// Please note when reversing
+Line 92: /// Reverse with caution!
 Line 93: /// </summary>
 
 File: Debug\DebugVideoController.cs
-Line 23: //DebugLogger.Log("video play");
-Line 28: //DebugLogger.Log("video pause");
-Line 35: //DebugLogger.Log("video +");
-Line 36: //DebugLogger.Log("frame:" + videoPlayer.frame);
-Line 42: //DebugLogger.Log("video -");
-Line 43: //DebugLogger.Log("frame:" + videoPlayer.frame);
-Line 48: //DebugLogger.Log("video skip");
+@ -514,533 +504,533 @@ Line 48: //DebugLogger.Log("video skip");
 
 File: Default\AudioController.cs
 Line 6: /// <summary>
-Line 7: /// Control audio based on object pool
+Line 7: /// Based on object pools Control Audio
 Line 8: /// </summary>
-Line 39: //AudioPlayer is a subclass!! It is not built-in Unity
-Line 72: //AudioPlayer is a subclass!! Not built-in Unity
+Line 39: //AudioPlayer is a word class! It doesn't come with unity.
+Line 72: //AudioPlayer is a word class! It doesn't come with unity.
 
 File: Default\BoxController.cs
 Line 5: /// <summary>
-Line 6: /// Battle box master control
+Line 6: /// Battlebox Master Control
 Line 7: /// </summary>
-Line 11: [Header("Line width")]
-Line 14: [Header("Generate box at the beginning, no generation if name is empty")]
-Line 21: //Intersection/non-overlapping/overlapping
-Line 107: //Get the realPoints of two Boxes
-Line 111: //Calculate three major Lists
-Line 121: //Merge two special boxes when they overlap, and give the rest to the parent BoxDrawer.
-Line 146: //Delete first, add it back to the parent BoxDrawer
-Line 151: //Generate first
+Line 11: [Header("Line Width")]
+Line 14: [Header("Generate box at start, empty name not generated")]
+Line 21: //intersection/non-overlapping/overlapping points
+Line 107: //Get the realPoints of the two Boxes.
+Line 111: //Calculate the three major lists
+Line 121: // When two special boxes overlap, merge them and leave the rest to the parent BoxDrawer.
+Line 146: //delete it first and add it back in the parent BoxDrawer.
+Line 151: //Mr. Sung
 Line 157: //List<Vector2> pointsFinal = SortPoints(CalculatePolygonCenter(AddLists(pointsCrossSave, pointsInCrossSave)), points);
 Line 221: /// <summary>
 Line 222: /// Generate box
 Line 223: /// </summary>
-Line 266: // Rotate each point first, then add the position of the object
-Line 281: // The core code: build Mesh! !
+Line 266: // rotate each point first, then add the object's position
+Line 281: // Most core code: build the mesh!
 Line 288: /// <summary>
-Line 289: /// Calculate coordinates to get RealPoints
+Line 289: /// Calculate coordinates to get RealPoints.
 Line 290: /// </summary>
-Line 296: // Rotate each point first, then add the position of the object
+Line 296: // rotate each point first, then add the object's position
 Line 307: /// <summary>
-Line 308: /// Reset frame
+Line 308: /// Reset box
 Line 309: /// </summary>
 Line 334: /// <summary>
-Line 335: /// Construct Mesh
+Line 335: /// Constructing a Mesh
 Line 336: /// </summary>
-Line 340: // Convert Vector array to ContourVertex array required by LibTessDotNet
-Line 347: // Create Tess object and add contour
-Line 351: // Perform triangulation
-Line 354: // Create Mesh object
-Line 357: // Convert Tess result to Unity Mesh format
-Line 370: // Apply vertices and triangles to the mesh
-Line 374: // Set UV coordinates for the mesh
-Line 378: // Here is a simple mapping from vertex coordinates to UV space
-Line 379: // Usually, you need to adjust this code according to your specific situation
-Line 388: // For better rendering, you can calculate normals and bounds
-Line 392: // Apply the mesh to the GameObject
+Line 340: // Convert the Vector array to the ContourVertex array needed for LibTessDotNet.
+Line 347: // Create a Tess object and add an outline.
+Line 351: // Triangulate
+Line 354: // Create Mesh Object
+Line 357: // Convert Tess results to Unity Mesh format.
+Line 370: // Apply vertices and triangles to the mesh.
+Line 374: // Set the UV coordinates for the mesh.
+Line 378: // Here's a simple mapping that maps vertex coordinates to UV space
+Line 379: // Often, you need to adapt this part of the code to the specific situation.
+Line 388: // Calculate normals and boundaries for better rendering results
+Line 392: // Apply the mesh to the GameObject.
 Line 395: /// <summary>
-Line 396: /// Remove duplicates
+Line 396: /// Eliminate duplicates
 Line 397: /// </summary>
-Line 400: // Use HashSet<Vector2> to store the Vector2 elements that have been encountered, because HashSet automatically removes duplicates
-Line 402: // Used to store the list after removing duplicates
-Line 407: // If the addition to the HashSet is successful (that is, the element has not been encountered before), add it to the result list
+Line 400: // Use HashSet<Vector2> to store the Vector2 elements that have been encountered, because HashSet automatically de-duplicates them.
+Line 402: // Used to store the de-duplicated list.
+Line 407: // If the addition to the HashSet was successful (i.e., the element has not been encountered before), add it to the result list
 Line 420: /// <summary>
-Line 421: /// Main function, calculates all intersections of two sets of line segments
+Line 421: /// Main function, calculates all intersections of two sets of lines.
 Line 422: /// </summary>
-Line 430: // Loop list
-Line 435: // Loop list
+Line 430: // Loop List
+Line 435: // Loop List
 Line 450: /// <summary>
-Line 451: /// Calculate vector cross product
+Line 451: /// Compute vector cross product
 Line 452: /// </summary>
 Line 458: /// <summary>
-Line 459: /// Check if point C is on line segment AB
+Line 459: /// Check if point C is on line AB.
 Line 460: /// </summary>
 Line 466: /// <summary>
-Line 467: /// Check if line segments AB and CD intersect
+Line 467: /// Check if lines AB and CD intersect.
 Line 468: /// </summary>
 Line 480: /// <summary>
-Line 481: /// Calculate the intersection of two line segments AB and CD
+Line 481: /// Calculate the intersection of two lines AB and CD.
 Line 482: /// </summary>
-Line 488: // Calculate the parameters of the linear equation
-Line 491: // Line segments are parallel or collinear
+Line 488: // Calculating the parameters of a linear equation
+Line 491: // Line segments parallel or co-linear
 Line 496: /// <summary>
-Line 497: /// Calculate non-coincident points
+Line 497: /// Calculate non-recombining points
 Line 498: /// </summary>
-Line 504: // Merge the list after elimination
+Line 504: // Merged and culled list
 Line 543: /// <summary>
-Line 544: /// Take initialPoint as the center of the circle, a certain length as the radius, rotate clockwise, and sort the points in the list.
+Line 544: /// Sort the list of points by rotating clockwise with initialPoint as the center and a number of lengths as the radius.
 Line 545: /// </summary>
 Line 554: /// <summary>
-Line 555: /// Add the first two and subtract the last two
+Line 555: //// Add the first two, subtract the last two
 Line 556: /// </summary>
 Line 565: /// <summary>
-Line 566: /// Add List
+Line 566: /// Add the lists.
 Line 567: /// </summary>
 Line 574: /// <summary>
-Line 575: /// Subtract List
+Line 575: /// Subtract the List.
 Line 576: /// </summary>
-Line 589: //Clipper2 API related
+Line 589: //Clipper2 API-related
 Line 596: //X
 Line 600: //Y
 Line 621: /// <summary>
-Line 622: /// Intersection
+Line 622: /// Take the intersection
 Line 623: /// </summary>
 
 File: Default\BoxDrawer.cs
 Line 10: /// <summary>
-Line 11: /// Battle box drawing
+Line 11: /// Combat box drawing
 Line 12: /// </summary>
 Line 29: [Header("Don't use Transform's rotation")]
 Line 30: // Get the rotation of the current object
-Line 31: [Header("Line width")]
+Line 31: [Header("Line Width")]
 Line 35: [Header("Whether to enable Bessel interpolation")]
-Line 39: [Header("The points used for the real group box")]
-Line 40: // Real curve interpolation, the number of insertion points is determined by besselPointsNum
+Line 39: [Header("Points used for true group box")]
+Line 40: //The real curve interpolation, the number of insertion points is determined by besselPointsNum.
 Line 49: [Header("Set whether it is a special box")]
-Line 52: [Header("When the Box is the parent, it is used to store the relevant calculated data of the child")]
-Line 53: [Header("The sum of the child realPoints")]
+Line 52: [Header("When this Box is the parent, use this to store the relevant post-calculation data for the child.")]
+Line 53: [Header("Sum of sub-level realPoints")]
 Line 56: [Header("Intersection")]
-Line 58: [Header("non-overlapping point")]
-Line 60: [Header("overlapping point")]
-Line 61: //Intersection/non-overlapping point/overlapping point
-Line 63: //Compound parent of this box
-Line 64: //Child of this box
-Line 67: [Header("For Editor")]
-Line 70: [Header("Whether to display Mesh (red line)")]
+Line 58: [Header ("non-recombining points")]
+Line 60: [Header("Point of coincidence")]
+Line 61: //intersection/non-overlapping/overlapping points
+Line 63: // Compound parent of this box
+Line 64: //Sublevel of this box
+Line 67: [Header("for Editor")]
+Line 70: [Header("Whether to display mesh (red line)")]
 Line 77: //BoxController.instance.boxes.Add(this);
-Line 96: //float testTimer;
-Line 145: //As a pure child
-Line 154: //As a parent
-Line 159: //Update the position coordinates of the two children
+Line 96: //float testTimer; //float testTimer.
+Line 145: //as a pure sub-level
+Line 154: //as parent
+Line 159: //Update the positional coordinates of the two sub-levels.
 Line 169: //Calculate the three major lists
 Line 178: //Merge when overlapping
-Line 199: //Dissolve if not overlapping
-Line 212: //Generate a box only when the parent object is BoxController
-Line 216: //Reduced frame is not drawn
-Line 222: //The father of the one who left will trigger this
+Line 199: // Dismissed if not overlapping
+Line 212: //Only generate box when parent object is BoxController.
+Line 216: //Subtracted boxes are not drawn.
+Line 222: //The father of the one who left will trigger this.
 Line 224: //Debug.Log(transform.childCount);
 Line 262: //SubListsWhenExitParent(GetRealPoints());
-Line 269: //The function is used to add two quaternions
-Line 272: //Convert two quaternions to Euler angles and add them
-Line 277: //Convert the added Euler angles to quaternions
+Line 269: // Function to add two quaternions together
+Line 272: // Convert two quaternions to Euler angles and add them together
+Line 277: // convert summed Euler angles to quaternions
 Line 289: /// <summary>
-Line 290: ///Generate a box through BoxController
+Line 290: /// Generating boxes via BoxController
 Line 291: /// </summary>
 Line 302: /// <summary>
-Line 303: /// Switch component
+Line 303: /// Switch assembly
 Line 304: /// </summary>
 Line 307: //meshFilter.mesh = null;
 Line 308: //lineRenderer.positionCount = 0;
@@ -648,147 +653,147 @@ Line 323: ///
 Line 341: /// <summary>
 Line 342: /// Interpolation function
 Line 343: /// </summary>
-Line 344: /// <param name="points">Original List</param>
-Line 345: /// <param name="interpolation">Number of points to divide by two</param>
+Line 344: /// <param name="points">Raw List</param>
+Line 345: //// <param name="interpolation">Equalizing points</param>
 Line 346: /// <returns></returns>
-Line 370: // Insert interpolation between the beginning and the end
+Line 370: // Insert first and last interpolations
 Line 380: /// <summary>
-Line 381: /// Generate points on the Bezier curve
+Line 381: /// Generate points on Bézier curve
 Line 382: /// </summary>
-Line 388: // Create a Vector2 list to store the points on the generated Bezier curve
-Line 390: // Check the number of control points. At least 4 control points are required to form a cubic Bezier curve.
-Line 393: // Display an error message in the console
-Line 394: // Return an empty Bezier point list
-Line 397: // Traverse the control point list and take out besselInsertNum + 1 points each time to generate a Bezier curve segment
-Line 405: // Generate points on the current curve segment according to the number of required points
-Line 408: // Calculate the value of parameter t for interpolation
-Line 409: // Call the function to calculate Bezier points
-Line 410: // Add the calculated points to the Bezier point list
-Line 415: // Return the generated Bezier point list
+Line 388: // Create a Vector2 list to store the points on the generated Bézier curve.
+Line 390: // Check the number of control points, at least 4 are needed to form a cubic Bezier curve.
+Line 393: // Display an error message on the console
+Line 394: // Returns an empty list of Bessel points.
+Line 397: // Iterate through the list of control points, taking out besselInsertNum + 1 point at a time to generate Bessel segments.
+Line 405: // Generate points on the current curve segment according to the number of points needed.
+Line 408: // Calculate the value of parameter t for interpolation.
+Line 409: // Call the function that calculates the Bessel point.
+Line 410: // Add the calculated points to the list of Bessel points.
+Line 415: // Returns a list of generated Bessel points.
 Line 433: /// <summary>
 Line 434: /// Calculate the number of combinations C(n, k)
 Line 435: /// </summary>
-Line 460: [Header("Show the coordinates of which points")]
-Line 554: // Draw a GUI once.
+Line 460: [Header("Show coordinates of which points")]
+Line 554: // Draw the GUI once.
 
 File: Default\CameraLightController.cs
-Line 6: // Radius of visible range
-Line 26: // Get references to all light source components
+Line 6: // Radius of the visible range
+Line 26: // Get references to all light components.
 
 File: Default\CanvasController.cs
 Line 10: /// <summary>
-Line 11: /// UI interface, including: FPS display, long press ESC to exit, setting interface
+Line 11: /// UI interface, including: FPS display Long press ESC to exit Setup interface
 Line 12: /// </summary>
-Line 18: //Cannot be opened during enemy turn
-Line 31: //Currently Max is only used to configure language packs
-Line 34: //Switch levels 0th level default 1st level key settings 2nd level language pack configuration
-Line 36: //Page is page turning Select is to switch primary and secondary key settings
-Line 37: //Is it selected
-Line 42: //Prevent trouble when switching scenes
-Line 45: //Store typewriter to suspend coroutines
+Line 18: //Enemy turn cannot be opened
+Line 31: //Currently Max is only used to configure language packs.
+Line 34: //Toggle Layer 0 Defaults Layer 1 Key Settings Layer 2 Language Pack Configuration
+Line 36: //Page is page flip Select is switching primary and secondary key setting
+Line 37: //Whether to check
+Line 42: //preventing the whole thing from happening during cut scenes
+Line 45: //Store the typewriter to pause the coprogramming
 Line 233: //Built-in package information
 Line 264: /// <summary>
-Line 265: /// Get language pack information
-Line 266: /// Return returnString
+Line 265: /// Get package information.
+Line 266: /// return returnString
 Line 267: /// </summary>
 Line 286: /// <summary>
-Line 287: /// Return on/off text
+Line 287: /// Returns the on/off text.
 Line 288: /// </summary>
-Line 324: //Settings menu
-Line 778: //The time of the last frame rate update;
-Line 779: //The time interval for updating the frame rate;
-Line 780: //Number of frames;
+Line 324: //Setup menu
+Line 778: //The last time the frame rate was updated.
+Line 779: //Interval for updating the frame rate.
+Line 780: //frames.
 Line 781: //Frame rate
 Line 788: //FPS = total number of frames in a certain period of time / a certain period of time
 Line 797: /// <summary>
 Line 798: /// Anim call
 Line 799: /// </summary>
-Line 809: //Convert world coordinates to screen coordinates
-Line 811: //Convert screen coordinates to the center of the screen as the origin
-Line 812: //Scale to get UGUI coordinates
+Line 809: //World coordinates converted to screen coordinates
+Line 811: //Transform screen coordinates to center of screen as origin
+Line 812: //scaling to get UGUI coordinates
 
 File: Default\ChangeClipWalk.cs
 Line 3: /// <summary>
-Line 4: /// Change the movement range after the player triggers
+Line 4: //// Changes movement range when triggered by the player.
 Line 5: /// </summary>
-Line 8: [Header("New range")]
+Line 8: [Header("New scope")]
 Line 15: //PlayerBehaviour playerBehaviour = collision.transform.GetComponent<PlayerBehaviour>();
 
 File: Default\DrawFrameController.cs
 Line 6: /// <summary>
-Line 7: /// Use LineRenderer and polygon shader to draw polygon frames, used for battle frames, UI, etc.
+Line 7: /// Use LineRenderer with polygon shader to draw polygonal boxes for combat boxes, UI, etc.
 Line 8: /// </summary>
 Line 12: [Header("Line length")]
 Line 15: [Header("Number of vertices")]
-Line 18: [Header("Vertices")]
-Line 21: [Header("Enable collision (for combat box)")]
+Line 18: [Header("Vertex")]
+Line 21: [Header("Turn on collision (for combat box)")]
 Line 24: [Header("ID detection: use _Point (0)")]
-Line 27: [Header("Use this to make it draw a regular polygon when it is created")]
+Line 27: [Header("Use this to allow it to draw orthopolygons when it is created.")]
 Line 30: [Header("Turn off automatic material acquisition")]
 Line 118: // Top-left
 Line 119: // Top-right
 Line 120: // Bottom-left
 Line 121: // Bottom-right
-Line 130: // Determine the number of sides based on the number of points
+Line 130: // Determine the number of edges based on the number of points.
 Line 156: // Calculate the new positions for the points
 Line 164: // Apply the animations using DOTween
 
 File: Default\DynamicTMP.cs
 Line 4: /// <summary>
-Line 5: /// Add all kinds of weird deformation/displacement/shake to the font. Balabala
+Line 5: /// Add all sorts of weird distortions/displacements/jiggles to the font blah blah blah!
 Line 6: /// </summary>
-Line 29: //Parkinson's, but each shake is different
+Line 29: // Parkinson's, but each jitter is different
 Line 40: //Animation
-Line 46: //Similar to the original battle dialogue shake: the characters shake randomly at random times
+Line 46: //Similar to the original battle's dialog jitter: characters randomly jitter at random times.
 Line 60: //Animation
-Line 67: //Uniform shake
+Line 67: // Neatly jittery
 Line 79: //Animation
-Line 85: //Twitching shake
+Line 85: //Twitchy jitteriness
 Line 95: //Animation
-Line 106: //Ghost-like twitching shake
+Line 106: // little spooky twitchy jitters
 Line 116: //Animation
-Line 124: //Ghost character floating
+Line 124: // Small ghost character floating
 Line 134: //Animation
 
 File: Default\MainControl.cs
 Line 13: /// <summary>
-Line 14: /// Call all ScriptableObject And is responsible for importing data and language packs
-Line 15: /// Also includes most commonly used functions
+Line 14: /// Calls all ScriptableObjects and takes care of importing data and language packs.
+Line 15: /// Also includes most of the commonly used functions.
 Line 16: /// </summary>
 Line 23: //Total number of built-in language packs
-Line 27: [Header("-BGM BPM settings-")]
+Line 27: [Header("-BGM BPM setting-")]
 Line 29: [Header("BGM BPM")]
-Line 32: [Header("BGM BPM offset")]
-Line 35: [Header("Turn on the metronome")]
-Line 38: [Header("-BGM BPM calculation results-")]
+Line 32: [Header("BGM BPM Offset")]
+Line 35: [Header("Turn on metronome")]
+Line 38: [Header("-BGM BPM calculation result-")]
 Line 42: [Header("-MainControl settings-")]
-Line 44: [Header("Status: Normal, in battle")]
-Line 52: [Header("For reference")]
-Line 53: [Header("Out of battle")]
-Line 56: //[Header("In battle")]
+Line 44: [Header("Status: Normal, in combat")]
+Line 52: [Header("for quoting")]
+Line 53: [Header ("Out of combat")]
+Line 56: //[Header("Inside the Battle")]
 Line 57: //public OldBoxController OldBoxController;
 Line 105: /// <summary>
-Line 106: /// Get the built-in language pack ID
+Line 106: /// Get the built-in language pack ID.
 Line 107: /// </summary>
 Line 125: /// <summary>
-Line 126: /// Load the data of the corresponding language pack
+Line 126: /// Load the data for the corresponding language pack.
 Line 127: /// </summary>
-Line 151: //Call ScriptableObject
+Line 151: //call ScriptableObject
 Line 152: //--------------------------------------------------------------------------------
-Line 155: //Call OverworldControl in InitializationOverworld
-Line 156: //Call ItemControl in Initialization
+Line 155: //InitializationOverworld calls OverworldControl within Overworld
+Line 156: //Initialization calls ItemControl.
 Line 157: //--------------------------------------------------------------------------------
 Line 160: /// <summary>
-Line 161: /// Initialize and load a lot of data
+Line 161: //// Initialization loads a bunch of data
 Line 162: /// </summary>
-Line 173: //ItemControl loading
+Line 173: //ItemControl Loading
 Line 174: //--------------------------------------------------------------------------------
 Line 188: //--------------------------------------------------------------------------------
 Line 206: //OverworldControl loading
 Line 207: //--------------------------------------------------------------------------------
 Line 219: //--------------------------------------------------------------------------------
-Line 228: //Detect language pack full and half width
-Line 245: //BattleControl loading
+Line 228: //Detect language packs with full half-corners
+Line 245: //BattleControl loaded.
 Line 246: //--------------------------------------------------------------------------------
 Line 284: //--------------------------------------------------------------------------------
 Line 285: //OldBoxController = GameObject.Find("MainFrame").GetComponent<OldBoxController>();
@@ -801,278 +806,277 @@ Line 382: /// <summary>
 Line 383: /// Generate a random color in string form.
 Line 384: /// </summary>
 Line 432: /// <summary>
-Line 433: /// Calculate BGM beats
+Line 433: /// Calculating BGM Beats
 Line 434: /// </summary>
-Line 444: // Calculate the time point of each beat until the music duration is reached
+Line 444: // Calculate the timing of each beat until it reaches the music duration
 Line 455: /// <summary>
-Line 456: /// Control the metronome
+Line 456: /// Control Metronome
 Line 457: /// </summary>
 Line 493: /// <summary>
-Line 494: /// Apply default key positions
+Line 494: /// Apply default keystrokes
 Line 495: /// </summary>
 Line 546: /// <summary>
-Line 547: /// Pass in the default KeyCode and convert it to the in-game key position.
-Line 548: /// mode: 0 press 1 hold 2 lift
+Line 547: /// Pass in the default KeyCode and convert it to in-game keys.
+Line 548: /// Mode:0Press 1Continue 2Raise
 Line 549: /// </summary>
 Line 686: /// <summary>
-Line 687: /// SFX on/off
+Line 687: ////On/Off SFX
 Line 688: /// </summary>
 Line 715: /// <summary>
-Line 716: /// Press tab to change resolution))
+Line 716: /// Press tab to change resolution that way))
 Line 717: /// </summary>
 Line 737: /// <summary>
-Line 738: /// Conversion matching resolution setting
+Line 738: /// Conversion to match resolution setting
 Line 739: /// </summary>
 Line 742: //if (OverworldControl.background)
-Line 743: // y = y / 9 * 16;
+Line 743: // y = y / 9 * 16.
 Line 744: //else
-Line 749: //Generally CanvasController.instance.framePic
+Line 749: //generally CanvasController.instance.framePic
 Line 762: /// <summary>
-Line 763: /// Resolution settings
+Line 763: /// Resolution setting
 Line 764: /// </summary>
-Line 794: // BackpackBehaviour rawImage is controlled in its script
-Line 821: // BackpackBehaviour rawImage is controlled in its script
-Line 834: // Set in SetCanvasFrameSprite
+Line 794: // The BackpackBehaviour rawImage is controlled in its script.
+Line 821: // The BackpackBehaviour rawImage is controlled in its script.
+Line 834: //set in SetCanvasFrameSprite
 Line 835: //CanvasController.instance.frame.sprite = OverworldControl.frames[CanvasController.instance.framePic];
 Line 894: /// <summary>
-Line 895: /// Fade out Enter the jump scene name
-Line 896: /// banMusic is faded out
-Line 897: /// time>0 has animation =0 directly cut scene <0 will be the absolute value of time
+Line 895: /// Fade Out Enter Jump Scene Name
+Line 896: /// banMusic is fading out.
+Line 897: /// time>0 has animation =0 cuts scene directly <0 takes absolute value of time
 Line 898: /// </summary>
 Line 955: /// <summary>
-Line 956: /// Pass in a string and return a string with the last i characters deleted
+Line 956: /// Pass in string and return string with the last i characters removed.
 Line 957: /// </summary>
 Line 964: /// <summary>
-Line 965: /// Randomly generate a six-digit English
+Line 965: /// Randomly generates a six-digit long English word.
 Line 966: /// </summary>
-Line 981: //Saved list imported text
+Line 981: //saved list imported text
 Line 1009: /// <summary>
-Line 1010: /// Import data (pass in TextAsset)
+Line 1010: /// Call in the data (pass in TextAsset)
 Line 1011: /// </summary>
-Line 1012: //Saved list imported text
+Line 1012: //saved list imported text
 Line 1038: /// <summary>
-Line 1039: /// Import data (pass in string)
+Line 1039: /// Call in data (pass in string)
 Line 1040: /// </summary>
-Line 1041: //Saved list Imported text
+Line 1041: //saved list imported text
 Line 1066: /// <summary>
-Line 1067: /// Pass in which object to use the backpack
-Line 1068: /// Then use it. If you hit true, the order of the backpack will be sorted.
-Line 1069: /// Then let the typewriter type a word
-Line 1070: /// Fill in 0 in plusText and calculate it yourself
+Line 1067: /// Pass in which object is using the backpack.
+Line 1068: /// Then we'll use it to hit true and put the packs in order.
+Line 1069: /// And then let the typewriter type again.
+Line 1070: /// plusText will calculate itself if it is zero.
 Line 1071: /// </summary>
 Line 1103: //Food
 Line 1130: /// <summary>
-Line 1131: /// Convert special characters
+Line 1131: /// Converting special characters
 Line 1132: /// </summary>
-Line 1137: //Check if there are multiple special characters that need to be called in a loop
-Line 1155: //DebugLogger.Log(list[i] +"/"+ name);
+Line 1137: // Detect if there are multiple special characters that need to be called in a loop
+Line 1155: //DebugLogger.Log(list[i] + "/" + name);
 Line 1190: /// <summary>
-Line 1191: /// Switch statement for detecting '<''>' symbol in ChangeItemData
+Line 1191: /// Switch statement to detect '<''>' symbols in ChangeItemData
 Line 1192: /// </summary>
 Line 1195: //DebugLogger.Log(text + "/" + texters + "/" + isData);
-Line 1202: //Enter
+Line 1202: // Carriage Return
 Line 1371: /// <summary>
-Line 1372: /// Detect uppercase letters in the input text and convert them to all lowercase.
+Line 1372: /// Detects uppercase letters in the input text and converts them to all lowercase.
 Line 1373: /// </summary>
 Line 1398: /// <summary>
-Line 1399: /// Detect lowercase letters in the input text and convert them to all uppercase.
+Line 1399: /// Detects lowercase letters within the input text and converts them to all uppercase.
 Line 1400: /// </summary>
 Line 1425: /// <summary>
-Line 1426: /// Input a vector of the form (x, y)
-Line 1427: /// If the vector is of the form (xRx, yRy) or (xrx, yry), then take a random number around R
+Line 1426: /// Input a vector of the form (x,y).
+Line 1427: /// If the vector is of the form (xRx, yRy) or (xrx, yry), then take random numbers around R
 Line 1428: /// </summary>
 Line 1457: /// <summary>
-Line 1458: /// Randomly separate the form of xRx / xrx / O
-Line 1459: /// If there is no r or R, it will return to the original, which is very practical
+Line 1458: /// Shaped like xRx / xrx / O Randomly Separated
+Line 1459: /// If there is no r or R, it will return to the original, very useful.
 Line 1460: ///
-Line 1461: /// Additional addition: P/p gets the player's position and determines whether it is X or Y through isY
-Line 1462: /// A certain degree of fixation is achieved through the form of xxx + xRx.
+Line 1461: /// Extra: p/p to get player position by isY to determine if it's X or Y.
+Line 1462: /// Some degree of immobilization is achieved by xxx + xRx.
 Line 1463: /// </summary>
 Line 1511: //DebugLogger.LogWarning(text.Substring(2));
 Line 1512: //DebugLogger.Log(RandomFloatChange(text.Substring(2), origin, isY, origin));
 Line 1522: /// <summary>
-Line 1523: /// Input a vector of the form (x,y)
+Line 1523: /// Input a vector of the form (x,y).
 Line 1524: ///
 Line 1525: /// </summary>
 Line 1533: /// <summary>
-Line 1534: /// Input a vector of the form (r,g,b,a)
-Line 1535: /// Also supports random numbers
+Line 1534: /// Input vector of the form (r,g,b,a)
+Line 1535: /// Random numbers are also supported.
 Line 1536: /// </summary>
 Line 1577: /// <summary>
-Line 1578: /// Judge between num1 and num2 If it matches, return num2. Otherwise, return num1.
+Line 1578: /// Judge between num1 and num2 and return num2 if it matches. otherwise return num1.
 Line 1579: /// </summary>
 Line 1595: /// <summary>
-Line 1596: /// Allocate Item data
+Line 1596: /// Allocate Item Data
 Line 1597: /// </summary>
 Line 1604: //Total number of items
-Line 1609: //Single item traversal Find the \ character
+Line 1609: //Single-item traversal Searching for \ symbols
 Line 1629: /// <summary>
-Line 1630: /// A child void of ItemClassification
+Line 1630: /// a subvoid of ItemClassificatio
 Line 1631: /// </summary>
 Line 1659: /// <summary>
-Line 1660: /// Detect the '\' character and split the text into sub-Lists
-Line 1661: /// Batch process strings
+Line 1660: /// Detect the '\' character and split the text into sublists.
+Line 1661: /// Batch processing string
 Line 1662: /// </summary>
 Line 1681: /// <summary>
-Line 1682: /// Detect the '\' character and split the text into sub-lists
-Line 1683: /// Pass in a string
+Line 1682: //// Detect '\' character and split text to sub-list
+Line 1683: /// Pass in a string.
 Line 1684: /// </summary>
 Line 1701: /// <summary>
-Line 1702: /// Detect the first '\' character and pass it out
+Line 1702: /// Pass the first '\' character detected.
 Line 1703: /// </summary>
 Line 1716: /// <summary>
-Line 1717: /// Reverse detection of the first '\' character and pass it out, optionally ignoring the last ; sign.
+Line 1717: /// Reverse the detection of the first '\' character and pass it out, optionally ignoring the final ; sign.
 Line 1718: /// </summary>
 Line 1740: /// <summary>
-Line 1741: /// Used for in-game text reading
-Line 1742: /// Pass in a data name and return the text package text
-Line 1743: /// Give the first one and return the second one)
+Line 1741: /// Used for in-game text reading.
+Line 1742: /// Incoming data name returns packet text
+Line 1743: /// give the first return the second)
 Line 1744: /// </summary>
 Line 1758: /// <summary>
-Line 1759: /// Used for in-game text reading
-Line 1760: /// Pass in a data name and return all text package texts with the same name
+Line 1759: /// Used for in-game text reading.
+Line 1760: /// Pass in a data name to return the text of all packets with the same name.
 Line 1761: /// </summary>
 Line 1776: /// <summary>
-Line 1777: /// Check if the first few characters of list are the same as the string screen passed in.
-Line 1778: /// If the same, split the text into sub-Lists
+Line 1777: /// Tests if the first few characters of the list are the same as the passed-in string screen.
+Line 1778: /// Split the text into sublists if they are the same.
 Line 1779: /// </summary>
 Line 1792: /// <summary>
-Line 1793: /// Redistribute text packages
+Line 1793: /// Redistribute text packets
 Line 1794: /// </summary>
-Line 1797: //max.Clear();
+Line 1797: //max.Clear(); //max.
 Line 1834: /// <summary>
-Line 1835: /// Get Item information by Id:
+Line 1835: /// Getting Item information by Id:
 Line 1836: /// type: Foods Arms Armors Others Auto
-Line 1837: /// num: 0 language package name
+Line 1837: /// num: 0 language pack name
 Line 1838: /// 1/2: data1/2.
 Line 1839: /// Do not enter more.
-Line 1840: /// Arm and Armor only have 1
+Line 1840: /// Arm and Armor only 1
 Line 1841: /// </summary>
-Line 1846: //Get the number name
+Line 1846: //get number name
 Line 1911: //Get the name in the language pack
 Line 1937: /// <summary>
-Line 1938: /// Get the item data (HP, ATK, etc.) through the Id:
-Line 1939: /// type：Foods Arms Armors Others Auto
-Line 1940: /// justId: If checked, +xxHP/AT/DF and other information will be added
+Line 1938: /// Get the Item's data (HP, ATK, etc.) by Id:
+Line 1939: /// type: Foods Arms Armors Others Auto
+Line 1940: /// justId: if you check it, it will add +xxHP/AT/DF and so on.
 Line 1941: /// </summary>
-Line 1946: //Get the number name
+Line 1946: //get the number name
 Line 2054: /// <summary>
-Line 2055: /// After identifying 0, it will be transmitted
+Line 2055: /// Passed out after recognizing zero.
 Line 2056: /// </summary>
 Line 2071: /// <summary>
-Line 2072: /// Get its id through the item data name.
-Line 2073: /// type：Foods Arms Armors Others
+Line 2072: /// Get the id of the item by its data name.
+Line 2073: /// type: Foods Arms Armors Others
 Line 2074: /// </summary>
 Line 2121: /// <summary>
-Line 2122: /// Given List<Int>, return if empty
+Line 2122: /// Give List<Int>, return if empty.
 Line 2123: /// </summary>
 Line 2147: /// <summary>
 Line 2148: /// Randomly get -1 or 1
 Line 2149: /// </summary>
 Line 2162: /// <summary>
-Line 2163: /// Return 1/-1 based on the positive or negative value of the number passed in.
-Line 2164: /// Return 1 if 0 is passed in.
+Line 2163: //// Incoming numbers return 1/-1 depending on positive or negative.
+Line 2164: /// Pass 0 back to 1.
 Line 2165: /// </summary>
 Line 2175: /// <summary>
-Line 2176: /// Given a specified length, the original string will be padded with spaces
+Line 2176: /// Given a specified length, the original string will be padded with spaces.
 Line 2177: /// </summary>
-Line 2178: /// <param name="origin">Original string</param>
-Line 2179: /// <param name="length">Return length</param>
+Line 2178: //// <param name="origin">original string</param>
+Line 2179: //// <param name="length">Returns the length</param>.
 Line 2180: /// <returns></returns>
 Line 2223: // From the beginning to the part before A
-Line 2224: // From the part after B to the end of the string
+Line 2224: // From the end of the string after B to the end of the string
 Line 2226: // Merge the two parts
 Line 2236: //spriteRenderer.color = Color.red;
 Line 2250: /// <summary>
-Line 2251: /// Calculate the midpoint of the polygon
+Line 2251: /// Calculate the polygon midpoint.
 Line 2252: /// </summary>
 Line 2272: /// <summary>
-Line 2273: /// Generate random points on the surface of the sphere
+Line 2273: /// Generate random points on the surface of the sphere.
 Line 2274: /// </summary>
 
 File: Default\MainControlSummon.cs
 Line 5: /// <summary>
-Line 6: /// Generate the main control and retain the generated main control when switching scenes.
-Line 7: /// In this way, the data loading of MainControl is called only once.
+Line 6: /// Generate a master control and keep the generated master control when switching scenes.
+Line 7: /// In this way the MainControl data load is called only once.
 Line 8: ///
-Line 9: /// BGMControl will be generated at the same time
+Line 9: /// The BGMControl will be generated at the same time.
 Line 10: /// </summary>
-Line 13: [Header("-Canvas settings-")]
+Line 13: [Header("-Canvas Settings-")]
 Line 19: [Header("-BGMControl settings-")]
-Line 21: [Header("BGM audio, empty means no audio")]
-Line 24: [Header("BGM volume")]
-Line 27: [Header("BGM tone")]
-Line 30: [Header("BGM loop playback initial state")]
+Line 21: [Header("BGM body audio Empty for no audio")]
+Line 24: [Header("BGM Volume")]
+Line 27: [Header("BGM Tone")]
+Line 30: [Header("Initial state of BGM loop")]
 Line 33: [Header("BGM BPM")]
-Line 36: [Header("BGM BPM offset")]
-Line 39: [Header("=Start the metronome during initialization")]
+Line 36: [Header("BGM BPM Offset")]
+Line 39: [Header("Turn on metronome at initialization")]
 Line 42: [Header("-MainControl settings-")]
-Line 44: [Header("Black field status related")]
-Line 51: [Header("Additional settings for battle scenes")]
-Line 99: //DebugLogger.LogWarning("<color=yellow>Detected that there is a MainControl in this scene</color>", gameObject);
-Line 115: //Generate
+Line 44: [Header("Blackfield status related")]
+Line 51: [Header("Additional settings for in-combat scenarios")]
+Line 99: //DebugLogger.LogWarning("<color=yellow>MainControl detected within this scene</color>", gameObject);
+Line 115: // Generate
 
 File: Default\MenuController.cs
 Line 6: /// <summary>
 Line 7: /// Control Menu, sodayo)
 Line 8: /// </summary>
-Line 11: [Header("Player name-LV-time-position-specific options-bottom text")]
-Line 46: //tmps[2] is set in update
+Line 11: [Header("Player Name - LV - Time - Location - Specific Options - Bottom Word")]
+Line 46: //tmps[2] set in update
 Line 150: //New
 Line 159: //Next page
 
 File: Default\ObjectPool.cs
-Line 6: [Header("Number of objects to fill the object pool")]
+Line 6: [Header("Number of objects to populate the object pool")]
 Line 13: /// <summary>
-Line 14: /// Initialize/fill the object pool
+Line 14: /// Initialize/Populate Object Pool
 Line 15: /// </summary>
 Line 28: /// <summary>
-Line 29: /// Return to the object pool
+Line 29: /// Returns the object pool
 Line 30: /// </summary>
 Line 41: /// <summary>
-Line 42: /// Get the object
+Line 42: /// Hippie Objects
 Line 43: /// </summary>
 
 File: Default\RenameController.cs
-Line 281: //Volume v = GameObject.Find("Global Volume").transform.GetComponent<Volume>();
-Line 284: //DOTween.To(() => v.weight, x => v.weight = x, 0, 5.5f).SetEase(Ease.Linear);
+@ -1049,214 +1039,191 @@ Line 284: //DOTween.To(() => v.weight, x => v.weight = x, 0, 5.5f).SetEase(Ease.
 
 File: Default\SaveController.cs
 Line 7: /// <summary>
-Line 8: /// Archive stored data
+Line 8: /// Archived stored data
 Line 9: /// </summary>
 Line 16: //DebugLogger.Log("save");
 Line 19: //DebugLogger.Log("create");
 Line 23: // Convert data
-Line 29: // Read user data into memory
+Line 29: // read user data into memory
 Line 32: //DebugLogger.Log("load");
-Line 36: // Check if the user profile exists
-Line 40: // Use CreateInstance method
-Line 41: // Use PopulateObject method to fill data
-Line 55: //DebugLogger.Log("Who knows about this, my friends" + Application.dataPath + "/Data");
+Line 36: // Check if the user profile exists.
+Line 40: // Using the CreateInstance method
+Line 41: // Use the PopulateObject method to populate the data.
+Line 55: //DebugLogger.Log("Families who get it" + Application.dataPath + "/Data");
 Line 73: // Check if the archive exists
-Line 76: // Remove archive data from memory
-Line 82: // Delete file
-Line 102: // Get all archive file paths in the directory
-Line 105: // Sort by file name
+Line 76: // remove archive data from memory
+Line 82: // Delete the file
+Line 102: // Get the paths of all archive files in the directory
+Line 105: // Sort filenames numerically
 Line 120: // Rename the file
 
 File: Default\StartController.cs
 Line 5: /// <summary>
-Line 6: /// Controller of the initial scene (template information)
+Line 6: /// Controller for the initial scene (template information)
 Line 7: /// </summary>
 
 File: Default\StorySceneController.cs
 Line 6: /// <summary>
-Line 7: /// ¿ØÖÆ½²¹ÊÊÂ³¡ ¾°£¨²¥PPT£©
+Line 7: /// ?????????????°?¨??PPT??
 Line 8: /// </summary>
 
 File: Default\TextChanger.cs
 Line 5: /// <summary>
-Line 6: /// Used for font matching and bilingual font data correction
+Line 6: /// For font matching and bilingual font data correction.
 Line 7: /// </summary>
 Line 10: //public TMP_FontAsset assetback;
-Line 13: //If Chinese and English are mixed, true is enough
+Line 13: //If you mix Chinese and English, then true is the end.
 Line 15: [Header("US/CN")]
 Line 18: //public float[] sizes;
 Line 20: //public bool no = true;
@@ -1082,148 +1086,170 @@ Line 13: /// <summary>
 Line 14: /// Typewriter system
 Line 15: /// </summary>
 Line 19: //Is the typewriter running?
-Line 20: //Is it typing characters?
-Line 25: //Actually counting
+Line 20: //Is the character typed in the
+Line 25: //actually counting
 Line 27: //Sound effects
-Line 30: [Header("Typing speed and typing speed after detecting pause characters")]
-Line 33: [Header("How many seconds after typing can you press X to skip, 0 means you can't skip")]
-Line 34: //Settings
-Line 41: [Header("Adapt to OW frame")]
+Line 30: [Header("Typing speed with detection of stop characters")]
+Line 33: [Header("How many seconds after typing can you press X to skip, 0 is not skippable")]
+Line 34: //Setting
+Line 41: [Header("Adapt OW box")]
 Line 50: [Header("Font")]
 Line 53: [Header("Typing animation")]
-Line 56: [Header("There are always some situations that require tough measures (drawing a gun")]
+Line 56: [Header("There will always be situations that require strong-arm tactics (drawing guns)")]
 Line 70: //Normal typewriter
-Line 71: //Typewriter that can't press ZX, use rich text for control.
+Line 71: //Can't press ZX's typewriter, use rich text for control.
 Line 76: /// <summary>
-Line 77: /// Start the typewriter. If typing is in progress, you can force it to end.
-Line 78: /// Generally, there is no need to forcefully interrupt the conversation.
-Line 79: /// If the statement passed in contains <autoFood>, please enter hp. If you enter 0, this character will be skipped.
+Line 77: /// Starts the typewriter. If typing is in progress, it can be forcibly terminated.
+Line 78: /// Generally there is no need to forcefully interrupt a conversation.
+Line 79: /// If the incoming statement contains <autoFood>, enter hp. If you enter 0, this character is skipped.
 Line 80: /// </summary>
-Line 295: //When there is only one Stop, isTyping is not set. This is because sometimes the stop time is very short, and if true, it looks a bit strange.
-Line 296: //If a long Stop is required, it is recommended that you use the <stop*x> method.
-Line 297: //isTyping = false;
+Line 295: // A separate Stop without setting isTyping, this is because there are times when this stop is very short and it looks a bit weird if true.
+Line 296: //If you need a long Stop, it is recommended that you still do it the <stop*x> way.
+Line 297: //isTyping = false.
 Line 328: //passTextString += spText.Length * 2 - 5;
-Line 330: //Rich text
-Line 361: //string cantString = ",.:;!?，。：；！？ \n\r";
+Line 330: // Rich Text
+Line 361: //string cantString = ",. :;! ,. :;! \n\r";
 Line 406: // == '<'
-Line 414: //pressX = false;
-Line 417: //This is a label note
-Line 427: //Animation related
+Line 414: //pressX = false.
+Line 417: //This is a tag note
+Line 427: //Kinetic effects related
 Line 456: //Animation
-Line 484: //pause will be used when OW detects
-Line 500: //Jumping words
+Line 484: //pause will be used during OW detection
+Line 500: //skipping words
 
 File: Obsolete\CreateQuadChanged.cs
 Line 6: /// <summary>
-Line 7: /// Old battle frame drawing script: Deprecated
+Line 7: /// Old combat box drawing script: deprecated.
 Line 8: /// New: DrawFrame
 Line 9: /// </summary>
 Line 21: //public float debug;
 Line 27: //public bool havePoints;
 Line 28: //public List<Vector3> noHavePoints = new List<Vector3>();
-Line 87: // Set main texture
+Line 87: // Setting up the master map
 
 File: Overworld\BackpackBehaviour.cs
 Line 5: /// <summary>
-Line 6: /// Manage OW backpack system
+Line 6: /// Managing the OW Backpack System
 Line 7: /// </summary>
-Line 132: // Disable
-Line 136: // Enable
+Line 132: //Close
+Line 136: //Open
 Line 244: //DebugLogger.LogWarning(talkUI.transform.localPosition.z);
-Line 282: // Border adaptation
+Line 282: //Border Adaptation
 Line 400: //DebugLogger.Log(talkUI.transform.localPosition.z);
 
 File: Overworld\CameraFollowPlayer.cs
 Line 3: /// <summary>
-Line 4: /// Overworld camera follow
+Line 4: /// Overworld Camera Following
 Line 5: /// </summary>
-Line 9: //Limit the maximum XY range of the camera. 0 means no movement
-Line 10: //Limit the maximum XY range of the camera. 0 means no movement
+Line 9: //limit the maximum XY range of the camera 0 is not moving
+Line 10: //Limit the maximum XY range of the camera 0 is not moving
 Line 27: //Follow the player
-Line 40: //Limit range
+Line 40: // Limit the scope
 
 File: Overworld\OverworldObjTrigger.cs
 Line 9: /// <summary>
-Line 10: /// OWObj trigger related. Cooperate with player ray
-Line 11: /// Used to read and display text and then display it
+Line 10: /// OWObj Trigger Related Match Player Ray
+Line 11: /// Used to read and display the text and then display it
 Line 12: /// </summary>
-Line 16: //If true, it will be triggered when it touches. If false, press Z to trigger.
+Line 16: //If true, trigger on touch. false, press Z to trigger.
 Line 23: [Header("Detect player animation direction 0,0 is not detected")]
-Line 26: [Header("Save related")]
+Line 26: [Header("Archive Related")]
 Line 33: [Header("Insert camera animation related")]
 Line 42: [Header("Fill in positive time if you need to fade out")]
-Line 45: [Header("OW jump scene only for trigger")]
-Line 52: [Header("OW jump scene locks the direction when entering 0 None -1 Left and Right 1 Up and Down")]
-Line 58: [Header("Call animator and set down to true when it ends")]
-Line 64: [Header("The object closes itself when it ends")]
-Line 67: [Header("Confirm the current typing object")]
-Line 70: [Header("Execute method when it ends")]
-Line 139: //See PlayerBehaviour for detection
+Line 45: [Header("OW jump scene for trigger only")]
+Line 52: [Header("OW Jump Scene Lock Entry Direction 0 None -1 Left/Right 1 Up/Down")]
+Line 58: [Header("Call animator at end and set down to true")]
+Line 64: [Header("End with object closing itself")]
+Line 67: [Header("Identify the object currently being typed")]
+Line 70: [Header("Execute method at end")]
+Line 139: // See PlayerBehaviour for detection.
 Line 201: /// <summary>
-Line 202: /// Activate typing. Don't touch the second parameter
+Line 202: /// Activate typing. Don't move the second parameter.
 Line 203: /// </summary>
 
 File: Overworld\OverworldTalkSelect.cs
 Line 6: /// <summary>
-Line 7: /// Used to insert an option system in OW, consistent with UT options, but different from DR options.
-Line 8: /// Adds heart to scenes with options.
-Line 9: /// Called in the text package
+Line 7: /// Used to insert a system of options in the OW, consistent with those of the UT and different from those of the DR.
+Line 8: /// Heart will be added in scenes containing options.
+Line 9: /// Called from within a text package
 Line 10: /// </summary>
-Line 75: //Selected the left option
-Line 101: //Selected the right option
+Line 75: //left option selected
+Line 101: //Right option selected
 
-File: Overworld\PlayerBehaviour.cs
+File: Overworld\PlayerBehavior.cs
 Line 4: /// <summary>
-Line 5: /// Player controller in Overworld
+Line 5: /// Player Controller in Overworld
 Line 6: /// </summary>
-Line 16: //Player speed The editor standard is 13 and exported as 5.5
-Line 18: [Header("Sound effect interception range int")]
-Line 21: [Header("Open reflection")]
+Line 16: //Player speed Editor standard is 13 Export is 5.5
+Line 18: [Header("Sound Intercept Range int")]
+Line 21: [Header("Turn on reflection")]
 Line 26: //public LayerMask mask;
-Line 32: //0.1 seconds, to prevent investigation OW conflict
-Line 34: //If necessary, put it on. This is because some projects have echo effects
-Line 50: //mask = 1 << 6;
+Line 32: //0.1 seconds to prevent investigation of OW conflicts
+Line 34: //If you need it, make it up. This is because some projects have an echo effect.
+Line 50: //mask = 1 << 6.
 Line 161: //DebugLogger.Log(obj.transform.tag);
 Line 179: //Animator reference
-Line 247: //if (MainControl.instance.KeyArrowToControl(KeyyCode.UpArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1)) Line 248: //moveDirectionX = 0; Line 255: //&& !(MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1) | | MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1))) File: Overworld\SpriteChanger.cs Line 5: /// <summary> Line 6: /// Changing Sprite in Overworld dialog Line 7: /// </ summary> File: Overworld\TalkUIPositionChanger.cs Line 6: /// <summary> Line 7: /// Modify the position of the dialog box in Overworld Line 8: /// </summary> Line 22: //gameObject.SetActive(false);
+Line 247: //if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode. DownArrow, 1))
+Line 248: //moveDirectionX = 0.
+Line 255: //&& ! (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1) || MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1)))
+
+File: Overworld\SpriteChanger.cs
+Line 5: /// <summary>
+Line 6: /// Change Sprite in the Overworld dialog.
+Line 7: /// </summary>
+
+File: Overworld\TalkUIPositionChanger.cs
+Line 6: /// <summary>
+Line 7: /// Change the position of the dialog box in Overworld.
+Line 8: /// </summary>
+Line 22: //gameObject.SetActive(false);
 
 File: Overworld\TriggerChangeLayer.cs
-Line 9: [Header("Follow the parent object's layer change and add 1")]
+Line 9: [Header("Add 1 to follow the hierarchy of the parent object")]
 
 File: Overworld\TriggerPlayerOut.cs
 Line 3: /// <summary>
-Line 4: /// Newly added in V0.1.1Line 5: /// For OW with animator, execute code/play animation when the player enters/leaves.
-Line 6: /// Can be adjusted in many ways, I guess Line 7: /// </summary>
-Line 13: [Header("Change the Boolean value of the animation:")]
-Line 16: [Header("Remove the entry detection range Execute animation")]
-Line 19: [Header("Remove invalidation when the previous scene is the specified scene")]
-Line 22: [Header("Set to execute when leaving the range/entering the range")]
-Line 28: [Header( "Set sceneBool of the animator to true when the previous scene is the specified scene")]
-Line 33: [Header("When electricOpen, electricOpen")]
-Line 69: //File for animation call: Overworld\Corridor\ColumnsMove. cs
+Line 4: /// New in V0.1.1.
+Line 5: /// Used to drive the OW of the animator, executing code/playing animations when the player enters/leaves.
+Line 6: /// Adjustable in many ways, I guess.
+Line 7: /// </summary>
+Line 13: [Header("Change animation boolean:")]
+Line 16: [Header("Remove entry detection range to perform animation")]
+Line 19: [Header("Remove disabled when last scene is specified")]
+Line 22: [Header("Set to execute on out-of-scope/in-scope")]
+Line 28: [Header("Set the animator's sceneBool to true if the last scene was the specified scene")]
+Line 33: [Header("electricOpen at electricOpen")]
+Line 69: //called for animation
+
+File: Overworld\Corridor\ColumnsMove.cs
 Line 3: /// <summary>
-Line 4: /// Corridor column movementLine 5: /// </summary>
-Line 9: //Including direction (positive and negative)
+Line 4: /// Promenade Columns Moving
+Line 5: /// </summary>
+Line 9: //including direction (positive and negative)
 
 File: Volume\ChromaticAberrationComponent.cs
 Line 5: /// <summary>
-Line 6: /// VolumeComponent, displayed in the add listLine 7: /// </summary>
+Line 6: /// VolumeComponent, shown in the add list
+Line 7: /// </summary>
 Line 14: [Header("Settings")]
 
 File: Volume\CRTScreenComponent.cs
 Line 5: /// <summary>
-Line 6: /// VolumeComponent, displayed in the add listLine 7: /// </summary>
+Line 6: /// VolumeComponent, shown in the add list
+Line 7: /// </summary>
 Line 14: [Header("Settings")]
 
 File: Volume\GlitchArtComponent.cs
 Line 5: /// <summary>
-Line 6: /// VolumeComponent, displayed in the add listLine 7: /// </summary>
+Line 6: /// VolumeComponent, shown in the add list
+Line 7: /// </summary>
 Line 14: [Header("AnalogGlitch")]
-Line 19 : [Header("HorizontalShake")]
+Line 19: [Header("HorizontalShake")]
 Line 24: [Header("ColorDrift")]
 Line 29: [Header("VerticalJump")]
 
 File: Volume\StretchPostComponent.cs
 Line 5: /// <summary>
-Line 6: /// VolumeComponent, displayed in the add list Line 7 : /// </summary>
+Line 6: /// VolumeComponent, shown in the add list
+Line 7: /// </summary>
 Line 14: [Header("Settings")]

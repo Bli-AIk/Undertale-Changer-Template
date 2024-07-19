@@ -3,24 +3,24 @@ using TMPro;
 using UnityEngine;
 
 /// <summary>
-/// 控制Target
+/// Control Target
 /// </summary>
 public class TargetController : MonoBehaviour
 {
     private Animator anim;
     private bool pressZ;
 
-    [Header("攻击造成的伤害")]
+    [Header("Damage from attack")]
     public int hitDamage;
 
     private TextMeshPro hitUI, hitUIb;
     private GameObject bar;
     public GameObject hpBar;
 
-    [Header("父级传入")]
+    [Header("parent incoming")]
     public int select;
 
-    [Header("父级传入 要击打的怪物")]
+    [Header("Parent passes in monster to hit")]
     public EnemiesController hitMonster;
 
     private void Start()
@@ -37,7 +37,7 @@ public class TargetController : MonoBehaviour
         if (anim == null)
             anim = GetComponent<Animator>();
 
-        //anim.enabled = true;
+        //anim.enabled = true;; //anim.enabled = true
         anim.SetBool("Hit", false);
         anim.SetFloat("MoveSpeed", 1);
         pressZ = true;
@@ -59,18 +59,20 @@ public class TargetController : MonoBehaviour
     }
 
     /// <summary>
-    /// 攻击敌人时进行的计算
+    /// Calculations performed when attacking an enemy
     /// </summary>
     private void Hit()
     {
         if (Mathf.Abs(bar.transform.localPosition.x) > 0.8f)
             hitDamage = (int)
-                (2.2f / 13.2f * (14 - Mathf.Abs(bar.transform.localPosition.x))//准确度系数
+                (2.2f / 13.2f * (14 - Mathf.Abs(bar.transform.localPosition.x))
+                //accuracy factor
                 * (MainControl.instance.PlayerControl.atk + MainControl.instance.PlayerControl.wearAtk
                 - MainControl.instance.BattleControl.enemiesDEF[select] + Random.Range(0, 2)));
         else
             hitDamage = (int)
-                 (2.2f / 13.2f * (14 - 0.8f)//准确度系数
+                 (2.2f / 13.2f * (14 - 0.8f)
+                 //accuracy factor
                  * (MainControl.instance.PlayerControl.atk + MainControl.instance.PlayerControl.wearAtk
                  - MainControl.instance.BattleControl.enemiesDEF[select] + Random.Range(0, 2)));
 
@@ -88,7 +90,7 @@ public class TargetController : MonoBehaviour
         }
     }
 
-    //以下皆用于anim
+    // All of the following are for anim
     private void HitAnim()
     {
         hitMonster.anim.SetBool("Hit", true);
@@ -110,7 +112,7 @@ public class TargetController : MonoBehaviour
 
     private void NotActive()
     {
-        //anim.enabled = false;
+        //anim.enabled = false;; //anim.enabled = false.
         gameObject.SetActive(false);
     }
 }

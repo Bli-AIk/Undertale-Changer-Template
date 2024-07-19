@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 
 /// <summary>
-/// Gameover控制器
+/// Gameover controller
 /// </summary>
 public class GameoverController : MonoBehaviour
 {
@@ -38,7 +38,7 @@ public class GameoverController : MonoBehaviour
         m_ParticleSystem.gameObject.SetActive(false);
     }
 
-    //接下来交给Animator表演
+    //The Animator is next.
     public void PlayFX(int i)
     {
         if (i < 0)

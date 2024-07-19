@@ -1,0 +1,1254 @@
+File: Battle\BattlePlayerController.cs
+Line 7: ///<summary>
+Line 8: ///控制战斗内玩家(心)的相关属性
+Line 9: ///</summary>
+Line 15: [Header("心变色时的ding动画速度，0为关")]
+Line 17: [Header("心渐变动画速度，0为关")]
+Line 20: [Header("基本属性调整")]
+Line 22: //速度与权重(按X乘以倍数)，速度测试为3，权重0.5f
+Line 24: //无敌时间
+Line 25: //碰撞距离判定
+Line 26: //用于蓝橙骨判断：玩家是否真的在移动
+Line 38: //方向
+Line 40: //是否处于“跳起”状态
+Line 41: //跳跃的加速度
+Line 42: //射线距离
+Line 46: //圆形碰撞体
+Line 48: //含有属性的颜色 读取BattleControl中的enum PlayerColor.颜色变换通过具体变换的函数来执行
+Line 53: //LayerMask mask;
+Line 70: //mask = 1 << 6;
+Line 114: //Debug
+Line 172: //反向检测(顶头)
+Line 174: //------------------------移动------------------------
+Line 338: ////////////////////////////////////////////////
+Line 411: ////////////////////////////////////////////////
+Line 567: //蓝橙骨所用的是否移动判定
+Line 621: ////DebugLogger.Log("X:" + x);
+Line 622: ////DebugLogger.Log("Y:" + y);
+Line 661: //速度参考：3
+Line 676: //蓝心碰板子确保再次可以跳
+Line 702: ///<summary>
+Line 703: ///掉出
+Line 704: ///</summary>
+Line 713: ///<summary>
+Line 714: ///通过渐变动画将玩家的颜色改变。
+Line 715: ///若gradientTime/dingTime等于0 则不会有渐变动画/ding动画；
+Line 716: ///若gradientTime/dingTime小于0 则使用该脚本内的gradientTime/dingTime变量。
+Line 717: ///若PlayerColor输入为nullColor，则不会更改玩家的实际颜色属性。
+Line 718: ///</summary>
+Line 778: ///<summary>
+Line 779: ///让蓝心坠落
+Line 780: ///</summary>
+Line 808: /////////////////////////////////////////判定相关
+Line 809: //定义用于判断点是否在多边形内的方法
+Line 812: //初始化点是否在多边形内的标志为false
+Line 813: //遍历多边形的每一条边，使用射线法判断点是否在多边形内
+Line 816: //如果点与当前边的两个端点之一在Y轴的两侧，并且在X轴的左侧，则反转内部标志
+Line 823: //返回点是否在多边形内的最终结果
+Line 826: //定义计算点到线段最近点的方法（计算垂足）
+Line 829: //计算线段的向量
+Line 830: //获取线段长度
+Line 831: //标准化线段向量
+Line 833: //计算点到线段起点的向量
+Line 834: //计算点在线段向量上的投影长度
+Line 835: //限制投影长度在0到线段长度之间
+Line 836: //计算并返回最近点的坐标
+Line 839: //定义计算位移后垂点位置的方法
+Line 842: //计算线段方向向量
+Line 843: //计算垂直方向向量（逆时针旋转90度）
+Line 845: //计算并返回位移后的垂点位置
+Line 848: //定义计算内缩多边形顶点的方法
+Line 851: //如果顶点列表为空或少于3个，返回null
+Line 853: //初始化存储位移后顶点的列表
+Line 854: //初始化存储交点的列表
+Line 856: //获取顶点数量
+Line 859: //获取当前顶点
+Line 860: //获取下一个顶点（环形列表）
+Line 862: //计算边的方向向量
+Line 863: //计算垂直方向向量
+Line 865: //计算当前顶点的位移
+Line 866: //计算下一个顶点的位移
+Line 868: //添加位移后的当前顶点到列表
+Line 869: //添加位移后的下一个顶点到列表
+Line 871: //从第二条边开始计算交点
+Line 876: //如果找到交点，添加到交点列表
+Line 881: //计算首尾两条边的交点
+Line 885: //如果找到交点，添加到交点列表
+Line 888: //返回交点列表，即内缩多边形的顶点
+Line 891: //定义线线交点计算的方法
+Line 894: //初始化交点坐标
+Line 896: //计算分母
+Line 897: //如果分母为0，则线段平行或重合，无交点
+Line 900: //计算交点X坐标
+Line 901: //计算交点Y坐标
+Line 903: //返回true，表示找到交点
+Line 905: //定义根据位移检查并调整点位置的方法
+Line 908: //保存原始点位置
+Line 910: //检查是否达到递归次数限制
+Line 912: //如果达到最大次数，返回当前点
+Line 915: //遍历所有战斗框
+Line 917: //排除Z轴不同的
+Line 925: //计算缩放后的多边形顶点
+Line 927: //遍历移动后的顶点
+Line 929: //DebugLogger.Log(item, DebugLogger.Type.err); //记录日志
+Line 932: //如果点 在 调整后的多边形内
+Line 934: //DebugLogger.Log(point, DebugLogger.Type.war, "#FF00FF"); //记录日志
+Line 935: //返回原始坐标
+Line 939: //如果点 不在 调整后的多边形内
+Line 941: //最近点
+Line 944: //最近距离设为最大值
+Line 945: //确定框是否为复合的框，如果是，需要额外调整移动距离
+Line 947: //遍历所有战斗框
+Line 949: //排除Z轴不同的
+Line 953: //遍历框的所有边
+Line 955: //计算到当前边的最近点
+Line 956: //计算距离
+Line 957: //如果距离更短
+Line 959: //更新最近点
+Line 960: //更新线段起点
+Line 961: //更新线段终点
+Line 962: //更新最近距离
+Line 969: //如果找到最近点
+Line 974: //计算位移后的点位置
+Line 975: //DebugLogger.Log(moved, DebugLogger.Type.war, "#FF0000"); //记录日志
+Line 977: //如果是初次调用或移动后的点不等于原点
+Line 979: //递归调用，增加递归深度
+Line 980: //如果移动后的点未通过检测
+Line 982: //因为已经在递归中处理递归深度，所以这里不需要再次调用CheckPoint
+Line 983: //返回新检查点
+Line 985: //返回移动后的点
+Line 989: //如果没有找到更近的点，返回原点
+Line 993: //杂项
+Line 1049: //距离为圆碰撞器+0.05f
+
+File: Battle\BoardController.cs
+Line 4: /// <summary>
+Line 5: /// 设定挡板，具体数据在BattlePlayerController内控制
+Line 6: /// </summary>
+Line 9: [Header("宽度")]
+Line 12: [Header("是否为跟踪板")]
+Line 15: [Header("是否让边缘碰撞器长度随sprite宽度而变化")]
+Line 19: //纯纯的检测器 检测玩家在上面就把EdgeCollider掐了。具体在BattlePlayerController内控
+Line 20: //默认为触发器。
+Line 23: //public bool test;
+Line 78: //if (test)  transform.position = new Vector3(Time.time, transform.position.y);
+Line 95: //进入的是下面
+
+File: Battle\BulletController.cs
+Line 5: /// <summary>
+Line 6: /// 弹幕控制器
+Line 7: /// </summary>
+Line 16: //含有属性的颜色 读取BattleControl中的enum BulletColor
+Line 20: //public bool useExtra;
+Line 21: //public Collider2D extra;
+Line 22: /// <summary>
+Line 23: /// 设置碰撞箱跟随SpriteRenderer缩放的模式。
+Line 24: /// CutFollow:切去boxColliderSizes内存储的数据；
+Line 25: /// NoFollow:不跟随缩放。
+Line 26: /// FullFollow:完全跟随缩放，即启用盒碰撞器的自动拼接。
+Line 27: /// </summary>
+Line 41: //if (useExtra)
+Line 42: //    extra = GetComponent<Collider2D>();
+Line 45: /// <summary>
+Line 46: /// 初始化弹幕（单个碰撞模式）。
+Line 47: /// </summary>
+Line 48: /// <param name="name">设置弹幕的Obj的名称，以便查找。</param>
+Line 49: /// <param name="typeName">设置弹幕的种类名称，如果种类名称与当前的弹幕一致，则保留原有的碰撞相关参数，反之清空。</param>
+Line 50: /// <param name="layer">玩家为100，战斗框边缘为50。可参考。</param>
+Line 51: /// <param name="sprite">一般在Resources内导入。</param>
+Line 52: /// <param name="size">设置判定箱大小，可设定多个List，但多数情况下需要避免其重叠。（NoFollow情况下设为(0,0)，会自动与sprite大小同步）</param>
+Line 53: /// <param name="offset">设定判定箱偏移，List大小必须与sizes相等。</param>
+Line 54: /// <param name="hit">设定碰撞箱伤害，List大小必须与sizes相等。</param>
+Line 55: /// <param name="followMode">设置碰撞箱跟随SpriteRenderer缩放的模式。</param>
+Line 56: /// <param name="startMask">设置Sprite遮罩模式。</param>
+Line 57: /// <param name="bulletColor">设置弹幕属性颜色数据</param>
+Line 58: /// <param name="startPosition">设置起始位置（相对坐标）。</param>
+Line 59: /// <param name="startRotation">设置旋转角度，一般只需更改Z轴。</param>
+Line 60: /// <param name="startScale">若弹幕不需拉伸，StartScale一般设置(1,1,1)。检测到Z为0时会归位到(1,1,1)。</param>
+Line 127: /// <summary>
+Line 128: /// 初始化弹幕（循环生成盒状碰撞模式）。
+Line 129: /// </summary>
+Line 130: /// <param name="name">设置弹幕的Obj的名称，以便查找。</param>
+Line 131: /// <param name="typeName">设置弹幕的种类名称，如果种类名称与当前的弹幕一致，则保留原有的碰撞相关参数，反之清空。</param>
+Line 132: /// <param name="layer">玩家为100，战斗框边缘为50。可参考。</param>
+Line 133: /// <param name="sprite">一般在Resources内导入。</param>
+Line 134: /// <param name="sizes">设置判定箱大小，可设定多个List，但多数情况下需要避免其重叠。（NoFollow情况下设为(0,0)，会自动与sprite大小同步）</param>
+Line 135: /// <param name="offsets">设定判定箱偏移，List大小必须与sizes相等。</param>
+Line 136: /// <param name="hits">设定碰撞箱伤害，List大小必须与sizes相等。</param>
+Line 137: /// <param name="followMode">设置碰撞箱跟随SpriteRenderer缩放的模式。</param>
+Line 138: /// <param name="startMask">设置Sprite遮罩模式。</param>
+Line 139: /// <param name="bulletColor">设置弹幕属性颜色数据</param>
+Line 140: /// <param name="startPosition">设置起始位置（相对坐标）。</param>
+Line 141: /// <param name="startRotation">设置旋转角度，一般只需更改Z轴。</param>
+Line 142: /// <param name="startScale">若弹幕不需拉伸，StartScale一般设置(1,1,1)。检测到Z为0时会归位到(1,1,1)。</param>
+Line 195: //循环生成box碰撞
+Line 229: //伤害判定
+Line 233: //if(!useExtra)
+
+File: Battle\BulletShaderController.cs
+Line 4: /// <summary>
+Line 5: /// µ¯Ä»Shader¿ØÖÆÆ÷
+Line 6: /// </summary>
+
+File: Battle\CameraShake.cs
+Line 12: [Header("moveExtent的Y轴对应摄像机Z轴")]
+Line 32: /// <summary>
+Line 33: /// 摄像机摇晃
+Line 34: /// loops会自动转换为偶数。
+Line 35: /// </summary>
+
+File: Battle\DialogBubbleBehaviour.cs
+Line 4: /// <summary>
+Line 5: /// 战斗内敌人对话气泡控制
+Line 6: /// </summary>
+Line 30: /// <summary>
+Line 31: /// 改变气泡的大小和左右箭头情况 进行赋值 之类的
+Line 32: /// </summary>
+
+File: Battle\EnemiesController.cs
+Line 3: /// <summary>
+Line 4: /// 怪物控制脚本
+Line 5: /// 主要用于动画控制和存储ATKDEF
+Line 6: /// </summary>
+
+File: Battle\EnemiesHpLineController.cs
+@ -216,237 +206,237 @@ Line 7: [Header("0¿ª")]
+
+File: Battle\GameoverController.cs
+Line 7: /// <summary>
+Line 8: /// Gameover控制器
+Line 9: /// </summary>
+Line 41: //接下来交给Animator表演
+Line 81: //m_ParticleSystem.transform.position = new Vector3(UnityEngine.Random.Range(-6.85f, 6.85f), UnityEngine.Random.Range(-5.25f, 5.25f));
+
+File: Battle\ItemSelectController.cs
+Line 5: /// <summary>
+Line 6: /// 字面意思
+Line 7: /// </summary>
+Line 18: //SelectUIController selectUIController;
+Line 21: //selectUIController = transform.parent.GetComponent<SelectUIController>();
+Line 34: //上
+
+File: Battle\ProjectionCheckCollider.cs
+Line 5: /// <summary>
+Line 6: /// 投影原先心的判定。
+Line 7: /// 如果你直接把弹幕放在原先心的位置（负一千），可能会导致显示问题。
+Line 8: /// </summary>
+Line 14: // Start is called before the first frame update
+Line 27: // Update is called once per frame
+
+File: Battle\SelectUIController.cs
+Line 7: /// <summary>
+Line 8: /// Battle场景中的UI控制器
+Line 9: /// 也负责玩家回合的控制
+Line 10: /// </summary>
+Line 16: [Header("HP条配色")]
+Line 22: [Header("对话气泡载入数")]
+Line 22: //载入actSave
+Line 27: [Header("暂存未使用的Sprite")]
+Line 33: [Header("四个按钮UI的选择 0开")]
+Line 36: [Header("层")]
+Line 37: //0选择按钮 1选择名称 2Act选项/背包层 3执行层 进入敌方回合后归零
+Line 39: [Header("子选择")]
+Line 42: //Item&Mercy:1 2 3三个位置 ACT:四个位置
+Line 47: [Header("暂存ACT选项以便调用")]
+Line 50: [Header("自动寻找战斗总控的怪物 需保证名称一致")]
+Line 59: [Header("首次进入回合的时候播放自定义的回合文本")]
+Line 125: //敌方回合：开！
+Line 139: /// <summary>
+Line 140: /// UI打字 打字完成后不会强制控死文本
+Line 141: /// </summary>
+Line 147: /// <summary>
+Line 148: /// 战术互换
+Line 149: /// </summary>
+Line 157: /// <summary>
+Line 158: /// selectUI=1时的设定
+Line 159: /// 主要为选定怪物
+Line 160: /// </summary>
+Line 176: /// <summary>
+Line 177: ///进我方回合
+Line 178: /// </summary>
+Line 195: /// <summary>
+Line 196: /// 我的回合！抽卡)
+Line 197: /// </summary>
+Line 263: //if (hpFood != MainControl.instance.PlayerControl.hp)
+Line 295: //FIGHT：选择敌人
+Line 309: //ACT：选择敌人
+Line 342: //ITEM：跳2
+Line 353: //MERCY：选择敌人
+Line 427: //在这里写ACT的相关触发代码
+Line 429: //怪物0
+Line 430: //选项
+Line 453: //怪物1
+Line 454: //选项
+Line 474: //怪物2
+Line 475: //选项
+Line 540: //hpSpr.material.SetFloat("_Crop", 1);
+Line 566: //if (myItemMax < num)
+Line 718: //if (selectUI == 1)
+Line 719: //    KeepDialogBubble();
+Line 790: /// <summary>
+Line 791: /// 更新UI文字与血条
+Line 792: /// </summary>
+Line 845: /// <summary>
+Line 846: /// 解决hpUI把01显示成1的问题)
+Line 847: /// </summary>
+
+File: Battle\SpriteSplitController.cs
+Line 5: /// <summary>
+Line 6: /// 内含Pool。
+Line 7: /// 实现精灵的碎片化效果。
+Line 8: /// 一行一行自上而下。
+Line 9: /// 启 用 本 脚 本 后 立 刻 生 效
+Line 10: /// </summary>
+Line 13: //对象池
+Line 18: //粒子为计算出图片左上角的相对坐标
+Line 19: //粒子生成速度
+Line 74: //-----对象池部分-----
+Line 76: /// <summary>
+Line 77: /// 初始化/填充对象池
+Line 78: /// </summary>
+Line 88: /// <summary>
+Line 89: /// 返回对象池
+Line 90: /// </summary>
+Line 98: /// <summary>
+Line 99: /// 喜提对象 square)
+Line 100: /// </summary>
+
+File: Battle\SpriteSplitFly.cs
+Line 4: /// <summary>
+Line 5: /// SpriteSplitController的子级控制器
+Line 6: /// </summary>
+
+File: Battle\TargetController.cs
+Line 5: /// <summary>
+Line 6: /// 控制Target
+Line 7: /// </summary>
+Line 13: [Header("攻击造成的伤害")]
+Line 20: [Header("父级传入")]
+Line 23: [Header("父级传入 要击打的怪物")]
+Line 40: //anim.enabled = true;
+Line 61: /// <summary>
+Line 62: /// 攻击敌人时进行的计算
+Line 63: /// </summary>
+Line 68: //准确度系数
+Line 73: //准确度系数
+Line 91: //以下皆用于anim
+Line 113: //anim.enabled = false;
+
+File: Battle\TurnController.cs
+Line 7: /// <summary>
+Line 8: /// 回合控制，同时也是弹幕的对象池
+Line 9: /// </summary>
+Line 19: //public List<string> inheritList = new List<string>();
+Line 31: //OutYourTurn();
+Line 32: //弹幕
+Line 39: //挡板
+Line 52: /// <summary>
+Line 53: /// 进入敌方回合
+Line 54: /// </summary>
+Line 61: /// <summary>
+Line 62: /// 回合执行系统
+Line 63: /// 根据回合编号进行相应的执行
+Line 64: /// </summary>
+Line 71: //MainControl.instance.battlePlayerController.ChangePlayerColor(MainControl.instance.BattleControl.playerColorList[5], BattleControl.PlayerColor.blue,0,BattlePlayerController.PlayerDirEnum.down);
+Line 110: //示例回合
+Line 157: /// <summary>
+Line 158: /// 回合嵌套
+Line 159: /// 首先在枚举Nest中定义嵌套名称，然后在此编写嵌套内容
+Line 160: /// 用于重复复杂弹幕的嵌套使用
+Line 161: /// </summary>
+
+File: Control\AudioControl.cs
+Line 10: //public List<AudioClip> bgmClip;
+Line 11: [Header("用于UI音效")]
+Line 14: [Header("用于打字机音效")]
+Line 17: [Header("用于战斗音效")]
+Line 20: [Header("用于走路脚步音效")]
+
+File: Control\BattleControl.cs
+Line 4: /// <summary>
+Line 5: /// 战斗系统管理器，仅使用于战斗场景。
+Line 6: /// </summary>
+Line 10: [Header("敌人OBJ")]
+Line 11: [Header("物体名会识别为敌人名称")]
+Line 12: //敌方的Obj。
+Line 14: [Header("HP 偶为目前血量 奇为最大Max 下同")]
+Line 19: [Header("战斗内UIText读取")]
+Line 24: [Header("存储ACT选项和选择后文本")]
+Line 25: //4个一对应 根据enemies而排序
+Line 27: [Header("存储MERCY选项和选择后文本")]
+Line 30: [Header("按回合存储旁白")]
+Line 33: [Header("存储敌人对话文件")]
+Line 34: //直接在战斗场景内读取
+Line 38: /// <summary>
+Line 39: /// 弹幕颜色数据（原版特殊弹幕），非视觉颜色
+Line 40: /// </summary>
+Line 51: /// <summary>
+Line 52: /// 玩家数据颜色
+Line 53: /// </summary>
+Line 67: [Header("项目附加")]
+
+File: Control\ItemControl.cs
+Line 4: /// <summary>
+Line 5: /// 存储所有物品信息。
+Line 6: /// </summary>
+Line 10: //数据包(内置数据调入)
+Line 11: //语言包
+Line 12: //总List存储 将分配到MainControl
+Line 14: //@ + 名称/属性1/属性2 List中排序为ID    3循0+ 2循10000+ 2循20000+ 3循30000+
+Line 16: //-------------------------------------------------------
+Line 18: //箱子数据 储存编号
+
+File: Control\OverworldControl.cs
+Line 4: /// <summary>
+Line 5: /// 主要用于Overworld的数据与通用基本数据
+Line 6: /// </summary>
+Line 10: //public int languagePack;
+Line 11: //黑切屏的时候防止玩家操作导致报错
+Line 13: [Header("--UI--")]
+Line 14: [Header("字体存储")]
+Line 17: [Header("字体全半角")]
+Line 18: //字体全半角
+Line 20: [Header("分辨率等级")]
+Line 21: //分辨率等级
+Line 23: [Header("全屏")]
+Line 24: //全屏开关
+Line 26: [Header("全局音量")]
+Line 27: //全局音量
+Line 29: [Header("简化特效")]
+Line 30: //光效 后处理特效显示
+Line 32: [Header("显示FPS")]
+Line 33: //显示FPS
+Line 35: [Header("分辨率（显示用）")]
+Line 36: //分辨率
+Line 38: [Header("文本包读取")]
+Line 46: //依照设置顺序
+Line 48: [Header("玩家相关")]
+Line 51: [Header("场景衔接存储")]
+Line 56: [Header("HD边框")]
+Line 61: //[Header("游戏内需要存档的数据在下面写")]
+Line 62: [Header("垂直同步")]
+Line 67: // 不同步
+Line 68: // 同步到屏幕刷新率
+Line 69: // 同步到屏幕刷新率的一半
+Line 81: //这仨
+Line 82: //是
+Line 83: //AI做的
+
+File: Control\PlayerControl.cs
+Line 4: /// <summary>
+Line 5: /// 玩家的信息
+Line 6: /// 以及一些相关的设置
+Line 7: /// </summary>
+Line 14: [Header("OW背包内显示的AT和DF会-10")]
+Line 20: //玩家背包数据 储存编号
+Line 26: [Header("场景衔接存储")]
+Line 31: [Header("开启调试")]
+Line 34: [Header("--调试模式设定--")]
+Line 35: [Header("锁血")]
+
+File: Debug\DebugDraft.cs
+Line 8: // Start is called before the first frame update
+@ -454,32 +444,32 @@ Line 13: // Update is called once per frame
+
+File: Debug\DebugGrid.cs
+Line 4: /// <summary>
+Line 5: /// Debug网格定位 用于做弹幕啥的
+Line 6: /// </summary>
+Line 9: [Header("颜色是给到'条'上面的")]
+Line 16: [Header("横纵分割几片(刀数-1) X为横着平铺竖条 Y则反之")]
+Line 21: [Header("XY偏移 如果左右对称就和参考一样填个正的数")]
+Line 26: [Header("参考坐标")]
+Line 48: //x
+Line 52: //DebugLogger.Log(length);
+Line 64: //x
+Line 68: //DebugLogger.Log(length);
+
+File: Debug\DebugPolygonScaler.cs
+Line 6: // 用于绘制原始多边形
+Line 7: // 用于绘制移动后的多边形
+Line 8: // 向中心移动的距离
+Line 9: // 创建一个简单的多边形顶点列表
+Line 22: // 计算多边形中点并移动顶点
+Line 25: // 绘制原始多边形
+Line 28: // 绘制移动后的多边形
+Line 32: // 向中心移动多边形顶点的方法
+Line 39: // 从顶点到中心点的方向
+Line 40: // 向中心点移动固定距离
+Line 46: // 计算多边形中心的方法
+Line 57: // 使用LineRenderer绘制多边形的方法
+Line 60: // 设置顶点数（+1是为了闭合多边形）
+Line 65: // 闭合多边形
+
+File: Debug\DebugRandomSudoku.cs
+Line 6: //æ≈π¨∏Ò≤‚ ‘
+@ -487,20 +477,20 @@ Line 30: ///DebugLogger.Log(j + 1);
+
+File: Debug\DebugSpTextSummon.cs
+Line 4: /// <summary>
+Line 5: /// 生成一系列脑梗加密文本
+Line 6: /// </summary>
+Line 19: /// <summary>
+Line 20: /// 原字母文本转化为数字
+Line 21: /// </summary>
+Line 44: /// <summary>
+Line 45: /// 数字的首字母表示数字
+Line 46: /// 数字换算为字母
+Line 47: /// </summary>
+Line 68: /// <summary>
+Line 69: /// 26字母换算为九键数字
+Line 70: /// </summary>
+Line 91: /// <summary>
+Line 92: /// 倒车请注意
+Line 93: /// </summary>
+
+File: Debug\DebugVideoController.cs
+@ -514,533 +504,533 @@ Line 48: //DebugLogger.Log("video skip");
+
+File: Default\AudioController.cs
+Line 6: /// <summary>
+Line 7: /// 基于对象池 控制音频
+Line 8: /// </summary>
+Line 39: //AudioPlayer是字类！！不是unity自带的
+Line 72: //AudioPlayer是字类！！不是unity自带的
+
+File: Default\BoxController.cs
+Line 5: /// <summary>
+Line 6: /// 战斗框总控
+Line 7: /// </summary>
+Line 11: [Header("线宽")]
+Line 14: [Header("起始时生成框，名字为空不生成")]
+Line 21: //交点/非重合点/重合点
+Line 107: //获取两个Box的realPoints
+Line 111: //计算三大List
+Line 121: //两个 特殊框 重合时合并，剩下的交给父BoxDrawer。
+Line 146: //先删了，在父BoxDrawer内加回来
+Line 151: //先生成一下
+Line 157: //List<Vector2> pointsFinal = SortPoints(CalculatePolygonCenter(AddLists(pointsCrossSave, pointsInCrossSave)), points);
+Line 221: /// <summary>
+Line 222: /// 生成框
+Line 223: /// </summary>
+Line 266: // 将每个点先旋转，然后再加上物体的位置
+Line 281: // 最核心代码：构建Mesh！！
+Line 288: /// <summary>
+Line 289: /// 计算坐标获取RealPoints
+Line 290: /// </summary>
+Line 296: // 将每个点先旋转，然后再加上物体的位置
+Line 307: /// <summary>
+Line 308: /// 重置框
+Line 309: /// </summary>
+Line 334: /// <summary>
+Line 335: /// 构造Mesh
+Line 336: /// </summary>
+Line 340: // 将Vector数组转换为LibTessDotNet所需的ContourVertex数组
+Line 347: // 创建Tess对象并添加轮廓
+Line 351: // 进行三角剖分
+Line 354: // 创建Mesh对象
+Line 357: // 将Tess结果转换为Unity Mesh格式
+Line 370: // 应用顶点和三角形到mesh
+Line 374: // 为mesh设置UV坐标
+Line 378: // 这里是一个简单的映射，将顶点坐标映射到UV空间
+Line 379: // 通常，你需要根据具体情况来调整这部分代码
+Line 388: // 为了更好的渲染效果，可以计算法线和边界
+Line 392: // 将mesh应用到GameObject
+Line 395: /// <summary>
+Line 396: /// 剔除重复项
+Line 397: /// </summary>
+Line 400: // 使用HashSet<Vector2>来存储已经遇到的Vector2元素，因为HashSet自动去重
+Line 402: // 用来存储去重后的列表
+Line 407: // 如果HashSet中添加成功（即之前未遇到过这个元素），则将其添加到结果列表中
+Line 420: /// <summary>
+Line 421: /// 主函数，计算两组线段的所有交点
+Line 422: /// </summary>
+Line 430: // 循环列表
+Line 435: // 循环列表
+Line 450: /// <summary>
+Line 451: ///  计算向量叉乘
+Line 452: /// </summary>
+Line 458: /// <summary>
+Line 459: /// 检查点C是否在AB线段上
+Line 460: /// </summary>
+Line 466: /// <summary>
+Line 467: /// 检查线段AB和CD是否相交
+Line 468: /// </summary>
+Line 480: /// <summary>
+Line 481: /// 计算两线段AB和CD的交点
+Line 482: /// </summary>
+Line 488: // 计算线性方程的参数
+Line 491: // 线段平行或共线
+Line 496: /// <summary>
+Line 497: /// 计算非重合点
+Line 498: /// </summary>
+Line 504: // 合并剔除后的列表
+Line 543: /// <summary>
+Line 544: /// 以initialPoint为圆心，若干长度为半径，顺时针旋转，排序列表各点。
+Line 545: /// </summary>
+Line 554: /// <summary>
+Line 555: /// 前面两个相加，减去后面两个
+Line 556: /// </summary>
+Line 565: /// <summary>
+Line 566: /// 把List相加
+Line 567: /// </summary>
+Line 574: /// <summary>
+Line 575: /// 把List相减
+Line 576: /// </summary>
+Line 589: //Clipper2 API 相关
+Line 596: //X
+Line 600: //Y
+Line 621: /// <summary>
+Line 622: /// 取交集
+Line 623: /// </summary>
+
+File: Default\BoxDrawer.cs
+Line 10: /// <summary>
+Line 11: /// 战斗框绘制
+Line 12: /// </summary>
+Line 29: [Header("别用Transform的旋转")]
+Line 30: // 获取当前物体的旋转
+Line 31: [Header("线宽")]
+Line 35: [Header("是否启用贝塞尔插值")]
+Line 39: [Header("真正组框所用的点")]
+Line 40: //真正的曲线插值，插入点数由besselPointsNum决定
+Line 49: [Header("设置其是否为特殊框")]
+Line 52: [Header("当该Box为父级时，以此存储子级的相关计算后数据")]
+Line 53: [Header("子级realPoints之和")]
+Line 56: [Header("交点")]
+Line 58: [Header("非重合点")]
+Line 60: [Header("重合点")]
+Line 61: //交点/非重合点/重合点
+Line 63: //此框的复合父级
+Line 64: //此框的子级
+Line 67: [Header("给Editor用的")]
+Line 70: [Header("是否展示Mesh（红线）")]
+Line 77: //BoxController.instance.boxes.Add(this);
+Line 96: //float testTimer;
+Line 145: //作为纯子级
+Line 154: //作为父级
+Line 159: //更新一下两个子级的位置坐标
+Line 169: //计算三大List
+Line 178: //重合时合并
+Line 199: //不重合就解散
+Line 212: //只有父物体为BoxController时生成框
+Line 216: //减框不绘制
+Line 222: //离开的那个 的爹 会触发这个
+Line 224: //Debug.Log(transform.childCount);
+Line 262: //SubListsWhenExitParent(GetRealPoints());
+Line 269: // 函数用于将两个四元数相加
+Line 272: // 将两个四元数转换为欧拉角，并相加
+Line 277: // 将相加后的欧拉角转换为四元数
+Line 289: /// <summary>
+Line 290: /// 通过BoxController生成框
+Line 291: /// </summary>
+Line 302: /// <summary>
+Line 303: /// 开关组件
+Line 304: /// </summary>
+Line 307: //meshFilter.mesh = null;
+Line 308: //lineRenderer.positionCount = 0;
+Line 320: /// <summary>
+Line 321: /// 获取组件
+Line 322: /// </summary>
+Line 323: ///
+Line 341: /// <summary>
+Line 342: /// 插值函数
+Line 343: /// </summary>
+Line 344: /// <param name="points">原始List</param>
+Line 345: /// <param name="interpolation">平分点数</param>
+Line 346: /// <returns></returns>
+Line 370: // 插入首尾之间的插值
+Line 380: /// <summary>
+Line 381: /// 生成贝塞尔曲线上的点
+Line 382: /// </summary>
+Line 388: // 创建一个Vector2列表用于存储生成的贝塞尔曲线上的点
+Line 390: // 检查控制点的数量，至少需要4个控制点才能形成一个立方贝塞尔曲线
+Line 393: // 在控制台显示错误消息
+Line 394: // 返回空的贝塞尔点列表
+Line 397: // 遍历控制点列表，每次取出besselInsertNum + 1个点生成贝塞尔曲线段
+Line 405: // 根据所需点的数量在当前曲线段上生成点
+Line 408: // 计算参数t的值，用于插值
+Line 409: // 调用计算贝塞尔点的函数
+Line 410: // 将计算得到的点添加到贝塞尔点列表中
+Line 415: // 返回生成的贝塞尔点列表
+Line 433: /// <summary>
+Line 434: /// 计算组合数 C(n, k)
+Line 435: /// </summary>
+Line 460: [Header("展示哪些点的坐标")]
+Line 554: //绘制一次GUI。
+
+File: Default\CameraLightController.cs
+Line 6: // 可视范围的半径
+Line 26: // 获取所有光源组件的引用
+
+File: Default\CanvasController.cs
+Line 10: /// <summary>
+Line 11: /// UI界面，包括：FPS显示 长按ESC退出 设置界面
+Line 12: /// </summary>
+Line 18: //敌人回合不能开
+Line 31: //目前 Max仅用于配置语言包
+Line 34: //切换层级 0层默认 1层按键设置 2层语言包配置
+Line 36: //Page是翻页 Select是切换主次按键设置
+Line 37: //是否选中
+Line 42: //防止切场景时整事儿
+Line 45: //存储打字机以暂停协程
+Line 233: //内置包信息
+Line 264: /// <summary>
+Line 265: /// 获取语言包信息
+Line 266: /// 返回returnString
+Line 267: /// </summary>
+Line 286: /// <summary>
+Line 287: /// 返回开/关文本
+Line 288: /// </summary>
+Line 324: //设置菜单
+Line 778: //上一次更新帧率的时间;
+Line 779: //更新帧率的时间间隔;
+Line 780: //帧数;
+Line 781: //帧率
+Line 788: //FPS = 某段时间内的总帧数 / 某段时间
+Line 797: /// <summary>
+Line 798: /// Anim调用
+Line 799: /// </summary>
+Line 809: //世界坐标转换为屏幕坐标
+Line 811: //将屏幕坐标变换为以屏幕中心为原点
+Line 812: //缩放得到UGUI坐标
+
+File: Default\ChangeClipWalk.cs
+Line 3: /// <summary>
+Line 4: /// 玩家触发后更改移动范围
+Line 5: /// </summary>
+Line 8: [Header("新范围")]
+Line 15: //PlayerBehaviour playerBehaviour = collision.transform.GetComponent<PlayerBehaviour>();
+
+File: Default\DrawFrameController.cs
+Line 6: /// <summary>
+Line 7: /// 使用LineRenderer与多边形shader绘制多边形框，用于战斗框、UI等。
+Line 8: /// </summary>
+Line 12: [Header("线长")]
+Line 15: [Header("顶点数")]
+Line 18: [Header("顶点")]
+Line 21: [Header("开启碰撞（用于战斗框）")]
+Line 24: [Header("ID检测：使用_Point (0)")]
+Line 27: [Header("使用这个可以让它创建时绘制正多边形")]
+Line 30: [Header("关闭自动获取材质")]
+Line 118: // Top-left
+Line 119: // Top-right
+Line 120: // Bottom-left
+Line 121: // Bottom-right
+Line 130: // 根据points的数量确定边数
+Line 156: // Calculate the new positions for the points
+Line 164: // Apply the animations using DOTween
+
+File: Default\DynamicTMP.cs
+Line 4: /// <summary>
+Line 5: /// 给字体添加各种奇奇怪怪的变形/位移/抖动 巴拉巴拉
+Line 6: /// </summary>
+Line 29: //帕金森，但是每个抖动都不一样
+Line 40: //动画
+Line 46: //类似于原版战斗内的我方对话抖动：字符随机时间随机一个抖那么一下
+Line 60: //动画
+Line 67: //整齐划一的抖动
+Line 79: //动画
+Line 85: //抽搐的抖动
+Line 95: //动画
+Line 106: //小幽灵式抽搐的抖动
+Line 116: //动画
+Line 124: //小幽灵字符漂浮
+Line 134: //动画
+
+File: Default\MainControl.cs
+Line 13: /// <summary>
+Line 14: /// 调用所有ScriptableObject 并负责对数据和语言包的导入
+Line 15: /// 还包括大部分常用的函数
+Line 16: /// </summary>
+Line 23: //内置语言包总数
+Line 27: [Header("-BGM BPM设置-")]
+Line 29: [Header("BGM BPM")]
+Line 32: [Header("BGM BPM偏移")]
+Line 35: [Header("开启节拍器")]
+Line 38: [Header("-BGM BPM计算结果-")]
+Line 42: [Header("-MainControl设置-")]
+Line 44: [Header("状态:正常,战斗内")]
+Line 52: [Header("引用用的")]
+Line 53: [Header("战斗外")]
+Line 56: //[Header("战斗内")]
+Line 57: //public OldBoxController OldBoxController;
+Line 105: /// <summary>
+Line 106: /// 获取内置语言包ID
+Line 107: /// </summary>
+Line 125: /// <summary>
+Line 126: /// 加载对应语言包的数据
+Line 127: /// </summary>
+Line 151: //调用ScriptableObject
+Line 152: //--------------------------------------------------------------------------------
+Line 155: //InitializationOverworld内调用OverworldControl
+Line 156: //Initialization内调用ItemControl
+Line 157: //--------------------------------------------------------------------------------
+Line 160: /// <summary>
+Line 161: /// 初始化加载一大堆数据
+Line 162: /// </summary>
+Line 173: //ItemControl加载
+Line 174: //--------------------------------------------------------------------------------
+Line 188: //--------------------------------------------------------------------------------
+Line 206: //OverworldControl加载
+Line 207: //--------------------------------------------------------------------------------
+Line 219: //--------------------------------------------------------------------------------
+Line 228: //检测语言包全半角
+Line 245: //BattleControl加载
+Line 246: //--------------------------------------------------------------------------------
+Line 284: //--------------------------------------------------------------------------------
+Line 285: //OldBoxController = GameObject.Find("MainFrame").GetComponent<OldBoxController>();
+Line 348: //CanvasController.instance.frame.DOKill();
+Line 349: //CanvasController.instance.frame.DOColor(Color.white, 0.5f);
+Line 369: /// <summary>
+Line 370: /// 生成字符串形式的随机颜色。
+Line 371: /// </summary>
+Line 382: /// <summary>
+Line 383: /// 生成字符串形式的随机颜色。
+Line 384: /// </summary>
+Line 432: /// <summary>
+Line 433: /// 计算BGM节拍
+Line 434: /// </summary>
+Line 444: // 计算每个拍子的时间点，直到达到音乐时长
+Line 455: /// <summary>
+Line 456: /// 控制节拍器
+Line 457: /// </summary>
+Line 493: /// <summary>
+Line 494: /// 应用默认键位
+Line 495: /// </summary>
+Line 546: /// <summary>
+Line 547: /// 传入默认KeyCode并转换为游戏内键位。
+Line 548: /// mode:0按下 1持续 2抬起
+Line 549: /// </summary>
+Line 686: /// <summary>
+Line 687: /// 开/关 SFX
+Line 688: /// </summary>
+Line 715: /// <summary>
+Line 716: /// 按按tab改改分辨率那样子))
+Line 717: /// </summary>
+Line 737: /// <summary>
+Line 738: /// 和分辨率设置配套的换算
+Line 739: /// </summary>
+Line 742: //if (OverworldControl.background)
+Line 743: //    y = y / 9 * 16;
+Line 744: //else
+Line 749: //一般为CanvasController.instance.framePic
+Line 762: /// <summary>
+Line 763: /// 分辨率设置
+Line 764: /// </summary>
+Line 794: // BackpackBehaviour rawImage在其脚本中控制
+Line 821: // BackpackBehaviour rawImage在其脚本中控制
+Line 834: //在SetCanvasFrameSprite内设定
+Line 835: //CanvasController.instance.frame.sprite = OverworldControl.frames[CanvasController.instance.framePic];
+Line 894: /// <summary>
+Line 895: /// 淡出 输入跳转场景名称
+Line 896: /// banMusic是渐出
+Line 897: /// time>0有动画 =0就直接切场景 <0时会以time的绝对值
+Line 898: /// </summary>
+Line 955: /// <summary>
+Line 956: /// 传入string，返回删去末尾i个字符的string
+Line 957: /// </summary>
+Line 964: /// <summary>
+Line 965: /// 随机生成一个六位长的英文
+Line 966: /// </summary>
+Line 981: //保存的list 导入的text
+Line 1009: /// <summary>
+Line 1010: /// 调入数据(传入TextAsset)
+Line 1011: /// </summary>
+Line 1012: //保存的list 导入的text
+Line 1038: /// <summary>
+Line 1039: /// 调入数据(传入string)
+Line 1040: /// </summary>
+Line 1041: //保存的list 导入的text
+Line 1066: /// <summary>
+Line 1067: /// 传入使用背包的哪个物体
+Line 1068: /// 然后就使用 打true会顺带把背包顺序整理下
+Line 1069: /// 然后再让打字机打个字
+Line 1070: /// plusText填0就自己计算
+Line 1071: /// </summary>
+Line 1103: //食物
+Line 1130: /// <summary>
+Line 1131: /// 转换特殊字符
+Line 1132: /// </summary>
+Line 1137: //检测是否有多个需要循环调用的特殊字符
+Line 1155: //DebugLogger.Log(list[i] +"/"+ name);
+Line 1190: /// <summary>
+Line 1191: /// ChangeItemData中检测'<''>'符号的Switch语句
+Line 1192: /// </summary>
+Line 1195: //DebugLogger.Log(text + "/" + texters + "/" + isData);
+Line 1202: //回车
+Line 1371: /// <summary>
+Line 1372: /// 检测输入文本内的大写字母，转为全小写。
+Line 1373: /// </summary>
+Line 1398: /// <summary>
+Line 1399: /// 检测输入文本内的小写字母，转为全大写。
+Line 1400: /// </summary>
+Line 1425: /// <summary>
+Line 1426: /// 输入形如(x,y)的向量
+Line 1427: /// 若向量形如(xRx，yRy)或(xrx，yry)，则在R左右取随机数
+Line 1428: /// </summary>
+Line 1457: /// <summary>
+Line 1458: /// 形如xRx / xrx / O   随机分开
+Line 1459: /// 如果没有r或R的话就会返回原本的，非常的实用
+Line 1460: ///
+Line 1461: /// 额外添加：P/p获取玩家位置 通过isY确定是X还是Y
+Line 1462: /// 通过xxx + xRx的形式实现一定程度上的固定。
+Line 1463: /// </summary>
+Line 1511: //DebugLogger.LogWarning(text.Substring(2));
+Line 1512: //DebugLogger.Log(RandomFloatChange(text.Substring(2), origin, isY, origin));
+Line 1522: /// <summary>
+Line 1523: /// 输入形如(x,y)的向量
+Line 1524: ///
+Line 1525: /// </summary>
+Line 1533: /// <summary>
+Line 1534: /// 输入形如(r,g,b,a)的向量
+Line 1535: /// 同样支持随机数
+Line 1536: /// </summary>
+Line 1577: /// <summary>
+Line 1578: /// 在num1与num2之间判断 符合后返回num2.否则传回num1.
+Line 1579: /// </summary>
+Line 1595: /// <summary>
+Line 1596: /// 分配Item数据
+Line 1597: /// </summary>
+Line 1604: //总物品数
+Line 1609: //单物品遍历 寻找\符
+Line 1629: /// <summary>
+Line 1630: /// ItemClassificatio的一个子void
+Line 1631: /// </summary>
+Line 1659: /// <summary>
+Line 1660: /// 检测 '\'字符然后分割文本到子List
+Line 1661: /// 批量处理string
+Line 1662: /// </summary>
+Line 1681: /// <summary>
+Line 1682: /// 检测 '\'字符然后分割文本到子List
+Line 1683: /// 传入一个string
+Line 1684: /// </summary>
+Line 1701: /// <summary>
+Line 1702: /// 检测到第一个'\'字符就传出
+Line 1703: /// </summary>
+Line 1716: /// <summary>
+Line 1717: /// 反向检测第一个'\'字符就传出，可选忽视掉最后的 ; 号。
+Line 1718: /// </summary>
+Line 1740: /// <summary>
+Line 1741: /// 用于游戏内文本读取
+Line 1742: /// 传入数据名称返回文本包文本
+Line 1743: /// 给第一个 返第二个)
+Line 1744: /// </summary>
+Line 1758: /// <summary>
+Line 1759: /// 用于游戏内文本读取
+Line 1760: /// 传入数据名称返回所有同名的文本包文本
+Line 1761: /// </summary>
+Line 1776: /// <summary>
+Line 1777: /// 检测list的前几个字符是否与传入的string screen相同。
+Line 1778: /// 若相同则分割文本到子List
+Line 1779: /// </summary>
+Line 1792: /// <summary>
+Line 1793: /// 再分配文本包
+Line 1794: /// </summary>
+Line 1797: //max.Clear();
+Line 1834: /// <summary>
+Line 1835: /// 通过Id获取Item信息：
+Line 1836: /// type：Foods Arms Armors Others Auto
+Line 1837: /// num：0语言包名称
+Line 1838: ///     1/2：data1/2.
+Line 1839: ///     请勿多输.
+Line 1840: ///     Arm和Armor只有1
+Line 1841: /// </summary>
+Line 1846: //获取编号名称
+Line 1911: //获取语言包内的名称
+Line 1937: /// <summary>
+Line 1938: /// 通过Id获取Item的数据（HP，ATK等）：
+Line 1939: /// type：Foods Arms Armors Others Auto
+Line 1940: /// justId:勾的话会加上 +xxHP/AT/DF等信息
+Line 1941: /// </summary>
+Line 1946: //获取编号名称
+Line 2054: /// <summary>
+Line 2055: /// 识别到0后传出
+Line 2056: /// </summary>
+Line 2071: /// <summary>
+Line 2072: /// 通过物品数据名称搞到它的id.
+Line 2073: /// type：Foods Arms Armors Others
+Line 2074: /// </summary>
+Line 2121: /// <summary>
+Line 2122: /// 给List<Int>，检测到空的返回
+Line 2123: /// </summary>
+Line 2147: /// <summary>
+Line 2148: /// 随机获取-1或1
+Line 2149: /// </summary>
+Line 2162: /// <summary>
+Line 2163: /// 传入数根据正负返回1/-1。
+Line 2164: /// 传0返1。
+Line 2165: /// </summary>
+Line 2175: /// <summary>
+Line 2176: /// 给一个指定长度，然后会用空格填充原字符串
+Line 2177: /// </summary>
+Line 2178: /// <param name="origin">原字符串</param>
+Line 2179: /// <param name="length">返回长度</param>
+Line 2180: /// <returns></returns>
+Line 2223: // 从开头到A之前的部分
+Line 2224: // 从B之后到字符串末尾的部分
+Line 2226: // 合并两部分
+Line 2236: //spriteRenderer.color = Color.red;
+Line 2250: /// <summary>
+Line 2251: /// 计算多边形中点
+Line 2252: /// </summary>
+Line 2272: /// <summary>
+Line 2273: /// 在球体表面上生成随机点
+Line 2274: /// </summary>
+
+File: Default\MainControlSummon.cs
+Line 5: /// <summary>
+Line 6: /// 生成总控，并在切换场景时保留已生成的总控。
+Line 7: /// 以此只调用一次MainControl的数据加载。
+Line 8: ///
+Line 9: /// 同时会生成BGMControl
+Line 10: /// </summary>
+Line 13: [Header("-Canvas设置-")]
+Line 19: [Header("-BGMControl设置-")]
+Line 21: [Header("BGM本体音频 空为无音频")]
+Line 24: [Header("BGM音量")]
+Line 27: [Header("BGM音调")]
+Line 30: [Header("BGM循环播放初始状态")]
+Line 33: [Header("BGM BPM")]
+Line 36: [Header("BGM BPM偏移")]
+Line 39: [Header("初始化时开启节拍器")]
+Line 42: [Header("-MainControl设置-")]
+Line 44: [Header("黑场状态相关")]
+Line 51: [Header("战斗内场景额外设置")]
+Line 99: //DebugLogger.LogWarning("<color=yellow>检测到本场景内有MainControl</color>", gameObject);
+Line 115: //生成
+
+File: Default\MenuController.cs
+Line 6: /// <summary>
+Line 7: /// 控制Menu，sodayo)
+Line 8: /// </summary>
+Line 11: [Header("玩家名-LV-时间-位置-具体选项-底部字")]
+Line 46: //tmps[2]在update内设置
+Line 150: //新建
+Line 159: //下页
+
+File: Default\ObjectPool.cs
+Line 6: [Header("填充对象池的对象数量")]
+Line 13: /// <summary>
+Line 14: /// 初始化/填充对象池
+Line 15: /// </summary>
+Line 28: /// <summary>
+Line 29: /// 返回对象池
+Line 30: /// </summary>
+Line 41: /// <summary>
+Line 42: /// 喜提对象
+Line 43: /// </summary>
+
+File: Default\RenameController.cs
+@ -1049,214 +1039,191 @@ Line 284: //DOTween.To(() => v.weight, x => v.weight = x, 0, 5.5f).SetEase(Ease.
+
+File: Default\SaveController.cs
+Line 7: /// <summary>
+Line 8: /// 存档存储的数据
+Line 9: /// </summary>
+Line 16: //DebugLogger.Log("save");
+Line 19: //DebugLogger.Log("create");
+Line 23: // 转换数据
+Line 29: // 读取用户数据到内存
+Line 32: //DebugLogger.Log("load");
+Line 36: // 检查用户配置文件是否存在
+Line 40: // 使用 CreateInstance 方法
+Line 41: // 使用 PopulateObject 方法来填充数据
+Line 55: //DebugLogger.Log("家人们谁懂啊"+ Application.dataPath + "/Data");
+Line 73: // 检查存档是否存在
+Line 76: // 从内存中移除存档数据
+Line 82: // 删除文件
+Line 102: // 获取目录下所有的存档文件路径
+Line 105: // 按照文件名的数字进行排序
+Line 120: // 重命名文件
+
+File: Default\StartController.cs
+Line 5: /// <summary>
+Line 6: /// 最初始场景（模板信息）的控制器
+Line 7: /// </summary>
+
+File: Default\StorySceneController.cs
+Line 6: /// <summary>
+Line 7: /// ¿ØÖÆ½²¹ÊÊÂ³¡¾°£¨²¥PPT£©
+Line 8: /// </summary>
+
+File: Default\TextChanger.cs
+Line 5: /// <summary>
+Line 6: /// 用于字体匹配及双语字体数据修正
+Line 7: /// </summary>
+Line 10: //public TMP_FontAsset assetback;
+Line 13: //若中英混搭 则true就完事了
+Line 15: [Header("US/CN")]
+Line 18: //public float[] sizes;
+Line 20: //public bool no = true;
+
+File: Default\TypeWritter.cs
+Line 13: /// <summary>
+Line 14: /// 打字机系统
+Line 15: /// </summary>
+Line 19: //打字机是否在运行
+Line 20: //是否在 打出字符
+Line 25: //实际上计数
+Line 27: //音效
+Line 30: [Header("打字速度与检测停顿字符后的打字速度")]
+Line 33: [Header("打字后多少秒可以按X跳过，0为不能跳")]
+Line 34: //设置
+Line 41: [Header("适配OW框")]
+Line 50: [Header("字体")]
+Line 53: [Header("打字动效")]
+Line 56: [Header("总有那么一些情况需要强硬手段（拔枪")]
+Line 70: //正常的打字机
+Line 71: //不能按ZX的打字机，使用富文本进行控制。
+Line 76: /// <summary>
+Line 77: /// 开启打字机。若打字正在进行，可强行终止。
+Line 78: /// 一般情况下不需要强行打断对话。
+Line 79: /// 若传入的语句中含有<autoFood>，请输入hp。若输入0，此字符将跳过。
+Line 80: /// </summary>
+Line 295: //单独一个Stop的时候，不设置isTyping，这是因为有的时候这个stop的时间很短，如果true看起来有点怪。
+Line 296: //如果需要长的Stop，建议你还是使用<stop*x>的方式来做。
+Line 297: //isTyping = false;
+Line 328: //passTextString += spText.Length * 2 - 5;
+Line 330: //富文本
+Line 361: //string cantString = ",.:;!?，。：；！？ \n\r";
+Line 406: // == '<'
+Line 414: //pressX = false;
+Line 417: //这是个标签注意
+Line 427: //动效相关
+Line 456: //动画
+Line 484: //pause在OW检测的时候会用
+Line 500: //跳字
+
+File: Obsolete\CreateQuadChanged.cs
+Line 6: /// <summary>
+Line 7: /// 旧的战斗框绘制脚本：已废弃
+Line 8: /// 新的：DrawFrame
+Line 9: /// </summary>
+Line 21: //public float debug;
+Line 27: //public bool havePoints;
+Line 28: //public List<Vector3> noHavePoints = new List<Vector3>();
+Line 87: // 设置主贴图
+
+File: Overworld\BackpackBehaviour.cs
+Line 5: /// <summary>
+Line 6: /// 管理OW背包系统
+Line 7: /// </summary>
+Line 132: //关闭
+Line 136: //开启
+Line 244: //DebugLogger.LogWarning(talkUI.transform.localPosition.z);
+Line 282: //边框自适应
+Line 400: //DebugLogger.Log(talkUI.transform.localPosition.z);
+
+File: Overworld\CameraFollowPlayer.cs
+Line 3: /// <summary>
+Line 4: /// Overworld摄像机跟随
+Line 5: /// </summary>
+Line 9: //限制摄像机最大XY范围 0则不动
+Line 10: //限制摄像机最大XY范围 0则不动
+Line 27: //跟随玩家
+Line 40: //限制范围
+
+File: Overworld\OverworldObjTrigger.cs
+Line 9: /// <summary>
+Line 10: /// OWObj触发器相关 配合玩家射线
+Line 11: /// 用于读取并显示文本然后显示出来
+Line 12: /// </summary>
+Line 16: //若为true，则碰到就触发。false，按Z触发。
+Line 23: [Header("检测玩家动画方向 0,0为不检测")]
+Line 26: [Header("存档相关")]
+Line 33: [Header("插入摄像机动画相关")]
+Line 42: [Header("需要渐出就填正数时间")]
+Line 45: [Header("OW跳场景 只给trigger")]
+Line 52: [Header("OW跳场景锁定进入时方向 0无 -1左右 1上下")]
+Line 58: [Header("结束时调用动画器并将下设为true")]
+Line 64: [Header("结束时物体自身关闭")]
+Line 67: [Header("确定目前打字的物体")]
+Line 70: [Header("结束时执行方法")]
+Line 139: //检测相关见PlayerBehaviour
+Line 201: /// <summary>
+Line 202: /// 激活打字。第二个参数别动
+Line 203: /// </summary>
+
+File: Overworld\OverworldTalkSelect.cs
+Line 6: /// <summary>
+Line 7: /// 用于在OW插入选项系统，与UT的选项一致，而不同于DR的选项。
+Line 8: /// 在含有选项的场景内会添加heart。
+Line 9: /// 在文本包内调用
+Line 10: /// </summary>
+Line 75: //选择了左侧选项
+Line 101: //选择了右侧选项
+
+File: Overworld\PlayerBehaviour.cs
+Line 4: /// <summary>
+Line 5: /// Overworld中的玩家控制器
+Line 6: /// </summary>
+Line 16: //玩家速度 编辑器标准为13 导出为5.5
+Line 18: [Header("音效截取范围 int")]
+Line 21: [Header("开启倒影")]
+Line 26: //public LayerMask mask;
+Line 32: //0.1秒，防止调查OW冲突
+Line 34: //需要就弄上 整这个是因为有的项目里做了回音效果
+Line 50: //mask = 1 << 6;
+Line 161: //DebugLogger.Log(obj.transform.tag);
+Line 179: //动画器引用
+Line 247: //if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
+Line 248: //moveDirectionX = 0;
+Line 255: //&& !(MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1) || MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1)))
+
+File: Overworld\SpriteChanger.cs
+Line 5: /// <summary>
+Line 6: /// Overworld对话中更改Sprite
+Line 7: /// </summary>
+
+File: Overworld\TalkUIPositionChanger.cs
+Line 6: /// <summary>
+Line 7: /// 修改Overworld中对话框的位置
+Line 8: /// </summary>
+Line 22: //gameObject.SetActive(false);
+
+File: Overworld\TriggerChangeLayer.cs
+Line 9: [Header("跟随父父物体的层级变化而加上1")]
+
+File: Overworld\TriggerPlayerOut.cs
+Line 3: /// <summary>
+Line 4: /// V0.1.1新加
+Line 5: /// 用于带动画器的OW，在玩家进入/离开时，执行代码/播放动画。
+Line 6: /// 可多方面调整，我猜
+Line 7: /// </summary>
+Line 13: [Header("更改动画的布尔值：")]
+Line 16: [Header("去除进入检测范围执行动画")]
+Line 19: [Header("在上个场景为指定场景时去除失效")]
+Line 22: [Header("设置在离开范围/进入范围时执行")]
+Line 28: [Header("在上个场景为指定场景时动画器的sceneBool设true")]
+Line 33: [Header("在electricOpen的时候electricOpen")]
+Line 69: //给动画调用的
+
+File: Overworld\Corridor\ColumnsMove.cs
+Line 3: /// <summary>
+Line 4: /// 长廊柱子移动
+Line 5: /// </summary>
+Line 9: //包括方向(正负)
+
+File: Volume\ChromaticAberrationComponent.cs
+Line 5: /// <summary>
+Line 6: /// VolumeComponent，显示在添加列表内
+Line 7: /// </summary>
+Line 14: [Header("Settings")]
+
+File: Volume\CRTScreenComponent.cs
+Line 5: /// <summary>
+Line 6: /// VolumeComponent，显示在添加列表内
+Line 7: /// </summary>
+Line 14: [Header("Settings")]
+
+File: Volume\GlitchArtComponent.cs
+Line 5: /// <summary>
+Line 6: /// VolumeComponent，显示在添加列表内
+Line 7: /// </summary>
+Line 14: [Header("AnalogGlitch")]
+Line 19: [Header("HorizontalShake")]
+Line 24: [Header("ColorDrift")]
+Line 29: [Header("VerticalJump")]
+
+File: Volume\StretchPostComponent.cs
+Line 5: /// <summary>
+Line 6: /// VolumeComponent，显示在添加列表内
+Line 7: /// </summary>
+Line 14: [Header("Settings")]

@@ -5,25 +5,29 @@ using UnityEngine.Rendering;
 using Log;
 using System.Collections.Generic;
 ///<summary>
-///控制战斗内玩家(心)的相关属性
+////Controls the relevant attributes of the player (heart) in the battle.
 ///</summary>
 public class BattlePlayerController : MonoBehaviour
 {
 
     public float test1 = -0.5f;
     public float test2 = 0.05f;
-    [Header("心变色时的ding动画速度，0为关")]
+    [Header("Speed of ding animation when heart changes color, 0 is off")]
     public float dingTime;
-    [Header("心渐变动画速度，0为关")]
+    [Header("Heart gradient animation speed, 0 is off")]
     public float gradientTime;
 
-    [Header("基本属性调整")]
+    [Header("Basic Attribute Adjustment")]
     public float speed;
-    public float speedWeightX, speedWeightY;//速度与权重(按X乘以倍数)，速度测试为3，权重0.5f
+    public float speedWeightX, speedWeightY;
+    // speed and weight (multiplied by X), speed test is 3, weight 0.5f
     private float speedWeight = 0.5f;
-    public float hitCD, hitCDMax;//无敌时间
-    public float displacement = 0.175f;//碰撞距离判定
-    public bool isMoving;//用于蓝橙骨判断：玩家是否真的在移动
+    public float hitCD, hitCDMax;
+    //Invincibility time
+    public float displacement = 0.175f;
+    //Collision distance determination
+    public bool isMoving;
+    // for blue and orange bone judgment: whether the player is really moving or not
     public float timeInterpolation = -0.225f;
     public Vector2 sceneDrift = new Vector2(-1000, 0);
     public enum PlayerDirEnum
@@ -35,22 +39,28 @@ public class BattlePlayerController : MonoBehaviour
         nullDir
     };
 
-    public PlayerDirEnum playerDir;//方向
+    public PlayerDirEnum playerDir;
+    //Direction
     public Vector3 moving;
-    public bool isJump;//是否处于“跳起”状态
-    public float jumpAcceleration;//跳跃的加速度
-    public float jumpRayDistance;//射线距离
+    public bool isJump;
+    //Whether it is in the "jump up" state.
+    public float jumpAcceleration;
+    //Jumping acceleration
+    public float jumpRayDistance;
+    //Ray distance
     public float jumpRayDistanceForBoard;
 
     private Rigidbody2D rigidBody;
-    public CircleCollider2D collideCollider;//圆形碰撞体
+    public CircleCollider2D collideCollider;
+    //Circular collision body
     private SpriteRenderer spriteRenderer, dingSpriteRenderer;
-    public BattleControl.PlayerColor playerColor;//含有属性的颜色 读取BattleControl中的enum PlayerColor.颜色变换通过具体变换的函数来执行
+    public BattleControl.PlayerColor playerColor;
+    //Color with attributes Read enum PlayerColor from BattleControl. color transformations are performed by the function of the specific transformation
     private Tween missAnim, changeColor, changeDingColor, changeDingScale;
 
     public Volume hitVolume;
 
-    //LayerMask mask;
+    //LayerMask mask.
     private void Start()
     {
         speedWeightX = 1;
@@ -67,7 +77,7 @@ public class BattlePlayerController : MonoBehaviour
         dingSpriteRenderer.color = Color.clear;
         hitVolume = GetComponent<Volume>();
         hitVolume.weight = 0;
-        //mask = 1 << 6;
+        //mask = 1 << 6.
         MainControl.instance.PlayerControl.missTime = 0;
 
     }
@@ -169,9 +179,10 @@ public class BattlePlayerController : MonoBehaviour
 
         Ray2D rayF = new Ray2D(transform.position, dirReal * -1);
         Debug.DrawRay(rayF.origin, rayF.direction, Color.red);
-        RaycastHit2D infoF = Physics2D.Raycast(transform.position, dirReal * -1, jumpRayDistance);//反向检测(顶头)
+        RaycastHit2D infoF = Physics2D.Raycast(transform.position, dirReal * -1, jumpRayDistance);
+        //Reverse detection (top head)
 
-        //------------------------移动------------------------
+        //------------------------ moving ------------------------
         switch (playerColor)
         {
             case BattleControl.PlayerColor.red:
@@ -257,7 +268,7 @@ public class BattlePlayerController : MonoBehaviour
                 else
                 {
                     transform.SetParent(null);
-                    
+
                 }
 
                 switch (playerDir)
@@ -335,7 +346,8 @@ public class BattlePlayerController : MonoBehaviour
                         jumpAcceleration += Time.deltaTime * timeInterpolation;
                         break;
 
-                    case PlayerDirEnum.down:////////////////////////////////////////////////
+                    case PlayerDirEnum.down:
+                    ////////////////////////////////////////////////
                         if (MainControl.instance.KeyArrowToControl(KeyCode.X, 1))
                         {
                             speedWeightX = speedWeight;
@@ -408,7 +420,8 @@ public class BattlePlayerController : MonoBehaviour
                         jumpAcceleration += Time.deltaTime * timeInterpolation;
                         break;
 
-                    case PlayerDirEnum.left:////////////////////////////////////////////////
+                    case PlayerDirEnum.left:
+                    ////////////////////////////////////////////////
                         if (MainControl.instance.KeyArrowToControl(KeyCode.X, 1))
                         {
                             speedWeightY = speedWeight;
@@ -444,7 +457,7 @@ public class BattlePlayerController : MonoBehaviour
 
                         if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) && !isJump && moving.x == 0)
                         {
-                            
+
 
                             moving = new Vector3(2.15f, moving.y);
                             isJump = true;
@@ -518,7 +531,7 @@ public class BattlePlayerController : MonoBehaviour
 
                         if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1) && !isJump && moving.x == 0)
                         {
-                            
+
 
                             moving = new Vector3(-2.15f, moving.y);
                             isJump = true;
@@ -564,7 +577,7 @@ public class BattlePlayerController : MonoBehaviour
         }
 
 
-        //蓝橙骨所用的是否移动判定
+        //Whether to move or not for blue and orange bones
         Vector2 dirMoveX = new Vector2();
         Vector2 dirMoveY = new Vector2();
         bool isMoveX = false, isMoveY = false;
@@ -657,8 +670,9 @@ public class BattlePlayerController : MonoBehaviour
         moving.y = MainControl.instance.JudgmentNumber(false, moving.y, -5);
         moving.x = MainControl.instance.JudgmentNumber(true, moving.x, 5);
         moving.y = MainControl.instance.JudgmentNumber(true, moving.y, 5);
-        
-        Vector3 newPos = transform.position + new Vector3(speedWeightX * speed * moving.x * Time.deltaTime, speedWeightY * speed * moving.y * Time.deltaTime);//速度参考：3
+
+        Vector3 newPos = transform.position + new Vector3(speedWeightX * speed * moving.x * Time.deltaTime, speedWeightY * speed * moving.y * Time.deltaTime);
+        //Speed reference: 3
 
         Vector3 checkPos = CheckPoint(newPos, displacement + BoxController.instance.width / 2);
 
@@ -673,7 +687,7 @@ public class BattlePlayerController : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        //蓝心碰板子确保再次可以跳
+        //Blue heart touches the board to make sure it's possible to jump again.
         if (collision.transform.CompareTag("board") && collision.transform.GetComponent<EdgeCollider2D>().IsTouching(collideCollider) && playerColor == BattleControl.PlayerColor.blue)
         {
             BlueJumpReady();
@@ -700,7 +714,7 @@ public class BattlePlayerController : MonoBehaviour
     */
 
     ///<summary>
-    ///掉出
+    //// Dropped out
     ///</summary>
     private void OnCollisionExit2D(Collision2D collision)
     {
@@ -711,10 +725,10 @@ public class BattlePlayerController : MonoBehaviour
     }
 
     ///<summary>
-    ///通过渐变动画将玩家的颜色改变。
-    ///若gradientTime/dingTime等于0 则不会有渐变动画/ding动画；
-    ///若gradientTime/dingTime小于0 则使用该脚本内的gradientTime/dingTime变量。
-    ///若PlayerColor输入为nullColor，则不会更改玩家的实际颜色属性。
+    /// Changes the player's color through a gradient animation.
+    /// If gradientTime/dingTime is equal to 0 then there will be no gradient/ding animation;
+    /// If gradientTime/dingTime is less than 0 then use the gradientTime/dingTime variable within this script.
+    /// If PlayerColor is entered as nullColor, the actual color attribute of the player is not changed.
     ///</summary>
     public void ChangePlayerColor(Color aimColor, BattleControl.PlayerColor aimPlayerColor, float startForce = 0, PlayerDirEnum dir = PlayerDirEnum.nullDir, float gradientTime = -1, float dingTime = -1, int fx = 2)
     {
@@ -765,7 +779,7 @@ public class BattlePlayerController : MonoBehaviour
             isJump = false;
             jumpAcceleration = 1.25f;
 
-            
+
         }
         if (aimPlayerColor == BattleControl.PlayerColor.blue)
         {
@@ -776,7 +790,7 @@ public class BattlePlayerController : MonoBehaviour
 
     }
     ///<summary>
-    ///让蓝心坠落
+    /// Let the Blue Heart Fall
     ///</summary>
     void BlueDown(float startForce = 0, PlayerDirEnum dir = PlayerDirEnum.nullDir)
     {
@@ -805,116 +819,155 @@ public class BattlePlayerController : MonoBehaviour
                 break;
         }
     }
-    /////////////////////////////////////////判定相关
-    //定义用于判断点是否在多边形内的方法
+    ///////////////////////////////////////// decision related
+    // Define the method used to determine if a point is inside a polygon.
     private bool IsPointInPolygon(Vector2 point, List<Vector2> polygon)
     {
-        bool isInside = false; //初始化点是否在多边形内的标志为false
-                               //遍历多边形的每一条边，使用射线法判断点是否在多边形内
+        bool isInside = false;
+        //false flag to initialize whether the point is inside the polygon or not
+                               // Iterate over each edge of the polygon and use the ray method to determine if the point is inside the polygon.
         for (int i = 0, j = polygon.Count - 1; i < polygon.Count; j = i++)
         {
-            //如果点与当前边的两个端点之一在Y轴的两侧，并且在X轴的左侧，则反转内部标志
+            //If the point is on either side of the Y-axis with one of the two endpoints of the current edge and to the left of the X-axis, reverse the internal flag
             if (((polygon[i].y > point.y) != (polygon[j].y > point.y)) &&
              (point.x < (polygon[j].x - polygon[i].x) * (point.y - polygon[i].y) / (polygon[j].y - polygon[i].y) + polygon[i].x))
             {
                 isInside = !isInside;
             }
         }
-        return isInside; //返回点是否在多边形内的最终结果
+        return isInside;
+        //returns the final result of whether the point is inside the polygon or not
     }
 
-    //定义计算点到线段最近点的方法（计算垂足）
+    // Define the method of calculating the nearest point to a line segment (calculating the vertical foot)
     private Vector2 GetNearestPointOnLine(Vector2 point, Vector2 start, Vector2 end)
     {
-        Vector2 line = end - start; //计算线段的向量
-        float len = line.magnitude; //获取线段长度
-        line.Normalize(); //标准化线段向量
+        Vector2 line = end - start;
+        //Calculate the vector of the line segments
+        float len = line.magnitude;
+        //get the length of the line segment
+        line.Normalize();
+        //Normalized line vectors
 
-        Vector2 v = point - start; //计算点到线段起点的向量
-        float d = Vector2.Dot(v, line); //计算点在线段向量上的投影长度
-        d = Mathf.Clamp(d, 0f, len); //限制投影长度在0到线段长度之间
-        return start + line * d; //计算并返回最近点的坐标
+        Vector2 v = point - start;
+        //calculate the vector from the point to the start of the line segment
+        float d = Vector2.Dot(v, line);
+        // Calculate the length of the projection of the point on the line vector
+        d = Mathf.Clamp(d, 0f, len);
+        // Limit the projection length to between 0 and the length of the line segment
+        return start + line * d;
+        //calculate and return the coordinates of the nearest point
     }
 
-    //定义计算位移后垂点位置的方法
+    // Define the method to calculate the position of the vertical point after displacement.
     private Vector2 CalculateDisplacedPoint(Vector2 nearestPoint, Vector2 point, Vector2 lineStart, Vector2 lineEnd, float displacement)
     {
-        Vector2 lineDirection = (lineEnd - lineStart).normalized; //计算线段方向向量
-        Vector2 perpendicularDirection = new Vector2(-lineDirection.y, lineDirection.x); //计算垂直方向向量（逆时针旋转90度）
+        Vector2 lineDirection = (lineEnd - lineStart).normalized;
+        //calculate line direction vector
+        Vector2 perpendicularDirection = new Vector2(-lineDirection.y, lineDirection.x);
+        //calculate vertical vector (rotate 90 degrees counterclockwise)
 
-        return nearestPoint + perpendicularDirection * -displacement; //计算并返回位移后的垂点位置
+        return nearestPoint + perpendicularDirection * -displacement;
+        //calculate and return the position of the vertical point after displacement
     }
 
-    //定义计算内缩多边形顶点的方法
+    // Define the method for calculating the vertices of an interior polygon.
     public List<Vector2> CalculateInwardOffset(List<Vector2> vertices, float offset)
     {
-        if (vertices == null || vertices.Count < 3) return null; //如果顶点列表为空或少于3个，返回null
+        if (vertices == null || vertices.Count < 3) return null;
+        // Return null if the vertex list is empty or has less than 3 vertices.
 
-        List<Vector2> offsetVertices = new List<Vector2>(); //初始化存储位移后顶点的列表
-        List<Vector2> intersectionPoints = new List<Vector2>(); //初始化存储交点的列表
+        List<Vector2> offsetVertices = new List<Vector2>();
+        //Initialize the list of vertices after storing the displacement.
+        List<Vector2> intersectionPoints = new List<Vector2>();
+        //Initialize list of stored intersection points
 
-        int count = vertices.Count; //获取顶点数量
+        int count = vertices.Count;
+        //get the number of vertices
         for (int i = 0; i < count; i++)
         {
-            Vector2 currentVertex = vertices[i]; //获取当前顶点
-            Vector2 nextVertex = vertices[(i + 1) % count]; //获取下一个顶点（环形列表）
+            Vector2 currentVertex = vertices[i];
+            //get current vertex
+            Vector2 nextVertex = vertices[(i + 1) % count];
+            //get next vertex (ring list)
 
-            Vector2 edgeDirection = (nextVertex - currentVertex).normalized; //计算边的方向向量
-            Vector2 perpendicularDirection = new Vector2(-edgeDirection.y, edgeDirection.x); //计算垂直方向向量
+            Vector2 edgeDirection = (nextVertex - currentVertex).normalized;
+            //Calculate the direction vectors of the edges.
+            Vector2 perpendicularDirection = new Vector2(-edgeDirection.y, edgeDirection.x);
+            //calculate the vertical vector
 
-            Vector2 offsetCurrentVertex = currentVertex + perpendicularDirection * offset; //计算当前顶点的位移
-            Vector2 offsetNextVertex = nextVertex + perpendicularDirection * offset; //计算下一个顶点的位移
+            Vector2 offsetCurrentVertex = currentVertex + perpendicularDirection * offset;
+            //Calculate the displacement of the current vertex.
+            Vector2 offsetNextVertex = nextVertex + perpendicularDirection * offset;
+            //calculate the displacement of the next vertex
 
-            offsetVertices.Add(offsetCurrentVertex); //添加位移后的当前顶点到列表
-            offsetVertices.Add(offsetNextVertex); //添加位移后的下一个顶点到列表
+            offsetVertices.Add(offsetCurrentVertex);
+            //Add the displaced vertex to the list.
+            offsetVertices.Add(offsetNextVertex);
+            //add the next vertex to the list after displacement
 
-            if (i > 0) //从第二条边开始计算交点
+            if (i > 0)
+            //calculate the intersection from the second edge
             {
                 bool foundIntersection = LineLineIntersection(out Vector2 intersection, offsetVertices[i * 2 - 2], offsetVertices[i * 2 - 1], offsetCurrentVertex, offsetNextVertex);
                 if (foundIntersection)
                 {
-                    intersectionPoints.Add(intersection); //如果找到交点，添加到交点列表
+                    intersectionPoints.Add(intersection);
+                    // if intersection is found, add to intersection list
                 }
             }
         }
 
-        //计算首尾两条边的交点
+        //calculate the intersection of the first and last edges
         bool foundFinalIntersection = LineLineIntersection(out Vector2 finalIntersection, offsetVertices[offsetVertices.Count - 2], offsetVertices[offsetVertices.Count - 1], offsetVertices[0], offsetVertices[1]);
         if (foundFinalIntersection)
         {
-            intersectionPoints.Add(finalIntersection); //如果找到交点，添加到交点列表
+            intersectionPoints.Add(finalIntersection);
+            // if intersection is found, add to intersection list
         }
 
-        return intersectionPoints; //返回交点列表，即内缩多边形的顶点
+        return intersectionPoints;
+        //returns a list of intersections, i.e. the vertices of the interior polygon.
     }
 
-    //定义线线交点计算的方法
+    // Define the method for calculating the intersection of lines.
     private bool LineLineIntersection(out Vector2 intersection, Vector2 point1, Vector2 point2, Vector2 point3, Vector2 point4)
     {
-        intersection = new Vector2(); //初始化交点坐标
+        intersection = new Vector2();
+        //Initialize intersection coordinates
 
-        float d = (point1.x - point2.x) * (point3.y - point4.y) - (point1.y - point2.y) * (point3.x - point4.x); //计算分母
-        if (d == 0) return false; //如果分母为0，则线段平行或重合，无交点
+        float d = (point1.x - point2.x) * (point3.y - point4.y) - (point1.y - point2.y) * (point3.x - point4.x);
+        //calculate the denominator
+        if (d == 0) return false;
+        // if the denominator is 0, the lines are parallel or coincident, no intersection
 
         float pre = (point1.x * point2.y - point1.y * point2.x), post = (point3.x * point4.y - point3.y * point4.x);
-        intersection.x = (pre * (point3.x - point4.x) - (point1.x - point2.x) * post) / d; //计算交点X坐标
-        intersection.y = (pre * (point3.y - point4.y) - (point1.y - point2.y) * post) / d; //计算交点Y坐标
+        intersection.x = (pre * (point3.x - point4.x) - (point1.x - point2.x) * post) / d;
+        //calculate the X coordinate of the intersection point
+        intersection.y = (pre * (point3.y - point4.y) - (point1.y - point2.y) * post) / d;
+        //calculate the Y coordinate of the intersection point
 
-        return true; //返回true，表示找到交点
+        return true;
+        //returns true, indicating that the intersection is found
     }
-    //定义根据位移检查并调整点位置的方法
+    //define the method of checking and adjusting the position of the point according to the displacement
     public Vector3 CheckPoint(Vector3 point, float displacement, int maxDepth = 10, int currentDepth = 0, bool isInitialCall = true)
     {
-        Vector2 originalPoint = point; //保存原始点位置
+        Vector2 originalPoint = point;
+        //Save the original point position
         float z = point.z;
-        if (currentDepth >= maxDepth) //检查是否达到递归次数限制
+        if (currentDepth >= maxDepth)
+        //Check to see if the recursion limit has been reached.
         {
-            return point; //如果达到最大次数，返回当前点
+            return point;
+            //If the maximum number of times is reached, return the current point
         }
 
-        foreach (var box in BoxController.instance.boxes) //遍历所有战斗框
+        foreach (var box in BoxController.instance.boxes)
+        //Iterate through all combat boxes
         {
-            if (box.localPosition.z != z)//排除Z轴不同的
+            if (box.localPosition.z != z)
+            //exclude Z-axis different
                 continue;
 
             float rDis;
@@ -922,75 +975,100 @@ public class BattlePlayerController : MonoBehaviour
                 rDis = displacement + test1;
             else
                 rDis = displacement;
-            List<Vector2> movedVertices = CalculateInwardOffset(box.GetRealPoints(false), -rDis); //计算缩放后的多边形顶点
+            List<Vector2> movedVertices = CalculateInwardOffset(box.GetRealPoints(false), -rDis);
+            //calculate scaled polygon vertices
             /*
-            foreach (var item in movedVertices) //遍历移动后的顶点
+            foreach (var item in movedVertices)
+            //Iterate over the moved vertices.
             {
-                //DebugLogger.Log(item, DebugLogger.Type.err); //记录日志
+                //DebugLogger.Log(item, DebugLogger.Type.err); // logging logs
             }
             */
-            if (IsPointInPolygon(point, movedVertices)) //如果点 在 调整后的多边形内
+            if (IsPointInPolygon(point, movedVertices))
+            //If the point is within the adjusted polygon
             {
-                //DebugLogger.Log(point, DebugLogger.Type.war, "#FF00FF"); //记录日志
-                return point; //返回原始坐标
+                //DebugLogger.Log(point, DebugLogger.Type.war, "#FF00FF"); //logging the logs
+                return point;
+                //return original coordinates
             }
 
         }
-        //如果点 不在 调整后的多边形内
+        //If the point is not in the adjusted polygon
 
-        Vector2 nearestPoint = Vector2.zero; //最近点
-        Vector2 lineStart = Vector2.zero; 
-        Vector2 lineEnd = Vector2.zero; 
-        float nearestDistance = float.MaxValue; //最近距离设为最大值
-        bool isParent = false;//确定框是否为复合的框，如果是，需要额外调整移动距离
+        Vector2 nearestPoint = Vector2.zero;
+        //nearest point
+        Vector2 lineStart = Vector2.zero;
+        Vector2 lineEnd = Vector2.zero;
+        float nearestDistance = float.MaxValue;
+        //Maximize the closest distance.
+        bool isParent = false;
+        // Determine if the box is a composite box, if so, you need to additionally adjust the movement distance
 
-        foreach (var box in BoxController.instance.boxes) //遍历所有战斗框
+        foreach (var box in BoxController.instance.boxes)
+        //Iterate through all combat boxes
         {
-            if (box.localPosition.z != z)//排除Z轴不同的
+            if (box.localPosition.z != z)
+            //Excluding Z-axis different
                 continue;
 
 
-            for (int i = 0, j = box.GetRealPoints(false).Count - 1; i < box.GetRealPoints(false).Count; j = i++) //遍历框的所有边
+            for (int i = 0, j = box.GetRealPoints(false).Count - 1; i < box.GetRealPoints(false).Count; j = i++)
+            // Iterate over all sides of the box
             {
-                Vector2 tempNearestPoint = GetNearestPointOnLine(point, box.GetRealPoints(false)[i], box.GetRealPoints(false)[j]); //计算到当前边的最近点
-                float tempDistance = Vector2.Distance(point, tempNearestPoint); //计算距离
-                if (tempDistance < nearestDistance) //如果距离更短
+                Vector2 tempNearestPoint = GetNearestPointOnLine(point, box.GetRealPoints(false)[i], box.GetRealPoints(false)[j]);
+                //calculate the closest point to the current edge
+                float tempDistance = Vector2.Distance(point, tempNearestPoint);
+                //calculate the distance
+                if (tempDistance < nearestDistance)
+                //If the distance is shorter
                 {
-                    nearestPoint = tempNearestPoint; //更新最近点
-                    lineStart = box.GetRealPoints(false)[i]; //更新线段起点
-                    lineEnd = box.GetRealPoints(false)[j]; //更新线段终点
-                    nearestDistance = tempDistance; //更新最近距离
+                    nearestPoint = tempNearestPoint;
+                    //Update most recent point
+                    lineStart = box.GetRealPoints(false)[i];
+                    //update the starting point of the line segment
+                    lineEnd = box.GetRealPoints(false)[j];
+                    //Update end of line segment
+                    nearestDistance = tempDistance;
+                    //Update closest distance
                     isParent = box.sonBoxDrawer.Count > 0;
-                    
+
                 }
             }
         }
 
-        if (nearestDistance < float.MaxValue) //如果找到最近点
+        if (nearestDistance < float.MaxValue)
+        //If the closest point is found
         {
             if (isParent)
                 displacement -= test2;
 
-            Vector3 moved = (Vector3)CalculateDisplacedPoint(nearestPoint, point, lineStart, lineEnd, -displacement) + new Vector3(0, 0, z); //计算位移后的点位置
-            //DebugLogger.Log(moved, DebugLogger.Type.war, "#FF0000"); //记录日志
+            Vector3 moved = (Vector3)CalculateDisplacedPoint(nearestPoint, point, lineStart, lineEnd, -displacement) + new Vector3(0, 0, z);
+            //calculate the position of the point after displacement
+            //DebugLogger.Log(moved, DebugLogger.Type.war, "#FF0000"); //logging the logs
 
-            if (isInitialCall || (Vector2)moved != originalPoint) //如果是初次调用或移动后的点不等于原点
+            if (isInitialCall || (Vector2)moved != originalPoint)
+            // if it is the first call or the point after the move is not equal to the original point
             {
-                Vector3 newCheck = (Vector3)(Vector2)CheckPoint(moved, displacement, maxDepth, currentDepth + 1, false) + new Vector3(0, 0, z); //递归调用，增加递归深度
-                if (newCheck != moved) //如果移动后的点未通过检测
+                Vector3 newCheck = (Vector3)(Vector2)CheckPoint(moved, displacement, maxDepth, currentDepth + 1, false) + new Vector3(0, 0, z);
+                //recursive call, increase recursion depth
+                if (newCheck != moved)
+                //If the moved point does not pass the test
                 {
-                    //因为已经在递归中处理递归深度，所以这里不需要再次调用CheckPoint
-                    return newCheck; //返回新检查点
+                    // Since recursion depth is already handled in the recursion, there is no need to call CheckPoint again.
+                    return newCheck;
+                    //return to new checkpoints
                 }
-                return moved; //返回移动后的点
+                return moved;
+                //return to the point after the move
             }
         }
 
-        return point;//如果没有找到更近的点，返回原点
+        return point;
+        // if no closer point is found, return to the origin
     }
 }
 
-//杂项
+//Miscellaneous
 /*
  写蓝心的时候无意中搞出来的弹球式蓝心：
 
@@ -1046,7 +1124,8 @@ public class BattlePlayerController : MonoBehaviour
                             }
                             Ray2D ray = new Ray2D(transform.position, dirReal);
                             Debug.DrawRay(ray.origin, ray.direction, Color.blue, collideCollider.radius + 0.05f);
-                            RaycastHit2D info = Physics2D.Raycast(transform.position, dirReal, collideCollider.radius + 0.05f);//距离为圆碰撞器+0.05f
+                            RaycastHit2D info = Physics2D.Raycast(transform.position, dirReal, collideCollider.radius + 0.05f);
+                            // Distance to circle collider +0.05f
                             if (info.collider != null && info.transform.position.z == transform.position.z)
                             {
                                 GameObject obj = info.collider.gameObject;

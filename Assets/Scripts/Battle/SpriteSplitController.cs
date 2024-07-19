@@ -3,20 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 内含Pool。
-/// 实现精灵的碎片化效果。
-/// 一行一行自上而下。
-/// 启 用 本 脚 本 后 立 刻 生 效
+/// Contained Pool.
+/// Implementing the sprites' fragmentation effect.
+/// Line by line, top to bottom.
+/// Effective immediately after starting this script.
 /// </summary>
 public class SpriteSplitController : MonoBehaviour
 {
-    private Queue<GameObject> available = new Queue<GameObject>();//对象池
+    private Queue<GameObject> available = new Queue<GameObject>();
+    //Object Pool
     private Texture2D map;
     private GameObject Mask;
     public int poolCount;
     public List<Color> colorExclude;
-    public Vector2 startPos;//粒子为计算出图片左上角的相对坐标
-    public float speed;//粒子生成速度
+    public Vector2 startPos;
+    //Particle to calculate the relative coordinates of the upper-left corner of the image
+    public float speed;
+    //Particle generation speed
 
     private void Awake()
     {
@@ -71,10 +74,10 @@ public class SpriteSplitController : MonoBehaviour
         }
     }
 
-    //-----对象池部分-----
+    //----- object pool section -----
 
     /// <summary>
-    /// 初始化/填充对象池
+    /// Initializing/filling the object pool
     /// </summary>
     public void FillPool()
     {
@@ -86,7 +89,7 @@ public class SpriteSplitController : MonoBehaviour
     }
 
     /// <summary>
-    /// 返回对象池
+    /// Returns the object pool
     /// </summary>
     public void ReturnPool(GameObject gameObject)
     {
@@ -96,7 +99,7 @@ public class SpriteSplitController : MonoBehaviour
     }
 
     /// <summary>
-    /// 喜提对象 square)
+    /// Hippie object square)
     /// </summary>
     public GameObject GetFromPool()
     {

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 生成一系列脑梗加密文本
+/// Generate a series of cerebral infarct encrypted texts
 /// </summary>
 public class DebugSpTextSummon : MonoBehaviour
 {
@@ -17,7 +17,7 @@ public class DebugSpTextSummon : MonoBehaviour
     }
 
     /// <summary>
-    /// 原字母文本转化为数字
+    /// Original alphabetic text converted to numbers
     /// </summary>
     private string LetterToNum(string str)
     {
@@ -42,8 +42,8 @@ public class DebugSpTextSummon : MonoBehaviour
     }
 
     /// <summary>
-    /// 数字的首字母表示数字
-    /// 数字换算为字母
+    /// The first letter of a number indicates a number.
+    /// Converting numbers to letters
     /// </summary>
     private string NumToNumLetter(string str)
     {
@@ -66,7 +66,7 @@ public class DebugSpTextSummon : MonoBehaviour
     }
 
     /// <summary>
-    /// 26字母换算为九键数字
+    /// 26 letters converted to 9-key numbers
     /// </summary>
     private string NineToNum(string str)
     {
@@ -89,7 +89,7 @@ public class DebugSpTextSummon : MonoBehaviour
     }
 
     /// <summary>
-    /// 倒车请注意
+    /// Reverse with caution!
     /// </summary>
     private string backString(string str)
     {

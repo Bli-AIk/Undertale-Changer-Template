@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 
 /// <summary>
-/// 修改Overworld中对话框的位置
+/// Change the position of the dialog box in Overworld.
 /// </summary>
 public class TalkUIPositionChanger : MonoBehaviour
 {
@@ -48,7 +48,7 @@ public class TalkUIPositionChanger : MonoBehaviour
         }
     }
 
-   
+
 
 
     private void OnEnable()

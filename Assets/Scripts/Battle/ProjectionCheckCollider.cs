@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 投影原先心的判定。
-/// 如果你直接把弹幕放在原先心的位置（负一千），可能会导致显示问题。
+/// The projection was originally centered.
+/// If you put the popup directly where the original center was (minus a thousand), it may cause display problems.
 /// </summary>
 public class ProjectionCheckCollider : ObjectPool
 {

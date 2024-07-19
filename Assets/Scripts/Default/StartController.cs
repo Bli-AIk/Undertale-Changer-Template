@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 
 /// <summary>
-/// 最初始场景（模板信息）的控制器
+/// Controller for the initial scene (template information)
 /// </summary>
 public class StartController : MonoBehaviour
 {

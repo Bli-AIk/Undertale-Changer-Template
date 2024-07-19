@@ -2,40 +2,48 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 主要用于Overworld的数据与通用基本数据
+//// Mainly used for Overworld data and generalized basic data.
 /// </summary>
 [CreateAssetMenu(fileName = "OverworldControl", menuName = "OverworldControl")]
 public class OverworldControl : ScriptableObject
 {
     //public int languagePack;
-    public bool pause;//黑切屏的时候防止玩家操作导致报错
+    public bool pause;
+    //Prevent players from reporting errors during black cut-scenes.
 
     [Header("--UI--")]
-    [Header("字体存储")]
+    [Header("Font Storage")]
     public List<TMPro.TMP_FontAsset> tmpFonts;
 
-    [Header("字体全半角")]
-    public bool textWidth;//字体全半角
+    [Header("Font Full Half")]
+    public bool textWidth;
+    //Font full half-angle
 
-    [Header("分辨率等级")]
-    public int resolutionLevel;//分辨率等级
+    [Header("Resolution Level")]
+    public int resolutionLevel;
+    //Resolution level
 
-    [Header("全屏")]
-    public bool fullScreen;//全屏开关
+    [Header("Full Screen")]
+    public bool fullScreen;
+    //Full Screen Switch
 
-    [Header("全局音量")]
-    public float mainVolume;//全局音量
+    [Header("Global Volume")]
+    public float mainVolume;
+    //Global Volume
 
-    [Header("简化特效")]
-    public bool noSFX;//光效 后处理特效显示
+    [Header("Simplify Effects")]
+    public bool noSFX;
+    //Lighting effect Post-processing effect display
 
-    [Header("显示FPS")]
-    public bool openFPS;//显示FPS
+    [Header("Show FPS")]
+    public bool openFPS;
+    //Display FPS
 
-    [Header("分辨率（显示用）")]
-    public Vector2 resolution;//分辨率
+    [Header("Resolution (for display)")]
+    public Vector2 resolution;
+    //Resolution
 
-    [Header("文本包读取")]
+    [Header("Packet read")]
     public string sceneTextsAsset;
 
     public List<string> sceneTextsSave;
@@ -43,30 +51,34 @@ public class OverworldControl : ScriptableObject
     public string settingAsset;
     public List<string> settingSave;
     public bool isSetting;
-    public List<KeyCode> keyCodes, keyCodesBack1, keyCodesBack2;//依照设置顺序
+    public List<KeyCode> keyCodes, keyCodesBack1, keyCodesBack2;
+    //In the order of setting
 
-    [Header("玩家相关")]
+    [Header("Player Related")]
     public Vector3 playerDeadPos;
 
-    [Header("场景衔接存储")]
+    [Header("Scene articulation store")]
     public Vector3 playerScenePos;
 
     public Vector2 animDirection;
 
-    [Header("HD边框")]
+    [Header("HD Border")]
     public bool hdResolution;
 
     public List<Sprite> frames;
 
-    //[Header("游戏内需要存档的数据在下面写")]
-    [Header("垂直同步")]
+    //[Header("In-game data that needs to be archived is written below.")]
+    [Header("Vertical Synchronization")]
     public VSyncMode vsyncMode;
 
     public enum VSyncMode
     {
-        DonNotSync, // 不同步
-        SyncToRefreshRate, // 同步到屏幕刷新率
-        HalfSync // 同步到屏幕刷新率的一半
+        DonNotSync,
+        // Unsynchronized
+        SyncToRefreshRate,
+        // Synchronize to screen refresh rate
+        HalfSync
+        // Synchronize to half the screen refresh rate
     }
 
     public enum DynamicTMP
@@ -78,9 +90,12 @@ public class OverworldControl : ScriptableObject
         CrazyShake,
         NapShake,
         NapFloat,
-        Wave,//这仨
-        Explode,//是
-        Bounce,//AI做的 
+        Wave,
+        //These three
+        Explode,
+        //Yes
+        Bounce,
+        // AI did it
     }
 
     public enum DynamicType

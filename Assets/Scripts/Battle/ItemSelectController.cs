@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 字面意思
+/// Literally
 /// </summary>
 public class ItemSelectController : MonoBehaviour
 {
@@ -31,7 +31,8 @@ public class ItemSelectController : MonoBehaviour
         {
             sons[i].gameObject.SetActive(i <= myItemMax + 1);
         }
-        if (sons[myItemMax + 2].transform.localPosition.y > -1.725)//上
+        if (sons[myItemMax + 2].transform.localPosition.y > -1.725)
+        //up
         {
             sons[0].transform.localPosition = sons[myItemMax + 2].transform.localPosition;
             sons[1].transform.localPosition = sons[myItemMax + 3].transform.localPosition;

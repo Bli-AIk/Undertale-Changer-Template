@@ -5,49 +5,52 @@ using TMPro;
 using UnityEngine;
 using Log;
 /// <summary>
-/// Battle场景中的UI控制器
-/// 也负责玩家回合的控制
+/// UI Controller in Battle Scene
+/// Also responsible for player turn control.
 /// </summary>
 public class SelectUIController : MonoBehaviour
 {
     private TextMeshPro nameUI, hpUI, textUI, textUIBack;
     private SpriteRenderer hpSpr;
 
-    [Header("HP条配色")]
+    [Header("HP Article Color Scheme")]
     public Color hpColorUnder;
 
     public Color hpColorOn;
     public Color hpColorHit;
 
-    [Header("对话气泡载入数")]//载入actSave
+    [Header("Number of dialog bubbles loaded")]
+    //Load actSave
     public int numDialog;
 
     public bool isDialog;
 
-    [Header("暂存未使用的Sprite")]
+    [Header("Storing unused Sprite")]
     public List<Sprite> spriteUI;
 
     public List<SpriteRenderer> buttons;
     public List<Vector2> playerUIPos;
 
-    [Header("四个按钮UI的选择 0开")]
+    [Header("Selection of four buttons UI 0 on")]
     public int selectUI;
 
-    [Header("层")]
-    public int selectLayer;//0选择按钮 1选择名称 2Act选项/背包层 3执行层 进入敌方回合后归零
+    [Header("Layer")]
+    public int selectLayer;
+    //0 Select Button 1 Select Name 2 Act Option/Backpack Layer 3 Execute Layer Zeroed after entering enemy turn
 
-    [Header("子选择")]
+    [Header("Subselect")]
     public int selectSon;
 
-    public int selectGrandSon;//Item&Mercy:1 2 3三个位置 ACT:四个位置
+    public int selectGrandSon;
+    //Item&Mercy:1 2 3 three positions ACT:four positions
     private ItemSelectController itemSelectController;
     private TypeWritter typeWritter;
     private GameObject enemiesHpLine;
 
-    [Header("暂存ACT选项以便调用")]
+    [Header("Save ACT option for invocation")]
     public List<string> actSave;
 
-    [Header("自动寻找战斗总控的怪物 需保证名称一致")]
+    [Header("Automatically find monsters for battle masters. Make sure they have the same name.")]
     public List<EnemiesController> enemiesControllers;
 
     private TargetController target;
@@ -56,7 +59,7 @@ public class SelectUIController : MonoBehaviour
     private int saveTurn = -1;
     private string saveTurnText = "";
 
-    [Header("首次进入回合的时候播放自定义的回合文本")]
+    [Header("Play customized turn text the first time you enter a turn")]
     public bool firstIn = false;
 
     public int firstInDiy = -1;
@@ -122,7 +125,8 @@ public class SelectUIController : MonoBehaviour
             {
                 if (numDialog < actSave.Count)
                     KeepDialogBubble();
-                else//敌方回合：开！
+                else
+                //Enemy turn: open!
                 {
                     isDialog = false;
 
@@ -137,7 +141,7 @@ public class SelectUIController : MonoBehaviour
     }
 
     /// <summary>
-    /// UI打字 打字完成后不会强制控死文本
+    //// UI typing No forced text control after typing is complete
     /// </summary>
     private void Type(string text)
     {
@@ -145,7 +149,7 @@ public class SelectUIController : MonoBehaviour
     }
 
     /// <summary>
-    /// 战术互换
+    /// Tactical exchange
     /// </summary>
     private void SpriteChange()
     {
@@ -155,8 +159,8 @@ public class SelectUIController : MonoBehaviour
     }
 
     /// <summary>
-    /// selectUI=1时的设定
-    /// 主要为选定怪物
+    /// Setting when selectUI=1
+    /// Mainly for selected monsters.
     /// </summary>
     private void LayerOneSet()
     {
@@ -174,7 +178,7 @@ public class SelectUIController : MonoBehaviour
     }
 
     /// <summary>
-    ///进我方回合
+    //// Into our turn.
     /// </summary>
     public void InTurn()
     {
@@ -193,7 +197,7 @@ public class SelectUIController : MonoBehaviour
     }
 
     /// <summary>
-    /// 我的回合！抽卡)
+    /// My turn! Draw Cards)
     /// </summary>
     private void MyTurn()
     {
@@ -260,7 +264,7 @@ public class SelectUIController : MonoBehaviour
                         selectLayer = 0;
                 }
 
-                //if (hpFood != MainControl.instance.PlayerControl.hp)
+                //if (hpFood ! = MainControl.instance.PlayerControl.hp)
                 hpUI.text = UIHPVoid(hpFood) + " / " + UIHPVoid(MainControl.instance.PlayerControl.hpMax);
                 break;
 
@@ -292,7 +296,8 @@ public class SelectUIController : MonoBehaviour
                 }
                 switch (selectUI)
                 {
-                    case 1://FIGHT：选择敌人
+                    case 1:
+                    //FIGHT: Select the enemy.
                         enemiesHpLine.SetActive(true);
                         LayerOneSet();
                         if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
@@ -302,11 +307,12 @@ public class SelectUIController : MonoBehaviour
                             target.select = selectSon;
                             target.transform.Find("Move").transform.position = new Vector3(MainControl.instance.BattleControl.enemies[selectSon].transform.position.x, target.transform.Find("Move").transform.position.y);
                             target.hitMonster = enemiesControllers[selectSon];
-                            MainControl.instance.battlePlayerController.transform.position = (Vector3)(Vector2.one * 10000) + new Vector3(0, 0, MainControl.instance.battlePlayerController.transform.position.z); 
+                            MainControl.instance.battlePlayerController.transform.position = (Vector3)(Vector2.one * 10000) + new Vector3(0, 0, MainControl.instance.battlePlayerController.transform.position.z);
                         }
                         break;
 
-                    case 2://ACT：选择敌人
+                    case 2:
+                    //ACT: Selecting Enemies
                         LayerOneSet();
                         if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
                         {
@@ -339,7 +345,8 @@ public class SelectUIController : MonoBehaviour
                         }
                         break;
 
-                    case 3://ITEM：跳2
+                    case 3:
+                    //ITEM: Jump 2
                         itemSelectController.myItemMax = MainControl.instance.FindMax(MainControl.instance.PlayerControl.myItems);
                         itemSelectController.Open();
                         selectLayer = 2;
@@ -350,7 +357,8 @@ public class SelectUIController : MonoBehaviour
                             UITextUpdate(UITextMode.Food);
                         break;
 
-                    case 4://MERCY：选择敌人
+                    case 4:
+                    //MERCY: Selection of the enemy
                         LayerOneSet();
                         if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
                         {
@@ -424,10 +432,13 @@ public class SelectUIController : MonoBehaviour
                         }
                         else if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
                         {
-                            switch (selectSon)//在这里写ACT的相关触发代码
+                            switch (selectSon)
+                            // Write the ACT trigger code here.
                             {
-                                case 0://怪物0
-                                    switch (selectGrandSon)//选项
+                                case 0:
+                                //Monster 0
+                                    switch (selectGrandSon)
+                                    //Option
                                     {
                                         case 1:
 
@@ -450,8 +461,10 @@ public class SelectUIController : MonoBehaviour
                                     }
                                     break;
 
-                                case 1://怪物1
-                                    switch (selectGrandSon)//选项
+                                case 1:
+                                //Monster 1
+                                    switch (selectGrandSon)
+                                    //Options
                                     {
                                         case 1:
 
@@ -471,8 +484,10 @@ public class SelectUIController : MonoBehaviour
                                     }
                                     break;
 
-                                case 2://怪物2
-                                    switch (selectGrandSon)//选项
+                                case 2:
+                                //Monster 2
+                                    switch (selectGrandSon)
+                                    //Options
                                     {
                                         case 1:
 
@@ -523,7 +538,7 @@ public class SelectUIController : MonoBehaviour
                         }
                         else if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
                         {
-                            selectLayer = 3; 
+                            selectLayer = 3;
                             MainControl.instance.battlePlayerController.transform.position = (Vector3)(Vector2.one * 10000) + new Vector3(0, 0, MainControl.instance.battlePlayerController.transform.position.z);
                             MainControl.instance.UseItem(typeWritter, textUI, selectSon + 1);
                             SpriteChange();
@@ -563,7 +578,8 @@ public class SelectUIController : MonoBehaviour
                         {
                             itemSelectController.myItemSelect = selectSon;
                         }
-                        else //if (myItemMax < num)
+                        else
+                        //if (myItemMax < num)
                         {
                             if (myItemMax >= 6)
                             {
@@ -716,7 +732,7 @@ public class SelectUIController : MonoBehaviour
         isDialog = true;
         numDialog = 0;
         //if (selectUI == 1)
-        //    KeepDialogBubble();
+        // KeepDialogBubble(); // KeepDialogBubble().
     }
 
     private void KeepDialogBubble()
@@ -788,7 +804,7 @@ public class SelectUIController : MonoBehaviour
     private int hpFood;
 
     /// <summary>
-    /// 更新UI文字与血条
+    /// Updated UI text and blood bars.
     /// </summary>
     public void UITextUpdate(UITextMode uiTextMode = 0, int foodNum = 0)
     {
@@ -843,7 +859,7 @@ public class SelectUIController : MonoBehaviour
     }
 
     /// <summary>
-    /// 解决hpUI把01显示成1的问题)
+    /// Fix hpUI showing 01 as 1)
     /// </summary>
     private string UIHPVoid(int i)
     {

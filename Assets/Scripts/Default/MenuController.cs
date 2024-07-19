@@ -4,11 +4,11 @@ using TMPro;
 using UnityEngine;
 
 /// <summary>
-/// 控制Menu，sodayo)
+/// Control Menu, sodayo)
 /// </summary>
 public class MenuController : MonoBehaviour
 {
-    [Header("玩家名-LV-时间-位置-具体选项-底部字")]
+    [Header("Player Name - LV - Time - Location - Specific Options - Bottom Word")]
     public List<TextMeshPro> tmps;
 
     private int select, selectMax = 5;
@@ -43,7 +43,7 @@ public class MenuController : MonoBehaviour
         PlayerControl playerControl = SaveController.LoadData("Data" + saveNum);
         tmps[0].text = playerControl.playerName;
         tmps[1].text = "LV " + playerControl.lv;
-        //tmps[2]在update内设置
+        //tmps[2] set in update
         tmps[3].text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, playerControl.saveScene);
 
         Flash();
@@ -147,7 +147,8 @@ public class MenuController : MonoBehaviour
 
                         case 3:
                             AudioController.instance.GetFx(1, MainControl.instance.AudioControl.fxClipUI);
-                            if (saveNum == (SaveController.GetDataNum() - 1))//新建
+                            if (saveNum == (SaveController.GetDataNum() - 1))
+                            //New
                             {
                                 saveNum++;
                                 MainControl.instance.dataNum = saveNum;
@@ -156,7 +157,8 @@ public class MenuController : MonoBehaviour
                                 MainControl.instance.PlayerControl.playerName = "";
                                 MainControl.instance.OutBlack("Rename", Color.black);
                             }
-                            else//下页
+                            else
+                            //Next page
                             {
                                 saveNum++;
                                 LoadLayer0();

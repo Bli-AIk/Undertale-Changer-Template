@@ -4,30 +4,30 @@ using UnityEngine;
 using Log;
 using System;
 /// <summary>
-/// 使用LineRenderer与多边形shader绘制多边形框，用于战斗框、UI等。
+/// Use LineRenderer with polygon shader to draw polygonal boxes for combat boxes, UI, etc.
 /// </summary>
 [Obsolete]
 public class OldBoxController : MonoBehaviour
 {
-    [Header("线长")]
+    [Header("Line length")]
     public float width;
 
-    [Header("顶点数")]
+    [Header("Number of vertices")]
     public int pointsMax = 4;
 
-    [Header("顶点")]
+    [Header("Vertex")]
     public List<Transform> points = new List<Transform>();
 
-    [Header("开启碰撞（用于战斗框）")]
+    [Header("Turn on collision (for combat box)")]
     public bool isCollider;
 
-    [Header("ID检测：使用_Point (0)")]
+    [Header("ID detection: use _Point (0)")]
     public bool useBracketId;
 
-    [Header("使用这个可以让它创建时绘制正多边形")]
+    [Header("Use this to allow it to draw orthopolygons when it is created.")]
     public bool startDraw;
 
-    [Header("关闭自动获取材质")]
+    [Header("Turn off automatic material acquisition")]
     public bool noAutoMaterial;
 
     private PolygonCollider2D polygonCollider2D;
@@ -115,10 +115,14 @@ public class OldBoxController : MonoBehaviour
         {
             List<Vector2> rectangleVertices = new List<Vector2>
         {
-            new Vector2(-1, 1),  // Top-left
-            new Vector2(1, 1),   // Top-right
-            new Vector2(-1, -1), // Bottom-left
-            new Vector2(1, -1)   // Bottom-right
+            new Vector2(-1, 1),
+            // Top-left
+            new Vector2(1, 1),
+            // Top-right
+            new Vector2(-1, -1),
+            // Bottom-left
+            new Vector2(1, -1)
+            // Bottom-right
         };
 
             AnimateToRectangle(points, 1, rectangleVertices);
@@ -127,7 +131,8 @@ public class OldBoxController : MonoBehaviour
 
     private List<Transform> Draw(List<Transform> pointList, float drawRadius)
     {
-        int sides = pointList.Count;  // 根据points的数量确定边数
+        int sides = pointList.Count;
+        // Determine the number of edges based on the number of points.
         List<Transform> drawnPoints = new List<Transform>();
 
         for (int i = 0; i < sides; i++)

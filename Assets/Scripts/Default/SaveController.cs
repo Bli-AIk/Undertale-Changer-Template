@@ -5,7 +5,7 @@ using System.IO;
 using UnityEngine;
 using Log;
 /// <summary>
-/// 存档存储的数据
+/// Archived stored data
 /// </summary>
 public class SaveController : MonoBehaviour
 {
@@ -20,25 +20,27 @@ public class SaveController : MonoBehaviour
             Directory.CreateDirectory(Application.dataPath + "/Data");
         }
         usersData[data.name] = data;
-        // 转换数据
+        // Convert data
         string jsonData = JsonConvert.SerializeObject(data);
 
         File.WriteAllText(Application.dataPath + string.Format("/Data/{0}.json", dataName), jsonData);
     }
 
-    // 读取用户数据到内存
+    // read user data into memory
     public static PlayerControl LoadData(string dataName)
     {
         //DebugLogger.Log("load");
 
         SortAndRenameData();
         string path = Application.dataPath + string.Format("/Data/{0}.json", dataName);
-        // 检查用户配置文件是否存在
+        // Check if the user profile exists.
         if (File.Exists(path))
         {
             string jsonData = File.ReadAllText(path);
-            PlayerControl userData = ScriptableObject.CreateInstance<PlayerControl>(); // 使用 CreateInstance 方法
-            JsonConvert.PopulateObject(jsonData, userData); // 使用 PopulateObject 方法来填充数据
+            PlayerControl userData = ScriptableObject.CreateInstance<PlayerControl>();
+            // Using the CreateInstance method
+            JsonConvert.PopulateObject(jsonData, userData);
+            // Use the PopulateObject method to populate the data.
             usersData[dataName] = userData;
             return userData;
         }
@@ -52,7 +54,7 @@ public class SaveController : MonoBehaviour
     {
         if (!Directory.Exists(Application.dataPath + "/Data"))
         {
-            //DebugLogger.Log("家人们谁懂啊"+ Application.dataPath + "/Data");
+            //DebugLogger.Log("Families who get it" + Application.dataPath + "/Data");
             return 0;
         }
 
@@ -70,16 +72,16 @@ public class SaveController : MonoBehaviour
     {
         string path = Application.dataPath + string.Format("/Data/{0}.json", dataName);
 
-        // 检查存档是否存在
+        // Check if the archive exists
         if (File.Exists(path))
         {
-            // 从内存中移除存档数据
+            // remove archive data from memory
             if (usersData.ContainsKey(dataName))
             {
                 usersData.Remove(dataName);
             }
 
-            // 删除文件
+            // Delete the file
             File.Delete(path);
         }
         else
@@ -99,10 +101,10 @@ public class SaveController : MonoBehaviour
             return;
         }
 
-        // 获取目录下所有的存档文件路径
+        // Get the paths of all archive files in the directory
         string[] files = Directory.GetFiles(dataPath, "*.json");
 
-        // 按照文件名的数字进行排序
+        // Sort filenames numerically
         Array.Sort(files, (a, b) =>
         {
             string fileNameA = Path.GetFileNameWithoutExtension(a);
@@ -117,7 +119,7 @@ public class SaveController : MonoBehaviour
             return fileNameA.CompareTo(fileNameB);
         });
 
-        // 重命名文件
+        // Rename the file
         for (int i = 0; i < files.Length; i++)
         {
             string newFileName = string.Format("Data{0}.json", i);

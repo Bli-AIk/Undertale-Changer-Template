@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// 回合控制，同时也是弹幕的对象池
+/// Round control, which also serves as the object pool for the pop-ups.
 /// </summary>
 public class TurnController : MonoBehaviour
 {
@@ -28,15 +28,15 @@ public class TurnController : MonoBehaviour
     {
         GameObject saveBullet = GameObject.Find("SaveBullet");
         mainFrame = GameObject.Find("MainFrame");
-        //OutYourTurn();
-        //弹幕
+        //OutYourTurn().
+        //Bouncer
         objectPools.Add(gameObject.AddComponent<ObjectPool>());
         objectPools[^1].parent = saveBullet.transform;
         objectPools[^1].count = poolCount[0];
         objectPools[^1].obj = Resources.Load<GameObject>("Template/Bullet Template");
         objectPools[^1].FillPool();
 
-        //挡板
+        //Baffle
         objectPools.Add(gameObject.AddComponent<ObjectPool>());
         objectPools[^1].parent = saveBullet.transform;
         objectPools[^1].count = poolCount[1];
@@ -50,7 +50,7 @@ public class TurnController : MonoBehaviour
     }
 
     /// <summary>
-    /// 进入敌方回合
+    /// Enters the enemy's turn
     /// </summary>
     public void OutYourTurn()
     {
@@ -59,8 +59,8 @@ public class TurnController : MonoBehaviour
     }
 
     /// <summary>
-    /// 回合执行系统
-    /// 根据回合编号进行相应的执行
+    /// Round execution system
+    /// Execute according to the round number.
     /// </summary>
     private IEnumerator<float> _TurnExecute(int turn)
     {
@@ -107,7 +107,8 @@ public class TurnController : MonoBehaviour
                 objectPools[0].ReturnPool(obj2.gameObject);
                 break;
 
-            case 1://示例回合
+            case 1:
+            //Example Round
                 DebugLogger.Log("这是一个示例回合");
                 yield return Timing.WaitForSeconds(0.5f);
                 DebugLogger.Log("请注意查看控制台发出的Debug文本介绍");
@@ -155,9 +156,9 @@ public class TurnController : MonoBehaviour
     }
 
     /// <summary>
-    /// 回合嵌套
-    /// 首先在枚举Nest中定义嵌套名称，然后在此编写嵌套内容
-    /// 用于重复复杂弹幕的嵌套使用
+    /// Round nesting
+    /// First define the nested name in the enumeration Nest, and then write the nested content here.
+    /// Used to repeat the nested use of complex popups.
     /// </summary>
     private IEnumerator<float> _TurnNest(Nest nest)
     {

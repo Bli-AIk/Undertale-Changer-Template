@@ -3,52 +3,52 @@ using UnityEngine;
 using static MainControl;
 
 /// <summary>
-/// 生成总控，并在切换场景时保留已生成的总控。
-/// 以此只调用一次MainControl的数据加载。
+/// Generate a master control and keep the generated master control when switching scenes.
+/// In this way the MainControl data load is called only once.
 ///
-/// 同时会生成BGMControl
+/// The BGMControl will be generated at the same time.
 /// </summary>
 public class MainControlSummon : MonoBehaviour
 {
-    [Header("-Canvas设置-")]
+    [Header("-Canvas Settings-")]
     public RenderMode renderMode;
 
     public int framePic;
 
     [Space]
-    [Header("-BGMControl设置-")]
+    [Header("-BGMControl settings-")]
     [Space]
-    [Header("BGM本体音频 空为无音频")]
+    [Header("BGM body audio Empty for no audio")]
     public AudioClip bgmClip;
 
-    [Header("BGM音量")]
+    [Header("BGM Volume")]
     public float volume = 0.5f;
 
-    [Header("BGM音调")]
+    [Header("BGM Tone")]
     public float pitch = 1;
 
-    [Header("BGM循环播放初始状态")]
+    [Header("Initial state of BGM loop")]
     public bool loop = true;
 
     [Header("BGM BPM")]
     public float bpm = 120;
 
-    [Header("BGM BPM偏移")]
+    [Header("BGM BPM Offset")]
     public float bpmDeviation = 0;
 
-    [Header("初始化时开启节拍器")]
+    [Header("Turn on metronome at initialization")]
     public bool openMetronome = false;
 
-    [Header("-MainControl设置-")]
+    [Header("-MainControl settings-")]
     [Space]
-    [Header("黑场状态相关")]
+    [Header("Blackfield status related")]
     public SceneState sceneState;
 
     public bool haveInOutBlack, noInBlack;
     public bool notPauseIn;
 
     [Space]
-    [Header("战斗内场景额外设置")]
+    [Header("Additional settings for in-combat scenarios")]
     public List<int> poolCount;
 
     private void Awake()
@@ -96,7 +96,7 @@ public class MainControlSummon : MonoBehaviour
         GameObject gameObjectM = GameObject.Find("MainControl");
         if (gameObjectM != null && gameObjectM.TryGetComponent(out mainControl))
         {
-            //DebugLogger.LogWarning("<color=yellow>检测到本场景内有MainControl</color>", gameObject);
+            //DebugLogger.LogWarning("<color=yellow>MainControl detected within this scene</color>", gameObject);
 
             mainControl.sceneState = sceneState;
             mainControl.haveInOutBlack = haveInOutBlack;
@@ -112,7 +112,7 @@ public class MainControlSummon : MonoBehaviour
             mainControl.SetResolution(instance.OverworldControl.resolutionLevel);
             return;
         }
-        //生成
+        // Generate
         DontDestroyOnLoad(transform);
 
         mainControl = gameObject.AddComponent<MainControl>();

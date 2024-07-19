@@ -9,7 +9,7 @@ public class CameraShake : MonoBehaviour
 
     public bool moveWithHeart;
     public Vector3 heartBasicPos = new Vector3(0, -1.5f);
-    [Header("moveExtent的Y轴对应摄像机Z轴")]
+    [Header("The Y-axis of moveExtent corresponds to the Z-axis of the camera.")]
     public Vector2 moveExtent = new Vector2(0.5f, 0.5f);
 
     private void Update()
@@ -17,7 +17,7 @@ public class CameraShake : MonoBehaviour
         if (moveWithHeart && !TurnController.instance.isMyTurn)
         {
             transform.position = new Vector3(moveExtent.x * (MainControl.instance.battlePlayerController.transform.position.x - heartBasicPos.x),
-                                             0, 
+                                             0,
                                              moveExtent.y * (MainControl.instance.battlePlayerController.transform.position.y - heartBasicPos.y));
         }
         if (moveWithHeart && tweenMoveBack == null && TurnController.instance.isMyTurn && transform.position != Vector3.zero)
@@ -30,8 +30,8 @@ public class CameraShake : MonoBehaviour
         tweenMoveBack = null;
     }
     /// <summary>
-    /// 摄像机摇晃
-    /// loops会自动转换为偶数。
+    /// Camera shake
+    /// Loops are automatically converted to even numbers.
     /// </summary>
 
     public void Shake(Vector3 v3move, Vector3 v3spin, int loops = 4, float shakeTime = 1f / 60f * 4f, string getSon = "", Ease easeMove = Ease.OutCubic, Ease easeSpin = Ease.InOutCubic)

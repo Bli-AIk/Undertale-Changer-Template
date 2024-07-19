@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ObjectPool : MonoBehaviour
 {
-    [Header("填充对象池的对象数量")]
+    [Header("Number of objects to populate the object pool")]
     public int count = 10;
 
     public GameObject obj;
@@ -11,7 +11,7 @@ public class ObjectPool : MonoBehaviour
     public Transform parent = null;
 
     /// <summary>
-    /// 初始化/填充对象池
+    /// Initialize/Populate Object Pool
     /// </summary>
     public void FillPool()
     {
@@ -26,7 +26,7 @@ public class ObjectPool : MonoBehaviour
     }
 
     /// <summary>
-    /// 返回对象池
+    /// Returns the object pool
     /// </summary>
     public void ReturnPool(GameObject gameObject)
     {
@@ -39,7 +39,7 @@ public class ObjectPool : MonoBehaviour
     }
 
     /// <summary>
-    /// 喜提对象
+    /// Hippie Objects
     /// </summary>
     public GameObject GetFromPool()
     {

@@ -4,8 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// 旧的战斗框绘制脚本：已废弃
-/// 新的：DrawFrame
+/// Old combat box drawing script: deprecated.
+/// New: DrawFrame
 /// </summary>
 
 [Obsolete]
@@ -84,7 +84,7 @@ public class CreateQuadChanged : MonoBehaviour
         meshRenderer.material = material;
         meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         meshRenderer.receiveShadows = false;
-        // 设置主贴图
+        // Setting up the master map
         meshRenderer.material.mainTexture = mainTex;
 
         if (haveEdgeCollider2D)

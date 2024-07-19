@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Overworld对话中更改Sprite
+/// Change Sprite in the Overworld dialog.
 /// </summary>
 public class SpriteChanger : MonoBehaviour
 {

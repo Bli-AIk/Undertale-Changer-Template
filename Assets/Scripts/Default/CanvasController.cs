@@ -8,14 +8,15 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
-/// UI界面，包括：FPS显示 长按ESC退出 设置界面
+/// UI interface, including: FPS display Long press ESC to exit Setup interface
 /// </summary>
 public class CanvasController : MonoBehaviour
 {
     public int framePic;
 
     public static CanvasController instance;
-    public bool openTurn;//敌人回合不能开
+    public bool openTurn;
+    //Enemy turn cannot be opened
     public TextMeshProUGUI fps;
     public Image frame;
     private Image exitImage;
@@ -28,21 +29,27 @@ public class CanvasController : MonoBehaviour
     private TextMeshProUGUI settingTmp, settingTmpSon, settingTmpUnder;
     public RenderMode renderMode;
 
-    private int settingSelect, settingSelectMax;//目前 Max仅用于配置语言包
+    private int settingSelect, settingSelectMax;
+    //Currently Max is only used to configure language packs.
 
     [HideInInspector]
-    public int settingLevel;//切换层级 0层默认 1层按键设置 2层语言包配置
+    public int settingLevel;
+    //Toggle Layer 0 Defaults Layer 1 Key Settings Layer 2 Language Pack Configuration
 
-    private int controlPage, controlSelect;//Page是翻页 Select是切换主次按键设置
-    private bool isSettingName;//是否选中
+    private int controlPage, controlSelect;
+    //Page is page flip Select is switching primary and secondary key setting
+    private bool isSettingName;
+    //Whether to check
     private float saveVolume;
     private bool isSettingControl;
 
     [HideInInspector]
-    public bool freeze;//防止切场景时整事儿
+    public bool freeze;
+    //preventing the whole thing from happening during cut scenes
 
     private Canvas canvas;
-    private TypeWritter[] typeWritters;//存储打字机以暂停协程
+    private TypeWritter[] typeWritters;
+    //Store the typewriter to pause the coprogramming
 
     public Animator animator;
 
@@ -230,7 +237,8 @@ public class CanvasController : MonoBehaviour
                 if (OnlySetSon)
                     settingSelect = MainControl.instance.languagePack;
 
-                for (int i = 0; i < MainControl.instance.languagePackInsideNum; i++) //内置包信息
+                for (int i = 0; i < MainControl.instance.languagePackInsideNum; i++)
+                //Built-in package information
                 {
                     string pathString = "TextAssets/LanguagePacks/" + MainControl.instance.GetLanguageInsideId(i);
 
@@ -262,8 +270,8 @@ public class CanvasController : MonoBehaviour
     }
 
     /// <summary>
-    /// 获取语言包信息
-    /// 返回returnString
+    /// Get package information.
+    /// return returnString
     /// </summary>
     private string GetLanguagePacksName(string pathString, string returnString, bool isOutSide)
     {
@@ -284,7 +292,7 @@ public class CanvasController : MonoBehaviour
     }
 
     /// <summary>
-    /// 返回开/关文本
+    /// Returns the on/off text.
     /// </summary>
     private string OpenOrClose(bool booler)
     {
@@ -321,7 +329,7 @@ public class CanvasController : MonoBehaviour
             exitImage.color = new Color(1, 1, 1, 0);
         }
 
-        //设置菜单
+        //Setup menu
         if (isSettingControl)
         {
             SettingText(false, true);
@@ -775,17 +783,21 @@ public class CanvasController : MonoBehaviour
         settingTmpUnder.text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlEggshell");
     }
 
-    private float m_LastUpdateShowTime = 0f;  //上一次更新帧率的时间;
-    private float m_UpdateShowDeltaTime = 0.2f;//更新帧率的时间间隔;
-    private int m_FrameUpdate = 0;//帧数;
-    private float m_FPS = 0;//帧率
+    private float m_LastUpdateShowTime = 0f;
+    //The last time the frame rate was updated.
+    private float m_UpdateShowDeltaTime = 0.2f;
+    //Interval for updating the frame rate.
+    private int m_FrameUpdate = 0;
+    //frames.
+    private float m_FPS = 0;
+    //Frame rate
 
     private string FPSFlash(string origin)
     {
         m_FrameUpdate++;
         if (Time.realtimeSinceStartup - m_LastUpdateShowTime >= m_UpdateShowDeltaTime)
         {
-            //FPS = 某段时间内的总帧数 / 某段时间
+            //FPS = total number of frames in a certain period of time / a certain period of time
             m_FPS = m_FrameUpdate / (Time.realtimeSinceStartup - m_LastUpdateShowTime);
             m_FrameUpdate = 0;
             m_LastUpdateShowTime = Time.realtimeSinceStartup;
@@ -795,7 +807,7 @@ public class CanvasController : MonoBehaviour
     }
 
     /// <summary>
-    /// Anim调用
+    /// Anim call
     /// </summary>
     public void AnimSetHeartPos()
     {
@@ -806,10 +818,13 @@ public class CanvasController : MonoBehaviour
     public Vector2 WorldToUgui(Vector3 position)
     {
         RectTransform canvasRectTransform = GetComponent<RectTransform>();
-        Vector2 screenPoint = Camera.main.WorldToScreenPoint(position);//世界坐标转换为屏幕坐标
+        Vector2 screenPoint = Camera.main.WorldToScreenPoint(position);
+        //World coordinates converted to screen coordinates
         Vector2 screenSize = new Vector2(Screen.width, Screen.height);
-        screenPoint -= screenSize / 2;//将屏幕坐标变换为以屏幕中心为原点
-        Vector2 anchorPos = screenPoint / screenSize * canvasRectTransform.sizeDelta;//缩放得到UGUI坐标
+        screenPoint -= screenSize / 2;
+        //Transform screen coordinates to center of screen as origin
+        Vector2 anchorPos = screenPoint / screenSize * canvasRectTransform.sizeDelta;
+        //scaling to get UGUI coordinates
 
         return anchorPos;
     }

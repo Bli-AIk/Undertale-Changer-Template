@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class DebugRandomSudoku : MonoBehaviour
 {
-    //æ≈π¨∏Ò≤‚ ‘
+    //?≈π¨∏?≤' '
     public List<DebugSudoku> sudokos;
 
     public int randomNum;
@@ -27,7 +27,6 @@ public class DebugRandomSudoku : MonoBehaviour
                 int j = Random.Range(0, sudokos.Count);
                 sudokos[j].change = true;
                 sudokos[j].Changed();
-                ///DebugLogger.Log(j + 1);
             }
     }
 }

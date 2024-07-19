@@ -11,34 +11,39 @@ using static Unity.Burst.Intrinsics.X86.Avx;
 using Random = UnityEngine.Random;
 
 /// <summary>
-/// 打字机系统
+/// Typewriter system
 /// </summary>
 public class TypeWritter : MonoBehaviour
 {
     public string originString, endString, passTextString;
-    public bool isRunning;//打字机是否在运行
-    public bool isTyping;//是否在 打出字符
+    public bool isRunning;
+    //Is the typewriter running?
+    public bool isTyping;
+    //Is the character typed in the
     public int hpIn;
     public int hpSave;
     public bool canNotX;
     public bool pressX;
-    public float clockTime;//实际上计数
+    public float clockTime;
+    //actually counting
     public bool isStop;
-    public int fx;//音效
+    public int fx;
+    //Sound effects
     public bool fxRandomPitch;
 
-    [Header("打字速度与检测停顿字符后的打字速度")]
+    [Header("Typing speed with detection of stop characters")]
     public float speed = 0.075f, speedSlow = 0.15f;
 
-    [Header("打字后多少秒可以按X跳过，0为不能跳")]
-    public float clock = 0.01f;//设置
+    [Header("How many seconds after typing can you press X to skip, 0 is not skippable")]
+    public float clock = 0.01f;
+    //Setting
 
     public bool passText;
 
 
     public SpriteChanger spriteChanger;
 
-    [Header("适配OW框")]
+    [Header("Adapt OW box")]
     public bool isOverworld;
 
     private TalkUIPositionChanger talkUIPositionChanger;
@@ -47,13 +52,13 @@ public class TypeWritter : MonoBehaviour
     public float volume = 0.5f;
     public AudioMixerGroup audioMixerGroup;
 
-    [Header("字体")]
+    [Header("Font")]
     public int useFont;
 
-    [Header("打字动效")]
+    [Header("Typing animation")]
     public OverworldControl.DynamicType dynamicType;
 
-    [Header("总有那么一些情况需要强硬手段（拔枪")]
+    [Header("There will always be situations that require strong-arm tactics (drawing guns)")]
     public bool forceReturn = false;
 
     private TMP_Text tmp_Text;
@@ -67,16 +72,18 @@ public class TypeWritter : MonoBehaviour
 
     public enum TypeMode
     {
-        Normal,//正常的打字机
-        CantZX,//不能按ZX的打字机，使用富文本进行控制。
+        Normal,
+        //Normal typewriter
+        CantZX,
+        //Can't press ZX's typewriter, use rich text for control.
     }
 
     private TypeMode typeMode = TypeMode.Normal;
 
     /// <summary>
-    /// 开启打字机。若打字正在进行，可强行终止。
-    /// 一般情况下不需要强行打断对话。
-    /// 若传入的语句中含有<autoFood>，请输入hp。若输入0，此字符将跳过。
+    /// Starts the typewriter. If typing is in progress, it can be forcibly terminated.
+    /// Generally there is no need to forcefully interrupt a conversation.
+    /// If the incoming statement contains <autoFood>, enter hp. If you enter 0, this character is skipped.
     /// </summary>
     public void TypeOpen(string text, bool force, int hp, int fx, TMP_Text tmp_Text, TypeMode typeMode = TypeMode.Normal)
     {
@@ -292,9 +299,9 @@ public class TypeWritter : MonoBehaviour
                             case "<stop>":
                                 if (!pressX)
                                 {
-                                    //单独一个Stop的时候，不设置isTyping，这是因为有的时候这个stop的时间很短，如果true看起来有点怪。
-                                    //如果需要长的Stop，建议你还是使用<stop*x>的方式来做。
-                                    //isTyping = false;
+                                    // A separate Stop without setting isTyping, this is because there are times when this stop is very short and it looks a bit weird if true.
+                                    //If you need a long Stop, it is recommended that you still do it the <stop*x> way.
+                                    //isTyping = false.
                                     yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f * Convert.ToInt32(!MainControl.instance.OverworldControl.textWidth));
                                 }
                                 isStop = true;
@@ -327,7 +334,8 @@ public class TypeWritter : MonoBehaviour
                                 passTextString = passTextString.Substring(0, passTextString.Length - spText.Length);
                                 //passTextString += spText.Length * 2 - 5;
                                 goto PassText;
-                            default://富文本
+                            default:
+                            // Rich Text
 
                                 if (spText.Length - 2 > 0 && spText[1] == '-' && spText[spText.Length - 2] == '-')
                                 {
@@ -358,7 +366,7 @@ public class TypeWritter : MonoBehaviour
                 }
             }
 
-            //string cantString = ",.:;!?，。：；！？ \n\r";
+            //string cantString = ",. :;! ,. :;! \n\r";
 
             string cantString = "* \n\r";
             for (int j = 0; j < cantString.Length; j++)
@@ -375,7 +383,7 @@ public class TypeWritter : MonoBehaviour
             {
                 endString += originString[i];
                 passTextString += originString[i];
-                
+
             }
 
             if (!pressX)
@@ -403,7 +411,8 @@ public class TypeWritter : MonoBehaviour
                     originString = originString.Substring(passTextString.Length - 1);
                     i -= passTextString.Length - 1;
                 }
-                else// == '<'
+                else
+                // == '<'
                 {
                     originString = originString.Substring(passTextString.Length);
                     i -= passTextString.Length;
@@ -411,10 +420,11 @@ public class TypeWritter : MonoBehaviour
                 }
                 break;
             }
-            //pressX = false;
+            //pressX = false.
             canNotX = false;
             isStop = false;
-            PassText:;//这是个标签注意
+            PassText:;
+            //This is a tag note
         }
 
         isRunning = false;
@@ -424,7 +434,8 @@ public class TypeWritter : MonoBehaviour
 
     private IEnumerator<float> _Dynamic(int num)
     {
-        if (dynamicType != OverworldControl.DynamicType.None)//动效相关
+        if (dynamicType != OverworldControl.DynamicType.None)
+        //Kinetic effects related
         {
             var textInfo = tmp_Text.textInfo;
 
@@ -453,7 +464,7 @@ public class TypeWritter : MonoBehaviour
                         for (int j = 0; j < 4; j++)
                         {
                             orig = verts[charInfo.vertexIndex + j];
-                            //动画
+                            //Animation
                             verts[charInfo.vertexIndex + j] = orig + randomer;
                         }
 
@@ -481,7 +492,8 @@ public class TypeWritter : MonoBehaviour
     }
     private void Update()
     {
-        if (MainControl.instance.OverworldControl.isSetting || forceReturn)//pause在OW检测的时候会用
+        if (MainControl.instance.OverworldControl.isSetting || forceReturn)
+        //pause will be used during OW detection
             return;
 
         if (clockTime > 0)
@@ -497,7 +509,8 @@ public class TypeWritter : MonoBehaviour
         {
             PassText();
         }
-        else if (!pressX && !canNotX && MainControl.instance.KeyArrowToControl(KeyCode.X) && typeMode != TypeMode.CantZX)//跳字
+        else if (!pressX && !canNotX && MainControl.instance.KeyArrowToControl(KeyCode.X) && typeMode != TypeMode.CantZX)
+        //skipping words
         {
             if (clock != 0 && clockTime <= 0)
             {

@@ -2,28 +2,28 @@ using TMPro;
 using UnityEngine;
 
 /// <summary>
-/// Debug网格定位 用于做弹幕啥的
+/// Debug grid positioning for pop-ups and stuff.
 /// </summary>
 public class DebugGrid : ObjectPool
 {
-    [Header("颜色是给到'条'上面的")]
+    [Header("Color is given to the top of the 'bar'")]
     public Color colorX;
 
     public Color colorY;
     public Color colorXForText;
     public Color colorYForText;
 
-    [Header("横纵分割几片(刀数-1) X为横着平铺竖条 Y则反之")]
+    [Header("Split the slices horizontally and vertically (number of cuts - 1) X is horizontal with flat vertical strips Y and vice versa.")]
     public int divisionX;
 
     public int divisionY;
 
-    [Header("XY偏移 如果左右对称就和参考一样填个正的数")]
+    [Header("XY offset If left/right symmetric fill in a positive number as for reference")]
     public float deviationX;
 
     public float deviationY;
 
-    [Header("参考坐标")]
+    [Header("Reference coordinates")]
     public Vector2 referenceX;
 
     public Vector2 referenceY;

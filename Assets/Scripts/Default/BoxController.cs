@@ -3,22 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using Clipper2Lib;
 /// <summary>
-/// 战斗框总控
+/// Battlebox Master Control
 /// </summary>
 public class BoxController : ObjectPool
 {
     public static BoxController instance;
-    [Header("线宽")]
+    [Header("Line Width")]
     public float width = 0.15f;
 
-    [Header("起始时生成框，名字为空不生成")]
+    [Header("Generate box at start, empty name not generated")]
     public string startSummonName;
     public Vector3 startSummonPos;
 
 
     public List<BoxDrawer> boxes = new List<BoxDrawer>();
 
-    public List<Vector2> pointsCrossSave, pointsOutCrossSave, pointsInCrossSave;//交点/非重合点/重合点
+    public List<Vector2> pointsCrossSave, pointsOutCrossSave, pointsInCrossSave;
+    //intersection/non-overlapping/overlapping points
 
     public enum BoxType
     {
@@ -104,11 +105,11 @@ public class BoxController : ObjectPool
                 BoxDrawer box1 = boxes[j];
 
                 List<Vector2> realPointsBack0, realPointsBack1;
-                //获取两个Box的realPoints
+                //Get the realPoints of the two Boxes.
                 realPointsBack0 = box0.GetRealPoints();
                 realPointsBack1 = box1.GetRealPoints();
 
-                //计算三大List
+                //Calculate the three major lists
 
                 pointsCrossSave = FindIntersections(realPointsBack0, realPointsBack1);
 
@@ -118,7 +119,7 @@ public class BoxController : ObjectPool
 
 
 
-                //两个 特殊框 重合时合并，剩下的交给父BoxDrawer。
+                // When two special boxes overlap, merge them and leave the rest to the parent BoxDrawer.
                 if (!(pointsCrossSave.Count == 0 && pointsInCrossSave.Count == 0))
                 {
                     if (!(box0.boxType == BoxType.None || box1.boxType == BoxType.None) && !(box0.boxType == BoxType.Sub && box1.boxType == BoxType.Sub))
@@ -143,12 +144,12 @@ public class BoxController : ObjectPool
 
                         boxParent.sonBoxDrawer = new List<BoxDrawer> { box0, box1 };
 
-                        //先删了，在父BoxDrawer内加回来
+                        //delete it first and add it back in the parent BoxDrawer.
                         boxes.Remove(box0);
                         boxes.Remove(box1);
 
                         /*
-                        //先生成一下
+                        //Mr. Sung
                         List<Vector2> points;
                         points = AddLists(realPointsBack0, realPointsBack1);
                         points = AddLists(points, pointsCrossSave);
@@ -210,7 +211,7 @@ public class BoxController : ObjectPool
             }
         }
 
-     
+
 
 
 
@@ -219,7 +220,7 @@ public class BoxController : ObjectPool
     }
 
     /// <summary>
-    /// 生成框
+    /// Generate box
     /// </summary>
     public List<Vector2> SummonBox(List<Vector2> list, Quaternion rotation, Transform transform, float width = 0.15f, LineRenderer lineRenderer = null, EdgeCollider2D edgeCollider2D = null, MeshFilter meshFilter = null)
     {
@@ -263,7 +264,7 @@ public class BoxController : ObjectPool
         }
 
         List<Vector2> polygon = new List<Vector2>(list);
-        // 将每个点先旋转，然后再加上物体的位置
+        // rotate each point first, then add the object's position
         for (int i = 0; i < polygon.Count; i++)
         {
             polygon[i] = rotation * polygon[i];
@@ -278,7 +279,8 @@ public class BoxController : ObjectPool
             lineRenderer.SetPosition(i, (Vector3)polygon[i] + transform.position);
         }
 
-        meshFilter.mesh = GenerateMesh(polygon.ToArray()); // 最核心代码：构建Mesh！！
+        meshFilter.mesh = GenerateMesh(polygon.ToArray());
+        // Most core code: build the mesh!
 
         edgeCollider2D.SetPoints(AddLists(polygon, new List<Vector2>() { polygon[0] }));
         edgeCollider2D.edgeRadius = width / 2;
@@ -286,14 +288,14 @@ public class BoxController : ObjectPool
         return polygon;
     }
     /// <summary>
-    /// 计算坐标获取RealPoints
+    /// Calculate coordinates to get RealPoints.
     /// </summary>
     public List<Vector2> GetRealPoints(List<Vector2> list, Quaternion rotation, Transform transform, bool isLocal = true)
     {
         Vector3 local = isLocal ? transform.localPosition : transform.position;
 
         List<Vector2> polygon = new List<Vector2>(list);
-        // 将每个点先旋转，然后再加上物体的位置
+        // rotate each point first, then add the object's position
         for (int i = 0; i < polygon.Count; i++)
         {
             polygon[i] = rotation * polygon[i] + local;
@@ -305,7 +307,7 @@ public class BoxController : ObjectPool
     }
     /*
     /// <summary>
-    /// 重置框
+    /// Reset box
     /// </summary>
     public void ResetBox(LineRenderer lineRenderer = null, MeshFilter meshFilter = null)
     {
@@ -332,29 +334,29 @@ public class BoxController : ObjectPool
     }
     */
     /// <summary>
-    /// 构造Mesh
+    /// Constructing a Mesh
     /// </summary>
     public Mesh GenerateMesh(Vector2[] vertexPoints)
     {
 
-        // 将Vector数组转换为LibTessDotNet所需的ContourVertex数组
+        // Convert the Vector array to the ContourVertex array needed for LibTessDotNet.
         ContourVertex[] contourVertices = new ContourVertex[vertexPoints.Length];
         for (int i = 0; i < vertexPoints.Length; i++)
         {
             contourVertices[i].Position = new Vec3 { X = vertexPoints[i].x, Y = vertexPoints[i].y, Z = 0 };
         }
 
-        // 创建Tess对象并添加轮廓
+        // Create a Tess object and add an outline.
         Tess tess = new Tess();
         tess.AddContour(contourVertices, ContourOrientation.Original);
 
-        // 进行三角剖分
+        // Triangulate
         tess.Tessellate(WindingRule.NonZero, ElementType.Polygons, 3);
 
-        // 创建Mesh对象
+        // Create Mesh Object
         Mesh mesh = new Mesh();
 
-        // 将Tess结果转换为Unity Mesh格式
+        // Convert Tess results to Unity Mesh format.
         Vector3[] vertices = new Vector3[tess.Vertices.Length];
         for (int i = 0; i < tess.Vertices.Length; i++)
         {
@@ -367,16 +369,16 @@ public class BoxController : ObjectPool
             triangles[i] = tess.Elements[i];
         }
 
-        // 应用顶点和三角形到mesh
+        // Apply vertices and triangles to the mesh.
         mesh.vertices = vertices;
         mesh.triangles = triangles;
 
-        // 为mesh设置UV坐标
+        // Set the UV coordinates for the mesh.
         Vector2[] uvs = new Vector2[vertices.Length];
         for (int i = 0; i < vertices.Length; i++)
         {
-            // 这里是一个简单的映射，将顶点坐标映射到UV空间
-            // 通常，你需要根据具体情况来调整这部分代码
+            // Here's a simple mapping that maps vertex coordinates to UV space
+            // Often, you need to adapt this part of the code to the specific situation.
 
 
             uvs[i] = new Vector2(vertices[i].x, vertices[i].y);
@@ -385,26 +387,26 @@ public class BoxController : ObjectPool
         }
         mesh.uv = uvs;
 
-        // 为了更好的渲染效果，可以计算法线和边界
+        // Calculate normals and boundaries for better rendering results
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
 
-        // 将mesh应用到GameObject
+        // Apply the mesh to the GameObject.
         return mesh;
     }
     /// <summary>
-    /// 剔除重复项
+    /// Eliminate duplicates
     /// </summary>
     public List<Vector2> RemoveDuplicates(List<Vector2> originalList)
     {
-        // 使用HashSet<Vector2>来存储已经遇到的Vector2元素，因为HashSet自动去重
+        // Use HashSet<Vector2> to store the Vector2 elements that have been encountered, because HashSet automatically de-duplicates them.
         HashSet<Vector2> seen = new HashSet<Vector2>();
-        // 用来存储去重后的列表
+        // Used to store the de-duplicated list.
         List<Vector2> resultList = new List<Vector2>();
 
         foreach (var item in originalList)
         {
-            // 如果HashSet中添加成功（即之前未遇到过这个元素），则将其添加到结果列表中
+            // If the addition to the HashSet was successful (i.e., the element has not been encountered before), add it to the result list
             if (seen.Add(item))
             {
                 resultList.Add(item);
@@ -418,7 +420,7 @@ public class BoxController : ObjectPool
 
 
     /// <summary>
-    /// 主函数，计算两组线段的所有交点
+    /// Main function, calculates all intersections of two sets of lines.
     /// </summary>
     public List<Vector2> FindIntersections(List<Vector2> poly1, List<Vector2> poly2)
     {
@@ -427,12 +429,14 @@ public class BoxController : ObjectPool
         for (int i = 0; i < poly1.Count; i++)
         {
             Vector2 a = poly1[i];
-            Vector2 b = poly1[(i + 1) % poly1.Count]; // 循环列表
+            Vector2 b = poly1[(i + 1) % poly1.Count];
+            // Loop List
 
             for (int j = 0; j < poly2.Count; j++)
             {
                 Vector2 c = poly2[j];
-                Vector2 d = poly2[(j + 1) % poly2.Count]; // 循环列表
+                Vector2 d = poly2[(j + 1) % poly2.Count];
+                // Loop List
 
                 if (DoLineSegmentsIntersect(a, b, c, d))
                 {
@@ -448,7 +452,7 @@ public class BoxController : ObjectPool
         return intersections;
     }
     /// <summary>
-    ///  计算向量叉乘
+    /// Compute vector cross product
     /// </summary>
     private static float CrossSave(Vector2 a, Vector2 b, Vector2 c)
     {
@@ -456,7 +460,7 @@ public class BoxController : ObjectPool
     }
 
     /// <summary>
-    /// 检查点C是否在AB线段上
+    /// Check if point C is on line AB.
     /// </summary>
     private static bool IsPointOnLineSegment(Vector2 a, Vector2 b, Vector2 c)
     {
@@ -464,7 +468,7 @@ public class BoxController : ObjectPool
     }
 
     /// <summary>
-    /// 检查线段AB和CD是否相交
+    /// Check if lines AB and CD intersect.
     /// </summary>
     public static bool DoLineSegmentsIntersect(Vector2 a, Vector2 b, Vector2 c, Vector2 d)
     {
@@ -478,30 +482,31 @@ public class BoxController : ObjectPool
     }
 
     /// <summary>
-    /// 计算两线段AB和CD的交点
+    /// Calculate the intersection of two lines AB and CD.
     /// </summary>
     public static Vector2? CalculateIntersectionPoint(Vector2 a, Vector2 b, Vector2 c, Vector2 d)
     {
         if (!DoLineSegmentsIntersect(a, b, c, d))
             return null;
 
-        // 计算线性方程的参数
+        // Calculating the parameters of a linear equation
         float denominator = (b.x - a.x) * (d.y - c.y) - (b.y - a.y) * (d.x - c.x);
         if (denominator == 0)
-            return null; // 线段平行或共线
+            return null;
+            // Line segments parallel or co-linear
 
         float u = ((c.x - a.x) * (d.y - c.y) - (c.y - a.y) * (d.x - c.x)) / denominator;
         return new Vector2(a.x + u * (b.x - a.x), a.y + u * (b.y - a.y));
     }
     /// <summary>
-    /// 计算非重合点
+    /// Calculate non-recombining points
     /// </summary>
     public List<Vector2> ProcessPolygons(List<Vector2> box1, List<Vector2> box2, List<Vector2> intersection)
     {
         List<Vector2> filteredBox1 = RemovePointsInsideOtherPolygon(box1, box2);
         List<Vector2> filteredBox2 = RemovePointsInsideOtherPolygon(box2, box1);
 
-        // 合并剔除后的列表
+        // Merged and culled list
         List<Vector2> result = new List<Vector2>();
         result.AddRange(filteredBox1);
         result.AddRange(filteredBox2);
@@ -541,7 +546,7 @@ public class BoxController : ObjectPool
 
     /*
 /// <summary>
-/// 以initialPoint为圆心，若干长度为半径，顺时针旋转，排序列表各点。
+/// Sort the list of points by rotating clockwise with initialPoint as the center and a number of lengths as the radius.
 /// </summary>
 public List<Vector2> SortPoints(Vector2 initialPoint, List<Vector2> points)
 {
@@ -552,7 +557,7 @@ public List<Vector2> SortPoints(Vector2 initialPoint, List<Vector2> points)
 }
 */
     /// <summary>
-    /// 前面两个相加，减去后面两个
+    //// Add the first two, subtract the last two
     /// </summary>
     public List<Vector2> AddAndSubLists(List<Vector2> list1, List<Vector2> list2, List<Vector2> list3, List<Vector2> list4)
     {
@@ -563,7 +568,7 @@ public List<Vector2> SortPoints(Vector2 initialPoint, List<Vector2> points)
         return subtractedResult;
     }
     /// <summary>
-    /// 把List相加
+    /// Add the lists.
     /// </summary>
     public List<T> AddLists<T>(List<T> list1, List<T> list2)
     {
@@ -572,7 +577,7 @@ public List<Vector2> SortPoints(Vector2 initialPoint, List<Vector2> points)
         return concatenatedList;
     }
     /// <summary>
-    /// 把List相减
+    /// Subtract the List.
     /// </summary>
     public List<T> SubLists<T>(List<T> sourceList, List<T> subtractedList)
     {
@@ -586,18 +591,20 @@ public List<Vector2> SortPoints(Vector2 initialPoint, List<Vector2> points)
         return result;
     }
 
-    //Clipper2 API 相关
+    //Clipper2 API-related
     public PathsD ConvertVectorToPath(List<Vector2> vector)
     {
         List<double> doubles = new List<double>();
         int j = 0;
         for (int i = 0; i < vector.Count * 2; i++)
         {
-            if (i % 2 == 0)//X
+            if (i % 2 == 0)
+            //X
             {
                 doubles.Add(vector[j].x);
             }
-            else//Y
+            else
+            //Y
             {
                 doubles.Add(vector[j].y);
                 j++;
@@ -619,7 +626,7 @@ public List<Vector2> SortPoints(Vector2 initialPoint, List<Vector2> points)
 
 
     /// <summary>
-    /// 取交集
+    /// Take the intersection
     /// </summary>
     public List<Vector2> GetUnion(List<Vector2> a, List<Vector2> b)
     {

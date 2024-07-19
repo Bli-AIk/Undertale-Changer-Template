@@ -11,8 +11,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
-/// 调用所有ScriptableObject 并负责对数据和语言包的导入
-/// 还包括大部分常用的函数
+/// Calls all ScriptableObjects and takes care of importing data and language packs.
+/// Also includes most of the commonly used functions.
 /// </summary>
 public class MainControl : MonoBehaviour
 {
@@ -20,28 +20,29 @@ public class MainControl : MonoBehaviour
     public int languagePack;
     public int dataNum;
 
-    public readonly int languagePackInsideNum = 3;//内置语言包总数
+    public readonly int languagePackInsideNum = 3;
+    //Total number of built-in language packs
 
     public bool blacking = false;
 
-    [Header("-BGM BPM设置-")]
+    [Header("-BGM BPM setting-")]
     [Space]
     [Header("BGM BPM")]
     public float bpm;
 
-    [Header("BGM BPM偏移")]
+    [Header("BGM BPM Offset")]
     public float bpmDeviation;
 
-    [Header("开启节拍器")]
+    [Header("Turn on metronome")]
     public bool isMetronome;
 
-    [Header("-BGM BPM计算结果-")]
+    [Header("-BGM BPM calculation result-")]
     [Space]
     public List<float> beatTimes;
 
-    [Header("-MainControl设置-")]
+    [Header("-MainControl settings-")]
     [Space]
-    [Header("状态:正常,战斗内")]
+    [Header("Status: Normal, in combat")]
     public SceneState sceneState;
 
     public bool haveInOutBlack, noInBlack;
@@ -49,11 +50,11 @@ public class MainControl : MonoBehaviour
 
     private Image inOutBlack;
 
-    [Header("引用用的")]
-    [Header("战斗外")]
+    [Header("for quoting")]
+    [Header ("Out of combat")]
     public PlayerBehaviour playerBehaviour;
 
-    //[Header("战斗内")]
+    //[Header("Inside the Battle")]
     //public OldBoxController OldBoxController;
 
     private Camera cameraMainInBattle;
@@ -103,7 +104,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 获取内置语言包ID
+    /// Get the built-in language pack ID.
     /// </summary>
     public string GetLanguageInsideId(int id)
     {
@@ -123,7 +124,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 加载对应语言包的数据
+    /// Load the data for the corresponding language pack.
     /// </summary>
     private string LoadLanguageData(string path)
     {
@@ -148,17 +149,17 @@ public class MainControl : MonoBehaviour
 
     public void InitializationLoad()
     {
-        //调用ScriptableObject
+        //call ScriptableObject
         //--------------------------------------------------------------------------------
         PlayerControl = Resources.Load<PlayerControl>("PlayerControl");
         AudioControl = Resources.Load<AudioControl>("AudioControl");
-        //InitializationOverworld内调用OverworldControl
-        //Initialization内调用ItemControl
+        //InitializationOverworld calls OverworldControl within Overworld
+        //Initialization calls ItemControl.
         //--------------------------------------------------------------------------------
     }
 
     /// <summary>
-    /// 初始化加载一大堆数据
+    //// Initialization loads a bunch of data
     /// </summary>
     public void Initialization(int lan)
     {
@@ -170,7 +171,7 @@ public class MainControl : MonoBehaviour
 
         LanguagePackDetection();
 
-        //ItemControl加载
+        //ItemControl Loading
         //--------------------------------------------------------------------------------
         ItemControl.itemText = LoadLanguageData("UI\\ItemText");
 
@@ -203,7 +204,7 @@ public class MainControl : MonoBehaviour
 
         if (sceneState == SceneState.InBattle)
             return;
-        //OverworldControl加载
+        //OverworldControl loading
         //--------------------------------------------------------------------------------
 
         OverworldControl.sceneTextsAsset = LoadLanguageData("Overworld\\" + SceneManager.GetActiveScene().name);
@@ -225,7 +226,7 @@ public class MainControl : MonoBehaviour
 
     public void InitializationLanguagePackFullWidth()
     {
-        //检测语言包全半角
+        //Detect language packs with full half-corners
         if (OverworldControl.textWidth != bool.Parse(ScreenMaxToOneSon(OverworldControl.settingSave, "LanguagePackFullWidth")))
         {
             OverworldControl.textWidth = bool.Parse(ScreenMaxToOneSon(OverworldControl.settingSave, "LanguagePackFullWidth"));
@@ -242,7 +243,7 @@ public class MainControl : MonoBehaviour
 
     public void InitializationBattle()
     {
-        //BattleControl加载
+        //BattleControl loaded.
         //--------------------------------------------------------------------------------
         if (BattleControl == null)
             BattleControl = Resources.Load<BattleControl>("BattleControl");
@@ -367,7 +368,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 生成字符串形式的随机颜色。
+    /// Generate a random color in string form.
     /// </summary>
     public string RandomStringColor()
     {
@@ -380,7 +381,7 @@ public class MainControl : MonoBehaviour
         return text;
     }
     /// <summary>
-    /// 生成字符串形式的随机颜色。
+    /// Generate a random color in string form.
     /// </summary>
     public string RandomStringColor(string origin)
     {
@@ -430,7 +431,7 @@ public class MainControl : MonoBehaviour
             Metronome();
     }
     /// <summary>
-    /// 计算BGM节拍
+    /// Calculating BGM Beats
     /// </summary>
     List<float> BGMBPMCount(float bpm, float bpmDeviation, float musicDuration = 0)
     {
@@ -441,7 +442,7 @@ public class MainControl : MonoBehaviour
         float currentTime = bpmDeviation;
         List<float> beats = new List<float>();
 
-        // 计算每个拍子的时间点，直到达到音乐时长
+        // Calculate the timing of each beat until it reaches the music duration
         while (currentTime < musicDuration)
         {
             beats.Add(currentTime);
@@ -453,7 +454,7 @@ public class MainControl : MonoBehaviour
     public int currentBeatIndex = 0;
     public float nextBeatTime = 0f;
     /// <summary>
-    /// 控制节拍器
+    /// Control Metronome
     /// </summary>
     void Metronome()
     {
@@ -491,7 +492,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 应用默认键位
+    /// Apply default keystrokes
     /// </summary>
     public void ApplyDefaultControl()
     {
@@ -544,8 +545,8 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 传入默认KeyCode并转换为游戏内键位。
-    /// mode:0按下 1持续 2抬起
+    /// Pass in the default KeyCode and convert it to in-game keys.
+    /// Mode:0Press 1Continue 2Raise
     /// </summary>
     public bool KeyArrowToControl(KeyCode key, int mode = 0)
     {
@@ -684,7 +685,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 开/关 SFX
+    ////On/Off SFX
     /// </summary>
     public void FindAndChangeAllSFX(bool isClose)
     {
@@ -713,7 +714,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 按按tab改改分辨率那样子))
+    /// Press tab to change resolution that way))
     /// </summary>
     public void ChangeResolution()
     {
@@ -735,18 +736,19 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 和分辨率设置配套的换算
+    /// Conversion to match resolution setting
     /// </summary>
     private int ScreenSet(int y)
     {
         //if (OverworldControl.background)
-        //    y = y / 9 * 16;
+        // y = y / 9 * 16.
         //else
         y = y / 3 * 4;
         return y;
     }
 
-    private void SetCanvasFrameSprite(int framePic = 2)//一般为CanvasController.instance.framePic
+    private void SetCanvasFrameSprite(int framePic = 2)
+    //generally CanvasController.instance.framePic
     {
         Image frame = CanvasController.instance.frame;
         if (framePic < 0)
@@ -760,7 +762,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 分辨率设置
+    /// Resolution setting
     /// </summary>
     public void SetResolution(int resolution)
     {
@@ -788,10 +790,10 @@ public class MainControl : MonoBehaviour
             Camera.main.rect = new Rect(0, 0, 1, 1);
             if (sceneState == SceneState.InBattle)
             {
-                
+
                 cameraMainInBattle.rect = new Rect(0, 0, 1, 1);
             }
-            // BackpackBehaviour rawImage在其脚本中控制
+            // The BackpackBehaviour rawImage is controlled in its script.
             /*
             RectTransform rectTransform = BackpackBehaviour.instance.rawImage.rectTransform;
 
@@ -818,7 +820,7 @@ public class MainControl : MonoBehaviour
                 cameraMainInBattle.rect = new Rect(0, 0.056f, 1, 0.888f);
             }
 
-            // BackpackBehaviour rawImage在其脚本中控制
+            // The BackpackBehaviour rawImage is controlled in its script.
             /*
             RectTransform rectTransform = BackpackBehaviour.instance.rawImage.rectTransform;
 
@@ -831,7 +833,7 @@ public class MainControl : MonoBehaviour
             if (BackpackBehaviour.instance != null)
                 BackpackBehaviour.instance.SuitResolution();
 
-            //在SetCanvasFrameSprite内设定
+            //set in SetCanvasFrameSprite
             //CanvasController.instance.frame.sprite = OverworldControl.frames[CanvasController.instance.framePic];
 
             CanvasController.instance.DOKill();
@@ -841,7 +843,7 @@ public class MainControl : MonoBehaviour
                 CanvasController.instance.frame.color = Color.black;
                 CanvasController.instance.fps.rectTransform.anchoredPosition = new Vector2(0, -30f);
             }
-            else 
+            else
                 CanvasController.instance.fps.rectTransform.anchoredPosition = new Vector2();
 
             CanvasController.instance.frame.DOColor(new Color(1, 1, 1, 1) * Convert.ToInt32(CanvasController.instance.framePic >= 0), 1f);
@@ -892,9 +894,9 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 淡出 输入跳转场景名称
-    /// banMusic是渐出
-    /// time>0有动画 =0就直接切场景 <0时会以time的绝对值
+    /// Fade Out Enter Jump Scene Name
+    /// banMusic is fading out.
+    /// time>0 has animation =0 cuts scene directly <0 takes absolute value of time
     /// </summary>
     public void OutBlack(string scene, Color color, bool banMusic = false, float time = 0.5f, bool Async = true)
     {
@@ -953,7 +955,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 传入string，返回删去末尾i个字符的string
+    /// Pass in string and return string with the last i characters removed.
     /// </summary>
     public string SubText(string str, int i = 1)
     {
@@ -962,7 +964,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 随机生成一个六位长的英文
+    /// Randomly generates a six-digit long English word.
     /// </summary>
     public string RandomName(int l = 6, string abc = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM")
     {
@@ -978,7 +980,8 @@ public class MainControl : MonoBehaviour
     [Space]
     public bool forceJumpLoadTurn;
 
-    public IEnumerator _LoadItemDataForTurn(List<string> list, TextAsset texter)//保存的list 导入的text
+    public IEnumerator _LoadItemDataForTurn(List<string> list, TextAsset texter)
+    //saved list imported text
     {
         list.Clear();
         string text = "";
@@ -1007,9 +1010,10 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 调入数据(传入TextAsset)
+    /// Call in the data (pass in TextAsset)
     /// </summary>
-    public void LoadItemData(List<string> list, TextAsset texter)//保存的list 导入的text
+    public void LoadItemData(List<string> list, TextAsset texter)
+    //saved list imported text
     {
         list.Clear();
         string text = "";
@@ -1036,9 +1040,10 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 调入数据(传入string)
+    /// Call in data (pass in string)
     /// </summary>
-    public void LoadItemData(List<string> list, string texter)//保存的list 导入的text
+    public void LoadItemData(List<string> list, string texter)
+    //saved list imported text
     {
         list.Clear();
         string text = "";
@@ -1064,10 +1069,10 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 传入使用背包的哪个物体
-    /// 然后就使用 打true会顺带把背包顺序整理下
-    /// 然后再让打字机打个字
-    /// plusText填0就自己计算
+    /// Pass in which object is using the backpack.
+    /// Then we'll use it to hit true and put the packs in order.
+    /// And then let the typewriter type again.
+    /// plusText will calculate itself if it is zero.
     /// </summary>
     public void UseItem(TypeWritter typeWritter, TMPro.TMP_Text tmp_Text, int sonSelect, int plusText = 0)
     {
@@ -1100,7 +1105,8 @@ public class MainControl : MonoBehaviour
 
             AudioController.instance.GetFx(3, AudioControl.fxClipUI);
         }
-        else//食物
+        else
+        //Food
         {
             int plusHp = int.Parse(ItemIdGetName(PlayerControl.myItems[sonSelect - 1], "Auto", 2));
             if (PlayerControl.wearArm == 10001)
@@ -1128,13 +1134,14 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 转换特殊字符
+    /// Converting special characters
     /// </summary>
     public List<string> ChangeItemData(List<string> list, bool isData, List<string> ex)
     {
         List<string> newList = new List<string>();
         string text = "";
-        bool isXH = false;//检测是否有多个需要循环调用的特殊字符
+        bool isXH = false;
+        // Detect if there are multiple special characters that need to be called in a loop
 
         for (int i = 0; i < list.Count; i++)
         {
@@ -1152,7 +1159,7 @@ public class MainControl : MonoBehaviour
                             break;
                     }
                     j = k;
-                    //DebugLogger.Log(list[i] +"/"+ name);
+                    //DebugLogger.Log(list[i] + "/" + name);
                 }
 
                 while (list[i][j] == '<')
@@ -1188,7 +1195,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// ChangeItemData中检测'<''>'符号的Switch语句
+    /// Switch statement to detect '<''>' symbols in ChangeItemData
     /// </summary>
     private string ChangeItemDataSwitch(string text, string texters, bool isData, string name, List<string> ex)
     {
@@ -1199,7 +1206,8 @@ public class MainControl : MonoBehaviour
                 text += PlayerControl.playerName;
                 break;
 
-            case "<enter>"://回车
+            case "<enter>":
+            // Carriage Return
                 text += "\n";
                 break;
 
@@ -1369,7 +1377,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 检测输入文本内的大写字母，转为全小写。
+    /// Detects uppercase letters in the input text and converts them to all lowercase.
     /// </summary>
     public string UppercaseToLowercase(string origin)
     {
@@ -1396,7 +1404,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 检测输入文本内的小写字母，转为全大写。
+    /// Detects lowercase letters within the input text and converts them to all uppercase.
     /// </summary>
     public string LowercaseToUppercase(string origin)
     {
@@ -1423,8 +1431,8 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 输入形如(x,y)的向量
-    /// 若向量形如(xRx，yRy)或(xrx，yry)，则在R左右取随机数
+    /// Input a vector of the form (x,y).
+    /// If the vector is of the form (xRx, yRy) or (xrx, yry), then take random numbers around R
     /// </summary>
     public Vector2 StringVector2ToRealVector2(string stringVector2, Vector3 origin)
     {
@@ -1455,11 +1463,11 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 形如xRx / xrx / O   随机分开
-    /// 如果没有r或R的话就会返回原本的，非常的实用
+    /// Shaped like xRx / xrx / O Randomly Separated
+    /// If there is no r or R, it will return to the original, very useful.
     ///
-    /// 额外添加：P/p获取玩家位置 通过isY确定是X还是Y
-    /// 通过xxx + xRx的形式实现一定程度上的固定。
+    /// Extra: p/p to get player position by isY to determine if it's X or Y.
+    /// Some degree of immobilization is achieved by xxx + xRx.
     /// </summary>
     public float RandomFloatChange(string text, float origin, bool isY = false, float plusSave = 0)
     {
@@ -1520,7 +1528,7 @@ public class MainControl : MonoBehaviour
     /*之后回来翻才意识到这不就一个强制转换的事儿）
      *
     /// <summary>
-    /// 输入形如(x,y)的向量
+    /// Input a vector of the form (x,y).
     ///
     /// </summary>
     public Vector3 StringVector2ToRealVector3(string stringVector2)
@@ -1531,8 +1539,8 @@ public class MainControl : MonoBehaviour
     */
 
     /// <summary>
-    /// 输入形如(r,g,b,a)的向量
-    /// 同样支持随机数
+    /// Input vector of the form (r,g,b,a)
+    /// Random numbers are also supported.
     /// </summary>
     public Color StringVector4ToRealColor(string stringVector4, Color origin)
     {
@@ -1575,7 +1583,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 在num1与num2之间判断 符合后返回num2.否则传回num1.
+    /// Judge between num1 and num2 and return num2 if it matches. otherwise return num1.
     /// </summary>
     public float JudgmentNumber(bool isGreater, float num1, float num2)
     {
@@ -1593,7 +1601,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 分配Item数据
+    /// Allocate Item Data
     /// </summary>
     private void ItemClassificatio()
     {
@@ -1601,12 +1609,14 @@ public class MainControl : MonoBehaviour
         ItemControl.itemArms.Clear();
         ItemControl.itemArmors.Clear();
         ItemControl.itemOthers.Clear();
-        for (int i = 0; i < ItemControl.itemMax.Count; i++)//总物品数
+        for (int i = 0; i < ItemControl.itemMax.Count; i++)
+        //Total number of items
         {
             string countText = ItemControl.itemMax[i];
             string[] text = new string[4];
             int texti = 0;
-            for (int k = 0; k < countText.Length; k++)//单物品遍历 寻找\符
+            for (int k = 0; k < countText.Length; k++)
+            //Single-item traversal Searching for \ symbols
             {
                 if (countText[k] == '\\')
                     texti++;
@@ -1627,7 +1637,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// ItemClassificatio的一个子void
+    /// a subvoid of ItemClassificatio
     /// </summary>
     private void ItemClassificatioAdd(string i, string origin)
     {
@@ -1657,8 +1667,8 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 检测 '\'字符然后分割文本到子List
-    /// 批量处理string
+    /// Detect the '\' character and split the text into sublists.
+    /// Batch processing string
     /// </summary>
     public void MaxToOneSon(List<string> parentList, List<string> sonList, char font = '\\')
     {
@@ -1679,8 +1689,8 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 检测 '\'字符然后分割文本到子List
-    /// 传入一个string
+    //// Detect '\' character and split text to sub-list
+    /// Pass in a string.
     /// </summary>
     public void MaxToOneSon(string parentString, List<string> sonList, char font = '\\')
     {
@@ -1699,7 +1709,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 检测到第一个'\'字符就传出
+    /// Pass the first '\' character detected.
     /// </summary>
     public string MaxToOneSon(string original, char font = '\\')
     {
@@ -1714,7 +1724,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 反向检测第一个'\'字符就传出，可选忽视掉最后的 ; 号。
+    /// Reverse the detection of the first '\' character and pass it out, optionally ignoring the final ; sign.
     /// </summary>
     public float MaxToLastFloat(string original, bool noLast = true, char font = '\\')
     {
@@ -1738,9 +1748,9 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 用于游戏内文本读取
-    /// 传入数据名称返回文本包文本
-    /// 给第一个 返第二个)
+    /// Used for in-game text reading.
+    /// Incoming data name returns packet text
+    /// give the first return the second)
     /// </summary>
     public string ScreenMaxToOneSon(List<string> parentList, string screen)
     {
@@ -1756,8 +1766,8 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 用于游戏内文本读取
-    /// 传入数据名称返回所有同名的文本包文本
+    /// Used for in-game text reading.
+    /// Pass in a data name to return the text of all packets with the same name.
     /// </summary>
     public List<string> ScreenMaxToAllSon(List<string> parentList, string screen)
     {
@@ -1774,8 +1784,8 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 检测list的前几个字符是否与传入的string screen相同。
-    /// 若相同则分割文本到子List
+    /// Tests if the first few characters of the list are the same as the passed-in string screen.
+    /// Split the text into sublists if they are the same.
     /// </summary>
     public void ScreenMaxToOneSon(List<string> parentList, List<string> sonList, string screen)
     {
@@ -1790,11 +1800,11 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 再分配文本包
+    /// Redistribute text packets
     /// </summary>
     private void MaxToSon(List<string> max, string[] text, List<string>[] son)
     {
-        //max.Clear();
+        //max.Clear(); //max.
         for (int i = 0; i < son.Length; i++)
         {
             son[i].Clear();
@@ -1832,18 +1842,19 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 通过Id获取Item信息：
-    /// type：Foods Arms Armors Others Auto
-    /// num：0语言包名称
-    ///     1/2：data1/2.
-    ///     请勿多输.
-    ///     Arm和Armor只有1
+    /// Getting Item information by Id:
+    /// type: Foods Arms Armors Others Auto
+    /// num: 0 language pack name
+    /// 1/2: data1/2.
+    /// Do not enter more.
+    /// Arm and Armor only 1
     /// </summary>
     public string ItemIdGetName(int id, string type, int num)
     {
         int realId;
         List<string> list;
-        string idName;//获取编号名称
+        string idName;
+        //get number name
         switch (type)
         {
             case "Foods":
@@ -1908,7 +1919,8 @@ public class MainControl : MonoBehaviour
         }
 
         string subText = "";
-        if (num == 0)//获取语言包内的名称
+        if (num == 0)
+        //Get the name in the language pack
         {
             for (int i = 0; i < ItemControl.itemTextMaxItem.Count; i++)
             {
@@ -1935,15 +1947,16 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 通过Id获取Item的数据（HP，ATK等）：
-    /// type：Foods Arms Armors Others Auto
-    /// justId:勾的话会加上 +xxHP/AT/DF等信息
+    /// Get the Item's data (HP, ATK, etc.) by Id:
+    /// type: Foods Arms Armors Others Auto
+    /// justId: if you check it, it will add +xxHP/AT/DF and so on.
     /// </summary>
     public string ItemIdGetData(int id, string type, bool notJustId = false)
     {
         int realId;
         List<string> list;
-        string idData;//获取编号名称
+        string idData;
+        //get the number name
         switch (type)
         {
             case "Foods":
@@ -2052,7 +2065,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 识别到0后传出
+    /// Passed out after recognizing zero.
     /// </summary>
     public int FindMax(List<int> list)
     {
@@ -2069,8 +2082,8 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 通过物品数据名称搞到它的id.
-    /// type：Foods Arms Armors Others
+    /// Get the id of the item by its data name.
+    /// type: Foods Arms Armors Others
     /// </summary>
     public int ItemNameGetId(string name, string type)
     {
@@ -2119,7 +2132,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 给List<Int>，检测到空的返回
+    /// Give List<Int>, return if empty.
     /// </summary>
     public int GetRealIntListCount(List<int> ints)
     {
@@ -2145,7 +2158,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 随机获取-1或1
+    /// Randomly get -1 or 1
     /// </summary>
     public int Get1Or_1()
     {
@@ -2160,8 +2173,8 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 传入数根据正负返回1/-1。
-    /// 传0返1。
+    //// Incoming numbers return 1/-1 depending on positive or negative.
+    /// Pass 0 back to 1.
     /// </summary>
     public int Get1Or_1(float i)
     {
@@ -2173,10 +2186,10 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 给一个指定长度，然后会用空格填充原字符串
+    /// Given a specified length, the original string will be padded with spaces.
     /// </summary>
-    /// <param name="origin">原字符串</param>
-    /// <param name="length">返回长度</param>
+    //// <param name="origin">original string</param>
+    //// <param name="length">Returns the length</param>.
     /// <returns></returns>
     public string FillString(string origin, int length)
     {
@@ -2220,10 +2233,13 @@ public class MainControl : MonoBehaviour
             return inputString;
         }
 
-        string part1 = inputString.Substring(0, startIndex); // 从开头到A之前的部分
-        string part2 = inputString.Substring(endIndex + 1); // 从B之后到字符串末尾的部分
+        string part1 = inputString.Substring(0, startIndex);
+        // From the beginning to the part before A
+        string part2 = inputString.Substring(endIndex + 1);
+        // From the end of the string after B to the end of the string
         DebugLogger.Log(inputString.Substring(startIndex + 1));
-        string result = part1 + add + part2; // 合并两部分
+        string result = part1 + add + part2;
+        // Merge the two parts
         return result;
     }
 
@@ -2246,9 +2262,9 @@ public class MainControl : MonoBehaviour
         }
 
     }
-    
+
     /// <summary>
-    /// 计算多边形中点
+    /// Calculate the polygon midpoint.
     /// </summary>
     public Vector2 CalculatePolygonCenter(List<Vector2> vertexPoints)
     {
@@ -2270,7 +2286,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// 在球体表面上生成随机点
+    /// Generate random points on the surface of the sphere.
     /// </summary>
     public Vector3 RandomPointOnSphereSurface(float minRandomValue, float maxRandomValue, float sphereRadius, Vector3 sphereCenter)
     {

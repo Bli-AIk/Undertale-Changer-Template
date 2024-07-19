@@ -278,10 +278,8 @@ strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.Overwor
                             mode = -1;
                             MainControl.instance.PlayerControl.playerName = setName;
                             AudioController.instance.transform.GetComponent<AudioSource>().Pause();
-                            //Volume v = GameObject.Find("Global Volume").transform.GetComponent<Volume>();
                             Volume v2 = GameObject.Find("Global Volume (1)").transform.GetComponent<Volume>();
 
-                            //DOTween.To(() => v.weight, x => v.weight = x, 0, 5.5f).SetEase(Ease.Linear);
                             DOTween.To(() => v2.weight, x => v2.weight = x, 1, 5.5f).SetEase(Ease.Linear);
 
                             SaveController.SaveData(MainControl.instance.PlayerControl, "Data" + MainControl.instance.dataNum);

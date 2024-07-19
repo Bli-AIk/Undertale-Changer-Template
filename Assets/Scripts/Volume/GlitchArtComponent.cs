@@ -3,7 +3,7 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
 /// <summary>
-/// VolumeComponent，显示在添加列表内
+/// VolumeComponent, shown in the add list
 /// </summary>
 
 [VolumeComponentMenuForRenderPipeline("Custom/Glitch Art", typeof(UniversalRenderPipeline))]
