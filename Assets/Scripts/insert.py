@@ -1,5 +1,6 @@
 import os
 import chardet
+import re
 
 def read_comments_from_txt(txt_file):
     results = {}
@@ -22,6 +23,17 @@ def read_comments_from_txt(txt_file):
         print(f"Failed to read {txt_file}: {e}")
     return results
 
+def remove_comments_from_line(line):
+    # Remove single line comments
+    line = re.sub(r'//.*', '', line)
+    # Remove block comments
+    line = re.sub(r'/\*.*?\*/', '', line)
+    # Remove XML documentation comments
+    line = re.sub(r'///.*', '', line)
+    # Remove [Header("...")]
+    line = re.sub(r'\[Header\(.*?\)\]', '', line)
+    return line
+
 def insert_comments_into_file(file_path, comments):
     try:
         with open(file_path, 'rb') as file:
@@ -32,10 +44,12 @@ def insert_comments_into_file(file_path, comments):
         with open(file_path, 'r', encoding=encoding) as file:
             lines = file.readlines()
 
-        with open(file_path, 'r+', encoding=encoding) as file:
+        with open(file_path, 'w', encoding=encoding) as file:
             for line_num, comment in sorted(comments, reverse=True):
+                # Remove original comment from the line, but keep the code
+                lines[line_num - 1] = remove_comments_from_line(lines[line_num - 1]).rstrip() + "\n"
+                # Insert new comment
                 lines.insert(line_num, f"{comment}\n")
-            file.seek(0)
             file.writelines(lines)
     except Exception as e:
         print(f"Failed to insert comments into {file_path}: {e}")
