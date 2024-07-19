@@ -1,3 +1,7 @@
+# 下载前先看看我！！！！
+目前，UCT的Github版本经常更新。
+请不要将当前版本用于游戏制作。此版本仅供学习，请期待UCT的新版本。
+
 # Undertale-Changer-Template
 一个基于Unity引擎的UNDERTALE同人游戏模板。
 
