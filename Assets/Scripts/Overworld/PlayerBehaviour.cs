@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 
 /// <summary>
-/// OverworldÖĞµÄÍæ¼Ò¿ØÖÆÆ÷
+/// Overworldä¸­çš„ç©å®¶æ§åˆ¶å™¨
 /// </summary>
 public class PlayerBehaviour : MonoBehaviour
 {
@@ -13,12 +13,12 @@ public class PlayerBehaviour : MonoBehaviour
     public int moveDirectionX, moveDirectionY;
     public int animDirectionX, animDirectionY;
     public float distance;
-    public float speed;//Íæ¼ÒËÙ¶È ±à¼­Æ÷±ê×¼Îª13 µ¼³öÎª5.5
+    public float speed;//ç©å®¶é€Ÿåº¦ ç¼–è¾‘å™¨æ ‡å‡†ä¸º13 å¯¼å‡ºä¸º5.5
 
-    [Header("ÒôĞ§½ØÈ¡·¶Î§ int")]
+    [Header("éŸ³æ•ˆæˆªå–èŒƒå›´ int")]
     public Vector2 walk;
 
-    [Header("¿ªÆôµ¹Ó°")]
+    [Header("å¼€å¯å€’å½±")]
     public bool isShadow;
 
     private SpriteRenderer shadowSprite;
@@ -29,9 +29,9 @@ public class PlayerBehaviour : MonoBehaviour
     public OverworldObjTrigger saveOwObj;
     private GameObject backpackUI;
     private SpriteRenderer spriteRenderer;
-    public float owTimer;//0.1Ãë£¬·ÀÖ¹µ÷²éOW³åÍ»
+    public float owTimer;//0.1ç§’ï¼Œé˜²æ­¢è°ƒæŸ¥OWå†²çª
 
-    private AudioMixerGroup mixer = null;//ĞèÒª¾ÍÅªÉÏ ÕûÕâ¸öÊÇÒòÎªÓĞµÄÏîÄ¿Àï×öÁË»ØÒôĞ§¹û
+    private AudioMixerGroup mixer = null;//éœ€è¦å°±å¼„ä¸Š æ•´è¿™ä¸ªæ˜¯å› ä¸ºæœ‰çš„é¡¹ç›®é‡Œåšäº†å›éŸ³æ•ˆæœ
 
     private void Awake()
     {
@@ -176,7 +176,7 @@ public class PlayerBehaviour : MonoBehaviour
             MainControl.instance.OutBlack("Battle", Color.black);
     }
 
-    public void PlayWalkAudio()//¶¯»­Æ÷ÒıÓÃ
+    public void PlayWalkAudio()//åŠ¨ç”»å™¨å¼•ç”¨
     {
         AudioController.instance.GetFx(Random.Range((int)walk.x, (int)walk.y), MainControl.instance.AudioControl.fxClipWalk, 1, 1, mixer);
     }

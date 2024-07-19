@@ -3,10 +3,10 @@ using UnityEngine;
 
 public class DebugPolygonScaler : MonoBehaviour
 {
-    public LineRenderer originalLineRenderer; // ÓÃÓÚ»æÖÆÔ­Ê¼¶à±ßĞÎ
-    public LineRenderer movedLineRenderer; // ÓÃÓÚ»æÖÆÒÆ¶¯ºóµÄ¶à±ßĞÎ
-    public float moveDistance = 0.5f; // ÏòÖĞĞÄÒÆ¶¯µÄ¾àÀë
-                                      // ´´½¨Ò»¸ö¼òµ¥µÄ¶à±ßĞÎ¶¥µãÁĞ±í
+    public LineRenderer originalLineRenderer; // ç”¨äºç»˜åˆ¶åŸå§‹å¤šè¾¹å½¢
+    public LineRenderer movedLineRenderer; // ç”¨äºç»˜åˆ¶ç§»åŠ¨åçš„å¤šè¾¹å½¢
+    public float moveDistance = 0.5f; // å‘ä¸­å¿ƒç§»åŠ¨çš„è·ç¦»
+                                      // åˆ›å»ºä¸€ä¸ªç®€å•çš„å¤šè¾¹å½¢é¡¶ç‚¹åˆ—è¡¨
   public  List<Vector2> vertices = new List<Vector2>()
         {
             new Vector2(-1, -1),
@@ -19,31 +19,31 @@ public class DebugPolygonScaler : MonoBehaviour
     {
       
 
-        // ¼ÆËã¶à±ßĞÎÖĞµã²¢ÒÆ¶¯¶¥µã
+        // è®¡ç®—å¤šè¾¹å½¢ä¸­ç‚¹å¹¶ç§»åŠ¨é¡¶ç‚¹
         List<Vector2> movedVertices = MoveVerticesTowardsCenter(vertices, moveDistance);
 
-        // »æÖÆÔ­Ê¼¶à±ßĞÎ
+        // ç»˜åˆ¶åŸå§‹å¤šè¾¹å½¢
         DrawPolygon(originalLineRenderer, vertices);
 
-        // »æÖÆÒÆ¶¯ºóµÄ¶à±ßĞÎ
+        // ç»˜åˆ¶ç§»åŠ¨åçš„å¤šè¾¹å½¢
         DrawPolygon(movedLineRenderer, movedVertices);
     }
 
-    // ÏòÖĞĞÄÒÆ¶¯¶à±ßĞÎ¶¥µãµÄ·½·¨
+    // å‘ä¸­å¿ƒç§»åŠ¨å¤šè¾¹å½¢é¡¶ç‚¹çš„æ–¹æ³•
     private List<Vector2> MoveVerticesTowardsCenter(List<Vector2> originalVertices, float distance)
     {
         Vector2 center = CalculatePolygonCenter(originalVertices);
         List<Vector2> movedVertices = new List<Vector2>();
         foreach (Vector2 vertex in originalVertices)
         {
-            Vector2 direction = (center - vertex).normalized; // ´Ó¶¥µãµ½ÖĞĞÄµãµÄ·½Ïò
-            Vector2 movedVertex = vertex + direction * distance; // ÏòÖĞĞÄµãÒÆ¶¯¹Ì¶¨¾àÀë
+            Vector2 direction = (center - vertex).normalized; // ä»é¡¶ç‚¹åˆ°ä¸­å¿ƒç‚¹çš„æ–¹å‘
+            Vector2 movedVertex = vertex + direction * distance; // å‘ä¸­å¿ƒç‚¹ç§»åŠ¨å›ºå®šè·ç¦»
             movedVertices.Add(movedVertex);
         }
         return movedVertices;
     }
 
-    // ¼ÆËã¶à±ßĞÎÖĞĞÄµÄ·½·¨
+    // è®¡ç®—å¤šè¾¹å½¢ä¸­å¿ƒçš„æ–¹æ³•
     private Vector2 CalculatePolygonCenter(List<Vector2> vertices)
     {
         Vector2 sum = Vector2.zero;
@@ -54,14 +54,14 @@ public class DebugPolygonScaler : MonoBehaviour
         return sum / vertices.Count;
     }
 
-    // Ê¹ÓÃLineRenderer»æÖÆ¶à±ßĞÎµÄ·½·¨
+    // ä½¿ç”¨LineRendererç»˜åˆ¶å¤šè¾¹å½¢çš„æ–¹æ³•
     private void DrawPolygon(LineRenderer lineRenderer, List<Vector2> vertices)
     {
-        lineRenderer.positionCount = vertices.Count + 1; // ÉèÖÃ¶¥µãÊı£¨+1ÊÇÎªÁË±ÕºÏ¶à±ßĞÎ£©
+        lineRenderer.positionCount = vertices.Count + 1; // è®¾ç½®é¡¶ç‚¹æ•°ï¼ˆ+1æ˜¯ä¸ºäº†é—­åˆå¤šè¾¹å½¢ï¼‰
         for (int i = 0; i < vertices.Count; i++)
         {
             lineRenderer.SetPosition(i, vertices[i]);
         }
-        lineRenderer.SetPosition(vertices.Count, vertices[0]); // ±ÕºÏ¶à±ßĞÎ
+        lineRenderer.SetPosition(vertices.Count, vertices[0]); // é—­åˆå¤šè¾¹å½¢
     }
 }

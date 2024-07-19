@@ -7,30 +7,30 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// OWObj´¥·¢Æ÷Ïà¹Ø ÅäºÏÍæ¼ÒÉäÏß
-/// ÓÃÓÚ¶ÁÈ¡²¢ÏÔÊ¾ÎÄ±¾È»ºóÏÔÊ¾³öÀ´
+/// OWObjè§¦å‘å™¨ç›¸å…³ é…åˆç©å®¶å°„çº¿
+/// ç”¨äºè¯»å–å¹¶æ˜¾ç¤ºæ–‡æœ¬ç„¶åæ˜¾ç¤ºå‡ºæ¥
 /// </summary>
 
 public class OverworldObjTrigger : MonoBehaviour
 {
-    //ÈôÎªtrue£¬ÔòÅöµ½¾Í´¥·¢¡£false£¬°´Z´¥·¢¡£
+    //è‹¥ä¸ºtrueï¼Œåˆ™ç¢°åˆ°å°±è§¦å‘ã€‚falseï¼ŒæŒ‰Zè§¦å‘ã€‚
     public bool isTriggerMode;
 
     public bool setIsUp;
     public bool isUp;
     public string text;
 
-    [Header("¼ì²âÍæ¼Ò¶¯»­·½Ïò 0,0Îª²»¼ì²â")]
+    [Header("æ£€æµ‹ç©å®¶åŠ¨ç”»æ–¹å‘ 0,0ä¸ºä¸æ£€æµ‹")]
     public Vector2 playerDir;
 
-    [Header("´æµµÏà¹Ø")]
+    [Header("å­˜æ¡£ç›¸å…³")]
     public bool isSave;
 
     public bool saveFullHp;
     private int saveSelect;
     private bool saveOpen;
 
-    [Header("²åÈëÉãÏñ»ú¶¯»­Ïà¹Ø")]
+    [Header("æ’å…¥æ‘„åƒæœºåŠ¨ç”»ç›¸å…³")]
     public bool openAnim;
 
     public Vector3 animEndPosPlus;
@@ -39,35 +39,35 @@ public class OverworldObjTrigger : MonoBehaviour
     public CameraFollowPlayer mainCamera;
     public bool endInBattle;
 
-    [Header("ĞèÒª½¥³ö¾ÍÌîÕıÊıÊ±¼ä")]
+    [Header("éœ€è¦æ¸å‡ºå°±å¡«æ­£æ•°æ—¶é—´")]
     public float stopTime = -1;
 
-    [Header("OWÌø³¡¾° Ö»¸øtrigger")]
+    [Header("OWè·³åœºæ™¯ åªç»™trigger")]
     public bool changeScene;
 
     public bool banMusic;
     public string sceneName;
     public Vector3 newPlayerPos;
 
-    [Header("OWÌø³¡¾°Ëø¶¨½øÈëÊ±·½Ïò 0ÎŞ -1×óÓÒ 1ÉÏÏÂ")]
+    [Header("OWè·³åœºæ™¯é”å®šè¿›å…¥æ—¶æ–¹å‘ 0æ—  -1å·¦å³ 1ä¸Šä¸‹")]
     public int onlyDir;
 
     private AudioSource bgm;
     private TypeWritter typeWritter;
 
-    [Header("½áÊøÊ±µ÷ÓÃ¶¯»­Æ÷²¢½«ÏÂÉèÎªtrue")]
+    [Header("ç»“æŸæ—¶è°ƒç”¨åŠ¨ç”»å™¨å¹¶å°†ä¸‹è®¾ä¸ºtrue")]
     public bool endAnim;
 
     public string animRoute;
     public string animBoolName;
 
-    [Header("½áÊøÊ±ÎïÌå×ÔÉí¹Ø±Õ")]
+    [Header("ç»“æŸæ—¶ç‰©ä½“è‡ªèº«å…³é—­")]
     public bool endSelf;
 
-    [Header("È·¶¨Ä¿Ç°´ò×ÖµÄÎïÌå")]
+    [Header("ç¡®å®šç›®å‰æ‰“å­—çš„ç‰©ä½“")]
     private bool isTyping;
 
-    [Header("½áÊøÊ±Ö´ĞĞ·½·¨")]
+    [Header("ç»“æŸæ—¶æ‰§è¡Œæ–¹æ³•")]
     public List<string> funNames;
 
     private void Start()
@@ -136,7 +136,7 @@ public class OverworldObjTrigger : MonoBehaviour
                 saveOpen = false;
             }
         }
-        //¼ì²âÏà¹Ø¼ûPlayerBehaviour
+        //æ£€æµ‹ç›¸å…³è§PlayerBehaviour
         if (isTyping && MainControl.instance.KeyArrowToControl(KeyCode.Z) && !typeWritter.isRunning)
         {
             PressZ();
@@ -173,7 +173,7 @@ public class OverworldObjTrigger : MonoBehaviour
             MethodInfo methodInfo = typeof(OverworldObjTrigger).GetMethod(item);
             if (methodInfo == null)
             {
-                DebugLogger.Log(item + "¼ì²âÊ§°Ü", gameObject, DebugLogger.Type.err);
+                DebugLogger.Log(item + "æ£€æµ‹å¤±è´¥", gameObject, DebugLogger.Type.err);
             }
             else
             {
@@ -199,7 +199,7 @@ public class OverworldObjTrigger : MonoBehaviour
     }
 
     /// <summary>
-    /// ¼¤»î´ò×Ö¡£µÚ¶ş¸ö²ÎÊı±ğ¶¯
+    /// æ¿€æ´»æ‰“å­—ã€‚ç¬¬äºŒä¸ªå‚æ•°åˆ«åŠ¨
     /// </summary>
     public void TypeText(bool isUp, bool isMusic = true)
     {

@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 
 /// <summary>
-/// ĞŞ¸ÄOverworldÖĞ¶Ô»°¿òµÄÎ»ÖÃ
+/// ä¿®æ”¹Overworldä¸­å¯¹è¯æ¡†çš„ä½ç½®
 /// </summary>
 public class TalkUIPositionChanger : MonoBehaviour
 {

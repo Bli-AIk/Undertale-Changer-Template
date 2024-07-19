@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 /// <summary>
-/// µ¯Ä»Shader¿ØÖÆÆ÷
+/// ÂµÂ¯Ã„Â»ShaderÂ¿Ã˜Ã–Ã†Ã†Ã·
 /// </summary>
 public class BulletShaderController : MonoBehaviour
 {

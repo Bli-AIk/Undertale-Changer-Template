@@ -5,7 +5,7 @@ using System.IO;
 using UnityEngine;
 using Log;
 /// <summary>
-/// ´æµµ´æ´¢µÄÊı¾İ
+/// å­˜æ¡£å­˜å‚¨çš„æ•°æ®
 /// </summary>
 public class SaveController : MonoBehaviour
 {
@@ -20,25 +20,25 @@ public class SaveController : MonoBehaviour
             Directory.CreateDirectory(Application.dataPath + "/Data");
         }
         usersData[data.name] = data;
-        // ×ª»»Êı¾İ
+        // è½¬æ¢æ•°æ®
         string jsonData = JsonConvert.SerializeObject(data);
 
         File.WriteAllText(Application.dataPath + string.Format("/Data/{0}.json", dataName), jsonData);
     }
 
-    // ¶ÁÈ¡ÓÃ»§Êı¾İµ½ÄÚ´æ
+    // è¯»å–ç”¨æˆ·æ•°æ®åˆ°å†…å­˜
     public static PlayerControl LoadData(string dataName)
     {
         //DebugLogger.Log("load");
 
         SortAndRenameData();
         string path = Application.dataPath + string.Format("/Data/{0}.json", dataName);
-        // ¼ì²éÓÃ»§ÅäÖÃÎÄ¼şÊÇ·ñ´æÔÚ
+        // æ£€æŸ¥ç”¨æˆ·é…ç½®æ–‡ä»¶æ˜¯å¦å­˜åœ¨
         if (File.Exists(path))
         {
             string jsonData = File.ReadAllText(path);
-            PlayerControl userData = ScriptableObject.CreateInstance<PlayerControl>(); // Ê¹ÓÃ CreateInstance ·½·¨
-            JsonConvert.PopulateObject(jsonData, userData); // Ê¹ÓÃ PopulateObject ·½·¨À´Ìî³äÊı¾İ
+            PlayerControl userData = ScriptableObject.CreateInstance<PlayerControl>(); // ä½¿ç”¨ CreateInstance æ–¹æ³•
+            JsonConvert.PopulateObject(jsonData, userData); // ä½¿ç”¨ PopulateObject æ–¹æ³•æ¥å¡«å……æ•°æ®
             usersData[dataName] = userData;
             return userData;
         }
@@ -52,7 +52,7 @@ public class SaveController : MonoBehaviour
     {
         if (!Directory.Exists(Application.dataPath + "/Data"))
         {
-            //DebugLogger.Log("¼ÒÈËÃÇË­¶®°¡"+ Application.dataPath + "/Data");
+            //DebugLogger.Log("å®¶äººä»¬è°æ‡‚å•Š"+ Application.dataPath + "/Data");
             return 0;
         }
 
@@ -70,21 +70,21 @@ public class SaveController : MonoBehaviour
     {
         string path = Application.dataPath + string.Format("/Data/{0}.json", dataName);
 
-        // ¼ì²é´æµµÊÇ·ñ´æÔÚ
+        // æ£€æŸ¥å­˜æ¡£æ˜¯å¦å­˜åœ¨
         if (File.Exists(path))
         {
-            // ´ÓÄÚ´æÖĞÒÆ³ı´æµµÊı¾İ
+            // ä»å†…å­˜ä¸­ç§»é™¤å­˜æ¡£æ•°æ®
             if (usersData.ContainsKey(dataName))
             {
                 usersData.Remove(dataName);
             }
 
-            // É¾³ıÎÄ¼ş
+            // åˆ é™¤æ–‡ä»¶
             File.Delete(path);
         }
         else
         {
-            DebugLogger.Log("´æµµ"+ dataName+"²»´æÔÚ£¬ÎŞ·¨É¾³ı¡£",DebugLogger.Type.war);
+            DebugLogger.Log("å­˜æ¡£"+ dataName+"ä¸å­˜åœ¨ï¼Œæ— æ³•åˆ é™¤ã€‚",DebugLogger.Type.war);
         }
         SortAndRenameData();
     }
@@ -95,14 +95,14 @@ public class SaveController : MonoBehaviour
 
         if (!Directory.Exists(dataPath))
         {
-            DebugLogger.Log("´æµµÄ¿Â¼²»´æÔÚ£¬ÎŞ·¨½øĞĞÅÅĞòºÍÖØÃüÃû¡£", DebugLogger.Type.war);
+            DebugLogger.Log("å­˜æ¡£ç›®å½•ä¸å­˜åœ¨ï¼Œæ— æ³•è¿›è¡Œæ’åºå’Œé‡å‘½åã€‚", DebugLogger.Type.war);
             return;
         }
 
-        // »ñÈ¡Ä¿Â¼ÏÂËùÓĞµÄ´æµµÎÄ¼şÂ·¾¶
+        // è·å–ç›®å½•ä¸‹æ‰€æœ‰çš„å­˜æ¡£æ–‡ä»¶è·¯å¾„
         string[] files = Directory.GetFiles(dataPath, "*.json");
 
-        // °´ÕÕÎÄ¼şÃûµÄÊı×Ö½øĞĞÅÅĞò
+        // æŒ‰ç…§æ–‡ä»¶åçš„æ•°å­—è¿›è¡Œæ’åº
         Array.Sort(files, (a, b) =>
         {
             string fileNameA = Path.GetFileNameWithoutExtension(a);
@@ -117,7 +117,7 @@ public class SaveController : MonoBehaviour
             return fileNameA.CompareTo(fileNameB);
         });
 
-        // ÖØÃüÃûÎÄ¼ş
+        // é‡å‘½åæ–‡ä»¶
         for (int i = 0; i < files.Length; i++)
         {
             string newFileName = string.Format("Data{0}.json", i);

@@ -2,28 +2,28 @@ using TMPro;
 using UnityEngine;
 
 /// <summary>
-/// DebugÍø¸ñ¶¨Î» ÓÃÓÚ×öµ¯Ä»É¶µÄ
+/// Debugç½‘æ ¼å®šä½ ç”¨äºåšå¼¹å¹•å•¥çš„
 /// </summary>
 public class DebugGrid : ObjectPool
 {
-    [Header("ÑÕÉ«ÊÇ¸øµ½'Ìõ'ÉÏÃæµÄ")]
+    [Header("é¢œè‰²æ˜¯ç»™åˆ°'æ¡'ä¸Šé¢çš„")]
     public Color colorX;
 
     public Color colorY;
     public Color colorXForText;
     public Color colorYForText;
 
-    [Header("ºá×İ·Ö¸î¼¸Æ¬(µ¶Êı-1) XÎªºá×ÅÆ½ÆÌÊúÌõ YÔò·´Ö®")]
+    [Header("æ¨ªçºµåˆ†å‰²å‡ ç‰‡(åˆ€æ•°-1) Xä¸ºæ¨ªç€å¹³é“ºç«–æ¡ Yåˆ™åä¹‹")]
     public int divisionX;
 
     public int divisionY;
 
-    [Header("XYÆ«ÒÆ Èç¹û×óÓÒ¶Ô³Æ¾ÍºÍ²Î¿¼Ò»ÑùÌî¸öÕıµÄÊı")]
+    [Header("XYåç§» å¦‚æœå·¦å³å¯¹ç§°å°±å’Œå‚è€ƒä¸€æ ·å¡«ä¸ªæ­£çš„æ•°")]
     public float deviationX;
 
     public float deviationY;
 
-    [Header("²Î¿¼×ø±ê")]
+    [Header("å‚è€ƒåæ ‡")]
     public Vector2 referenceX;
 
     public Vector2 referenceY;

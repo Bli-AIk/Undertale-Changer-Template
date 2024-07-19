@@ -8,7 +8,7 @@ using UnityEngine.UIElements;
 using UnityEditor;
 #endif
 /// <summary>
-/// Õ½¶·¿ò»æÖÆ
+/// æˆ˜æ–—æ¡†ç»˜åˆ¶
 /// </summary>
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
@@ -26,18 +26,18 @@ public class BoxDrawer : MonoBehaviour
 
     */
     public Vector3 localPosition;
-    [Header("±ğÓÃTransformµÄĞı×ª")]
-    public Quaternion rotation; // »ñÈ¡µ±Ç°ÎïÌåµÄĞı×ª
-    [Header("Ïß¿í")]
+    [Header("åˆ«ç”¨Transformçš„æ—‹è½¬")]
+    public Quaternion rotation; // è·å–å½“å‰ç‰©ä½“çš„æ—‹è½¬
+    [Header("çº¿å®½")]
     public float width = 0.15f;
     public List<Vector2> vertexPoints;
 
-    [Header("ÊÇ·ñÆôÓÃ±´Èû¶û²åÖµ")]
+    [Header("æ˜¯å¦å¯ç”¨è´å¡å°”æ’å€¼")]
     public bool isBessel;
     public List<Vector2> besselPoints;
     public int besselPointsNum = 16;
-    [Header("ÕæÕı×é¿òËùÓÃµÄµã")]
-    public List<Vector2> realPoints;//ÕæÕıµÄÇúÏß²åÖµ£¬²åÈëµãÊıÓÉbesselPointsNum¾ö¶¨
+    [Header("çœŸæ­£ç»„æ¡†æ‰€ç”¨çš„ç‚¹")]
+    public List<Vector2> realPoints;//çœŸæ­£çš„æ›²çº¿æ’å€¼ï¼Œæ’å…¥ç‚¹æ•°ç”±besselPointsNumå†³å®š
     public int besselInsertNum = 2;
 
     public MeshFilter meshFilter;
@@ -46,28 +46,28 @@ public class BoxDrawer : MonoBehaviour
     public EdgeCollider2D edgeCollider2D;
 
 
-    [Header("ÉèÖÃÆäÊÇ·ñÎªÌØÊâ¿ò")]
+    [Header("è®¾ç½®å…¶æ˜¯å¦ä¸ºç‰¹æ®Šæ¡†")]
     public BoxController.BoxType boxType;
 
-    [Header("µ±¸ÃBoxÎª¸¸¼¶Ê±£¬ÒÔ´Ë´æ´¢×Ó¼¶µÄÏà¹Ø¼ÆËãºóÊı¾İ")]
-    [Header("×Ó¼¶realPointsÖ®ºÍ")]
+    [Header("å½“è¯¥Boxä¸ºçˆ¶çº§æ—¶ï¼Œä»¥æ­¤å­˜å‚¨å­çº§çš„ç›¸å…³è®¡ç®—åæ•°æ®")]
+    [Header("å­çº§realPointsä¹‹å’Œ")]
     public List<Vector2> pointsSonSum;
 
-    [Header("½»µã")]
+    [Header("äº¤ç‚¹")]
     public List<Vector2> pointsCross;
-    [Header("·ÇÖØºÏµã")]
+    [Header("éé‡åˆç‚¹")]
     public List<Vector2> pointsOutCross;
-    [Header("ÖØºÏµã")]
-    public List<Vector2> pointsInCross;//½»µã/·ÇÖØºÏµã/ÖØºÏµã
+    [Header("é‡åˆç‚¹")]
+    public List<Vector2> pointsInCross;//äº¤ç‚¹/éé‡åˆç‚¹/é‡åˆç‚¹
 
-    public BoxDrawer parent;//´Ë¿òµÄ¸´ºÏ¸¸¼¶
-    public List<BoxDrawer> sonBoxDrawer;//´Ë¿òµÄ×Ó¼¶
+    public BoxDrawer parent;//æ­¤æ¡†çš„å¤åˆçˆ¶çº§
+    public List<BoxDrawer> sonBoxDrawer;//æ­¤æ¡†çš„å­çº§
 
 #if UNITY_EDITOR
-    [Header("¸øEditorÓÃµÄ")]
+    [Header("ç»™Editorç”¨çš„")]
     public int regularEdge;
     public float regularAngle;
-    [Header("ÊÇ·ñÕ¹Ê¾Mesh£¨ºìÏß£©")]
+    [Header("æ˜¯å¦å±•ç¤ºMeshï¼ˆçº¢çº¿ï¼‰")]
     public bool showMesh;
 #endif
 
@@ -142,7 +142,7 @@ public class BoxDrawer : MonoBehaviour
         }
         */
 
-        if (sonBoxDrawer.Count == 0 && transform.childCount == 0)//×÷Îª´¿×Ó¼¶
+        if (sonBoxDrawer.Count == 0 && transform.childCount == 0)//ä½œä¸ºçº¯å­çº§
         {
 
             if (isBessel)
@@ -151,12 +151,12 @@ public class BoxDrawer : MonoBehaviour
                 realPoints = vertexPoints;
 
         }
-        else if (sonBoxDrawer.Count == 2 && transform.childCount == 2)//×÷Îª¸¸¼¶
+        else if (sonBoxDrawer.Count == 2 && transform.childCount == 2)//ä½œä¸ºçˆ¶çº§
         {
 
             pointsSonSum.Clear();
 
-            //¸üĞÂÒ»ÏÂÁ½¸ö×Ó¼¶µÄÎ»ÖÃ×ø±ê
+            //æ›´æ–°ä¸€ä¸‹ä¸¤ä¸ªå­çº§çš„ä½ç½®åæ ‡
             sonBoxDrawer[0].transform.localPosition = sonBoxDrawer[0].localPosition - localPosition;
             sonBoxDrawer[1].transform.localPosition = sonBoxDrawer[1].localPosition - localPosition;
 
@@ -166,7 +166,7 @@ public class BoxDrawer : MonoBehaviour
             pointsSonSum = BoxController.instance.AddLists(realPointsBack0, realPointsBack1);
 
 
-            //¼ÆËãÈı´óList
+            //è®¡ç®—ä¸‰å¤§List
 
             pointsCross = BoxController.instance.FindIntersections(realPointsBack0, realPointsBack1);
 
@@ -175,7 +175,7 @@ public class BoxDrawer : MonoBehaviour
             pointsInCross = BoxController.instance.AddAndSubLists(realPointsBack0, realPointsBack1, pointsCross, pointsOutCross);
 
 
-            //ÖØºÏÊ±ºÏ²¢
+            //é‡åˆæ—¶åˆå¹¶
             if (!(pointsCross.Count == 0 && pointsInCross.Count == 0))
             {
                 /*
@@ -196,7 +196,7 @@ public class BoxDrawer : MonoBehaviour
 
                 realPoints = pointsFinal;
             }
-            else//²»ÖØºÏ¾Í½âÉ¢
+            else//ä¸é‡åˆå°±è§£æ•£
             {
                 ExitParent();
                 return;
@@ -209,17 +209,17 @@ public class BoxDrawer : MonoBehaviour
 
 
 
-        if (transform.parent == BoxController.instance.transform)//Ö»ÓĞ¸¸ÎïÌåÎªBoxControllerÊ±Éú³É¿ò
+        if (transform.parent == BoxController.instance.transform)//åªæœ‰çˆ¶ç‰©ä½“ä¸ºBoxControlleræ—¶ç”Ÿæˆæ¡†
         {
             transform.localPosition = localPosition;
 
-            if (boxType != BoxController.BoxType.Sub)//¼õ¿ò²»»æÖÆ
+            if (boxType != BoxController.BoxType.Sub)//å‡æ¡†ä¸ç»˜åˆ¶
                 SummonBox();
         }
         else transform.localPosition = localPosition - parent.localPosition;
     }
 
-    void ExitParent()//Àë¿ªµÄÄÇ¸ö µÄµù »á´¥·¢Õâ¸ö
+    void ExitParent()//ç¦»å¼€çš„é‚£ä¸ª çš„çˆ¹ ä¼šè§¦å‘è¿™ä¸ª
     {
         //Debug.Log(transform.childCount);
 
@@ -266,15 +266,15 @@ public class BoxDrawer : MonoBehaviour
         parent = null;
     }
 
-    // º¯ÊıÓÃÓÚ½«Á½¸öËÄÔªÊıÏà¼Ó
+    // å‡½æ•°ç”¨äºå°†ä¸¤ä¸ªå››å…ƒæ•°ç›¸åŠ 
     public Quaternion AddQuaternions(Quaternion quat1, Quaternion quat2)
     {
-        // ½«Á½¸öËÄÔªÊı×ª»»ÎªÅ·À­½Ç£¬²¢Ïà¼Ó
+        // å°†ä¸¤ä¸ªå››å…ƒæ•°è½¬æ¢ä¸ºæ¬§æ‹‰è§’ï¼Œå¹¶ç›¸åŠ 
         Vector3 euler1 = quat1.eulerAngles;
         Vector3 euler2 = quat2.eulerAngles;
         Vector3 summedEulerAngles = euler1 + euler2;
 
-        // ½«Ïà¼ÓºóµÄÅ·À­½Ç×ª»»ÎªËÄÔªÊı
+        // å°†ç›¸åŠ åçš„æ¬§æ‹‰è§’è½¬æ¢ä¸ºå››å…ƒæ•°
         return Quaternion.Euler(summedEulerAngles);
     }
 
@@ -287,7 +287,7 @@ public class BoxDrawer : MonoBehaviour
     }
     */
     /// <summary>
-    /// Í¨¹ıBoxControllerÉú³É¿ò
+    /// é€šè¿‡BoxControllerç”Ÿæˆæ¡†
     /// </summary>
     public List<Vector2> SummonBox()
     {
@@ -300,7 +300,7 @@ public class BoxDrawer : MonoBehaviour
     }
     
     /// <summary>
-    /// ¿ª¹Ø×é¼ş
+    /// å¼€å…³ç»„ä»¶
     /// </summary>
     public void IsOpenComponentsData(bool isOpen = false)
     {
@@ -318,7 +318,7 @@ public class BoxDrawer : MonoBehaviour
     }
 
     /// <summary>
-    /// »ñÈ¡×é¼ş
+    /// è·å–ç»„ä»¶
     /// </summary>
     /// 
     public void GetComponents(bool forceBesselFlash = false)
@@ -339,10 +339,10 @@ public class BoxDrawer : MonoBehaviour
 
     }
     /// <summary>
-    /// ²åÖµº¯Êı
+    /// æ’å€¼å‡½æ•°
     /// </summary>
-    /// <param name="points">Ô­Ê¼List</param>
-    /// <param name="interpolation">Æ½·ÖµãÊı</param>
+    /// <param name="points">åŸå§‹List</param>
+    /// <param name="interpolation">å¹³åˆ†ç‚¹æ•°</param>
     /// <returns></returns>
     List<Vector2> InterpolatePoints(List<Vector2> points, int interpolation)
     {
@@ -350,7 +350,7 @@ public class BoxDrawer : MonoBehaviour
 
         if (points.Count < 2)
         {
-            Debug.LogWarning("²åÖµĞèÒªÖÁÉÙÁ½¸öµã¡£");
+            Debug.LogWarning("æ’å€¼éœ€è¦è‡³å°‘ä¸¤ä¸ªç‚¹ã€‚");
             return interpolatedPoints;
         }
 
@@ -367,7 +367,7 @@ public class BoxDrawer : MonoBehaviour
             }
         }
 
-        // ²åÈëÊ×Î²Ö®¼äµÄ²åÖµ
+        // æ’å…¥é¦–å°¾ä¹‹é—´çš„æ’å€¼
         for (int j = 1; j <= interpolation; j++)
         {
             float t = (float)j / (float)(interpolation + 1);
@@ -378,23 +378,23 @@ public class BoxDrawer : MonoBehaviour
     }
 
     /// <summary>
-    /// Éú³É±´Èû¶ûÇúÏßÉÏµÄµã
+    /// ç”Ÿæˆè´å¡å°”æ›²çº¿ä¸Šçš„ç‚¹
     /// </summary>
     public static List<Vector2> GenerateBezierCurve(List<Vector2> points, int besselInsertNum, int numPoints)
     {
         List<Vector2> controlPoints = new List<Vector2>(points);
 
         controlPoints.Add(controlPoints[0]);
-        List<Vector2> bezierPoints = new List<Vector2>(); // ´´½¨Ò»¸öVector2ÁĞ±íÓÃÓÚ´æ´¢Éú³ÉµÄ±´Èû¶ûÇúÏßÉÏµÄµã
+        List<Vector2> bezierPoints = new List<Vector2>(); // åˆ›å»ºä¸€ä¸ªVector2åˆ—è¡¨ç”¨äºå­˜å‚¨ç”Ÿæˆçš„è´å¡å°”æ›²çº¿ä¸Šçš„ç‚¹
 
-        // ¼ì²é¿ØÖÆµãµÄÊıÁ¿£¬ÖÁÉÙĞèÒª4¸ö¿ØÖÆµã²ÅÄÜĞÎ³ÉÒ»¸öÁ¢·½±´Èû¶ûÇúÏß
+        // æ£€æŸ¥æ§åˆ¶ç‚¹çš„æ•°é‡ï¼Œè‡³å°‘éœ€è¦4ä¸ªæ§åˆ¶ç‚¹æ‰èƒ½å½¢æˆä¸€ä¸ªç«‹æ–¹è´å¡å°”æ›²çº¿
         if (controlPoints.Count < 4)
         {
-            DebugLogger.Log("ÖÁÉÙĞèÒª4¸ö¿ØÖÆµã²ÅÄÜĞÎ³ÉÁ¢·½±´Èû¶ûÇúÏß¡£", DebugLogger.Type.err); // ÔÚ¿ØÖÆÌ¨ÏÔÊ¾´íÎóÏûÏ¢
-            return bezierPoints; // ·µ»Ø¿ÕµÄ±´Èû¶ûµãÁĞ±í
+            DebugLogger.Log("è‡³å°‘éœ€è¦4ä¸ªæ§åˆ¶ç‚¹æ‰èƒ½å½¢æˆç«‹æ–¹è´å¡å°”æ›²çº¿ã€‚", DebugLogger.Type.err); // åœ¨æ§åˆ¶å°æ˜¾ç¤ºé”™è¯¯æ¶ˆæ¯
+            return bezierPoints; // è¿”å›ç©ºçš„è´å¡å°”ç‚¹åˆ—è¡¨
         }
 
-        // ±éÀú¿ØÖÆµãÁĞ±í£¬Ã¿´ÎÈ¡³öbesselInsertNum + 1¸öµãÉú³É±´Èû¶ûÇúÏß¶Î
+        // éå†æ§åˆ¶ç‚¹åˆ—è¡¨ï¼Œæ¯æ¬¡å–å‡ºbesselInsertNum + 1ä¸ªç‚¹ç”Ÿæˆè´å¡å°”æ›²çº¿æ®µ
         List<Vector2> pointList = new List<Vector2>();
         for (int i = 0; i < controlPoints.Count - besselInsertNum; i += besselInsertNum + 1)
         {
@@ -402,17 +402,17 @@ public class BoxDrawer : MonoBehaviour
             {
                 pointList.Add(controlPoints[i + k]);
             }
-            // ¸ù¾İËùĞèµãµÄÊıÁ¿ÔÚµ±Ç°ÇúÏß¶ÎÉÏÉú³Éµã
+            // æ ¹æ®æ‰€éœ€ç‚¹çš„æ•°é‡åœ¨å½“å‰æ›²çº¿æ®µä¸Šç”Ÿæˆç‚¹
             for (int j = 0; j <= numPoints; j++)
             {
-                float t = j / (float)numPoints; // ¼ÆËã²ÎÊıtµÄÖµ£¬ÓÃÓÚ²åÖµ
-                Vector2 point = CalculateNthDegreeBezierPoint(pointList, t); // µ÷ÓÃ¼ÆËã±´Èû¶ûµãµÄº¯Êı
-                bezierPoints.Add(point); // ½«¼ÆËãµÃµ½µÄµãÌí¼Óµ½±´Èû¶ûµãÁĞ±íÖĞ
+                float t = j / (float)numPoints; // è®¡ç®—å‚æ•°tçš„å€¼ï¼Œç”¨äºæ’å€¼
+                Vector2 point = CalculateNthDegreeBezierPoint(pointList, t); // è°ƒç”¨è®¡ç®—è´å¡å°”ç‚¹çš„å‡½æ•°
+                bezierPoints.Add(point); // å°†è®¡ç®—å¾—åˆ°çš„ç‚¹æ·»åŠ åˆ°è´å¡å°”ç‚¹åˆ—è¡¨ä¸­
             }
             pointList.Clear();
         }
 
-        return bezierPoints; // ·µ»ØÉú³ÉµÄ±´Èû¶ûµãÁĞ±í
+        return bezierPoints; // è¿”å›ç”Ÿæˆçš„è´å¡å°”ç‚¹åˆ—è¡¨
     }
 
     private static Vector2 CalculateNthDegreeBezierPoint(List<Vector2> controlPoints, float t)
@@ -431,7 +431,7 @@ public class BoxDrawer : MonoBehaviour
     }
 
     /// <summary>
-    /// ¼ÆËã×éºÏÊı C(n, k)
+    /// è®¡ç®—ç»„åˆæ•° C(n, k)
     /// </summary>
     private static float BinomialCoefficient(int n, int k)
     {
@@ -457,7 +457,7 @@ public class BoxDrawer : MonoBehaviour
         All
     };
 
-    [Header("Õ¹Ê¾ÄÄĞ©µãµÄ×ø±ê")]
+    [Header("å±•ç¤ºå“ªäº›ç‚¹çš„åæ ‡")]
     public ShowGizmosPoint showGizmosPoint;
 
     public void OnDrawGizmos()
@@ -551,19 +551,19 @@ public class SceneExtEditor : Editor
     {
         BoxDrawer example = (BoxDrawer)target;
 
-        base.OnInspectorGUI(); //»æÖÆÒ»´ÎGUI¡£
-        if (GUILayout.Button("ÇĞ·Ö(²»Ç¿ÖÆË¢ĞÂ)"))
+        base.OnInspectorGUI(); //ç»˜åˆ¶ä¸€æ¬¡GUIã€‚
+        if (GUILayout.Button("åˆ‡åˆ†(ä¸å¼ºåˆ¶åˆ·æ–°)"))
         {
             example.GetComponents(false);
             example.Update();
         }
-        if (GUILayout.Button("ÇĞ·Ö(Ç¿ÖÆË¢ĞÂ)"))
+        if (GUILayout.Button("åˆ‡åˆ†(å¼ºåˆ¶åˆ·æ–°)"))
         {
             example.GetComponents(true);
             example.Update();
         }
 
-        if (GUILayout.Button("Éú³É±ê×¼Õ½¶·¿ò"))
+        if (GUILayout.Button("ç”Ÿæˆæ ‡å‡†æˆ˜æ–—æ¡†"))
         {
             example.vertexPoints = new List<Vector2>
             {
@@ -576,7 +576,7 @@ public class SceneExtEditor : Editor
             example.Update();
         }
 
-        if (GUILayout.Button("Éú³ÉÕı·½Õ½¶·¿ò"))
+        if (GUILayout.Button("ç”Ÿæˆæ­£æ–¹æˆ˜æ–—æ¡†"))
         {
             example.vertexPoints = new List<Vector2>
             {
@@ -588,7 +588,7 @@ public class SceneExtEditor : Editor
             example.GetComponents(true);
             example.Update();
         }
-        if (GUILayout.Button("Éú³ÉÕı¶à±ßĞÎ"))
+        if (GUILayout.Button("ç”Ÿæˆæ­£å¤šè¾¹å½¢"))
         {
             example.vertexPoints.Clear();
             int sides = 3;

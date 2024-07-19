@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Audio;
 
 /// <summary>
-/// »ùÓÚ¶ÔÏó³Ø ¿ØÖÆÒôÆµ
+/// åŸºäºå¯¹è±¡æ±  æ§åˆ¶éŸ³é¢‘
 /// </summary>
 public class AudioController : ObjectPool
 {
@@ -36,7 +36,7 @@ public class AudioController : ObjectPool
         fx.GetComponent<AudioSource>().volume = volume;
         fx.GetComponent<AudioSource>().pitch = pitch;
         fx.GetComponent<AudioSource>().outputAudioMixerGroup = audioMixerGroup;
-        //AudioPlayerÊÇ×ÖÀà£¡£¡²»ÊÇunity×Ô´øµÄ
+        //AudioPlayeræ˜¯å­—ç±»ï¼ï¼ä¸æ˜¯unityè‡ªå¸¦çš„
         fx.GetComponent<AudioPlayer>().Playing(list);
     }
     */
@@ -69,7 +69,7 @@ public class AudioController : ObjectPool
         }
 
         fx.GetComponent<AudioSource>().outputAudioMixerGroup = audioMixerGroup;
-        //AudioPlayerÊÇ×ÖÀà£¡£¡²»ÊÇunity×Ô´øµÄ
+        //AudioPlayeræ˜¯å­—ç±»ï¼ï¼ä¸æ˜¯unityè‡ªå¸¦çš„
         fx.GetComponent<AudioPlayer>().Playing(list[fxNum]);
     }
 

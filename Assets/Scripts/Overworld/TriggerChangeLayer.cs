@@ -6,7 +6,7 @@ public class TriggerChangeLayer : MonoBehaviour
     private SpriteRenderer spriteRenderer, spriteRendererP;
     public int upLayer = 5, downLayer = -2;
 
-    [Header("¸úËæ¸¸¸¸ÎïÌåµÄ²ã¼¶±ä»¯¶ø¼ÓÉÏ1")]
+    [Header("è·Ÿéšçˆ¶çˆ¶ç‰©ä½“çš„å±‚çº§å˜åŒ–è€ŒåŠ ä¸Š1")]
     public bool followParentPlus;
 
     private void Start()

@@ -3,24 +3,24 @@ using TMPro;
 using UnityEngine;
 
 /// <summary>
-/// ¿ØÖÆTarget
+/// æ§åˆ¶Target
 /// </summary>
 public class TargetController : MonoBehaviour
 {
     private Animator anim;
     private bool pressZ;
 
-    [Header("¹¥»÷Ôì³ÉµÄÉËº¦")]
+    [Header("æ”»å‡»é€ æˆçš„ä¼¤å®³")]
     public int hitDamage;
 
     private TextMeshPro hitUI, hitUIb;
     private GameObject bar;
     public GameObject hpBar;
 
-    [Header("¸¸¼¶´«Èë")]
+    [Header("çˆ¶çº§ä¼ å…¥")]
     public int select;
 
-    [Header("¸¸¼¶´«Èë Òª»÷´òµÄ¹ÖÎï")]
+    [Header("çˆ¶çº§ä¼ å…¥ è¦å‡»æ‰“çš„æ€ªç‰©")]
     public EnemiesController hitMonster;
 
     private void Start()
@@ -59,18 +59,18 @@ public class TargetController : MonoBehaviour
     }
 
     /// <summary>
-    /// ¹¥»÷µĞÈËÊ±½øĞĞµÄ¼ÆËã
+    /// æ”»å‡»æ•Œäººæ—¶è¿›è¡Œçš„è®¡ç®—
     /// </summary>
     private void Hit()
     {
         if (Mathf.Abs(bar.transform.localPosition.x) > 0.8f)
             hitDamage = (int)
-                (2.2f / 13.2f * (14 - Mathf.Abs(bar.transform.localPosition.x))//×¼È·¶ÈÏµÊı
+                (2.2f / 13.2f * (14 - Mathf.Abs(bar.transform.localPosition.x))//å‡†ç¡®åº¦ç³»æ•°
                 * (MainControl.instance.PlayerControl.atk + MainControl.instance.PlayerControl.wearAtk
                 - MainControl.instance.BattleControl.enemiesDEF[select] + Random.Range(0, 2)));
         else
             hitDamage = (int)
-                 (2.2f / 13.2f * (14 - 0.8f)//×¼È·¶ÈÏµÊı
+                 (2.2f / 13.2f * (14 - 0.8f)//å‡†ç¡®åº¦ç³»æ•°
                  * (MainControl.instance.PlayerControl.atk + MainControl.instance.PlayerControl.wearAtk
                  - MainControl.instance.BattleControl.enemiesDEF[select] + Random.Range(0, 2)));
 
@@ -88,7 +88,7 @@ public class TargetController : MonoBehaviour
         }
     }
 
-    //ÒÔÏÂ½ÔÓÃÓÚanim
+    //ä»¥ä¸‹çš†ç”¨äºanim
     private void HitAnim()
     {
         hitMonster.anim.SetBool("Hit", true);

@@ -4,7 +4,7 @@ public class EnemiesHpLineController : MonoBehaviour
 {
     private SpriteRenderer greenSprite;
 
-    [Header("0¿ª")]
+    [Header("0Â¿Âª")]
     public int num;
 
     private void Start()

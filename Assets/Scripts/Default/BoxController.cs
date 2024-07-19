@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using Clipper2Lib;
 /// <summary>
-/// Õ½¶·¿ò×Ü¿Ø
+/// æˆ˜æ–—æ¡†æ€»æ§
 /// </summary>
 public class BoxController : ObjectPool
 {
     public static BoxController instance;
-    [Header("Ïß¿í")]
+    [Header("çº¿å®½")]
     public float width = 0.15f;
 
-    [Header("ÆğÊ¼Ê±Éú³É¿ò£¬Ãû×ÖÎª¿Õ²»Éú³É")]
+    [Header("èµ·å§‹æ—¶ç”Ÿæˆæ¡†ï¼Œåå­—ä¸ºç©ºä¸ç”Ÿæˆ")]
     public string startSummonName;
     public Vector3 startSummonPos;
 
 
     public List<BoxDrawer> boxes = new List<BoxDrawer>();
 
-    public List<Vector2> pointsCrossSave, pointsOutCrossSave, pointsInCrossSave;//½»µã/·ÇÖØºÏµã/ÖØºÏµã
+    public List<Vector2> pointsCrossSave, pointsOutCrossSave, pointsInCrossSave;//äº¤ç‚¹/éé‡åˆç‚¹/é‡åˆç‚¹
 
     public enum BoxType
     {
@@ -67,7 +67,7 @@ public class BoxController : ObjectPool
             start.localPosition = startSummonPos;
         }
 
-        /*²âÊÔÊ¹ÓÃ
+        /*æµ‹è¯•ä½¿ç”¨
         GetFromThePool();
         BoxDrawer a = GetFromThePool();
         a.localPosition += Vector3.right + Vector3.up;
@@ -104,11 +104,11 @@ public class BoxController : ObjectPool
                 BoxDrawer box1 = boxes[j];
 
                 List<Vector2> realPointsBack0, realPointsBack1;
-                //»ñÈ¡Á½¸öBoxµÄrealPoints
+                //è·å–ä¸¤ä¸ªBoxçš„realPoints
                 realPointsBack0 = box0.GetRealPoints();
                 realPointsBack1 = box1.GetRealPoints();
 
-                //¼ÆËãÈı´óList
+                //è®¡ç®—ä¸‰å¤§List
 
                 pointsCrossSave = FindIntersections(realPointsBack0, realPointsBack1);
 
@@ -118,7 +118,7 @@ public class BoxController : ObjectPool
 
 
 
-                //Á½¸ö ÌØÊâ¿ò ÖØºÏÊ±ºÏ²¢£¬Ê£ÏÂµÄ½»¸ø¸¸BoxDrawer¡£
+                //ä¸¤ä¸ª ç‰¹æ®Šæ¡† é‡åˆæ—¶åˆå¹¶ï¼Œå‰©ä¸‹çš„äº¤ç»™çˆ¶BoxDrawerã€‚
                 if (!(pointsCrossSave.Count == 0 && pointsInCrossSave.Count == 0))
                 {
                     if (!(box0.boxType == BoxType.None || box1.boxType == BoxType.None) && !(box0.boxType == BoxType.Sub && box1.boxType == BoxType.Sub))
@@ -143,12 +143,12 @@ public class BoxController : ObjectPool
 
                         boxParent.sonBoxDrawer = new List<BoxDrawer> { box0, box1 };
 
-                        //ÏÈÉ¾ÁË£¬ÔÚ¸¸BoxDrawerÄÚ¼Ó»ØÀ´
+                        //å…ˆåˆ äº†ï¼Œåœ¨çˆ¶BoxDrawerå†…åŠ å›æ¥
                         boxes.Remove(box0);
                         boxes.Remove(box1);
 
                         /*
-                        //ÏÈÉú³ÉÒ»ÏÂ
+                        //å…ˆç”Ÿæˆä¸€ä¸‹
                         List<Vector2> points;
                         points = AddLists(realPointsBack0, realPointsBack1);
                         points = AddLists(points, pointsCrossSave);
@@ -219,7 +219,7 @@ public class BoxController : ObjectPool
     }
 
     /// <summary>
-    /// Éú³É¿ò
+    /// ç”Ÿæˆæ¡†
     /// </summary>
     public List<Vector2> SummonBox(List<Vector2> list, Quaternion rotation, Transform transform, float width = 0.15f, LineRenderer lineRenderer = null, EdgeCollider2D edgeCollider2D = null, MeshFilter meshFilter = null)
     {
@@ -263,7 +263,7 @@ public class BoxController : ObjectPool
         }
 
         List<Vector2> polygon = new List<Vector2>(list);
-        // ½«Ã¿¸öµãÏÈĞı×ª£¬È»ºóÔÙ¼ÓÉÏÎïÌåµÄÎ»ÖÃ
+        // å°†æ¯ä¸ªç‚¹å…ˆæ—‹è½¬ï¼Œç„¶åå†åŠ ä¸Šç‰©ä½“çš„ä½ç½®
         for (int i = 0; i < polygon.Count; i++)
         {
             polygon[i] = rotation * polygon[i];
@@ -278,7 +278,7 @@ public class BoxController : ObjectPool
             lineRenderer.SetPosition(i, (Vector3)polygon[i] + transform.position);
         }
 
-        meshFilter.mesh = GenerateMesh(polygon.ToArray()); // ×îºËĞÄ´úÂë£º¹¹½¨Mesh£¡£¡
+        meshFilter.mesh = GenerateMesh(polygon.ToArray()); // æœ€æ ¸å¿ƒä»£ç ï¼šæ„å»ºMeshï¼ï¼
 
         edgeCollider2D.SetPoints(AddLists(polygon, new List<Vector2>() { polygon[0] }));
         edgeCollider2D.edgeRadius = width / 2;
@@ -286,14 +286,14 @@ public class BoxController : ObjectPool
         return polygon;
     }
     /// <summary>
-    /// ¼ÆËã×ø±ê»ñÈ¡RealPoints
+    /// è®¡ç®—åæ ‡è·å–RealPoints
     /// </summary>
     public List<Vector2> GetRealPoints(List<Vector2> list, Quaternion rotation, Transform transform, bool isLocal = true)
     {
         Vector3 local = isLocal ? transform.localPosition : transform.position;
 
         List<Vector2> polygon = new List<Vector2>(list);
-        // ½«Ã¿¸öµãÏÈĞı×ª£¬È»ºóÔÙ¼ÓÉÏÎïÌåµÄÎ»ÖÃ
+        // å°†æ¯ä¸ªç‚¹å…ˆæ—‹è½¬ï¼Œç„¶åå†åŠ ä¸Šç‰©ä½“çš„ä½ç½®
         for (int i = 0; i < polygon.Count; i++)
         {
             polygon[i] = rotation * polygon[i] + local;
@@ -305,7 +305,7 @@ public class BoxController : ObjectPool
     }
     /*
     /// <summary>
-    /// ÖØÖÃ¿ò
+    /// é‡ç½®æ¡†
     /// </summary>
     public void ResetBox(LineRenderer lineRenderer = null, MeshFilter meshFilter = null)
     {
@@ -332,29 +332,29 @@ public class BoxController : ObjectPool
     }
     */
     /// <summary>
-    /// ¹¹ÔìMesh
+    /// æ„é€ Mesh
     /// </summary>
     public Mesh GenerateMesh(Vector2[] vertexPoints)
     {
 
-        // ½«VectorÊı×é×ª»»ÎªLibTessDotNetËùĞèµÄContourVertexÊı×é
+        // å°†Vectoræ•°ç»„è½¬æ¢ä¸ºLibTessDotNetæ‰€éœ€çš„ContourVertexæ•°ç»„
         ContourVertex[] contourVertices = new ContourVertex[vertexPoints.Length];
         for (int i = 0; i < vertexPoints.Length; i++)
         {
             contourVertices[i].Position = new Vec3 { X = vertexPoints[i].x, Y = vertexPoints[i].y, Z = 0 };
         }
 
-        // ´´½¨Tess¶ÔÏó²¢Ìí¼ÓÂÖÀª
+        // åˆ›å»ºTesså¯¹è±¡å¹¶æ·»åŠ è½®å»“
         Tess tess = new Tess();
         tess.AddContour(contourVertices, ContourOrientation.Original);
 
-        // ½øĞĞÈı½ÇÆÊ·Ö
+        // è¿›è¡Œä¸‰è§’å‰–åˆ†
         tess.Tessellate(WindingRule.NonZero, ElementType.Polygons, 3);
 
-        // ´´½¨Mesh¶ÔÏó
+        // åˆ›å»ºMeshå¯¹è±¡
         Mesh mesh = new Mesh();
 
-        // ½«Tess½á¹û×ª»»ÎªUnity Mesh¸ñÊ½
+        // å°†Tessç»“æœè½¬æ¢ä¸ºUnity Meshæ ¼å¼
         Vector3[] vertices = new Vector3[tess.Vertices.Length];
         for (int i = 0; i < tess.Vertices.Length; i++)
         {
@@ -367,16 +367,16 @@ public class BoxController : ObjectPool
             triangles[i] = tess.Elements[i];
         }
 
-        // Ó¦ÓÃ¶¥µãºÍÈı½ÇĞÎµ½mesh
+        // åº”ç”¨é¡¶ç‚¹å’Œä¸‰è§’å½¢åˆ°mesh
         mesh.vertices = vertices;
         mesh.triangles = triangles;
 
-        // ÎªmeshÉèÖÃUV×ø±ê
+        // ä¸ºmeshè®¾ç½®UVåæ ‡
         Vector2[] uvs = new Vector2[vertices.Length];
         for (int i = 0; i < vertices.Length; i++)
         {
-            // ÕâÀïÊÇÒ»¸ö¼òµ¥µÄÓ³Éä£¬½«¶¥µã×ø±êÓ³Éäµ½UV¿Õ¼ä
-            // Í¨³££¬ÄãĞèÒª¸ù¾İ¾ßÌåÇé¿öÀ´µ÷ÕûÕâ²¿·Ö´úÂë
+            // è¿™é‡Œæ˜¯ä¸€ä¸ªç®€å•çš„æ˜ å°„ï¼Œå°†é¡¶ç‚¹åæ ‡æ˜ å°„åˆ°UVç©ºé—´
+            // é€šå¸¸ï¼Œä½ éœ€è¦æ ¹æ®å…·ä½“æƒ…å†µæ¥è°ƒæ•´è¿™éƒ¨åˆ†ä»£ç 
 
 
             uvs[i] = new Vector2(vertices[i].x, vertices[i].y);
@@ -385,26 +385,26 @@ public class BoxController : ObjectPool
         }
         mesh.uv = uvs;
 
-        // ÎªÁË¸üºÃµÄäÖÈ¾Ğ§¹û£¬¿ÉÒÔ¼ÆËã·¨ÏßºÍ±ß½ç
+        // ä¸ºäº†æ›´å¥½çš„æ¸²æŸ“æ•ˆæœï¼Œå¯ä»¥è®¡ç®—æ³•çº¿å’Œè¾¹ç•Œ
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
 
-        // ½«meshÓ¦ÓÃµ½GameObject
+        // å°†meshåº”ç”¨åˆ°GameObject
         return mesh;
     }
     /// <summary>
-    /// ÌŞ³ıÖØ¸´Ïî
+    /// å‰”é™¤é‡å¤é¡¹
     /// </summary>
     public List<Vector2> RemoveDuplicates(List<Vector2> originalList)
     {
-        // Ê¹ÓÃHashSet<Vector2>À´´æ´¢ÒÑ¾­Óöµ½µÄVector2ÔªËØ£¬ÒòÎªHashSet×Ô¶¯È¥ÖØ
+        // ä½¿ç”¨HashSet<Vector2>æ¥å­˜å‚¨å·²ç»é‡åˆ°çš„Vector2å…ƒç´ ï¼Œå› ä¸ºHashSetè‡ªåŠ¨å»é‡
         HashSet<Vector2> seen = new HashSet<Vector2>();
-        // ÓÃÀ´´æ´¢È¥ÖØºóµÄÁĞ±í
+        // ç”¨æ¥å­˜å‚¨å»é‡åçš„åˆ—è¡¨
         List<Vector2> resultList = new List<Vector2>();
 
         foreach (var item in originalList)
         {
-            // Èç¹ûHashSetÖĞÌí¼Ó³É¹¦£¨¼´Ö®Ç°Î´Óöµ½¹ıÕâ¸öÔªËØ£©£¬Ôò½«ÆäÌí¼Óµ½½á¹ûÁĞ±íÖĞ
+            // å¦‚æœHashSetä¸­æ·»åŠ æˆåŠŸï¼ˆå³ä¹‹å‰æœªé‡åˆ°è¿‡è¿™ä¸ªå…ƒç´ ï¼‰ï¼Œåˆ™å°†å…¶æ·»åŠ åˆ°ç»“æœåˆ—è¡¨ä¸­
             if (seen.Add(item))
             {
                 resultList.Add(item);
@@ -418,7 +418,7 @@ public class BoxController : ObjectPool
 
 
     /// <summary>
-    /// Ö÷º¯Êı£¬¼ÆËãÁ½×éÏß¶ÎµÄËùÓĞ½»µã
+    /// ä¸»å‡½æ•°ï¼Œè®¡ç®—ä¸¤ç»„çº¿æ®µçš„æ‰€æœ‰äº¤ç‚¹
     /// </summary>
     public List<Vector2> FindIntersections(List<Vector2> poly1, List<Vector2> poly2)
     {
@@ -427,12 +427,12 @@ public class BoxController : ObjectPool
         for (int i = 0; i < poly1.Count; i++)
         {
             Vector2 a = poly1[i];
-            Vector2 b = poly1[(i + 1) % poly1.Count]; // Ñ­»·ÁĞ±í
+            Vector2 b = poly1[(i + 1) % poly1.Count]; // å¾ªç¯åˆ—è¡¨
 
             for (int j = 0; j < poly2.Count; j++)
             {
                 Vector2 c = poly2[j];
-                Vector2 d = poly2[(j + 1) % poly2.Count]; // Ñ­»·ÁĞ±í
+                Vector2 d = poly2[(j + 1) % poly2.Count]; // å¾ªç¯åˆ—è¡¨
 
                 if (DoLineSegmentsIntersect(a, b, c, d))
                 {
@@ -448,7 +448,7 @@ public class BoxController : ObjectPool
         return intersections;
     }
     /// <summary>
-    ///  ¼ÆËãÏòÁ¿²æ³Ë
+    ///  è®¡ç®—å‘é‡å‰ä¹˜
     /// </summary>
     private static float CrossSave(Vector2 a, Vector2 b, Vector2 c)
     {
@@ -456,7 +456,7 @@ public class BoxController : ObjectPool
     }
 
     /// <summary>
-    /// ¼ì²éµãCÊÇ·ñÔÚABÏß¶ÎÉÏ
+    /// æ£€æŸ¥ç‚¹Cæ˜¯å¦åœ¨ABçº¿æ®µä¸Š
     /// </summary>
     private static bool IsPointOnLineSegment(Vector2 a, Vector2 b, Vector2 c)
     {
@@ -464,7 +464,7 @@ public class BoxController : ObjectPool
     }
 
     /// <summary>
-    /// ¼ì²éÏß¶ÎABºÍCDÊÇ·ñÏà½»
+    /// æ£€æŸ¥çº¿æ®µABå’ŒCDæ˜¯å¦ç›¸äº¤
     /// </summary>
     public static bool DoLineSegmentsIntersect(Vector2 a, Vector2 b, Vector2 c, Vector2 d)
     {
@@ -478,30 +478,30 @@ public class BoxController : ObjectPool
     }
 
     /// <summary>
-    /// ¼ÆËãÁ½Ïß¶ÎABºÍCDµÄ½»µã
+    /// è®¡ç®—ä¸¤çº¿æ®µABå’ŒCDçš„äº¤ç‚¹
     /// </summary>
     public static Vector2? CalculateIntersectionPoint(Vector2 a, Vector2 b, Vector2 c, Vector2 d)
     {
         if (!DoLineSegmentsIntersect(a, b, c, d))
             return null;
 
-        // ¼ÆËãÏßĞÔ·½³ÌµÄ²ÎÊı
+        // è®¡ç®—çº¿æ€§æ–¹ç¨‹çš„å‚æ•°
         float denominator = (b.x - a.x) * (d.y - c.y) - (b.y - a.y) * (d.x - c.x);
         if (denominator == 0)
-            return null; // Ïß¶ÎÆ½ĞĞ»ò¹²Ïß
+            return null; // çº¿æ®µå¹³è¡Œæˆ–å…±çº¿
 
         float u = ((c.x - a.x) * (d.y - c.y) - (c.y - a.y) * (d.x - c.x)) / denominator;
         return new Vector2(a.x + u * (b.x - a.x), a.y + u * (b.y - a.y));
     }
     /// <summary>
-    /// ¼ÆËã·ÇÖØºÏµã
+    /// è®¡ç®—éé‡åˆç‚¹
     /// </summary>
     public List<Vector2> ProcessPolygons(List<Vector2> box1, List<Vector2> box2, List<Vector2> intersection)
     {
         List<Vector2> filteredBox1 = RemovePointsInsideOtherPolygon(box1, box2);
         List<Vector2> filteredBox2 = RemovePointsInsideOtherPolygon(box2, box1);
 
-        // ºÏ²¢ÌŞ³ıºóµÄÁĞ±í
+        // åˆå¹¶å‰”é™¤åçš„åˆ—è¡¨
         List<Vector2> result = new List<Vector2>();
         result.AddRange(filteredBox1);
         result.AddRange(filteredBox2);
@@ -541,7 +541,7 @@ public class BoxController : ObjectPool
 
     /*
 /// <summary>
-/// ÒÔinitialPointÎªÔ²ĞÄ£¬Èô¸É³¤¶ÈÎª°ë¾¶£¬Ë³Ê±ÕëĞı×ª£¬ÅÅĞòÁĞ±í¸÷µã¡£
+/// ä»¥initialPointä¸ºåœ†å¿ƒï¼Œè‹¥å¹²é•¿åº¦ä¸ºåŠå¾„ï¼Œé¡ºæ—¶é’ˆæ—‹è½¬ï¼Œæ’åºåˆ—è¡¨å„ç‚¹ã€‚
 /// </summary>
 public List<Vector2> SortPoints(Vector2 initialPoint, List<Vector2> points)
 {
@@ -552,7 +552,7 @@ public List<Vector2> SortPoints(Vector2 initialPoint, List<Vector2> points)
 }
 */
     /// <summary>
-    /// Ç°ÃæÁ½¸öÏà¼Ó£¬¼õÈ¥ºóÃæÁ½¸ö
+    /// å‰é¢ä¸¤ä¸ªç›¸åŠ ï¼Œå‡å»åé¢ä¸¤ä¸ª
     /// </summary>
     public List<Vector2> AddAndSubLists(List<Vector2> list1, List<Vector2> list2, List<Vector2> list3, List<Vector2> list4)
     {
@@ -563,7 +563,7 @@ public List<Vector2> SortPoints(Vector2 initialPoint, List<Vector2> points)
         return subtractedResult;
     }
     /// <summary>
-    /// °ÑListÏà¼Ó
+    /// æŠŠListç›¸åŠ 
     /// </summary>
     public List<T> AddLists<T>(List<T> list1, List<T> list2)
     {
@@ -572,7 +572,7 @@ public List<Vector2> SortPoints(Vector2 initialPoint, List<Vector2> points)
         return concatenatedList;
     }
     /// <summary>
-    /// °ÑListÏà¼õ
+    /// æŠŠListç›¸å‡
     /// </summary>
     public List<T> SubLists<T>(List<T> sourceList, List<T> subtractedList)
     {
@@ -586,7 +586,7 @@ public List<Vector2> SortPoints(Vector2 initialPoint, List<Vector2> points)
         return result;
     }
 
-    //Clipper2 API Ïà¹Ø
+    //Clipper2 API ç›¸å…³
     public PathsD ConvertVectorToPath(List<Vector2> vector)
     {
         List<double> doubles = new List<double>();
@@ -619,7 +619,7 @@ public List<Vector2> SortPoints(Vector2 initialPoint, List<Vector2> points)
 
 
     /// <summary>
-    /// È¡½»¼¯
+    /// å–äº¤é›†
     /// </summary>
     public List<Vector2> GetUnion(List<Vector2> a, List<Vector2> b)
     {

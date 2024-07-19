@@ -11,34 +11,34 @@ using static Unity.Burst.Intrinsics.X86.Avx;
 using Random = UnityEngine.Random;
 
 /// <summary>
-/// ´ò×Ö»úÏµÍ³
+/// æ‰“å­—æœºç³»ç»Ÿ
 /// </summary>
 public class TypeWritter : MonoBehaviour
 {
     public string originString, endString, passTextString;
-    public bool isRunning;//´ò×Ö»úÊÇ·ñÔÚÔËĞĞ
-    public bool isTyping;//ÊÇ·ñÔÚ ´ò³ö×Ö·û
+    public bool isRunning;//æ‰“å­—æœºæ˜¯å¦åœ¨è¿è¡Œ
+    public bool isTyping;//æ˜¯å¦åœ¨ æ‰“å‡ºå­—ç¬¦
     public int hpIn;
     public int hpSave;
     public bool canNotX;
     public bool pressX;
-    public float clockTime;//Êµ¼ÊÉÏ¼ÆÊı
+    public float clockTime;//å®é™…ä¸Šè®¡æ•°
     public bool isStop;
-    public int fx;//ÒôĞ§
+    public int fx;//éŸ³æ•ˆ
     public bool fxRandomPitch;
 
-    [Header("´ò×ÖËÙ¶ÈÓë¼ì²âÍ£¶Ù×Ö·ûºóµÄ´ò×ÖËÙ¶È")]
+    [Header("æ‰“å­—é€Ÿåº¦ä¸æ£€æµ‹åœé¡¿å­—ç¬¦åçš„æ‰“å­—é€Ÿåº¦")]
     public float speed = 0.075f, speedSlow = 0.15f;
 
-    [Header("´ò×Öºó¶àÉÙÃë¿ÉÒÔ°´XÌø¹ı£¬0Îª²»ÄÜÌø")]
-    public float clock = 0.01f;//ÉèÖÃ
+    [Header("æ‰“å­—åå¤šå°‘ç§’å¯ä»¥æŒ‰Xè·³è¿‡ï¼Œ0ä¸ºä¸èƒ½è·³")]
+    public float clock = 0.01f;//è®¾ç½®
 
     public bool passText;
 
 
     public SpriteChanger spriteChanger;
 
-    [Header("ÊÊÅäOW¿ò")]
+    [Header("é€‚é…OWæ¡†")]
     public bool isOverworld;
 
     private TalkUIPositionChanger talkUIPositionChanger;
@@ -47,13 +47,13 @@ public class TypeWritter : MonoBehaviour
     public float volume = 0.5f;
     public AudioMixerGroup audioMixerGroup;
 
-    [Header("×ÖÌå")]
+    [Header("å­—ä½“")]
     public int useFont;
 
-    [Header("´ò×Ö¶¯Ğ§")]
+    [Header("æ‰“å­—åŠ¨æ•ˆ")]
     public OverworldControl.DynamicType dynamicType;
 
-    [Header("×ÜÓĞÄÇÃ´Ò»Ğ©Çé¿öĞèÒªÇ¿Ó²ÊÖ¶Î£¨°ÎÇ¹")]
+    [Header("æ€»æœ‰é‚£ä¹ˆä¸€äº›æƒ…å†µéœ€è¦å¼ºç¡¬æ‰‹æ®µï¼ˆæ‹”æª")]
     public bool forceReturn = false;
 
     private TMP_Text tmp_Text;
@@ -67,16 +67,16 @@ public class TypeWritter : MonoBehaviour
 
     public enum TypeMode
     {
-        Normal,//Õı³£µÄ´ò×Ö»ú
-        CantZX,//²»ÄÜ°´ZXµÄ´ò×Ö»ú£¬Ê¹ÓÃ¸»ÎÄ±¾½øĞĞ¿ØÖÆ¡£
+        Normal,//æ­£å¸¸çš„æ‰“å­—æœº
+        CantZX,//ä¸èƒ½æŒ‰ZXçš„æ‰“å­—æœºï¼Œä½¿ç”¨å¯Œæ–‡æœ¬è¿›è¡Œæ§åˆ¶ã€‚
     }
 
     private TypeMode typeMode = TypeMode.Normal;
 
     /// <summary>
-    /// ¿ªÆô´ò×Ö»ú¡£Èô´ò×ÖÕıÔÚ½øĞĞ£¬¿ÉÇ¿ĞĞÖÕÖ¹¡£
-    /// Ò»°ãÇé¿öÏÂ²»ĞèÒªÇ¿ĞĞ´ò¶Ï¶Ô»°¡£
-    /// Èô´«ÈëµÄÓï¾äÖĞº¬ÓĞ<autoFood>£¬ÇëÊäÈëhp¡£ÈôÊäÈë0£¬´Ë×Ö·û½«Ìø¹ı¡£
+    /// å¼€å¯æ‰“å­—æœºã€‚è‹¥æ‰“å­—æ­£åœ¨è¿›è¡Œï¼Œå¯å¼ºè¡Œç»ˆæ­¢ã€‚
+    /// ä¸€èˆ¬æƒ…å†µä¸‹ä¸éœ€è¦å¼ºè¡Œæ‰“æ–­å¯¹è¯ã€‚
+    /// è‹¥ä¼ å…¥çš„è¯­å¥ä¸­å«æœ‰<autoFood>ï¼Œè¯·è¾“å…¥hpã€‚è‹¥è¾“å…¥0ï¼Œæ­¤å­—ç¬¦å°†è·³è¿‡ã€‚
     /// </summary>
     public void TypeOpen(string text, bool force, int hp, int fx, TMP_Text tmp_Text, TypeMode typeMode = TypeMode.Normal)
     {
@@ -292,8 +292,8 @@ public class TypeWritter : MonoBehaviour
                             case "<stop>":
                                 if (!pressX)
                                 {
-                                    //µ¥¶ÀÒ»¸öStopµÄÊ±ºò£¬²»ÉèÖÃisTyping£¬ÕâÊÇÒòÎªÓĞµÄÊ±ºòÕâ¸östopµÄÊ±¼äºÜ¶Ì£¬Èç¹ûtrue¿´ÆğÀ´ÓĞµã¹Ö¡£
-                                    //Èç¹ûĞèÒª³¤µÄStop£¬½¨ÒéÄã»¹ÊÇÊ¹ÓÃ<stop*x>µÄ·½Ê½À´×ö¡£
+                                    //å•ç‹¬ä¸€ä¸ªStopçš„æ—¶å€™ï¼Œä¸è®¾ç½®isTypingï¼Œè¿™æ˜¯å› ä¸ºæœ‰çš„æ—¶å€™è¿™ä¸ªstopçš„æ—¶é—´å¾ˆçŸ­ï¼Œå¦‚æœtrueçœ‹èµ·æ¥æœ‰ç‚¹æ€ªã€‚
+                                    //å¦‚æœéœ€è¦é•¿çš„Stopï¼Œå»ºè®®ä½ è¿˜æ˜¯ä½¿ç”¨<stop*x>çš„æ–¹å¼æ¥åšã€‚
                                     //isTyping = false;
                                     yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f * Convert.ToInt32(!MainControl.instance.OverworldControl.textWidth));
                                 }
@@ -327,7 +327,7 @@ public class TypeWritter : MonoBehaviour
                                 passTextString = passTextString.Substring(0, passTextString.Length - spText.Length);
                                 //passTextString += spText.Length * 2 - 5;
                                 goto PassText;
-                            default://¸»ÎÄ±¾
+                            default://å¯Œæ–‡æœ¬
 
                                 if (spText.Length - 2 > 0 && spText[1] == '-' && spText[spText.Length - 2] == '-')
                                 {
@@ -358,7 +358,7 @@ public class TypeWritter : MonoBehaviour
                 }
             }
 
-            //string cantString = ",.:;!?£¬¡££º£»£¡£¿ \n\r";
+            //string cantString = ",.:;!?ï¼Œã€‚ï¼šï¼›ï¼ï¼Ÿ \n\r";
 
             string cantString = "* \n\r";
             for (int j = 0; j < cantString.Length; j++)
@@ -390,7 +390,7 @@ public class TypeWritter : MonoBehaviour
                 if (tmp_Text.font != MainControl.instance.OverworldControl.tmpFonts[useFont])
                     tmp_Text.font = MainControl.instance.OverworldControl.tmpFonts[useFont];
             }
-            else DebugLogger.Log("È±Ê§tmp_Text", DebugLogger.Type.war, "#FFFF00");
+            else DebugLogger.Log("ç¼ºå¤±tmp_Text", DebugLogger.Type.war, "#FFFF00");
 
             if (!passText)
             {
@@ -414,7 +414,7 @@ public class TypeWritter : MonoBehaviour
             //pressX = false;
             canNotX = false;
             isStop = false;
-            PassText:;//ÕâÊÇ¸ö±êÇ©×¢Òâ
+            PassText:;//è¿™æ˜¯ä¸ªæ ‡ç­¾æ³¨æ„
         }
 
         isRunning = false;
@@ -424,7 +424,7 @@ public class TypeWritter : MonoBehaviour
 
     private IEnumerator<float> _Dynamic(int num)
     {
-        if (dynamicType != OverworldControl.DynamicType.None)//¶¯Ğ§Ïà¹Ø
+        if (dynamicType != OverworldControl.DynamicType.None)//åŠ¨æ•ˆç›¸å…³
         {
             var textInfo = tmp_Text.textInfo;
 
@@ -453,7 +453,7 @@ public class TypeWritter : MonoBehaviour
                         for (int j = 0; j < 4; j++)
                         {
                             orig = verts[charInfo.vertexIndex + j];
-                            //¶¯»­
+                            //åŠ¨ç”»
                             verts[charInfo.vertexIndex + j] = orig + randomer;
                         }
 
@@ -481,7 +481,7 @@ public class TypeWritter : MonoBehaviour
     }
     private void Update()
     {
-        if (MainControl.instance.OverworldControl.isSetting || forceReturn)//pauseÔÚOW¼ì²âµÄÊ±ºò»áÓÃ
+        if (MainControl.instance.OverworldControl.isSetting || forceReturn)//pauseåœ¨OWæ£€æµ‹çš„æ—¶å€™ä¼šç”¨
             return;
 
         if (clockTime > 0)
@@ -497,7 +497,7 @@ public class TypeWritter : MonoBehaviour
         {
             PassText();
         }
-        else if (!pressX && !canNotX && MainControl.instance.KeyArrowToControl(KeyCode.X) && typeMode != TypeMode.CantZX)//Ìø×Ö
+        else if (!pressX && !canNotX && MainControl.instance.KeyArrowToControl(KeyCode.X) && typeMode != TypeMode.CantZX)//è·³å­—
         {
             if (clock != 0 && clockTime <= 0)
             {

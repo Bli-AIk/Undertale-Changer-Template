@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ͶӰԭ���ĵ��ж���
-/// �����ֱ�Ӱѵ�Ļ����ԭ���ĵ�λ�ã���һǧ�������ܻᵼ����ʾ���⡣
+/// 投影原先心的判定。
+/// 如果你直接把弹幕放在原先心的位置（负一千），可能会导致显示问题。
 /// </summary>
 public class ProjectionCheckCollider : ObjectPool
 {

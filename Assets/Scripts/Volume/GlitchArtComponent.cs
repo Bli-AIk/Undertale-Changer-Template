@@ -3,7 +3,7 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
 /// <summary>
-/// VolumeComponent£¬ÏÔÊ¾ÔÚÌí¼ÓÁĞ±íÄÚ
+/// VolumeComponentï¼Œæ˜¾ç¤ºåœ¨æ·»åŠ åˆ—è¡¨å†…
 /// </summary>
 
 [VolumeComponentMenuForRenderPipeline("Custom/Glitch Art", typeof(UniversalRenderPipeline))]

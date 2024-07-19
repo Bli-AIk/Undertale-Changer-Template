@@ -12,8 +12,8 @@ public class DebugTmpGrassMaker : MonoBehaviour
 
     private void Start()
     {
-        strings.Add("²İ\n²İ");
-        strings.Add("²İ *\n²İ *");
+        strings.Add("Â²Ã\nÂ²Ã");
+        strings.Add("Â²Ã *\nÂ²Ã *");
         tmp = GetComponent<TextMeshPro>();
         time = timeMax;
     }

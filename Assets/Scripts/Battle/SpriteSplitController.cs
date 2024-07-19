@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ÄÚº¬Pool¡£
-/// ÊµÏÖ¾«ÁéµÄËéÆ¬»¯Ğ§¹û¡£
-/// Ò»ĞĞÒ»ĞĞ×ÔÉÏ¶øÏÂ¡£
-/// Æô ÓÃ ±¾ ½Å ±¾ ºó Á¢ ¿Ì Éú Ğ§
+/// å†…å«Poolã€‚
+/// å®ç°ç²¾çµçš„ç¢ç‰‡åŒ–æ•ˆæœã€‚
+/// ä¸€è¡Œä¸€è¡Œè‡ªä¸Šè€Œä¸‹ã€‚
+/// å¯ ç”¨ æœ¬ è„š æœ¬ å ç«‹ åˆ» ç”Ÿ æ•ˆ
 /// </summary>
 public class SpriteSplitController : MonoBehaviour
 {
-    private Queue<GameObject> available = new Queue<GameObject>();//¶ÔÏó³Ø
+    private Queue<GameObject> available = new Queue<GameObject>();//å¯¹è±¡æ± 
     private Texture2D map;
     private GameObject Mask;
     public int poolCount;
     public List<Color> colorExclude;
-    public Vector2 startPos;//Á£×ÓÎª¼ÆËã³öÍ¼Æ¬×óÉÏ½ÇµÄÏà¶Ô×ø±ê
-    public float speed;//Á£×ÓÉú³ÉËÙ¶È
+    public Vector2 startPos;//ç²’å­ä¸ºè®¡ç®—å‡ºå›¾ç‰‡å·¦ä¸Šè§’çš„ç›¸å¯¹åæ ‡
+    public float speed;//ç²’å­ç”Ÿæˆé€Ÿåº¦
 
     private void Awake()
     {
@@ -71,10 +71,10 @@ public class SpriteSplitController : MonoBehaviour
         }
     }
 
-    //-----¶ÔÏó³Ø²¿·Ö-----
+    //-----å¯¹è±¡æ± éƒ¨åˆ†-----
 
     /// <summary>
-    /// ³õÊ¼»¯/Ìî³ä¶ÔÏó³Ø
+    /// åˆå§‹åŒ–/å¡«å……å¯¹è±¡æ± 
     /// </summary>
     public void FillPool()
     {
@@ -86,7 +86,7 @@ public class SpriteSplitController : MonoBehaviour
     }
 
     /// <summary>
-    /// ·µ»Ø¶ÔÏó³Ø
+    /// è¿”å›å¯¹è±¡æ± 
     /// </summary>
     public void ReturnPool(GameObject gameObject)
     {
@@ -96,7 +96,7 @@ public class SpriteSplitController : MonoBehaviour
     }
 
     /// <summary>
-    /// Ï²Ìá¶ÔÏó square)
+    /// å–œæå¯¹è±¡ square)
     /// </summary>
     public GameObject GetFromPool()
     {

@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// ¹ÜÀíOW±³°üÏµÍ³
+/// ç®¡ç†OWèƒŒåŒ…ç³»ç»Ÿ
 /// </summary>
 public class BackpackBehaviour : MonoBehaviour
 {
@@ -129,11 +129,11 @@ public class BackpackBehaviour : MonoBehaviour
         }
         if ((MainControl.instance.KeyArrowToControl(KeyCode.X) || MainControl.instance.KeyArrowToControl(KeyCode.C)) && sonSelect == 0)
         {
-            if (backpack.gameObject.activeSelf)//¹Ø±Õ
+            if (backpack.gameObject.activeSelf)//å…³é—­
             {
                 BackpackExit();
             }
-            else if (MainControl.instance.KeyArrowToControl(KeyCode.C))//¿ªÆô
+            else if (MainControl.instance.KeyArrowToControl(KeyCode.C))//å¼€å¯
             {
                 AudioController.instance.GetFx(0, MainControl.instance.AudioControl.fxClipUI);
                 MainControl.instance.PlayerControl.myItems = MainControl.instance.ListOrderChanger(MainControl.instance.PlayerControl.myItems);
@@ -279,7 +279,7 @@ public class BackpackBehaviour : MonoBehaviour
             }
 
             /*
-            if (MainControl.instance.OverworldControl.background)//±ß¿ò×ÔÊÊÓ¦
+            if (MainControl.instance.OverworldControl.background)//è¾¹æ¡†è‡ªé€‚åº”
                 backpack.localScale = Vector3.one * 0.8888f;
             else
             */

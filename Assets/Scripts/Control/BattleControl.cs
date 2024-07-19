@@ -2,41 +2,41 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Õ½¶·ÏµÍ³¹ÜÀíÆ÷£¬½öÊ¹ÓÃÓÚÕ½¶·³¡¾°¡£
+/// æˆ˜æ–—ç³»ç»Ÿç®¡ç†å™¨ï¼Œä»…ä½¿ç”¨äºæˆ˜æ–—åœºæ™¯ã€‚
 /// </summary>
 [CreateAssetMenu(fileName = "BattleControl", menuName = "BattleControl")]
 public class BattleControl : ScriptableObject
 {
-    [Header("µĞÈËOBJ")]
-    [Header("ÎïÌåÃû»áÊ¶±ğÎªµĞÈËÃû³Æ")]
-    public List<GameObject> enemies;//µĞ·½µÄObj¡£
+    [Header("æ•ŒäººOBJ")]
+    [Header("ç‰©ä½“åä¼šè¯†åˆ«ä¸ºæ•Œäººåç§°")]
+    public List<GameObject> enemies;//æ•Œæ–¹çš„Objã€‚
 
-    [Header("HP Å¼ÎªÄ¿Ç°ÑªÁ¿ ÆæÎª×î´óMax ÏÂÍ¬")]
+    [Header("HP å¶ä¸ºç›®å‰è¡€é‡ å¥‡ä¸ºæœ€å¤§Max ä¸‹åŒ")]
     public List<int> enemiesHp;
 
     public List<int> enemiesATK, enemiesDEF;
 
-    [Header("Õ½¶·ÄÚUIText¶ÁÈ¡")]
+    [Header("æˆ˜æ–—å†…UITextè¯»å–")]
     public string uiText;
 
     public List<string> uiTextSave;
 
-    [Header("´æ´¢ACTÑ¡ÏîºÍÑ¡ÔñºóÎÄ±¾")]
-    public List<string> actSave;//4¸öÒ»¶ÔÓ¦ ¸ù¾İenemies¶øÅÅĞò
+    [Header("å­˜å‚¨ACTé€‰é¡¹å’Œé€‰æ‹©åæ–‡æœ¬")]
+    public List<string> actSave;//4ä¸ªä¸€å¯¹åº” æ ¹æ®enemiesè€Œæ’åº
 
-    [Header("´æ´¢MERCYÑ¡ÏîºÍÑ¡ÔñºóÎÄ±¾")]
+    [Header("å­˜å‚¨MERCYé€‰é¡¹å’Œé€‰æ‹©åæ–‡æœ¬")]
     public List<string> mercySave;
 
-    [Header("°´»ØºÏ´æ´¢ÅÔ°×")]
+    [Header("æŒ‰å›åˆå­˜å‚¨æ—ç™½")]
     public List<string> turnTextSave;
 
-    [Header("´æ´¢µĞÈË¶Ô»°ÎÄ¼ş")]
-    public List<string> turnDialogAsset;//Ö±½ÓÔÚÕ½¶·³¡¾°ÄÚ¶ÁÈ¡
+    [Header("å­˜å‚¨æ•Œäººå¯¹è¯æ–‡ä»¶")]
+    public List<string> turnDialogAsset;//ç›´æ¥åœ¨æˆ˜æ–—åœºæ™¯å†…è¯»å–
 
     public List<TextAsset> otherDialogAsset;
 
     /// <summary>
-    /// µ¯Ä»ÑÕÉ«Êı¾İ£¨Ô­°æÌØÊâµ¯Ä»£©£¬·ÇÊÓ¾õÑÕÉ«
+    /// å¼¹å¹•é¢œè‰²æ•°æ®ï¼ˆåŸç‰ˆç‰¹æ®Šå¼¹å¹•ï¼‰ï¼Œéè§†è§‰é¢œè‰²
     /// </summary>
     public enum BulletColor
     {
@@ -49,7 +49,7 @@ public class BattleControl : ScriptableObject
     public List<Color> bulletColorList;
 
     /// <summary>
-    /// Íæ¼ÒÊı¾İÑÕÉ«
+    /// ç©å®¶æ•°æ®é¢œè‰²
     /// </summary>
     public enum PlayerColor
     {
@@ -64,6 +64,6 @@ public class BattleControl : ScriptableObject
 
     public List<Color> playerColorList, playerMissColorList;
 
-    [Header("ÏîÄ¿¸½¼Ó")]
+    [Header("é¡¹ç›®é™„åŠ ")]
     public int randomTurnDir;
 }

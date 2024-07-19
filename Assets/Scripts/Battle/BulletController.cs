@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ��Ļ������
+/// 弹幕控制器
 /// </summary>
 public class BulletController : MonoBehaviour
 {
@@ -13,17 +13,17 @@ public class BulletController : MonoBehaviour
     public List<BoxCollider2D> boxColliderList = new List<BoxCollider2D>();
     public List<Vector2> boxColliderSizes = new List<Vector2>();
     public List<int> boxHitList = new List<int>();
-    public BattleControl.BulletColor bulletColor;//�������Ե���ɫ ��ȡBattleControl�е�enum BulletColor
+    public BattleControl.BulletColor bulletColor;//含有属性的颜色 读取BattleControl中的enum BulletColor
 
     public FollowMode followMode;
 
     //public bool useExtra;
     //public Collider2D extra;
     /// <summary>
-    /// ������ײ�����SpriteRenderer���ŵ�ģʽ��
-    /// CutFollow:��ȥboxColliderSizes�ڴ洢�����ݣ�
-    /// NoFollow:���������š�
-    /// FullFollow:��ȫ�������ţ������ú���ײ�����Զ�ƴ�ӡ�
+    /// 设置碰撞箱跟随SpriteRenderer缩放的模式。
+    /// CutFollow:切去boxColliderSizes内存储的数据；
+    /// NoFollow:不跟随缩放。
+    /// FullFollow:完全跟随缩放，即启用盒碰撞器的自动拼接。
     /// </summary>
     public enum FollowMode
     {
@@ -43,21 +43,21 @@ public class BulletController : MonoBehaviour
     }
 
     /// <summary>
-    /// ��ʼ����Ļ��������ײģʽ����
+    /// 初始化弹幕（单个碰撞模式）。
     /// </summary>
-    /// <param name="name">���õ�Ļ��Obj�����ƣ��Ա���ҡ�</param>
-    /// <param name="typeName">���õ�Ļ���������ƣ�������������뵱ǰ�ĵ�Ļһ�£�����ԭ�е���ײ��ز�������֮��ա�</param>
-    /// <param name="layer">���Ϊ100��ս�����ԵΪ50���ɲο���</param>
-    /// <param name="sprite">һ����Resources�ڵ��롣</param>
-    /// <param name="size">�����ж����С�����趨���List���������������Ҫ�������ص�����NoFollow�������Ϊ(0,0)�����Զ���sprite��Сͬ����</param>
-    /// <param name="offset">�趨�ж���ƫ�ƣ�List��С������sizes��ȡ�</param>
-    /// <param name="hit">�趨��ײ���˺���List��С������sizes��ȡ�</param>
-    /// <param name="followMode">������ײ�����SpriteRenderer���ŵ�ģʽ��</param>
-    /// <param name="startMask">����Sprite����ģʽ��</param>
-    /// <param name="bulletColor">���õ�Ļ������ɫ����</param>
-    /// <param name="startPosition">������ʼλ�ã�������꣩��</param>
-    /// <param name="startRotation">������ת�Ƕȣ�һ��ֻ�����Z�ᡣ</param>
-    /// <param name="startScale">����Ļ�������죬StartScaleһ������(1,1,1)����⵽ZΪ0ʱ���λ��(1,1,1)��</param>
+    /// <param name="name">设置弹幕的Obj的名称，以便查找。</param>
+    /// <param name="typeName">设置弹幕的种类名称，如果种类名称与当前的弹幕一致，则保留原有的碰撞相关参数，反之清空。</param>
+    /// <param name="layer">玩家为100，战斗框边缘为50。可参考。</param>
+    /// <param name="sprite">一般在Resources内导入。</param>
+    /// <param name="size">设置判定箱大小，可设定多个List，但多数情况下需要避免其重叠。（NoFollow情况下设为(0,0)，会自动与sprite大小同步）</param>
+    /// <param name="offset">设定判定箱偏移，List大小必须与sizes相等。</param>
+    /// <param name="hit">设定碰撞箱伤害，List大小必须与sizes相等。</param>
+    /// <param name="followMode">设置碰撞箱跟随SpriteRenderer缩放的模式。</param>
+    /// <param name="startMask">设置Sprite遮罩模式。</param>
+    /// <param name="bulletColor">设置弹幕属性颜色数据</param>
+    /// <param name="startPosition">设置起始位置（相对坐标）。</param>
+    /// <param name="startRotation">设置旋转角度，一般只需更改Z轴。</param>
+    /// <param name="startScale">若弹幕不需拉伸，StartScale一般设置(1,1,1)。检测到Z为0时会归位到(1,1,1)。</param>
     public void SetBullet(
        string name,
        string typeName,
@@ -125,21 +125,21 @@ public class BulletController : MonoBehaviour
     }
 
     /// <summary>
-    /// ��ʼ����Ļ��ѭ�����ɺ�״��ײģʽ����
+    /// 初始化弹幕（循环生成盒状碰撞模式）。
     /// </summary>
-    /// <param name="name">���õ�Ļ��Obj�����ƣ��Ա���ҡ�</param>
-    /// <param name="typeName">���õ�Ļ���������ƣ�������������뵱ǰ�ĵ�Ļһ�£�����ԭ�е���ײ��ز�������֮��ա�</param>
-    /// <param name="layer">���Ϊ100��ս�����ԵΪ50���ɲο���</param>
-    /// <param name="sprite">һ����Resources�ڵ��롣</param>
-    /// <param name="sizes">�����ж����С�����趨���List���������������Ҫ�������ص�����NoFollow�������Ϊ(0,0)�����Զ���sprite��Сͬ����</param>
-    /// <param name="offsets">�趨�ж���ƫ�ƣ�List��С������sizes��ȡ�</param>
-    /// <param name="hits">�趨��ײ���˺���List��С������sizes��ȡ�</param>
-    /// <param name="followMode">������ײ�����SpriteRenderer���ŵ�ģʽ��</param>
-    /// <param name="startMask">����Sprite����ģʽ��</param>
-    /// <param name="bulletColor">���õ�Ļ������ɫ����</param>
-    /// <param name="startPosition">������ʼλ�ã�������꣩��</param>
-    /// <param name="startRotation">������ת�Ƕȣ�һ��ֻ�����Z�ᡣ</param>
-    /// <param name="startScale">����Ļ�������죬StartScaleһ������(1,1,1)����⵽ZΪ0ʱ���λ��(1,1,1)��</param>
+    /// <param name="name">设置弹幕的Obj的名称，以便查找。</param>
+    /// <param name="typeName">设置弹幕的种类名称，如果种类名称与当前的弹幕一致，则保留原有的碰撞相关参数，反之清空。</param>
+    /// <param name="layer">玩家为100，战斗框边缘为50。可参考。</param>
+    /// <param name="sprite">一般在Resources内导入。</param>
+    /// <param name="sizes">设置判定箱大小，可设定多个List，但多数情况下需要避免其重叠。（NoFollow情况下设为(0,0)，会自动与sprite大小同步）</param>
+    /// <param name="offsets">设定判定箱偏移，List大小必须与sizes相等。</param>
+    /// <param name="hits">设定碰撞箱伤害，List大小必须与sizes相等。</param>
+    /// <param name="followMode">设置碰撞箱跟随SpriteRenderer缩放的模式。</param>
+    /// <param name="startMask">设置Sprite遮罩模式。</param>
+    /// <param name="bulletColor">设置弹幕属性颜色数据</param>
+    /// <param name="startPosition">设置起始位置（相对坐标）。</param>
+    /// <param name="startRotation">设置旋转角度，一般只需更改Z轴。</param>
+    /// <param name="startScale">若弹幕不需拉伸，StartScale一般设置(1,1,1)。检测到Z为0时会归位到(1,1,1)。</param>
 
     public void SetBullet(
         string name,
@@ -192,7 +192,7 @@ public class BulletController : MonoBehaviour
 
         boxColliderSizes = sizes;
         boxHitList = hits;
-        //ѭ������box��ײ
+        //循环生成box碰撞
         for (int i = 0; i < sizes.Count; i++)
         {
             BoxCollider2D save = gameObject.AddComponent<BoxCollider2D>();
@@ -226,7 +226,7 @@ public class BulletController : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay2D(Collider2D collision)//�˺��ж�
+    private void OnTriggerStay2D(Collider2D collision)//伤害判定
     {
         if (collision.transform.CompareTag("Player") && collision.name.Substring(0, "CheckCollider".Length) == "CheckCollider")
         {

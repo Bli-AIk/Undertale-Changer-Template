@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 
 /// <summary>
-/// Gameover¿ØÖÆÆ÷
+/// Gameoveræ§åˆ¶å™¨
 /// </summary>
 public class GameoverController : MonoBehaviour
 {
@@ -38,7 +38,7 @@ public class GameoverController : MonoBehaviour
         m_ParticleSystem.gameObject.SetActive(false);
     }
 
-    //½ÓÏÂÀ´½»¸øAnimator±íÑİ
+    //æ¥ä¸‹æ¥äº¤ç»™Animatorè¡¨æ¼”
     public void PlayFX(int i)
     {
         if (i < 0)

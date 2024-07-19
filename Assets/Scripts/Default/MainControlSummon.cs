@@ -3,52 +3,52 @@ using UnityEngine;
 using static MainControl;
 
 /// <summary>
-/// Éú³É×Ü¿Ø£¬²¢ÔÚÇĞ»»³¡¾°Ê±±£ÁôÒÑÉú³ÉµÄ×Ü¿Ø¡£
-/// ÒÔ´ËÖ»µ÷ÓÃÒ»´ÎMainControlµÄÊı¾İ¼ÓÔØ¡£
+/// ç”Ÿæˆæ€»æ§ï¼Œå¹¶åœ¨åˆ‡æ¢åœºæ™¯æ—¶ä¿ç•™å·²ç”Ÿæˆçš„æ€»æ§ã€‚
+/// ä»¥æ­¤åªè°ƒç”¨ä¸€æ¬¡MainControlçš„æ•°æ®åŠ è½½ã€‚
 ///
-/// Í¬Ê±»áÉú³ÉBGMControl
+/// åŒæ—¶ä¼šç”ŸæˆBGMControl
 /// </summary>
 public class MainControlSummon : MonoBehaviour
 {
-    [Header("-CanvasÉèÖÃ-")]
+    [Header("-Canvasè®¾ç½®-")]
     public RenderMode renderMode;
 
     public int framePic;
 
     [Space]
-    [Header("-BGMControlÉèÖÃ-")]
+    [Header("-BGMControlè®¾ç½®-")]
     [Space]
-    [Header("BGM±¾ÌåÒôÆµ ¿ÕÎªÎŞÒôÆµ")]
+    [Header("BGMæœ¬ä½“éŸ³é¢‘ ç©ºä¸ºæ— éŸ³é¢‘")]
     public AudioClip bgmClip;
 
-    [Header("BGMÒôÁ¿")]
+    [Header("BGMéŸ³é‡")]
     public float volume = 0.5f;
 
-    [Header("BGMÒôµ÷")]
+    [Header("BGMéŸ³è°ƒ")]
     public float pitch = 1;
 
-    [Header("BGMÑ­»·²¥·Å³õÊ¼×´Ì¬")]
+    [Header("BGMå¾ªç¯æ’­æ”¾åˆå§‹çŠ¶æ€")]
     public bool loop = true;
 
     [Header("BGM BPM")]
     public float bpm = 120;
 
-    [Header("BGM BPMÆ«ÒÆ")]
+    [Header("BGM BPMåç§»")]
     public float bpmDeviation = 0;
 
-    [Header("³õÊ¼»¯Ê±¿ªÆô½ÚÅÄÆ÷")]
+    [Header("åˆå§‹åŒ–æ—¶å¼€å¯èŠ‚æ‹å™¨")]
     public bool openMetronome = false;
 
-    [Header("-MainControlÉèÖÃ-")]
+    [Header("-MainControlè®¾ç½®-")]
     [Space]
-    [Header("ºÚ³¡×´Ì¬Ïà¹Ø")]
+    [Header("é»‘åœºçŠ¶æ€ç›¸å…³")]
     public SceneState sceneState;
 
     public bool haveInOutBlack, noInBlack;
     public bool notPauseIn;
 
     [Space]
-    [Header("Õ½¶·ÄÚ³¡¾°¶îÍâÉèÖÃ")]
+    [Header("æˆ˜æ–—å†…åœºæ™¯é¢å¤–è®¾ç½®")]
     public List<int> poolCount;
 
     private void Awake()
@@ -96,7 +96,7 @@ public class MainControlSummon : MonoBehaviour
         GameObject gameObjectM = GameObject.Find("MainControl");
         if (gameObjectM != null && gameObjectM.TryGetComponent(out mainControl))
         {
-            //DebugLogger.LogWarning("<color=yellow>¼ì²âµ½±¾³¡¾°ÄÚÓĞMainControl</color>", gameObject);
+            //DebugLogger.LogWarning("<color=yellow>æ£€æµ‹åˆ°æœ¬åœºæ™¯å†…æœ‰MainControl</color>", gameObject);
 
             mainControl.sceneState = sceneState;
             mainControl.haveInOutBlack = haveInOutBlack;
@@ -112,7 +112,7 @@ public class MainControlSummon : MonoBehaviour
             mainControl.SetResolution(instance.OverworldControl.resolutionLevel);
             return;
         }
-        //Éú³É
+        //ç”Ÿæˆ
         DontDestroyOnLoad(transform);
 
         mainControl = gameObject.AddComponent<MainControl>();

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// »ØºÏ¿ØÖÆ£¬Í¬Ê±Ò²ÊÇµ¯Ä»µÄ¶ÔÏó³Ø
+/// å›åˆæ§åˆ¶ï¼ŒåŒæ—¶ä¹Ÿæ˜¯å¼¹å¹•çš„å¯¹è±¡æ± 
 /// </summary>
 public class TurnController : MonoBehaviour
 {
@@ -29,14 +29,14 @@ public class TurnController : MonoBehaviour
         GameObject saveBullet = GameObject.Find("SaveBullet");
         mainFrame = GameObject.Find("MainFrame");
         //OutYourTurn();
-        //µ¯Ä»
+        //å¼¹å¹•
         objectPools.Add(gameObject.AddComponent<ObjectPool>());
         objectPools[^1].parent = saveBullet.transform;
         objectPools[^1].count = poolCount[0];
         objectPools[^1].obj = Resources.Load<GameObject>("Template/Bullet Template");
         objectPools[^1].FillPool();
 
-        //µ²°å
+        //æŒ¡æ¿
         objectPools.Add(gameObject.AddComponent<ObjectPool>());
         objectPools[^1].parent = saveBullet.transform;
         objectPools[^1].count = poolCount[1];
@@ -50,7 +50,7 @@ public class TurnController : MonoBehaviour
     }
 
     /// <summary>
-    /// ½øÈëµĞ·½»ØºÏ
+    /// è¿›å…¥æ•Œæ–¹å›åˆ
     /// </summary>
     public void OutYourTurn()
     {
@@ -59,15 +59,15 @@ public class TurnController : MonoBehaviour
     }
 
     /// <summary>
-    /// »ØºÏÖ´ĞĞÏµÍ³
-    /// ¸ù¾İ»ØºÏ±àºÅ½øĞĞÏàÓ¦µÄÖ´ĞĞ
+    /// å›åˆæ‰§è¡Œç³»ç»Ÿ
+    /// æ ¹æ®å›åˆç¼–å·è¿›è¡Œç›¸åº”çš„æ‰§è¡Œ
     /// </summary>
     private IEnumerator<float> _TurnExecute(int turn)
     {
         switch (turn)
         {
             case 0:
-                DebugLogger.Log("ÕâÊÇ¸ö°ÚÀÃ»ØºÏ¡­¡­Ò²Ğí°É¡£");
+                DebugLogger.Log("è¿™æ˜¯ä¸ªæ‘†çƒ‚å›åˆâ€¦â€¦ä¹Ÿè®¸å§ã€‚");
                 //MainControl.instance.battlePlayerController.ChangePlayerColor(MainControl.instance.BattleControl.playerColorList[5], BattleControl.PlayerColor.blue,0,BattlePlayerController.PlayerDirEnum.down);
                 var obj = objectPools[0].GetFromPool().GetComponent<BulletController>();
                 obj.SetBullet(
@@ -97,7 +97,7 @@ public class TurnController : MonoBehaviour
                     );
                 for (int i = 600; i > 0; i--)
                 {
-                    DebugLogger.Log("ÄãÏÈ±ğ¼±£¬ÏÈ°Ú" + MainControl.instance.RandomStringColor() + i + "</color>Ãë");
+                    DebugLogger.Log("ä½ å…ˆåˆ«æ€¥ï¼Œå…ˆæ‘†" + MainControl.instance.RandomStringColor() + i + "</color>ç§’");
                     yield return Timing.WaitForSeconds(1f);
                 }
 
@@ -107,13 +107,13 @@ public class TurnController : MonoBehaviour
                 objectPools[0].ReturnPool(obj2.gameObject);
                 break;
 
-            case 1://Ê¾Àı»ØºÏ
-                DebugLogger.Log("ÕâÊÇÒ»¸öÊ¾Àı»ØºÏ");
+            case 1://ç¤ºä¾‹å›åˆ
+                DebugLogger.Log("è¿™æ˜¯ä¸€ä¸ªç¤ºä¾‹å›åˆ");
                 yield return Timing.WaitForSeconds(0.5f);
-                DebugLogger.Log("Çë×¢Òâ²é¿´¿ØÖÆÌ¨·¢³öµÄDebugÎÄ±¾½éÉÜ");
+                DebugLogger.Log("è¯·æ³¨æ„æŸ¥çœ‹æ§åˆ¶å°å‘å‡ºçš„Debugæ–‡æœ¬ä»‹ç»");
                 yield return Timing.WaitForSeconds(1.5f);
 
-                DebugLogger.Log("Õ½¶·¿òËõ·Å£º¸ü¸ÄËÄ¸öµãµÄ×ø±ê");
+                DebugLogger.Log("æˆ˜æ–—æ¡†ç¼©æ”¾ï¼šæ›´æ”¹å››ä¸ªç‚¹çš„åæ ‡");
                 mainFrame.transform.GetChild(0).DOLocalMoveX(1.4f, 0.5f).SetEase(Ease.InOutSine);
                 mainFrame.transform.GetChild(3).DOLocalMoveX(1.4f, 0.5f).SetEase(Ease.InOutSine);
                 mainFrame.transform.GetChild(1).DOLocalMoveX(-1.4f, 0.5f).SetEase(Ease.InOutSine);
@@ -121,7 +121,7 @@ public class TurnController : MonoBehaviour
 
                 yield return Timing.WaitForSeconds(1);
 
-                DebugLogger.Log("Í¨¹ı¸ü¸Äµã×ø±êÊµÏÖµÄÕ½¶·¿òÖáµãĞı×ª");
+                DebugLogger.Log("é€šè¿‡æ›´æ”¹ç‚¹åæ ‡å®ç°çš„æˆ˜æ–—æ¡†è½´ç‚¹æ—‹è½¬");
                 for (int i = 0; i < 4; i++)
                 {
                     mainFrame.transform.GetChild(0).DOLocalMove(mainFrame.transform.GetChild(3).transform.localPosition, 0.5f).SetEase(Ease.InOutSine);
@@ -131,14 +131,14 @@ public class TurnController : MonoBehaviour
                     yield return Timing.WaitForSeconds(0.5f);
                 }
 
-                DebugLogger.Log("¼òµ¥Ç¶Ì×µ¯Ä»±àĞ´Ê¾Àı");
+                DebugLogger.Log("ç®€å•åµŒå¥—å¼¹å¹•ç¼–å†™ç¤ºä¾‹");
                 for (int i = 0; i < 5 * 20; i++)
                 {
                     Timing.RunCoroutine(_TurnNest(Nest.simpleNestBullet));
                     yield return Timing.WaitForSeconds(0.2f);
                 }
 
-                DebugLogger.Log("Õ½¶·¿òËõ·Å»Ø³õÊ¼×ø±êÒÔ½áÊø»ØºÏ");
+                DebugLogger.Log("æˆ˜æ–—æ¡†ç¼©æ”¾å›åˆå§‹åæ ‡ä»¥ç»“æŸå›åˆ");
                 yield return Timing.WaitForSeconds(1f);
                 mainFrame.transform.GetChild(0).DOLocalMoveX(5.93f, 0.5f).SetEase(Ease.InOutSine);
                 mainFrame.transform.GetChild(3).DOLocalMoveX(5.93f, 0.5f).SetEase(Ease.InOutSine);
@@ -155,9 +155,9 @@ public class TurnController : MonoBehaviour
     }
 
     /// <summary>
-    /// »ØºÏÇ¶Ì×
-    /// Ê×ÏÈÔÚÃ¶¾ÙNestÖĞ¶¨ÒåÇ¶Ì×Ãû³Æ£¬È»ºóÔÚ´Ë±àĞ´Ç¶Ì×ÄÚÈİ
-    /// ÓÃÓÚÖØ¸´¸´ÔÓµ¯Ä»µÄÇ¶Ì×Ê¹ÓÃ
+    /// å›åˆåµŒå¥—
+    /// é¦–å…ˆåœ¨æšä¸¾Nestä¸­å®šä¹‰åµŒå¥—åç§°ï¼Œç„¶ååœ¨æ­¤ç¼–å†™åµŒå¥—å†…å®¹
+    /// ç”¨äºé‡å¤å¤æ‚å¼¹å¹•çš„åµŒå¥—ä½¿ç”¨
     /// </summary>
     private IEnumerator<float> _TurnNest(Nest nest)
     {

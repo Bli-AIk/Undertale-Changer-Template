@@ -1,13 +1,13 @@
 using UnityEngine;
 
 /// <summary>
-/// OverworldÉãÏñ»ú¸úËæ
+/// Overworldæ‘„åƒæœºè·Ÿéš
 /// </summary>
 public class CameraFollowPlayer : MonoBehaviour
 {
     public bool limit = true;
-    public Vector2 limitX;//ÏŞÖÆÉãÏñ»ú×î´óXY·¶Î§ 0Ôò²»¶¯
-    public Vector2 limitY;//ÏŞÖÆÉãÏñ»ú×î´óXY·¶Î§ 0Ôò²»¶¯
+    public Vector2 limitX;//é™åˆ¶æ‘„åƒæœºæœ€å¤§XYèŒƒå›´ 0åˆ™ä¸åŠ¨
+    public Vector2 limitY;//é™åˆ¶æ‘„åƒæœºæœ€å¤§XYèŒƒå›´ 0åˆ™ä¸åŠ¨
     public GameObject player;
     public bool isFollow;
     public Vector3 followPosition;
@@ -24,7 +24,7 @@ public class CameraFollowPlayer : MonoBehaviour
             return;
         }
         followPosition = transform.position;
-        //¸úËæÍæ¼Ò
+        //è·Ÿéšç©å®¶
         if (limit)
         {
             if (player.transform.position.x >= limitX.x || player.transform.position.x <= limitX.y)
@@ -37,7 +37,7 @@ public class CameraFollowPlayer : MonoBehaviour
                 transform.position = new Vector3(transform.position.x, player.transform.position.y, transform.position.z);
             }
 
-            //ÏŞÖÆ·¶Î§
+            //é™åˆ¶èŒƒå›´
             if (transform.position.x <= limitX.x)
             {
                 transform.position = new Vector3(limitX.x, transform.position.y, transform.position.z);

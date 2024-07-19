@@ -4,30 +4,30 @@ using UnityEngine;
 using Log;
 using System;
 /// <summary>
-/// Ê¹ÓÃLineRendererÓë¶à±ßĞÎshader»æÖÆ¶à±ßĞÎ¿ò£¬ÓÃÓÚÕ½¶·¿ò¡¢UIµÈ¡£
+/// ä½¿ç”¨LineRendererä¸å¤šè¾¹å½¢shaderç»˜åˆ¶å¤šè¾¹å½¢æ¡†ï¼Œç”¨äºæˆ˜æ–—æ¡†ã€UIç­‰ã€‚
 /// </summary>
 [Obsolete]
 public class OldBoxController : MonoBehaviour
 {
-    [Header("Ïß³¤")]
+    [Header("çº¿é•¿")]
     public float width;
 
-    [Header("¶¥µãÊı")]
+    [Header("é¡¶ç‚¹æ•°")]
     public int pointsMax = 4;
 
-    [Header("¶¥µã")]
+    [Header("é¡¶ç‚¹")]
     public List<Transform> points = new List<Transform>();
 
-    [Header("¿ªÆôÅö×²£¨ÓÃÓÚÕ½¶·¿ò£©")]
+    [Header("å¼€å¯ç¢°æ’ï¼ˆç”¨äºæˆ˜æ–—æ¡†ï¼‰")]
     public bool isCollider;
 
-    [Header("ID¼ì²â£ºÊ¹ÓÃ_Point (0)")]
+    [Header("IDæ£€æµ‹ï¼šä½¿ç”¨_Point (0)")]
     public bool useBracketId;
 
-    [Header("Ê¹ÓÃÕâ¸ö¿ÉÒÔÈÃËü´´½¨Ê±»æÖÆÕı¶à±ßĞÎ")]
+    [Header("ä½¿ç”¨è¿™ä¸ªå¯ä»¥è®©å®ƒåˆ›å»ºæ—¶ç»˜åˆ¶æ­£å¤šè¾¹å½¢")]
     public bool startDraw;
 
-    [Header("¹Ø±Õ×Ô¶¯»ñÈ¡²ÄÖÊ")]
+    [Header("å…³é—­è‡ªåŠ¨è·å–æè´¨")]
     public bool noAutoMaterial;
 
     private PolygonCollider2D polygonCollider2D;
@@ -41,7 +41,7 @@ public class OldBoxController : MonoBehaviour
         points.Clear();
         if (pointsMax < 3)
         {
-            DebugLogger.Log("pointsMax < 3 , ÒÑ¸ü¸ÄÎª3", DebugLogger.Type.war);
+            DebugLogger.Log("pointsMax < 3 , å·²æ›´æ”¹ä¸º3", DebugLogger.Type.war);
             pointsMax = 3;
         }
         for (int i = 0; i < pointsMax; i++)
@@ -127,7 +127,7 @@ public class OldBoxController : MonoBehaviour
 
     private List<Transform> Draw(List<Transform> pointList, float drawRadius)
     {
-        int sides = pointList.Count;  // ¸ù¾İpointsµÄÊıÁ¿È·¶¨±ßÊı
+        int sides = pointList.Count;  // æ ¹æ®pointsçš„æ•°é‡ç¡®å®šè¾¹æ•°
         List<Transform> drawnPoints = new List<Transform>();
 
         for (int i = 0; i < sides; i++)

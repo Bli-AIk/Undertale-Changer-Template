@@ -2,40 +2,40 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Ö÷ÒªÓÃÓÚOverworldµÄÊı¾İÓëÍ¨ÓÃ»ù±¾Êı¾İ
+/// ä¸»è¦ç”¨äºOverworldçš„æ•°æ®ä¸é€šç”¨åŸºæœ¬æ•°æ®
 /// </summary>
 [CreateAssetMenu(fileName = "OverworldControl", menuName = "OverworldControl")]
 public class OverworldControl : ScriptableObject
 {
     //public int languagePack;
-    public bool pause;//ºÚÇĞÆÁµÄÊ±ºò·ÀÖ¹Íæ¼Ò²Ù×÷µ¼ÖÂ±¨´í
+    public bool pause;//é»‘åˆ‡å±çš„æ—¶å€™é˜²æ­¢ç©å®¶æ“ä½œå¯¼è‡´æŠ¥é”™
 
     [Header("--UI--")]
-    [Header("×ÖÌå´æ´¢")]
+    [Header("å­—ä½“å­˜å‚¨")]
     public List<TMPro.TMP_FontAsset> tmpFonts;
 
-    [Header("×ÖÌåÈ«°ë½Ç")]
-    public bool textWidth;//×ÖÌåÈ«°ë½Ç
+    [Header("å­—ä½“å…¨åŠè§’")]
+    public bool textWidth;//å­—ä½“å…¨åŠè§’
 
-    [Header("·Ö±æÂÊµÈ¼¶")]
-    public int resolutionLevel;//·Ö±æÂÊµÈ¼¶
+    [Header("åˆ†è¾¨ç‡ç­‰çº§")]
+    public int resolutionLevel;//åˆ†è¾¨ç‡ç­‰çº§
 
-    [Header("È«ÆÁ")]
-    public bool fullScreen;//È«ÆÁ¿ª¹Ø
+    [Header("å…¨å±")]
+    public bool fullScreen;//å…¨å±å¼€å…³
 
-    [Header("È«¾ÖÒôÁ¿")]
-    public float mainVolume;//È«¾ÖÒôÁ¿
+    [Header("å…¨å±€éŸ³é‡")]
+    public float mainVolume;//å…¨å±€éŸ³é‡
 
-    [Header("¼ò»¯ÌØĞ§")]
-    public bool noSFX;//¹âĞ§ ºó´¦ÀíÌØĞ§ÏÔÊ¾
+    [Header("ç®€åŒ–ç‰¹æ•ˆ")]
+    public bool noSFX;//å…‰æ•ˆ åå¤„ç†ç‰¹æ•ˆæ˜¾ç¤º
 
-    [Header("ÏÔÊ¾FPS")]
-    public bool openFPS;//ÏÔÊ¾FPS
+    [Header("æ˜¾ç¤ºFPS")]
+    public bool openFPS;//æ˜¾ç¤ºFPS
 
-    [Header("·Ö±æÂÊ£¨ÏÔÊ¾ÓÃ£©")]
-    public Vector2 resolution;//·Ö±æÂÊ
+    [Header("åˆ†è¾¨ç‡ï¼ˆæ˜¾ç¤ºç”¨ï¼‰")]
+    public Vector2 resolution;//åˆ†è¾¨ç‡
 
-    [Header("ÎÄ±¾°ü¶ÁÈ¡")]
+    [Header("æ–‡æœ¬åŒ…è¯»å–")]
     public string sceneTextsAsset;
 
     public List<string> sceneTextsSave;
@@ -43,30 +43,30 @@ public class OverworldControl : ScriptableObject
     public string settingAsset;
     public List<string> settingSave;
     public bool isSetting;
-    public List<KeyCode> keyCodes, keyCodesBack1, keyCodesBack2;//ÒÀÕÕÉèÖÃË³Ğò
+    public List<KeyCode> keyCodes, keyCodesBack1, keyCodesBack2;//ä¾ç…§è®¾ç½®é¡ºåº
 
-    [Header("Íæ¼ÒÏà¹Ø")]
+    [Header("ç©å®¶ç›¸å…³")]
     public Vector3 playerDeadPos;
 
-    [Header("³¡¾°ÏÎ½Ó´æ´¢")]
+    [Header("åœºæ™¯è¡”æ¥å­˜å‚¨")]
     public Vector3 playerScenePos;
 
     public Vector2 animDirection;
 
-    [Header("HD±ß¿ò")]
+    [Header("HDè¾¹æ¡†")]
     public bool hdResolution;
 
     public List<Sprite> frames;
 
-    //[Header("ÓÎÏ·ÄÚĞèÒª´æµµµÄÊı¾İÔÚÏÂÃæĞ´")]
-    [Header("´¹Ö±Í¬²½")]
+    //[Header("æ¸¸æˆå†…éœ€è¦å­˜æ¡£çš„æ•°æ®åœ¨ä¸‹é¢å†™")]
+    [Header("å‚ç›´åŒæ­¥")]
     public VSyncMode vsyncMode;
 
     public enum VSyncMode
     {
-        DonNotSync, // ²»Í¬²½
-        SyncToRefreshRate, // Í¬²½µ½ÆÁÄ»Ë¢ĞÂÂÊ
-        HalfSync // Í¬²½µ½ÆÁÄ»Ë¢ĞÂÂÊµÄÒ»°ë
+        DonNotSync, // ä¸åŒæ­¥
+        SyncToRefreshRate, // åŒæ­¥åˆ°å±å¹•åˆ·æ–°ç‡
+        HalfSync // åŒæ­¥åˆ°å±å¹•åˆ·æ–°ç‡çš„ä¸€åŠ
     }
 
     public enum DynamicTMP
@@ -78,9 +78,9 @@ public class OverworldControl : ScriptableObject
         CrazyShake,
         NapShake,
         NapFloat,
-        Wave,//ÕâØí
-        Explode,//ÊÇ
-        Bounce,//AI×öµÄ 
+        Wave,//è¿™ä»¨
+        Explode,//æ˜¯
+        Bounce,//AIåšçš„ 
     }
 
     public enum DynamicType

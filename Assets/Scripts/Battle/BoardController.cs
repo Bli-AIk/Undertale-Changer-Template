@@ -2,22 +2,22 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Éè¶¨µ²°å£¬¾ßÌåÊı¾İÔÚBattlePlayerControllerÄÚ¿ØÖÆ
+/// è®¾å®šæŒ¡æ¿ï¼Œå…·ä½“æ•°æ®åœ¨BattlePlayerControllerå†…æ§åˆ¶
 /// </summary>
 public class BoardController : MonoBehaviour
 {
-    [Header("¿í¶È")]
+    [Header("å®½åº¦")]
     public float width = 2.1f;
 
-    [Header("ÊÇ·ñÎª¸ú×Ù°å")]
+    [Header("æ˜¯å¦ä¸ºè·Ÿè¸ªæ¿")]
     public bool canMove;
 
-    [Header("ÊÇ·ñÈÃ±ßÔµÅö×²Æ÷³¤¶ÈËæsprite¿í¶È¶ø±ä»¯")]
+    [Header("æ˜¯å¦è®©è¾¹ç¼˜ç¢°æ’å™¨é•¿åº¦éšspriteå®½åº¦è€Œå˜åŒ–")]
     public bool keepEdge;
 
     public List<Sprite> boards;
-    private BoxCollider2D boxCollider2DUp, boxCollider2DDown;//´¿´¿µÄ¼ì²âÆ÷ ¼ì²âÍæ¼ÒÔÚÉÏÃæ¾Í°ÑEdgeColliderÆşÁË¡£¾ßÌåÔÚBattlePlayerControllerÄÚ¿Ø
-    private EdgeCollider2D edgeCollider2D;//Ä¬ÈÏÎª´¥·¢Æ÷¡£
+    private BoxCollider2D boxCollider2DUp, boxCollider2DDown;//çº¯çº¯çš„æ£€æµ‹å™¨ æ£€æµ‹ç©å®¶åœ¨ä¸Šé¢å°±æŠŠEdgeCollideræäº†ã€‚å…·ä½“åœ¨BattlePlayerControllerå†…æ§
+    private EdgeCollider2D edgeCollider2D;//é»˜è®¤ä¸ºè§¦å‘å™¨ã€‚
     private SpriteRenderer spriteRenderer;
 
     //public bool test;
@@ -92,7 +92,7 @@ public class BoardController : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            if (boxCollider2DDown.IsTouching(collision))//½øÈëµÄÊÇÏÂÃæ
+            if (boxCollider2DDown.IsTouching(collision))//è¿›å…¥çš„æ˜¯ä¸‹é¢
                 edgeCollider2D.isTrigger = true;
             else if (boxCollider2DUp.IsTouching(collision))
                 edgeCollider2D.isTrigger = false;

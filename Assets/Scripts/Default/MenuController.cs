@@ -4,11 +4,11 @@ using TMPro;
 using UnityEngine;
 
 /// <summary>
-/// ¿ØÖÆMenu£¬sodayo)
+/// æ§åˆ¶Menuï¼Œsodayo)
 /// </summary>
 public class MenuController : MonoBehaviour
 {
-    [Header("Íæ¼ÒÃû-LV-Ê±¼ä-Î»ÖÃ-¾ßÌåÑ¡Ïî-µ×²¿×Ö")]
+    [Header("ç©å®¶å-LV-æ—¶é—´-ä½ç½®-å…·ä½“é€‰é¡¹-åº•éƒ¨å­—")]
     public List<TextMeshPro> tmps;
 
     private int select, selectMax = 5;
@@ -43,7 +43,7 @@ public class MenuController : MonoBehaviour
         PlayerControl playerControl = SaveController.LoadData("Data" + saveNum);
         tmps[0].text = playerControl.playerName;
         tmps[1].text = "LV " + playerControl.lv;
-        //tmps[2]ÔÚupdateÄÚÉèÖÃ
+        //tmps[2]åœ¨updateå†…è®¾ç½®
         tmps[3].text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, playerControl.saveScene);
 
         Flash();
@@ -147,7 +147,7 @@ public class MenuController : MonoBehaviour
 
                         case 3:
                             AudioController.instance.GetFx(1, MainControl.instance.AudioControl.fxClipUI);
-                            if (saveNum == (SaveController.GetDataNum() - 1))//ĞÂ½¨
+                            if (saveNum == (SaveController.GetDataNum() - 1))//æ–°å»º
                             {
                                 saveNum++;
                                 MainControl.instance.dataNum = saveNum;
@@ -156,7 +156,7 @@ public class MenuController : MonoBehaviour
                                 MainControl.instance.PlayerControl.playerName = "";
                                 MainControl.instance.OutBlack("Rename", Color.black);
                             }
-                            else//ÏÂÒ³
+                            else//ä¸‹é¡µ
                             {
                                 saveNum++;
                                 LoadLayer0();

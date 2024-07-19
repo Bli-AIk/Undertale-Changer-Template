@@ -3,14 +3,14 @@ using TMPro;
 using UnityEngine;
 
 /// <summary>
-/// ÓÃÓÚ×ÖÌåÆ¥Åä¼°Ë«Óï×ÖÌåÊı¾İĞŞÕı
+/// ç”¨äºå­—ä½“åŒ¹é…åŠåŒè¯­å­—ä½“æ•°æ®ä¿®æ­£
 /// </summary>
 public class TextChanger : MonoBehaviour
 {
     //public TMP_FontAsset assetback;
     private TMP_Text tmp;
 
-    public bool width;//ÈôÖĞÓ¢»ì´î Ôòtrue¾ÍÍêÊÂÁË
+    public bool width;//è‹¥ä¸­è‹±æ··æ­ åˆ™trueå°±å®Œäº‹äº†
 
     [Header("US/CN")]
     public Vector4[] Options;

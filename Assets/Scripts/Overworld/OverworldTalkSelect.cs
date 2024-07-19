@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// ÓÃÓÚÔÚOW²åÈëÑ¡ÏîÏµÍ³£¬ÓëUTµÄÑ¡ÏîÒ»ÖÂ£¬¶ø²»Í¬ÓÚDRµÄÑ¡Ïî¡£
-/// ÔÚº¬ÓĞÑ¡ÏîµÄ³¡¾°ÄÚ»áÌí¼Óheart¡£
-/// ÔÚÎÄ±¾°üÄÚµ÷ÓÃ
+/// ç”¨äºåœ¨OWæ’å…¥é€‰é¡¹ç³»ç»Ÿï¼Œä¸UTçš„é€‰é¡¹ä¸€è‡´ï¼Œè€Œä¸åŒäºDRçš„é€‰é¡¹ã€‚
+/// åœ¨å«æœ‰é€‰é¡¹çš„åœºæ™¯å†…ä¼šæ·»åŠ heartã€‚
+/// åœ¨æ–‡æœ¬åŒ…å†…è°ƒç”¨
 /// </summary>
 public class OverworldTalkSelect : MonoBehaviour
 {
@@ -72,11 +72,11 @@ public class OverworldTalkSelect : MonoBehaviour
                 typeWritter.TypeStop();
                 switch (select)
                 {
-                    case 0://Ñ¡ÔñÁË×ó²àÑ¡Ïî
+                    case 0://é€‰æ‹©äº†å·¦ä¾§é€‰é¡¹
                         switch (typeText)
                         {
                             /*
-                            ´ò×Ö»úÊ¾Àı
+                            æ‰“å­—æœºç¤ºä¾‹
                             case "XXX":
 
                         typeWritter.TypeOpen(MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.owTextsSave, texts[0]), false, 0, 1);
@@ -98,7 +98,7 @@ public class OverworldTalkSelect : MonoBehaviour
                         }
                         break;
 
-                    case 1://Ñ¡ÔñÁËÓÒ²àÑ¡Ïî
+                    case 1://é€‰æ‹©äº†å³ä¾§é€‰é¡¹
                         break;
                 }
                 heart.color = Color.clear;

@@ -8,15 +8,15 @@ public class AudioControl : ScriptableObject
     public AudioMixer globalAudioMixer;
     
     //public List<AudioClip> bgmClip;
-    [Header("ÓÃÓÚUIÒôĞ§")]
+    [Header("ç”¨äºUIéŸ³æ•ˆ")]
     public List<AudioClip> fxClipUI;
 
-    [Header("ÓÃÓÚ´ò×Ö»úÒôĞ§")]
+    [Header("ç”¨äºæ‰“å­—æœºéŸ³æ•ˆ")]
     public List<AudioClip> fxClipType;
 
-    [Header("ÓÃÓÚÕ½¶·ÒôĞ§")]
+    [Header("ç”¨äºæˆ˜æ–—éŸ³æ•ˆ")]
     public List<AudioClip> fxClipBattle;
 
-    [Header("ÓÃÓÚ×ßÂ·½Å²½ÒôĞ§")]
+    [Header("ç”¨äºèµ°è·¯è„šæ­¥éŸ³æ•ˆ")]
     public List<AudioClip> fxClipWalk;
 }

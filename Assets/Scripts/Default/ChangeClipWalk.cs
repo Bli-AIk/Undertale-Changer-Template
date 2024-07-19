@@ -1,11 +1,11 @@
 using UnityEngine;
 
 /// <summary>
-/// Íæ¼Ò´¥·¢ºó¸ü¸ÄÒÆ¶¯·¶Î§
+/// ç©å®¶è§¦å‘åæ›´æ”¹ç§»åŠ¨èŒƒå›´
 /// </summary>
 public class ChangeClipWalk : MonoBehaviour
 {
-    [Header("ĞÂ·¶Î§")]
+    [Header("æ–°èŒƒå›´")]
     public Vector2 range;
 
     private void OnTriggerStay2D(Collider2D collision)

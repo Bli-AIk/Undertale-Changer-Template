@@ -8,14 +8,14 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
-/// UI½çÃæ£¬°üÀ¨£ºFPSÏÔÊ¾ ³¤°´ESCÍË³ö ÉèÖÃ½çÃæ
+/// UIç•Œé¢ï¼ŒåŒ…æ‹¬ï¼šFPSæ˜¾ç¤º é•¿æŒ‰ESCé€€å‡º è®¾ç½®ç•Œé¢
 /// </summary>
 public class CanvasController : MonoBehaviour
 {
     public int framePic;
 
     public static CanvasController instance;
-    public bool openTurn;//µĞÈË»ØºÏ²»ÄÜ¿ª
+    public bool openTurn;//æ•Œäººå›åˆä¸èƒ½å¼€
     public TextMeshProUGUI fps;
     public Image frame;
     private Image exitImage;
@@ -28,21 +28,21 @@ public class CanvasController : MonoBehaviour
     private TextMeshProUGUI settingTmp, settingTmpSon, settingTmpUnder;
     public RenderMode renderMode;
 
-    private int settingSelect, settingSelectMax;//Ä¿Ç° Max½öÓÃÓÚÅäÖÃÓïÑÔ°ü
+    private int settingSelect, settingSelectMax;//ç›®å‰ Maxä»…ç”¨äºé…ç½®è¯­è¨€åŒ…
 
     [HideInInspector]
-    public int settingLevel;//ÇĞ»»²ã¼¶ 0²ãÄ¬ÈÏ 1²ã°´¼üÉèÖÃ 2²ãÓïÑÔ°üÅäÖÃ
+    public int settingLevel;//åˆ‡æ¢å±‚çº§ 0å±‚é»˜è®¤ 1å±‚æŒ‰é”®è®¾ç½® 2å±‚è¯­è¨€åŒ…é…ç½®
 
-    private int controlPage, controlSelect;//PageÊÇ·­Ò³ SelectÊÇÇĞ»»Ö÷´Î°´¼üÉèÖÃ
-    private bool isSettingName;//ÊÇ·ñÑ¡ÖĞ
+    private int controlPage, controlSelect;//Pageæ˜¯ç¿»é¡µ Selectæ˜¯åˆ‡æ¢ä¸»æ¬¡æŒ‰é”®è®¾ç½®
+    private bool isSettingName;//æ˜¯å¦é€‰ä¸­
     private float saveVolume;
     private bool isSettingControl;
 
     [HideInInspector]
-    public bool freeze;//·ÀÖ¹ÇĞ³¡¾°Ê±ÕûÊÂ¶ù
+    public bool freeze;//é˜²æ­¢åˆ‡åœºæ™¯æ—¶æ•´äº‹å„¿
 
     private Canvas canvas;
-    private TypeWritter[] typeWritters;//´æ´¢´ò×Ö»úÒÔÔİÍ£Ğ­³Ì
+    private TypeWritter[] typeWritters;//å­˜å‚¨æ‰“å­—æœºä»¥æš‚åœåç¨‹
 
     public Animator animator;
 
@@ -121,9 +121,9 @@ public class CanvasController : MonoBehaviour
                 }
                 if (!isSetting)
                     settingTmpSon.text = ((int)(MainControl.instance.OverworldControl.mainVolume * 100)).ToString() + "%\n\n" + OpenOrClose(MainControl.instance.OverworldControl.fullScreen) + '\n' +
-                    MainControl.instance.OverworldControl.resolution.x + '¡Á' + MainControl.instance.OverworldControl.resolution.y + '\n' + OpenOrClose(MainControl.instance.OverworldControl.noSFX) + '\n' + OpenOrClose(MainControl.instance.OverworldControl.openFPS);
+                    MainControl.instance.OverworldControl.resolution.x + 'Ã—' + MainControl.instance.OverworldControl.resolution.y + '\n' + OpenOrClose(MainControl.instance.OverworldControl.noSFX) + '\n' + OpenOrClose(MainControl.instance.OverworldControl.openFPS);
                 else settingTmpSon.text = "<color=yellow>" + ((int)(MainControl.instance.OverworldControl.mainVolume * 100)).ToString() + "%</color>\n\n" + OpenOrClose(MainControl.instance.OverworldControl.fullScreen) + '\n' +
-                    MainControl.instance.OverworldControl.resolution.x + '¡Á' + MainControl.instance.OverworldControl.resolution.y + '\n' + OpenOrClose(MainControl.instance.OverworldControl.noSFX) + '\n' + OpenOrClose(MainControl.instance.OverworldControl.openFPS);
+                    MainControl.instance.OverworldControl.resolution.x + 'Ã—' + MainControl.instance.OverworldControl.resolution.y + '\n' + OpenOrClose(MainControl.instance.OverworldControl.noSFX) + '\n' + OpenOrClose(MainControl.instance.OverworldControl.openFPS);
 
                 break;
 
@@ -230,7 +230,7 @@ public class CanvasController : MonoBehaviour
                 if (OnlySetSon)
                     settingSelect = MainControl.instance.languagePack;
 
-                for (int i = 0; i < MainControl.instance.languagePackInsideNum; i++) //ÄÚÖÃ°üĞÅÏ¢
+                for (int i = 0; i < MainControl.instance.languagePackInsideNum; i++) //å†…ç½®åŒ…ä¿¡æ¯
                 {
                     string pathString = "TextAssets/LanguagePacks/" + MainControl.instance.GetLanguageInsideId(i);
 
@@ -262,8 +262,8 @@ public class CanvasController : MonoBehaviour
     }
 
     /// <summary>
-    /// »ñÈ¡ÓïÑÔ°üĞÅÏ¢
-    /// ·µ»ØreturnString
+    /// è·å–è¯­è¨€åŒ…ä¿¡æ¯
+    /// è¿”å›returnString
     /// </summary>
     private string GetLanguagePacksName(string pathString, string returnString, bool isOutSide)
     {
@@ -284,7 +284,7 @@ public class CanvasController : MonoBehaviour
     }
 
     /// <summary>
-    /// ·µ»Ø¿ª/¹ØÎÄ±¾
+    /// è¿”å›å¼€/å…³æ–‡æœ¬
     /// </summary>
     private string OpenOrClose(bool booler)
     {
@@ -321,7 +321,7 @@ public class CanvasController : MonoBehaviour
             exitImage.color = new Color(1, 1, 1, 0);
         }
 
-        //ÉèÖÃ²Ëµ¥
+        //è®¾ç½®èœå•
         if (isSettingControl)
         {
             SettingText(false, true);
@@ -775,17 +775,17 @@ public class CanvasController : MonoBehaviour
         settingTmpUnder.text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "ControlEggshell");
     }
 
-    private float m_LastUpdateShowTime = 0f;  //ÉÏÒ»´Î¸üĞÂÖ¡ÂÊµÄÊ±¼ä;
-    private float m_UpdateShowDeltaTime = 0.2f;//¸üĞÂÖ¡ÂÊµÄÊ±¼ä¼ä¸ô;
-    private int m_FrameUpdate = 0;//Ö¡Êı;
-    private float m_FPS = 0;//Ö¡ÂÊ
+    private float m_LastUpdateShowTime = 0f;  //ä¸Šä¸€æ¬¡æ›´æ–°å¸§ç‡çš„æ—¶é—´;
+    private float m_UpdateShowDeltaTime = 0.2f;//æ›´æ–°å¸§ç‡çš„æ—¶é—´é—´éš”;
+    private int m_FrameUpdate = 0;//å¸§æ•°;
+    private float m_FPS = 0;//å¸§ç‡
 
     private string FPSFlash(string origin)
     {
         m_FrameUpdate++;
         if (Time.realtimeSinceStartup - m_LastUpdateShowTime >= m_UpdateShowDeltaTime)
         {
-            //FPS = Ä³¶ÎÊ±¼äÄÚµÄ×ÜÖ¡Êı / Ä³¶ÎÊ±¼ä
+            //FPS = æŸæ®µæ—¶é—´å†…çš„æ€»å¸§æ•° / æŸæ®µæ—¶é—´
             m_FPS = m_FrameUpdate / (Time.realtimeSinceStartup - m_LastUpdateShowTime);
             m_FrameUpdate = 0;
             m_LastUpdateShowTime = Time.realtimeSinceStartup;
@@ -795,7 +795,7 @@ public class CanvasController : MonoBehaviour
     }
 
     /// <summary>
-    /// Animµ÷ÓÃ
+    /// Animè°ƒç”¨
     /// </summary>
     public void AnimSetHeartPos()
     {
@@ -806,10 +806,10 @@ public class CanvasController : MonoBehaviour
     public Vector2 WorldToUgui(Vector3 position)
     {
         RectTransform canvasRectTransform = GetComponent<RectTransform>();
-        Vector2 screenPoint = Camera.main.WorldToScreenPoint(position);//ÊÀ½ç×ø±ê×ª»»ÎªÆÁÄ»×ø±ê
+        Vector2 screenPoint = Camera.main.WorldToScreenPoint(position);//ä¸–ç•Œåæ ‡è½¬æ¢ä¸ºå±å¹•åæ ‡
         Vector2 screenSize = new Vector2(Screen.width, Screen.height);
-        screenPoint -= screenSize / 2;//½«ÆÁÄ»×ø±ê±ä»»ÎªÒÔÆÁÄ»ÖĞĞÄÎªÔ­µã
-        Vector2 anchorPos = screenPoint / screenSize * canvasRectTransform.sizeDelta;//Ëõ·ÅµÃµ½UGUI×ø±ê
+        screenPoint -= screenSize / 2;//å°†å±å¹•åæ ‡å˜æ¢ä¸ºä»¥å±å¹•ä¸­å¿ƒä¸ºåŸç‚¹
+        Vector2 anchorPos = screenPoint / screenSize * canvasRectTransform.sizeDelta;//ç¼©æ”¾å¾—åˆ°UGUIåæ ‡
 
         return anchorPos;
     }

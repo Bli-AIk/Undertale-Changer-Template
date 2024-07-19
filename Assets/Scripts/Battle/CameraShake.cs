@@ -9,7 +9,7 @@ public class CameraShake : MonoBehaviour
 
     public bool moveWithHeart;
     public Vector3 heartBasicPos = new Vector3(0, -1.5f);
-    [Header("moveExtentµÄYÖá¶ÔÓ¦ÉãÏñ»úZÖá")]
+    [Header("moveExtentçš„Yè½´å¯¹åº”æ‘„åƒæœºZè½´")]
     public Vector2 moveExtent = new Vector2(0.5f, 0.5f);
 
     private void Update()
@@ -30,8 +30,8 @@ public class CameraShake : MonoBehaviour
         tweenMoveBack = null;
     }
     /// <summary>
-    /// ÉãÏñ»úÒ¡»Î
-    /// loops»á×Ô¶¯×ª»»ÎªÅ¼Êı¡£
+    /// æ‘„åƒæœºæ‘‡æ™ƒ
+    /// loopsä¼šè‡ªåŠ¨è½¬æ¢ä¸ºå¶æ•°ã€‚
     /// </summary>
 
     public void Shake(Vector3 v3move, Vector3 v3spin, int loops = 4, float shakeTime = 1f / 60f * 4f, string getSon = "", Ease easeMove = Ease.OutCubic, Ease easeSpin = Ease.InOutCubic)

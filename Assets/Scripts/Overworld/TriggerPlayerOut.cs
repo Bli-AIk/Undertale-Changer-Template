@@ -1,36 +1,36 @@
 using UnityEngine;
 
 /// <summary>
-/// V0.1.1ĞÂ¼Ó
-/// ÓÃÓÚ´ø¶¯»­Æ÷µÄOW£¬ÔÚÍæ¼Ò½øÈë/Àë¿ªÊ±£¬Ö´ĞĞ´úÂë/²¥·Å¶¯»­¡£
-/// ¿É¶à·½Ãæµ÷Õû£¬ÎÒ²Â
+/// V0.1.1æ–°åŠ 
+/// ç”¨äºå¸¦åŠ¨ç”»å™¨çš„OWï¼Œåœ¨ç©å®¶è¿›å…¥/ç¦»å¼€æ—¶ï¼Œæ‰§è¡Œä»£ç /æ’­æ”¾åŠ¨ç”»ã€‚
+/// å¯å¤šæ–¹é¢è°ƒæ•´ï¼Œæˆ‘çŒœ
 /// </summary>
 public class TriggerPlayerOut : MonoBehaviour
 {
     public float volume = 1;
     public float pitch = 1;
 
-    [Header("¸ü¸Ä¶¯»­µÄ²¼¶ûÖµ£º")]
+    [Header("æ›´æ”¹åŠ¨ç”»çš„å¸ƒå°”å€¼ï¼š")]
     public string changeBool;
 
-    [Header("È¥³ı½øÈë¼ì²â·¶Î§Ö´ĞĞ¶¯»­")]
+    [Header("å»é™¤è¿›å…¥æ£€æµ‹èŒƒå›´æ‰§è¡ŒåŠ¨ç”»")]
     public bool banTrigger;
 
-    [Header("ÔÚÉÏ¸ö³¡¾°ÎªÖ¸¶¨³¡¾°Ê±È¥³ıÊ§Ğ§")]
+    [Header("åœ¨ä¸Šä¸ªåœºæ™¯ä¸ºæŒ‡å®šåœºæ™¯æ—¶å»é™¤å¤±æ•ˆ")]
     public string notBanSceneSp;
 
-    [Header("ÉèÖÃÔÚÀë¿ª·¶Î§/½øÈë·¶Î§Ê±Ö´ĞĞ")]
+    [Header("è®¾ç½®åœ¨ç¦»å¼€èŒƒå›´/è¿›å…¥èŒƒå›´æ—¶æ‰§è¡Œ")]
     public bool isEnter;
 
     private Animator animator;
     private bool triggered = false;
 
-    [Header("ÔÚÉÏ¸ö³¡¾°ÎªÖ¸¶¨³¡¾°Ê±¶¯»­Æ÷µÄsceneBoolÉètrue")]
+    [Header("åœ¨ä¸Šä¸ªåœºæ™¯ä¸ºæŒ‡å®šåœºæ™¯æ—¶åŠ¨ç”»å™¨çš„sceneBoolè®¾true")]
     public string sceneSp;
 
     public string sceneBool = "SceneSp";
 
-    [Header("ÔÚelectricOpenµÄÊ±ºòelectricOpen")]
+    [Header("åœ¨electricOpençš„æ—¶å€™electricOpen")]
     public bool electricOpen;
 
     private void Start()
@@ -66,7 +66,7 @@ public class TriggerPlayerOut : MonoBehaviour
     }
 
     /*
-    //¸ø¶¯»­µ÷ÓÃµÄ
+    //ç»™åŠ¨ç”»è°ƒç”¨çš„
 
     void SetNoActive(string name)
     {

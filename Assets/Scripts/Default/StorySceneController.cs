@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 
 /// <summary>
-/// ¿ØÖÆ½²¹ÊÊÂ³¡¾°£¨²¥PPT£©
+/// Â¿Ã˜Ã–Ã†Â½Â²Â¹ÃŠÃŠÃ‚Â³Â¡Â¾Â°Â£Â¨Â²Â¥PPTÂ£Â©
 /// </summary>
 public class StorySceneController : MonoBehaviour
 {

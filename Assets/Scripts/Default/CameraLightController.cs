@@ -3,7 +3,7 @@ using UnityEngine.Rendering.Universal;
 
 public class CameraLightController : MonoBehaviour
 {
-    public float viewDistance = 10f; // ¿ÉÊÓ·¶Î§µÄ°ë¾¶
+    public float viewDistance = 10f; // å¯è§†èŒƒå›´çš„åŠå¾„
 
     private Camera mainCamera;
 
@@ -23,7 +23,7 @@ public class CameraLightController : MonoBehaviour
         if (MainControl.instance.OverworldControl.noSFX)
             return;
 
-        // »ñÈ¡ËùÓĞ¹âÔ´×é¼şµÄÒıÓÃ
+        // è·å–æ‰€æœ‰å…‰æºç»„ä»¶çš„å¼•ç”¨
         Light2D[] lights = FindObjectsOfType<Light2D>();
 
         foreach (Light2D light in lights)

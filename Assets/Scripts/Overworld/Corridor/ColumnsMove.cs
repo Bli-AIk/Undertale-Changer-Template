@@ -1,12 +1,12 @@
 using UnityEngine;
 
 /// <summary>
-/// 长廊柱子移动
+/// 闀垮粖鏌卞瓙绉诲姩
 /// </summary>
 public class ColumnsMove : MonoBehaviour
 {
     private CameraFollowPlayer parentCamera;
-    public float speed;//包括方向(正负)
+    public float speed;//鍖呮嫭鏂瑰悜(姝ｈ礋)
 
     private void Start()
     {

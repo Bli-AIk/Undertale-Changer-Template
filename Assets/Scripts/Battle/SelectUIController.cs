@@ -5,49 +5,49 @@ using TMPro;
 using UnityEngine;
 using Log;
 /// <summary>
-/// Battle³¡¾°ÖĞµÄUI¿ØÖÆÆ÷
-/// Ò²¸ºÔğÍæ¼Ò»ØºÏµÄ¿ØÖÆ
+/// Battleåœºæ™¯ä¸­çš„UIæ§åˆ¶å™¨
+/// ä¹Ÿè´Ÿè´£ç©å®¶å›åˆçš„æ§åˆ¶
 /// </summary>
 public class SelectUIController : MonoBehaviour
 {
     private TextMeshPro nameUI, hpUI, textUI, textUIBack;
     private SpriteRenderer hpSpr;
 
-    [Header("HPÌõÅäÉ«")]
+    [Header("HPæ¡é…è‰²")]
     public Color hpColorUnder;
 
     public Color hpColorOn;
     public Color hpColorHit;
 
-    [Header("¶Ô»°ÆøÅİÔØÈëÊı")]//ÔØÈëactSave
+    [Header("å¯¹è¯æ°”æ³¡è½½å…¥æ•°")]//è½½å…¥actSave
     public int numDialog;
 
     public bool isDialog;
 
-    [Header("Ôİ´æÎ´Ê¹ÓÃµÄSprite")]
+    [Header("æš‚å­˜æœªä½¿ç”¨çš„Sprite")]
     public List<Sprite> spriteUI;
 
     public List<SpriteRenderer> buttons;
     public List<Vector2> playerUIPos;
 
-    [Header("ËÄ¸ö°´Å¥UIµÄÑ¡Ôñ 0¿ª")]
+    [Header("å››ä¸ªæŒ‰é’®UIçš„é€‰æ‹© 0å¼€")]
     public int selectUI;
 
-    [Header("²ã")]
-    public int selectLayer;//0Ñ¡Ôñ°´Å¥ 1Ñ¡ÔñÃû³Æ 2ActÑ¡Ïî/±³°ü²ã 3Ö´ĞĞ²ã ½øÈëµĞ·½»ØºÏºó¹éÁã
+    [Header("å±‚")]
+    public int selectLayer;//0é€‰æ‹©æŒ‰é’® 1é€‰æ‹©åç§° 2Acté€‰é¡¹/èƒŒåŒ…å±‚ 3æ‰§è¡Œå±‚ è¿›å…¥æ•Œæ–¹å›åˆåå½’é›¶
 
-    [Header("×ÓÑ¡Ôñ")]
+    [Header("å­é€‰æ‹©")]
     public int selectSon;
 
-    public int selectGrandSon;//Item&Mercy:1 2 3Èı¸öÎ»ÖÃ ACT:ËÄ¸öÎ»ÖÃ
+    public int selectGrandSon;//Item&Mercy:1 2 3ä¸‰ä¸ªä½ç½® ACT:å››ä¸ªä½ç½®
     private ItemSelectController itemSelectController;
     private TypeWritter typeWritter;
     private GameObject enemiesHpLine;
 
-    [Header("Ôİ´æACTÑ¡ÏîÒÔ±ãµ÷ÓÃ")]
+    [Header("æš‚å­˜ACTé€‰é¡¹ä»¥ä¾¿è°ƒç”¨")]
     public List<string> actSave;
 
-    [Header("×Ô¶¯Ñ°ÕÒÕ½¶·×Ü¿ØµÄ¹ÖÎï Ğè±£Ö¤Ãû³ÆÒ»ÖÂ")]
+    [Header("è‡ªåŠ¨å¯»æ‰¾æˆ˜æ–—æ€»æ§çš„æ€ªç‰© éœ€ä¿è¯åç§°ä¸€è‡´")]
     public List<EnemiesController> enemiesControllers;
 
     private TargetController target;
@@ -56,7 +56,7 @@ public class SelectUIController : MonoBehaviour
     private int saveTurn = -1;
     private string saveTurnText = "";
 
-    [Header("Ê×´Î½øÈë»ØºÏµÄÊ±ºò²¥·Å×Ô¶¨ÒåµÄ»ØºÏÎÄ±¾")]
+    [Header("é¦–æ¬¡è¿›å…¥å›åˆçš„æ—¶å€™æ’­æ”¾è‡ªå®šä¹‰çš„å›åˆæ–‡æœ¬")]
     public bool firstIn = false;
 
     public int firstInDiy = -1;
@@ -122,7 +122,7 @@ public class SelectUIController : MonoBehaviour
             {
                 if (numDialog < actSave.Count)
                     KeepDialogBubble();
-                else//µĞ·½»ØºÏ£º¿ª£¡
+                else//æ•Œæ–¹å›åˆï¼šå¼€ï¼
                 {
                     isDialog = false;
 
@@ -137,7 +137,7 @@ public class SelectUIController : MonoBehaviour
     }
 
     /// <summary>
-    /// UI´ò×Ö ´ò×ÖÍê³Éºó²»»áÇ¿ÖÆ¿ØËÀÎÄ±¾
+    /// UIæ‰“å­— æ‰“å­—å®Œæˆåä¸ä¼šå¼ºåˆ¶æ§æ­»æ–‡æœ¬
     /// </summary>
     private void Type(string text)
     {
@@ -145,7 +145,7 @@ public class SelectUIController : MonoBehaviour
     }
 
     /// <summary>
-    /// Õ½Êõ»¥»»
+    /// æˆ˜æœ¯äº’æ¢
     /// </summary>
     private void SpriteChange()
     {
@@ -155,8 +155,8 @@ public class SelectUIController : MonoBehaviour
     }
 
     /// <summary>
-    /// selectUI=1Ê±µÄÉè¶¨
-    /// Ö÷ÒªÎªÑ¡¶¨¹ÖÎï
+    /// selectUI=1æ—¶çš„è®¾å®š
+    /// ä¸»è¦ä¸ºé€‰å®šæ€ªç‰©
     /// </summary>
     private void LayerOneSet()
     {
@@ -174,7 +174,7 @@ public class SelectUIController : MonoBehaviour
     }
 
     /// <summary>
-    ///½øÎÒ·½»ØºÏ
+    ///è¿›æˆ‘æ–¹å›åˆ
     /// </summary>
     public void InTurn()
     {
@@ -193,7 +193,7 @@ public class SelectUIController : MonoBehaviour
     }
 
     /// <summary>
-    /// ÎÒµÄ»ØºÏ£¡³é¿¨)
+    /// æˆ‘çš„å›åˆï¼æŠ½å¡)
     /// </summary>
     private void MyTurn()
     {
@@ -292,7 +292,7 @@ public class SelectUIController : MonoBehaviour
                 }
                 switch (selectUI)
                 {
-                    case 1://FIGHT£ºÑ¡ÔñµĞÈË
+                    case 1://FIGHTï¼šé€‰æ‹©æ•Œäºº
                         enemiesHpLine.SetActive(true);
                         LayerOneSet();
                         if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
@@ -306,7 +306,7 @@ public class SelectUIController : MonoBehaviour
                         }
                         break;
 
-                    case 2://ACT£ºÑ¡ÔñµĞÈË
+                    case 2://ACTï¼šé€‰æ‹©æ•Œäºº
                         LayerOneSet();
                         if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
                         {
@@ -339,7 +339,7 @@ public class SelectUIController : MonoBehaviour
                         }
                         break;
 
-                    case 3://ITEM£ºÌø2
+                    case 3://ITEMï¼šè·³2
                         itemSelectController.myItemMax = MainControl.instance.FindMax(MainControl.instance.PlayerControl.myItems);
                         itemSelectController.Open();
                         selectLayer = 2;
@@ -350,7 +350,7 @@ public class SelectUIController : MonoBehaviour
                             UITextUpdate(UITextMode.Food);
                         break;
 
-                    case 4://MERCY£ºÑ¡ÔñµĞÈË
+                    case 4://MERCYï¼šé€‰æ‹©æ•Œäºº
                         LayerOneSet();
                         if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
                         {
@@ -424,10 +424,10 @@ public class SelectUIController : MonoBehaviour
                         }
                         else if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
                         {
-                            switch (selectSon)//ÔÚÕâÀïĞ´ACTµÄÏà¹Ø´¥·¢´úÂë
+                            switch (selectSon)//åœ¨è¿™é‡Œå†™ACTçš„ç›¸å…³è§¦å‘ä»£ç 
                             {
-                                case 0://¹ÖÎï0
-                                    switch (selectGrandSon)//Ñ¡Ïî
+                                case 0://æ€ªç‰©0
+                                    switch (selectGrandSon)//é€‰é¡¹
                                     {
                                         case 1:
 
@@ -450,8 +450,8 @@ public class SelectUIController : MonoBehaviour
                                     }
                                     break;
 
-                                case 1://¹ÖÎï1
-                                    switch (selectGrandSon)//Ñ¡Ïî
+                                case 1://æ€ªç‰©1
+                                    switch (selectGrandSon)//é€‰é¡¹
                                     {
                                         case 1:
 
@@ -471,8 +471,8 @@ public class SelectUIController : MonoBehaviour
                                     }
                                     break;
 
-                                case 2://¹ÖÎï2
-                                    switch (selectGrandSon)//Ñ¡Ïî
+                                case 2://æ€ªç‰©2
+                                    switch (selectGrandSon)//é€‰é¡¹
                                     {
                                         case 1:
 
@@ -788,7 +788,7 @@ public class SelectUIController : MonoBehaviour
     private int hpFood;
 
     /// <summary>
-    /// ¸üĞÂUIÎÄ×ÖÓëÑªÌõ
+    /// æ›´æ–°UIæ–‡å­—ä¸è¡€æ¡
     /// </summary>
     public void UITextUpdate(UITextMode uiTextMode = 0, int foodNum = 0)
     {
@@ -843,7 +843,7 @@ public class SelectUIController : MonoBehaviour
     }
 
     /// <summary>
-    /// ½â¾öhpUI°Ñ01ÏÔÊ¾³É1µÄÎÊÌâ)
+    /// è§£å†³hpUIæŠŠ01æ˜¾ç¤ºæˆ1çš„é—®é¢˜)
     /// </summary>
     private string UIHPVoid(int i)
     {

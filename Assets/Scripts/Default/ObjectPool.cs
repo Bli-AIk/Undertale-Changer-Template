@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class ObjectPool : MonoBehaviour
 {
-    [Header("Ìî³ä¶ÔÏó³ØµÄ¶ÔÏóÊıÁ¿")]
+    [Header("å¡«å……å¯¹è±¡æ± çš„å¯¹è±¡æ•°é‡")]
     public int count = 10;
 
     public GameObject obj;
@@ -11,7 +11,7 @@ public class ObjectPool : MonoBehaviour
     public Transform parent = null;
 
     /// <summary>
-    /// ³õÊ¼»¯/Ìî³ä¶ÔÏó³Ø
+    /// åˆå§‹åŒ–/å¡«å……å¯¹è±¡æ± 
     /// </summary>
     public void FillPool()
     {
@@ -26,7 +26,7 @@ public class ObjectPool : MonoBehaviour
     }
 
     /// <summary>
-    /// ·µ»Ø¶ÔÏó³Ø
+    /// è¿”å›å¯¹è±¡æ± 
     /// </summary>
     public void ReturnPool(GameObject gameObject)
     {
@@ -39,7 +39,7 @@ public class ObjectPool : MonoBehaviour
     }
 
     /// <summary>
-    /// Ï²Ìá¶ÔÏó
+    /// å–œæå¯¹è±¡
     /// </summary>
     public GameObject GetFromPool()
     {

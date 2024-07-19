@@ -2,18 +2,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// ´æ´¢ËùÓĞÎïÆ·ĞÅÏ¢¡£
+/// å­˜å‚¨æ‰€æœ‰ç‰©å“ä¿¡æ¯ã€‚
 /// </summary>
 [CreateAssetMenu(fileName = "ItemControl", menuName = "ItemControl")]
 public class ItemControl : ScriptableObject
 {
-    public TextAsset itemData;//Êı¾İ°ü(ÄÚÖÃÊı¾İµ÷Èë)
-    public string itemText;//ÓïÑÔ°ü
-    public List<string> itemMax, itemTextMax;//×ÜList´æ´¢ ½«·ÖÅäµ½MainControl
+    public TextAsset itemData;//æ•°æ®åŒ…(å†…ç½®æ•°æ®è°ƒå…¥)
+    public string itemText;//è¯­è¨€åŒ…
+    public List<string> itemMax, itemTextMax;//æ€»Listå­˜å‚¨ å°†åˆ†é…åˆ°MainControl
     public List<string> itemTextMaxItem, itemTextMaxItemSon, itemTextMaxData;
-    public List<string> itemFoods, itemArms, itemArmors, itemOthers;//@ + Ãû³Æ/ÊôĞÔ1/ÊôĞÔ2 ListÖĞÅÅĞòÎªID    3Ñ­0+ 2Ñ­10000+ 2Ñ­20000+ 3Ñ­30000+
+    public List<string> itemFoods, itemArms, itemArmors, itemOthers;//@ + åç§°/å±æ€§1/å±æ€§2 Listä¸­æ’åºä¸ºID    3å¾ª0+ 2å¾ª10000+ 2å¾ª20000+ 3å¾ª30000+
 
     //-------------------------------------------------------
 
-    public List<int> itemBox1, itemBox2;//Ïä×ÓÊı¾İ ´¢´æ±àºÅ
+    public List<int> itemBox1, itemBox2;//ç®±å­æ•°æ® å‚¨å­˜ç¼–å·
 }

@@ -11,8 +11,8 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
-/// µ÷ÓÃËùÓĞScriptableObject ²¢¸ºÔğ¶ÔÊı¾İºÍÓïÑÔ°üµÄµ¼Èë
-/// »¹°üÀ¨´ó²¿·Ö³£ÓÃµÄº¯Êı
+/// è°ƒç”¨æ‰€æœ‰ScriptableObject å¹¶è´Ÿè´£å¯¹æ•°æ®å’Œè¯­è¨€åŒ…çš„å¯¼å…¥
+/// è¿˜åŒ…æ‹¬å¤§éƒ¨åˆ†å¸¸ç”¨çš„å‡½æ•°
 /// </summary>
 public class MainControl : MonoBehaviour
 {
@@ -20,28 +20,28 @@ public class MainControl : MonoBehaviour
     public int languagePack;
     public int dataNum;
 
-    public readonly int languagePackInsideNum = 3;//ÄÚÖÃÓïÑÔ°ü×ÜÊı
+    public readonly int languagePackInsideNum = 3;//å†…ç½®è¯­è¨€åŒ…æ€»æ•°
 
     public bool blacking = false;
 
-    [Header("-BGM BPMÉèÖÃ-")]
+    [Header("-BGM BPMè®¾ç½®-")]
     [Space]
     [Header("BGM BPM")]
     public float bpm;
 
-    [Header("BGM BPMÆ«ÒÆ")]
+    [Header("BGM BPMåç§»")]
     public float bpmDeviation;
 
-    [Header("¿ªÆô½ÚÅÄÆ÷")]
+    [Header("å¼€å¯èŠ‚æ‹å™¨")]
     public bool isMetronome;
 
-    [Header("-BGM BPM¼ÆËã½á¹û-")]
+    [Header("-BGM BPMè®¡ç®—ç»“æœ-")]
     [Space]
     public List<float> beatTimes;
 
-    [Header("-MainControlÉèÖÃ-")]
+    [Header("-MainControlè®¾ç½®-")]
     [Space]
-    [Header("×´Ì¬:Õı³£,Õ½¶·ÄÚ")]
+    [Header("çŠ¶æ€:æ­£å¸¸,æˆ˜æ–—å†…")]
     public SceneState sceneState;
 
     public bool haveInOutBlack, noInBlack;
@@ -49,11 +49,11 @@ public class MainControl : MonoBehaviour
 
     private Image inOutBlack;
 
-    [Header("ÒıÓÃÓÃµÄ")]
-    [Header("Õ½¶·Íâ")]
+    [Header("å¼•ç”¨ç”¨çš„")]
+    [Header("æˆ˜æ–—å¤–")]
     public PlayerBehaviour playerBehaviour;
 
-    //[Header("Õ½¶·ÄÚ")]
+    //[Header("æˆ˜æ–—å†…")]
     //public OldBoxController OldBoxController;
 
     private Camera cameraMainInBattle;
@@ -103,7 +103,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// »ñÈ¡ÄÚÖÃÓïÑÔ°üID
+    /// è·å–å†…ç½®è¯­è¨€åŒ…ID
     /// </summary>
     public string GetLanguageInsideId(int id)
     {
@@ -123,7 +123,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// ¼ÓÔØ¶ÔÓ¦ÓïÑÔ°üµÄÊı¾İ
+    /// åŠ è½½å¯¹åº”è¯­è¨€åŒ…çš„æ•°æ®
     /// </summary>
     private string LoadLanguageData(string path)
     {
@@ -148,17 +148,17 @@ public class MainControl : MonoBehaviour
 
     public void InitializationLoad()
     {
-        //µ÷ÓÃScriptableObject
+        //è°ƒç”¨ScriptableObject
         //--------------------------------------------------------------------------------
         PlayerControl = Resources.Load<PlayerControl>("PlayerControl");
         AudioControl = Resources.Load<AudioControl>("AudioControl");
-        //InitializationOverworldÄÚµ÷ÓÃOverworldControl
-        //InitializationÄÚµ÷ÓÃItemControl
+        //InitializationOverworldå†…è°ƒç”¨OverworldControl
+        //Initializationå†…è°ƒç”¨ItemControl
         //--------------------------------------------------------------------------------
     }
 
     /// <summary>
-    /// ³õÊ¼»¯¼ÓÔØÒ»´ó¶ÑÊı¾İ
+    /// åˆå§‹åŒ–åŠ è½½ä¸€å¤§å †æ•°æ®
     /// </summary>
     public void Initialization(int lan)
     {
@@ -170,7 +170,7 @@ public class MainControl : MonoBehaviour
 
         LanguagePackDetection();
 
-        //ItemControl¼ÓÔØ
+        //ItemControlåŠ è½½
         //--------------------------------------------------------------------------------
         ItemControl.itemText = LoadLanguageData("UI\\ItemText");
 
@@ -203,7 +203,7 @@ public class MainControl : MonoBehaviour
 
         if (sceneState == SceneState.InBattle)
             return;
-        //OverworldControl¼ÓÔØ
+        //OverworldControlåŠ è½½
         //--------------------------------------------------------------------------------
 
         OverworldControl.sceneTextsAsset = LoadLanguageData("Overworld\\" + SceneManager.GetActiveScene().name);
@@ -225,7 +225,7 @@ public class MainControl : MonoBehaviour
 
     public void InitializationLanguagePackFullWidth()
     {
-        //¼ì²âÓïÑÔ°üÈ«°ë½Ç
+        //æ£€æµ‹è¯­è¨€åŒ…å…¨åŠè§’
         if (OverworldControl.textWidth != bool.Parse(ScreenMaxToOneSon(OverworldControl.settingSave, "LanguagePackFullWidth")))
         {
             OverworldControl.textWidth = bool.Parse(ScreenMaxToOneSon(OverworldControl.settingSave, "LanguagePackFullWidth"));
@@ -242,7 +242,7 @@ public class MainControl : MonoBehaviour
 
     public void InitializationBattle()
     {
-        //BattleControl¼ÓÔØ
+        //BattleControlåŠ è½½
         //--------------------------------------------------------------------------------
         if (BattleControl == null)
             BattleControl = Resources.Load<BattleControl>("BattleControl");
@@ -367,7 +367,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// Éú³É×Ö·û´®ĞÎÊ½µÄËæ»úÑÕÉ«¡£
+    /// ç”Ÿæˆå­—ç¬¦ä¸²å½¢å¼çš„éšæœºé¢œè‰²ã€‚
     /// </summary>
     public string RandomStringColor()
     {
@@ -380,7 +380,7 @@ public class MainControl : MonoBehaviour
         return text;
     }
     /// <summary>
-    /// Éú³É×Ö·û´®ĞÎÊ½µÄËæ»úÑÕÉ«¡£
+    /// ç”Ÿæˆå­—ç¬¦ä¸²å½¢å¼çš„éšæœºé¢œè‰²ã€‚
     /// </summary>
     public string RandomStringColor(string origin)
     {
@@ -430,7 +430,7 @@ public class MainControl : MonoBehaviour
             Metronome();
     }
     /// <summary>
-    /// ¼ÆËãBGM½ÚÅÄ
+    /// è®¡ç®—BGMèŠ‚æ‹
     /// </summary>
     List<float> BGMBPMCount(float bpm, float bpmDeviation, float musicDuration = 0)
     {
@@ -441,7 +441,7 @@ public class MainControl : MonoBehaviour
         float currentTime = bpmDeviation;
         List<float> beats = new List<float>();
 
-        // ¼ÆËãÃ¿¸öÅÄ×ÓµÄÊ±¼äµã£¬Ö±µ½´ïµ½ÒôÀÖÊ±³¤
+        // è®¡ç®—æ¯ä¸ªæ‹å­çš„æ—¶é—´ç‚¹ï¼Œç›´åˆ°è¾¾åˆ°éŸ³ä¹æ—¶é•¿
         while (currentTime < musicDuration)
         {
             beats.Add(currentTime);
@@ -453,7 +453,7 @@ public class MainControl : MonoBehaviour
     public int currentBeatIndex = 0;
     public float nextBeatTime = 0f;
     /// <summary>
-    /// ¿ØÖÆ½ÚÅÄÆ÷
+    /// æ§åˆ¶èŠ‚æ‹å™¨
     /// </summary>
     void Metronome()
     {
@@ -491,7 +491,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// Ó¦ÓÃÄ¬ÈÏ¼üÎ»
+    /// åº”ç”¨é»˜è®¤é”®ä½
     /// </summary>
     public void ApplyDefaultControl()
     {
@@ -544,8 +544,8 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// ´«ÈëÄ¬ÈÏKeyCode²¢×ª»»ÎªÓÎÏ·ÄÚ¼üÎ»¡£
-    /// mode:0°´ÏÂ 1³ÖĞø 2Ì§Æğ
+    /// ä¼ å…¥é»˜è®¤KeyCodeå¹¶è½¬æ¢ä¸ºæ¸¸æˆå†…é”®ä½ã€‚
+    /// mode:0æŒ‰ä¸‹ 1æŒç»­ 2æŠ¬èµ·
     /// </summary>
     public bool KeyArrowToControl(KeyCode key, int mode = 0)
     {
@@ -684,7 +684,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// ¿ª/¹Ø SFX
+    /// å¼€/å…³ SFX
     /// </summary>
     public void FindAndChangeAllSFX(bool isClose)
     {
@@ -713,7 +713,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// °´°´tab¸Ä¸Ä·Ö±æÂÊÄÇÑù×Ó))
+    /// æŒ‰æŒ‰tabæ”¹æ”¹åˆ†è¾¨ç‡é‚£æ ·å­))
     /// </summary>
     public void ChangeResolution()
     {
@@ -735,7 +735,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// ºÍ·Ö±æÂÊÉèÖÃÅäÌ×µÄ»»Ëã
+    /// å’Œåˆ†è¾¨ç‡è®¾ç½®é…å¥—çš„æ¢ç®—
     /// </summary>
     private int ScreenSet(int y)
     {
@@ -746,7 +746,7 @@ public class MainControl : MonoBehaviour
         return y;
     }
 
-    private void SetCanvasFrameSprite(int framePic = 2)//Ò»°ãÎªCanvasController.instance.framePic
+    private void SetCanvasFrameSprite(int framePic = 2)//ä¸€èˆ¬ä¸ºCanvasController.instance.framePic
     {
         Image frame = CanvasController.instance.frame;
         if (framePic < 0)
@@ -760,7 +760,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// ·Ö±æÂÊÉèÖÃ
+    /// åˆ†è¾¨ç‡è®¾ç½®
     /// </summary>
     public void SetResolution(int resolution)
     {
@@ -791,7 +791,7 @@ public class MainControl : MonoBehaviour
                 
                 cameraMainInBattle.rect = new Rect(0, 0, 1, 1);
             }
-            // BackpackBehaviour rawImageÔÚÆä½Å±¾ÖĞ¿ØÖÆ
+            // BackpackBehaviour rawImageåœ¨å…¶è„šæœ¬ä¸­æ§åˆ¶
             /*
             RectTransform rectTransform = BackpackBehaviour.instance.rawImage.rectTransform;
 
@@ -818,7 +818,7 @@ public class MainControl : MonoBehaviour
                 cameraMainInBattle.rect = new Rect(0, 0.056f, 1, 0.888f);
             }
 
-            // BackpackBehaviour rawImageÔÚÆä½Å±¾ÖĞ¿ØÖÆ
+            // BackpackBehaviour rawImageåœ¨å…¶è„šæœ¬ä¸­æ§åˆ¶
             /*
             RectTransform rectTransform = BackpackBehaviour.instance.rawImage.rectTransform;
 
@@ -831,7 +831,7 @@ public class MainControl : MonoBehaviour
             if (BackpackBehaviour.instance != null)
                 BackpackBehaviour.instance.SuitResolution();
 
-            //ÔÚSetCanvasFrameSpriteÄÚÉè¶¨
+            //åœ¨SetCanvasFrameSpriteå†…è®¾å®š
             //CanvasController.instance.frame.sprite = OverworldControl.frames[CanvasController.instance.framePic];
 
             CanvasController.instance.DOKill();
@@ -892,9 +892,9 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// µ­³ö ÊäÈëÌø×ª³¡¾°Ãû³Æ
-    /// banMusicÊÇ½¥³ö
-    /// time>0ÓĞ¶¯»­ =0¾ÍÖ±½ÓÇĞ³¡¾° <0Ê±»áÒÔtimeµÄ¾ø¶ÔÖµ
+    /// æ·¡å‡º è¾“å…¥è·³è½¬åœºæ™¯åç§°
+    /// banMusicæ˜¯æ¸å‡º
+    /// time>0æœ‰åŠ¨ç”» =0å°±ç›´æ¥åˆ‡åœºæ™¯ <0æ—¶ä¼šä»¥timeçš„ç»å¯¹å€¼
     /// </summary>
     public void OutBlack(string scene, Color color, bool banMusic = false, float time = 0.5f, bool Async = true)
     {
@@ -953,7 +953,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// ´«Èëstring£¬·µ»ØÉ¾È¥Ä©Î²i¸ö×Ö·ûµÄstring
+    /// ä¼ å…¥stringï¼Œè¿”å›åˆ å»æœ«å°¾iä¸ªå­—ç¬¦çš„string
     /// </summary>
     public string SubText(string str, int i = 1)
     {
@@ -962,7 +962,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// Ëæ»úÉú³ÉÒ»¸öÁùÎ»³¤µÄÓ¢ÎÄ
+    /// éšæœºç”Ÿæˆä¸€ä¸ªå…­ä½é•¿çš„è‹±æ–‡
     /// </summary>
     public string RandomName(int l = 6, string abc = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM")
     {
@@ -978,7 +978,7 @@ public class MainControl : MonoBehaviour
     [Space]
     public bool forceJumpLoadTurn;
 
-    public IEnumerator _LoadItemDataForTurn(List<string> list, TextAsset texter)//±£´æµÄlist µ¼ÈëµÄtext
+    public IEnumerator _LoadItemDataForTurn(List<string> list, TextAsset texter)//ä¿å­˜çš„list å¯¼å…¥çš„text
     {
         list.Clear();
         string text = "";
@@ -1007,9 +1007,9 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// µ÷ÈëÊı¾İ(´«ÈëTextAsset)
+    /// è°ƒå…¥æ•°æ®(ä¼ å…¥TextAsset)
     /// </summary>
-    public void LoadItemData(List<string> list, TextAsset texter)//±£´æµÄlist µ¼ÈëµÄtext
+    public void LoadItemData(List<string> list, TextAsset texter)//ä¿å­˜çš„list å¯¼å…¥çš„text
     {
         list.Clear();
         string text = "";
@@ -1036,9 +1036,9 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// µ÷ÈëÊı¾İ(´«Èëstring)
+    /// è°ƒå…¥æ•°æ®(ä¼ å…¥string)
     /// </summary>
-    public void LoadItemData(List<string> list, string texter)//±£´æµÄlist µ¼ÈëµÄtext
+    public void LoadItemData(List<string> list, string texter)//ä¿å­˜çš„list å¯¼å…¥çš„text
     {
         list.Clear();
         string text = "";
@@ -1064,10 +1064,10 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// ´«ÈëÊ¹ÓÃ±³°üµÄÄÄ¸öÎïÌå
-    /// È»ºó¾ÍÊ¹ÓÃ ´òtrue»áË³´ø°Ñ±³°üË³ĞòÕûÀíÏÂ
-    /// È»ºóÔÙÈÃ´ò×Ö»ú´ò¸ö×Ö
-    /// plusTextÌî0¾Í×Ô¼º¼ÆËã
+    /// ä¼ å…¥ä½¿ç”¨èƒŒåŒ…çš„å“ªä¸ªç‰©ä½“
+    /// ç„¶åå°±ä½¿ç”¨ æ‰“trueä¼šé¡ºå¸¦æŠŠèƒŒåŒ…é¡ºåºæ•´ç†ä¸‹
+    /// ç„¶åå†è®©æ‰“å­—æœºæ‰“ä¸ªå­—
+    /// plusTextå¡«0å°±è‡ªå·±è®¡ç®—
     /// </summary>
     public void UseItem(TypeWritter typeWritter, TMPro.TMP_Text tmp_Text, int sonSelect, int plusText = 0)
     {
@@ -1100,7 +1100,7 @@ public class MainControl : MonoBehaviour
 
             AudioController.instance.GetFx(3, AudioControl.fxClipUI);
         }
-        else//Ê³Îï
+        else//é£Ÿç‰©
         {
             int plusHp = int.Parse(ItemIdGetName(PlayerControl.myItems[sonSelect - 1], "Auto", 2));
             if (PlayerControl.wearArm == 10001)
@@ -1128,13 +1128,13 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// ×ª»»ÌØÊâ×Ö·û
+    /// è½¬æ¢ç‰¹æ®Šå­—ç¬¦
     /// </summary>
     public List<string> ChangeItemData(List<string> list, bool isData, List<string> ex)
     {
         List<string> newList = new List<string>();
         string text = "";
-        bool isXH = false;//¼ì²âÊÇ·ñÓĞ¶à¸öĞèÒªÑ­»·µ÷ÓÃµÄÌØÊâ×Ö·û
+        bool isXH = false;//æ£€æµ‹æ˜¯å¦æœ‰å¤šä¸ªéœ€è¦å¾ªç¯è°ƒç”¨çš„ç‰¹æ®Šå­—ç¬¦
 
         for (int i = 0; i < list.Count; i++)
         {
@@ -1188,7 +1188,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// ChangeItemDataÖĞ¼ì²â'<''>'·ûºÅµÄSwitchÓï¾ä
+    /// ChangeItemDataä¸­æ£€æµ‹'<''>'ç¬¦å·çš„Switchè¯­å¥
     /// </summary>
     private string ChangeItemDataSwitch(string text, string texters, bool isData, string name, List<string> ex)
     {
@@ -1199,7 +1199,7 @@ public class MainControl : MonoBehaviour
                 text += PlayerControl.playerName;
                 break;
 
-            case "<enter>"://»Ø³µ
+            case "<enter>"://å›è½¦
                 text += "\n";
                 break;
 
@@ -1302,7 +1302,7 @@ public class MainControl : MonoBehaviour
                     texters = texters.Substring(4);
                     texters = texters.Substring(0, texters.Length - 1);
                     int q = int.Parse(texters);
-                    text += "İÊ" + q + "İÊ";
+                    text += "è”" + q + "è”";
                     break;
                 }
 
@@ -1369,7 +1369,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// ¼ì²âÊäÈëÎÄ±¾ÄÚµÄ´óĞ´×ÖÄ¸£¬×ªÎªÈ«Ğ¡Ğ´¡£
+    /// æ£€æµ‹è¾“å…¥æ–‡æœ¬å†…çš„å¤§å†™å­—æ¯ï¼Œè½¬ä¸ºå…¨å°å†™ã€‚
     /// </summary>
     public string UppercaseToLowercase(string origin)
     {
@@ -1396,7 +1396,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// ¼ì²âÊäÈëÎÄ±¾ÄÚµÄĞ¡Ğ´×ÖÄ¸£¬×ªÎªÈ«´óĞ´¡£
+    /// æ£€æµ‹è¾“å…¥æ–‡æœ¬å†…çš„å°å†™å­—æ¯ï¼Œè½¬ä¸ºå…¨å¤§å†™ã€‚
     /// </summary>
     public string LowercaseToUppercase(string origin)
     {
@@ -1423,8 +1423,8 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// ÊäÈëĞÎÈç(x,y)µÄÏòÁ¿
-    /// ÈôÏòÁ¿ĞÎÈç(xRx£¬yRy)»ò(xrx£¬yry)£¬ÔòÔÚR×óÓÒÈ¡Ëæ»úÊı
+    /// è¾“å…¥å½¢å¦‚(x,y)çš„å‘é‡
+    /// è‹¥å‘é‡å½¢å¦‚(xRxï¼ŒyRy)æˆ–(xrxï¼Œyry)ï¼Œåˆ™åœ¨Rå·¦å³å–éšæœºæ•°
     /// </summary>
     public Vector2 StringVector2ToRealVector2(string stringVector2, Vector3 origin)
     {
@@ -1455,11 +1455,11 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// ĞÎÈçxRx / xrx / O   Ëæ»ú·Ö¿ª
-    /// Èç¹ûÃ»ÓĞr»òRµÄ»°¾Í»á·µ»ØÔ­±¾µÄ£¬·Ç³£µÄÊµÓÃ
+    /// å½¢å¦‚xRx / xrx / O   éšæœºåˆ†å¼€
+    /// å¦‚æœæ²¡æœ‰ræˆ–Rçš„è¯å°±ä¼šè¿”å›åŸæœ¬çš„ï¼Œéå¸¸çš„å®ç”¨
     ///
-    /// ¶îÍâÌí¼Ó£ºP/p»ñÈ¡Íæ¼ÒÎ»ÖÃ Í¨¹ıisYÈ·¶¨ÊÇX»¹ÊÇY
-    /// Í¨¹ıxxx + xRxµÄĞÎÊ½ÊµÏÖÒ»¶¨³Ì¶ÈÉÏµÄ¹Ì¶¨¡£
+    /// é¢å¤–æ·»åŠ ï¼šP/pè·å–ç©å®¶ä½ç½® é€šè¿‡isYç¡®å®šæ˜¯Xè¿˜æ˜¯Y
+    /// é€šè¿‡xxx + xRxçš„å½¢å¼å®ç°ä¸€å®šç¨‹åº¦ä¸Šçš„å›ºå®šã€‚
     /// </summary>
     public float RandomFloatChange(string text, float origin, bool isY = false, float plusSave = 0)
     {
@@ -1517,10 +1517,10 @@ public class MainControl : MonoBehaviour
         }
     }
 
-    /*Ö®ºó»ØÀ´·­²ÅÒâÊ¶µ½Õâ²»¾ÍÒ»¸öÇ¿ÖÆ×ª»»µÄÊÂ¶ù£©
+    /*ä¹‹åå›æ¥ç¿»æ‰æ„è¯†åˆ°è¿™ä¸å°±ä¸€ä¸ªå¼ºåˆ¶è½¬æ¢çš„äº‹å„¿ï¼‰
      *
     /// <summary>
-    /// ÊäÈëĞÎÈç(x,y)µÄÏòÁ¿
+    /// è¾“å…¥å½¢å¦‚(x,y)çš„å‘é‡
     ///
     /// </summary>
     public Vector3 StringVector2ToRealVector3(string stringVector2)
@@ -1531,8 +1531,8 @@ public class MainControl : MonoBehaviour
     */
 
     /// <summary>
-    /// ÊäÈëĞÎÈç(r,g,b,a)µÄÏòÁ¿
-    /// Í¬ÑùÖ§³ÖËæ»úÊı
+    /// è¾“å…¥å½¢å¦‚(r,g,b,a)çš„å‘é‡
+    /// åŒæ ·æ”¯æŒéšæœºæ•°
     /// </summary>
     public Color StringVector4ToRealColor(string stringVector4, Color origin)
     {
@@ -1575,7 +1575,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// ÔÚnum1Óënum2Ö®¼äÅĞ¶Ï ·ûºÏºó·µ»Ønum2.·ñÔò´«»Ønum1.
+    /// åœ¨num1ä¸num2ä¹‹é—´åˆ¤æ–­ ç¬¦åˆåè¿”å›num2.å¦åˆ™ä¼ å›num1.
     /// </summary>
     public float JudgmentNumber(bool isGreater, float num1, float num2)
     {
@@ -1593,7 +1593,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// ·ÖÅäItemÊı¾İ
+    /// åˆ†é…Itemæ•°æ®
     /// </summary>
     private void ItemClassificatio()
     {
@@ -1601,12 +1601,12 @@ public class MainControl : MonoBehaviour
         ItemControl.itemArms.Clear();
         ItemControl.itemArmors.Clear();
         ItemControl.itemOthers.Clear();
-        for (int i = 0; i < ItemControl.itemMax.Count; i++)//×ÜÎïÆ·Êı
+        for (int i = 0; i < ItemControl.itemMax.Count; i++)//æ€»ç‰©å“æ•°
         {
             string countText = ItemControl.itemMax[i];
             string[] text = new string[4];
             int texti = 0;
-            for (int k = 0; k < countText.Length; k++)//µ¥ÎïÆ·±éÀú Ñ°ÕÒ\·û
+            for (int k = 0; k < countText.Length; k++)//å•ç‰©å“éå† å¯»æ‰¾\ç¬¦
             {
                 if (countText[k] == '\\')
                     texti++;
@@ -1627,7 +1627,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// ItemClassificatioµÄÒ»¸ö×Óvoid
+    /// ItemClassificatioçš„ä¸€ä¸ªå­void
     /// </summary>
     private void ItemClassificatioAdd(string i, string origin)
     {
@@ -1657,8 +1657,8 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// ¼ì²â '\'×Ö·ûÈ»ºó·Ö¸îÎÄ±¾µ½×ÓList
-    /// ÅúÁ¿´¦Àístring
+    /// æ£€æµ‹ '\'å­—ç¬¦ç„¶ååˆ†å‰²æ–‡æœ¬åˆ°å­List
+    /// æ‰¹é‡å¤„ç†string
     /// </summary>
     public void MaxToOneSon(List<string> parentList, List<string> sonList, char font = '\\')
     {
@@ -1679,8 +1679,8 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// ¼ì²â '\'×Ö·ûÈ»ºó·Ö¸îÎÄ±¾µ½×ÓList
-    /// ´«ÈëÒ»¸östring
+    /// æ£€æµ‹ '\'å­—ç¬¦ç„¶ååˆ†å‰²æ–‡æœ¬åˆ°å­List
+    /// ä¼ å…¥ä¸€ä¸ªstring
     /// </summary>
     public void MaxToOneSon(string parentString, List<string> sonList, char font = '\\')
     {
@@ -1699,7 +1699,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// ¼ì²âµ½µÚÒ»¸ö'\'×Ö·û¾Í´«³ö
+    /// æ£€æµ‹åˆ°ç¬¬ä¸€ä¸ª'\'å­—ç¬¦å°±ä¼ å‡º
     /// </summary>
     public string MaxToOneSon(string original, char font = '\\')
     {
@@ -1714,7 +1714,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// ·´Ïò¼ì²âµÚÒ»¸ö'\'×Ö·û¾Í´«³ö£¬¿ÉÑ¡ºöÊÓµô×îºóµÄ ; ºÅ¡£
+    /// åå‘æ£€æµ‹ç¬¬ä¸€ä¸ª'\'å­—ç¬¦å°±ä¼ å‡ºï¼Œå¯é€‰å¿½è§†æ‰æœ€åçš„ ; å·ã€‚
     /// </summary>
     public float MaxToLastFloat(string original, bool noLast = true, char font = '\\')
     {
@@ -1738,9 +1738,9 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// ÓÃÓÚÓÎÏ·ÄÚÎÄ±¾¶ÁÈ¡
-    /// ´«ÈëÊı¾İÃû³Æ·µ»ØÎÄ±¾°üÎÄ±¾
-    /// ¸øµÚÒ»¸ö ·µµÚ¶ş¸ö)
+    /// ç”¨äºæ¸¸æˆå†…æ–‡æœ¬è¯»å–
+    /// ä¼ å…¥æ•°æ®åç§°è¿”å›æ–‡æœ¬åŒ…æ–‡æœ¬
+    /// ç»™ç¬¬ä¸€ä¸ª è¿”ç¬¬äºŒä¸ª)
     /// </summary>
     public string ScreenMaxToOneSon(List<string> parentList, string screen)
     {
@@ -1756,8 +1756,8 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// ÓÃÓÚÓÎÏ·ÄÚÎÄ±¾¶ÁÈ¡
-    /// ´«ÈëÊı¾İÃû³Æ·µ»ØËùÓĞÍ¬ÃûµÄÎÄ±¾°üÎÄ±¾
+    /// ç”¨äºæ¸¸æˆå†…æ–‡æœ¬è¯»å–
+    /// ä¼ å…¥æ•°æ®åç§°è¿”å›æ‰€æœ‰åŒåçš„æ–‡æœ¬åŒ…æ–‡æœ¬
     /// </summary>
     public List<string> ScreenMaxToAllSon(List<string> parentList, string screen)
     {
@@ -1774,8 +1774,8 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// ¼ì²âlistµÄÇ°¼¸¸ö×Ö·ûÊÇ·ñÓë´«ÈëµÄstring screenÏàÍ¬¡£
-    /// ÈôÏàÍ¬Ôò·Ö¸îÎÄ±¾µ½×ÓList
+    /// æ£€æµ‹listçš„å‰å‡ ä¸ªå­—ç¬¦æ˜¯å¦ä¸ä¼ å…¥çš„string screenç›¸åŒã€‚
+    /// è‹¥ç›¸åŒåˆ™åˆ†å‰²æ–‡æœ¬åˆ°å­List
     /// </summary>
     public void ScreenMaxToOneSon(List<string> parentList, List<string> sonList, string screen)
     {
@@ -1790,7 +1790,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// ÔÙ·ÖÅäÎÄ±¾°ü
+    /// å†åˆ†é…æ–‡æœ¬åŒ…
     /// </summary>
     private void MaxToSon(List<string> max, string[] text, List<string>[] son)
     {
@@ -1832,18 +1832,18 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// Í¨¹ıId»ñÈ¡ItemĞÅÏ¢£º
-    /// type£ºFoods Arms Armors Others Auto
-    /// num£º0ÓïÑÔ°üÃû³Æ
-    ///     1/2£ºdata1/2.
-    ///     ÇëÎğ¶àÊä.
-    ///     ArmºÍArmorÖ»ÓĞ1
+    /// é€šè¿‡Idè·å–Itemä¿¡æ¯ï¼š
+    /// typeï¼šFoods Arms Armors Others Auto
+    /// numï¼š0è¯­è¨€åŒ…åç§°
+    ///     1/2ï¼šdata1/2.
+    ///     è¯·å‹¿å¤šè¾“.
+    ///     Armå’ŒArmoråªæœ‰1
     /// </summary>
     public string ItemIdGetName(int id, string type, int num)
     {
         int realId;
         List<string> list;
-        string idName;//»ñÈ¡±àºÅÃû³Æ
+        string idName;//è·å–ç¼–å·åç§°
         switch (type)
         {
             case "Foods":
@@ -1908,7 +1908,7 @@ public class MainControl : MonoBehaviour
         }
 
         string subText = "";
-        if (num == 0)//»ñÈ¡ÓïÑÔ°üÄÚµÄÃû³Æ
+        if (num == 0)//è·å–è¯­è¨€åŒ…å†…çš„åç§°
         {
             for (int i = 0; i < ItemControl.itemTextMaxItem.Count; i++)
             {
@@ -1935,15 +1935,15 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// Í¨¹ıId»ñÈ¡ItemµÄÊı¾İ£¨HP£¬ATKµÈ£©£º
-    /// type£ºFoods Arms Armors Others Auto
-    /// justId:¹´µÄ»°»á¼ÓÉÏ +xxHP/AT/DFµÈĞÅÏ¢
+    /// é€šè¿‡Idè·å–Itemçš„æ•°æ®ï¼ˆHPï¼ŒATKç­‰ï¼‰ï¼š
+    /// typeï¼šFoods Arms Armors Others Auto
+    /// justId:å‹¾çš„è¯ä¼šåŠ ä¸Š +xxHP/AT/DFç­‰ä¿¡æ¯
     /// </summary>
     public string ItemIdGetData(int id, string type, bool notJustId = false)
     {
         int realId;
         List<string> list;
-        string idData;//»ñÈ¡±àºÅÃû³Æ
+        string idData;//è·å–ç¼–å·åç§°
         switch (type)
         {
             case "Foods":
@@ -2052,7 +2052,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// Ê¶±ğµ½0ºó´«³ö
+    /// è¯†åˆ«åˆ°0åä¼ å‡º
     /// </summary>
     public int FindMax(List<int> list)
     {
@@ -2069,8 +2069,8 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// Í¨¹ıÎïÆ·Êı¾İÃû³Æ¸ãµ½ËüµÄid.
-    /// type£ºFoods Arms Armors Others
+    /// é€šè¿‡ç‰©å“æ•°æ®åç§°æåˆ°å®ƒçš„id.
+    /// typeï¼šFoods Arms Armors Others
     /// </summary>
     public int ItemNameGetId(string name, string type)
     {
@@ -2119,7 +2119,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// ¸øList<Int>£¬¼ì²âµ½¿ÕµÄ·µ»Ø
+    /// ç»™List<Int>ï¼Œæ£€æµ‹åˆ°ç©ºçš„è¿”å›
     /// </summary>
     public int GetRealIntListCount(List<int> ints)
     {
@@ -2145,7 +2145,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// Ëæ»ú»ñÈ¡-1»ò1
+    /// éšæœºè·å–-1æˆ–1
     /// </summary>
     public int Get1Or_1()
     {
@@ -2160,8 +2160,8 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// ´«ÈëÊı¸ù¾İÕı¸º·µ»Ø1/-1¡£
-    /// ´«0·µ1¡£
+    /// ä¼ å…¥æ•°æ ¹æ®æ­£è´Ÿè¿”å›1/-1ã€‚
+    /// ä¼ 0è¿”1ã€‚
     /// </summary>
     public int Get1Or_1(float i)
     {
@@ -2173,10 +2173,10 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// ¸øÒ»¸öÖ¸¶¨³¤¶È£¬È»ºó»áÓÃ¿Õ¸ñÌî³äÔ­×Ö·û´®
+    /// ç»™ä¸€ä¸ªæŒ‡å®šé•¿åº¦ï¼Œç„¶åä¼šç”¨ç©ºæ ¼å¡«å……åŸå­—ç¬¦ä¸²
     /// </summary>
-    /// <param name="origin">Ô­×Ö·û´®</param>
-    /// <param name="length">·µ»Ø³¤¶È</param>
+    /// <param name="origin">åŸå­—ç¬¦ä¸²</param>
+    /// <param name="length">è¿”å›é•¿åº¦</param>
     /// <returns></returns>
     public string FillString(string origin, int length)
     {
@@ -2216,14 +2216,14 @@ public class MainControl : MonoBehaviour
     {
         if (startIndex < 0 || endIndex >= inputString.Length || startIndex > endIndex)
         {
-            DebugLogger.Log("ÎŞĞ§µÄÆğÊ¼ºÍ½áÊøÎ»ÖÃ", DebugLogger.Type.err);
+            DebugLogger.Log("æ— æ•ˆçš„èµ·å§‹å’Œç»“æŸä½ç½®", DebugLogger.Type.err);
             return inputString;
         }
 
-        string part1 = inputString.Substring(0, startIndex); // ´Ó¿ªÍ·µ½AÖ®Ç°µÄ²¿·Ö
-        string part2 = inputString.Substring(endIndex + 1); // ´ÓBÖ®ºóµ½×Ö·û´®Ä©Î²µÄ²¿·Ö
+        string part1 = inputString.Substring(0, startIndex); // ä»å¼€å¤´åˆ°Aä¹‹å‰çš„éƒ¨åˆ†
+        string part2 = inputString.Substring(endIndex + 1); // ä»Bä¹‹ååˆ°å­—ç¬¦ä¸²æœ«å°¾çš„éƒ¨åˆ†
         DebugLogger.Log(inputString.Substring(startIndex + 1));
-        string result = part1 + add + part2; // ºÏ²¢Á½²¿·Ö
+        string result = part1 + add + part2; // åˆå¹¶ä¸¤éƒ¨åˆ†
         return result;
     }
 
@@ -2242,13 +2242,13 @@ public class MainControl : MonoBehaviour
         else
         {
             selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
-            DebugLogger.Log("DebugÎŞµĞÄ£Ê½ÒÑ½«ÄúµÄÑªÁ¿»Ö¸´", DebugLogger.Type.nor, "#FF0000");
+            DebugLogger.Log("Debugæ— æ•Œæ¨¡å¼å·²å°†æ‚¨çš„è¡€é‡æ¢å¤", DebugLogger.Type.nor, "#FF0000");
         }
 
     }
     
     /// <summary>
-    /// ¼ÆËã¶à±ßĞÎÖĞµã
+    /// è®¡ç®—å¤šè¾¹å½¢ä¸­ç‚¹
     /// </summary>
     public Vector2 CalculatePolygonCenter(List<Vector2> vertexPoints)
     {
@@ -2270,7 +2270,7 @@ public class MainControl : MonoBehaviour
     }
 
     /// <summary>
-    /// ÔÚÇòÌå±íÃæÉÏÉú³ÉËæ»úµã
+    /// åœ¨çƒä½“è¡¨é¢ä¸Šç”Ÿæˆéšæœºç‚¹
     /// </summary>
     public Vector3 RandomPointOnSphereSurface(float minRandomValue, float maxRandomValue, float sphereRadius, Vector3 sphereCenter)
     {

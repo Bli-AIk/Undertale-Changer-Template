@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
-/// Overworld对话中更改Sprite
+/// Overworld瀵硅瘽涓洿鏀筍prite
 /// </summary>
 public class SpriteChanger : MonoBehaviour
 {

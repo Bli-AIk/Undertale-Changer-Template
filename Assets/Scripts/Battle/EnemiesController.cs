@@ -1,8 +1,8 @@
 using UnityEngine;
 
 /// <summary>
-/// 怪物控制脚本
-/// 主要用于动画控制和存储ATKDEF
+/// 鎬墿鎺у埗鑴氭湰
+/// 涓昏鐢ㄤ簬鍔ㄧ敾鎺у埗鍜屽瓨鍌ˋTKDEF
 /// </summary>
 public class EnemiesController : MonoBehaviour
 {

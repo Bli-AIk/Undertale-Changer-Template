@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 
 /// <summary>
-/// Õ½¶·ÄÚµĞÈË¶Ô»°ÆøÅİ¿ØÖÆ
+/// æˆ˜æ–—å†…æ•Œäººå¯¹è¯æ°”æ³¡æ§åˆ¶
 /// </summary>
 public class DialogBubbleBehaviour : MonoBehaviour
 {
@@ -28,7 +28,7 @@ public class DialogBubbleBehaviour : MonoBehaviour
     }
 
     /// <summary>
-    /// ¸Ä±äÆøÅİµÄ´óĞ¡ºÍ×óÓÒ¼ıÍ·Çé¿ö ½øĞĞ¸³Öµ Ö®ÀàµÄ
+    /// æ”¹å˜æ°”æ³¡çš„å¤§å°å’Œå·¦å³ç®­å¤´æƒ…å†µ è¿›è¡Œèµ‹å€¼ ä¹‹ç±»çš„
     /// </summary>
     public void PositionChange()
     {

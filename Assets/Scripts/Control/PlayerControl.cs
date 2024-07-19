@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Íæ¼ÒµÄĞÅÏ¢
-/// ÒÔ¼°Ò»Ğ©Ïà¹ØµÄÉèÖÃ
+/// ç©å®¶çš„ä¿¡æ¯
+/// ä»¥åŠä¸€äº›ç›¸å…³çš„è®¾ç½®
 /// </summary>
 [CreateAssetMenu(fileName = "PlayerControl", menuName = "PlayerControl")]
 public class PlayerControl : ScriptableObject
@@ -11,28 +11,28 @@ public class PlayerControl : ScriptableObject
     public int hp, hpMax, lv, exp, gold, wearAtk, wearDef, nextExp;
     public float missTime, missTimeMax;
 
-    [Header("OW±³°üÄÚÏÔÊ¾µÄATºÍDF»á-10")]
+    [Header("OWèƒŒåŒ…å†…æ˜¾ç¤ºçš„ATå’ŒDFä¼š-10")]
     public int atk;
 
     public int def;
 
     public string playerName;
-    public List<int> myItems;//Íæ¼Ò±³°üÊı¾İ ´¢´æ±àºÅ
+    public List<int> myItems;//ç©å®¶èƒŒåŒ…æ•°æ® å‚¨å­˜ç¼–å·
     public int wearArm, wearArmor;
     public bool canMove;
 
     public float gameTime;
 
-    [Header("³¡¾°ÏÎ½Ó´æ´¢")]
+    [Header("åœºæ™¯è¡”æ¥å­˜å‚¨")]
     public string lastScene;
 
     public string saveScene;
 
-    [Header("¿ªÆôµ÷ÊÔ")]
+    [Header("å¼€å¯è°ƒè¯•")]
     public bool isDebug;
 
-    [Header("--µ÷ÊÔÄ£Ê½Éè¶¨--")]
-    [Header("ËøÑª")]
+    [Header("--è°ƒè¯•æ¨¡å¼è®¾å®š--")]
+    [Header("é”è¡€")]
     public bool invincible;
     public bool keepInvincible;
 }

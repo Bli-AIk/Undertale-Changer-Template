@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class DebugRandomSudoku : MonoBehaviour
 {
-    //¾Å¹¬¸ñ²âÊÔ
+    //Ã¦â‰ˆÏ€Â¨âˆÃ’â‰¤â€šÂ â€˜
     public List<DebugSudoku> sudokos;
 
     public int randomNum;

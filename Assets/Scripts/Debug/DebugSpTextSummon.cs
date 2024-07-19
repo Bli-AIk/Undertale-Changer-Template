@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Éú³ÉÒ»ÏµÁĞÄÔ¹£¼ÓÃÜÎÄ±¾
+/// ç”Ÿæˆä¸€ç³»åˆ—è„‘æ¢—åŠ å¯†æ–‡æœ¬
 /// </summary>
 public class DebugSpTextSummon : MonoBehaviour
 {
@@ -17,7 +17,7 @@ public class DebugSpTextSummon : MonoBehaviour
     }
 
     /// <summary>
-    /// Ô­×ÖÄ¸ÎÄ±¾×ª»¯ÎªÊı×Ö
+    /// åŸå­—æ¯æ–‡æœ¬è½¬åŒ–ä¸ºæ•°å­—
     /// </summary>
     private string LetterToNum(string str)
     {
@@ -42,8 +42,8 @@ public class DebugSpTextSummon : MonoBehaviour
     }
 
     /// <summary>
-    /// Êı×ÖµÄÊ××ÖÄ¸±íÊ¾Êı×Ö
-    /// Êı×Ö»»ËãÎª×ÖÄ¸
+    /// æ•°å­—çš„é¦–å­—æ¯è¡¨ç¤ºæ•°å­—
+    /// æ•°å­—æ¢ç®—ä¸ºå­—æ¯
     /// </summary>
     private string NumToNumLetter(string str)
     {
@@ -66,7 +66,7 @@ public class DebugSpTextSummon : MonoBehaviour
     }
 
     /// <summary>
-    /// 26×ÖÄ¸»»ËãÎª¾Å¼üÊı×Ö
+    /// 26å­—æ¯æ¢ç®—ä¸ºä¹é”®æ•°å­—
     /// </summary>
     private string NineToNum(string str)
     {
@@ -89,7 +89,7 @@ public class DebugSpTextSummon : MonoBehaviour
     }
 
     /// <summary>
-    /// µ¹³µÇë×¢Òâ
+    /// å€’è½¦è¯·æ³¨æ„
     /// </summary>
     private string backString(string str)
     {

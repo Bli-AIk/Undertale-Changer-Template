@@ -5,25 +5,25 @@ using UnityEngine.Rendering;
 using Log;
 using System.Collections.Generic;
 ///<summary>
-///¿ØÖÆÕ½¶·ÄÚÍæ¼Ò(ĞÄ)µÄÏà¹ØÊôĞÔ
+///æ§åˆ¶æˆ˜æ–—å†…ç©å®¶(å¿ƒ)çš„ç›¸å…³å±æ€§
 ///</summary>
 public class BattlePlayerController : MonoBehaviour
 {
 
     public float test1 = -0.5f;
     public float test2 = 0.05f;
-    [Header("ĞÄ±äÉ«Ê±µÄding¶¯»­ËÙ¶È£¬0Îª¹Ø")]
+    [Header("å¿ƒå˜è‰²æ—¶çš„dingåŠ¨ç”»é€Ÿåº¦ï¼Œ0ä¸ºå…³")]
     public float dingTime;
-    [Header("ĞÄ½¥±ä¶¯»­ËÙ¶È£¬0Îª¹Ø")]
+    [Header("å¿ƒæ¸å˜åŠ¨ç”»é€Ÿåº¦ï¼Œ0ä¸ºå…³")]
     public float gradientTime;
 
-    [Header("»ù±¾ÊôĞÔµ÷Õû")]
+    [Header("åŸºæœ¬å±æ€§è°ƒæ•´")]
     public float speed;
-    public float speedWeightX, speedWeightY;//ËÙ¶ÈÓëÈ¨ÖØ(°´X³ËÒÔ±¶Êı)£¬ËÙ¶È²âÊÔÎª3£¬È¨ÖØ0.5f
+    public float speedWeightX, speedWeightY;//é€Ÿåº¦ä¸æƒé‡(æŒ‰Xä¹˜ä»¥å€æ•°)ï¼Œé€Ÿåº¦æµ‹è¯•ä¸º3ï¼Œæƒé‡0.5f
     private float speedWeight = 0.5f;
-    public float hitCD, hitCDMax;//ÎŞµĞÊ±¼ä
-    public float displacement = 0.175f;//Åö×²¾àÀëÅĞ¶¨
-    public bool isMoving;//ÓÃÓÚÀ¶³È¹ÇÅĞ¶Ï£ºÍæ¼ÒÊÇ·ñÕæµÄÔÚÒÆ¶¯
+    public float hitCD, hitCDMax;//æ— æ•Œæ—¶é—´
+    public float displacement = 0.175f;//ç¢°æ’è·ç¦»åˆ¤å®š
+    public bool isMoving;//ç”¨äºè“æ©™éª¨åˆ¤æ–­ï¼šç©å®¶æ˜¯å¦çœŸçš„åœ¨ç§»åŠ¨
     public float timeInterpolation = -0.225f;
     public Vector2 sceneDrift = new Vector2(-1000, 0);
     public enum PlayerDirEnum
@@ -35,17 +35,17 @@ public class BattlePlayerController : MonoBehaviour
         nullDir
     };
 
-    public PlayerDirEnum playerDir;//·½Ïò
+    public PlayerDirEnum playerDir;//æ–¹å‘
     public Vector3 moving;
-    public bool isJump;//ÊÇ·ñ´¦ÓÚ¡°ÌøÆğ¡±×´Ì¬
-    public float jumpAcceleration;//ÌøÔ¾µÄ¼ÓËÙ¶È
-    public float jumpRayDistance;//ÉäÏß¾àÀë
+    public bool isJump;//æ˜¯å¦å¤„äºâ€œè·³èµ·â€çŠ¶æ€
+    public float jumpAcceleration;//è·³è·ƒçš„åŠ é€Ÿåº¦
+    public float jumpRayDistance;//å°„çº¿è·ç¦»
     public float jumpRayDistanceForBoard;
 
     private Rigidbody2D rigidBody;
-    public CircleCollider2D collideCollider;//Ô²ĞÎÅö×²Ìå
+    public CircleCollider2D collideCollider;//åœ†å½¢ç¢°æ’ä½“
     private SpriteRenderer spriteRenderer, dingSpriteRenderer;
-    public BattleControl.PlayerColor playerColor;//º¬ÓĞÊôĞÔµÄÑÕÉ« ¶ÁÈ¡BattleControlÖĞµÄenum PlayerColor.ÑÕÉ«±ä»»Í¨¹ı¾ßÌå±ä»»µÄº¯ÊıÀ´Ö´ĞĞ
+    public BattleControl.PlayerColor playerColor;//å«æœ‰å±æ€§çš„é¢œè‰² è¯»å–BattleControlä¸­çš„enum PlayerColor.é¢œè‰²å˜æ¢é€šè¿‡å…·ä½“å˜æ¢çš„å‡½æ•°æ¥æ‰§è¡Œ
     private Tween missAnim, changeColor, changeDingColor, changeDingScale;
 
     public Volume hitVolume;
@@ -169,9 +169,9 @@ public class BattlePlayerController : MonoBehaviour
 
         Ray2D rayF = new Ray2D(transform.position, dirReal * -1);
         Debug.DrawRay(rayF.origin, rayF.direction, Color.red);
-        RaycastHit2D infoF = Physics2D.Raycast(transform.position, dirReal * -1, jumpRayDistance);//·´Ïò¼ì²â(¶¥Í·)
+        RaycastHit2D infoF = Physics2D.Raycast(transform.position, dirReal * -1, jumpRayDistance);//åå‘æ£€æµ‹(é¡¶å¤´)
 
-        //------------------------ÒÆ¶¯------------------------
+        //------------------------ç§»åŠ¨------------------------
         switch (playerColor)
         {
             case BattleControl.PlayerColor.red:
@@ -564,7 +564,7 @@ public class BattlePlayerController : MonoBehaviour
         }
 
 
-        //À¶³È¹ÇËùÓÃµÄÊÇ·ñÒÆ¶¯ÅĞ¶¨
+        //è“æ©™éª¨æ‰€ç”¨çš„æ˜¯å¦ç§»åŠ¨åˆ¤å®š
         Vector2 dirMoveX = new Vector2();
         Vector2 dirMoveY = new Vector2();
         bool isMoveX = false, isMoveY = false;
@@ -658,7 +658,7 @@ public class BattlePlayerController : MonoBehaviour
         moving.x = MainControl.instance.JudgmentNumber(true, moving.x, 5);
         moving.y = MainControl.instance.JudgmentNumber(true, moving.y, 5);
         
-        Vector3 newPos = transform.position + new Vector3(speedWeightX * speed * moving.x * Time.deltaTime, speedWeightY * speed * moving.y * Time.deltaTime);//ËÙ¶È²Î¿¼£º3
+        Vector3 newPos = transform.position + new Vector3(speedWeightX * speed * moving.x * Time.deltaTime, speedWeightY * speed * moving.y * Time.deltaTime);//é€Ÿåº¦å‚è€ƒï¼š3
 
         Vector3 checkPos = CheckPoint(newPos, displacement + BoxController.instance.width / 2);
 
@@ -673,7 +673,7 @@ public class BattlePlayerController : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        //À¶ĞÄÅö°å×ÓÈ·±£ÔÙ´Î¿ÉÒÔÌø
+        //è“å¿ƒç¢°æ¿å­ç¡®ä¿å†æ¬¡å¯ä»¥è·³
         if (collision.transform.CompareTag("board") && collision.transform.GetComponent<EdgeCollider2D>().IsTouching(collideCollider) && playerColor == BattleControl.PlayerColor.blue)
         {
             BlueJumpReady();
@@ -700,7 +700,7 @@ public class BattlePlayerController : MonoBehaviour
     */
 
     ///<summary>
-    ///µô³ö
+    ///æ‰å‡º
     ///</summary>
     private void OnCollisionExit2D(Collision2D collision)
     {
@@ -711,10 +711,10 @@ public class BattlePlayerController : MonoBehaviour
     }
 
     ///<summary>
-    ///Í¨¹ı½¥±ä¶¯»­½«Íæ¼ÒµÄÑÕÉ«¸Ä±ä¡£
-    ///ÈôgradientTime/dingTimeµÈÓÚ0 Ôò²»»áÓĞ½¥±ä¶¯»­/ding¶¯»­£»
-    ///ÈôgradientTime/dingTimeĞ¡ÓÚ0 ÔòÊ¹ÓÃ¸Ã½Å±¾ÄÚµÄgradientTime/dingTime±äÁ¿¡£
-    ///ÈôPlayerColorÊäÈëÎªnullColor£¬Ôò²»»á¸ü¸ÄÍæ¼ÒµÄÊµ¼ÊÑÕÉ«ÊôĞÔ¡£
+    ///é€šè¿‡æ¸å˜åŠ¨ç”»å°†ç©å®¶çš„é¢œè‰²æ”¹å˜ã€‚
+    ///è‹¥gradientTime/dingTimeç­‰äº0 åˆ™ä¸ä¼šæœ‰æ¸å˜åŠ¨ç”»/dingåŠ¨ç”»ï¼›
+    ///è‹¥gradientTime/dingTimeå°äº0 åˆ™ä½¿ç”¨è¯¥è„šæœ¬å†…çš„gradientTime/dingTimeå˜é‡ã€‚
+    ///è‹¥PlayerColorè¾“å…¥ä¸ºnullColorï¼Œåˆ™ä¸ä¼šæ›´æ”¹ç©å®¶çš„å®é™…é¢œè‰²å±æ€§ã€‚
     ///</summary>
     public void ChangePlayerColor(Color aimColor, BattleControl.PlayerColor aimPlayerColor, float startForce = 0, PlayerDirEnum dir = PlayerDirEnum.nullDir, float gradientTime = -1, float dingTime = -1, int fx = 2)
     {
@@ -776,7 +776,7 @@ public class BattlePlayerController : MonoBehaviour
 
     }
     ///<summary>
-    ///ÈÃÀ¶ĞÄ×¹Âä
+    ///è®©è“å¿ƒå è½
     ///</summary>
     void BlueDown(float startForce = 0, PlayerDirEnum dir = PlayerDirEnum.nullDir)
     {
@@ -805,116 +805,116 @@ public class BattlePlayerController : MonoBehaviour
                 break;
         }
     }
-    /////////////////////////////////////////ÅĞ¶¨Ïà¹Ø
-    //¶¨ÒåÓÃÓÚÅĞ¶ÏµãÊÇ·ñÔÚ¶à±ßĞÎÄÚµÄ·½·¨
+    /////////////////////////////////////////åˆ¤å®šç›¸å…³
+    //å®šä¹‰ç”¨äºåˆ¤æ–­ç‚¹æ˜¯å¦åœ¨å¤šè¾¹å½¢å†…çš„æ–¹æ³•
     private bool IsPointInPolygon(Vector2 point, List<Vector2> polygon)
     {
-        bool isInside = false; //³õÊ¼»¯µãÊÇ·ñÔÚ¶à±ßĞÎÄÚµÄ±êÖ¾Îªfalse
-                               //±éÀú¶à±ßĞÎµÄÃ¿Ò»Ìõ±ß£¬Ê¹ÓÃÉäÏß·¨ÅĞ¶ÏµãÊÇ·ñÔÚ¶à±ßĞÎÄÚ
+        bool isInside = false; //åˆå§‹åŒ–ç‚¹æ˜¯å¦åœ¨å¤šè¾¹å½¢å†…çš„æ ‡å¿—ä¸ºfalse
+                               //éå†å¤šè¾¹å½¢çš„æ¯ä¸€æ¡è¾¹ï¼Œä½¿ç”¨å°„çº¿æ³•åˆ¤æ–­ç‚¹æ˜¯å¦åœ¨å¤šè¾¹å½¢å†…
         for (int i = 0, j = polygon.Count - 1; i < polygon.Count; j = i++)
         {
-            //Èç¹ûµãÓëµ±Ç°±ßµÄÁ½¸ö¶ËµãÖ®Ò»ÔÚYÖáµÄÁ½²à£¬²¢ÇÒÔÚXÖáµÄ×ó²à£¬Ôò·´×ªÄÚ²¿±êÖ¾
+            //å¦‚æœç‚¹ä¸å½“å‰è¾¹çš„ä¸¤ä¸ªç«¯ç‚¹ä¹‹ä¸€åœ¨Yè½´çš„ä¸¤ä¾§ï¼Œå¹¶ä¸”åœ¨Xè½´çš„å·¦ä¾§ï¼Œåˆ™åè½¬å†…éƒ¨æ ‡å¿—
             if (((polygon[i].y > point.y) != (polygon[j].y > point.y)) &&
              (point.x < (polygon[j].x - polygon[i].x) * (point.y - polygon[i].y) / (polygon[j].y - polygon[i].y) + polygon[i].x))
             {
                 isInside = !isInside;
             }
         }
-        return isInside; //·µ»ØµãÊÇ·ñÔÚ¶à±ßĞÎÄÚµÄ×îÖÕ½á¹û
+        return isInside; //è¿”å›ç‚¹æ˜¯å¦åœ¨å¤šè¾¹å½¢å†…çš„æœ€ç»ˆç»“æœ
     }
 
-    //¶¨Òå¼ÆËãµãµ½Ïß¶Î×î½üµãµÄ·½·¨£¨¼ÆËã´¹×ã£©
+    //å®šä¹‰è®¡ç®—ç‚¹åˆ°çº¿æ®µæœ€è¿‘ç‚¹çš„æ–¹æ³•ï¼ˆè®¡ç®—å‚è¶³ï¼‰
     private Vector2 GetNearestPointOnLine(Vector2 point, Vector2 start, Vector2 end)
     {
-        Vector2 line = end - start; //¼ÆËãÏß¶ÎµÄÏòÁ¿
-        float len = line.magnitude; //»ñÈ¡Ïß¶Î³¤¶È
-        line.Normalize(); //±ê×¼»¯Ïß¶ÎÏòÁ¿
+        Vector2 line = end - start; //è®¡ç®—çº¿æ®µçš„å‘é‡
+        float len = line.magnitude; //è·å–çº¿æ®µé•¿åº¦
+        line.Normalize(); //æ ‡å‡†åŒ–çº¿æ®µå‘é‡
 
-        Vector2 v = point - start; //¼ÆËãµãµ½Ïß¶ÎÆğµãµÄÏòÁ¿
-        float d = Vector2.Dot(v, line); //¼ÆËãµãÔÚÏß¶ÎÏòÁ¿ÉÏµÄÍ¶Ó°³¤¶È
-        d = Mathf.Clamp(d, 0f, len); //ÏŞÖÆÍ¶Ó°³¤¶ÈÔÚ0µ½Ïß¶Î³¤¶ÈÖ®¼ä
-        return start + line * d; //¼ÆËã²¢·µ»Ø×î½üµãµÄ×ø±ê
+        Vector2 v = point - start; //è®¡ç®—ç‚¹åˆ°çº¿æ®µèµ·ç‚¹çš„å‘é‡
+        float d = Vector2.Dot(v, line); //è®¡ç®—ç‚¹åœ¨çº¿æ®µå‘é‡ä¸Šçš„æŠ•å½±é•¿åº¦
+        d = Mathf.Clamp(d, 0f, len); //é™åˆ¶æŠ•å½±é•¿åº¦åœ¨0åˆ°çº¿æ®µé•¿åº¦ä¹‹é—´
+        return start + line * d; //è®¡ç®—å¹¶è¿”å›æœ€è¿‘ç‚¹çš„åæ ‡
     }
 
-    //¶¨Òå¼ÆËãÎ»ÒÆºó´¹µãÎ»ÖÃµÄ·½·¨
+    //å®šä¹‰è®¡ç®—ä½ç§»åå‚ç‚¹ä½ç½®çš„æ–¹æ³•
     private Vector2 CalculateDisplacedPoint(Vector2 nearestPoint, Vector2 point, Vector2 lineStart, Vector2 lineEnd, float displacement)
     {
-        Vector2 lineDirection = (lineEnd - lineStart).normalized; //¼ÆËãÏß¶Î·½ÏòÏòÁ¿
-        Vector2 perpendicularDirection = new Vector2(-lineDirection.y, lineDirection.x); //¼ÆËã´¹Ö±·½ÏòÏòÁ¿£¨ÄæÊ±ÕëĞı×ª90¶È£©
+        Vector2 lineDirection = (lineEnd - lineStart).normalized; //è®¡ç®—çº¿æ®µæ–¹å‘å‘é‡
+        Vector2 perpendicularDirection = new Vector2(-lineDirection.y, lineDirection.x); //è®¡ç®—å‚ç›´æ–¹å‘å‘é‡ï¼ˆé€†æ—¶é’ˆæ—‹è½¬90åº¦ï¼‰
 
-        return nearestPoint + perpendicularDirection * -displacement; //¼ÆËã²¢·µ»ØÎ»ÒÆºóµÄ´¹µãÎ»ÖÃ
+        return nearestPoint + perpendicularDirection * -displacement; //è®¡ç®—å¹¶è¿”å›ä½ç§»åçš„å‚ç‚¹ä½ç½®
     }
 
-    //¶¨Òå¼ÆËãÄÚËõ¶à±ßĞÎ¶¥µãµÄ·½·¨
+    //å®šä¹‰è®¡ç®—å†…ç¼©å¤šè¾¹å½¢é¡¶ç‚¹çš„æ–¹æ³•
     public List<Vector2> CalculateInwardOffset(List<Vector2> vertices, float offset)
     {
-        if (vertices == null || vertices.Count < 3) return null; //Èç¹û¶¥µãÁĞ±íÎª¿Õ»òÉÙÓÚ3¸ö£¬·µ»Ønull
+        if (vertices == null || vertices.Count < 3) return null; //å¦‚æœé¡¶ç‚¹åˆ—è¡¨ä¸ºç©ºæˆ–å°‘äº3ä¸ªï¼Œè¿”å›null
 
-        List<Vector2> offsetVertices = new List<Vector2>(); //³õÊ¼»¯´æ´¢Î»ÒÆºó¶¥µãµÄÁĞ±í
-        List<Vector2> intersectionPoints = new List<Vector2>(); //³õÊ¼»¯´æ´¢½»µãµÄÁĞ±í
+        List<Vector2> offsetVertices = new List<Vector2>(); //åˆå§‹åŒ–å­˜å‚¨ä½ç§»åé¡¶ç‚¹çš„åˆ—è¡¨
+        List<Vector2> intersectionPoints = new List<Vector2>(); //åˆå§‹åŒ–å­˜å‚¨äº¤ç‚¹çš„åˆ—è¡¨
 
-        int count = vertices.Count; //»ñÈ¡¶¥µãÊıÁ¿
+        int count = vertices.Count; //è·å–é¡¶ç‚¹æ•°é‡
         for (int i = 0; i < count; i++)
         {
-            Vector2 currentVertex = vertices[i]; //»ñÈ¡µ±Ç°¶¥µã
-            Vector2 nextVertex = vertices[(i + 1) % count]; //»ñÈ¡ÏÂÒ»¸ö¶¥µã£¨»·ĞÎÁĞ±í£©
+            Vector2 currentVertex = vertices[i]; //è·å–å½“å‰é¡¶ç‚¹
+            Vector2 nextVertex = vertices[(i + 1) % count]; //è·å–ä¸‹ä¸€ä¸ªé¡¶ç‚¹ï¼ˆç¯å½¢åˆ—è¡¨ï¼‰
 
-            Vector2 edgeDirection = (nextVertex - currentVertex).normalized; //¼ÆËã±ßµÄ·½ÏòÏòÁ¿
-            Vector2 perpendicularDirection = new Vector2(-edgeDirection.y, edgeDirection.x); //¼ÆËã´¹Ö±·½ÏòÏòÁ¿
+            Vector2 edgeDirection = (nextVertex - currentVertex).normalized; //è®¡ç®—è¾¹çš„æ–¹å‘å‘é‡
+            Vector2 perpendicularDirection = new Vector2(-edgeDirection.y, edgeDirection.x); //è®¡ç®—å‚ç›´æ–¹å‘å‘é‡
 
-            Vector2 offsetCurrentVertex = currentVertex + perpendicularDirection * offset; //¼ÆËãµ±Ç°¶¥µãµÄÎ»ÒÆ
-            Vector2 offsetNextVertex = nextVertex + perpendicularDirection * offset; //¼ÆËãÏÂÒ»¸ö¶¥µãµÄÎ»ÒÆ
+            Vector2 offsetCurrentVertex = currentVertex + perpendicularDirection * offset; //è®¡ç®—å½“å‰é¡¶ç‚¹çš„ä½ç§»
+            Vector2 offsetNextVertex = nextVertex + perpendicularDirection * offset; //è®¡ç®—ä¸‹ä¸€ä¸ªé¡¶ç‚¹çš„ä½ç§»
 
-            offsetVertices.Add(offsetCurrentVertex); //Ìí¼ÓÎ»ÒÆºóµÄµ±Ç°¶¥µãµ½ÁĞ±í
-            offsetVertices.Add(offsetNextVertex); //Ìí¼ÓÎ»ÒÆºóµÄÏÂÒ»¸ö¶¥µãµ½ÁĞ±í
+            offsetVertices.Add(offsetCurrentVertex); //æ·»åŠ ä½ç§»åçš„å½“å‰é¡¶ç‚¹åˆ°åˆ—è¡¨
+            offsetVertices.Add(offsetNextVertex); //æ·»åŠ ä½ç§»åçš„ä¸‹ä¸€ä¸ªé¡¶ç‚¹åˆ°åˆ—è¡¨
 
-            if (i > 0) //´ÓµÚ¶şÌõ±ß¿ªÊ¼¼ÆËã½»µã
+            if (i > 0) //ä»ç¬¬äºŒæ¡è¾¹å¼€å§‹è®¡ç®—äº¤ç‚¹
             {
                 bool foundIntersection = LineLineIntersection(out Vector2 intersection, offsetVertices[i * 2 - 2], offsetVertices[i * 2 - 1], offsetCurrentVertex, offsetNextVertex);
                 if (foundIntersection)
                 {
-                    intersectionPoints.Add(intersection); //Èç¹ûÕÒµ½½»µã£¬Ìí¼Óµ½½»µãÁĞ±í
+                    intersectionPoints.Add(intersection); //å¦‚æœæ‰¾åˆ°äº¤ç‚¹ï¼Œæ·»åŠ åˆ°äº¤ç‚¹åˆ—è¡¨
                 }
             }
         }
 
-        //¼ÆËãÊ×Î²Á½Ìõ±ßµÄ½»µã
+        //è®¡ç®—é¦–å°¾ä¸¤æ¡è¾¹çš„äº¤ç‚¹
         bool foundFinalIntersection = LineLineIntersection(out Vector2 finalIntersection, offsetVertices[offsetVertices.Count - 2], offsetVertices[offsetVertices.Count - 1], offsetVertices[0], offsetVertices[1]);
         if (foundFinalIntersection)
         {
-            intersectionPoints.Add(finalIntersection); //Èç¹ûÕÒµ½½»µã£¬Ìí¼Óµ½½»µãÁĞ±í
+            intersectionPoints.Add(finalIntersection); //å¦‚æœæ‰¾åˆ°äº¤ç‚¹ï¼Œæ·»åŠ åˆ°äº¤ç‚¹åˆ—è¡¨
         }
 
-        return intersectionPoints; //·µ»Ø½»µãÁĞ±í£¬¼´ÄÚËõ¶à±ßĞÎµÄ¶¥µã
+        return intersectionPoints; //è¿”å›äº¤ç‚¹åˆ—è¡¨ï¼Œå³å†…ç¼©å¤šè¾¹å½¢çš„é¡¶ç‚¹
     }
 
-    //¶¨ÒåÏßÏß½»µã¼ÆËãµÄ·½·¨
+    //å®šä¹‰çº¿çº¿äº¤ç‚¹è®¡ç®—çš„æ–¹æ³•
     private bool LineLineIntersection(out Vector2 intersection, Vector2 point1, Vector2 point2, Vector2 point3, Vector2 point4)
     {
-        intersection = new Vector2(); //³õÊ¼»¯½»µã×ø±ê
+        intersection = new Vector2(); //åˆå§‹åŒ–äº¤ç‚¹åæ ‡
 
-        float d = (point1.x - point2.x) * (point3.y - point4.y) - (point1.y - point2.y) * (point3.x - point4.x); //¼ÆËã·ÖÄ¸
-        if (d == 0) return false; //Èç¹û·ÖÄ¸Îª0£¬ÔòÏß¶ÎÆ½ĞĞ»òÖØºÏ£¬ÎŞ½»µã
+        float d = (point1.x - point2.x) * (point3.y - point4.y) - (point1.y - point2.y) * (point3.x - point4.x); //è®¡ç®—åˆ†æ¯
+        if (d == 0) return false; //å¦‚æœåˆ†æ¯ä¸º0ï¼Œåˆ™çº¿æ®µå¹³è¡Œæˆ–é‡åˆï¼Œæ— äº¤ç‚¹
 
         float pre = (point1.x * point2.y - point1.y * point2.x), post = (point3.x * point4.y - point3.y * point4.x);
-        intersection.x = (pre * (point3.x - point4.x) - (point1.x - point2.x) * post) / d; //¼ÆËã½»µãX×ø±ê
-        intersection.y = (pre * (point3.y - point4.y) - (point1.y - point2.y) * post) / d; //¼ÆËã½»µãY×ø±ê
+        intersection.x = (pre * (point3.x - point4.x) - (point1.x - point2.x) * post) / d; //è®¡ç®—äº¤ç‚¹Xåæ ‡
+        intersection.y = (pre * (point3.y - point4.y) - (point1.y - point2.y) * post) / d; //è®¡ç®—äº¤ç‚¹Yåæ ‡
 
-        return true; //·µ»Øtrue£¬±íÊ¾ÕÒµ½½»µã
+        return true; //è¿”å›trueï¼Œè¡¨ç¤ºæ‰¾åˆ°äº¤ç‚¹
     }
-    //¶¨Òå¸ù¾İÎ»ÒÆ¼ì²é²¢µ÷ÕûµãÎ»ÖÃµÄ·½·¨
+    //å®šä¹‰æ ¹æ®ä½ç§»æ£€æŸ¥å¹¶è°ƒæ•´ç‚¹ä½ç½®çš„æ–¹æ³•
     public Vector3 CheckPoint(Vector3 point, float displacement, int maxDepth = 10, int currentDepth = 0, bool isInitialCall = true)
     {
-        Vector2 originalPoint = point; //±£´æÔ­Ê¼µãÎ»ÖÃ
+        Vector2 originalPoint = point; //ä¿å­˜åŸå§‹ç‚¹ä½ç½®
         float z = point.z;
-        if (currentDepth >= maxDepth) //¼ì²éÊÇ·ñ´ïµ½µİ¹é´ÎÊıÏŞÖÆ
+        if (currentDepth >= maxDepth) //æ£€æŸ¥æ˜¯å¦è¾¾åˆ°é€’å½’æ¬¡æ•°é™åˆ¶
         {
-            return point; //Èç¹û´ïµ½×î´ó´ÎÊı£¬·µ»Øµ±Ç°µã
+            return point; //å¦‚æœè¾¾åˆ°æœ€å¤§æ¬¡æ•°ï¼Œè¿”å›å½“å‰ç‚¹
         }
 
-        foreach (var box in BoxController.instance.boxes) //±éÀúËùÓĞÕ½¶·¿ò
+        foreach (var box in BoxController.instance.boxes) //éå†æ‰€æœ‰æˆ˜æ–—æ¡†
         {
-            if (box.localPosition.z != z)//ÅÅ³ıZÖá²»Í¬µÄ
+            if (box.localPosition.z != z)//æ’é™¤Zè½´ä¸åŒçš„
                 continue;
 
             float rDis;
@@ -922,77 +922,77 @@ public class BattlePlayerController : MonoBehaviour
                 rDis = displacement + test1;
             else
                 rDis = displacement;
-            List<Vector2> movedVertices = CalculateInwardOffset(box.GetRealPoints(false), -rDis); //¼ÆËãËõ·ÅºóµÄ¶à±ßĞÎ¶¥µã
+            List<Vector2> movedVertices = CalculateInwardOffset(box.GetRealPoints(false), -rDis); //è®¡ç®—ç¼©æ”¾åçš„å¤šè¾¹å½¢é¡¶ç‚¹
             /*
-            foreach (var item in movedVertices) //±éÀúÒÆ¶¯ºóµÄ¶¥µã
+            foreach (var item in movedVertices) //éå†ç§»åŠ¨åçš„é¡¶ç‚¹
             {
-                //DebugLogger.Log(item, DebugLogger.Type.err); //¼ÇÂ¼ÈÕÖ¾
+                //DebugLogger.Log(item, DebugLogger.Type.err); //è®°å½•æ—¥å¿—
             }
             */
-            if (IsPointInPolygon(point, movedVertices)) //Èç¹ûµã ÔÚ µ÷ÕûºóµÄ¶à±ßĞÎÄÚ
+            if (IsPointInPolygon(point, movedVertices)) //å¦‚æœç‚¹ åœ¨ è°ƒæ•´åçš„å¤šè¾¹å½¢å†…
             {
-                //DebugLogger.Log(point, DebugLogger.Type.war, "#FF00FF"); //¼ÇÂ¼ÈÕÖ¾
-                return point; //·µ»ØÔ­Ê¼×ø±ê
+                //DebugLogger.Log(point, DebugLogger.Type.war, "#FF00FF"); //è®°å½•æ—¥å¿—
+                return point; //è¿”å›åŸå§‹åæ ‡
             }
 
         }
-        //Èç¹ûµã ²»ÔÚ µ÷ÕûºóµÄ¶à±ßĞÎÄÚ
+        //å¦‚æœç‚¹ ä¸åœ¨ è°ƒæ•´åçš„å¤šè¾¹å½¢å†…
 
-        Vector2 nearestPoint = Vector2.zero; //×î½üµã
+        Vector2 nearestPoint = Vector2.zero; //æœ€è¿‘ç‚¹
         Vector2 lineStart = Vector2.zero; 
         Vector2 lineEnd = Vector2.zero; 
-        float nearestDistance = float.MaxValue; //×î½ü¾àÀëÉèÎª×î´óÖµ
-        bool isParent = false;//È·¶¨¿òÊÇ·ñÎª¸´ºÏµÄ¿ò£¬Èç¹ûÊÇ£¬ĞèÒª¶îÍâµ÷ÕûÒÆ¶¯¾àÀë
+        float nearestDistance = float.MaxValue; //æœ€è¿‘è·ç¦»è®¾ä¸ºæœ€å¤§å€¼
+        bool isParent = false;//ç¡®å®šæ¡†æ˜¯å¦ä¸ºå¤åˆçš„æ¡†ï¼Œå¦‚æœæ˜¯ï¼Œéœ€è¦é¢å¤–è°ƒæ•´ç§»åŠ¨è·ç¦»
 
-        foreach (var box in BoxController.instance.boxes) //±éÀúËùÓĞÕ½¶·¿ò
+        foreach (var box in BoxController.instance.boxes) //éå†æ‰€æœ‰æˆ˜æ–—æ¡†
         {
-            if (box.localPosition.z != z)//ÅÅ³ıZÖá²»Í¬µÄ
+            if (box.localPosition.z != z)//æ’é™¤Zè½´ä¸åŒçš„
                 continue;
 
 
-            for (int i = 0, j = box.GetRealPoints(false).Count - 1; i < box.GetRealPoints(false).Count; j = i++) //±éÀú¿òµÄËùÓĞ±ß
+            for (int i = 0, j = box.GetRealPoints(false).Count - 1; i < box.GetRealPoints(false).Count; j = i++) //éå†æ¡†çš„æ‰€æœ‰è¾¹
             {
-                Vector2 tempNearestPoint = GetNearestPointOnLine(point, box.GetRealPoints(false)[i], box.GetRealPoints(false)[j]); //¼ÆËãµ½µ±Ç°±ßµÄ×î½üµã
-                float tempDistance = Vector2.Distance(point, tempNearestPoint); //¼ÆËã¾àÀë
-                if (tempDistance < nearestDistance) //Èç¹û¾àÀë¸ü¶Ì
+                Vector2 tempNearestPoint = GetNearestPointOnLine(point, box.GetRealPoints(false)[i], box.GetRealPoints(false)[j]); //è®¡ç®—åˆ°å½“å‰è¾¹çš„æœ€è¿‘ç‚¹
+                float tempDistance = Vector2.Distance(point, tempNearestPoint); //è®¡ç®—è·ç¦»
+                if (tempDistance < nearestDistance) //å¦‚æœè·ç¦»æ›´çŸ­
                 {
-                    nearestPoint = tempNearestPoint; //¸üĞÂ×î½üµã
-                    lineStart = box.GetRealPoints(false)[i]; //¸üĞÂÏß¶ÎÆğµã
-                    lineEnd = box.GetRealPoints(false)[j]; //¸üĞÂÏß¶ÎÖÕµã
-                    nearestDistance = tempDistance; //¸üĞÂ×î½ü¾àÀë
+                    nearestPoint = tempNearestPoint; //æ›´æ–°æœ€è¿‘ç‚¹
+                    lineStart = box.GetRealPoints(false)[i]; //æ›´æ–°çº¿æ®µèµ·ç‚¹
+                    lineEnd = box.GetRealPoints(false)[j]; //æ›´æ–°çº¿æ®µç»ˆç‚¹
+                    nearestDistance = tempDistance; //æ›´æ–°æœ€è¿‘è·ç¦»
                     isParent = box.sonBoxDrawer.Count > 0;
                     
                 }
             }
         }
 
-        if (nearestDistance < float.MaxValue) //Èç¹ûÕÒµ½×î½üµã
+        if (nearestDistance < float.MaxValue) //å¦‚æœæ‰¾åˆ°æœ€è¿‘ç‚¹
         {
             if (isParent)
                 displacement -= test2;
 
-            Vector3 moved = (Vector3)CalculateDisplacedPoint(nearestPoint, point, lineStart, lineEnd, -displacement) + new Vector3(0, 0, z); //¼ÆËãÎ»ÒÆºóµÄµãÎ»ÖÃ
-            //DebugLogger.Log(moved, DebugLogger.Type.war, "#FF0000"); //¼ÇÂ¼ÈÕÖ¾
+            Vector3 moved = (Vector3)CalculateDisplacedPoint(nearestPoint, point, lineStart, lineEnd, -displacement) + new Vector3(0, 0, z); //è®¡ç®—ä½ç§»åçš„ç‚¹ä½ç½®
+            //DebugLogger.Log(moved, DebugLogger.Type.war, "#FF0000"); //è®°å½•æ—¥å¿—
 
-            if (isInitialCall || (Vector2)moved != originalPoint) //Èç¹ûÊÇ³õ´Îµ÷ÓÃ»òÒÆ¶¯ºóµÄµã²»µÈÓÚÔ­µã
+            if (isInitialCall || (Vector2)moved != originalPoint) //å¦‚æœæ˜¯åˆæ¬¡è°ƒç”¨æˆ–ç§»åŠ¨åçš„ç‚¹ä¸ç­‰äºåŸç‚¹
             {
-                Vector3 newCheck = (Vector3)(Vector2)CheckPoint(moved, displacement, maxDepth, currentDepth + 1, false) + new Vector3(0, 0, z); //µİ¹éµ÷ÓÃ£¬Ôö¼Óµİ¹éÉî¶È
-                if (newCheck != moved) //Èç¹ûÒÆ¶¯ºóµÄµãÎ´Í¨¹ı¼ì²â
+                Vector3 newCheck = (Vector3)(Vector2)CheckPoint(moved, displacement, maxDepth, currentDepth + 1, false) + new Vector3(0, 0, z); //é€’å½’è°ƒç”¨ï¼Œå¢åŠ é€’å½’æ·±åº¦
+                if (newCheck != moved) //å¦‚æœç§»åŠ¨åçš„ç‚¹æœªé€šè¿‡æ£€æµ‹
                 {
-                    //ÒòÎªÒÑ¾­ÔÚµİ¹éÖĞ´¦Àíµİ¹éÉî¶È£¬ËùÒÔÕâÀï²»ĞèÒªÔÙ´Îµ÷ÓÃCheckPoint
-                    return newCheck; //·µ»ØĞÂ¼ì²éµã
+                    //å› ä¸ºå·²ç»åœ¨é€’å½’ä¸­å¤„ç†é€’å½’æ·±åº¦ï¼Œæ‰€ä»¥è¿™é‡Œä¸éœ€è¦å†æ¬¡è°ƒç”¨CheckPoint
+                    return newCheck; //è¿”å›æ–°æ£€æŸ¥ç‚¹
                 }
-                return moved; //·µ»ØÒÆ¶¯ºóµÄµã
+                return moved; //è¿”å›ç§»åŠ¨åçš„ç‚¹
             }
         }
 
-        return point;//Èç¹ûÃ»ÓĞÕÒµ½¸ü½üµÄµã£¬·µ»ØÔ­µã
+        return point;//å¦‚æœæ²¡æœ‰æ‰¾åˆ°æ›´è¿‘çš„ç‚¹ï¼Œè¿”å›åŸç‚¹
     }
 }
 
-//ÔÓÏî
+//æ‚é¡¹
 /*
- Ğ´À¶ĞÄµÄÊ±ºòÎŞÒâÖĞ¸ã³öÀ´µÄµ¯ÇòÊ½À¶ĞÄ£º
+ å†™è“å¿ƒçš„æ—¶å€™æ— æ„ä¸­æå‡ºæ¥çš„å¼¹çƒå¼è“å¿ƒï¼š
 
   case BattleControl.PlayerColor.blue:
                 switch (playerDir)
@@ -1046,7 +1046,7 @@ public class BattlePlayerController : MonoBehaviour
                             }
                             Ray2D ray = new Ray2D(transform.position, dirReal);
                             Debug.DrawRay(ray.origin, ray.direction, Color.blue, collideCollider.radius + 0.05f);
-                            RaycastHit2D info = Physics2D.Raycast(transform.position, dirReal, collideCollider.radius + 0.05f);//¾àÀëÎªÔ²Åö×²Æ÷+0.05f
+                            RaycastHit2D info = Physics2D.Raycast(transform.position, dirReal, collideCollider.radius + 0.05f);//è·ç¦»ä¸ºåœ†ç¢°æ’å™¨+0.05f
                             if (info.collider != null && info.transform.position.z == transform.position.z)
                             {
                                 GameObject obj = info.collider.gameObject;
