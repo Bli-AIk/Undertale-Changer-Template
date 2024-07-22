@@ -386,7 +386,7 @@ public class TypeWritter : MonoBehaviour
                 tmp_Text.text = endString;
 
                 Timing.RunCoroutine(_Dynamic(endString.Length - 1));
-
+                
 
                 if (tmp_Text.font != MainControl.instance.OverworldControl.tmpFonts[useFont])
                     tmp_Text.font = MainControl.instance.OverworldControl.tmpFonts[useFont];
@@ -578,6 +578,18 @@ public class TypeWritter : MonoBehaviour
             {
                 pressX = true;
             }
+        }
+
+
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                Timing.RunCoroutine(_Dynamic(i));
+            }
+
+
         }
 
     }
