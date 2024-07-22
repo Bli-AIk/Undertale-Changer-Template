@@ -429,7 +429,7 @@ public class TypeWritter : MonoBehaviour
             var textInfo = tmp_Text.textInfo;
 
             Vector3 orig;
-            TMP_CharacterInfo charInfo = default;
+            TMP_CharacterInfo charInfo;
             Vector3[] verts;
             Color32[] colors;
 
@@ -518,11 +518,8 @@ public class TypeWritter : MonoBehaviour
 
                     for (int i = 0; i < 30; i++)
                     {
-
                         if (pressX)
                             break;
-
-
 
                         tmp_Text.ForceMeshUpdate();
 
@@ -541,15 +538,13 @@ public class TypeWritter : MonoBehaviour
                             verts[charInfo.vertexIndex + j] = orig + down * (1 - (float)i / 30);
                         }
 
-                        //textInfo.meshInfo[charInfo.materialReferenceIndex].vertices = verts;
-
-                        Debug.LogError(down * (1 - (float)i / 30));
                         for (int k = 0; k < textInfo.meshInfo.Length; k++)
                         {
                             var meshInfo = textInfo.meshInfo[k];
                             meshInfo.mesh.vertices = meshInfo.vertices;
                             tmp_Text.UpdateGeometry(meshInfo.mesh, k);
                         }
+
                         yield return 0;
                     }
                     break;
