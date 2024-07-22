@@ -422,7 +422,6 @@ public class TypeWritter : MonoBehaviour
         if (originString.Length > "<passText>".Length)
             originString = originString.Substring("<passText>".Length);
     }
-
     private IEnumerator<float> _Dynamic(int num)
     {
         if (dynamicType != OverworldControl.DynamicType.None)//动效相关
@@ -446,7 +445,7 @@ public class TypeWritter : MonoBehaviour
 
                         Vector3 randomer = new Vector3(Random.Range(-0.05f, 0.05f), Random.Range(-0.05f, 0.05f), 0);
 
-                         charInfo = textInfo.characterInfo[num];
+                        charInfo = textInfo.characterInfo[num];
 
                         if (!charInfo.isVisible) break;
 
