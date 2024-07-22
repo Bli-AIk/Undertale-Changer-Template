@@ -383,8 +383,8 @@ public class TypeWritter : MonoBehaviour
 
             if (tmp_Text != null)
             {
-                Timing.RunCoroutine(_Dynamic(endString.Length - 1));
                 tmp_Text.text = endString;
+                Timing.RunCoroutine(_Dynamic(endString.Length - 1));
 
 
                 if (tmp_Text.font != MainControl.instance.OverworldControl.tmpFonts[useFont])
@@ -428,10 +428,11 @@ public class TypeWritter : MonoBehaviour
         {
             var textInfo = tmp_Text.textInfo;
 
-            Debug.LogWarning(num);
-            Vector3 orig = default;
+            Vector3 orig;
             TMP_CharacterInfo charInfo = default;
-            Vector3[] verts = default;
+            Vector3[] verts;
+            Color32[] colors;
+
             switch (dynamicType)
             {
                 case OverworldControl.DynamicType.Shake:
@@ -469,15 +470,88 @@ public class TypeWritter : MonoBehaviour
 
                     break;
                 case OverworldControl.DynamicType.Fade:
+
+                    float fadeDuration = 0.1f; // 渐入时间
+                    Color32 startColor;
+                    Color32 endColor;
+
+                    tmp_Text.ForceMeshUpdate();
+
+                    charInfo = textInfo.characterInfo[num];
+                    if (!charInfo.isVisible) break;
+
+                    colors = textInfo.meshInfo[charInfo.materialReferenceIndex].colors32;
+                    startColor = colors[charInfo.vertexIndex];
+                    endColor = new Color32(startColor.r, startColor.g, startColor.b, 255);
+
+                    // 设置初始颜色为透明
+                    for (int j = 0; j < 4; j++)
+                    {
+                        colors[charInfo.vertexIndex + j] = new Color32(startColor.r, startColor.g, startColor.b, 0);
+                    }
+
+                    tmp_Text.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
+
+                    float elapsedTime = 0f;
+                    while (elapsedTime < fadeDuration)
+                    {
+
+                        if (pressX)
+                            break;
+                        elapsedTime += Time.deltaTime;
+                        float alpha = Mathf.Clamp01(elapsedTime / fadeDuration);
+
+                        Color32 currentColor = Color32.Lerp(new Color32(startColor.r, startColor.g, startColor.b, 0), endColor, alpha);
+
+                        for (int j = 0; j < 4; j++)
+                        {
+                            colors[charInfo.vertexIndex + j] = currentColor;
+                        }
+
+                        tmp_Text.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
+
+                        yield return 0;
+                    }
                     break;
-                case OverworldControl.DynamicType.FadeUp:
-                    break;
-                case OverworldControl.DynamicType.Garbled:
+
+                case OverworldControl.DynamicType.Up:
+
+                    for (int i = 0; i < 30; i++)
+                    {
+                        if (pressX)
+                            break;
+
+                        tmp_Text.ForceMeshUpdate();
+
+                        Vector3 down = new Vector3(0, -0.5f);
+
+                        charInfo = textInfo.characterInfo[num];
+
+                        if (!charInfo.isVisible) break;
+
+                        verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
+
+                        for (int j = 0; j < 4; j++)
+                        {
+                            orig = verts[charInfo.vertexIndex + j];
+                            //动画
+                            verts[charInfo.vertexIndex + j] = orig + down * (1 - (float)i / 30);
+                        }
+
+                        for (int k = 0; k < textInfo.meshInfo.Length; k++)
+                        {
+                            var meshInfo = textInfo.meshInfo[k];
+                            meshInfo.mesh.vertices = meshInfo.vertices;
+                            tmp_Text.UpdateGeometry(meshInfo.mesh, k);
+                        }
+                        yield return 0;
+                    }
                     break;
             }
 
         }
         yield return 0;
+        tmp_Text.ForceMeshUpdate();
     }
     private void Update()
     {

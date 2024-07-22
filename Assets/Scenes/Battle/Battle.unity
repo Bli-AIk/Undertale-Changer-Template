@@ -7788,7 +7788,7 @@ MonoBehaviour:
   volume: 0.5
   audioMixerGroup: {fileID: 0}
   useFont: 0
-  dynamicType: 1
+  dynamicType: 4
   forceReturn: 0
 --- !u!1 &1735849019
 GameObject:

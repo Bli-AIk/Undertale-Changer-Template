@@ -89,6 +89,6 @@ public class OverworldControl : ScriptableObject
         Shake,
         Fade,
         FadeUp,
-        Garbled
+        Up,
     }
 }
