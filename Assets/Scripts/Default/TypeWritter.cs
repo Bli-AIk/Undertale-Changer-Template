@@ -384,6 +384,7 @@ public class TypeWritter : MonoBehaviour
             if (tmp_Text != null)
             {
                 tmp_Text.text = endString;
+
                 Timing.RunCoroutine(_Dynamic(endString.Length - 1));
 
 
@@ -518,8 +519,11 @@ public class TypeWritter : MonoBehaviour
 
                     for (int i = 0; i < 30; i++)
                     {
+
                         if (pressX)
                             break;
+
+
 
                         tmp_Text.ForceMeshUpdate();
 
@@ -538,6 +542,9 @@ public class TypeWritter : MonoBehaviour
                             verts[charInfo.vertexIndex + j] = orig + down * (1 - (float)i / 30);
                         }
 
+                        //textInfo.meshInfo[charInfo.materialReferenceIndex].vertices = verts;
+
+                        Debug.LogError(down * (1 - (float)i / 30));
                         for (int k = 0; k < textInfo.meshInfo.Length; k++)
                         {
                             var meshInfo = textInfo.meshInfo[k];
