@@ -385,7 +385,7 @@ public class TypeWritter : MonoBehaviour
             {
                 tmp_Text.text = endString;
 
-                Timing.RunCoroutine(_Dynamic(endString.Length - 1));
+                Timing.RunCoroutine(_Dynamic(endString.Length - 1, dynamicType));
                 
 
                 if (tmp_Text.font != MainControl.instance.OverworldControl.tmpFonts[useFont])
@@ -422,7 +422,10 @@ public class TypeWritter : MonoBehaviour
         if (originString.Length > "<passText>".Length)
             originString = originString.Substring("<passText>".Length);
     }
-    private IEnumerator<float> _Dynamic(int num)
+
+    List<Vector2> dynamicPos;
+
+    IEnumerator<float> _Dynamic(int num, OverworldControl.DynamicType dynamicType)
     {
         if (dynamicType != OverworldControl.DynamicType.None)//动效相关
         {
@@ -523,7 +526,7 @@ public class TypeWritter : MonoBehaviour
 
                         tmp_Text.ForceMeshUpdate();
 
-                        Vector3 down = new Vector3(0, -0.5f);
+                        Vector3 down = new Vector3(0, -0.1f);
 
                         charInfo = textInfo.characterInfo[num];
 
@@ -582,15 +585,6 @@ public class TypeWritter : MonoBehaviour
 
 
 
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            for (int i = 0; i < 5; i++)
-            {
-                Timing.RunCoroutine(_Dynamic(i));
-            }
-
-
-        }
 
     }
 
