@@ -69,38 +69,19 @@ public class TurnController : MonoBehaviour
             case 0:
                 DebugLogger.Log("这是个摆烂回合……也许吧。");
                 //MainControl.instance.battlePlayerController.ChangePlayerColor(MainControl.instance.BattleControl.playerColorList[5], BattleControl.PlayerColor.blue,0,BattlePlayerController.PlayerDirEnum.down);
+
                 var obj = objectPools[0].GetFromPool().GetComponent<BulletController>();
-                obj.SetBullet(
-                    "DemoBullet",
-                    "CupCake",
-                    40,
-                    Resources.Load<Sprite>("Sprites/Bullet/CupCake"),
-                    Vector2.zero,
-                    1,
-                    Vector2.zero,
-                    new Vector3(1, -1.6f),
-                    BattleControl.BulletColor.white,
-                    SpriteMaskInteraction.None
-                    );
+                obj.SetBullet("CupCake", new Vector3(1, -1.6f));
+
                 var obj2 = objectPools[0].GetFromPool().GetComponent<BulletController>();
-                obj2.SetBullet(
-                    "DemoBullet",
-                    "CupCake",
-                    40,
-                    Resources.Load<Sprite>("Sprites/Bullet/CupCake"),
-                    Vector2.zero,
-                    1,
-                    Vector2.zero,
-                    new Vector3(-1, -1.6f),
-                    BattleControl.BulletColor.white,
-                    SpriteMaskInteraction.None
-                    );
+                obj2.SetBullet("CupCake", new Vector3(-1, -1.6f));
+
+
                 for (int i = 600; i > 0; i--)
                 {
                     DebugLogger.Log("你先别急，先摆" + MainControl.instance.RandomStringColor() + i + "</color>秒");
                     yield return Timing.WaitForSeconds(1f);
                 }
-
 
                 objectPools[0].ReturnPool(obj.gameObject);
 
@@ -166,20 +147,9 @@ public class TurnController : MonoBehaviour
             case Nest.simpleNestBullet:
                 var obj = objectPools[0].GetFromPool().GetComponent<BulletController>();
 
-                obj.SetBullet(
-                    "DemoBullet",
-                    "CupCake",
-                    40,
-                    Resources.Load<Sprite>("Sprites/Bullet/CupCake"),
-                    Vector2.zero,
-                    1,
-                    Vector2.zero,
-                    new Vector3(0, -3.35f),
-                    BattleControl.BulletColor.white,
-                    SpriteMaskInteraction.VisibleInsideMask
-                    );
+                obj.SetBullet("CupCake", new Vector3(0, -3.35f));
 
-                obj.transform.localPosition += new Vector3(UnityEngine.Random.Range(-0.5f, 0.5f), 0);
+                obj.transform.localPosition += new Vector3(Random.Range(-0.5f, 0.5f), 0);
 
                 obj.transform.DOMoveY(0, 1).SetEase(Ease.OutSine).SetLoops(2, LoopType.Yoyo);
 

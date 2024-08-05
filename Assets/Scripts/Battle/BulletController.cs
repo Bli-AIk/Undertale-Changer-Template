@@ -41,6 +41,43 @@ public class BulletController : MonoBehaviour
         //if (useExtra)
         //    extra = GetComponent<Collider2D>();
     }
+    public void SetBullet(string bulletPathName,
+        Vector3 startPosition = default, BattleControl.BulletColor bulletColor = default, SpriteMaskInteraction startMask = default, Vector3 startRotation = default, Vector3 startScale = default)
+    {
+        string path = "Assets/Bullets/" + bulletPathName;
+
+        SetBullet((BulletControl)Resources.Load(path), startPosition, bulletColor, startMask, startRotation, startScale);
+    }
+    public void SetBullet(BulletControl bulletControl,
+        Vector3 startPosition = default, BattleControl.BulletColor bulletColor = default, SpriteMaskInteraction startMask = default, Vector3 startRotation = default, Vector3 startScale = default)
+    {
+        Debug.LogWarning(startPosition);
+
+        if (startPosition == default)
+            startPosition = bulletControl.startPosition;
+        if (bulletColor == default)
+            bulletColor = bulletControl.bulletColor;
+        if (startMask == default)
+            startMask = bulletControl.startMask;
+        if (startRotation == default)
+            startRotation = bulletControl.startRotation;
+        if (startScale == default)
+            startScale = bulletControl.startScale;
+
+        SetBullet(bulletControl.name, 
+            bulletControl.typeName, 
+            bulletControl.layer, 
+            bulletControl.sprite,
+            bulletControl.size, 
+            bulletControl.hit, 
+            bulletControl.offset,
+            startPosition, 
+            bulletColor, 
+            startMask,
+            startRotation,
+            startScale,
+            bulletControl.followMode);
+    }
 
     /// <summary>
     /// 初始化弹幕（单个碰撞模式）。
