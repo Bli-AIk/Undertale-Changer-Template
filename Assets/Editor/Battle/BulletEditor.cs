@@ -1,12 +1,12 @@
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
-using UnityEditor.UIElements;
 
 
 public class BulletEditor : EditorWindow
 {
-    [MenuItem("Window/UI Toolkit/BulletEditor")]
+    [MenuItem("UCT Window/BulletEditor")]
     public static void ShowExample()
     {
         BulletEditor wnd = GetWindow<BulletEditor>();
@@ -22,6 +22,8 @@ public class BulletEditor : EditorWindow
         var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Editor/Battle/BulletEditor.uxml");
         VisualElement labelFromUXML = visualTree.Instantiate();
         root.Add(labelFromUXML);
+
+        rootVisualElement.Add(new MaskField());
 
     }
 }
