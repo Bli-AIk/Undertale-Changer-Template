@@ -13,7 +13,6 @@ public class TurnController : MonoBehaviour
     public int turn;
     public bool isMyTurn;
 
-    private GameObject mainFrame;
     public List<int> poolCount;
 
     //public List<string> inheritList = new List<string>();
@@ -27,7 +26,6 @@ public class TurnController : MonoBehaviour
     private void Start()
     {
         GameObject saveBullet = GameObject.Find("SaveBullet");
-        mainFrame = GameObject.Find("MainFrame");
         //OutYourTurn();
         //弹幕
         objectPools.Add(gameObject.AddComponent<ObjectPool>());
@@ -66,15 +64,15 @@ public class TurnController : MonoBehaviour
     {
         switch (turn)
         {
-            case 0:
+            case 1:
                 DebugLogger.Log("这是个摆烂回合……也许吧。");
                 //MainControl.instance.battlePlayerController.ChangePlayerColor(MainControl.instance.BattleControl.playerColorList[5], BattleControl.PlayerColor.blue,0,BattlePlayerController.PlayerDirEnum.down);
 
                 var obj = objectPools[0].GetFromPool().GetComponent<BulletController>();
-                obj.SetBullet("CupCake", new Vector3(1, -1.6f));
+                obj.SetBullet("CupCake", new Vector3(1, -1.6f), (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
 
                 var obj2 = objectPools[0].GetFromPool().GetComponent<BulletController>();
-                obj2.SetBullet("CupCake", new Vector3(-1, -1.6f));
+                obj2.SetBullet("CupCake", new Vector3(-1, -1.6f), (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
 
 
                 for (int i = 600; i > 0; i--)
@@ -88,27 +86,31 @@ public class TurnController : MonoBehaviour
                 objectPools[0].ReturnPool(obj2.gameObject);
                 break;
 
-            case 1://示例回合
+            case 0://示例回合
                 DebugLogger.Log("这是一个示例回合");
                 yield return Timing.WaitForSeconds(0.5f);
                 DebugLogger.Log("请注意查看控制台发出的Debug文本介绍");
                 yield return Timing.WaitForSeconds(1.5f);
 
                 DebugLogger.Log("战斗框缩放：更改四个点的坐标");
-                mainFrame.transform.GetChild(0).DOLocalMoveX(1.4f, 0.5f).SetEase(Ease.InOutSine);
-                mainFrame.transform.GetChild(3).DOLocalMoveX(1.4f, 0.5f).SetEase(Ease.InOutSine);
-                mainFrame.transform.GetChild(1).DOLocalMoveX(-1.4f, 0.5f).SetEase(Ease.InOutSine);
-                mainFrame.transform.GetChild(2).DOLocalMoveX(-1.4f, 0.5f).SetEase(Ease.InOutSine);
+
+                DOTween.To(() => MainControl.instance.mainBox.vertexPoints[0], x => MainControl.instance.mainBox.vertexPoints[0] = x, new Vector2(1.4f, MainControl.instance.mainBox.vertexPoints[0].y), 0.5f).SetEase(Ease.InOutSine);
+                DOTween.To(() => MainControl.instance.mainBox.vertexPoints[1], x => MainControl.instance.mainBox.vertexPoints[1] = x, new Vector2(1.4f, MainControl.instance.mainBox.vertexPoints[1].y), 0.5f).SetEase(Ease.InOutSine);
+                DOTween.To(() => MainControl.instance.mainBox.vertexPoints[2], x => MainControl.instance.mainBox.vertexPoints[2] = x, new Vector2(-1.4f, MainControl.instance.mainBox.vertexPoints[2].y), 0.5f).SetEase(Ease.InOutSine);
+                DOTween.To(() => MainControl.instance.mainBox.vertexPoints[3], x => MainControl.instance.mainBox.vertexPoints[3] = x, new Vector2(-1.4f, MainControl.instance.mainBox.vertexPoints[3].y), 0.5f).SetEase(Ease.InOutSine);
+
 
                 yield return Timing.WaitForSeconds(1);
 
                 DebugLogger.Log("通过更改点坐标实现的战斗框轴点旋转");
                 for (int i = 0; i < 4; i++)
                 {
-                    mainFrame.transform.GetChild(0).DOLocalMove(mainFrame.transform.GetChild(3).transform.localPosition, 0.5f).SetEase(Ease.InOutSine);
-                    mainFrame.transform.GetChild(1).DOLocalMove(mainFrame.transform.GetChild(0).transform.localPosition, 0.5f).SetEase(Ease.InOutSine);
-                    mainFrame.transform.GetChild(2).DOLocalMove(mainFrame.transform.GetChild(1).transform.localPosition, 0.5f).SetEase(Ease.InOutSine);
-                    mainFrame.transform.GetChild(3).DOLocalMove(mainFrame.transform.GetChild(2).transform.localPosition, 0.5f).SetEase(Ease.InOutSine);
+
+                    DOTween.To(() => MainControl.instance.mainBox.vertexPoints[0], x => MainControl.instance.mainBox.vertexPoints[0] = x, MainControl.instance.mainBox.vertexPoints[3], 0.5f).SetEase(Ease.InOutSine);
+                    DOTween.To(() => MainControl.instance.mainBox.vertexPoints[1], x => MainControl.instance.mainBox.vertexPoints[1] = x, MainControl.instance.mainBox.vertexPoints[0], 0.5f).SetEase(Ease.InOutSine);
+                    DOTween.To(() => MainControl.instance.mainBox.vertexPoints[2], x => MainControl.instance.mainBox.vertexPoints[2] = x, MainControl.instance.mainBox.vertexPoints[1], 0.5f).SetEase(Ease.InOutSine);
+                    DOTween.To(() => MainControl.instance.mainBox.vertexPoints[3], x => MainControl.instance.mainBox.vertexPoints[3] = x, MainControl.instance.mainBox.vertexPoints[2], 0.5f).SetEase(Ease.InOutSine);
+
                     yield return Timing.WaitForSeconds(0.5f);
                 }
 
@@ -121,10 +123,10 @@ public class TurnController : MonoBehaviour
 
                 DebugLogger.Log("战斗框缩放回初始坐标以结束回合");
                 yield return Timing.WaitForSeconds(1f);
-                mainFrame.transform.GetChild(0).DOLocalMoveX(5.93f, 0.5f).SetEase(Ease.InOutSine);
-                mainFrame.transform.GetChild(3).DOLocalMoveX(5.93f, 0.5f).SetEase(Ease.InOutSine);
-                mainFrame.transform.GetChild(1).DOLocalMoveX(-5.93f, 0.5f).SetEase(Ease.InOutSine);
-                mainFrame.transform.GetChild(2).DOLocalMoveX(-5.93f, 0.5f).SetEase(Ease.InOutSine);
+                DOTween.To(() => MainControl.instance.mainBox.vertexPoints[0], x => MainControl.instance.mainBox.vertexPoints[0] = x, new Vector2(5.93f, MainControl.instance.mainBox.vertexPoints[0].y), 0.5f).SetEase(Ease.InOutSine);
+                DOTween.To(() => MainControl.instance.mainBox.vertexPoints[1], x => MainControl.instance.mainBox.vertexPoints[1] = x, new Vector2(5.93f, MainControl.instance.mainBox.vertexPoints[1].y), 0.5f).SetEase(Ease.InOutSine);
+                DOTween.To(() => MainControl.instance.mainBox.vertexPoints[2], x => MainControl.instance.mainBox.vertexPoints[2] = x, new Vector2(-5.93f, MainControl.instance.mainBox.vertexPoints[2].y), 0.5f).SetEase(Ease.InOutSine);
+                DOTween.To(() => MainControl.instance.mainBox.vertexPoints[3], x => MainControl.instance.mainBox.vertexPoints[3] = x, new Vector2(-5.93f, MainControl.instance.mainBox.vertexPoints[3].y), 0.5f).SetEase(Ease.InOutSine);
                 yield return Timing.WaitForSeconds(0.5f);
 
                 break;
@@ -147,7 +149,7 @@ public class TurnController : MonoBehaviour
             case Nest.simpleNestBullet:
                 var obj = objectPools[0].GetFromPool().GetComponent<BulletController>();
 
-                obj.SetBullet("CupCake", new Vector3(0, -3.35f));
+                obj.SetBullet("CupCake", new Vector3(0, -3.35f), (BattleControl.BulletColor)Random.Range(0,3), SpriteMaskInteraction.VisibleInsideMask);
 
                 obj.transform.localPosition += new Vector3(Random.Range(-0.5f, 0.5f), 0);
 

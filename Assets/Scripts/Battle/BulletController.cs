@@ -325,17 +325,17 @@ public class BulletController : MonoBehaviour
         switch (spriteMaskInteraction)
         {
             case SpriteMaskInteraction.None:
-                spriteRenderer.material.SetFloat("_IsMask", 0);
+                spriteRenderer.material.SetFloat("_OpenMask", 0);
                 break;
 
             case SpriteMaskInteraction.VisibleInsideMask:
-                spriteRenderer.material.SetFloat("_IsMask", 1);
-                spriteRenderer.material.SetFloat("_IsOutSide", 0);
+                spriteRenderer.material.SetFloat("_OpenMask", 1);
+                spriteRenderer.material.SetFloat("_OutSide", 0);
                 break;
 
             case SpriteMaskInteraction.VisibleOutsideMask:
-                spriteRenderer.material.SetFloat("_IsMask", 1);
-                spriteRenderer.material.SetFloat("_IsOutSide", 1);
+                spriteRenderer.material.SetFloat("_OpenMask", 1);
+                spriteRenderer.material.SetFloat("_OutSide", 1);
                 break;
 
             default:

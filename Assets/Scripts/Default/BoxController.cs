@@ -65,6 +65,7 @@ public class BoxController : ObjectPool
             BoxDrawer start = GetFromThePool();
             start.name = startSummonName;
             start.localPosition = startSummonPos;
+            MainControl.instance.mainBox = start;
         }
 
         /*测试使用

@@ -58,6 +58,8 @@ public class MainControl : MonoBehaviour
 
     private Camera cameraMainInBattle;
 
+    public BoxDrawer mainBox;
+
     public enum SceneState
     {
         Normal,
