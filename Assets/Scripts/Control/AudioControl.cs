@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 
-[CreateAssetMenu(fileName = "AudioControl", menuName = "AudioControl")]
+[CreateAssetMenu(fileName = "AudioControl", menuName = "UCT-Disposable/AudioControl")]
 public class AudioControl : ScriptableObject
 {
     public AudioMixer globalAudioMixer;

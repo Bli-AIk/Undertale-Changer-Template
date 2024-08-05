@@ -20,9 +20,8 @@ public class TurnEditor : EditorWindow
 
         // Import UXML
         var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Editor/TurnEditor.uxml");
-        //VisualElement labelFromUXML = visualTree.Instantiate();
-        //root.Add(labelFromUXML);
-        visualTree.CloneTree(root);
+        VisualElement labelFromUXML = visualTree.Instantiate();
+        root.Add(labelFromUXML);
 
     }
 }

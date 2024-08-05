@@ -5,7 +5,7 @@ using UnityEngine;
 /// 玩家的信息
 /// 以及一些相关的设置
 /// </summary>
-[CreateAssetMenu(fileName = "PlayerControl", menuName = "PlayerControl")]
+[CreateAssetMenu(fileName = "PlayerControl", menuName = "UCT-Disposable/PlayerControl")]
 public class PlayerControl : ScriptableObject
 {
     public int hp, hpMax, lv, exp, gold, wearAtk, wearDef, nextExp;

@@ -1,0 +1,11 @@
+Label {
+    font-size: 20px;
+    -unity-font-style: bold;
+    color: rgb(68, 138, 255);
+}
+
+.window-icon {
+    background-image: url("icons/TurnEditor.png");
+    width: 16px;
+    height: 16px;
+}

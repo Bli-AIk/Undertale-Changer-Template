@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// 战斗系统管理器，仅使用于战斗场景。
 /// </summary>
-[CreateAssetMenu(fileName = "BattleControl", menuName = "BattleControl")]
+[CreateAssetMenu(fileName = "BattleControl", menuName = "UCT-Disposable/BattleControl")]
 public class BattleControl : ScriptableObject
 {
     [Header("敌人OBJ")]

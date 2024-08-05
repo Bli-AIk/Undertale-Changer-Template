@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// 主要用于Overworld的数据与通用基本数据
 /// </summary>
-[CreateAssetMenu(fileName = "OverworldControl", menuName = "OverworldControl")]
+[CreateAssetMenu(fileName = "OverworldControl", menuName = "UCT-Disposable/OverworldControl")]
 public class OverworldControl : ScriptableObject
 {
     //public int languagePack;

@@ -4,7 +4,7 @@ using UnityEngine;
 /// <summary>
 /// 存储所有物品信息。
 /// </summary>
-[CreateAssetMenu(fileName = "ItemControl", menuName = "ItemControl")]
+[CreateAssetMenu(fileName = "ItemControl", menuName = "UCT-Disposable/ItemControl")]
 public class ItemControl : ScriptableObject
 {
     public TextAsset itemData;//数据包(内置数据调入)
