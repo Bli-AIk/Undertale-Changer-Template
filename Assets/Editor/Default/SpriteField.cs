@@ -3,13 +3,13 @@ using UnityEngine;
 using UnityEngine.UIElements;
 
 
-public class BulletEditor : EditorWindow
+public class SpriteField : EditorWindow
 {
-    [MenuItem("UCT Window/BulletEditor")]
+    [MenuItem("UCT Window/SpriteField")]
     public static void ShowExample()
     {
-        BulletEditor wnd = GetWindow<BulletEditor>();
-        wnd.titleContent = new GUIContent("BulletEditor");
+        SpriteField wnd = GetWindow<SpriteField>();
+        wnd.titleContent = new GUIContent("SpriteField");
     }
 
     public void CreateGUI()
@@ -18,12 +18,12 @@ public class BulletEditor : EditorWindow
         VisualElement root = rootVisualElement;
 
         // Import UXML
-        var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Editor/Battle/BulletEditor.uxml");
+        var visualTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/Editor/Default/SpriteField.uxml");
         //VisualElement labelFromUXML = visualTree.Instantiate();
         //root.Add(labelFromUXML);
         visualTree.CloneTree(root);
 
-        var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Editor/Default/BulletEditor.uss");
+        var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>("Assets/Editor/Default/SpriteField.uss");
         root.styleSheets.Add(styleSheet);
     }
 }

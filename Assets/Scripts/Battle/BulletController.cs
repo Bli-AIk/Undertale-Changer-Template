@@ -23,7 +23,6 @@ public class BulletController : MonoBehaviour
     /// 设置碰撞箱跟随SpriteRenderer缩放的模式。
     /// CutFollow:切去boxColliderSizes内存储的数据；
     /// NoFollow:不跟随缩放。
-    /// FullFollow:完全跟随缩放，即启用盒碰撞器的自动拼接。
     /// </summary>
     public enum FollowMode
     {
@@ -68,99 +67,16 @@ public class BulletController : MonoBehaviour
             bulletControl.typeName, 
             bulletControl.layer, 
             bulletControl.sprite,
-            bulletControl.size, 
-            bulletControl.hit, 
-            bulletControl.offset,
+            bulletControl.triggerSize, 
+            bulletControl.triggerHit, 
+            bulletControl.triggerOffset,
             startPosition, 
             bulletColor, 
             startMask,
             startRotation,
             startScale,
-            bulletControl.followMode);
+            bulletControl.triggerFollowMode);
     }
-
-    /// <summary>
-    /// 初始化弹幕（单个碰撞模式）。
-    /// </summary>
-    /// <param name="name">设置弹幕的Obj的名称，以便查找。</param>
-    /// <param name="typeName">设置弹幕的种类名称，如果种类名称与当前的弹幕一致，则保留原有的碰撞相关参数，反之清空。</param>
-    /// <param name="layer">玩家为100，战斗框边缘为50。可参考。</param>
-    /// <param name="sprite">一般在Resources内导入。</param>
-    /// <param name="size">设置判定箱大小，可设定多个List，但多数情况下需要避免其重叠。（NoFollow情况下设为(0,0)，会自动与sprite大小同步）</param>
-    /// <param name="offset">设定判定箱偏移，List大小必须与sizes相等。</param>
-    /// <param name="hit">设定碰撞箱伤害，List大小必须与sizes相等。</param>
-    /// <param name="followMode">设置碰撞箱跟随SpriteRenderer缩放的模式。</param>
-    /// <param name="startMask">设置Sprite遮罩模式。</param>
-    /// <param name="bulletColor">设置弹幕属性颜色数据</param>
-    /// <param name="startPosition">设置起始位置（相对坐标）。</param>
-    /// <param name="startRotation">设置旋转角度，一般只需更改Z轴。</param>
-    /// <param name="startScale">若弹幕不需拉伸，StartScale一般设置(1,1,1)。检测到Z为0时会归位到(1,1,1)。</param>
-    public void SetBullet(
-       string name,
-       string typeName,
-       int layer,
-       Sprite sprite,
-       Vector2 size,
-       int hit,
-       Vector2 offset,
-       Vector3 startPosition = new Vector3(),
-       BattleControl.BulletColor bulletColor = BattleControl.BulletColor.white,
-       SpriteMaskInteraction startMask = SpriteMaskInteraction.None,
-       Vector3 startRotation = new Vector3(),
-       Vector3 startScale = new Vector3(),
-       FollowMode followMode = FollowMode.NoFollow
-       )
-    {
-        gameObject.name = name;
-
-        spriteRenderer.sortingOrder = layer;
-
-        this.bulletColor = bulletColor;
-        spriteRenderer.color = MainControl.instance.BattleControl.bulletColorList[(int)this.bulletColor];
-
-        transform.localPosition = startPosition;
-
-        transform.rotation = Quaternion.Euler(startRotation);
-
-        if (startScale.z == 0)
-            startScale = Vector3.one;
-
-        transform.localScale = startScale;
-
-        spriteRenderer.sprite = sprite;
-        SetMask(startMask);
-
-        if (this.typeName != typeName)
-            this.typeName = typeName;
-        else
-            return;
-
-        for (int i = 0; i < boxColliderList.Count; i++)
-        {
-            Destroy(boxColliderList[0]);
-            boxColliderList.RemoveAt(0);
-        }
-
-        boxColliderSizes.Clear();
-        boxHitList.Clear();
-
-        boxColliderSizes.Add(size);
-        boxHitList.Add(hit);
-
-        BoxCollider2D save = gameObject.AddComponent<BoxCollider2D>();
-        save.isTrigger = true;
-        if (followMode == FollowMode.NoFollow)
-            save.size = boxColliderSizes[0];
-        else
-        {
-            save.size = boxColliderList[0].transform.GetComponent<SpriteRenderer>().size - boxColliderSizes[0];
-        }
-
-        save.offset = offset;
-
-        boxColliderList.Add(save);
-    }
-
     /// <summary>
     /// 初始化弹幕（循环生成盒状碰撞模式）。
     /// </summary>
@@ -168,10 +84,10 @@ public class BulletController : MonoBehaviour
     /// <param name="typeName">设置弹幕的种类名称，如果种类名称与当前的弹幕一致，则保留原有的碰撞相关参数，反之清空。</param>
     /// <param name="layer">玩家为100，战斗框边缘为50。可参考。</param>
     /// <param name="sprite">一般在Resources内导入。</param>
-    /// <param name="sizes">设置判定箱大小，可设定多个List，但多数情况下需要避免其重叠。（NoFollow情况下设为(0,0)，会自动与sprite大小同步）</param>
-    /// <param name="offsets">设定判定箱偏移，List大小必须与sizes相等。</param>
-    /// <param name="hits">设定碰撞箱伤害，List大小必须与sizes相等。</param>
-    /// <param name="followMode">设置碰撞箱跟随SpriteRenderer缩放的模式。</param>
+    /// <param name="triggerSizes">设置判定箱大小，可设定多个List，但多数情况下需要避免其重叠。（NoFollow情况下设为(0,0)，会自动与sprite大小同步）</param>
+    /// <param name="triggerHits">设定碰撞箱伤害，List大小必须与sizes相等。</param>
+    /// <param name="triggerOffsets">设定判定箱偏移，List大小必须与sizes相等。</param>
+    /// <param name="triggerFollowMode">设置碰撞箱跟随SpriteRenderer缩放的模式。</param>
     /// <param name="startMask">设置Sprite遮罩模式。</param>
     /// <param name="bulletColor">设置弹幕属性颜色数据</param>
     /// <param name="startPosition">设置起始位置（相对坐标）。</param>
@@ -183,15 +99,15 @@ public class BulletController : MonoBehaviour
         string typeName,
         int layer,
         Sprite sprite,
-        List<Vector2> sizes,
-        List<int> hits,
-        List<Vector2> offsets,
+        List<Vector2> triggerSizes,
+        List<int> triggerHits,
+        List<Vector2> triggerOffsets,
         Vector3 startPosition = new Vector3(),
         BattleControl.BulletColor bulletColor = BattleControl.BulletColor.white,
         SpriteMaskInteraction startMask = SpriteMaskInteraction.None,
         Vector3 startRotation = new Vector3(),
         Vector3 startScale = new Vector3(),
-        FollowMode followMode = FollowMode.NoFollow
+        FollowMode triggerFollowMode = FollowMode.NoFollow
         )
     {
         gameObject.name = name;
@@ -227,21 +143,21 @@ public class BulletController : MonoBehaviour
         boxColliderSizes.Clear();
         boxHitList.Clear();
 
-        boxColliderSizes = sizes;
-        boxHitList = hits;
+        boxColliderSizes = triggerSizes;
+        boxHitList = triggerHits;
         //循环生成box碰撞
-        for (int i = 0; i < sizes.Count; i++)
+        for (int i = 0; i < triggerSizes.Count; i++)
         {
             BoxCollider2D save = gameObject.AddComponent<BoxCollider2D>();
             save.isTrigger = true;
-            if (followMode == FollowMode.NoFollow)
+            if (triggerFollowMode == FollowMode.NoFollow)
                 save.size = boxColliderSizes[i];
             else
             {
                 save.size = boxColliderList[i].transform.GetComponent<SpriteRenderer>().size - boxColliderSizes[i];
             }
 
-            save.offset = offsets[i];
+            save.offset = triggerOffsets[i];
 
             boxColliderList.Add(save);
         }

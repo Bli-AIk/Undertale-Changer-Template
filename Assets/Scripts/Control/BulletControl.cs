@@ -11,16 +11,13 @@ public class BulletControl : ScriptableObject
     public string typeName;
     public int layer;
     public Sprite sprite;
-    public Vector2 size;
-    public int hit;
-    public Vector2 offset;
+    public List<Vector2> triggerSize = new List<Vector2>() { new Vector2() };
+    public List<int> triggerHit = new List<int> { 1 };
+    public List<Vector2> triggerOffset = new List<Vector2>() { new Vector2() };
     public Vector3 startPosition = new Vector3();
     public BulletColor bulletColor = BulletColor.white;
     public SpriteMaskInteraction startMask = SpriteMaskInteraction.None;
     public Vector3 startRotation = new Vector3();
     public Vector3 startScale = new Vector3();
-    public FollowMode followMode = FollowMode.NoFollow;
-
-
-
+    public FollowMode triggerFollowMode = FollowMode.NoFollow;
 }
