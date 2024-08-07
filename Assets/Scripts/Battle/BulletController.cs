@@ -40,17 +40,20 @@ public class BulletController : MonoBehaviour
         //if (useExtra)
         //    extra = GetComponent<Collider2D>();
     }
-    public void SetBullet(string bulletPathName,
+    public void SetBullet(string bulletPathName, string objName = default,
         Vector3 startPosition = default, BattleControl.BulletColor bulletColor = default, SpriteMaskInteraction startMask = default, Vector3 startRotation = default, Vector3 startScale = default)
     {
         string path = "Assets/Bullets/" + bulletPathName;
 
-        SetBullet((BulletControl)Resources.Load(path), startPosition, bulletColor, startMask, startRotation, startScale);
+        SetBullet((BulletControl)Resources.Load(path), objName, startPosition, bulletColor, startMask, startRotation, startScale);
     }
-    public void SetBullet(BulletControl bulletControl,
+    public void SetBullet(BulletControl bulletControl, string objName = default,
         Vector3 startPosition = default, BattleControl.BulletColor bulletColor = default, SpriteMaskInteraction startMask = default, Vector3 startRotation = default, Vector3 startScale = default)
     {
         Debug.LogWarning(startPosition);
+
+        if (objName == default)
+            objName = bulletControl.objName;
 
         if (startPosition == default)
             startPosition = bulletControl.startPosition;
@@ -63,7 +66,7 @@ public class BulletController : MonoBehaviour
         if (startScale == default)
             startScale = bulletControl.startScale;
 
-        SetBullet(bulletControl.name, 
+        SetBullet(objName, 
             bulletControl.typeName, 
             bulletControl.layer, 
             bulletControl.sprite,
@@ -80,7 +83,7 @@ public class BulletController : MonoBehaviour
     /// <summary>
     /// 初始化弹幕（循环生成盒状碰撞模式）。
     /// </summary>
-    /// <param name="name">设置弹幕的Obj的名称，以便查找。</param>
+    /// <param name="objName">设置弹幕的Obj的名称，以便查找。</param>
     /// <param name="typeName">设置弹幕的种类名称，如果种类名称与当前的弹幕一致，则保留原有的碰撞相关参数，反之清空。</param>
     /// <param name="layer">玩家为100，战斗框边缘为50。可参考。</param>
     /// <param name="sprite">一般在Resources内导入。</param>
@@ -95,7 +98,7 @@ public class BulletController : MonoBehaviour
     /// <param name="startScale">若弹幕不需拉伸，StartScale一般设置(1,1,1)。检测到Z为0时会归位到(1,1,1)。</param>
 
     public void SetBullet(
-        string name,
+        string objName,
         string typeName,
         int layer,
         Sprite sprite,
@@ -110,7 +113,7 @@ public class BulletController : MonoBehaviour
         FollowMode triggerFollowMode = FollowMode.NoFollow
         )
     {
-        gameObject.name = name;
+        gameObject.name = objName;
 
         spriteRenderer.sortingOrder = layer;
 

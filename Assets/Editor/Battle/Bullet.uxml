@@ -1,0 +1,6 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="Bullet" style="width: 150px; height: 150px; align-items: center; background-color: rgb(47, 47, 47); border-left-color: rgb(21, 21, 21); border-right-color: rgb(21, 21, 21); border-top-color: rgb(21, 21, 21); border-bottom-color: rgb(21, 21, 21); border-left-width: 1px; border-right-width: 1px; border-top-width: 1px; border-bottom-width: 1px; margin-left: 2px; margin-right: 2px; margin-top: 2px; margin-bottom: 2px; flex-direction: column-reverse; flex-grow: 0;">
+        <ui:VisualElement name="BulletImage" style="position: absolute; left: 50px; top: 50px; right: 50px; bottom: 50px; background-image: resource(&apos;Sprites/Bullet/CupCake&apos;);" />
+        <ui:Label text="CupCake" display-tooltip-when-elided="true" name="BulletText" usage-hints="None" style="position: relative; left: auto; top: auto; bottom: auto; padding-bottom: 5px; transform-origin: center; flex-direction: column;" />
+    </ui:VisualElement>
+</ui:UXML>

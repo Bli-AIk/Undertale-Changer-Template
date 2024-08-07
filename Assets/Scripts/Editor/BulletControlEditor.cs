@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 using System.Collections.Generic;
+using static BulletController;
 
 [CustomEditor(typeof(BulletControl))]
 public class BulletControlEditor : Editor
@@ -69,7 +70,7 @@ public class BulletControlEditor : Editor
 
             gridPainter.triggerSize = bullet.triggerSize;
             gridPainter.triggerOffset = bullet.triggerOffset;
-
+            gridPainter.triggerFollowMode = bullet.triggerFollowMode;
             //gridPainter.GridSizeX = bullet.sprite.texture.width;
             //gridPainter.GridSizeY = bullet.sprite.texture.height;
 
@@ -92,6 +93,8 @@ public class BulletControlEditor : Editor
         public List<Vector2> triggerSize = new List<Vector2>();
         public List<Vector2> triggerOffset = new List<Vector2>();
 
+        public FollowMode triggerFollowMode = FollowMode.NoFollow;
+
         protected override void ImmediateRepaint()
         {
             var rect = contentRect;
@@ -101,6 +104,9 @@ public class BulletControlEditor : Editor
             {
                 Vector2 size = triggerSize[i];
                 Vector2 offset = triggerOffset[i];
+
+                if (triggerFollowMode == FollowMode.CutFollow)
+                    size = Vector2.one - triggerSize[i];
 
                 // 确定每个Box Collider的中心点
                 float centerX = offset.x * rect.width + rect.width / 2;

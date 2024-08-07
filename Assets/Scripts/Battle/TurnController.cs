@@ -69,10 +69,10 @@ public class TurnController : MonoBehaviour
                 //MainControl.instance.battlePlayerController.ChangePlayerColor(MainControl.instance.BattleControl.playerColorList[5], BattleControl.PlayerColor.blue,0,BattlePlayerController.PlayerDirEnum.down);
 
                 var obj = objectPools[0].GetFromPool().GetComponent<BulletController>();
-                obj.SetBullet("CupCake", new Vector3(1, -1.6f), (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
+                obj.SetBullet("CupCake", "CupCake", new Vector3(1, -1.6f), (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
 
                 var obj2 = objectPools[0].GetFromPool().GetComponent<BulletController>();
-                obj2.SetBullet("CupCake", new Vector3(-1, -1.6f), (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
+                obj2.SetBullet("CupCake", "CupCake", new Vector3(-1, -1.6f), (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
 
 
                 for (int i = 600; i > 0; i--)
@@ -149,7 +149,7 @@ public class TurnController : MonoBehaviour
             case Nest.simpleNestBullet:
                 var obj = objectPools[0].GetFromPool().GetComponent<BulletController>();
 
-                obj.SetBullet("CupCake", new Vector3(0, -3.35f), (BattleControl.BulletColor)Random.Range(0,3), SpriteMaskInteraction.VisibleInsideMask);
+                obj.SetBullet("CupCake", "CupCake", new Vector3(0, -3.35f), (BattleControl.BulletColor)Random.Range(0,3), SpriteMaskInteraction.VisibleInsideMask);
 
                 obj.transform.localPosition += new Vector3(Random.Range(-0.5f, 0.5f), 0);
 
