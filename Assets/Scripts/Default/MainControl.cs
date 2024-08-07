@@ -367,6 +367,10 @@ public class MainControl : MonoBehaviour
 
         beatTimes = BGMBPMCount(bpm, bpmDeviation);
     }
+    public Color RandomColor()
+    {
+        return new Color(UnityEngine.Random.Range(0, 1f), UnityEngine.Random.Range(0, 1f), UnityEngine.Random.Range(0, 1f), 1);
+    }
 
     /// <summary>
     /// 生成字符串形式的随机颜色。

@@ -10,17 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8af6835af6fd18e45b8cff33dfa3d893, type: 3}
-  m_Name: CupCake
+  m_Name: Test
   m_EditorClassIdentifier: 
   objName: DemoBullet
   typeName: CupCake
   layer: 40
-  sprite: {fileID: 21300000, guid: a55224a9007c69a4e97f55b16a124d64, type: 3}
+  sprite: {fileID: 21300000, guid: 121174eaf0c4d5141abaf5e9a2319032, type: 3}
   triggerOffset:
-  - {x: 0, y: 0}
+  - {x: 0, y: -0.325}
+  - {x: 0, y: 0.175}
   triggerSize:
-  - {x: 1, y: 1}
-  triggerHit: 01000000
+  - {x: 0.2, y: 0.35}
+  - {x: 1, y: 0.65}
+  triggerHit: 0100000005000000
   startPosition: {x: 1, y: -1.6, z: 0}
   startRotation: {x: 0, y: 0, z: 0}
   startScale: {x: 0, y: 0, z: 0}

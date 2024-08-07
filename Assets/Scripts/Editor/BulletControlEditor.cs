@@ -2,8 +2,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
-using static UnityEngine.UI.Image;
-using static UnityEngine.Rendering.DebugUI.MessageBox;
+using System.Collections.Generic;
 
 [CustomEditor(typeof(BulletControl))]
 public class BulletControlEditor : Editor
@@ -67,10 +66,14 @@ public class BulletControlEditor : Editor
                 }
             };
 
-            gridPainter.GridSizeX = bullet.sprite.texture.width;
-            gridPainter.GridSizeY = bullet.sprite.texture.height;
 
-            Debug.Log(gridPainter.GridSizeX + "   " + gridPainter.GridSizeY);
+            gridPainter.triggerSize = bullet.triggerSize;
+            gridPainter.triggerOffset = bullet.triggerOffset;
+
+            //gridPainter.GridSizeX = bullet.sprite.texture.width;
+            //gridPainter.GridSizeY = bullet.sprite.texture.height;
+
+            //Debug.Log(gridPainter.GridSizeX + "   " + gridPainter.GridSizeY);
 
 
             root.Add(background);
@@ -81,30 +84,52 @@ public class BulletControlEditor : Editor
         return root;
     }
 
-
     private class GridPainter : ImmediateModeElement
     {
-        public float GridSizeX = 16f;
-        public float GridSizeY = 16f;
-        private readonly Color LineColor = Color.green;
+        private Color lineColor = Color.green;
+
+        // 存储每个Box Collider的大小和偏移的列表
+        public List<Vector2> triggerSize = new List<Vector2>();
+        public List<Vector2> triggerOffset = new List<Vector2>();
 
         protected override void ImmediateRepaint()
         {
             var rect = contentRect;
 
-            Debug.LogWarning(rect.width + "   " + rect.height);
-
-            for (float x = 0; x < rect.width; x += rect.width / GridSizeX * 2)
+            // 遍历每个Box Collider
+            for (int i = 0; i < triggerSize.Count; i++)
             {
-                Handles.color = LineColor;
-                Handles.DrawLine(new Vector3(x, 0), new Vector3(x, rect.height));
-            }
+                Vector2 size = triggerSize[i];
+                Vector2 offset = triggerOffset[i];
 
-            for (float y = 0; y < rect.height; y += rect.width / GridSizeY * 2)
-            {
-                Handles.color = LineColor;
-                Handles.DrawLine(new Vector3(0, y), new Vector3(rect.width, y));
+                // 确定每个Box Collider的中心点
+                float centerX = offset.x * rect.width + rect.width / 2;
+                float centerY = (offset.y - 1) * rect.height + rect.height / 2;
+
+                // 计算每个Box Collider的半宽度和半高度
+                float halfWidth = size.x * rect.width / 2;
+                float halfHeight = size.y * rect.height / 2;
+
+                // 计算每个Box Collider的边界
+                float xStart = centerX - halfWidth;
+                float yStart = -centerY + halfHeight;
+                float xEnd = centerX + halfWidth;
+                float yEnd = -centerY - halfHeight;
+
+                Handles.color = lineColor;
+
+                // 绘制矩形的四条边
+                // 下边
+                Handles.DrawLine(new Vector3(xStart, yStart), new Vector3(xEnd, yStart));
+                // 上边
+                Handles.DrawLine(new Vector3(xStart, yEnd), new Vector3(xEnd, yEnd));
+                // 左边
+                Handles.DrawLine(new Vector3(xStart, yStart), new Vector3(xStart, yEnd));
+                // 右边
+                Handles.DrawLine(new Vector3(xEnd, yStart), new Vector3(xEnd, yEnd));
             }
         }
     }
+
+
 }

@@ -145,12 +145,15 @@ public class BulletController : MonoBehaviour
 
         boxColliderSizes = triggerSizes;
         boxHitList = triggerHits;
+
+        followMode = triggerFollowMode;
+
         //循环生成box碰撞
         for (int i = 0; i < triggerSizes.Count; i++)
         {
             BoxCollider2D save = gameObject.AddComponent<BoxCollider2D>();
             save.isTrigger = true;
-            if (triggerFollowMode == FollowMode.NoFollow)
+            if (followMode == FollowMode.NoFollow)
                 save.size = boxColliderSizes[i];
             else
             {
