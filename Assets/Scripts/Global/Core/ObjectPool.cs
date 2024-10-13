@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectPool : MonoBehaviour
+public abstract class ObjectPool : MonoBehaviour
 {
     [Header("填充对象池的对象数量")]
     public int count = 10;
@@ -13,7 +13,7 @@ public class ObjectPool : MonoBehaviour
     /// <summary>
     /// 初始化/填充对象池
     /// </summary>
-    public void FillPool()
+    public virtual void FillPool()
     {
         if (parent == null)
             parent = transform;
@@ -28,7 +28,7 @@ public class ObjectPool : MonoBehaviour
     /// <summary>
     /// 返回对象池
     /// </summary>
-    public void ReturnPool(GameObject gameObject)
+    public virtual void ReturnPool(GameObject gameObject)
     {
         if (parent == null)
             parent = transform;
@@ -41,7 +41,7 @@ public class ObjectPool : MonoBehaviour
     /// <summary>
     /// 喜提对象
     /// </summary>
-    public GameObject GetFromPool()
+    public virtual GameObject GetFromPool()
     {
         if (availableObj.Count == 0)
             FillPool();
