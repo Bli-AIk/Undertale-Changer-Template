@@ -6,7 +6,7 @@ public class DebugRandomSudoku : MonoBehaviour
     //æ≈π¨∏Ò≤‚ ‘
     public List<DebugSudoku> sudokos;
 
-    public int randomNum;
+    public int randomnumber;
 
     private void Start()
     {
@@ -21,8 +21,8 @@ public class DebugRandomSudoku : MonoBehaviour
 
     private void Randomer()
     {
-        if (randomNum > 0)
-            for (int i = 0; i < randomNum; i++)
+        if (randomnumber > 0)
+            for (int i = 0; i < randomnumber; i++)
             {
                 int j = Random.Range(0, sudokos.Count);
                 sudokos[j].change = true;

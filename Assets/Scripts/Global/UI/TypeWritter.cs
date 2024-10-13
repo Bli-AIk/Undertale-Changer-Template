@@ -184,8 +184,8 @@ public class TypeWritter : MonoBehaviour
                         if (!pressX)
                         {
                             isTyping = false;
-                            float num = float.Parse(spText.Substring(6, spText.Length - 7));
-                            for (int p = 0; p < num; p++)
+                            float number = float.Parse(spText.Substring(6, spText.Length - 7));
+                            for (int p = 0; p < number; p++)
                             {
                                 if (pressX)
                                     break;
@@ -211,10 +211,10 @@ public class TypeWritter : MonoBehaviour
                         {
                             isTyping = false;
 
-                            float num = float.Parse(spText.Substring(9, spText.Length - 10));
+                            float number = float.Parse(spText.Substring(9, spText.Length - 10));
                             for (int l = 0; l < 3; l++)
                             {
-                                for (int p = 0; p < num; p++)
+                                for (int p = 0; p < number; p++)
                                 {
                                     if (pressX)
                                         break;
@@ -250,10 +250,10 @@ public class TypeWritter : MonoBehaviour
                         {
                             isTyping = false;
 
-                            float num = float.Parse(spText.Substring(12, spText.Length - 13));
+                            float number = float.Parse(spText.Substring(12, spText.Length - 13));
                             for (int l = 0; l < 6; l++)
                             {
-                                for (int p = 0; p < num; p++)
+                                for (int p = 0; p < number; p++)
                                 {
                                     if (pressX)
                                         break;
@@ -425,7 +425,7 @@ public class TypeWritter : MonoBehaviour
 
     List<Vector2> dynamicPos;
 
-    IEnumerator<float> _Dynamic(int num, OverworldControl.DynamicType dynamicType)
+    IEnumerator<float> _Dynamic(int number, OverworldControl.DynamicType dynamicType)
     {
         if (dynamicType != OverworldControl.DynamicType.None)//动效相关
         {
@@ -448,7 +448,7 @@ public class TypeWritter : MonoBehaviour
 
                         Vector3 randomer = new Vector3(Random.Range(-0.05f, 0.05f), Random.Range(-0.05f, 0.05f), 0);
 
-                        charInfo = textInfo.characterInfo[num];
+                        charInfo = textInfo.characterInfo[number];
 
                         if (!charInfo.isVisible) break;
 
@@ -480,7 +480,7 @@ public class TypeWritter : MonoBehaviour
 
                     tmp_Text.ForceMeshUpdate();
 
-                    charInfo = textInfo.characterInfo[num];
+                    charInfo = textInfo.characterInfo[number];
                     if (!charInfo.isVisible) break;
 
                     colors = textInfo.meshInfo[charInfo.materialReferenceIndex].colors32;
@@ -528,7 +528,7 @@ public class TypeWritter : MonoBehaviour
 
                         Vector3 down = new Vector3(0, -0.1f);
 
-                        charInfo = textInfo.characterInfo[num];
+                        charInfo = textInfo.characterInfo[number];
 
                         if (!charInfo.isVisible) break;
 

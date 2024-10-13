@@ -25,7 +25,7 @@ public class StartController : MonoBehaviour
         AudioController.instance.GetFx(11, MainControl.instance.AudioControl.fxClipUI);
         text.text = MainControl.instance.OverworldControl.sceneTextsAsset;
 
-        PlayerControl playerControl = SaveController.LoadData("Data" + MainControl.instance.dataNum);
+        PlayerControl playerControl = SaveController.LoadData("Data" + MainControl.instance.datanumber);
     }
 
     private void Update()

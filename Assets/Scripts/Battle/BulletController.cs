@@ -230,7 +230,7 @@ public class BulletController : MonoBehaviour
             MainControl.instance.selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
 
             float r = Random.Range(0, 0.025f);
-            Vector3 v3spin = MainControl.instance.RandomPointOnSphereSurface(-2.5f,2.5f,2.5f,new Vector3());
+            Vector3 v3spin = MainControl.instance.RandomPointOnSphereSurface(2.5f,new Vector3());
             MainControl.instance.cameraShake.Shake(new Vector3(r * MainControl.instance.Get1Or_1(), r * MainControl.instance.Get1Or_1(), 0), new Vector3(0, 0, v3spin.z), 4, 1f / 60f * 4f * 1.5f, "", Ease.OutElastic);
             MainControl.instance.cameraShake3D.Shake(new Vector3(r * MainControl.instance.Get1Or_1(), 0, r * MainControl.instance.Get1Or_1()), v3spin, 4, 1f / 60f * 4f * 1.5f, "3D CameraPoint", Ease.OutElastic);
             if (MainControl.instance.PlayerControl.hp <= 0)

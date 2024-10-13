@@ -10,16 +10,16 @@ public class DebugSpTextSummon : MonoBehaviour
 
     private void Start()
     {
-        puter.Add(LetterToNum(puter[0]));
-        puter.Add(NumToNumLetter(puter[1]));
-        puter.Add(NineToNum(puter[2]));
+        puter.Add(LetterTonumber(puter[0]));
+        puter.Add(numberTonumberLetter(puter[1]));
+        puter.Add(NineTonumber(puter[2]));
         puter.Add(backString(puter[3]));
     }
 
     /// <summary>
     /// 原字母文本转化为数字
     /// </summary>
-    private string LetterToNum(string str)
+    private string LetterTonumber(string str)
     {
         string returnText = "";
         string text = " abcdefghijklmnopqrstuvwxyz";
@@ -45,7 +45,7 @@ public class DebugSpTextSummon : MonoBehaviour
     /// 数字的首字母表示数字
     /// 数字换算为字母
     /// </summary>
-    private string NumToNumLetter(string str)
+    private string numberTonumberLetter(string str)
     {
         string returnText = "";
         string text = "0123456789 ";
@@ -68,7 +68,7 @@ public class DebugSpTextSummon : MonoBehaviour
     /// <summary>
     /// 26字母换算为九键数字
     /// </summary>
-    private string NineToNum(string str)
+    private string NineTonumber(string str)
     {
         string returnText = "";
         string text = " abcdefghijklmnopqrstuvwxyz";

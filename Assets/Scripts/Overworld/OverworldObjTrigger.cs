@@ -94,20 +94,17 @@ public class OverworldObjTrigger : MonoBehaviour
                 {
                     case 0:
 
-                        SaveController.SaveData(MainControl.instance.PlayerControl, "Data" + MainControl.instance.dataNum);
+                        SaveController.SaveData(MainControl.instance.PlayerControl, "Data" + MainControl.instance.datanumber);
                         saveSelect = 2;
                         AudioController.instance.GetFx(12, MainControl.instance.AudioControl.fxClipUI);
                         string name = MainControl.instance.PlayerControl.playerName;
 
                         BackpackBehaviour.instance.saveUIHeart.anchoredPosition = new Vector2(10000, 10000);
 
-                        BackpackBehaviour.instance.saveUI.text = "<color=yellow>" + MainControl.instance.FillString(name, 10) + "LV" + MainControl.instance.FillString(MainControl.instance.PlayerControl.lv.ToString(), 7) +
-                        MainControl.instance.GetRealTime((int)MainControl.instance.PlayerControl.gameTime) + "\n" +
-                        MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, SceneManager.GetActiveScene().name) + "\n<size=1>\n</size>  " +
-                        MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Saved");
+                        BackpackBehaviour.instance.saveUI.text = $"<color=yellow>{MainControl.instance.FillString(name, 10)}LV{MainControl.instance.FillString(MainControl.instance.PlayerControl.lv.ToString(), 7)}{MainControl.instance.GetRealTime((int)MainControl.instance.PlayerControl.gameTime)}\n{MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, SceneManager.GetActiveScene().name)}\n{MainControl.instance.RichTextWithEnd("size", 1, "\n")}  {MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Saved")}";
                         MainControl.instance.PlayerControl.saveScene = SceneManager.GetActiveScene().name;
                         PlayerPrefs.SetInt("languagePack", MainControl.instance.languagePack);
-                        PlayerPrefs.SetInt("dataNum", MainControl.instance.dataNum);
+                        PlayerPrefs.SetInt("datanumber", MainControl.instance.datanumber);
                         PlayerPrefs.SetInt("hdResolution", Convert.ToInt32(MainControl.instance.OverworldControl.hdResolution));
                         PlayerPrefs.SetInt("noSFX", Convert.ToInt32(MainControl.instance.OverworldControl.noSFX));
                         PlayerPrefs.SetInt("vsyncMode", Convert.ToInt32(MainControl.instance.OverworldControl.vsyncMode));

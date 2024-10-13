@@ -157,7 +157,9 @@ public class BackpackBehaviour : MonoBehaviour
 
                 uiSelect.text = uiSelectPlusColor + MainControl.instance.ItemControl.itemTextMaxData[0].Substring(0, MainControl.instance.ItemControl.itemTextMaxData[0].Length - 1);
                 uiName.text = MainControl.instance.PlayerControl.playerName;
-                uiTexts.text = "LV " + MainControl.instance.PlayerControl.lv + "\nHP " + MainControl.instance.PlayerControl.hp + "/" + MainControl.instance.PlayerControl.hpMax + "\nG " + MainControl.instance.PlayerControl.gold;
+                uiTexts.text = $"LV {MainControl.instance.PlayerControl.lv}\n" +
+                    $"HP {MainControl.instance.PlayerControl.hp}/{MainControl.instance.PlayerControl.hpMax}\n" +
+                    $"G {MainControl.instance.PlayerControl.gold}";
 
                 if (select == 1)
                     FlashBackpackUIRightPoint(-8.55f * 0.5f);
@@ -191,13 +193,14 @@ public class BackpackBehaviour : MonoBehaviour
                             for (int i = 0; i < MainControl.instance.PlayerControl.myItems.Count; i++)
                             {
                                 if (MainControl.instance.PlayerControl.myItems[i] != 0)
-                                    uiItems.text += " " + MainControl.instance.ItemIdGetName(MainControl.instance.PlayerControl.myItems[i], "Auto", 0) + "\n";
+                                    uiItems.text += $" {MainControl.instance.ItemIdGetName(MainControl.instance.PlayerControl.myItems[i], "Auto", 0)}\n";
                                 else uiItems.text += "\n";
                             }
 
-                            uiItems.text += "\n " + MainControl.instance.ItemControl.itemTextMaxData[8].Substring(0, MainControl.instance.ItemControl.itemTextMaxData[8].Length - 1)
-                                + MainControl.instance.ItemControl.itemTextMaxData[9].Substring(0, MainControl.instance.ItemControl.itemTextMaxData[9].Length - 1) +
-                                MainControl.instance.ItemControl.itemTextMaxData[10].Substring(0, MainControl.instance.ItemControl.itemTextMaxData[10].Length - 1);
+                            uiItems.text += $"\n {MainControl.instance.ItemControl.itemTextMaxData[8][..^1]}" +
+                                            $"{MainControl.instance.ItemControl.itemTextMaxData[9][..^1]}" +
+                                            $"{MainControl.instance.ItemControl.itemTextMaxData[10][..^1]}";
+
                         }
                         else
                         {
@@ -217,7 +220,9 @@ public class BackpackBehaviour : MonoBehaviour
                                 case 1:
                                     sonUse = 4;
                                     MainControl.instance.UseItem(typeWritter, typeMessage, sonSelect, plusText);
-                                    uiTexts.text = "LV " + MainControl.instance.PlayerControl.lv + "\nHP " + MainControl.instance.PlayerControl.hp + "/" + MainControl.instance.PlayerControl.hpMax + "\nG " + MainControl.instance.PlayerControl.gold;
+                                    uiTexts.text = $"LV {MainControl.instance.PlayerControl.lv}\n" +
+                                        $"HP {MainControl.instance.PlayerControl.hp}/{MainControl.instance.PlayerControl.hpMax}\n" +
+                                        $"G {MainControl.instance.PlayerControl.gold}";
 
                                     goto default;
                                 case 2:
@@ -260,14 +265,24 @@ public class BackpackBehaviour : MonoBehaviour
                     BackpackUIRightPoint2.transform.localPosition = new Vector3(BackpackUIRightPoint2.transform.localPosition.x, -11.3f);
                     BackpackUIRightPoint3.transform.localPosition = new Vector3(BackpackUIRightPoint3.transform.localPosition.x, -11.3f);
                     */
-                    uiItems.text = "\"" + MainControl.instance.PlayerControl.playerName + "\"\n\nLV " + MainControl.instance.PlayerControl.lv + "\nHP " + MainControl.instance.PlayerControl.hp +
-                           "<size=12> </size>/<size=12> </size>" + MainControl.instance.PlayerControl.hpMax + "<size=1>\n</size>\n" + MainControl.instance.ItemControl.itemTextMaxData[1].Substring(0, MainControl.instance.ItemControl.itemTextMaxData[1].Length - 1)
-                           + "<size=12> </size>" + (MainControl.instance.PlayerControl.atk - 10) + "<size=6> </size>(" + MainControl.instance.PlayerControl.wearAtk + ")<size=15> </size> EXP:" + MainControl.instance.PlayerControl.exp +
-                           "\n" + MainControl.instance.ItemControl.itemTextMaxData[2].Substring(0, MainControl.instance.ItemControl.itemTextMaxData[2].Length - 1) + "<size=12> </size>" + (MainControl.instance.PlayerControl.def - 10) +
-                           "<size=6> </size>(" + MainControl.instance.PlayerControl.wearDef + ")<size=15> </size>" + MainControl.instance.ItemControl.itemTextMaxData[3].Substring(0, MainControl.instance.ItemControl.itemTextMaxData[3].Length - 1)
-                           + ":" + MainControl.instance.PlayerControl.nextExp + "\n\n" + MainControl.instance.ItemControl.itemTextMaxData[4].Substring(0, MainControl.instance.ItemControl.itemTextMaxData[4].Length - 1) + MainControl.instance.ItemIdGetName(MainControl.instance.PlayerControl.wearArm, "Auto", 0)
-                           + "\n" + MainControl.instance.ItemControl.itemTextMaxData[5].Substring(0, MainControl.instance.ItemControl.itemTextMaxData[5].Length - 1) + MainControl.instance.ItemIdGetName(MainControl.instance.PlayerControl.wearArmor, "Auto", 0)
-                           + "\n<size=13>\n</size>" + MainControl.instance.ItemControl.itemTextMaxData[6].Substring(0, MainControl.instance.ItemControl.itemTextMaxData[6].Length - 1) + MainControl.instance.PlayerControl.gold;
+                    uiItems.text = $"\"{MainControl.instance.PlayerControl.playerName}\"\n\n"
+                                   + $"LV {MainControl.instance.PlayerControl.lv}\n"
+                                   + $"HP {MainControl.instance.PlayerControl.hp}{MainControl.instance.RichTextWithEnd("size", 12, " ")}/{MainControl.instance.RichTextWithEnd("size", 12, " ")}{MainControl.instance.PlayerControl.hpMax}{MainControl.instance.RichTextWithEnd("size", 1, "\n")}\n"
+                                   + $"{MainControl.instance.ItemControl.itemTextMaxData[1][..^1]}\n"
+                                   + $"{MainControl.instance.RichTextWithEnd("size", 12, " ")}{(MainControl.instance.PlayerControl.atk - 10)}{MainControl.instance.RichTextWithEnd("size", 6, " ")}({MainControl.instance.PlayerControl.wearAtk}){MainControl.instance.RichTextWithEnd("size", 15, " ")} EXP:{MainControl.instance.PlayerControl.exp}\n"
+                                   + $"{MainControl.instance.ItemControl.itemTextMaxData[2][..^1]}\n"
+                                   + $"{MainControl.instance.RichTextWithEnd("size", 12, " ")}{(MainControl.instance.PlayerControl.def - 10)}{MainControl.instance.RichTextWithEnd("size", 6, " ")}({MainControl.instance.PlayerControl.wearDef}){MainControl.instance.RichTextWithEnd("size", 15, " ")}\n"
+                                   + $"{MainControl.instance.ItemControl.itemTextMaxData[3][..^1]}:\n"
+                                   + $"{MainControl.instance.PlayerControl.nextExp}\n\n"
+                                   + $"{MainControl.instance.ItemControl.itemTextMaxData[4][..^1]}\n"
+                                   + $"{MainControl.instance.ItemIdGetName(MainControl.instance.PlayerControl.wearArm, "Auto", 0)}\n"
+                                   + $"{MainControl.instance.ItemControl.itemTextMaxData[5][..^1]}\n"
+                                   + $"{MainControl.instance.ItemIdGetName(MainControl.instance.PlayerControl.wearArmor, "Auto", 0)}\n"
+                                   + $"{MainControl.instance.RichTextWithEnd("size", 13, "\n")}"
+                                   + $"{MainControl.instance.ItemControl.itemTextMaxData[6][..^1]}\n"
+                                   + $"{MainControl.instance.PlayerControl.gold}";
+
+
                 }
             }
             if ((MainControl.instance.KeyArrowToControl(KeyCode.X)) && sonUse != 4)
@@ -278,11 +293,6 @@ public class BackpackBehaviour : MonoBehaviour
                     sonUse = 0;
             }
 
-            /*
-            if (MainControl.instance.OverworldControl.background)//边框自适应
-                backpack.localScale = Vector3.one * 0.8888f;
-            else
-            */
             backpack.localScale = Vector3.one;
 
             if (sonUse != 4)

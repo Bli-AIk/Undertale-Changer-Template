@@ -37,7 +37,7 @@ public class BoxController : ObjectPool
         obj.SetActive(false);
         FillPool();
     }
-    int num;
+    int number;
     public BoxDrawer GetFromThePool()
     {
         List<Vector2> points = new List<Vector2>
@@ -51,8 +51,8 @@ public class BoxController : ObjectPool
         BoxDrawer newBoxDrawer = GetFromPool().GetComponent<BoxDrawer>();
         newBoxDrawer.vertexPoints = points;
         boxes.Add(newBoxDrawer);
-        num++;
-        newBoxDrawer.name = "Box" + num;
+        number++;
+        newBoxDrawer.name = "Box" + number;
         newBoxDrawer.width = width;
         newBoxDrawer.tag = "Box";
         return newBoxDrawer;

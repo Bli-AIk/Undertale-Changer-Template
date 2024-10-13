@@ -20,7 +20,7 @@ public class SpriteChanger : MonoBehaviour
     private SpriteRenderer sprite;
     private Image spriteImage;
     private TalkUIPositionChanger talkUIPositionChanger;
-    private int num;
+    private int number;
     private float clock;
     private bool back;
 
@@ -56,10 +56,10 @@ public class SpriteChanger : MonoBehaviour
         }
         if (justSaying || (haveBack && typeWritter.isTyping && !typeWritter.passText && !typeWritter.isStop))
         {
-            if (clock <= 0 && num >= 0)
+            if (clock <= 0 && number >= 0)
             {
                 back = !back;
-                ChangeImage(num, back);
+                ChangeImage(number, back);
                 clock = backFrame / 60f;
             }
         }
@@ -68,7 +68,7 @@ public class SpriteChanger : MonoBehaviour
             if (back)
             {
                 back = false;
-                ChangeImage(num, back);
+                ChangeImage(number, back);
             }
             clock = backFrame / 60f;
         }
@@ -110,6 +110,6 @@ public class SpriteChanger : MonoBehaviour
             }
         }
 
-        num = i;
+        number = i;
     }
 }

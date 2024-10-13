@@ -15,7 +15,7 @@ public class MenuController : MonoBehaviour
     public int layer;
     private bool setData;
 
-    public int saveNum;
+    public int saveNumber;
 
     private void Awake()
     {
@@ -31,16 +31,16 @@ public class MenuController : MonoBehaviour
     {
         setData = false;
         layer = 0;
-        if (MainControl.instance.dataNum < 0)
-            MainControl.instance.dataNum = 0;
-        MainControl.instance.SetPlayerControl(SaveController.LoadData("Data" + MainControl.instance.dataNum));
-        saveNum = MainControl.instance.dataNum;
+        if (MainControl.instance.datanumber < 0)
+            MainControl.instance.datanumber = 0;
+        MainControl.instance.SetPlayerControl(SaveController.LoadData("Data" + MainControl.instance.datanumber));
+        saveNumber = MainControl.instance.datanumber;
         LoadLayer0();
     }
 
     private void LoadLayer0()
     {
-        PlayerControl playerControl = SaveController.LoadData("Data" + saveNum);
+        PlayerControl playerControl = SaveController.LoadData("Data" + saveNumber);
         tmps[0].text = playerControl.playerName;
         tmps[1].text = "LV " + playerControl.lv;
         //tmps[2]在update内设置
@@ -85,7 +85,7 @@ public class MenuController : MonoBehaviour
                 select = 0 + 2 * Convert.ToInt32(setData);
             else select = 1 + 2 * Convert.ToInt32(setData);
         }
-        if (setData && select == 2 && (saveNum == 0))
+        if (setData && select == 2 && (saveNumber == 0))
         {
             if (select % 2 == 0)
                 select = 3;
@@ -120,8 +120,8 @@ public class MenuController : MonoBehaviour
                             goto case 2;
                         case 4:
                             setData = true;
-                            saveNum = MainControl.instance.dataNum;
-                            if (0 != (SaveController.GetDataNum() - 1))
+                            saveNumber = MainControl.instance.datanumber;
+                            if (0 != (SaveController.GetDatanumber() - 1))
                                 select = 5;
                             Flash();
                             AudioController.instance.GetFx(1, MainControl.instance.AudioControl.fxClipUI);
@@ -139,41 +139,41 @@ public class MenuController : MonoBehaviour
                     {
                         case 2:
                             AudioController.instance.GetFx(1, MainControl.instance.AudioControl.fxClipUI);
-                            if (saveNum > 0)
-                                saveNum--;
+                            if (saveNumber > 0)
+                                saveNumber--;
                             select = 3;
                             LoadLayer0();
                             break;
 
                         case 3:
                             AudioController.instance.GetFx(1, MainControl.instance.AudioControl.fxClipUI);
-                            if (saveNum == (SaveController.GetDataNum() - 1))//新建
+                            if (saveNumber == (SaveController.GetDatanumber() - 1))//新建
                             {
-                                saveNum++;
-                                MainControl.instance.dataNum = saveNum;
-                                SaveController.SaveData(MainControl.instance.PlayerControl, "Data" + MainControl.instance.dataNum);
+                                saveNumber++;
+                                MainControl.instance.datanumber = saveNumber;
+                                SaveController.SaveData(MainControl.instance.PlayerControl, "Data" + MainControl.instance.datanumber);
                                 MainControl.instance.SetPlayerControl(ScriptableObject.CreateInstance<PlayerControl>());
                                 MainControl.instance.PlayerControl.playerName = "";
                                 MainControl.instance.OutBlack("Rename", Color.black);
                             }
                             else//下页
                             {
-                                saveNum++;
+                                saveNumber++;
                                 LoadLayer0();
                             }
                             break;
 
                         case 4:
-                            if (SaveController.GetDataNum() - 1 <= 0)
+                            if (SaveController.GetDatanumber() - 1 <= 0)
                                 goto case 5;
-                            SaveController.DeleteData("Data" + saveNum);
-                            if (saveNum > (SaveController.GetDataNum() - 1))
-                                saveNum = SaveController.GetDataNum() - 1;
+                            SaveController.DeleteData("Data" + saveNumber);
+                            if (saveNumber > (SaveController.GetDatanumber() - 1))
+                                saveNumber = SaveController.GetDatanumber() - 1;
                             LoadLayer0();
                             break;
 
                         case 5:
-                            if (MainControl.instance.dataNum == saveNum)
+                            if (MainControl.instance.datanumber == saveNumber)
                             {
                                 setData = false;
                                 Flash();
@@ -182,7 +182,7 @@ public class MenuController : MonoBehaviour
                             }
                             else
                             {
-                                MainControl.instance.dataNum = saveNum;
+                                MainControl.instance.datanumber = saveNumber;
                                 AudioController.instance.GetFx(1, MainControl.instance.AudioControl.fxClipUI);
                                 UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
                                 break;
@@ -203,7 +203,7 @@ public class MenuController : MonoBehaviour
         List<string> list = new List<string>();
         for (int i = 0; i < 6; i++)
         {
-            if (setData && i == 2 && (saveNum == 0))
+            if (setData && i == 2 && (saveNumber == 0))
                 list.Add("<color=grey>");
             else if (i != select)
                 list.Add("");
@@ -219,10 +219,10 @@ public class MenuController : MonoBehaviour
                      + list[5] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Menu5") + "</color>";
         else
             tmps[4].text = list[0] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Menu12") + "</color> "
-                     + list[1] + "Data" + saveNum + "</color>\n"
+                     + list[1] + "Data" + saveNumber + "</color>\n"
                      + list[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Menu6") + "</color> "
-                     + list[3] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, saveNum == (SaveController.GetDataNum() - 1) ? "Menu10" : "Menu7") + "</color>\n"
-                     + list[4] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, 0 == (SaveController.GetDataNum() - 1) ? "Menu8" : "Menu11") + "</color> "
+                     + list[3] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, saveNumber == (SaveController.GetDatanumber() - 1) ? "Menu10" : "Menu7") + "</color>\n"
+                     + list[4] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, 0 == (SaveController.GetDatanumber() - 1) ? "Menu8" : "Menu11") + "</color> "
                      + list[5] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Menu9") + "</color>";
     }
 

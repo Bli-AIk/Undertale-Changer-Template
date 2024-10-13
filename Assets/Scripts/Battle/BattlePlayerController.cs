@@ -20,13 +20,13 @@ public class BattlePlayerController : MonoBehaviour
     [Header("基本属性调整")]
     public float speed;
     public float speedWeightX, speedWeightY;//速度与权重(按X乘以倍数)，速度测试为3，权重0.5f
-    private float speedWeight = 0.5f;
+    private readonly float speedWeight = 0.5f;
     public float hitCD, hitCDMax;//无敌时间
     public float displacement = 0.175f;//碰撞距离判定
     public bool isMoving;//用于蓝橙骨判断：玩家是否真的在移动
     public float timeInterpolation = -0.225f;
-    public Vector2 sceneDrift = new Vector2(-1000, 0);
-    public enum PlayerDirEnum
+    public Vector2 sceneDrift = new(-1000, 0);
+    public enum PlayerDirenum
     {
         up,
         down,
@@ -35,7 +35,7 @@ public class BattlePlayerController : MonoBehaviour
         nullDir
     };
 
-    public PlayerDirEnum playerDir;//方向
+    public PlayerDirenum playerDir;//方向
     public Vector3 moving;
     public bool isJump;//是否处于“跳起”状态
     public float jumpAcceleration;//跳跃的加速度
@@ -59,7 +59,7 @@ public class BattlePlayerController : MonoBehaviour
         jumpRayDistanceForBoard = 0.2f;
         jumpAcceleration = 1.25f;
         playerColor = BattleControl.PlayerColor.red;
-        playerDir = PlayerDirEnum.down;
+        playerDir = PlayerDirenum.down;
         rigidBody = GetComponent<Rigidbody2D>();
         collideCollider = GetComponent<CircleCollider2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
@@ -124,11 +124,11 @@ public class BattlePlayerController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.I))
                 ChangePlayerColor(MainControl.instance.BattleControl.playerColorList[5], (BattleControl.PlayerColor)5, 2.5f, 0);
             else if (Input.GetKeyDown(KeyCode.K))
-                ChangePlayerColor(MainControl.instance.BattleControl.playerColorList[5], (BattleControl.PlayerColor)5, 2.5f, (PlayerDirEnum)1);
+                ChangePlayerColor(MainControl.instance.BattleControl.playerColorList[5], (BattleControl.PlayerColor)5, 2.5f, (PlayerDirenum)1);
             else if (Input.GetKeyDown(KeyCode.J))
-                ChangePlayerColor(MainControl.instance.BattleControl.playerColorList[5], (BattleControl.PlayerColor)5, 2.5f, (PlayerDirEnum)2);
+                ChangePlayerColor(MainControl.instance.BattleControl.playerColorList[5], (BattleControl.PlayerColor)5, 2.5f, (PlayerDirenum)2);
             else if (Input.GetKeyDown(KeyCode.L))
-                ChangePlayerColor(MainControl.instance.BattleControl.playerColorList[5], (BattleControl.PlayerColor)5, 2.5f, (PlayerDirEnum)3);
+                ChangePlayerColor(MainControl.instance.BattleControl.playerColorList[5], (BattleControl.PlayerColor)5, 2.5f, (PlayerDirenum)3);
 
             if (Input.GetKeyDown(KeyCode.P))
                 MainControl.instance.PlayerControl.hp = 0;
@@ -144,30 +144,30 @@ public class BattlePlayerController : MonoBehaviour
     }
     private void Moving()
     {
-        Vector2 dirReal = new Vector2();
+        Vector2 dirReal = new();
         switch (playerDir)
         {
-            case PlayerDirEnum.up:
+            case PlayerDirenum.up:
                 dirReal = Vector2.up;
                 break;
 
-            case PlayerDirEnum.down:
+            case PlayerDirenum.down:
                 dirReal = Vector2.down;
                 break;
 
-            case PlayerDirEnum.left:
+            case PlayerDirenum.left:
                 dirReal = Vector2.left;
                 break;
 
-            case PlayerDirEnum.right:
+            case PlayerDirenum.right:
                 dirReal = Vector2.right;
                 break;
         }
-        Ray2D ray = new Ray2D(transform.position, dirReal);
+        Ray2D ray = new(transform.position, dirReal);
         Debug.DrawRay(ray.origin, ray.direction, Color.blue);
         RaycastHit2D info = Physics2D.Raycast(transform.position, dirReal, jumpRayDistance);
 
-        Ray2D rayF = new Ray2D(transform.position, dirReal * -1);
+        Ray2D rayF = new(transform.position, dirReal * -1);
         Debug.DrawRay(rayF.origin, rayF.direction, Color.red);
         RaycastHit2D infoF = Physics2D.Raycast(transform.position, dirReal * -1, jumpRayDistance);//反向检测(顶头)
 
@@ -262,7 +262,7 @@ public class BattlePlayerController : MonoBehaviour
 
                 switch (playerDir)
                 {
-                    case PlayerDirEnum.up:
+                    case PlayerDirenum.up:
                         if (MainControl.instance.KeyArrowToControl(KeyCode.X, 1))
                         {
                             speedWeightX = speedWeight;
@@ -335,7 +335,7 @@ public class BattlePlayerController : MonoBehaviour
                         jumpAcceleration += Time.deltaTime * timeInterpolation;
                         break;
 
-                    case PlayerDirEnum.down:////////////////////////////////////////////////
+                    case PlayerDirenum.down:////////////////////////////////////////////////
                         if (MainControl.instance.KeyArrowToControl(KeyCode.X, 1))
                         {
                             speedWeightX = speedWeight;
@@ -408,7 +408,7 @@ public class BattlePlayerController : MonoBehaviour
                         jumpAcceleration += Time.deltaTime * timeInterpolation;
                         break;
 
-                    case PlayerDirEnum.left:////////////////////////////////////////////////
+                    case PlayerDirenum.left:////////////////////////////////////////////////
                         if (MainControl.instance.KeyArrowToControl(KeyCode.X, 1))
                         {
                             speedWeightY = speedWeight;
@@ -481,7 +481,7 @@ public class BattlePlayerController : MonoBehaviour
                         jumpAcceleration += Time.deltaTime * timeInterpolation;
                         break;
 
-                    case PlayerDirEnum.right:
+                    case PlayerDirenum.right:
                         if (MainControl.instance.KeyArrowToControl(KeyCode.X, 1))
                         {
                             speedWeightY = speedWeight;
@@ -565,8 +565,8 @@ public class BattlePlayerController : MonoBehaviour
 
 
         //蓝橙骨所用的是否移动判定
-        Vector2 dirMoveX = new Vector2();
-        Vector2 dirMoveY = new Vector2();
+        Vector2 dirMoveX = new();
+        Vector2 dirMoveY = new();
         bool isMoveX = false, isMoveY = false;
         if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1))
         {
@@ -596,10 +596,10 @@ public class BattlePlayerController : MonoBehaviour
         if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1))
             isMoveX = false;
 
-        Ray2D rayMoveX = new Ray2D(transform.position, dirMoveX);
+        Ray2D rayMoveX = new(transform.position, dirMoveX);
         Debug.DrawRay(rayMoveX.origin, rayMoveX.direction, Color.green);
         RaycastHit2D infoMoveX = Physics2D.Raycast(transform.position, dirMoveX, 0.2f);
-        Ray2D rayMoveY = new Ray2D(transform.position, dirMoveY);
+        Ray2D rayMoveY = new(transform.position, dirMoveY);
         Debug.DrawRay(rayMoveY.origin, rayMoveY.direction, new Color(0, 0.5f, 0, 1));
         RaycastHit2D infoMoveY = Physics2D.Raycast(transform.position, dirMoveY, 0.2f);
 
@@ -635,19 +635,19 @@ public class BattlePlayerController : MonoBehaviour
         {
             switch (playerDir)
             {
-                case PlayerDirEnum.up:
+                case PlayerDirenum.up:
                     movingSave = moving.y;
                     break;
 
-                case PlayerDirEnum.down:
+                case PlayerDirenum.down:
                     movingSave = moving.y;
                     break;
 
-                case PlayerDirEnum.left:
+                case PlayerDirenum.left:
                     movingSave = moving.x;
                     break;
 
-                case PlayerDirEnum.right:
+                case PlayerDirenum.right:
                     movingSave = moving.x;
                     break;
             }
@@ -716,7 +716,7 @@ public class BattlePlayerController : MonoBehaviour
     ///若gradientTime/dingTime小于0 则使用该脚本内的gradientTime/dingTime变量。
     ///若PlayerColor输入为nullColor，则不会更改玩家的实际颜色属性。
     ///</summary>
-    public void ChangePlayerColor(Color aimColor, BattleControl.PlayerColor aimPlayerColor, float startForce = 0, PlayerDirEnum dir = PlayerDirEnum.nullDir, float gradientTime = -1, float dingTime = -1, int fx = 2)
+    public void ChangePlayerColor(Color aimColor, BattleControl.PlayerColor aimPlayerColor, float startForce = 0, PlayerDirenum dir = PlayerDirenum.nullDir, float gradientTime = -1, float dingTime = -1, int fx = 2)
     {
         AudioController.instance.GetFx(fx, MainControl.instance.AudioControl.fxClipBattle);
 
@@ -778,9 +778,9 @@ public class BattlePlayerController : MonoBehaviour
     ///<summary>
     ///让蓝心坠落
     ///</summary>
-    void BlueDown(float startForce = 0, PlayerDirEnum dir = PlayerDirEnum.nullDir)
+    void BlueDown(float startForce = 0, PlayerDirenum dir = PlayerDirenum.nullDir)
     {
-        if (dir != PlayerDirEnum.nullDir)
+        if (dir != PlayerDirenum.nullDir)
         {
             playerDir = dir;
         }
@@ -788,19 +788,19 @@ public class BattlePlayerController : MonoBehaviour
         isJump = true;
         switch (playerDir)
         {
-            case PlayerDirEnum.up:
+            case PlayerDirenum.up:
                 moving = new Vector3(moving.x, startForce);
                 break;
 
-            case PlayerDirEnum.down:
+            case PlayerDirenum.down:
                 moving = new Vector3(moving.x, -startForce);
                 break;
 
-            case PlayerDirEnum.left:
+            case PlayerDirenum.left:
                 moving = new Vector3(-startForce, moving.y);
                 break;
 
-            case PlayerDirEnum.right:
+            case PlayerDirenum.right:
                 moving = new Vector3(startForce, moving.y);
                 break;
         }
@@ -837,10 +837,10 @@ public class BattlePlayerController : MonoBehaviour
     }
 
     //定义计算位移后垂点位置的方法
-    private Vector2 CalculateDisplacedPoint(Vector2 nearestPoint, Vector2 point, Vector2 lineStart, Vector2 lineEnd, float displacement)
+    private Vector2 CalculateDisplacedPoint(Vector2 nearestPoint, Vector2 lineStart, Vector2 lineEnd, float displacement)
     {
         Vector2 lineDirection = (lineEnd - lineStart).normalized; //计算线段方向向量
-        Vector2 perpendicularDirection = new Vector2(-lineDirection.y, lineDirection.x); //计算垂直方向向量（逆时针旋转90度）
+        Vector2 perpendicularDirection = new(-lineDirection.y, lineDirection.x); //计算垂直方向向量（逆时针旋转90度）
 
         return nearestPoint + perpendicularDirection * -displacement; //计算并返回位移后的垂点位置
     }
@@ -850,8 +850,8 @@ public class BattlePlayerController : MonoBehaviour
     {
         if (vertices == null || vertices.Count < 3) return null; //如果顶点列表为空或少于3个，返回null
 
-        List<Vector2> offsetVertices = new List<Vector2>(); //初始化存储位移后顶点的列表
-        List<Vector2> intersectionPoints = new List<Vector2>(); //初始化存储交点的列表
+        List<Vector2> offsetVertices = new(); //初始化存储位移后顶点的列表
+        List<Vector2> intersectionPoints = new(); //初始化存储交点的列表
 
         int count = vertices.Count; //获取顶点数量
         for (int i = 0; i < count; i++)
@@ -860,7 +860,7 @@ public class BattlePlayerController : MonoBehaviour
             Vector2 nextVertex = vertices[(i + 1) % count]; //获取下一个顶点（环形列表）
 
             Vector2 edgeDirection = (nextVertex - currentVertex).normalized; //计算边的方向向量
-            Vector2 perpendicularDirection = new Vector2(-edgeDirection.y, edgeDirection.x); //计算垂直方向向量
+            Vector2 perpendicularDirection = new(-edgeDirection.y, edgeDirection.x); //计算垂直方向向量
 
             Vector2 offsetCurrentVertex = currentVertex + perpendicularDirection * offset; //计算当前顶点的位移
             Vector2 offsetNextVertex = nextVertex + perpendicularDirection * offset; //计算下一个顶点的位移
@@ -879,7 +879,7 @@ public class BattlePlayerController : MonoBehaviour
         }
 
         //计算首尾两条边的交点
-        bool foundFinalIntersection = LineLineIntersection(out Vector2 finalIntersection, offsetVertices[offsetVertices.Count - 2], offsetVertices[offsetVertices.Count - 1], offsetVertices[0], offsetVertices[1]);
+        bool foundFinalIntersection = LineLineIntersection(out Vector2 finalIntersection, offsetVertices[^2], offsetVertices[^1], offsetVertices[0], offsetVertices[1]);
         if (foundFinalIntersection)
         {
             intersectionPoints.Add(finalIntersection); //如果找到交点，添加到交点列表
@@ -971,7 +971,7 @@ public class BattlePlayerController : MonoBehaviour
             if (isParent)
                 displacement -= test2;
 
-            Vector3 moved = (Vector3)CalculateDisplacedPoint(nearestPoint, point, lineStart, lineEnd, -displacement) + new Vector3(0, 0, z); //计算位移后的点位置
+            Vector3 moved = (Vector3)CalculateDisplacedPoint(nearestPoint, lineStart, lineEnd, -displacement) + new Vector3(0, 0, z); //计算位移后的点位置
             //Debug.Log(moved, "#FF0000"); //记录日志
 
             if (isInitialCall || (Vector2)moved != originalPoint) //如果是初次调用或移动后的点不等于原点
@@ -997,12 +997,12 @@ public class BattlePlayerController : MonoBehaviour
   case BattleControl.PlayerColor.blue:
                 switch (playerDir)
                 {
-                    case PlayerDirEnum.up:
+                    case PlayerDirenum.up:
                         transform.rotation = Quaternion.Euler(0, 0, 180);
                         Physics2D.gravity = new Vector2(0, 9.8f);
                         break;
 
-                    case PlayerDirEnum.down:
+                    case PlayerDirenum.down:
                         transform.rotation = Quaternion.Euler(0, 0, 0);
                         Physics2D.gravity = new Vector2(0, -9.8f);
                         if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow))
@@ -1028,19 +1028,19 @@ public class BattlePlayerController : MonoBehaviour
                             Vector2 dirReal = new Vector2();
                             switch (playerDir)
                             {
-                                case PlayerDirEnum.up:
+                                case PlayerDirenum.up:
                                     dirReal = Vector2.up;
                                     break;
 
-                                case PlayerDirEnum.down:
+                                case PlayerDirenum.down:
                                     dirReal = Vector2.down;
                                     break;
 
-                                case PlayerDirEnum.left:
+                                case PlayerDirenum.left:
                                     dirReal = Vector2.left;
                                     break;
 
-                                case PlayerDirEnum.right:
+                                case PlayerDirenum.right:
                                     dirReal = Vector2.right;
                                     break;
                             }
@@ -1066,12 +1066,12 @@ public class BattlePlayerController : MonoBehaviour
                         jumpAcceleration += Time.deltaTime * 0.425f;
                             break;
 
-                    case PlayerDirEnum.left:
+                    case PlayerDirenum.left:
                         transform.rotation = Quaternion.Euler(0, 0, 270);
                         Physics2D.gravity = new Vector2(-9.8f, 0);
                         break;
 
-                    case PlayerDirEnum.right:
+                    case PlayerDirenum.right:
                         transform.rotation = Quaternion.Euler(0, 0, 90);
                         Physics2D.gravity = new Vector2(9.8f, 0);
                         break;

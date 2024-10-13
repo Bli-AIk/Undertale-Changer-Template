@@ -233,7 +233,7 @@ Line 8: /// UI controller in Battle scene
 Line 9: /// Also responsible for controlling the player's turn
 Line 10: /// </summary>
 Line 16: [Header("HP bar color")]
-Line 22: [Header("Number of dialogue bubbles loaded")]
+Line 22: [Header("number of dialogue bubbles loaded")]
 Line 22: //Load actSave
 Line 27: [Header("Temporarily save unused Sprite")]
 Line 33: [Header("Four button UI selection 0 open")]
@@ -274,7 +274,7 @@ Line 454: //Options
 Line 474: //Monster 2
 Line 475: //Options
 Line 540: //hpSpr.material.SetFloat("_Crop", 1);
-Line 566: //if (myItemMax < num)
+Line 566: //if (myItemMax < number)
 Line 718: //if (selectUI == 1)
 Line 719: // KeepDialogBubble();
 Line 790: /// <summary>
@@ -341,7 +341,7 @@ Line 61: /// <summary>
 Line 62: /// Turn execution system
 Line 63: /// Execute according to the turn number
 Line 64: /// </summary>
-Line 71: //MainControl.instance.battlePlayerController.ChangePlayerColor(MainControl.instance.BattleControl.playerColorList[5], BattleControl.PlayerColor.blue,0,BattlePlayerController.PlayerDirEnum.down);
+Line 71: //MainControl.instance.battlePlayerController.ChangePlayerColor(MainControl.instance.BattleControl.playerColorList[5], BattleControl.PlayerColor.blue,0,BattlePlayerController.PlayerDirenum.down);
 Line 110: //Example round
 Line 157: /// <summary>
 Line 158: /// Round nesting
@@ -605,7 +605,7 @@ Line 30: // Get the rotation of the current object
 Line 31: [Header("Line width")]
 Line 35: [Header("Whether to enable Bessel interpolation")]
 Line 39: [Header("The points used for the real group box")]
-Line 40: // Real curve interpolation, the number of insertion points is determined by besselPointsNum
+Line 40: // Real curve interpolation, the number of insertion points is determined by besselPointsnumber
 Line 49: [Header("Set whether it is a special box")]
 Line 52: [Header("When the Box is the parent, it is used to store the relevant calculated data of the child")]
 Line 53: [Header("The sum of the child realPoints")]
@@ -649,7 +649,7 @@ Line 341: /// <summary>
 Line 342: /// Interpolation function
 Line 343: /// </summary>
 Line 344: /// <param name="points">Original List</param>
-Line 345: /// <param name="interpolation">Number of points to divide by two</param>
+Line 345: /// <param name="interpolation">number of points to divide by two</param>
 Line 346: /// <returns></returns>
 Line 370: // Insert interpolation between the beginning and the end
 Line 380: /// <summary>
@@ -659,7 +659,7 @@ Line 388: // Create a Vector2 list to store the points on the generated Bezier c
 Line 390: // Check the number of control points. At least 4 control points are required to form a cubic Bezier curve.
 Line 393: // Display an error message in the console
 Line 394: // Return an empty Bezier point list
-Line 397: // Traverse the control point list and take out besselInsertNum + 1 points each time to generate a Bezier curve segment
+Line 397: // Traverse the control point list and take out besselInsertnumber + 1 points each time to generate a Bezier curve segment
 Line 405: // Generate points on the current curve segment according to the number of required points
 Line 408: // Calculate the value of parameter t for interpolation
 Line 409: // Call the function to calculate Bezier points
@@ -697,7 +697,7 @@ Line 288: /// </summary>
 Line 324: //Settings menu
 Line 778: //The time of the last frame rate update;
 Line 779: //The time interval for updating the frame rate;
-Line 780: //Number of frames;
+Line 780: //number of frames;
 Line 781: //Frame rate
 Line 788: //FPS = total number of frames in a certain period of time / a certain period of time
 Line 797: /// <summary>
@@ -719,7 +719,7 @@ Line 6: /// <summary>
 Line 7: /// Use LineRenderer and polygon shader to draw polygon frames, used for battle frames, UI, etc.
 Line 8: /// </summary>
 Line 12: [Header("Line length")]
-Line 15: [Header("Number of vertices")]
+Line 15: [Header("number of vertices")]
 Line 18: [Header("Vertices")]
 Line 21: [Header("Enable collision (for combat box)")]
 Line 24: [Header("ID detection: use _Point (0)")]
@@ -899,7 +899,7 @@ Line 1534: /// Input a vector of the form (r,g,b,a)
 Line 1535: /// Also supports random numbers
 Line 1536: /// </summary>
 Line 1577: /// <summary>
-Line 1578: /// Judge between num1 and num2 If it matches, return num2. Otherwise, return num1.
+Line 1578: /// Judge between number1 and number2 If it matches, return number2. Otherwise, return number1.
 Line 1579: /// </summary>
 Line 1595: /// <summary>
 Line 1596: /// Allocate Item data
@@ -943,7 +943,7 @@ Line 1797: //max.Clear();
 Line 1834: /// <summary>
 Line 1835: /// Get Item information by Id:
 Line 1836: /// type: Foods Arms Armors Others Auto
-Line 1837: /// num: 0 language package name
+Line 1837: /// number: 0 language package name
 Line 1838: /// 1/2: data1/2.
 Line 1839: /// Do not enter more.
 Line 1840: /// Arm and Armor only have 1
@@ -1022,7 +1022,7 @@ Line 150: //New
 Line 159: //Next page
 
 File: Default\ObjectPool.cs
-Line 6: [Header("Number of objects to fill the object pool")]
+Line 6: [Header("number of objects to fill the object pool")]
 Line 13: /// <summary>
 Line 14: /// Initialize/fill the object pool
 Line 15: /// </summary>

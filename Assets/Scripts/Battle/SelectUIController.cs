@@ -20,7 +20,7 @@ public class SelectUIController : MonoBehaviour
     public Color hpColorHit;
 
     [Header("对话气泡载入数")]//载入actSave
-    public int numDialog;
+    public int numberDialog;
 
     public bool isDialog;
 
@@ -118,9 +118,9 @@ public class SelectUIController : MonoBehaviour
 
         if (isDialog)
         {
-            if ((!dialog.typeWritter.isTyping && (MainControl.instance.KeyArrowToControl(KeyCode.Z))) || ((selectUI == 1 || textUI.text == "") && numDialog == 0))
+            if ((!dialog.typeWritter.isTyping && (MainControl.instance.KeyArrowToControl(KeyCode.Z))) || ((selectUI == 1 || textUI.text == "") && numberDialog == 0))
             {
-                if (numDialog < actSave.Count)
+                if (numberDialog < actSave.Count)
                     KeepDialogBubble();
                 else//敌方回合：开！
                 {
@@ -557,36 +557,36 @@ public class SelectUIController : MonoBehaviour
                             textUITextChanger2 = "<color=#00000000>aa*</color>* " + MainControl.instance.ItemIdGetName(MainControl.instance.PlayerControl.myItems[selectSon + 2 - (selectGrandSon - 1)], "Auto", 0) + "\n";
                             textUIDataChanger2 = MainControl.instance.ItemIdGetData(MainControl.instance.PlayerControl.myItems[selectSon + 2 - (selectGrandSon - 1)], "Auto", true) + "\n";
                         }
-                        int num = 8;
+                        int number = 8;
 
                         if (myItemMax >= 8)
                         {
                             itemSelectController.myItemSelect = selectSon;
                         }
-                        else //if (myItemMax < num)
+                        else //if (myItemMax < number)
                         {
                             if (myItemMax >= 6)
                             {
-                                num = 8;
+                                number = 8;
                             }
                             else if (myItemMax >= 4)
                             {
-                                num = 7;
+                                number = 7;
                             }
                             else if (myItemMax >= 2)
                             {
-                                num = 6;
+                                number = 6;
                             }
                             else if (myItemMax >= 1)
                             {
-                                num = 5;
+                                number = 5;
                             }
                             if (myItemMax % 2 == 0)
                             {
-                                itemSelectController.myItemSelect = selectSon + (num - 1 - myItemMax);
+                                itemSelectController.myItemSelect = selectSon + (number - 1 - myItemMax);
                             }
                             else
-                                itemSelectController.myItemSelect = selectSon + (num - myItemMax);
+                                itemSelectController.myItemSelect = selectSon + (number - myItemMax);
                         }
                         itemSelectController.myItemRealSelect = selectSon;
                         MainControl.instance.battlePlayerController.transform.position = new Vector3(-5.175f, -0.96f - (selectGrandSon - 1) * 0.66f, MainControl.instance.battlePlayerController.transform.position.z);
@@ -714,7 +714,7 @@ public class SelectUIController : MonoBehaviour
         MainControl.instance.LoadItemData(actSave, textAsset);
         actSave = MainControl.instance.ChangeItemData(actSave, true, new List<string>());
         isDialog = true;
-        numDialog = 0;
+        numberDialog = 0;
         //if (selectUI == 1)
         //    KeepDialogBubble();
     }
@@ -722,7 +722,7 @@ public class SelectUIController : MonoBehaviour
     private void KeepDialogBubble()
     {
         List<string> save = new List<string>();
-        MainControl.instance.MaxToOneSon(actSave[numDialog], save);
+        MainControl.instance.MaxToOneSon(actSave[numberDialog], save);
         for (int i = 0; i < enemiesControllers.Count; i++)
         {
             if (save[2] == enemiesControllers[i].name)
@@ -738,7 +738,7 @@ public class SelectUIController : MonoBehaviour
         dialog.isBackRight = Convert.ToBoolean(save[3]);
         dialog.backY = float.Parse(save[4]);
         dialog.typeWritter.TypeOpen(save[5], false, 0, 1, dialog.tmp);
-        numDialog++;
+        numberDialog++;
         dialog.tmp.text = "";
         dialog.PositionChange();
     }
@@ -790,7 +790,7 @@ public class SelectUIController : MonoBehaviour
     /// <summary>
     /// 更新UI文字与血条
     /// </summary>
-    public void UITextUpdate(UITextMode uiTextMode = 0, int foodNum = 0)
+    public void UITextUpdate(UITextMode uiTextMode = 0, int foodnumber = 0)
     {
         hpSpr.transform.localScale = new Vector3(0.525f * MainControl.instance.PlayerControl.hpMax, 8.5f);
         hpSpr.material.SetColor("_ColorUnder", hpColorUnder);
@@ -820,10 +820,10 @@ public class SelectUIController : MonoBehaviour
 
                 hpSpr.material.SetFloat("_IsFlashing", 1);
                 hpSpr.material.SetFloat("_Crop", (float)MainControl.instance.PlayerControl.hp / MainControl.instance.PlayerControl.hpMax);
-                float addNum = MainControl.instance.PlayerControl.hp + foodNum;
-                if (addNum > MainControl.instance.PlayerControl.hpMax)
-                    addNum = MainControl.instance.PlayerControl.hpMax;
-                hpSpr.material.DOFloat(addNum / MainControl.instance.PlayerControl.hpMax, "_Flash", 0.5f).SetEase(Ease.OutCirc);
+                float addnumber = MainControl.instance.PlayerControl.hp + foodnumber;
+                if (addnumber > MainControl.instance.PlayerControl.hpMax)
+                    addnumber = MainControl.instance.PlayerControl.hpMax;
+                hpSpr.material.DOFloat(addnumber / MainControl.instance.PlayerControl.hpMax, "_Flash", 0.5f).SetEase(Ease.OutCirc);
                 break;
         }
 
@@ -835,10 +835,10 @@ public class SelectUIController : MonoBehaviour
         else
         {
             hpFoodTween.Kill();
-            int addNum = MainControl.instance.PlayerControl.hp + foodNum;
-            if (addNum > MainControl.instance.PlayerControl.hpMax)
-                addNum = MainControl.instance.PlayerControl.hpMax;
-            hpFoodTween = DOTween.To(() => hpFood, x => hpFood = x, addNum, 0.5f);
+            int addnumber = MainControl.instance.PlayerControl.hp + foodnumber;
+            if (addnumber > MainControl.instance.PlayerControl.hpMax)
+                addnumber = MainControl.instance.PlayerControl.hpMax;
+            hpFoodTween = DOTween.To(() => hpFood, x => hpFood = x, addnumber, 0.5f);
         }
     }
 

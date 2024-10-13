@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class ObjectPool : MonoBehaviour
+public class ObjectPool : MonoBehaviour
 {
     [Header("填充对象池的对象数量")]
     public int count = 10;

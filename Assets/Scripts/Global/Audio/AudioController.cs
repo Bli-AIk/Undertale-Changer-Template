@@ -29,9 +29,9 @@ public class AudioController : ObjectPool
     {
         audioSource.outputAudioMixerGroup = MainControl.instance.AudioControl.globalAudioMixer.FindMatchingGroups("BGM")[0];
     }
-    public void GetFx(int fxNum, List<AudioClip> list, float volume = 0.5f, float pitch = 1, AudioMixerGroup audioMixerGroup = default)
+    public void GetFx(int fxnumber, List<AudioClip> list, float volume = 0.5f, float pitch = 1, AudioMixerGroup audioMixerGroup = default)
     {
-        if (fxNum < 0)
+        if (fxnumber < 0)
             return;
         GameObject fx = GetFromPool();
         fx.GetComponent<AudioSource>().volume = volume;
@@ -59,12 +59,12 @@ public class AudioController : ObjectPool
 
         fx.GetComponent<AudioSource>().outputAudioMixerGroup = audioMixerGroup;
         //AudioPlayer是字类！！不是unity自带的
-        fx.GetComponent<AudioPlayer>().Playing(list[fxNum]);
+        fx.GetComponent<AudioPlayer>().Playing(list[fxnumber]);
     }
 
-    public IEnumerator LayerGetFx(float time, int fxNum, List<AudioClip> list, float volume = 0.5f, float pitch = 1, UnityEngine.Audio.AudioMixerGroup audioMixerGroup = null)
+    public IEnumerator LayerGetFx(float time, int fxnumber, List<AudioClip> list, float volume = 0.5f, float pitch = 1, UnityEngine.Audio.AudioMixerGroup audioMixerGroup = null)
     {
         yield return new WaitForSeconds(time);
-        GetFx(fxNum, list, volume, pitch, audioMixerGroup);
+        GetFx(fxnumber, list, volume, pitch, audioMixerGroup);
     }
 }

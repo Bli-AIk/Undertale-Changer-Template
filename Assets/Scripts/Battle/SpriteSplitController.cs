@@ -10,7 +10,7 @@ using UnityEngine;
 /// </summary>
 public class SpriteSplitController : MonoBehaviour
 {
-    private Queue<GameObject> available = new Queue<GameObject>();//对象池
+    private readonly Queue<GameObject> available = new();//对象池
     private Texture2D map;
     private GameObject Mask;
     public int poolCount;

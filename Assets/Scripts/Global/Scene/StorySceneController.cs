@@ -14,7 +14,7 @@ public class StorySceneController : MonoBehaviour
     private TypeWritter typeWritter;
     private TextMeshPro tmp;
     public GameObject mask;
-    private int picNum;
+    private int picnumber;
 
     private void Awake()
     {
@@ -43,15 +43,15 @@ public class StorySceneController : MonoBehaviour
         }
     }
 
-    public void Fade(int Num)
+    public void Fade(int number)
     {
-        picNum = Num;
+        picnumber = number;
         spriteRenderer.DOColor(new Color(1, 1, 1, 0), 0.5f).SetEase(Ease.Linear).SetLoops(2, LoopType.Yoyo);
         Invoke(nameof(ChangePic), 0.5f);
     }
 
     private void ChangePic()
     {
-        spriteRenderer.sprite = pics[picNum];
+        spriteRenderer.sprite = pics[picnumber];
     }
 }

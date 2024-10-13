@@ -66,8 +66,7 @@ public class TurnController : MonoBehaviour
         {
             case 1:
                 Debug.Log("这是个摆烂回合……也许吧。");
-                //MainControl.instance.battlePlayerController.ChangePlayerColor(MainControl.instance.BattleControl.playerColorList[5], BattleControl.PlayerColor.blue,0,BattlePlayerController.PlayerDirEnum.down);
-
+           
                 var obj = objectPools[0].GetFromPool().GetComponent<BulletController>();
                 obj.SetBullet("CupCake", "CupCake", new Vector3(1, -1.6f), (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
 
@@ -77,7 +76,7 @@ public class TurnController : MonoBehaviour
 
                 for (int i = 600; i > 0; i--)
                 {
-                    Debug.Log("你先别急，先摆" + MainControl.instance.RandomStringColor() + i + "</color>秒");
+                    Debug.Log($"你先别急，先摆{MainControl.instance.RandomStringColor()}{i}</color>秒");
                     yield return Timing.WaitForSeconds(1f);
                 }
 
