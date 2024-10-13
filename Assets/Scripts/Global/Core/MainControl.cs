@@ -18,9 +18,9 @@ public class MainControl : MonoBehaviour
 {
     public static MainControl instance;
     public int languagePack;
-    public int datanumber;
+    public int dataNumber;
 
-    public readonly int languagePackInsidenum = 3;//内置语言包总数
+    public readonly int languagePackInsideNumber = 3;//内置语言包总数
 
     public bool blacking = false;
 
@@ -129,20 +129,20 @@ public class MainControl : MonoBehaviour
     /// </summary>
     private string LoadLanguageData(string path)
     {
-        if (languagePack < languagePackInsidenum)
+        if (languagePack < languagePackInsideNumber)
         {
             return Resources.Load<TextAsset>($"TextAssets/LanguagePacks/{GetLanguageInsideId(languagePack)}/{path}").text;
         }
         else
         {
-            return File.ReadAllText($"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[languagePack - languagePackInsidenum]}\\{path}.txt");
+            return File.ReadAllText($"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[languagePack - languagePackInsideNumber]}\\{path}.txt");
         }
     }
 
     private void LanguagePackDetection()
     {
         if ((languagePack < 0)
-            || (languagePack >= Directory.GetDirectories(Application.dataPath + "\\LanguagePacks").Length + languagePackInsidenum))
+            || (languagePack >= Directory.GetDirectories(Application.dataPath + "\\LanguagePacks").Length + languagePackInsideNumber))
         {
             languagePack = 2;
         }
@@ -255,7 +255,7 @@ public class MainControl : MonoBehaviour
 
         string[] turnSave;
         TextAsset[] textAssets;
-        if (languagePack < languagePackInsidenum)
+        if (languagePack < languagePackInsideNumber)
         {
             textAssets = Resources.LoadAll<TextAsset>($"TextAssets/LanguagePacks/{GetLanguageInsideId(languagePack)}/Battle/Turn");
 
@@ -266,13 +266,13 @@ public class MainControl : MonoBehaviour
             }
         }
         else
-            turnSave = Directory.GetFiles($"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[languagePack - languagePackInsidenum]}\\Battle\\Turn");
+            turnSave = Directory.GetFiles($"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[languagePack - languagePackInsideNumber]}\\Battle\\Turn");
 
         for (int i = 0; i < turnSave.Length; i++)
         {
             string file = turnSave[i];
 
-            if (languagePack < languagePackInsidenum)
+            if (languagePack < languagePackInsideNumber)
                 BattleControl.turnDialogAsset.Add(file);
             else if (turnSave[i].Substring(turnSave[i].Length - 3) == "txt")
                 BattleControl.turnDialogAsset.Add(File.ReadAllText(file));
@@ -297,23 +297,23 @@ public class MainControl : MonoBehaviour
     private void Awake()
     {
         languagePack = PlayerPrefs.GetInt("languagePack", 2);
-        if (PlayerPrefs.GetInt("datanumber", 0) >= 0)
-            datanumber = PlayerPrefs.GetInt("datanumber", 0);
+        if (PlayerPrefs.GetInt("dataNumber", 0) >= 0)
+            dataNumber = PlayerPrefs.GetInt("dataNumber", 0);
         else
         {
-            PlayerPrefs.SetInt("datanumber", 0);
-            datanumber = 0;
+            PlayerPrefs.SetInt("dataNumber", 0);
+            dataNumber = 0;
         }
-        if (datanumber > (SaveController.GetDatanumber() - 1))
+        if (dataNumber > (SaveController.GetDataNumber() - 1))
         {
-            datanumber = (SaveController.GetDatanumber() - 1);
+            dataNumber = (SaveController.GetDataNumber() - 1);
         }
 
         instance = this;
         InitializationLoad();
         Initialization(languagePack);
 
-        if (datanumber == -1)
+        if (dataNumber == -1)
         {
             SetPlayerControl(ScriptableObject.CreateInstance<PlayerControl>());
         }
@@ -1720,16 +1720,16 @@ public class MainControl : MonoBehaviour
     public List<int> ListOrderChanger(List<int> original)
     {
         List<int> newList = new List<int>();
-        int plusnumber = original.Count;
+        int plusNumber = original.Count;
         for (int i = 0; i < original.Count; i++)
         {
             if (original[i] != 0)
             {
                 newList.Add(original[i]);
-                plusnumber--;
+                plusNumber--;
             }
         }
-        for (int i = 0; i < plusnumber; i++)
+        for (int i = 0; i < plusNumber; i++)
         {
             newList.Add(0);
         }
@@ -2086,8 +2086,8 @@ public class MainControl : MonoBehaviour
     /// <returns></returns>
     public string FillString(string origin, int length)
     {
-        int fornumber = length - origin.Length;
-        for (int i = 0; i < fornumber; i++)
+        int forNumber = length - origin.Length;
+        for (int i = 0; i < forNumber; i++)
         {
             origin += " ";
         }

@@ -790,7 +790,7 @@ public class SelectUIController : MonoBehaviour
     /// <summary>
     /// 更新UI文字与血条
     /// </summary>
-    public void UITextUpdate(UITextMode uiTextMode = 0, int foodnumber = 0)
+    public void UITextUpdate(UITextMode uiTextMode = 0, int foodNumber = 0)
     {
         hpSpr.transform.localScale = new Vector3(0.525f * MainControl.instance.PlayerControl.hpMax, 8.5f);
         hpSpr.material.SetColor("_ColorUnder", hpColorUnder);
@@ -820,10 +820,10 @@ public class SelectUIController : MonoBehaviour
 
                 hpSpr.material.SetFloat("_IsFlashing", 1);
                 hpSpr.material.SetFloat("_Crop", (float)MainControl.instance.PlayerControl.hp / MainControl.instance.PlayerControl.hpMax);
-                float addnumber = MainControl.instance.PlayerControl.hp + foodnumber;
-                if (addnumber > MainControl.instance.PlayerControl.hpMax)
-                    addnumber = MainControl.instance.PlayerControl.hpMax;
-                hpSpr.material.DOFloat(addnumber / MainControl.instance.PlayerControl.hpMax, "_Flash", 0.5f).SetEase(Ease.OutCirc);
+                float addNumber = MainControl.instance.PlayerControl.hp + foodNumber;
+                if (addNumber > MainControl.instance.PlayerControl.hpMax)
+                    addNumber = MainControl.instance.PlayerControl.hpMax;
+                hpSpr.material.DOFloat(addNumber / MainControl.instance.PlayerControl.hpMax, "_Flash", 0.5f).SetEase(Ease.OutCirc);
                 break;
         }
 
@@ -835,10 +835,10 @@ public class SelectUIController : MonoBehaviour
         else
         {
             hpFoodTween.Kill();
-            int addnumber = MainControl.instance.PlayerControl.hp + foodnumber;
-            if (addnumber > MainControl.instance.PlayerControl.hpMax)
-                addnumber = MainControl.instance.PlayerControl.hpMax;
-            hpFoodTween = DOTween.To(() => hpFood, x => hpFood = x, addnumber, 0.5f);
+            int addNumber = MainControl.instance.PlayerControl.hp + foodNumber;
+            if (addNumber > MainControl.instance.PlayerControl.hpMax)
+                addNumber = MainControl.instance.PlayerControl.hpMax;
+            hpFoodTween = DOTween.To(() => hpFood, x => hpFood = x, addNumber, 0.5f);
         }
     }
 

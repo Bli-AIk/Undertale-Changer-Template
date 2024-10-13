@@ -31,10 +31,10 @@ public class MenuController : MonoBehaviour
     {
         setData = false;
         layer = 0;
-        if (MainControl.instance.datanumber < 0)
-            MainControl.instance.datanumber = 0;
-        MainControl.instance.SetPlayerControl(SaveController.LoadData("Data" + MainControl.instance.datanumber));
-        saveNumber = MainControl.instance.datanumber;
+        if (MainControl.instance.dataNumber < 0)
+            MainControl.instance.dataNumber = 0;
+        MainControl.instance.SetPlayerControl(SaveController.LoadData("Data" + MainControl.instance.dataNumber));
+        saveNumber = MainControl.instance.dataNumber;
         LoadLayer0();
     }
 
@@ -120,8 +120,8 @@ public class MenuController : MonoBehaviour
                             goto case 2;
                         case 4:
                             setData = true;
-                            saveNumber = MainControl.instance.datanumber;
-                            if (0 != (SaveController.GetDatanumber() - 1))
+                            saveNumber = MainControl.instance.dataNumber;
+                            if (0 != (SaveController.GetDataNumber() - 1))
                                 select = 5;
                             Flash();
                             AudioController.instance.GetFx(1, MainControl.instance.AudioControl.fxClipUI);
@@ -147,11 +147,11 @@ public class MenuController : MonoBehaviour
 
                         case 3:
                             AudioController.instance.GetFx(1, MainControl.instance.AudioControl.fxClipUI);
-                            if (saveNumber == (SaveController.GetDatanumber() - 1))//新建
+                            if (saveNumber == (SaveController.GetDataNumber() - 1))//新建
                             {
                                 saveNumber++;
-                                MainControl.instance.datanumber = saveNumber;
-                                SaveController.SaveData(MainControl.instance.PlayerControl, "Data" + MainControl.instance.datanumber);
+                                MainControl.instance.dataNumber = saveNumber;
+                                SaveController.SaveData(MainControl.instance.PlayerControl, "Data" + MainControl.instance.dataNumber);
                                 MainControl.instance.SetPlayerControl(ScriptableObject.CreateInstance<PlayerControl>());
                                 MainControl.instance.PlayerControl.playerName = "";
                                 MainControl.instance.OutBlack("Rename", Color.black);
@@ -164,16 +164,16 @@ public class MenuController : MonoBehaviour
                             break;
 
                         case 4:
-                            if (SaveController.GetDatanumber() - 1 <= 0)
+                            if (SaveController.GetDataNumber() - 1 <= 0)
                                 goto case 5;
                             SaveController.DeleteData("Data" + saveNumber);
-                            if (saveNumber > (SaveController.GetDatanumber() - 1))
-                                saveNumber = SaveController.GetDatanumber() - 1;
+                            if (saveNumber > (SaveController.GetDataNumber() - 1))
+                                saveNumber = SaveController.GetDataNumber() - 1;
                             LoadLayer0();
                             break;
 
                         case 5:
-                            if (MainControl.instance.datanumber == saveNumber)
+                            if (MainControl.instance.dataNumber == saveNumber)
                             {
                                 setData = false;
                                 Flash();
@@ -182,7 +182,7 @@ public class MenuController : MonoBehaviour
                             }
                             else
                             {
-                                MainControl.instance.datanumber = saveNumber;
+                                MainControl.instance.dataNumber = saveNumber;
                                 AudioController.instance.GetFx(1, MainControl.instance.AudioControl.fxClipUI);
                                 UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
                                 break;
@@ -221,8 +221,8 @@ public class MenuController : MonoBehaviour
             tmps[4].text = list[0] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Menu12") + "</color> "
                      + list[1] + "Data" + saveNumber + "</color>\n"
                      + list[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Menu6") + "</color> "
-                     + list[3] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, saveNumber == (SaveController.GetDatanumber() - 1) ? "Menu10" : "Menu7") + "</color>\n"
-                     + list[4] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, 0 == (SaveController.GetDatanumber() - 1) ? "Menu8" : "Menu11") + "</color> "
+                     + list[3] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, saveNumber == (SaveController.GetDataNumber() - 1) ? "Menu10" : "Menu7") + "</color>\n"
+                     + list[4] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, 0 == (SaveController.GetDataNumber() - 1) ? "Menu8" : "Menu11") + "</color> "
                      + list[5] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Menu9") + "</color>";
     }
 

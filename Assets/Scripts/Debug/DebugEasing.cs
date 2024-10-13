@@ -11,7 +11,7 @@ public class DebugEasing : MonoBehaviour
     private float timer;
     public string enumStr;
     private LineRenderer lineRenderer;
-    private int setnumber;
+    private int setNumber;
 
     private void Start()
     {
@@ -29,11 +29,11 @@ public class DebugEasing : MonoBehaviour
             {
                 timer = baseTime;
 
-                if (lineRenderer.positionCount <= setnumber)
+                if (lineRenderer.positionCount <= setNumber)
                     lineRenderer.positionCount++;
 
-                lineRenderer.SetPosition(setnumber, transform.position);
-                setnumber++;
+                lineRenderer.SetPosition(setNumber, transform.position);
+                setNumber++;
             }
             else
             {

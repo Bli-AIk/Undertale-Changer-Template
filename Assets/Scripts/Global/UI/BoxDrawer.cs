@@ -35,10 +35,10 @@ public class BoxDrawer : MonoBehaviour
     [Header("是否启用贝塞尔插值")]
     public bool isBessel;
     public List<Vector2> besselPoints;
-    public int besselPointsnumber = 16;
+    public int besselPointsNumber = 16;
     [Header("真正组框所用的点")]
-    public List<Vector2> realPoints;//真正的曲线插值，插入点数由besselPointsnumber决定
-    public int besselInsertnumber = 2;
+    public List<Vector2> realPoints;//真正的曲线插值，插入点数由besselPointsNumber决定
+    public int besselInsertNumber = 2;
 
     public MeshFilter meshFilter;
     public MeshRenderer meshRenderer;
@@ -146,7 +146,7 @@ public class BoxDrawer : MonoBehaviour
         {
 
             if (isBessel)
-                realPoints = GenerateBezierCurve(besselPoints, besselInsertnumber, besselPointsnumber);
+                realPoints = GenerateBezierCurve(besselPoints, besselInsertNumber, besselPointsNumber);
             else
                 realPoints = vertexPoints;
 
@@ -327,14 +327,14 @@ public class BoxDrawer : MonoBehaviour
         {
             if (!isBessel)
                 besselPoints.Clear();
-            else if (besselPoints.Count == 0 || besselPoints.Count != vertexPoints.Count * (besselInsertnumber + 1))
-                besselPoints = InterpolatePoints(vertexPoints, besselInsertnumber);
+            else if (besselPoints.Count == 0 || besselPoints.Count != vertexPoints.Count * (besselInsertNumber + 1))
+                besselPoints = InterpolatePoints(vertexPoints, besselInsertNumber);
         }
         else
         {
             besselPoints.Clear();
             if (isBessel)
-                besselPoints = InterpolatePoints(vertexPoints, besselInsertnumber);
+                besselPoints = InterpolatePoints(vertexPoints, besselInsertNumber);
         }
 
     }
@@ -380,7 +380,7 @@ public class BoxDrawer : MonoBehaviour
     /// <summary>
     /// 生成贝塞尔曲线上的点
     /// </summary>
-    public static List<Vector2> GenerateBezierCurve(List<Vector2> points, int besselInsertnumber, int numberPoints)
+    public static List<Vector2> GenerateBezierCurve(List<Vector2> points, int besselInsertNumber, int numberPoints)
     {
         List<Vector2> controlPoints = new List<Vector2>(points);
 
@@ -394,11 +394,11 @@ public class BoxDrawer : MonoBehaviour
             return bezierPoints; // 返回空的贝塞尔点列表
         }
 
-        // 遍历控制点列表，每次取出besselInsertnumber + 1个点生成贝塞尔曲线段
+        // 遍历控制点列表，每次取出besselInsertNumber + 1个点生成贝塞尔曲线段
         List<Vector2> pointList = new List<Vector2>();
-        for (int i = 0; i < controlPoints.Count - besselInsertnumber; i += besselInsertnumber + 1)
+        for (int i = 0; i < controlPoints.Count - besselInsertNumber; i += besselInsertNumber + 1)
         {
-            for (int k = 0; k < besselInsertnumber + 2; k++)
+            for (int k = 0; k < besselInsertNumber + 2; k++)
             {
                 pointList.Add(controlPoints[i + k]);
             }
@@ -486,7 +486,7 @@ public class BoxDrawer : MonoBehaviour
             for (int i = 0; i < besselPoints.Count; i++)
             {
                 var point = besselPoints[i];
-                if (i % (besselInsertnumber + 1) != 0)
+                if (i % (besselInsertNumber + 1) != 0)
                 {
                     if (showGizmosPoint == ShowGizmosPoint.JustVertexBessel || showGizmosPoint == ShowGizmosPoint.All)
                         Gizmos.color = Color.cyan;
@@ -657,8 +657,8 @@ public class SceneExtEditor : Editor
                 Undo.RecordObject(example, "Changed point " + i);
                 vertices[i] = newVertexPoints;
                 if (example.isBessel)
-                    if (i % (example.besselInsertnumber + 1) == 0)
-                        example.vertexPoints[i / (example.besselInsertnumber + 1)] = newVertexPoints;
+                    if (i % (example.besselInsertNumber + 1) == 0)
+                        example.vertexPoints[i / (example.besselInsertNumber + 1)] = newVertexPoints;
                 example.Update();
                 if (!isUndoRedoPerformed)
                 {

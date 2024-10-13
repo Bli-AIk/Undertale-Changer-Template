@@ -48,21 +48,21 @@ public class SaveController : MonoBehaviour
         }
     }
 
-    public static int GetDatanumber()
+    public static int GetDataNumber()
     {
         if (!Directory.Exists(Application.dataPath + "/Data"))
         {
             return 0;
         }
 
-        int returnnumber = 0;
+        int returnNumber = 0;
         for (int i = 0; i < Directory.GetFiles(Application.dataPath + "/Data").Length; i++)
         {
             string text = Directory.GetFiles(Application.dataPath + "/Data")[i];
             if (text.Substring(text.Length - 5) == ".json")
-                returnnumber++;
+                returnNumber++;
         }
-        return returnnumber;
+        return returnNumber;
     }
 
     public static void DeleteData(string dataName)

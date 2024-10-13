@@ -41,17 +41,17 @@ public class RenameController : MonoBehaviour
         }
     }
 
-    private string Alphabet(int selectnumber)
+    private string Alphabet(int selectNumber)
     {
         string bet = "A B C D E F G\nH I J K L M N\nO P Q R S T U\nV W X Y Z\na b c d e f g\nh i j k l m n\no p q r s t u\nv w x y z";
         string final = "";
         for (int i = 0; i < bet.Length; i++)
         {
-            if (i == selectnumber * 2)
+            if (i == selectNumber * 2)
             {
                 final += "<color=yellow>";
             }
-            else if (i == selectnumber * 2 + 1)
+            else if (i == selectNumber * 2 + 1)
             {
                 final += "</color>";
             }
@@ -61,14 +61,14 @@ public class RenameController : MonoBehaviour
         return final;
     }
 
-    private void Selectbet(int selectnumber)
+    private void Selectbet(int selectNumber)
     {
         List<string> strings = new List<string>();
         /*
-        if (!(selectnumber >= 52 && selectnumber <= 54))
+        if (!(selectNumber >= 52 && selectNumber <= 54))
             return;
         */
-        int selecter = selectnumber - 52;
+        int selecter = selectNumber - 52;
         for (int i = 0; i < 3; i++)
         {
             if (i == selecter)
@@ -284,9 +284,9 @@ strings[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.Overwor
                             //DOTween.To(() => v.weight, x => v.weight = x, 0, 5.5f).SetEase(Ease.Linear);
                             DOTween.To(() => v2.weight, x => v2.weight = x, 1, 5.5f).SetEase(Ease.Linear);
 
-                            SaveController.SaveData(MainControl.instance.PlayerControl, "Data" + MainControl.instance.datanumber);
+                            SaveController.SaveData(MainControl.instance.PlayerControl, "Data" + MainControl.instance.dataNumber);
                             PlayerPrefs.SetInt("languagePack", MainControl.instance.languagePack);
-                            PlayerPrefs.SetInt("datanumber", MainControl.instance.datanumber);
+                            PlayerPrefs.SetInt("dataNumber", MainControl.instance.dataNumber);
                             PlayerPrefs.SetInt("hdResolution", Convert.ToInt32(MainControl.instance.OverworldControl.hdResolution));
                             PlayerPrefs.SetInt("noSFX", Convert.ToInt32(MainControl.instance.OverworldControl.noSFX));
                             PlayerPrefs.SetInt("vsyncMode", Convert.ToInt32(MainControl.instance.OverworldControl.vsyncMode));

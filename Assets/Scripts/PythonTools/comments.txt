@@ -341,7 +341,7 @@ Line 61: /// <summary>
 Line 62: /// Turn execution system
 Line 63: /// Execute according to the turn number
 Line 64: /// </summary>
-Line 71: //MainControl.instance.battlePlayerController.ChangePlayerColor(MainControl.instance.BattleControl.playerColorList[5], BattleControl.PlayerColor.blue,0,BattlePlayerController.PlayerDirenum.down);
+Line 71: //MainControl.instance.battlePlayerController.ChangePlayerColor(MainControl.instance.BattleControl.playerColorList[5], BattleControl.PlayerColor.blue,0,BattlePlayerController.PlayerDirEnum.down);
 Line 110: //Example round
 Line 157: /// <summary>
 Line 158: /// Round nesting
@@ -605,7 +605,7 @@ Line 30: // Get the rotation of the current object
 Line 31: [Header("Line width")]
 Line 35: [Header("Whether to enable Bessel interpolation")]
 Line 39: [Header("The points used for the real group box")]
-Line 40: // Real curve interpolation, the number of insertion points is determined by besselPointsnumber
+Line 40: // Real curve interpolation, the number of insertion points is determined by besselPointsNumber
 Line 49: [Header("Set whether it is a special box")]
 Line 52: [Header("When the Box is the parent, it is used to store the relevant calculated data of the child")]
 Line 53: [Header("The sum of the child realPoints")]
@@ -659,7 +659,7 @@ Line 388: // Create a Vector2 list to store the points on the generated Bezier c
 Line 390: // Check the number of control points. At least 4 control points are required to form a cubic Bezier curve.
 Line 393: // Display an error message in the console
 Line 394: // Return an empty Bezier point list
-Line 397: // Traverse the control point list and take out besselInsertnumber + 1 points each time to generate a Bezier curve segment
+Line 397: // Traverse the control point list and take out besselInsertNumber + 1 points each time to generate a Bezier curve segment
 Line 405: // Generate points on the current curve segment according to the number of required points
 Line 408: // Calculate the value of parameter t for interpolation
 Line 409: // Call the function to calculate Bezier points

@@ -94,7 +94,7 @@ public class OverworldObjTrigger : MonoBehaviour
                 {
                     case 0:
 
-                        SaveController.SaveData(MainControl.instance.PlayerControl, "Data" + MainControl.instance.datanumber);
+                        SaveController.SaveData(MainControl.instance.PlayerControl, "Data" + MainControl.instance.dataNumber);
                         saveSelect = 2;
                         AudioController.instance.GetFx(12, MainControl.instance.AudioControl.fxClipUI);
                         string name = MainControl.instance.PlayerControl.playerName;
@@ -104,7 +104,7 @@ public class OverworldObjTrigger : MonoBehaviour
                         BackpackBehaviour.instance.saveUI.text = $"<color=yellow>{MainControl.instance.FillString(name, 10)}LV{MainControl.instance.FillString(MainControl.instance.PlayerControl.lv.ToString(), 7)}{MainControl.instance.GetRealTime((int)MainControl.instance.PlayerControl.gameTime)}\n{MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, SceneManager.GetActiveScene().name)}\n{MainControl.instance.RichTextWithEnd("size", 1, "\n")}  {MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Saved")}";
                         MainControl.instance.PlayerControl.saveScene = SceneManager.GetActiveScene().name;
                         PlayerPrefs.SetInt("languagePack", MainControl.instance.languagePack);
-                        PlayerPrefs.SetInt("datanumber", MainControl.instance.datanumber);
+                        PlayerPrefs.SetInt("dataNumber", MainControl.instance.dataNumber);
                         PlayerPrefs.SetInt("hdResolution", Convert.ToInt32(MainControl.instance.OverworldControl.hdResolution));
                         PlayerPrefs.SetInt("noSFX", Convert.ToInt32(MainControl.instance.OverworldControl.noSFX));
                         PlayerPrefs.SetInt("vsyncMode", Convert.ToInt32(MainControl.instance.OverworldControl.vsyncMode));

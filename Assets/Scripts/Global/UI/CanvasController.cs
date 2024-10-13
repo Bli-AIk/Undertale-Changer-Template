@@ -230,7 +230,7 @@ public class CanvasController : MonoBehaviour
                 if (OnlySetSon)
                     settingSelect = MainControl.instance.languagePack;
 
-                for (int i = 0; i < MainControl.instance.languagePackInsidenum; i++) //内置包信息
+                for (int i = 0; i < MainControl.instance.languagePackInsideNumber; i++) //内置包信息
                 {
                     string pathString = "TextAssets/LanguagePacks/" + MainControl.instance.GetLanguageInsideId(i);
 
@@ -254,7 +254,7 @@ public class CanvasController : MonoBehaviour
                 if (!OnlySetSon)
                     settingTmp.text += MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Back");
 
-                settingTmpUnder.text = GetLanguagePacksName(pathStringSaver, "LanguagePackInformation", settingSelect >= MainControl.instance.languagePackInsidenum) + '\n' + GetLanguagePacksName(pathStringSaver, "LanguagePackAuthor", settingSelect >= MainControl.instance.languagePackInsidenum);
+                settingTmpUnder.text = GetLanguagePacksName(pathStringSaver, "LanguagePackInformation", settingSelect >= MainControl.instance.languagePackInsideNumber) + '\n' + GetLanguagePacksName(pathStringSaver, "LanguagePackAuthor", settingSelect >= MainControl.instance.languagePackInsideNumber);
 
                 settingSelect = settingSelectBack;
                 break;
