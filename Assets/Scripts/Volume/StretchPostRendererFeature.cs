@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
-using Log;
+
 
 public class StretchPostRendererFeature : ScriptableRendererFeature
 {

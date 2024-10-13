@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using Log;
+
 /// <summary>
 /// Battle场景中的UI控制器
 /// 也负责玩家回合的控制
