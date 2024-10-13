@@ -43,7 +43,7 @@ public class CRTScreenPass : ScriptableRenderPass
         renderPassEvent = passEvent;
         if (CRTScreenShader == null)
         {
-            DebugLogger.Log("Shader不存在", DebugLogger.Type.err);
+            Debug.Log("Shader不存在");
             return;
         }
         mat = CoreUtils.CreateEngineMaterial(CRTScreenShader);

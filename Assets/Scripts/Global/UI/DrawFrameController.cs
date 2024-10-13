@@ -41,7 +41,7 @@ public class OldBoxController : MonoBehaviour
         points.Clear();
         if (pointsMax < 3)
         {
-            DebugLogger.Log("pointsMax < 3 , 已更改为3", DebugLogger.Type.war);
+            Debug.Log("pointsMax < 3 , 已更改为3");
             pointsMax = 3;
         }
         for (int i = 0; i < pointsMax; i++)
@@ -149,7 +149,7 @@ public class OldBoxController : MonoBehaviour
     {
         if (pointList.Count != vertices.Count)
         {
-            DebugLogger.Log("The number of points and vertices must be the same.",DebugLogger.Type.war);
+            Debug.Log("The number of points and vertices must be the same.");
             return;
         }
 

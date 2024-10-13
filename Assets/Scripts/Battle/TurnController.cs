@@ -65,7 +65,7 @@ public class TurnController : MonoBehaviour
         switch (turn)
         {
             case 1:
-                DebugLogger.Log("这是个摆烂回合……也许吧。");
+                Debug.Log("这是个摆烂回合……也许吧。");
                 //MainControl.instance.battlePlayerController.ChangePlayerColor(MainControl.instance.BattleControl.playerColorList[5], BattleControl.PlayerColor.blue,0,BattlePlayerController.PlayerDirEnum.down);
 
                 var obj = objectPools[0].GetFromPool().GetComponent<BulletController>();
@@ -77,7 +77,7 @@ public class TurnController : MonoBehaviour
 
                 for (int i = 600; i > 0; i--)
                 {
-                    DebugLogger.Log("你先别急，先摆" + MainControl.instance.RandomStringColor() + i + "</color>秒");
+                    Debug.Log("你先别急，先摆" + MainControl.instance.RandomStringColor() + i + "</color>秒");
                     yield return Timing.WaitForSeconds(1f);
                 }
 
@@ -87,12 +87,12 @@ public class TurnController : MonoBehaviour
                 break;
 
             case 0://示例回合
-                DebugLogger.Log("这是一个示例回合");
+                Debug.Log("这是一个示例回合");
                 yield return Timing.WaitForSeconds(0.5f);
-                DebugLogger.Log("请注意查看控制台发出的Debug文本介绍");
+                Debug.Log("请注意查看控制台发出的Debug文本介绍");
                 yield return Timing.WaitForSeconds(1.5f);
 
-                DebugLogger.Log("战斗框缩放：更改四个点的坐标");
+                Debug.Log("战斗框缩放：更改四个点的坐标");
 
                 DOTween.To(() => MainControl.instance.mainBox.vertexPoints[0], x => MainControl.instance.mainBox.vertexPoints[0] = x, new Vector2(1.4f, MainControl.instance.mainBox.vertexPoints[0].y), 0.5f).SetEase(Ease.InOutSine);
                 DOTween.To(() => MainControl.instance.mainBox.vertexPoints[1], x => MainControl.instance.mainBox.vertexPoints[1] = x, new Vector2(1.4f, MainControl.instance.mainBox.vertexPoints[1].y), 0.5f).SetEase(Ease.InOutSine);
@@ -102,7 +102,7 @@ public class TurnController : MonoBehaviour
 
                 yield return Timing.WaitForSeconds(1);
 
-                DebugLogger.Log("通过更改点坐标实现的战斗框轴点旋转");
+                Debug.Log("通过更改点坐标实现的战斗框轴点旋转");
                 for (int i = 0; i < 4; i++)
                 {
 
@@ -114,14 +114,14 @@ public class TurnController : MonoBehaviour
                     yield return Timing.WaitForSeconds(0.5f);
                 }
 
-                DebugLogger.Log("简单嵌套弹幕编写示例");
+                Debug.Log("简单嵌套弹幕编写示例");
                 for (int i = 0; i < 5 * 20; i++)
                 {
                     Timing.RunCoroutine(_TurnNest(Nest.simpleNestBullet));
                     yield return Timing.WaitForSeconds(0.2f);
                 }
 
-                DebugLogger.Log("战斗框缩放回初始坐标以结束回合");
+                Debug.Log("战斗框缩放回初始坐标以结束回合");
                 yield return Timing.WaitForSeconds(1f);
                 DOTween.To(() => MainControl.instance.mainBox.vertexPoints[0], x => MainControl.instance.mainBox.vertexPoints[0] = x, new Vector2(5.93f, MainControl.instance.mainBox.vertexPoints[0].y), 0.5f).SetEase(Ease.InOutSine);
                 DOTween.To(() => MainControl.instance.mainBox.vertexPoints[1], x => MainControl.instance.mainBox.vertexPoints[1] = x, new Vector2(5.93f, MainControl.instance.mainBox.vertexPoints[1].y), 0.5f).SetEase(Ease.InOutSine);

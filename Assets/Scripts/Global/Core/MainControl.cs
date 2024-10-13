@@ -1158,7 +1158,7 @@ public class MainControl : MonoBehaviour
                             break;
                     }
                     j = k;
-                    //DebugLogger.Log(list[i] +"/"+ name);
+                    //Debug.Log(list[i] +"/"+ name);
                 }
 
                 while (list[i][j] == '<')
@@ -1198,7 +1198,7 @@ public class MainControl : MonoBehaviour
     /// </summary>
     private string ChangeItemDataSwitch(string text, string texters, bool isData, string name, List<string> ex)
     {
-        //DebugLogger.Log(text + "/" + texters + "/" + isData);
+        //Debug.Log(text + "/" + texters + "/" + isData);
         switch (texters)
         {
             case "<playerName>":
@@ -1514,8 +1514,8 @@ public class MainControl : MonoBehaviour
         {
             if (text.Length > 1 && (text[0] == 'O' || text[0] == 'o') && text[1] == '+')
             {
-                //DebugLogger.LogWarning(text.Substring(2));
-                //DebugLogger.Log(RandomFloatChange(text.Substring(2), origin, isY, origin));
+                //Debug.LogWarning(text.Substring(2));
+                //Debug.Log(RandomFloatChange(text.Substring(2), origin, isY, origin));
                 return RandomFloatChange(text.Substring(2), origin, isY, origin);
             }
             else
@@ -2222,13 +2222,13 @@ public class MainControl : MonoBehaviour
     {
         if (startIndex < 0 || endIndex >= inputString.Length || startIndex > endIndex)
         {
-            DebugLogger.Log("无效的起始和结束位置", DebugLogger.Type.err);
+            Debug.Log("无效的起始和结束位置");
             return inputString;
         }
 
         string part1 = inputString.Substring(0, startIndex); // 从开头到A之前的部分
         string part2 = inputString.Substring(endIndex + 1); // 从B之后到字符串末尾的部分
-        DebugLogger.Log(inputString.Substring(startIndex + 1));
+        Debug.Log(inputString.Substring(startIndex + 1));
         string result = part1 + add + part2; // 合并两部分
         return result;
     }
@@ -2248,7 +2248,7 @@ public class MainControl : MonoBehaviour
         else
         {
             selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
-            DebugLogger.Log("Debug无敌模式已将您的血量恢复", DebugLogger.Type.nor, "#FF0000");
+            Debug.Log("Debug无敌模式已将您的血量恢复", "#FF0000");
         }
 
     }

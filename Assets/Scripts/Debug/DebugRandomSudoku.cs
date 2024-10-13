@@ -27,7 +27,7 @@ public class DebugRandomSudoku : MonoBehaviour
                 int j = Random.Range(0, sudokos.Count);
                 sudokos[j].change = true;
                 sudokos[j].Changed();
-                ///DebugLogger.Log(j + 1);
+                ///Debug.Log(j + 1);
             }
     }
 }

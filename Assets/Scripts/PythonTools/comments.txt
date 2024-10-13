@@ -21,7 +21,7 @@ Line 114: //Debug
 Line 172: //Reverse detection (head)
 Line 174: //------------------------Move------------------------
 Line 338: /////////////////////////////////////////////////////
-Line 411: /// ... ////DebugLogger.Log("Y:" + y);
+Line 411: /// ... ////Debug.Log("Y:" + y);
 Line 661: //Speed ​​reference: 3
 Line 676: //Blue heart touches the board to ensure that it can jump again
 Line 702: ///<summary>
@@ -80,9 +80,9 @@ Line 915: //Traverse all battle boxes
 Line 917: //Exclude different Z axes
 Line 925: //Calculate the scaled polygon vertices
 Line 927: //Traverse the moved vertices
-Line 929: //DebugLogger.Log(item, DebugLogger.Type.err); //Record log
+Line 929: //Debug.Log(item); //Record log
 Line 932: //If the point is inside the adjusted polygon
-Line 934: //DebugLogger.Log(point, DebugLogger.Type.war, "#FF00FF"); //Record log
+Line 934: //Debug.Log(point, "#FF00FF"); //Record log
 Line 935: //Return original coordinates
 Line 939: //If the point is not in the adjusted polygon
 Line 941: //Nearest point
@@ -100,7 +100,7 @@ Line 961: //Update the end point of the line segment
 Line 962: //Update the nearest distance
 Line 969: //If the nearest point is found
 Line 974: //Calculate the position of the point after displacement
-Line 975: //DebugLogger.Log(moved, DebugLogger.Type.war, "#FF0000"); //Log
+Line 975: //Debug.Log(moved, "#FF0000"); //Log
 Line 977: //If it is the first call or the point after moving is not equal to the origin
 Line 979: //Recursive call, increase the recursion depth
 Line 980: //If the point after moving does not pass the test
@@ -451,9 +451,9 @@ Line 16: [Header("How many pieces are divided horizontally and vertically (numbe
 Line 21: [Header("XY offset, if left-right symmetric, fill in a positive number like the reference")]
 Line 26: [Header("reference coordinates")]
 Line 48: //x
-Line 52: //DebugLogger.Log(length);
+Line 52: //Debug.Log(length);
 Line 64: //x
-Line 68: //DebugLogger.Log(length);
+Line 68: //Debug.Log(length);
 
 File: Debug\DebugPolygonScaler.cs
 Line 6: // Used to draw the original polygon
@@ -473,7 +473,7 @@ Line 65: // Closed polygon
 
 File: Debug\DebugRandomSudoku.cs
 Line 6: //æ≈π¨∏Ò≤‚ ‘
-Line 30: ///DebugLogger.Log(j + 1);
+Line 30: ///Debug.Log(j + 1);
 
 File: Debug\DebugSpTextSummon.cs
 Line 4: /// <summary>
@@ -494,13 +494,13 @@ Line 92: /// Please note when reversing
 Line 93: /// </summary>
 
 File: Debug\DebugVideoController.cs
-Line 23: //DebugLogger.Log("video play");
-Line 28: //DebugLogger.Log("video pause");
-Line 35: //DebugLogger.Log("video +");
-Line 36: //DebugLogger.Log("frame:" + videoPlayer.frame);
-Line 42: //DebugLogger.Log("video -");
-Line 43: //DebugLogger.Log("frame:" + videoPlayer.frame);
-Line 48: //DebugLogger.Log("video skip");
+Line 23: //Debug.Log("video play");
+Line 28: //Debug.Log("video pause");
+Line 35: //Debug.Log("video +");
+Line 36: //Debug.Log("frame:" + videoPlayer.frame);
+Line 42: //Debug.Log("video -");
+Line 43: //Debug.Log("frame:" + videoPlayer.frame);
+Line 48: //Debug.Log("video skip");
 
 File: Default\AudioController.cs
 Line 6: /// <summary>
@@ -865,11 +865,11 @@ Line 1130: /// <summary>
 Line 1131: /// Convert special characters
 Line 1132: /// </summary>
 Line 1137: //Check if there are multiple special characters that need to be called in a loop
-Line 1155: //DebugLogger.Log(list[i] +"/"+ name);
+Line 1155: //Debug.Log(list[i] +"/"+ name);
 Line 1190: /// <summary>
 Line 1191: /// Switch statement for detecting '<''>' symbol in ChangeItemData
 Line 1192: /// </summary>
-Line 1195: //DebugLogger.Log(text + "/" + texters + "/" + isData);
+Line 1195: //Debug.Log(text + "/" + texters + "/" + isData);
 Line 1202: //Enter
 Line 1371: /// <summary>
 Line 1372: /// Detect uppercase letters in the input text and convert them to all lowercase.
@@ -888,8 +888,8 @@ Line 1460: ///
 Line 1461: /// Additional addition: P/p gets the player's position and determines whether it is X or Y through isY
 Line 1462: /// A certain degree of fixation is achieved through the form of xxx + xRx.
 Line 1463: /// </summary>
-Line 1511: //DebugLogger.LogWarning(text.Substring(2));
-Line 1512: //DebugLogger.Log(RandomFloatChange(text.Substring(2), origin, isY, origin));
+Line 1511: //Debug.LogWarning(text.Substring(2));
+Line 1512: //Debug.Log(RandomFloatChange(text.Substring(2), origin, isY, origin));
 Line 1522: /// <summary>
 Line 1523: /// Input a vector of the form (x,y)
 Line 1524: ///
@@ -1009,7 +1009,7 @@ Line 39: [Header("=Start the metronome during initialization")]
 Line 42: [Header("-MainControl settings-")]
 Line 44: [Header("Black field status related")]
 Line 51: [Header("Additional settings for battle scenes")]
-Line 99: //DebugLogger.LogWarning("<color=yellow>Detected that there is a MainControl in this scene</color>", gameObject);
+Line 99: //Debug.LogWarning("<color=yellow>Detected that there is a MainControl in this scene</color>", gameObject);
 Line 115: //Generate
 
 File: Default\MenuController.cs
@@ -1041,15 +1041,15 @@ File: Default\SaveController.cs
 Line 7: /// <summary>
 Line 8: /// Archive stored data
 Line 9: /// </summary>
-Line 16: //DebugLogger.Log("save");
-Line 19: //DebugLogger.Log("create");
+Line 16: //Debug.Log("save");
+Line 19: //Debug.Log("create");
 Line 23: // Convert data
 Line 29: // Read user data into memory
-Line 32: //DebugLogger.Log("load");
+Line 32: //Debug.Log("load");
 Line 36: // Check if the user profile exists
 Line 40: // Use CreateInstance method
 Line 41: // Use PopulateObject method to fill data
-Line 55: //DebugLogger.Log("Who knows about this, my friends" + Application.dataPath + "/Data");
+Line 55: //Debug.Log("Who knows about this, my friends" + Application.dataPath + "/Data");
 Line 73: // Check if the archive exists
 Line 76: // Remove archive data from memory
 Line 82: // Delete file
@@ -1129,9 +1129,9 @@ Line 6: /// Manage OW backpack system
 Line 7: /// </summary>
 Line 132: // Disable
 Line 136: // Enable
-Line 244: //DebugLogger.LogWarning(talkUI.transform.localPosition.z);
+Line 244: //Debug.LogWarning(talkUI.transform.localPosition.z);
 Line 282: // Border adaptation
-Line 400: //DebugLogger.Log(talkUI.transform.localPosition.z);
+Line 400: //Debug.Log(talkUI.transform.localPosition.z);
 
 File: Overworld\CameraFollowPlayer.cs
 Line 3: /// <summary>
@@ -1183,7 +1183,7 @@ Line 26: //public LayerMask mask;
 Line 32: //0.1 seconds, to prevent investigation OW conflict
 Line 34: //If necessary, put it on. This is because some projects have echo effects
 Line 50: //mask = 1 << 6;
-Line 161: //DebugLogger.Log(obj.transform.tag);
+Line 161: //Debug.Log(obj.transform.tag);
 Line 179: //Animator reference
 Line 247: //if (MainControl.instance.KeyArrowToControl(KeyyCode.UpArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1)) Line 248: //moveDirectionX = 0; Line 255: //&& !(MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1) | | MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1))) File: Overworld\SpriteChanger.cs Line 5: /// <summary> Line 6: /// Changing Sprite in Overworld dialog Line 7: /// </ summary> File: Overworld\TalkUIPositionChanger.cs Line 6: /// <summary> Line 7: /// Modify the position of the dialog box in Overworld Line 8: /// </summary> Line 22: //gameObject.SetActive(false);
 

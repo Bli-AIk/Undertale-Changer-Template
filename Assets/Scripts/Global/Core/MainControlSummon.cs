@@ -96,7 +96,7 @@ public class MainControlSummon : MonoBehaviour
         GameObject gameObjectM = GameObject.Find("MainControl");
         if (gameObjectM != null && gameObjectM.TryGetComponent(out mainControl))
         {
-            //DebugLogger.LogWarning("<color=yellow>检测到本场景内有MainControl</color>", gameObject);
+            //Debug.LogWarning("<color=yellow>检测到本场景内有MainControl</color>", gameObject);
 
             mainControl.sceneState = sceneState;
             mainControl.haveInOutBlack = haveInOutBlack;

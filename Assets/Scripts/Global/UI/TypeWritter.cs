@@ -391,7 +391,7 @@ public class TypeWritter : MonoBehaviour
                 if (tmp_Text.font != MainControl.instance.OverworldControl.tmpFonts[useFont])
                     tmp_Text.font = MainControl.instance.OverworldControl.tmpFonts[useFont];
             }
-            else DebugLogger.Log("缺失tmp_Text", DebugLogger.Type.war, "#FFFF00");
+            else Debug.Log("缺失tmp_Text", "#FFFF00");
 
             if (!passText)
             {

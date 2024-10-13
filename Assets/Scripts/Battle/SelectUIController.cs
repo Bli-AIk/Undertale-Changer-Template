@@ -435,7 +435,7 @@ public class SelectUIController : MonoBehaviour
 
                                         case 2:
 
-                                            DebugLogger.Log(1);
+                                            Debug.Log(1);
                                             AudioController.instance.GetFx(3, MainControl.instance.AudioControl.fxClipBattle);
 
                                             break;

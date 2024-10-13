@@ -173,7 +173,7 @@ public class OverworldObjTrigger : MonoBehaviour
             MethodInfo methodInfo = typeof(OverworldObjTrigger).GetMethod(item);
             if (methodInfo == null)
             {
-                DebugLogger.Log(item + "检测失败", gameObject, DebugLogger.Type.err);
+                Debug.Log(item + "检测失败", gameObject);
             }
             else
             {

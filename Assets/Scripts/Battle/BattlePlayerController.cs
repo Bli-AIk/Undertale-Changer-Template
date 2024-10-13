@@ -618,8 +618,8 @@ public class BattlePlayerController : MonoBehaviour
             isMoving = !(x || y);
 
             /*
-            ////DebugLogger.Log("X:" + x);
-            ////DebugLogger.Log("Y:" + y);
+            ////Debug.Log("X:" + x);
+            ////Debug.Log("Y:" + y);
             */
         }
         else
@@ -926,12 +926,12 @@ public class BattlePlayerController : MonoBehaviour
             /*
             foreach (var item in movedVertices) //遍历移动后的顶点
             {
-                //DebugLogger.Log(item, DebugLogger.Type.err); //记录日志
+                //Debug.Log(item); //记录日志
             }
             */
             if (IsPointInPolygon(point, movedVertices)) //如果点 在 调整后的多边形内
             {
-                //DebugLogger.Log(point, DebugLogger.Type.war, "#FF00FF"); //记录日志
+                //Debug.Log(point, "#FF00FF"); //记录日志
                 return point; //返回原始坐标
             }
 
@@ -972,7 +972,7 @@ public class BattlePlayerController : MonoBehaviour
                 displacement -= test2;
 
             Vector3 moved = (Vector3)CalculateDisplacedPoint(nearestPoint, point, lineStart, lineEnd, -displacement) + new Vector3(0, 0, z); //计算位移后的点位置
-            //DebugLogger.Log(moved, DebugLogger.Type.war, "#FF0000"); //记录日志
+            //Debug.Log(moved, "#FF0000"); //记录日志
 
             if (isInitialCall || (Vector2)moved != originalPoint) //如果是初次调用或移动后的点不等于原点
             {

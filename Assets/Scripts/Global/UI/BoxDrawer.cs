@@ -390,7 +390,7 @@ public class BoxDrawer : MonoBehaviour
         // 检查控制点的数量，至少需要4个控制点才能形成一个立方贝塞尔曲线
         if (controlPoints.Count < 4)
         {
-            DebugLogger.Log("至少需要4个控制点才能形成立方贝塞尔曲线。", DebugLogger.Type.err); // 在控制台显示错误消息
+            Debug.Log("至少需要4个控制点才能形成立方贝塞尔曲线。"); // 在控制台显示错误消息
             return bezierPoints; // 返回空的贝塞尔点列表
         }
 
@@ -594,7 +594,7 @@ public class SceneExtEditor : Editor
             int sides = 3;
             if (example.regularEdge >= 3)
                 sides = example.regularEdge;
-            else DebugLogger.Log("regularEdge should > 3", DebugLogger.Type.err, "#FF0000");
+            else Debug.Log("regularEdge should > 3", "#FF0000");
             float radius = 3;
             for (int i = sides - 1; i >= 0; i--)
             {

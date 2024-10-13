@@ -44,7 +44,7 @@ public class ChromaticAberrationPass : ScriptableRenderPass
         renderPassEvent = passEvent;
         if (ChromaticAberrationShader == null)
         {
-            DebugLogger.Log("Shader²»´æÔÚ", DebugLogger.Type.err);
+            Debug.Log("Shader不存在");
             return;
         }
         mat = CoreUtils.CreateEngineMaterial(ChromaticAberrationShader);
