@@ -65,7 +65,7 @@ public class TextureFinder : MonoBehaviour
 
         foreach (KeyValuePair<Texture, List<(GameObject obj, string usageType)>> entry in textureUsageMap)
         {
-            Debug.Log($"该场景内使用了<b> {entry.Value[0].usageType}</b>: <b>{entry.Key.name}</b>", entry.Key, "#FFFF00");
+            Debug.LogWarning($"该场景内使用了<b> {entry.Value[0].usageType}</b>: <b>{entry.Key.name}</b>", entry.Key);
             foreach (var (obj, usageType) in entry.Value)
             {
                 Debug.Log($"  - 使用该 <b>{usageType}</b> 的对象: <b>{obj.name}</b>)", obj);

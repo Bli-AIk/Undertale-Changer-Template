@@ -20,7 +20,7 @@ public static class Debug
 #endif
     }
 
-    public static void LogWarning(object content, string color = "#FFFFFF")
+    public static void LogWarning(object content, string color = "#FFFF00")
     {
 #if UNITY_EDITOR
         string text = ("<color=" + color + ">" + content + "</color>");
@@ -28,7 +28,7 @@ public static class Debug
 #endif
     }
 
-    public static void LogWarning(object content, Object context, string color = "#FFFFFF")
+    public static void LogWarning(object content, Object context, string color = "#FFFF00")
     {
 #if UNITY_EDITOR
         string text = ("<color=" + color + ">" + content + "</color>");
@@ -36,7 +36,7 @@ public static class Debug
 #endif
     }
 
-    public static void LogError(object content, string color = "#FFFFFF")
+    public static void LogError(object content, string color = "#FF0000")
     {
 #if UNITY_EDITOR
         string text = ("<color=" + color + ">" + content + "</color>");
@@ -44,7 +44,7 @@ public static class Debug
 #endif
     }
 
-    public static void LogError(object content, Object context, string color = "#FFFFFF")
+    public static void LogError(object content, Object context, string color = "#FF0000")
     {
 #if UNITY_EDITOR
         string text = ("<color=" + color + ">" + content + "</color>");
