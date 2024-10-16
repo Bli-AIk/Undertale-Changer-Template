@@ -822,7 +822,7 @@ public class MainControl : MonoBehaviour
     /// <summary>
     /// 淡出 输入跳转场景名称
     /// banMusic是渐出
-    /// time>0有动画 =0就直接切场景 <0时会以time的绝对值
+    /// time大于0有动画 等于0就直接切场景 小于0时会以time的绝对值
     /// </summary>
     public void OutBlack(string scene, Color color, bool banMusic = false, float time = 0.5f, bool Async = true)
     {
