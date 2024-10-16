@@ -20,7 +20,7 @@ public class MainControl : MonoBehaviour
     public int languagePack;
     public int dataNumber;
 
-    public readonly int languagePackInsideNumber = 3;//内置语言包总数
+    public readonly int LanguagePackInsideNumber = 3;//内置语言包总数
 
     public bool blacking = false;
 
@@ -129,20 +129,20 @@ public class MainControl : MonoBehaviour
     /// </summary>
     private string LoadLanguageData(string path)
     {
-        if (languagePack < languagePackInsideNumber)
+        if (languagePack < LanguagePackInsideNumber)
         {
             return Resources.Load<TextAsset>($"TextAssets/LanguagePacks/{GetLanguageInsideId(languagePack)}/{path}").text;
         }
         else
         {
-            return File.ReadAllText($"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[languagePack - languagePackInsideNumber]}\\{path}.txt");
+            return File.ReadAllText($"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[languagePack - LanguagePackInsideNumber]}\\{path}.txt");
         }
     }
 
     private void LanguagePackDetection()
     {
         if ((languagePack < 0)
-            || (languagePack >= Directory.GetDirectories(Application.dataPath + "\\LanguagePacks").Length + languagePackInsideNumber))
+            || (languagePack >= Directory.GetDirectories(Application.dataPath + "\\LanguagePacks").Length + LanguagePackInsideNumber))
         {
             languagePack = 2;
         }
@@ -255,7 +255,7 @@ public class MainControl : MonoBehaviour
 
         string[] turnSave;
         TextAsset[] textAssets;
-        if (languagePack < languagePackInsideNumber)
+        if (languagePack < LanguagePackInsideNumber)
         {
             textAssets = Resources.LoadAll<TextAsset>($"TextAssets/LanguagePacks/{GetLanguageInsideId(languagePack)}/Battle/Turn");
 
@@ -266,13 +266,13 @@ public class MainControl : MonoBehaviour
             }
         }
         else
-            turnSave = Directory.GetFiles($"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[languagePack - languagePackInsideNumber]}\\Battle\\Turn");
+            turnSave = Directory.GetFiles($"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[languagePack - LanguagePackInsideNumber]}\\Battle\\Turn");
 
         for (int i = 0; i < turnSave.Length; i++)
         {
             string file = turnSave[i];
 
-            if (languagePack < languagePackInsideNumber)
+            if (languagePack < LanguagePackInsideNumber)
                 BattleControl.turnDialogAsset.Add(file);
             else if (turnSave[i].Substring(turnSave[i].Length - 3) == "txt")
                 BattleControl.turnDialogAsset.Add(File.ReadAllText(file));
@@ -1978,7 +1978,7 @@ public class MainControl : MonoBehaviour
     /// 通过物品数据名称搞到它的id.
     /// type：Foods Arms Armors Others
     /// </summary>
-    public int ItemNameGetId(string name, string type)
+    public int ItemNameGetId(string itemName, string type)
     {
         int id = 0, listInt = 0;
         List<string> list;
@@ -2001,7 +2001,7 @@ public class MainControl : MonoBehaviour
                 id += 20000;
                 break;
 
-            case "Oters":
+            case "Others":
                 list = ItemControl.itemOthers;
                 listInt = 3;
                 id += 30000;
@@ -2014,7 +2014,7 @@ public class MainControl : MonoBehaviour
         {
             for (int i = 0; i < list.Count / listInt; i++)
             {
-                if (list[i * listInt] == name)
+                if (list[i * listInt] == itemName)
                 {
                     id += i + 1;
                     break;

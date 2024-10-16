@@ -1,6 +1,6 @@
 using UnityEngine;
 /// <summary>
-/// ·â×°DebugÀà
+/// Debugæ§åˆ¶å™¨
 /// </summary>
 public static class Debug
 {
