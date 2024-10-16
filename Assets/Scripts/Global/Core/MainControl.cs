@@ -14,6 +14,7 @@ using UnityEngine.UI;
 /// 调用所有ScriptableObject 并负责对数据和语言包的导入
 /// 还包括大部分常用的函数
 /// </summary>
+
 public class MainControl : MonoBehaviour
 {
     public static MainControl instance;
