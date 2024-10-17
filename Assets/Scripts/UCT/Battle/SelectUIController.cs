@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using TMPro;
 using UCT.Global.Audio;
@@ -16,6 +17,12 @@ namespace UCT.Battle
     /// </summary>
     public class SelectUIController : MonoBehaviour
     {
+        private static readonly int IsFlashing = Shader.PropertyToID("_IsFlashing");
+        private static readonly int ColorFlash = Shader.PropertyToID("_ColorFlash");
+        private static readonly int ColorOn = Shader.PropertyToID("_ColorOn");
+        private static readonly int ColorUnder = Shader.PropertyToID("_ColorUnder");
+        private static readonly int Crop = Shader.PropertyToID("_Crop");
+        private static readonly int Flash = Shader.PropertyToID("_Flash");
         private TextMeshPro _nameUI, _hpUI, _textUI, _textUIBack;
         private SpriteRenderer _hpSpr;
 
@@ -86,9 +93,9 @@ namespace UCT.Battle
                 "ACT",
                 "ITEM",
                 "MERCY"};
-            for (int i = 0; i < loadButton.Length; i++)
+            foreach (var t in loadButton)
             {
-                buttons.Add(transform.Find(loadButton[i]).GetComponent<SpriteRenderer>());
+                buttons.Add(transform.Find(t).GetComponent<SpriteRenderer>());
             }
 
             for (int i = 0; i < MainControl.Instance.BattleControl.enemies.Count; i++)
@@ -243,9 +250,9 @@ namespace UCT.Battle
                             _textUI.text = "";
                         }
                         if (selectUI != 3)
-                            for (int i = 0; i < MainControl.Instance.BattleControl.enemies.Count; i++)
+                            foreach (var t in MainControl.Instance.BattleControl.enemies)
                             {
-                                _textUI.text += "<color=#00000000>aa*</color>* " + MainControl.Instance.BattleControl.enemies[i].name + "\n";
+                                _textUI.text += "<color=#00000000>aa*</color>* " + t.name + "\n";
                             }
                         else
                         {
@@ -253,8 +260,8 @@ namespace UCT.Battle
 
                             _textUIBack.rectTransform.anchoredPosition = new Vector2(-5, -3.3f);
                             _textUIBack.alignment = TextAlignmentOptions.TopRight;
-                            _hpSpr.material.SetFloat("_IsFlashing", 1);
-                            _hpSpr.material.SetColor("_ColorFlash", hpColorOn);
+                            _hpSpr.material.SetFloat(IsFlashing, 1);
+                            _hpSpr.material.SetColor(ColorFlash, hpColorOn);
 
                             _hpFood = MainControl.Instance.PlayerControl.hp;
 
@@ -265,7 +272,7 @@ namespace UCT.Battle
                     }
 
                     //if (hpFood != MainControl.instance.PlayerControl.hp)
-                    _hpUI.text = UihpVoid(_hpFood) + " / " + UihpVoid(MainControl.Instance.PlayerControl.hpMax);
+                    _hpUI.text = FormatWithLeadingZero(_hpFood) + " / " + FormatWithLeadingZero(MainControl.Instance.PlayerControl.hpMax);
                     break;
 
                 case 1:
@@ -422,9 +429,9 @@ namespace UCT.Battle
                                 selectGrandSon = 1;
                                 _textUI.text = "";
                                 _textUIBack.text = "";
-                                for (int i = 0; i < MainControl.Instance.BattleControl.enemies.Count; i++)
+                                foreach (var t in MainControl.Instance.BattleControl.enemies)
                                 {
-                                    _textUI.text += "<color=#00000000>aa*</color>* " + MainControl.Instance.BattleControl.enemies[i].name + "\n";
+                                    _textUI.text += "<color=#00000000>aa*</color>* " + t.name + "\n";
                                 }
                             }
                             else if (MainControl.Instance.KeyArrowToControl(KeyCode.Z))
@@ -628,7 +635,7 @@ namespace UCT.Battle
                                     UITextUpdate(UITextMode.Food);
                             }
 
-                            _hpUI.text = UihpVoid(_hpFood) + " / " + UihpVoid(MainControl.Instance.PlayerControl.hpMax);
+                            _hpUI.text = FormatWithLeadingZero(_hpFood) + " / " + FormatWithLeadingZero(MainControl.Instance.PlayerControl.hpMax);
                             break;
 
                         case 4:
@@ -638,9 +645,9 @@ namespace UCT.Battle
                                 selectLayer = 1;
                                 selectGrandSon = 1;
                                 _textUI.text = "";
-                                for (int i = 0; i < MainControl.Instance.BattleControl.enemies.Count; i++)
+                                foreach (var t in MainControl.Instance.BattleControl.enemies)
                                 {
-                                    _textUI.text += "<color=#00000000>aa*</color>* " + MainControl.Instance.BattleControl.enemies[i].name + "\n";
+                                    _textUI.text += "<color=#00000000>aa*</color>* " + t.name + "\n";
                                 }
                             }
                             else if (MainControl.Instance.KeyArrowToControl(KeyCode.Z))
@@ -727,15 +734,12 @@ namespace UCT.Battle
 
         private void KeepDialogBubble()
         {
-            List<string> save = new List<string>();
+            var save = new List<string>();
             MainControl.Instance.MaxToOneSon(actSave[numberDialog], save);
-            for (int i = 0; i < enemiesControllers.Count; i++)
+            foreach (var t in enemiesControllers.Where(t => save[2] == t.name))
             {
-                if (save[2] == enemiesControllers[i].name)
-                {
-                    _dialog.transform.SetParent(enemiesControllers[i].transform);
-                    break;
-                }
+                _dialog.transform.SetParent(t.transform);
+                break;
             }
 
             _dialog.size = MainControl.Instance.StringVector2ToRealVector2(save[0], _dialog.size);
@@ -753,7 +757,7 @@ namespace UCT.Battle
         {
             if (TurnController.Instance.turn != _saveTurn || _saveTurnText == "")
             {
-                List<string> load = new List<string>();
+                List<string> load;
                 _saveTurn = TurnController.Instance.turn;
                 if (isDiy)
                 {
@@ -770,15 +774,10 @@ namespace UCT.Battle
             Type(_saveTurnText);
         }
 
-        private List<string> TurnTextLoad(List<string> turnTextSave, int turn)
+        private static List<string> TurnTextLoad(List<string> turnTextSave, int turn)
         {
-            List<string> turnTextSaveChanged = new List<string>();
-            for (int i = 0; i < turnTextSave.Count; i++)
-            {
-                if (turnTextSave[i].Substring(0, turn.ToString().Length) == turn.ToString())
-                    turnTextSaveChanged.Add(turnTextSave[i].Substring(turn.ToString().Length + 1));
-            }
-            List<string> saves = new List<string>();
+            var turnTextSaveChanged = (from t in turnTextSave where t[..turn.ToString().Length] == turn.ToString() select t[(turn.ToString().Length + 1)..]).ToList();
+            var saves = new List<string>();
             MainControl.MaxToOneSon(turnTextSaveChanged, saves);
             return saves;
         }
@@ -799,24 +798,24 @@ namespace UCT.Battle
         public void UITextUpdate(UITextMode uiTextMode = 0, int foodNumber = 0)
         {
             _hpSpr.transform.localScale = new Vector3(0.525f * MainControl.Instance.PlayerControl.hpMax, 8.5f);
-            _hpSpr.material.SetColor("_ColorUnder", hpColorUnder);
-            _hpSpr.material.SetColor("_ColorOn", hpColorOn);
+            _hpSpr.material.SetColor(ColorUnder, hpColorUnder);
+            _hpSpr.material.SetColor(ColorOn, hpColorOn);
 
             switch (uiTextMode)
             {
                 case UITextMode.None:
                     goto default;
                 default:
-                    _hpSpr.material.SetFloat("_Crop", (float)MainControl.Instance.PlayerControl.hp / MainControl.Instance.PlayerControl.hpMax);
-                    _hpSpr.material.SetFloat("_Flash", (float)MainControl.Instance.PlayerControl.hp / MainControl.Instance.PlayerControl.hpMax);
+                    _hpSpr.material.SetFloat(Crop, (float)MainControl.Instance.PlayerControl.hp / MainControl.Instance.PlayerControl.hpMax);
+                    _hpSpr.material.SetFloat(Flash, (float)MainControl.Instance.PlayerControl.hp / MainControl.Instance.PlayerControl.hpMax);
                     break;
 
                 case UITextMode.Hit:
                     _hpSpr.material.DOKill();
 
-                    _hpSpr.material.SetFloat("_IsFlashing", 0);
-                    _hpSpr.material.SetColor("_ColorFlash", hpColorHit);
-                    _hpSpr.material.SetFloat("_Crop", (float)MainControl.Instance.PlayerControl.hp / MainControl.Instance.PlayerControl.hpMax);
+                    _hpSpr.material.SetFloat(IsFlashing, 0);
+                    _hpSpr.material.SetColor(ColorFlash, hpColorHit);
+                    _hpSpr.material.SetFloat(Crop, (float)MainControl.Instance.PlayerControl.hp / MainControl.Instance.PlayerControl.hpMax);
                     _hpSpr.material.DOFloat((float)MainControl.Instance.PlayerControl.hp / MainControl.Instance.PlayerControl.hpMax, "_Flash", 0.5f).SetEase(Ease.OutCirc);
 
                     break;
@@ -824,8 +823,8 @@ namespace UCT.Battle
                 case UITextMode.Food:
                     _hpSpr.material.DOKill();
 
-                    _hpSpr.material.SetFloat("_IsFlashing", 1);
-                    _hpSpr.material.SetFloat("_Crop", (float)MainControl.Instance.PlayerControl.hp / MainControl.Instance.PlayerControl.hpMax);
+                    _hpSpr.material.SetFloat(IsFlashing, 1);
+                    _hpSpr.material.SetFloat(Crop, (float)MainControl.Instance.PlayerControl.hp / MainControl.Instance.PlayerControl.hpMax);
                     float addNumber = MainControl.Instance.PlayerControl.hp + foodNumber;
                     if (addNumber > MainControl.Instance.PlayerControl.hpMax)
                         addNumber = MainControl.Instance.PlayerControl.hpMax;
@@ -837,7 +836,7 @@ namespace UCT.Battle
             _nameUI.text = MainControl.Instance.PlayerControl.playerName + " lv<size=3><color=#00000000>0</size></color>" + MainControl.Instance.PlayerControl.lv;
 
             if (uiTextMode != UITextMode.Food)
-                _hpUI.text = UihpVoid(MainControl.Instance.PlayerControl.hp) + " / " + UihpVoid(MainControl.Instance.PlayerControl.hpMax);
+                _hpUI.text = FormatWithLeadingZero(MainControl.Instance.PlayerControl.hp) + " / " + FormatWithLeadingZero(MainControl.Instance.PlayerControl.hpMax);
             else
             {
                 _hpFoodTween.Kill();
@@ -849,13 +848,11 @@ namespace UCT.Battle
         }
 
         /// <summary>
-        /// 解决hpUI把01显示成1的问题)
+        /// 将数字格式化为两位数（前导零）显示，例如将 1 显示为 01。
         /// </summary>
-        private string UihpVoid(int i)
+        private string FormatWithLeadingZero(int i)
         {
-            if (0 <= i && i < 10)
-                return "0" + i;
-            return i.ToString();
+            return i.ToString("D2");
         }
     }
 }

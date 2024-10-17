@@ -118,14 +118,7 @@ namespace UCT.Overworld
             if (sonUse != 4)
             {
                 _uiItems.gameObject.SetActive(sonSelect != 0);
-                if (sonSelect != 0)
-                {
-                    _backpackUIRight.transform.localPosition = new Vector3(_backpackUIRight.transform.localPosition.x, _backpackUIRight.transform.localPosition.y, 5);
-                }
-                else
-                {
-                    _backpackUIRight.transform.localPosition = new Vector3(_backpackUIRight.transform.localPosition.x, _backpackUIRight.transform.localPosition.y, -50);
-                }
+                _backpackUIRight.transform.localPosition = sonSelect != 0 ? new Vector3(_backpackUIRight.transform.localPosition.x, _backpackUIRight.transform.localPosition.y, 5) : new Vector3(_backpackUIRight.transform.localPosition.x, _backpackUIRight.transform.localPosition.y, -50);
             }
             else
             {
@@ -191,14 +184,10 @@ namespace UCT.Overworld
                             {
                                 sonSelect = 1;
                                 _uiItems.text = "";
-                                /*
-                            BackpackUIRightPoint2.transform.localPosition = new Vector3(BackpackUIRightPoint2.transform.localPosition.x, -8.55f);
-                            BackpackUIRightPoint3.transform.localPosition = new Vector3(BackpackUIRightPoint3.transform.localPosition.x, -8.55f);
-                            */
-                                for (int i = 0; i < MainControl.Instance.PlayerControl.myItems.Count; i++)
+                                foreach (var t in MainControl.Instance.PlayerControl.myItems)
                                 {
-                                    if (MainControl.Instance.PlayerControl.myItems[i] != 0)
-                                        _uiItems.text += $" {MainControl.Instance.ItemIdGetName(MainControl.Instance.PlayerControl.myItems[i], "Auto", 0)}\n";
+                                    if (t != 0)
+                                        _uiItems.text += $" {MainControl.Instance.ItemIdGetName(t, "Auto", 0)}\n";
                                     else _uiItems.text += "\n";
                                 }
 
@@ -209,12 +198,13 @@ namespace UCT.Overworld
                             }
                             else
                             {
-                                int plusText;
-                                if (MainControl.Instance.PlayerControl.myItems[sonSelect - 1] >= 20000)
-                                    plusText = -20000 + MainControl.Instance.ItemControl.itemFoods.Count / 3 + MainControl.Instance.ItemControl.itemArms.Count / 2;
-                                else if (MainControl.Instance.PlayerControl.myItems[sonSelect - 1] >= 10000)
-                                    plusText = -10000 + MainControl.Instance.ItemControl.itemFoods.Count / 3;
-                                else plusText = 0;
+                                var plusText = MainControl.Instance.PlayerControl.myItems[sonSelect - 1] switch
+                                {
+                                    >= 20000 => -20000 + MainControl.Instance.ItemControl.itemFoods.Count / 3 +
+                                                MainControl.Instance.ItemControl.itemArms.Count / 2,
+                                    >= 10000 => -10000 + MainControl.Instance.ItemControl.itemFoods.Count / 3,
+                                    _ => 0
+                                };
 
                                 switch (sonUse)
                                 {
@@ -294,7 +284,7 @@ namespace UCT.Overworld
                 {
                     if (select == 2 || (select == 1 && sonUse == 0))
                         sonSelect = 0;
-                    else if (sonUse != 0)
+                    else
                         sonUse = 0;
                 }
 
@@ -339,7 +329,7 @@ namespace UCT.Overworld
 
                 if (sonUse != 0)
                 {
-                    if (MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow) && sonUse > 1 && sonUse < 4)
+                    if (MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow) && sonUse is > 1 and < 4)
                     {
                         sonUse -= 1;
 
@@ -366,7 +356,7 @@ namespace UCT.Overworld
                             _heart.transform.position = Vector2.one * 10000;
                         else if (select == 1)
                         {
-                            if (sonSelect < 9 && sonSelect > 0)
+                            if (sonSelect is < 9 and > 0)
                             {
                                 _heart.rectTransform.anchoredPosition = new Vector2(-103, 143 - (sonSelect - 1) * 31);
                             }
