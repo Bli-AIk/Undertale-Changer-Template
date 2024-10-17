@@ -89,7 +89,7 @@ public class BulletControlEditor : Editor
     {
         private Color lineColor = Color.green;
 
-        // ´æ´¢Ã¿¸öBox ColliderµÄ´óÐ¡ºÍÆ«ÒÆµÄÁÐ±í
+        // ï¿½æ´¢Ã¿ï¿½ï¿½Box Colliderï¿½Ä´ï¿½Ð¡ï¿½ï¿½Æ«ï¿½Æµï¿½ï¿½Ð±ï¿½
         public List<Vector2> triggerSize = new List<Vector2>();
         public List<Vector2> triggerOffset = new List<Vector2>();
 
@@ -99,7 +99,7 @@ public class BulletControlEditor : Editor
         {
             var rect = contentRect;
 
-            // ±éÀúÃ¿¸öBox Collider
+            // ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½Box Collider
             for (int i = 0; i < triggerSize.Count; i++)
             {
                 Vector2 size = triggerSize[i];
@@ -108,15 +108,15 @@ public class BulletControlEditor : Editor
                 if (triggerFollowMode == FollowMode.CutFollow)
                     size = Vector2.one - triggerSize[i];
 
-                // È·¶¨Ã¿¸öBox ColliderµÄÖÐÐÄµã
+                // È·ï¿½ï¿½Ã¿ï¿½ï¿½Box Colliderï¿½ï¿½ï¿½ï¿½ï¿½Äµï¿½
                 float centerX = offset.x * rect.width + rect.width / 2;
                 float centerY = (offset.y - 1) * rect.height + rect.height / 2;
 
-                // ¼ÆËãÃ¿¸öBox ColliderµÄ°ë¿í¶ÈºÍ°ë¸ß¶È
+                // ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½Box Colliderï¿½Ä°ï¿½ï¿½ï¿½ÈºÍ°ï¿½ß¶ï¿½
                 float halfWidth = size.x * rect.width / 2;
                 float halfHeight = size.y * rect.height / 2;
 
-                // ¼ÆËãÃ¿¸öBox ColliderµÄ±ß½ç
+                // ï¿½ï¿½ï¿½ï¿½Ã¿ï¿½ï¿½Box Colliderï¿½Ä±ß½ï¿½
                 float xStart = centerX - halfWidth;
                 float yStart = -centerY + halfHeight;
                 float xEnd = centerX + halfWidth;
@@ -124,14 +124,14 @@ public class BulletControlEditor : Editor
 
                 Handles.color = lineColor;
 
-                // »æÖÆ¾ØÐÎµÄËÄÌõ±ß
-                // ÏÂ±ß
+                // ï¿½ï¿½ï¿½Æ¾ï¿½ï¿½Îµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+                // ï¿½Â±ï¿½
                 Handles.DrawLine(new Vector3(xStart, yStart), new Vector3(xEnd, yStart));
-                // ÉÏ±ß
+                // ï¿½Ï±ï¿½
                 Handles.DrawLine(new Vector3(xStart, yEnd), new Vector3(xEnd, yEnd));
-                // ×ó±ß
+                // ï¿½ï¿½ï¿½
                 Handles.DrawLine(new Vector3(xStart, yStart), new Vector3(xStart, yEnd));
-                // ÓÒ±ß
+                // ï¿½Ò±ï¿½
                 Handles.DrawLine(new Vector3(xEnd, yStart), new Vector3(xEnd, yEnd));
             }
         }

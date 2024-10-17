@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// µ¯Ä»ÎÄ¼þ
+/// ï¿½ï¿½Ä»ï¿½Ä¼ï¿½
 /// </summary>
 [CreateAssetMenu(fileName = "TimelineNodeControl", menuName = "UCT-Other/TimelineNodeControl")]
 public class TimelineNodeControl : ScriptableObject
 {
-    [Header("½Úµã¿ªÊ¼Ê±¼ä")]
+    [Header("ï¿½Úµã¿ªÊ¼Ê±ï¿½ï¿½")]
     public float startTime;
-    [Header("½Úµã½áÊøÊ±¼ä")]
+    [Header("ï¿½Úµï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½")]
     public float endTime;
 
 

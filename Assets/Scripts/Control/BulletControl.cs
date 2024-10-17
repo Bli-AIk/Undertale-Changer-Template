@@ -5,48 +5,48 @@ using static BattleControl;
 using static BulletController;
 
 /// <summary>
-/// µ¯Ä»ÎÄ¼þ
+/// ï¿½ï¿½Ä»ï¿½Ä¼ï¿½
 /// </summary>
 [CreateAssetMenu(fileName = "BulletControl", menuName = "UCT-BulletControl")]
 public class BulletControl : ScriptableObject
 {
-    [Header("µ¯Ä»µÄÖÖÀàÃû³Æ")]
+    [Header("ï¿½ï¿½Ä»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
     public string typeName;
 
-    [Header("µ¯Ä»Ä¬ÈÏµÄObjÃû³Æ")]
+    [Header("ï¿½ï¿½Ä»Ä¬ï¿½Ïµï¿½Objï¿½ï¿½ï¿½ï¿½")]
     public string objName;
 
-    [Header("Íæ¼ÒÎª100£¬Õ½¶·¿ò±ßÔµÎª50¡£¿É²Î¿¼")]
+    [Header("ï¿½ï¿½ï¿½Îª100ï¿½ï¿½Õ½ï¿½ï¿½ï¿½ï¿½ï¿½ÔµÎª50ï¿½ï¿½ï¿½É²Î¿ï¿½")]
     public int layer;
 
-    [Header("¾«Áé")]
+    [Header("ï¿½ï¿½ï¿½ï¿½")]
     public Sprite sprite;
 
-    [Header("ÅÐ¶¨Ïä´óÐ¡")]
+    [Header("ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½Ð¡")]
     public List<Vector2> triggerSize = new List<Vector2>() { new Vector2(1, 1) };
 
-    [Header("ÅÐ¶¨ÏäÉËº¦")]
+    [Header("ï¿½Ð¶ï¿½ï¿½ï¿½ï¿½Ëºï¿½")]
     public List<int> triggerHit = new List<int> { 1 };
 
-    [Header("ÅÐ¶¨ÏäÆ«ÒÆ")]
+    [Header("ï¿½Ð¶ï¿½ï¿½ï¿½Æ«ï¿½ï¿½")]
     public List<Vector2> triggerOffset = new List<Vector2>() { new Vector2() };
 
-    [Header("ÆðÊ¼Ïà¶Ô×ø±ê")]
+    [Header("ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
     public Vector3 startPosition = new Vector3();
 
-    [Header("ÆðÊ¼Ðý×ª½Ç¶È")]
+    [Header("ï¿½ï¿½Ê¼ï¿½ï¿½×ªï¿½Ç¶ï¿½")]
     public Vector3 startRotation = new Vector3();
 
-    [Header("ÆðÊ¼À­Éì")]
+    [Header("ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½")]
     public Vector3 startScale = new Vector3(1, 1, 1);
 
-    [Header("ÊôÐÔÑÕÉ«Êý¾Ý")]
+    [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É«ï¿½ï¿½ï¿½ï¿½")]
     public BulletColor bulletColor = BulletColor.white;
 
-    [Header("SpriteÕÚÕÖÄ£Ê½")]
+    [Header("Spriteï¿½ï¿½ï¿½ï¿½Ä£Ê½")]
     public SpriteMaskInteraction startMask = SpriteMaskInteraction.None;
 
-    [Header("Åö×²ÏäËõ·ÅÄ£Ê½")]
+    [Header("ï¿½ï¿½×²ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä£Ê½")]
     public FollowMode triggerFollowMode = FollowMode.NoFollow;
 
 

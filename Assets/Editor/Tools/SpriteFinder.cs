@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class TextureFinder : MonoBehaviour
 {
-    [MenuItem("Tools/UCT/²éÑ¯¸Ã³¡¾°ÄÚTextureÊ¹ÓÃÇé¿ö")]
+    [MenuItem("Tools/UCT/ï¿½ï¿½Ñ¯ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½TextureÊ¹ï¿½ï¿½ï¿½ï¿½ï¿½")]
     public static void FindAllTexturesInScene()
     {
         Dictionary<Texture, List<(GameObject obj, string usageType)>> textureUsageMap = new Dictionary<Texture, List<(GameObject, string)>>();
@@ -65,10 +65,10 @@ public class TextureFinder : MonoBehaviour
 
         foreach (KeyValuePair<Texture, List<(GameObject obj, string usageType)>> entry in textureUsageMap)
         {
-            Debug.LogWarning($"¸Ã³¡¾°ÄÚÊ¹ÓÃÁË<b> {entry.Value[0].usageType}</b>: <b>{entry.Key.name}</b>", entry.Key);
+            Debug.LogWarning($"ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½ï¿½ï¿½ï¿½<b> {entry.Value[0].usageType}</b>: <b>{entry.Key.name}</b>", entry.Key);
             foreach (var (obj, usageType) in entry.Value)
             {
-                Debug.Log($"  - Ê¹ÓÃ¸Ã <b>{usageType}</b> µÄ¶ÔÏó: <b>{obj.name}</b>)", obj);
+                Debug.Log($"  - Ê¹ï¿½Ã¸ï¿½ <b>{usageType}</b> ï¿½Ä¶ï¿½ï¿½ï¿½: <b>{obj.name}</b>)", obj);
             }
         }
     }

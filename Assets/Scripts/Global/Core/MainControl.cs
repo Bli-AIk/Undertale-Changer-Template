@@ -21,7 +21,7 @@ public class MainControl : MonoBehaviour
     public int languagePack;
     public int dataNumber;
 
-    public readonly int LanguagePackInsideNumber = 3;//内置语言包总数
+    public const int LanguagePackInsideNumber = 3; //内置语言包总数
 
     public bool blacking = false;
 

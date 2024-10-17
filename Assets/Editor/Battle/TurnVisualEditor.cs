@@ -6,7 +6,7 @@ using System.Linq;
 using System.Collections.Generic;
 
 /// <summary>
-/// ¿ÉÊÓ»¯»ØºÏ±à¼­Æ÷
+/// ï¿½ï¿½ï¿½Ó»ï¿½ï¿½ØºÏ±à¼­ï¿½ï¿½
 /// </summary>
 public class TurnVisualEditor : EditorWindow
 {
@@ -28,7 +28,7 @@ public class TurnVisualEditor : EditorWindow
 
 
 
-        // µ¯Ä»ÎÄ¼þµ¼Èë
+        // ï¿½ï¿½Ä»ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½
         VisualElement bulletsContainer = root.Q("Bullets");
 
         if (bulletsContainer == null)
@@ -58,7 +58,7 @@ public class TurnVisualEditor : EditorWindow
 
 
     /// <summary>
-    /// ´¦Àí°Ñµ¯Ä»×§µ½Ê±¼äÖáµÄÂß¼­
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½Ñµï¿½Ä»×§ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß¼ï¿½
     /// </summary>
     void DragBullets(VisualElement bulletRoot, BulletControl bulletControl)
     {
@@ -69,12 +69,12 @@ public class TurnVisualEditor : EditorWindow
         bulletText.text = bulletControl.typeName;
         bulletImage.style.backgroundImage = bulletControl.sprite.texture;
 
-        // Ìí¼ÓÊó±ê½øÈëÊÂ¼þ¼àÌýÆ÷
+        // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         bullet.RegisterCallback<MouseEnterEvent>(evt =>
         {
             bulletText.style.color = new Color(173 / 255f, 216 / 255f, 230 / 255f);
             bulletImage.style.unityBackgroundImageTintColor = new Color(173 / 255f, 216 / 255f, 230 / 255f);
-        });   // Ìí¼ÓÊó±ê½øÈëÊÂ¼þ¼àÌýÆ÷
+        });   // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         bullet.RegisterCallback<MouseLeaveEvent>(evt =>
         {
             bulletText.style.color = Color.white;
