@@ -4,6 +4,7 @@ using UnityEngine.UIElements;
 using UnityEditor.UIElements;
 using System.Linq;
 using System.Collections.Generic;
+using UCT.Control;
 
 /// <summary>
 /// ���ӻ��غϱ༭��
@@ -33,17 +34,17 @@ public class TurnVisualEditor : EditorWindow
 
         if (bulletsContainer == null)
         {
-            Debug.LogError("No element with name 'Bullets' found in the root.");
+            UCT.Global.Other.Debug.LogError("No element with name 'Bullets' found in the root.");
             return;
         }
 
 
         List<BulletControl> bullets = Resources.LoadAll<BulletControl>("Assets/Bullets/").ToList();
-        Debug.Log(bullets.Count);
+        UCT.Global.Other.Debug.Log(bullets.Count);
 
         foreach (var bullet in bullets)
         {
-            Debug.Log(bullet.name);
+            UCT.Global.Other.Debug.Log(bullet.name);
 
             VisualElement bulletRoot = new VisualElement();
 

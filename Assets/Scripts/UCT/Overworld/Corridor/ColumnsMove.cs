@@ -1,24 +1,27 @@
 using UnityEngine;
 
-/// <summary>
-/// 长廊柱子移动
-/// </summary>
-public class ColumnsMove : MonoBehaviour
+namespace UCT.Overworld.Corridor
 {
-    private CameraFollowPlayer parentCamera;
-    public float speed;//包括方向(正负)
-
-    private void Start()
+    /// <summary>
+    /// 长廊柱子移动
+    /// </summary>
+    public class ColumnsMove : MonoBehaviour
     {
-        parentCamera = transform.parent.GetComponent<CameraFollowPlayer>();
-        transform.localPosition = parentCamera.transform.position * speed;
-    }
+        private CameraFollowPlayer parentCamera;
+        public float speed;//包括方向(正负)
 
-    private void Update()
-    {
-        if (parentCamera.transform.position.x >= parentCamera.limitX.x || parentCamera.transform.position.x <= parentCamera.limitY.y)
+        private void Start()
         {
-            transform.position = parentCamera.followPosition * speed;
+            parentCamera = transform.parent.GetComponent<CameraFollowPlayer>();
+            transform.localPosition = parentCamera.transform.position * speed;
+        }
+
+        private void Update()
+        {
+            if (parentCamera.transform.position.x >= parentCamera.limitX.x || parentCamera.transform.position.x <= parentCamera.limitY.y)
+            {
+                transform.position = parentCamera.followPosition * speed;
+            }
         }
     }
 }

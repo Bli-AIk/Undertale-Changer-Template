@@ -1,37 +1,41 @@
+using UCT.Global.Core;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-public class CameraLightController : MonoBehaviour
+namespace UCT.Global.Other
 {
-    public float viewDistance = 10f; // 可视范围的半径
-
-    private Camera mainCamera;
-
-    private void Start()
+    public class CameraLightController : MonoBehaviour
     {
-        mainCamera = GetComponent<Camera>();
-        UpdateLightsVisibility();
-    }
+        public float viewDistance = 10f; // 可视范围的半径
 
-    private void Update()
-    {
-        UpdateLightsVisibility();
-    }
+        private Camera mainCamera;
 
-    private void UpdateLightsVisibility()
-    {
-        if (MainControl.instance.OverworldControl.noSFX)
-            return;
-
-        // 获取所有光源组件的引用
-        Light2D[] lights = FindObjectsOfType<Light2D>();
-
-        foreach (Light2D light in lights)
+        private void Start()
         {
-            if (light.lightType == Light2D.LightType.Global)
+            mainCamera = GetComponent<Camera>();
+            UpdateLightsVisibility();
+        }
+
+        private void Update()
+        {
+            UpdateLightsVisibility();
+        }
+
+        private void UpdateLightsVisibility()
+        {
+            if (MainControl.instance.OverworldControl.noSFX)
                 return;
 
-            light.enabled = Vector3.Distance(light.transform.position, mainCamera.transform.position) <= viewDistance;
+            // 获取所有光源组件的引用
+            Light2D[] lights = FindObjectsOfType<Light2D>();
+
+            foreach (Light2D light in lights)
+            {
+                if (light.lightType == Light2D.LightType.Global)
+                    return;
+
+                light.enabled = Vector3.Distance(light.transform.position, mainCamera.transform.position) <= viewDistance;
+            }
         }
     }
 }

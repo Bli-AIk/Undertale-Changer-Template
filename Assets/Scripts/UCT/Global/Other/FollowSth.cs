@@ -1,16 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class FollowSth : MonoBehaviour
+namespace UCT.Global.Other
 {
-    public GameObject sth;
-    public Vector3 posAdd;
-    void Update()
+    public class FollowSth : MonoBehaviour
     {
-        if(sth != null)
+        public GameObject sth;
+        public Vector3 posAdd;
+        void Update()
         {
-            transform.position = sth.transform.position + posAdd;
+            if(sth != null)
+            {
+                transform.position = sth.transform.position + posAdd;
+            }
         }
     }
 }

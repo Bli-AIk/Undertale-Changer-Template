@@ -1,81 +1,86 @@
 using System;
 using System.Collections.Generic;
+using UCT.Global.Audio;
+using UCT.Global.Core;
+using UCT.Global.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
-/// <summary>
-/// 用于在OW插入选项系统，与UT的选项一致，而不同于DR的选项。
-/// 在含有选项的场景内会添加heart。
-/// 在文本包内调用
-/// </summary>
-public class OverworldTalkSelect : MonoBehaviour
+namespace UCT.Overworld
 {
-    public static OverworldTalkSelect instance;
-    public int select;
-    private Image heart;
-    private bool canSelect;
-    private TypeWritter typeWritter;
-    public List<string> texts;
-    public string typeText;
-
-    private void Awake()
+    /// <summary>
+    /// 用于在OW插入选项系统，与UT的选项一致，而不同于DR的选项。
+    /// 在含有选项的场景内会添加heart。
+    /// 在文本包内调用
+    /// </summary>
+    public class OverworldTalkSelect : MonoBehaviour
     {
-        instance = this;
-    }
+        public static OverworldTalkSelect instance;
+        public int select;
+        private Image heart;
+        private bool canSelect;
+        private TypeWritter typeWritter;
+        public List<string> texts;
+        public string typeText;
 
-    private void Start()
-    {
-        typeWritter = GameObject.Find("BackpackCanvas").GetComponent<TypeWritter>();
-        Transform heartTrans = BackpackBehaviour.instance.typeMessage.transform.Find("Heart");
-        GameObject heartObj;
-        if (!heartTrans)
-            heartObj = Instantiate(new GameObject(), BackpackBehaviour.instance.typeMessage.transform);
-        else heartObj = heartTrans.gameObject;
-
-        heart = heartObj.AddComponent<Image>() ?? heartObj.GetComponent<Image>();
-        heart.rectTransform.sizeDelta = 16 * Vector3.one;
-        heart.sprite = Resources.Load<Sprite>("Sprites/Soul");
-        heart.color = Color.clear;
-    }
-
-    public void Open()
-    {
-        select = 0;
-        heart.rectTransform.anchoredPosition = new Vector2(-143.3f + Convert.ToInt32(select) * 192.5f, -18.8f);
-        heart.color = Color.red;
-        canSelect = true;
-    }
-
-    private void Update()
-    {
-        if (canSelect)
+        private void Awake()
         {
-            if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow))
-            {
-                if (select > 0)
-                    select--;
-                else select = 1;
-                heart.rectTransform.anchoredPosition = new Vector2(-143.3f + Convert.ToInt32(select) * 192.5f, -18.8f);
-                AudioController.instance.GetFx(0, MainControl.instance.AudioControl.fxClipUI);
-            }
-            else if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow))
-            {
-                if (select < 1)
-                    select++;
-                else select = 0;
-                heart.rectTransform.anchoredPosition = new Vector2(-143.3f + Convert.ToInt32(select) * 192.5f, -18.8f);
-                AudioController.instance.GetFx(0, MainControl.instance.AudioControl.fxClipUI);
-            }
+            instance = this;
+        }
 
-            if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
+        private void Start()
+        {
+            typeWritter = GameObject.Find("BackpackCanvas").GetComponent<TypeWritter>();
+            Transform heartTrans = BackpackBehaviour.instance.typeMessage.transform.Find("Heart");
+            GameObject heartObj;
+            if (!heartTrans)
+                heartObj = Instantiate(new GameObject(), BackpackBehaviour.instance.typeMessage.transform);
+            else heartObj = heartTrans.gameObject;
+
+            heart = heartObj.AddComponent<Image>() ?? heartObj.GetComponent<Image>();
+            heart.rectTransform.sizeDelta = 16 * Vector3.one;
+            heart.sprite = Resources.Load<Sprite>("Sprites/Soul");
+            heart.color = Color.clear;
+        }
+
+        public void Open()
+        {
+            select = 0;
+            heart.rectTransform.anchoredPosition = new Vector2(-143.3f + Convert.ToInt32(select) * 192.5f, -18.8f);
+            heart.color = Color.red;
+            canSelect = true;
+        }
+
+        private void Update()
+        {
+            if (canSelect)
             {
-                typeWritter.TypeStop();
-                switch (select)
+                if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow))
                 {
-                    case 0://选择了左侧选项
-                        switch (typeText)
-                        {
-                            /*
+                    if (select > 0)
+                        select--;
+                    else select = 1;
+                    heart.rectTransform.anchoredPosition = new Vector2(-143.3f + Convert.ToInt32(select) * 192.5f, -18.8f);
+                    AudioController.instance.GetFx(0, MainControl.instance.AudioControl.fxClipUI);
+                }
+                else if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow))
+                {
+                    if (select < 1)
+                        select++;
+                    else select = 0;
+                    heart.rectTransform.anchoredPosition = new Vector2(-143.3f + Convert.ToInt32(select) * 192.5f, -18.8f);
+                    AudioController.instance.GetFx(0, MainControl.instance.AudioControl.fxClipUI);
+                }
+
+                if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
+                {
+                    typeWritter.TypeStop();
+                    switch (select)
+                    {
+                        case 0://选择了左侧选项
+                            switch (typeText)
+                            {
+                                /*
                             打字机示例
                             case "XXX":
 
@@ -83,27 +88,28 @@ public class OverworldTalkSelect : MonoBehaviour
                         break;
                             */
 
-                            case "BackMenu":
-                                typeWritter.forceReturn = true;
-                                MainControl.instance.OutBlack("Menu", Color.black, true, 0f);
-                                AudioController.instance.audioSource.volume = 0;
-                                break;
+                                case "BackMenu":
+                                    typeWritter.forceReturn = true;
+                                    MainControl.instance.OutBlack("Menu", Color.black, true, 0f);
+                                    AudioController.instance.audioSource.volume = 0;
+                                    break;
 
-                            case "Select":
-                                AudioController.instance.GetFx(2, MainControl.instance.AudioControl.fxClipBattle);
-                                break;
+                                case "Select":
+                                    AudioController.instance.GetFx(2, MainControl.instance.AudioControl.fxClipBattle);
+                                    break;
 
-                            default:
-                                break;
-                        }
-                        break;
+                                default:
+                                    break;
+                            }
+                            break;
 
-                    case 1://选择了右侧选项
-                        break;
+                        case 1://选择了右侧选项
+                            break;
+                    }
+                    heart.color = Color.clear;
+                    canSelect = false;
+                    return;
                 }
-                heart.color = Color.clear;
-                canSelect = false;
-                return;
             }
         }
     }

@@ -1,43 +1,46 @@
-using DG.Tweening;
 using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
-public class DebugEasing : MonoBehaviour
+namespace Debug
 {
-    public List<Vector2> vector2s;
-    public float time;
-    public float baseTime;
-    private float timer;
-    public string enumStr;
-    private LineRenderer lineRenderer;
-    private int setNumber;
-
-    private void Start()
+    public class DebugEasing : MonoBehaviour
     {
-        lineRenderer = GetComponent<LineRenderer>();
-        transform.localPosition = vector2s[0];
-        transform.DOLocalMoveX(vector2s[1].x, time);
-        transform.DOLocalMoveY(vector2s[1].y, time).SetEase((Ease)Enum.Parse(typeof(Ease), enumStr));
-    }
+        public List<Vector2> vector2s;
+        public float time;
+        public float baseTime;
+        private float timer;
+        public string enumStr;
+        private LineRenderer lineRenderer;
+        private int setNumber;
 
-    private void Update()
-    {
-        if (Time.time < time)
+        private void Start()
         {
-            if (timer <= 0)
-            {
-                timer = baseTime;
+            lineRenderer = GetComponent<LineRenderer>();
+            transform.localPosition = vector2s[0];
+            transform.DOLocalMoveX(vector2s[1].x, time);
+            transform.DOLocalMoveY(vector2s[1].y, time).SetEase((Ease)Enum.Parse(typeof(Ease), enumStr));
+        }
 
-                if (lineRenderer.positionCount <= setNumber)
-                    lineRenderer.positionCount++;
-
-                lineRenderer.SetPosition(setNumber, transform.position);
-                setNumber++;
-            }
-            else
+        private void Update()
+        {
+            if (Time.time < time)
             {
-                timer -= Time.deltaTime;
+                if (timer <= 0)
+                {
+                    timer = baseTime;
+
+                    if (lineRenderer.positionCount <= setNumber)
+                        lineRenderer.positionCount++;
+
+                    lineRenderer.SetPosition(setNumber, transform.position);
+                    setNumber++;
+                }
+                else
+                {
+                    timer -= Time.deltaTime;
+                }
             }
         }
     }

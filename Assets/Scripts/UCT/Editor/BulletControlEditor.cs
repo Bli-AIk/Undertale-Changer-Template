@@ -3,7 +3,8 @@ using UnityEngine;
 using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 using System.Collections.Generic;
-using static BulletController;
+using UCT.Control;
+using static UCT.Battle.BulletController;
 
 [CustomEditor(typeof(BulletControl))]
 public class BulletControlEditor : Editor

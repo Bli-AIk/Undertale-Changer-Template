@@ -1,65 +1,67 @@
-
 using System;
-using TMPro;
+using UCT.Global.UI;
 using UnityEngine;
 
-/// <summary>
-/// 修改Overworld中对话框的位置
-/// </summary>
-public class TalkUIPositionChanger : MonoBehaviour
+namespace UCT.Overworld
 {
-    public static TalkUIPositionChanger instance;
-    public bool isUp;
-    public bool haveHead;
-
-    private void Awake()
+    /// <summary>
+    /// 修改Overworld中对话框的位置
+    /// </summary>
+    public class TalkUIPositionChanger : MonoBehaviour
     {
-        instance = this;
-    }
+        public static TalkUIPositionChanger instance;
+        public bool isUp;
+        public bool haveHead;
 
-    private void Start()
-    {
-        //gameObject.SetActive(false);
-        transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, -50);
-    }
-
-    public void Change(bool updateHeader = true, bool haveHeader = false, bool cleaner = true, TypeWritter typeWritter = null)
-    {
-        if (cleaner)
+        private void Awake()
         {
-            BackpackBehaviour.instance.typeMessage.text = "";
-            if (typeWritter != null)
-                typeWritter.endString = "";
+            instance = this;
         }
 
-        if (!updateHeader)
-            return;
-        haveHead = haveHeader;
+        private void Start()
+        {
+            //gameObject.SetActive(false);
+            transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, -50);
+        }
 
-        if (isUp)
+        public void Change(bool updateHeader = true, bool haveHeader = false, bool cleaner = true, TypeWritter typeWritter = null)
         {
-            transform.localPosition = new Vector3(transform.localPosition.x, 7.77f, transform.localPosition.z);
-            BackpackBehaviour.instance.typeMessage.rectTransform.anchoredPosition = new Vector2(10 + 115f * Convert.ToInt32(haveHead), 139);
+            if (cleaner)
+            {
+                BackpackBehaviour.instance.typeMessage.text = "";
+                if (typeWritter != null)
+                    typeWritter.endString = "";
+            }
+
+            if (!updateHeader)
+                return;
+            haveHead = haveHeader;
+
+            if (isUp)
+            {
+                transform.localPosition = new Vector3(transform.localPosition.x, 7.77f, transform.localPosition.z);
+                BackpackBehaviour.instance.typeMessage.rectTransform.anchoredPosition = new Vector2(10 + 115f * Convert.ToInt32(haveHead), 139);
+            }
+            else
+            {
+                transform.localPosition = new Vector3(transform.localPosition.x, 0, transform.localPosition.z);
+                BackpackBehaviour.instance.typeMessage.rectTransform.anchoredPosition = new Vector2(10 + 115f * Convert.ToInt32(haveHead), -170);
+            }
         }
-        else
-        {
-            transform.localPosition = new Vector3(transform.localPosition.x, 0, transform.localPosition.z);
-            BackpackBehaviour.instance.typeMessage.rectTransform.anchoredPosition = new Vector2(10 + 115f * Convert.ToInt32(haveHead), -170);
-        }
-    }
 
    
 
 
-    private void OnEnable()
-    {
-        if (BackpackBehaviour.instance.typeMessage != null)
-            BackpackBehaviour.instance.typeMessage.gameObject.SetActive(true);
-    }
+        private void OnEnable()
+        {
+            if (BackpackBehaviour.instance.typeMessage != null)
+                BackpackBehaviour.instance.typeMessage.gameObject.SetActive(true);
+        }
 
-    private void OnDisable()
-    {
-        if (BackpackBehaviour.instance.typeMessage != null)
-            BackpackBehaviour.instance.typeMessage.gameObject.SetActive(false);
+        private void OnDisable()
+        {
+            if (BackpackBehaviour.instance.typeMessage != null)
+                BackpackBehaviour.instance.typeMessage.gameObject.SetActive(false);
+        }
     }
 }

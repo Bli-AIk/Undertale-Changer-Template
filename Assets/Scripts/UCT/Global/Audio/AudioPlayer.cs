@@ -1,36 +1,39 @@
 using UnityEngine;
 
-public class AudioPlayer : MonoBehaviour
+namespace UCT.Global.Audio
 {
-    private bool isPlay = false;
-    public AudioSource audioSource;
-    private float clock = 0;
-
-    private void OnEnable()
+    public class AudioPlayer : MonoBehaviour
     {
-        isPlay = false;
-        clock = 0;
-    }
+        private bool isPlay = false;
+        public AudioSource audioSource;
+        private float clock = 0;
 
-    private void Update()
-    {
-        if (isPlay)
+        private void OnEnable()
         {
-            clock += Time.deltaTime;
-            if (clock >= audioSource.clip.length)
+            isPlay = false;
+            clock = 0;
+        }
+
+        private void Update()
+        {
+            if (isPlay)
             {
-                AudioController.instance.ReturnPool(gameObject);
+                clock += Time.deltaTime;
+                if (clock >= audioSource.clip.length)
+                {
+                    AudioController.instance.ReturnPool(gameObject);
+                }
             }
         }
-    }
 
-    public void Playing(AudioClip clip)
-    {
-        if (!isPlay)
+        public void Playing(AudioClip clip)
         {
-            audioSource.clip = clip;
-            audioSource.Play();
-            isPlay = true;
+            if (!isPlay)
+            {
+                audioSource.clip = clip;
+                audioSource.Play();
+                isPlay = true;
+            }
         }
     }
 }

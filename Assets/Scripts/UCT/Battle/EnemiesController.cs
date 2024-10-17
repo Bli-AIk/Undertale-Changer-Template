@@ -1,25 +1,30 @@
+using UCT.Global.Audio;
+using UCT.Global.Core;
 using UnityEngine;
 
-/// <summary>
-/// 怪物控制脚本
-/// 主要用于动画控制和存储ATKDEF
-/// </summary>
-public class EnemiesController : MonoBehaviour
+namespace UCT.Battle
 {
-    public Animator anim;
-    public int atk, def;
-
-    private void Start()
+    /// <summary>
+    /// 怪物控制脚本
+    /// 主要用于动画控制和存储ATKDEF
+    /// </summary>
+    public class EnemiesController : MonoBehaviour
     {
-        anim = GetComponent<Animator>();
-    }
+        public Animator anim;
+        public int atk, def;
 
-    private void AnimHit()
-    {
-        if (anim.GetBool("Hit"))
+        private void Start()
         {
-            AudioController.instance.GetFx(1, MainControl.instance.AudioControl.fxClipBattle);
-            anim.SetBool("Hit", false);
+            anim = GetComponent<Animator>();
+        }
+
+        private void AnimHit()
+        {
+            if (anim.GetBool("Hit"))
+            {
+                AudioController.instance.GetFx(1, MainControl.instance.AudioControl.fxClipBattle);
+                anim.SetBool("Hit", false);
+            }
         }
     }
 }

@@ -1,82 +1,86 @@
 using UnityEngine;
-/// <summary>
-/// Debug控制器
-/// </summary>
-public static class Debug
+
+namespace UCT.Global.Other
 {
-    public static void Log(object content, string color = "#FFFFFF")
+    /// <summary>
+    /// Debug控制器
+    /// </summary>
+    public static class Debug
     {
+        public static void Log(object content, string color = "#FFFFFF")
+        {
 #if UNITY_EDITOR
-        string text = ("<color=" + color + ">" + content + "</color>");
-        UnityEngine.Debug.Log(text);
+            string text = ("<color=" + color + ">" + content + "</color>");
+            UnityEngine.Debug.Log(text);
 #endif
-    }
+        }
 
-    public static void Log(object content, Object context, string color = "#FFFFFF")
-    {
+        public static void Log(object content, Object context, string color = "#FFFFFF")
+        {
 #if UNITY_EDITOR
-        string text = ("<color=" + color + ">" + content + "</color>");
-        UnityEngine.Debug.Log(text, context);
+            string text = ("<color=" + color + ">" + content + "</color>");
+            UnityEngine.Debug.Log(text, context);
 #endif
-    }
+        }
 
-    public static void LogWarning(object content, string color = "#FFFF00")
-    {
+        public static void LogWarning(object content, string color = "#FFFF00")
+        {
 #if UNITY_EDITOR
-        string text = ("<color=" + color + ">" + content + "</color>");
-        UnityEngine.Debug.LogWarning(text);
+            string text = ("<color=" + color + ">" + content + "</color>");
+            UnityEngine.Debug.LogWarning(text);
 #endif
-    }
+        }
 
-    public static void LogWarning(object content, Object context, string color = "#FFFF00")
-    {
+        public static void LogWarning(object content, Object context, string color = "#FFFF00")
+        {
 #if UNITY_EDITOR
-        string text = ("<color=" + color + ">" + content + "</color>");
-        UnityEngine.Debug.LogWarning(text, context);
+            string text = ("<color=" + color + ">" + content + "</color>");
+            UnityEngine.Debug.LogWarning(text, context);
 #endif
-    }
+        }
 
-    public static void LogError(object content, string color = "#FF0000")
-    {
+        public static void LogError(object content, string color = "#FF0000")
+        {
 #if UNITY_EDITOR
-        string text = ("<color=" + color + ">" + content + "</color>");
-        UnityEngine.Debug.LogError(text);
+            string text = ("<color=" + color + ">" + content + "</color>");
+            UnityEngine.Debug.LogError(text);
 #endif
-    }
+        }
 
-    public static void LogError(object content, Object context, string color = "#FF0000")
-    {
+        public static void LogError(object content, Object context, string color = "#FF0000")
+        {
 #if UNITY_EDITOR
-        string text = ("<color=" + color + ">" + content + "</color>");
-        UnityEngine.Debug.LogError(text, context);
+            string text = ("<color=" + color + ">" + content + "</color>");
+            UnityEngine.Debug.LogError(text, context);
 #endif
-    }
+        }
 
-    public static void DrawRay(Vector3 start, Vector3 direction)
-    {
+        public static void DrawRay(Vector3 start, Vector3 direction)
+        {
 #if UNITY_EDITOR
-        UnityEngine.Debug.DrawRay(start, direction);
+            UnityEngine.Debug.DrawRay(start, direction);
 #endif
-    }
+        }
 
-    public static void DrawRay(Vector3 start, Vector3 direction, Color color)
-    {
+        public static void DrawRay(Vector3 start, Vector3 direction, Color color)
+        {
 #if UNITY_EDITOR
-        UnityEngine.Debug.DrawRay(start, direction, color);
+            UnityEngine.Debug.DrawRay(start, direction, color);
 #endif
-    }
+        }
 
-    public static void DrawRay(Vector3 start, Vector3 direction, Color color, float duration)
-    {
+        public static void DrawRay(Vector3 start, Vector3 direction, Color color, float duration)
+        {
 #if UNITY_EDITOR
-        UnityEngine.Debug.DrawRay(start, direction, color, duration);
+            UnityEngine.Debug.DrawRay(start, direction, color, duration);
 #endif
-    }
+        }
 
-    public static void DrawRay(Vector3 start, Vector3 direction, Color color, float duration, bool depthTest)
-    {
+        public static void DrawRay(Vector3 start, Vector3 direction, Color color, float duration, bool depthTest)
+        {
 #if UNITY_EDITOR
-        UnityEngine.Debug.DrawRay(start, direction, color, duration, depthTest);
+            UnityEngine.Debug.DrawRay(start, direction, color, duration, depthTest);
 #endif
+        }
     }
 }

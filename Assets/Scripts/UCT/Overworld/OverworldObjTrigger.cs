@@ -1,236 +1,241 @@
-using DG.Tweening;
-
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using DG.Tweening;
+using UCT.Global.Audio;
+using UCT.Global.Core;
+using UCT.Global.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-/// <summary>
-/// OWObj触发器相关 配合玩家射线
-/// 用于读取并显示文本然后显示出来
-/// </summary>
-
-public class OverworldObjTrigger : MonoBehaviour
+namespace UCT.Overworld
 {
-    //若为true，则碰到就触发。false，按Z触发。
-    public bool isTriggerMode;
+    /// <summary>
+    /// OWObj触发器相关 配合玩家射线
+    /// 用于读取并显示文本然后显示出来
+    /// </summary>
 
-    public bool setIsUp;
-    public bool isUp;
-    public string text;
-
-    [Header("检测玩家动画方向 0,0为不检测")]
-    public Vector2 playerDir;
-
-    [Header("存档相关")]
-    public bool isSave;
-
-    public bool saveFullHp;
-    private int saveSelect;
-    private bool saveOpen;
-
-    [Header("插入摄像机动画相关")]
-    public bool openAnim;
-
-    public Vector3 animEndPosPlus;
-    public float animTime;
-    public Ease animEase;
-    public CameraFollowPlayer mainCamera;
-    public bool endInBattle;
-
-    [Header("需要渐出就填正数时间")]
-    public float stopTime = -1;
-
-    [Header("OW跳场景 只给trigger")]
-    public bool changeScene;
-
-    public bool banMusic;
-    public string sceneName;
-    public Vector3 newPlayerPos;
-
-    [Header("OW跳场景锁定进入时方向 0无 -1左右 1上下")]
-    public int onlyDir;
-
-    private AudioSource bgm;
-    private TypeWritter typeWritter;
-
-    [Header("结束时调用动画器并将下设为true")]
-    public bool endAnim;
-
-    public string animRoute;
-    public string animBoolName;
-
-    [Header("结束时物体自身关闭")]
-    public bool endSelf;
-
-    [Header("确定目前打字的物体")]
-    private bool isTyping;
-
-    [Header("结束时执行方法")]
-    public List<string> funNames;
-
-    private void Start()
+    public class OverworldObjTrigger : MonoBehaviour
     {
-        transform.tag = "owObjTrigger";
-        mainCamera = TalkUIPositionChanger.instance.transform.parent.GetComponent<CameraFollowPlayer>();
-        typeWritter = BackpackBehaviour.instance.typeWritter;
-        bgm = AudioController.instance.audioSource;
-    }
+        //若为true，则碰到就触发。false，按Z触发。
+        public bool isTriggerMode;
 
-    private void Update()
-    {
-        if (saveOpen)
+        public bool setIsUp;
+        public bool isUp;
+        public string text;
+
+        [Header("检测玩家动画方向 0,0为不检测")]
+        public Vector2 playerDir;
+
+        [Header("存档相关")]
+        public bool isSave;
+
+        public bool saveFullHp;
+        private int saveSelect;
+        private bool saveOpen;
+
+        [Header("插入摄像机动画相关")]
+        public bool openAnim;
+
+        public Vector3 animEndPosPlus;
+        public float animTime;
+        public Ease animEase;
+        public CameraFollowPlayer mainCamera;
+        public bool endInBattle;
+
+        [Header("需要渐出就填正数时间")]
+        public float stopTime = -1;
+
+        [Header("OW跳场景 只给trigger")]
+        public bool changeScene;
+
+        public bool banMusic;
+        public string sceneName;
+        public Vector3 newPlayerPos;
+
+        [Header("OW跳场景锁定进入时方向 0无 -1左右 1上下")]
+        public int onlyDir;
+
+        private AudioSource bgm;
+        private TypeWritter typeWritter;
+
+        [Header("结束时调用动画器并将下设为true")]
+        public bool endAnim;
+
+        public string animRoute;
+        public string animBoolName;
+
+        [Header("结束时物体自身关闭")]
+        public bool endSelf;
+
+        [Header("确定目前打字的物体")]
+        private bool isTyping;
+
+        [Header("结束时执行方法")]
+        public List<string> funNames;
+
+        private void Start()
         {
-            if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow) || MainControl.instance.KeyArrowToControl(KeyCode.RightArrow))
-            {
-                saveSelect = Convert.ToInt32(!Convert.ToBoolean(saveSelect));
+            transform.tag = "owObjTrigger";
+            mainCamera = TalkUIPositionChanger.instance.transform.parent.GetComponent<CameraFollowPlayer>();
+            typeWritter = BackpackBehaviour.instance.typeWritter;
+            bgm = AudioController.instance.audioSource;
+        }
 
-                BackpackBehaviour.instance.saveUIHeart.anchoredPosition = new Vector2(-258 + saveSelect * 180, -44);
-            }
-            if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
+        private void Update()
+        {
+            if (saveOpen)
             {
-                switch (saveSelect)
+                if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow) || MainControl.instance.KeyArrowToControl(KeyCode.RightArrow))
                 {
-                    case 0:
+                    saveSelect = Convert.ToInt32(!Convert.ToBoolean(saveSelect));
 
-                        SaveController.SaveData(MainControl.instance.PlayerControl, "Data" + MainControl.instance.dataNumber);
-                        saveSelect = 2;
-                        AudioController.instance.GetFx(12, MainControl.instance.AudioControl.fxClipUI);
-                        string name = MainControl.instance.PlayerControl.playerName;
+                    BackpackBehaviour.instance.saveUIHeart.anchoredPosition = new Vector2(-258 + saveSelect * 180, -44);
+                }
+                if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
+                {
+                    switch (saveSelect)
+                    {
+                        case 0:
 
-                        BackpackBehaviour.instance.saveUIHeart.anchoredPosition = new Vector2(10000, 10000);
+                            SaveController.SaveData(MainControl.instance.PlayerControl, "Data" + MainControl.instance.dataNumber);
+                            saveSelect = 2;
+                            AudioController.instance.GetFx(12, MainControl.instance.AudioControl.fxClipUI);
+                            string name = MainControl.instance.PlayerControl.playerName;
 
-                        BackpackBehaviour.instance.saveUI.text = $"<color=yellow>{MainControl.instance.FillString(name, 10)}LV{MainControl.instance.FillString(MainControl.instance.PlayerControl.lv.ToString(), 7)}{MainControl.instance.GetRealTime((int)MainControl.instance.PlayerControl.gameTime)}\n{MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, SceneManager.GetActiveScene().name)}\n{MainControl.instance.RichTextWithEnd("size", 1, "\n")}  {MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Saved")}";
-                        MainControl.instance.PlayerControl.saveScene = SceneManager.GetActiveScene().name;
-                        PlayerPrefs.SetInt("languagePack", MainControl.instance.languagePack);
-                        PlayerPrefs.SetInt("dataNumber", MainControl.instance.dataNumber);
-                        PlayerPrefs.SetInt("hdResolution", Convert.ToInt32(MainControl.instance.OverworldControl.hdResolution));
-                        PlayerPrefs.SetInt("noSFX", Convert.ToInt32(MainControl.instance.OverworldControl.noSFX));
-                        PlayerPrefs.SetInt("vsyncMode", Convert.ToInt32(MainControl.instance.OverworldControl.vsyncMode));
-                        break;
+                            BackpackBehaviour.instance.saveUIHeart.anchoredPosition = new Vector2(10000, 10000);
 
-                    case 1:
-                        goto default;
-                    default:
-                        BackpackBehaviour.instance.saveUIHeart.anchoredPosition = new Vector2(10000, 10000);
-                        BackpackBehaviour.instance.saveBack.transform.localPosition = new Vector3(BackpackBehaviour.instance.saveBack.transform.localPosition.x, BackpackBehaviour.instance.saveBack.transform.localPosition.y, -50);
-                        BackpackBehaviour.instance.saveUI.text = "";
-                        PressZ();
-                        saveOpen = false;
-                        break;
+                            BackpackBehaviour.instance.saveUI.text = $"<color=yellow>{MainControl.instance.FillString(name, 10)}LV{MainControl.instance.FillString(MainControl.instance.PlayerControl.lv.ToString(), 7)}{MainControl.instance.GetRealTime((int)MainControl.instance.PlayerControl.gameTime)}\n{MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, SceneManager.GetActiveScene().name)}\n{MainControl.instance.RichTextWithEnd("size", 1, "\n")}  {MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Saved")}";
+                            MainControl.instance.PlayerControl.saveScene = SceneManager.GetActiveScene().name;
+                            PlayerPrefs.SetInt("languagePack", MainControl.instance.languagePack);
+                            PlayerPrefs.SetInt("dataNumber", MainControl.instance.dataNumber);
+                            PlayerPrefs.SetInt("hdResolution", Convert.ToInt32(MainControl.instance.OverworldControl.hdResolution));
+                            PlayerPrefs.SetInt("noSFX", Convert.ToInt32(MainControl.instance.OverworldControl.noSFX));
+                            PlayerPrefs.SetInt("vsyncMode", Convert.ToInt32(MainControl.instance.OverworldControl.vsyncMode));
+                            break;
 
-                    case 2:
-                        goto default;
+                        case 1:
+                            goto default;
+                        default:
+                            BackpackBehaviour.instance.saveUIHeart.anchoredPosition = new Vector2(10000, 10000);
+                            BackpackBehaviour.instance.saveBack.transform.localPosition = new Vector3(BackpackBehaviour.instance.saveBack.transform.localPosition.x, BackpackBehaviour.instance.saveBack.transform.localPosition.y, -50);
+                            BackpackBehaviour.instance.saveUI.text = "";
+                            PressZ();
+                            saveOpen = false;
+                            break;
+
+                        case 2:
+                            goto default;
+                    }
+                }
+                else if (MainControl.instance.KeyArrowToControl(KeyCode.X))
+                {
+                    BackpackBehaviour.instance.saveUIHeart.anchoredPosition = new Vector2(10000, 10000);
+                    BackpackBehaviour.instance.saveBack.transform.localPosition = new Vector3(BackpackBehaviour.instance.saveBack.transform.localPosition.x, BackpackBehaviour.instance.saveBack.transform.localPosition.y, -50);
+                    BackpackBehaviour.instance.saveUI.text = "";
+                    PressZ();
+                    saveOpen = false;
                 }
             }
-            else if (MainControl.instance.KeyArrowToControl(KeyCode.X))
+            //检测相关见PlayerBehaviour
+            if (isTyping && MainControl.instance.KeyArrowToControl(KeyCode.Z) && !typeWritter.isRunning)
             {
-                BackpackBehaviour.instance.saveUIHeart.anchoredPosition = new Vector2(10000, 10000);
-                BackpackBehaviour.instance.saveBack.transform.localPosition = new Vector3(BackpackBehaviour.instance.saveBack.transform.localPosition.x, BackpackBehaviour.instance.saveBack.transform.localPosition.y, -50);
-                BackpackBehaviour.instance.saveUI.text = "";
                 PressZ();
-                saveOpen = false;
             }
         }
-        //检测相关见PlayerBehaviour
-        if (isTyping && MainControl.instance.KeyArrowToControl(KeyCode.Z) && !typeWritter.isRunning)
-        {
-            PressZ();
-        }
-    }
 
-    public void PressZ()
-    {
-        if (BackpackBehaviour.instance.typeMessage.text != "")
+        public void PressZ()
         {
-            if (endAnim)
+            if (BackpackBehaviour.instance.typeMessage.text != "")
             {
-                GameObject.Find(animRoute).GetComponent<Animator>().SetBool(animBoolName, true);
+                if (endAnim)
+                {
+                    GameObject.Find(animRoute).GetComponent<Animator>().SetBool(animBoolName, true);
+                }
+
+                if (endSelf)
+                    gameObject.SetActive(false);
             }
 
-            if (endSelf)
-                gameObject.SetActive(false);
-        }
-
-        isTyping = false;
-        BackpackBehaviour.instance.typeMessage.text = "";
-        TalkUIPositionChanger.instance.transform.localPosition = new Vector3(TalkUIPositionChanger.instance.transform.localPosition.x, TalkUIPositionChanger.instance.transform.localPosition.y, -50);
-        if (isSave && !saveOpen)
-        {
-            Save();
-            return;
-        }
-
-        MainControl.instance.PlayerControl.canMove = true;
-        MainControl.instance.OverworldControl.pause = false;
-
-        foreach (var item in funNames)
-        {
-            MethodInfo methodInfo = typeof(OverworldObjTrigger).GetMethod(item);
-            if (methodInfo == null)
+            isTyping = false;
+            BackpackBehaviour.instance.typeMessage.text = "";
+            TalkUIPositionChanger.instance.transform.localPosition = new Vector3(TalkUIPositionChanger.instance.transform.localPosition.x, TalkUIPositionChanger.instance.transform.localPosition.y, -50);
+            if (isSave && !saveOpen)
             {
-                Debug.Log(item + "检测失败", gameObject);
+                Save();
+                return;
             }
-            else
+
+            MainControl.instance.PlayerControl.canMove = true;
+            MainControl.instance.OverworldControl.pause = false;
+
+            foreach (var item in funNames)
             {
-                methodInfo.Invoke(this, new object[0]);
+                MethodInfo methodInfo = typeof(OverworldObjTrigger).GetMethod(item);
+                if (methodInfo == null)
+                {
+                    Global.Other.Debug.Log(item + "检测失败", gameObject);
+                }
+                else
+                {
+                    methodInfo.Invoke(this, new object[0]);
+                }
             }
         }
-    }
 
-    public void Save()
-    {
-        saveOpen = true;
-        saveSelect = 0;
-
-        BackpackBehaviour.instance.saveBack.transform.localPosition = new Vector3(BackpackBehaviour.instance.saveBack.transform.localPosition.x, BackpackBehaviour.instance.saveBack.transform.localPosition.y, 5);
-        string name = MainControl.instance.PlayerControl.playerName;
-
-        BackpackBehaviour.instance.saveUI.text = MainControl.instance.FillString(name, 10) + "LV" + MainControl.instance.FillString(MainControl.instance.PlayerControl.lv.ToString(), 7) +
-            MainControl.instance.GetRealTime((int)MainControl.instance.PlayerControl.gameTime) + "\n" +
-            MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, SceneManager.GetActiveScene().name) + "\n<size=1>\n</size>  " +
-            MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Save") + "         " + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Back")
-            ;
-        BackpackBehaviour.instance.saveUIHeart.anchoredPosition = new Vector2(-258, -44);
-    }
-
-    /// <summary>
-    /// 激活打字。第二个参数别动
-    /// </summary>
-    public void TypeText(bool isUp, bool isMusic = true)
-    {
-        isTyping = true;
-        MainControl.instance.PlayerControl.canMove = false;
-        MainControl.instance.OverworldControl.pause = true;
-        TalkUIPositionChanger.instance.Change(true, true);
-
-        if (TalkUIPositionChanger.instance.transform.localPosition.z < 0)
+        public void Save()
         {
-            TalkUIPositionChanger.instance.transform.localPosition = new Vector3(TalkUIPositionChanger.instance.transform.localPosition.x, TalkUIPositionChanger.instance.transform.localPosition.y, 5);
+            saveOpen = true;
+            saveSelect = 0;
+
+            BackpackBehaviour.instance.saveBack.transform.localPosition = new Vector3(BackpackBehaviour.instance.saveBack.transform.localPosition.x, BackpackBehaviour.instance.saveBack.transform.localPosition.y, 5);
+            string name = MainControl.instance.PlayerControl.playerName;
+
+            BackpackBehaviour.instance.saveUI.text = MainControl.instance.FillString(name, 10) + "LV" + MainControl.instance.FillString(MainControl.instance.PlayerControl.lv.ToString(), 7) +
+                                                     MainControl.instance.GetRealTime((int)MainControl.instance.PlayerControl.gameTime) + "\n" +
+                                                     MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, SceneManager.GetActiveScene().name) + "\n<size=1>\n</size>  " +
+                                                     MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Save") + "         " + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Back")
+                ;
+            BackpackBehaviour.instance.saveUIHeart.anchoredPosition = new Vector2(-258, -44);
         }
-        TalkUIPositionChanger.instance.isUp = isUp;
 
-        if (typeWritter == null)
-            typeWritter = BackpackBehaviour.instance.typeWritter;
+        /// <summary>
+        /// 激活打字。第二个参数别动
+        /// </summary>
+        public void TypeText(bool isUp, bool isMusic = true)
+        {
+            isTyping = true;
+            MainControl.instance.PlayerControl.canMove = false;
+            MainControl.instance.OverworldControl.pause = true;
+            TalkUIPositionChanger.instance.Change(true, true);
 
-        typeWritter.TypeOpen(MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, text), false, 0, 1, BackpackBehaviour.instance.typeMessage);
-        if (endInBattle)
-            typeWritter.EndInBattle();
+            if (TalkUIPositionChanger.instance.transform.localPosition.z < 0)
+            {
+                TalkUIPositionChanger.instance.transform.localPosition = new Vector3(TalkUIPositionChanger.instance.transform.localPosition.x, TalkUIPositionChanger.instance.transform.localPosition.y, 5);
+            }
+            TalkUIPositionChanger.instance.isUp = isUp;
 
-        if (isMusic && stopTime >= 0)
-            bgm.DOFade(0, stopTime);
-    }
+            if (typeWritter == null)
+                typeWritter = BackpackBehaviour.instance.typeWritter;
 
-    public void AnimTypeText(bool isUp)
-    {
-        MainControl.instance.PlayerControl.canMove = false;
-        MainControl.instance.OverworldControl.pause = true;
-        mainCamera.isFollow = false;
-        mainCamera.transform.DOLocalMove(animEndPosPlus, animTime).SetEase(animEase).OnKill(() => TypeText(isUp, false));
-        DOTween.To(() => mainCamera.followPosition, x => mainCamera.followPosition = x, animEndPosPlus, animTime).SetEase(animEase);
+            typeWritter.TypeOpen(MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, text), false, 0, 1, BackpackBehaviour.instance.typeMessage);
+            if (endInBattle)
+                typeWritter.EndInBattle();
 
-        if (stopTime >= 0)
-            bgm.DOFade(0, stopTime);
+            if (isMusic && stopTime >= 0)
+                bgm.DOFade(0, stopTime);
+        }
+
+        public void AnimTypeText(bool isUp)
+        {
+            MainControl.instance.PlayerControl.canMove = false;
+            MainControl.instance.OverworldControl.pause = true;
+            mainCamera.isFollow = false;
+            mainCamera.transform.DOLocalMove(animEndPosPlus, animTime).SetEase(animEase).OnKill(() => TypeText(isUp, false));
+            DOTween.To(() => mainCamera.followPosition, x => mainCamera.followPosition = x, animEndPosPlus, animTime).SetEase(animEase);
+
+            if (stopTime >= 0)
+                bgm.DOFade(0, stopTime);
+        }
     }
 }

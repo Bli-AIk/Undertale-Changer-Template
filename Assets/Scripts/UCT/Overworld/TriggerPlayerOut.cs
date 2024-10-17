@@ -1,71 +1,74 @@
+using UCT.Global.Core;
 using UnityEngine;
 
-/// <summary>
-/// V0.1.1新加
-/// 用于带动画器的OW，在玩家进入/离开时，执行代码/播放动画。
-/// 可多方面调整，我猜
-/// </summary>
-public class TriggerPlayerOut : MonoBehaviour
+namespace UCT.Overworld
 {
-    public float volume = 1;
-    public float pitch = 1;
-
-    [Header("更改动画的布尔值：")]
-    public string changeBool;
-
-    [Header("去除进入检测范围执行动画")]
-    public bool banTrigger;
-
-    [Header("在上个场景为指定场景时去除失效")]
-    public string notBanSceneSp;
-
-    [Header("设置在离开范围/进入范围时执行")]
-    public bool isEnter;
-
-    private Animator animator;
-    private bool triggered = false;
-
-    [Header("在上个场景为指定场景时动画器的sceneBool设true")]
-    public string sceneSp;
-
-    public string sceneBool = "SceneSp";
-
-    [Header("在electricOpen的时候electricOpen")]
-    public bool electricOpen;
-
-    private void Start()
+    /// <summary>
+    /// V0.1.1新加
+    /// 用于带动画器的OW，在玩家进入/离开时，执行代码/播放动画。
+    /// 可多方面调整，我猜
+    /// </summary>
+    public class TriggerPlayerOut : MonoBehaviour
     {
-        animator = GetComponent<Animator>();
+        public float volume = 1;
+        public float pitch = 1;
 
-        if (sceneSp == MainControl.instance.PlayerControl.lastScene)
+        [Header("更改动画的布尔值：")]
+        public string changeBool;
+
+        [Header("去除进入检测范围执行动画")]
+        public bool banTrigger;
+
+        [Header("在上个场景为指定场景时去除失效")]
+        public string notBanSceneSp;
+
+        [Header("设置在离开范围/进入范围时执行")]
+        public bool isEnter;
+
+        private Animator animator;
+        private bool triggered = false;
+
+        [Header("在上个场景为指定场景时动画器的sceneBool设true")]
+        public string sceneSp;
+
+        public string sceneBool = "SceneSp";
+
+        [Header("在electricOpen的时候electricOpen")]
+        public bool electricOpen;
+
+        private void Start()
         {
-            animator.SetBool(sceneBool, true);
-        }
-    }
+            animator = GetComponent<Animator>();
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (banTrigger && notBanSceneSp != MainControl.instance.PlayerControl.lastScene)
-            return;
-        if (!triggered && isEnter && collision.CompareTag("Player"))
+            if (sceneSp == MainControl.instance.PlayerControl.lastScene)
+            {
+                animator.SetBool(sceneBool, true);
+            }
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
         {
-            animator.SetBool(changeBool, true);
-            triggered = true;
+            if (banTrigger && notBanSceneSp != MainControl.instance.PlayerControl.lastScene)
+                return;
+            if (!triggered && isEnter && collision.CompareTag("Player"))
+            {
+                animator.SetBool(changeBool, true);
+                triggered = true;
+            }
         }
-    }
 
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (banTrigger && notBanSceneSp != MainControl.instance.PlayerControl.lastScene)
-            return;
-        if (!triggered && !isEnter && collision.CompareTag("Player"))
+        private void OnTriggerExit2D(Collider2D collision)
         {
-            animator.SetBool(changeBool, true);
-            triggered = true;
+            if (banTrigger && notBanSceneSp != MainControl.instance.PlayerControl.lastScene)
+                return;
+            if (!triggered && !isEnter && collision.CompareTag("Player"))
+            {
+                animator.SetBool(changeBool, true);
+                triggered = true;
+            }
         }
-    }
 
-    /*
+        /*
     //给动画调用的
 
     void SetNoActive(string name)
@@ -99,4 +102,5 @@ public class TriggerPlayerOut : MonoBehaviour
         AudioController.instance.GetFx(i, MainControl.instance.AudioControl.fxClipBattle, volume, pitch, mixer);
     }
     */
+    }
 }

@@ -1,51 +1,55 @@
+using UCT.Global.Core;
 using UnityEngine;
 
-public class DebugVideoController : MonoBehaviour
+namespace Debug
 {
-    private UnityEngine.Video.VideoPlayer videoPlayer;
-    public int skip;
-
-    private void Start()
+    public class DebugVideoController : MonoBehaviour
     {
-        videoPlayer = GetComponent<UnityEngine.Video.VideoPlayer>();
-    }
+        private UnityEngine.Video.VideoPlayer videoPlayer;
+        public int skip;
 
-    private void Update()
-    {
-        if (!MainControl.instance.PlayerControl.isDebug)
-            return;
-
-        if (Input.GetKeyDown(KeyCode.Space))
+        private void Start()
         {
-            if (videoPlayer.isPaused)
+            videoPlayer = GetComponent<UnityEngine.Video.VideoPlayer>();
+        }
+
+        private void Update()
+        {
+            if (!MainControl.instance.PlayerControl.isDebug)
+                return;
+
+            if (Input.GetKeyDown(KeyCode.Space))
             {
-                videoPlayer.Play();
-                //Debug.Log("video play");
+                if (videoPlayer.isPaused)
+                {
+                    videoPlayer.Play();
+                    //Debug.Log("video play");
+                }
+                else
+                {
+                    videoPlayer.Pause();
+                    //Debug.Log("video pause");
+                }
             }
-            else
+
+            if (Input.GetKeyDown(KeyCode.KeypadPlus))
             {
-                videoPlayer.Pause();
-                //Debug.Log("video pause");
+                videoPlayer.StepForward();
+                //Debug.Log("video +");
+                //Debug.Log("frame:" + videoPlayer.frame);
             }
-        }
 
-        if (Input.GetKeyDown(KeyCode.KeypadPlus))
-        {
-            videoPlayer.StepForward();
-            //Debug.Log("video +");
-            //Debug.Log("frame:" + videoPlayer.frame);
-        }
-
-        if (Input.GetKeyDown(KeyCode.KeypadMinus))
-        {
-            videoPlayer.frame -= 1;
-            //Debug.Log("video -");
-            //Debug.Log("frame:" + videoPlayer.frame);
-        }
-        if (Input.GetKeyDown(KeyCode.KeypadEnter))
-        {
-            videoPlayer.frame = skip;
-            //Debug.Log("video skip");
+            if (Input.GetKeyDown(KeyCode.KeypadMinus))
+            {
+                videoPlayer.frame -= 1;
+                //Debug.Log("video -");
+                //Debug.Log("frame:" + videoPlayer.frame);
+            }
+            if (Input.GetKeyDown(KeyCode.KeypadEnter))
+            {
+                videoPlayer.frame = skip;
+                //Debug.Log("video skip");
+            }
         }
     }
 }

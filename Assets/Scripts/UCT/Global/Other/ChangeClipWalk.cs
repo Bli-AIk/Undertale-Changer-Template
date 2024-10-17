@@ -1,21 +1,26 @@
+using UCT.Global.Core;
+using UCT.Overworld;
 using UnityEngine;
 
-/// <summary>
-/// 玩家触发后更改移动范围
-/// </summary>
-public class ChangeClipWalk : MonoBehaviour
+namespace UCT.Global.Other
 {
-    [Header("新范围")]
-    public Vector2 range;
-
-    private void OnTriggerStay2D(Collider2D collision)
+    /// <summary>
+    /// 玩家触发后更改移动范围
+    /// </summary>
+    public class ChangeClipWalk : MonoBehaviour
     {
-        if (collision.transform.CompareTag("Player"))
+        [Header("新范围")]
+        public Vector2 range;
+
+        private void OnTriggerStay2D(Collider2D collision)
         {
-            PlayerBehaviour playerBehaviour = MainControl.instance.playerBehaviour;
-            if (playerBehaviour != null)
+            if (collision.transform.CompareTag("Player"))
             {
-                playerBehaviour.walk = range;
+                PlayerBehaviour playerBehaviour = MainControl.instance.playerBehaviour;
+                if (playerBehaviour != null)
+                {
+                    playerBehaviour.walk = range;
+                }
             }
         }
     }

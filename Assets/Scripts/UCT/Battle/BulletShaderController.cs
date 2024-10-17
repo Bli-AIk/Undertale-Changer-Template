@@ -1,24 +1,27 @@
-using System;
+using UCT.Global.Core;
 using UnityEngine;
 
-/// <summary>
-/// µ¯Ä»Shader¿ØÖÆÆ÷
-/// </summary>
-public class BulletShaderController : MonoBehaviour
+namespace UCT.Battle
 {
-    private Material material;
-    private void Start()
+    /// <summary>
+    /// µ¯Ä»Shader¿ØÖÆÆ÷
+    /// </summary>
+    public class BulletShaderController : MonoBehaviour
     {
-        material = Instantiate(Resources.Load<Material>("Materials/Bullet"));
+        private Material material;
+        private void Start()
+        {
+            material = Instantiate(Resources.Load<Material>("Materials/Bullet"));
 
-        GetComponent<SpriteRenderer>().material = material;
-    }
+            GetComponent<SpriteRenderer>().material = material;
+        }
 
-    private void Update()
-    {
-        if (MainControl.instance.sceneState != MainControl.SceneState.InBattle)
-            return;
-        if (MainControl.instance.OverworldControl.isSetting || MainControl.instance.OverworldControl.pause)
-            return;
+        private void Update()
+        {
+            if (MainControl.instance.sceneState != MainControl.SceneState.InBattle)
+                return;
+            if (MainControl.instance.OverworldControl.isSetting || MainControl.instance.OverworldControl.pause)
+                return;
+        }
     }
 }

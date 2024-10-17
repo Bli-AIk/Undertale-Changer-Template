@@ -1,54 +1,57 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ObjectPool : MonoBehaviour
+namespace UCT.Global.Core
 {
-    [Header("填充对象池的对象数量")]
-    public int count = 10;
-
-    public GameObject obj;
-    private Queue<GameObject> availableObj = new Queue<GameObject>();
-    public Transform parent = null;
-
-    /// <summary>
-    /// 初始化/填充对象池
-    /// </summary>
-    public virtual void FillPool()
+    public class ObjectPool : MonoBehaviour
     {
-        if (parent == null)
-            parent = transform;
+        [Header("填充对象池的对象数量")]
+        public int count = 10;
 
-        for (int i = 0; i < count; i++)
+        public GameObject obj;
+        private Queue<GameObject> availableObj = new Queue<GameObject>();
+        public Transform parent = null;
+
+        /// <summary>
+        /// 初始化/填充对象池
+        /// </summary>
+        public virtual void FillPool()
         {
-            var newObj = Instantiate(obj, parent);
-            ReturnPool(newObj);
+            if (parent == null)
+                parent = transform;
+
+            for (int i = 0; i < count; i++)
+            {
+                var newObj = Instantiate(obj, parent);
+                ReturnPool(newObj);
+            }
         }
-    }
 
-    /// <summary>
-    /// 返回对象池
-    /// </summary>
-    public virtual void ReturnPool(GameObject gameObject)
-    {
-        if (parent == null)
-            parent = transform;
+        /// <summary>
+        /// 返回对象池
+        /// </summary>
+        public virtual void ReturnPool(GameObject gameObject)
+        {
+            if (parent == null)
+                parent = transform;
 
-        gameObject.SetActive(false);
-        gameObject.transform.SetParent(parent);
-        availableObj.Enqueue(gameObject);
-    }
+            gameObject.SetActive(false);
+            gameObject.transform.SetParent(parent);
+            availableObj.Enqueue(gameObject);
+        }
 
-    /// <summary>
-    /// 喜提对象
-    /// </summary>
-    public virtual GameObject GetFromPool()
-    {
-        if (availableObj.Count == 0)
-            FillPool();
+        /// <summary>
+        /// 喜提对象
+        /// </summary>
+        public virtual GameObject GetFromPool()
+        {
+            if (availableObj.Count == 0)
+                FillPool();
 
-        var obj = availableObj.Dequeue();
+            var obj = availableObj.Dequeue();
 
-        obj.SetActive(true);
-        return obj;
+            obj.SetActive(true);
+            return obj;
+        }
     }
 }

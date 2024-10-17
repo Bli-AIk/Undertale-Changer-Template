@@ -2,28 +2,31 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-/// <summary>
-/// VolumeComponent，显示在添加列表内
-/// </summary>
-
-[VolumeComponentMenuForRenderPipeline("Custom/CRT Screen", typeof(UniversalRenderPipeline))]
-public class CRTScreenComponent : VolumeComponent, IPostProcessComponent
+namespace Volume
 {
-    public BoolParameter isShow = new BoolParameter(false, true);
+    /// <summary>
+    /// VolumeComponent，显示在添加列表内
+    /// </summary>
 
-    [Header("Settings")]
-    public Vector2Parameter resolution = new Vector2Parameter(new Vector2(1000, 1000), true);
-
-    public Vector4Parameter pixelScanlineBrightness = new Vector4Parameter(new Vector4(0.225f, 0.85f, 0.05f, 0.95f), true);
-    public FloatParameter speed = new FloatParameter(1, true);
-
-    public bool IsActive()
+    [VolumeComponentMenuForRenderPipeline("Custom/CRT Screen", typeof(UniversalRenderPipeline))]
+    public class CRTScreenComponent : VolumeComponent, IPostProcessComponent
     {
-        return true;
-    }
+        public BoolParameter isShow = new BoolParameter(false, true);
 
-    public bool IsTileCompatible()
-    {
-        return false;
+        [Header("Settings")]
+        public Vector2Parameter resolution = new Vector2Parameter(new Vector2(1000, 1000), true);
+
+        public Vector4Parameter pixelScanlineBrightness = new Vector4Parameter(new Vector4(0.225f, 0.85f, 0.05f, 0.95f), true);
+        public FloatParameter speed = new FloatParameter(1, true);
+
+        public bool IsActive()
+        {
+            return true;
+        }
+
+        public bool IsTileCompatible()
+        {
+            return false;
+        }
     }
 }
