@@ -12,27 +12,27 @@ namespace UCT.Global.Scene
     /// </summary>
     public class StorySceneController : MonoBehaviour
     {
-        public static StorySceneController instance;
+        public static StorySceneController Instance;
         public List<Sprite> pics;
-        private SpriteRenderer spriteRenderer;
-        private TypeWritter typeWritter;
-        private TextMeshPro tmp;
+        private SpriteRenderer _spriteRenderer;
+        private TypeWritter _typeWritter;
+        private TextMeshPro _tmp;
         public GameObject mask;
-        private int picNumber;
+        private int _picNumber;
 
         private void Awake()
         {
-            instance = this;
+            Instance = this;
         }
 
         private void Start()
         {
-            typeWritter = GetComponent<TypeWritter>();
-            spriteRenderer = transform.Find("Pic").GetComponent<SpriteRenderer>();
-            tmp = transform.Find("Text").GetComponent<TextMeshPro>();
+            _typeWritter = GetComponent<TypeWritter>();
+            _spriteRenderer = transform.Find("Pic").GetComponent<SpriteRenderer>();
+            _tmp = transform.Find("Text").GetComponent<TextMeshPro>();
             mask = transform.Find("Mask").gameObject;
 
-            typeWritter.TypeOpen(MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Text"), false, 0, 1, tmp, TypeWritter.TypeMode.CantZX);
+            _typeWritter.TypeOpen(MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Text"), false, 0, 1, _tmp, TypeWritter.TypeMode.CantZx);
         }
 
         private void Update()
@@ -41,22 +41,22 @@ namespace UCT.Global.Scene
                 return;
             if (MainControl.Instance.KeyArrowToControl(KeyCode.Z))
             {
-                typeWritter.TypeStop();
-                tmp.text = "";
+                _typeWritter.TypeStop();
+                _tmp.text = "";
                 MainControl.Instance.OutBlack("Start", Color.black);
             }
         }
 
         public void Fade(int number)
         {
-            picNumber = number;
-            spriteRenderer.DOColor(new Color(1, 1, 1, 0), 0.5f).SetEase(Ease.Linear).SetLoops(2, LoopType.Yoyo);
+            _picNumber = number;
+            _spriteRenderer.DOColor(new Color(1, 1, 1, 0), 0.5f).SetEase(Ease.Linear).SetLoops(2, LoopType.Yoyo);
             Invoke(nameof(ChangePic), 0.5f);
         }
 
         private void ChangePic()
         {
-            spriteRenderer.sprite = pics[picNumber];
+            _spriteRenderer.sprite = pics[_picNumber];
         }
     }
 }

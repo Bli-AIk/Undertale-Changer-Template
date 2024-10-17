@@ -18,9 +18,9 @@ namespace UCT.Global.Scene
         [Header("玩家名-LV-时间-位置-具体选项-底部字")]
         public List<TextMeshPro> tmps;
 
-        private int select, selectMax = 5;
+        private int _select, _selectMax = 5;
         public int layer;
-        private bool setData;
+        private bool _setData;
 
         public int saveNumber;
 
@@ -36,7 +36,7 @@ namespace UCT.Global.Scene
 
         private void Start()
         {
-            setData = false;
+            _setData = false;
             layer = 0;
             if (MainControl.Instance.dataNumber < 0)
                 MainControl.Instance.dataNumber = 0;
@@ -65,38 +65,38 @@ namespace UCT.Global.Scene
 
             if (MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow))
             {
-                select--;
+                _select--;
             }
             else if (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow))
             {
-                select -= 2;
+                _select -= 2;
             }
             if (MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow))
             {
-                select++;
+                _select++;
             }
             else if (MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow))
             {
-                select += 2;
+                _select += 2;
             }
-            if (select < 0 + 2 * Convert.ToInt32(setData))
+            if (_select < 0 + 2 * Convert.ToInt32(_setData))
             {
-                if (select % 2 != 0)
-                    select = selectMax;
+                if (_select % 2 != 0)
+                    _select = _selectMax;
                 else
-                    select = selectMax - 1;
+                    _select = _selectMax - 1;
             }
-            if (select > selectMax)
+            if (_select > _selectMax)
             {
-                if (select % 2 == 0)
-                    select = 0 + 2 * Convert.ToInt32(setData);
-                else select = 1 + 2 * Convert.ToInt32(setData);
+                if (_select % 2 == 0)
+                    _select = 0 + 2 * Convert.ToInt32(_setData);
+                else _select = 1 + 2 * Convert.ToInt32(_setData);
             }
-            if (setData && select == 2 && (saveNumber == 0))
+            if (_setData && _select == 2 && (saveNumber == 0))
             {
-                if (select % 2 == 0)
-                    select = 3;
-                else select = 4;
+                if (_select % 2 == 0)
+                    _select = 3;
+                else _select = 4;
             }
             if (layer == 0)
             {
@@ -107,8 +107,8 @@ namespace UCT.Global.Scene
                 }
                 if (MainControl.Instance.KeyArrowToControl(KeyCode.Z))
                 {
-                    if (!setData)
-                        switch (select)
+                    if (!_setData)
+                        switch (_select)
                         {
                             case 0:
                                 MainControl.Instance.OutBlack(MainControl.Instance.PlayerControl.saveScene, Color.black, true);
@@ -119,19 +119,19 @@ namespace UCT.Global.Scene
                                 break;
 
                             case 2:
-                                CanvasController.instance.InSetting();
+                                CanvasController.Instance.InSetting();
                                 break;
 
                             case 3:
-                                CanvasController.instance.settingLevel = 2;
+                                CanvasController.Instance.settingLevel = 2;
                                 goto case 2;
                             case 4:
-                                setData = true;
+                                _setData = true;
                                 saveNumber = MainControl.Instance.dataNumber;
                                 if (0 != (SaveController.GetDataNumber() - 1))
-                                    select = 5;
+                                    _select = 5;
                                 Flash();
-                                AudioController.instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                                AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
                                 break;
 
                             case 5:
@@ -142,18 +142,18 @@ namespace UCT.Global.Scene
                                 goto case 5;
                         }
                     else
-                        switch (select)
+                        switch (_select)
                         {
                             case 2:
-                                AudioController.instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                                AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
                                 if (saveNumber > 0)
                                     saveNumber--;
-                                select = 3;
+                                _select = 3;
                                 LoadLayer0();
                                 break;
 
                             case 3:
-                                AudioController.instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                                AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
                                 if (saveNumber == (SaveController.GetDataNumber() - 1))//新建
                                 {
                                     saveNumber++;
@@ -182,23 +182,23 @@ namespace UCT.Global.Scene
                             case 5:
                                 if (MainControl.Instance.dataNumber == saveNumber)
                                 {
-                                    setData = false;
+                                    _setData = false;
                                     Flash();
-                                    AudioController.instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                                    AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
                                     break;
                                 }
 
                                 MainControl.Instance.dataNumber = saveNumber;
-                                AudioController.instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                                AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
                                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
                                 break;
                         }
                 }
-                else if (MainControl.Instance.KeyArrowToControl(KeyCode.X) && setData)
+                else if (MainControl.Instance.KeyArrowToControl(KeyCode.X) && _setData)
                 {
-                    setData = false;
+                    _setData = false;
                     Flash();
-                    AudioController.instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                    AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
                 }
             }
         }
@@ -208,14 +208,14 @@ namespace UCT.Global.Scene
             List<string> list = new List<string>();
             for (int i = 0; i < 6; i++)
             {
-                if (setData && i == 2 && (saveNumber == 0))
+                if (_setData && i == 2 && (saveNumber == 0))
                     list.Add("<color=grey>");
-                else if (i != select)
+                else if (i != _select)
                     list.Add("");
                 else
                     list.Add("<color=yellow>");
             }
-            if (!setData)
+            if (!_setData)
                 tmps[4].text = list[0] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Menu0") + "</color> "
                                + list[1] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Menu1") + "</color>\n"
                                + list[2] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Menu2") + "</color> "

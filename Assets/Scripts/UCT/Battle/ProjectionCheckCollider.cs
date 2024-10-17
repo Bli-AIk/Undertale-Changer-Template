@@ -10,19 +10,19 @@ namespace UCT.Battle
     /// </summary>
     public class ProjectionCheckCollider : ObjectPool
     {
-        GameObject canvasBoxProjectionSet;
-        List<GameObject> sets = new List<GameObject>();
-        List<GameObject> checkColliders = new List<GameObject>();
+        GameObject _canvasBoxProjectionSet;
+        List<GameObject> _sets = new List<GameObject>();
+        List<GameObject> _checkColliders = new List<GameObject>();
         // Start is called before the first frame update
         void Start()
         {
-            canvasBoxProjectionSet = GameObject.Find("CanvasBoxProjectionSet");
+            _canvasBoxProjectionSet = GameObject.Find("CanvasBoxProjectionSet");
 
             obj = (GameObject)Resources.Load("Prefabs/CheckCollider");
-            for (int i = 0; i < canvasBoxProjectionSet.transform.childCount; i++)
+            for (int i = 0; i < _canvasBoxProjectionSet.transform.childCount; i++)
             {
-                sets.Add(canvasBoxProjectionSet.transform.GetChild(i).gameObject);
-                checkColliders.Add(GetFromPool());
+                _sets.Add(_canvasBoxProjectionSet.transform.GetChild(i).gameObject);
+                _checkColliders.Add(GetFromPool());
             }
         }
 
@@ -30,11 +30,11 @@ namespace UCT.Battle
         void Update()
         {
             Vector2 relative = (Vector2)MainControl.Instance.battlePlayerController.transform.position - MainControl.Instance.battlePlayerController.sceneDrift;
-            for (int i = 0; i < sets.Count; i++)
+            for (int i = 0; i < _sets.Count; i++)
             {
-                Vector3 convert = sets[i].transform.position + sets[i].transform.rotation * relative;
-                checkColliders[i].transform.position = (convert - canvasBoxProjectionSet.transform.position);
-                checkColliders[i].transform.rotation = sets[i].transform.rotation;
+                Vector3 convert = _sets[i].transform.position + _sets[i].transform.rotation * relative;
+                _checkColliders[i].transform.position = (convert - _canvasBoxProjectionSet.transform.position);
+                _checkColliders[i].transform.rotation = _sets[i].transform.rotation;
             }
         }
     }

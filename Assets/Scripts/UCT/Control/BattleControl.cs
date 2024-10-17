@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UCT.Control
 {
@@ -16,7 +17,8 @@ namespace UCT.Control
         [Header("HP 偶为目前血量 奇为最大Max 下同")]
         public List<int> enemiesHp;
 
-        public List<int> enemiesATK, enemiesDEF;
+        [FormerlySerializedAs("enemiesATK")] public List<int> enemiesAtk;
+        [FormerlySerializedAs("enemiesDEF")] public List<int> enemiesDef;
 
         [Header("战斗内UIText读取")]
         public string uiText;
@@ -42,10 +44,10 @@ namespace UCT.Control
         /// </summary>
         public enum BulletColor
         {
-            white,
-            blue,
-            orange,
-            green
+            White,
+            Blue,
+            Orange,
+            Green
         }
 
         public List<Color> bulletColorList;
@@ -55,13 +57,13 @@ namespace UCT.Control
         /// </summary>
         public enum PlayerColor
         {
-            red,
-            orange,
-            yellow,
-            green,
-            cyan,
-            blue,
-            purple,
+            Red,
+            Orange,
+            Yellow,
+            Green,
+            Cyan,
+            Blue,
+            Purple,
         }
 
         public List<Color> playerColorList, playerMissColorList;

@@ -58,25 +58,25 @@ namespace UCT.Global.Core
         private void Awake()
         {
             GameObject canvas;
-            if (CanvasController.instance == null)
+            if (CanvasController.Instance == null)
             {
                 canvas = Instantiate(Resources.Load<GameObject>("Prefabs/Canvas"));
                 canvas.name = "Canvas";
-                CanvasController.instance.framePic = framePic;
-                CanvasController.instance.renderMode = renderMode;
-                CanvasController.instance.openTurn = sceneState == SceneState.InBattle;
+                CanvasController.Instance.framePic = framePic;
+                CanvasController.Instance.renderMode = renderMode;
+                CanvasController.Instance.openTurn = sceneState == SceneState.InBattle;
                 DontDestroyOnLoad(canvas);
             }
             else
             {
-                CanvasController.instance.framePic = framePic;
-                CanvasController.instance.renderMode = renderMode;
-                CanvasController.instance.openTurn = sceneState == SceneState.InBattle;
-                CanvasController.instance.Start();
+                CanvasController.Instance.framePic = framePic;
+                CanvasController.Instance.renderMode = renderMode;
+                CanvasController.Instance.openTurn = sceneState == SceneState.InBattle;
+                CanvasController.Instance.Start();
             }
 
             GameObject bgm;
-            if (AudioController.instance == null)
+            if (AudioController.Instance == null)
             {
                 bgm = Instantiate(Resources.Load<GameObject>("Prefabs/BGM Source"));
                 bgm.name = "BGM Source";
@@ -84,7 +84,7 @@ namespace UCT.Global.Core
             }
             else
             {
-                bgm = AudioController.instance.gameObject;
+                bgm = AudioController.Instance.gameObject;
             }
             AudioSource audioSource = bgm.GetComponent<AudioSource>();
             audioSource.pitch = pitch;

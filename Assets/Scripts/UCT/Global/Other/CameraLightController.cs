@@ -8,11 +8,11 @@ namespace UCT.Global.Other
     {
         public float viewDistance = 10f; // 可视范围的半径
 
-        private Camera mainCamera;
+        private Camera _mainCamera;
 
         private void Start()
         {
-            mainCamera = GetComponent<Camera>();
+            _mainCamera = GetComponent<Camera>();
             UpdateLightsVisibility();
         }
 
@@ -23,7 +23,7 @@ namespace UCT.Global.Other
 
         private void UpdateLightsVisibility()
         {
-            if (MainControl.Instance.OverworldControl.noSFX)
+            if (MainControl.Instance.OverworldControl.noSfx)
                 return;
 
             // 获取所有光源组件的引用
@@ -34,7 +34,7 @@ namespace UCT.Global.Other
                 if (light.lightType == Light2D.LightType.Global)
                     return;
 
-                light.enabled = Vector3.Distance(light.transform.position, mainCamera.transform.position) <= viewDistance;
+                light.enabled = Vector3.Distance(light.transform.position, _mainCamera.transform.position) <= viewDistance;
             }
         }
     }

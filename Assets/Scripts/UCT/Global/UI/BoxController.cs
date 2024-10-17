@@ -11,7 +11,7 @@ namespace UCT.Global.UI
     /// </summary>
     public class BoxController : ObjectPool
     {
-        public static BoxController instance;
+        public static BoxController Instance;
         [Header("线宽")]
         public float width = 0.15f;
 
@@ -33,7 +33,7 @@ namespace UCT.Global.UI
 
         private void Awake()
         {
-            instance = this;
+            Instance = this;
 
             obj = new GameObject();
             obj.name = "Box";
@@ -41,7 +41,7 @@ namespace UCT.Global.UI
             obj.SetActive(false);
             FillPool();
         }
-        int number;
+        int _number;
         public BoxDrawer GetFromThePool()
         {
             List<Vector2> points = new List<Vector2>
@@ -55,8 +55,8 @@ namespace UCT.Global.UI
             BoxDrawer newBoxDrawer = GetFromPool().GetComponent<BoxDrawer>();
             newBoxDrawer.vertexPoints = points;
             boxes.Add(newBoxDrawer);
-            number++;
-            newBoxDrawer.name = "Box" + number;
+            _number++;
+            newBoxDrawer.name = "Box" + _number;
             newBoxDrawer.width = width;
             newBoxDrawer.tag = "Box";
             return newBoxDrawer;

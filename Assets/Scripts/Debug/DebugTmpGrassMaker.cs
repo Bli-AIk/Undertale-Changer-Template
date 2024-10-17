@@ -7,16 +7,16 @@ namespace Debug
 {
     public class DebugTmpGrassMaker : MonoBehaviour
     {
-        private TextMeshPro tmp;
+        private TextMeshPro _tmp;
         public List<string> strings;
         public float time, timeMax;
-        private bool select;
+        private bool _select;
 
         private void Start()
         {
             strings.Add("²Ý\n²Ý");
             strings.Add("²Ý *\n²Ý *");
-            tmp = GetComponent<TextMeshPro>();
+            _tmp = GetComponent<TextMeshPro>();
             time = timeMax;
         }
 
@@ -25,8 +25,8 @@ namespace Debug
             if (time < 0)
             {
                 time = timeMax;
-                select = !select;
-                tmp.text = strings[Convert.ToInt32(select)];
+                _select = !_select;
+                _tmp.text = strings[Convert.ToInt32(_select)];
             }
             else time -= Time.deltaTime;
         }

@@ -25,8 +25,8 @@ namespace UCT.Overworld
         [Header("设置在离开范围/进入范围时执行")]
         public bool isEnter;
 
-        private Animator animator;
-        private bool triggered;
+        private Animator _animator;
+        private bool _triggered;
 
         [Header("在上个场景为指定场景时动画器的sceneBool设true")]
         public string sceneSp;
@@ -38,11 +38,11 @@ namespace UCT.Overworld
 
         private void Start()
         {
-            animator = GetComponent<Animator>();
+            _animator = GetComponent<Animator>();
 
             if (sceneSp == MainControl.Instance.PlayerControl.lastScene)
             {
-                animator.SetBool(sceneBool, true);
+                _animator.SetBool(sceneBool, true);
             }
         }
 
@@ -50,10 +50,10 @@ namespace UCT.Overworld
         {
             if (banTrigger && notBanSceneSp != MainControl.Instance.PlayerControl.lastScene)
                 return;
-            if (!triggered && isEnter && collision.CompareTag("Player"))
+            if (!_triggered && isEnter && collision.CompareTag("Player"))
             {
-                animator.SetBool(changeBool, true);
-                triggered = true;
+                _animator.SetBool(changeBool, true);
+                _triggered = true;
             }
         }
 
@@ -61,10 +61,10 @@ namespace UCT.Overworld
         {
             if (banTrigger && notBanSceneSp != MainControl.Instance.PlayerControl.lastScene)
                 return;
-            if (!triggered && !isEnter && collision.CompareTag("Player"))
+            if (!_triggered && !isEnter && collision.CompareTag("Player"))
             {
-                animator.SetBool(changeBool, true);
-                triggered = true;
+                _animator.SetBool(changeBool, true);
+                _triggered = true;
             }
         }
 

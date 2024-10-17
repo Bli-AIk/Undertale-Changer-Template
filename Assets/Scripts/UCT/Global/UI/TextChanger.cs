@@ -2,6 +2,7 @@ using System;
 using TMPro;
 using UCT.Global.Core;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UCT.Global.UI
 {
@@ -11,12 +12,12 @@ namespace UCT.Global.UI
     public class TextChanger : MonoBehaviour
     {
         //public TMP_FontAsset assetback;
-        private TMP_Text tmp;
+        private TMP_Text _tmp;
 
         public bool width;//若中英混搭 则true就完事了
 
-        [Header("US/CN")]
-        public Vector4[] Options;
+        [FormerlySerializedAs("Options")] [Header("US/CN")]
+        public Vector4[] options;
 
         //public float[] sizes;
 
@@ -29,7 +30,7 @@ namespace UCT.Global.UI
 
         public void Set()
         {
-            tmp = GetComponent<TMP_Text>();
+            _tmp = GetComponent<TMP_Text>();
 
             /*
        while (tmp.font != assetback)
@@ -46,12 +47,12 @@ namespace UCT.Global.UI
 
         public void Change()
         {
-            if (tmp != null)
+            if (_tmp != null)
             {
-                tmp.characterSpacing = Options[Convert.ToInt32(width)].x;
-                tmp.wordSpacing = Options[Convert.ToInt32(width)].y;
-                tmp.lineSpacing = Options[Convert.ToInt32(width)].z;
-                tmp.paragraphSpacing = Options[Convert.ToInt32(width)].w;
+                _tmp.characterSpacing = options[Convert.ToInt32(width)].x;
+                _tmp.wordSpacing = options[Convert.ToInt32(width)].y;
+                _tmp.lineSpacing = options[Convert.ToInt32(width)].z;
+                _tmp.paragraphSpacing = options[Convert.ToInt32(width)].w;
             }
             else
             {

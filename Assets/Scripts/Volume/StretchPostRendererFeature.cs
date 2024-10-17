@@ -15,51 +15,51 @@ namespace Volume
         }
 
         public Settings settings = new Settings();
-        private StretchPostPass pass;
+        private StretchPostPass _pass;
 
         public override void Create()
         {
             name = "StretchPostPass";
-            pass = new StretchPostPass(RenderPassEvent.BeforeRenderingPostProcessing, settings.shader);
+            _pass = new StretchPostPass(RenderPassEvent.BeforeRenderingPostProcessing, settings.shader);
         }
 
         public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
         {
-            pass.Setup(renderer.cameraColorTarget);
-            renderer.EnqueuePass(pass);
+            _pass.Setup(renderer.cameraColorTarget);
+            renderer.EnqueuePass(_pass);
         }
     }
 
     [Serializable]
     public class StretchPostPass : ScriptableRenderPass
     {
-        private static readonly string renderTag = "StretchPost Effects";
+        private static readonly string RenderTag = "StretchPost Effects";
         private static readonly int MainTexId = Shader.PropertyToID("_MainTex");
         private static readonly int TempTargetId = Shader.PropertyToID("_TempTargetColorTint");
 
-        private StretchPostComponent StretchPostVolume;
-        private Material mat;
-        private RenderTargetIdentifier currentTarget;
+        private StretchPostComponent _stretchPostVolume;
+        private Material _mat;
+        private RenderTargetIdentifier _currentTarget;
 
-        public StretchPostPass(RenderPassEvent passEvent, Shader StretchPostShader)
+        public StretchPostPass(RenderPassEvent passEvent, Shader stretchPostShader)
         {
             renderPassEvent = passEvent;
-            if (StretchPostShader == null)
+            if (stretchPostShader == null)
             {
                 UCT.Global.Other.Debug.Log("Shader不存在");
                 return;
             }
-            mat = CoreUtils.CreateEngineMaterial(StretchPostShader);
+            _mat = CoreUtils.CreateEngineMaterial(stretchPostShader);
         }
 
         public void Setup(in RenderTargetIdentifier currentTarget)
         {
-            this.currentTarget = currentTarget;
+            this._currentTarget = currentTarget;
         }
 
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
-            if (mat == null)
+            if (_mat == null)
             {
                 return;
             }
@@ -68,16 +68,16 @@ namespace Volume
                 return;
             }
             VolumeStack stack = VolumeManager.instance.stack;
-            StretchPostVolume = stack.GetComponent<StretchPostComponent>();
-            if (StretchPostVolume == null)
+            _stretchPostVolume = stack.GetComponent<StretchPostComponent>();
+            if (_stretchPostVolume == null)
             {
                 return;
             }
-            if (StretchPostVolume.isShow.value == false)
+            if (_stretchPostVolume.isShow.value == false)
             {
                 return;
             }
-            CommandBuffer cmd = CommandBufferPool.Get(renderTag);
+            CommandBuffer cmd = CommandBufferPool.Get(RenderTag);
             Render(cmd, ref renderingData);
             context.ExecuteCommandBuffer(cmd);
             CommandBufferPool.Release(cmd);
@@ -87,15 +87,15 @@ namespace Volume
         {
             ref CameraData cameraData = ref renderingData.cameraData;
             Camera camera = cameraData.camera;
-            RenderTargetIdentifier source = currentTarget;
+            RenderTargetIdentifier source = _currentTarget;
             int destination = TempTargetId;
 
-            mat.SetVector("_Draw", StretchPostVolume.draw.value);
+            _mat.SetVector("_Draw", _stretchPostVolume.draw.value);
 
             cmd.SetGlobalTexture(MainTexId, source);
             cmd.GetTemporaryRT(destination, cameraData.camera.scaledPixelWidth, cameraData.camera.scaledPixelHeight, 0, FilterMode.Trilinear, RenderTextureFormat.Default);
             cmd.Blit(source, destination);
-            cmd.Blit(destination, source, mat, 0);
+            cmd.Blit(destination, source, _mat, 0);
         }
     }
 }

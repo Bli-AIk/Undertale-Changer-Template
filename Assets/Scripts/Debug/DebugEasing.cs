@@ -2,44 +2,45 @@ using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Debug
 {
     public class DebugEasing : MonoBehaviour
     {
-        public List<Vector2> vector2s;
+        [FormerlySerializedAs("vector2s")] public List<Vector2> vector2S;
         public float time;
         public float baseTime;
-        private float timer;
+        private float _timer;
         public string enumStr;
-        private LineRenderer lineRenderer;
-        private int setNumber;
+        private LineRenderer _lineRenderer;
+        private int _setNumber;
 
         private void Start()
         {
-            lineRenderer = GetComponent<LineRenderer>();
-            transform.localPosition = vector2s[0];
-            transform.DOLocalMoveX(vector2s[1].x, time);
-            transform.DOLocalMoveY(vector2s[1].y, time).SetEase((Ease)Enum.Parse(typeof(Ease), enumStr));
+            _lineRenderer = GetComponent<LineRenderer>();
+            transform.localPosition = vector2S[0];
+            transform.DOLocalMoveX(vector2S[1].x, time);
+            transform.DOLocalMoveY(vector2S[1].y, time).SetEase((Ease)Enum.Parse(typeof(Ease), enumStr));
         }
 
         private void Update()
         {
             if (Time.time < time)
             {
-                if (timer <= 0)
+                if (_timer <= 0)
                 {
-                    timer = baseTime;
+                    _timer = baseTime;
 
-                    if (lineRenderer.positionCount <= setNumber)
-                        lineRenderer.positionCount++;
+                    if (_lineRenderer.positionCount <= _setNumber)
+                        _lineRenderer.positionCount++;
 
-                    lineRenderer.SetPosition(setNumber, transform.position);
-                    setNumber++;
+                    _lineRenderer.SetPosition(_setNumber, transform.position);
+                    _setNumber++;
                 }
                 else
                 {
-                    timer -= Time.deltaTime;
+                    _timer -= Time.deltaTime;
                 }
             }
         }

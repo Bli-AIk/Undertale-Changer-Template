@@ -6,6 +6,7 @@ using UCT.Global.Audio;
 using UCT.Global.Core;
 using UCT.Global.UI;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UCT.Battle
 {
@@ -25,19 +26,20 @@ namespace UCT.Battle
         [Header("基本属性调整")]
         public float speed;
         public float speedWeightX, speedWeightY;//速度与权重(按X乘以倍数)，速度测试为3，权重0.5f
-        private readonly float speedWeight = 0.5f;
-        public float hitCD, hitCDMax;//无敌时间
+        private readonly float _speedWeight = 0.5f;
+        [FormerlySerializedAs("hitCD")] public float hitCd;//无敌时间
+        [FormerlySerializedAs("hitCDMax")] public float hitCdMax;//无敌时间
         public float displacement = 0.175f;//碰撞距离判定
         public bool isMoving;//用于蓝橙骨判断：玩家是否真的在移动
         public float timeInterpolation = -0.225f;
         public Vector2 sceneDrift = new(-1000, 0);
         public enum PlayerDirEnum
         {
-            up,
-            down,
-            left,
-            right,
-            nullDir
+            Up,
+            Down,
+            Left,
+            Right,
+            NullDir
         }
 
         public PlayerDirEnum playerDir;//方向
@@ -47,11 +49,11 @@ namespace UCT.Battle
         public float jumpRayDistance;//射线距离
         public float jumpRayDistanceForBoard;
 
-        private Rigidbody2D rigidBody;
+        private Rigidbody2D _rigidBody;
         public CircleCollider2D collideCollider;//圆形碰撞体
-        private SpriteRenderer spriteRenderer, dingSpriteRenderer;
+        private SpriteRenderer _spriteRenderer, _dingSpriteRenderer;
         public BattleControl.PlayerColor playerColor;//含有属性的颜色 读取BattleControl中的enum PlayerColor.颜色变换通过具体变换的函数来执行
-        private Tween missAnim, changeColor, changeDingColor, changeDingScale;
+        private Tween _missAnim, _changeColor, _changeDingColor, _changeDingScale;
 
         public UnityEngine.Rendering.Volume hitVolume;
 
@@ -63,13 +65,13 @@ namespace UCT.Battle
             jumpRayDistance = 0.2f;
             jumpRayDistanceForBoard = 0.2f;
             jumpAcceleration = 1.25f;
-            playerColor = BattleControl.PlayerColor.red;
-            playerDir = PlayerDirEnum.down;
-            rigidBody = GetComponent<Rigidbody2D>();
+            playerColor = BattleControl.PlayerColor.Red;
+            playerDir = PlayerDirEnum.Down;
+            _rigidBody = GetComponent<Rigidbody2D>();
             collideCollider = GetComponent<CircleCollider2D>();
-            spriteRenderer = GetComponent<SpriteRenderer>();
-            dingSpriteRenderer = transform.Find("Ding").GetComponent<SpriteRenderer>();
-            dingSpriteRenderer.color = Color.clear;
+            _spriteRenderer = GetComponent<SpriteRenderer>();
+            _dingSpriteRenderer = transform.Find("Ding").GetComponent<SpriteRenderer>();
+            _dingSpriteRenderer.color = Color.clear;
             hitVolume = GetComponent<UnityEngine.Rendering.Volume>();
             hitVolume.weight = 0;
             //mask = 1 << 6;
@@ -78,7 +80,7 @@ namespace UCT.Battle
         }
         private void Update()
         {
-            if (!MainControl.Instance.OverworldControl.noSFX && hitVolume.weight > 0)
+            if (!MainControl.Instance.OverworldControl.noSfx && hitVolume.weight > 0)
                 hitVolume.weight -= Time.deltaTime;
 
             if (MainControl.Instance.PlayerControl.hp <= 0)
@@ -87,10 +89,10 @@ namespace UCT.Battle
 
                 if (!(MainControl.Instance.PlayerControl.isDebug && MainControl.Instance.PlayerControl.invincible))
                 {
-                    spriteRenderer.color = Color.red;
+                    _spriteRenderer.color = Color.red;
                     MainControl.Instance.OverworldControl.playerDeadPos = transform.position - (Vector3)sceneDrift;
                     MainControl.Instance.OverworldControl.pause = true;
-                    TurnController.instance.KillIEnumerator();
+                    TurnController.Instance.KillIEnumerator();
                     MainControl.Instance.SwitchScene("Gameover", false);
                 }
                 else
@@ -103,16 +105,16 @@ namespace UCT.Battle
             if (MainControl.Instance.PlayerControl.missTime >= 0)
             {
                 MainControl.Instance.PlayerControl.missTime -= Time.deltaTime;
-                if (missAnim == null && MainControl.Instance.PlayerControl.missTimeMax >= 0.4f)
-                    missAnim = spriteRenderer.DOColor(MainControl.Instance.BattleControl.playerMissColorList[(int)playerColor], 0.2f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
+                if (_missAnim == null && MainControl.Instance.PlayerControl.missTimeMax >= 0.4f)
+                    _missAnim = _spriteRenderer.DOColor(MainControl.Instance.BattleControl.playerMissColorList[(int)playerColor], 0.2f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
             }
             else
             {
-                if (missAnim != null)
+                if (_missAnim != null)
                 {
-                    missAnim.Kill();
-                    missAnim = null;
-                    spriteRenderer.color = MainControl.Instance.BattleControl.playerColorList[(int)playerColor];
+                    _missAnim.Kill();
+                    _missAnim = null;
+                    _spriteRenderer.color = MainControl.Instance.BattleControl.playerColorList[(int)playerColor];
                 }
             }
 
@@ -144,7 +146,7 @@ namespace UCT.Battle
         {
             if (MainControl.Instance.OverworldControl.isSetting || MainControl.Instance.OverworldControl.pause)
                 return;
-            if (!TurnController.instance.isMyTurn)
+            if (!TurnController.Instance.isMyTurn)
                 Moving();
         }
         private void Moving()
@@ -152,19 +154,19 @@ namespace UCT.Battle
             Vector2 dirReal = new();
             switch (playerDir)
             {
-                case PlayerDirEnum.up:
+                case PlayerDirEnum.Up:
                     dirReal = Vector2.up;
                     break;
 
-                case PlayerDirEnum.down:
+                case PlayerDirEnum.Down:
                     dirReal = Vector2.down;
                     break;
 
-                case PlayerDirEnum.left:
+                case PlayerDirEnum.Left:
                     dirReal = Vector2.left;
                     break;
 
-                case PlayerDirEnum.right:
+                case PlayerDirEnum.Right:
                     dirReal = Vector2.right;
                     break;
             }
@@ -179,11 +181,11 @@ namespace UCT.Battle
             //------------------------移动------------------------
             switch (playerColor)
             {
-                case BattleControl.PlayerColor.red:
+                case BattleControl.PlayerColor.Red:
                     if (MainControl.Instance.KeyArrowToControl(KeyCode.X, 1))
                     {
-                        speedWeightX = speedWeight;
-                        speedWeightY = speedWeight;
+                        speedWeightX = _speedWeight;
+                        speedWeightY = _speedWeight;
                     }
                     else
                     {
@@ -219,19 +221,19 @@ namespace UCT.Battle
                         moving = new Vector3(0, moving.y);
                     break;
 
-                case BattleControl.PlayerColor.orange:
+                case BattleControl.PlayerColor.Orange:
                     break;
 
-                case BattleControl.PlayerColor.yellow:
+                case BattleControl.PlayerColor.Yellow:
                     break;
 
-                case BattleControl.PlayerColor.green:
+                case BattleControl.PlayerColor.Green:
                     break;
 
-                case BattleControl.PlayerColor.cyan:
+                case BattleControl.PlayerColor.Cyan:
                     break;
 
-                case BattleControl.PlayerColor.blue:
+                case BattleControl.PlayerColor.Blue:
                     RaycastHit2D infoForBoard = Physics2D.Raycast(transform.position, dirReal, jumpRayDistanceForBoard);
                     if (infoForBoard.collider != null)
                     {
@@ -267,10 +269,10 @@ namespace UCT.Battle
 
                     switch (playerDir)
                     {
-                        case PlayerDirEnum.up:
+                        case PlayerDirEnum.Up:
                             if (MainControl.Instance.KeyArrowToControl(KeyCode.X, 1))
                             {
-                                speedWeightX = speedWeight;
+                                speedWeightX = _speedWeight;
                             }
                             else
                             {
@@ -340,10 +342,10 @@ namespace UCT.Battle
                             jumpAcceleration += Time.deltaTime * timeInterpolation;
                             break;
 
-                        case PlayerDirEnum.down:////////////////////////////////////////////////
+                        case PlayerDirEnum.Down:////////////////////////////////////////////////
                             if (MainControl.Instance.KeyArrowToControl(KeyCode.X, 1))
                             {
-                                speedWeightX = speedWeight;
+                                speedWeightX = _speedWeight;
                             }
                             else
                             {
@@ -413,10 +415,10 @@ namespace UCT.Battle
                             jumpAcceleration += Time.deltaTime * timeInterpolation;
                             break;
 
-                        case PlayerDirEnum.left:////////////////////////////////////////////////
+                        case PlayerDirEnum.Left:////////////////////////////////////////////////
                             if (MainControl.Instance.KeyArrowToControl(KeyCode.X, 1))
                             {
-                                speedWeightY = speedWeight;
+                                speedWeightY = _speedWeight;
                             }
                             else
                             {
@@ -486,10 +488,10 @@ namespace UCT.Battle
                             jumpAcceleration += Time.deltaTime * timeInterpolation;
                             break;
 
-                        case PlayerDirEnum.right:
+                        case PlayerDirEnum.Right:
                             if (MainControl.Instance.KeyArrowToControl(KeyCode.X, 1))
                             {
-                                speedWeightY = speedWeight;
+                                speedWeightY = _speedWeight;
                             }
                             else
                             {
@@ -561,7 +563,7 @@ namespace UCT.Battle
                     }
                     break;
 
-                case BattleControl.PlayerColor.purple:
+                case BattleControl.PlayerColor.Purple:
                     break;
             }
 
@@ -626,30 +628,30 @@ namespace UCT.Battle
             }
             else
             {
-                if (playerColor == BattleControl.PlayerColor.blue && jumpRayDistance != 0)
+                if (playerColor == BattleControl.PlayerColor.Blue && jumpRayDistance != 0)
                     isMoving = true;
                 else
                     isMoving = false;
             }
 
             float movingSave = 0;
-            if (playerColor == BattleControl.PlayerColor.blue && isJump)
+            if (playerColor == BattleControl.PlayerColor.Blue && isJump)
             {
                 switch (playerDir)
                 {
-                    case PlayerDirEnum.up:
+                    case PlayerDirEnum.Up:
                         movingSave = moving.y;
                         break;
 
-                    case PlayerDirEnum.down:
+                    case PlayerDirEnum.Down:
                         movingSave = moving.y;
                         break;
 
-                    case PlayerDirEnum.left:
+                    case PlayerDirEnum.Left:
                         movingSave = moving.x;
                         break;
 
-                    case PlayerDirEnum.right:
+                    case PlayerDirEnum.Right:
                         movingSave = moving.x;
                         break;
                 }
@@ -662,10 +664,10 @@ namespace UCT.Battle
         
             Vector3 newPos = transform.position + new Vector3(speedWeightX * speed * moving.x * Time.deltaTime, speedWeightY * speed * moving.y * Time.deltaTime);//速度参考：3
 
-            Vector3 checkPos = CheckPoint(newPos, displacement + BoxController.instance.width / 2);
+            Vector3 checkPos = CheckPoint(newPos, displacement + BoxController.Instance.width / 2);
 
             if (newPos == checkPos)
-                rigidBody.MovePosition(newPos);
+                _rigidBody.MovePosition(newPos);
             else
                 transform.position = checkPos;
 
@@ -676,7 +678,7 @@ namespace UCT.Battle
         private void OnCollisionEnter2D(Collision2D collision)
         {
             //蓝心碰板子确保再次可以跳
-            if (collision.transform.CompareTag("board") && collision.transform.GetComponent<EdgeCollider2D>().IsTouching(collideCollider) && playerColor == BattleControl.PlayerColor.blue)
+            if (collision.transform.CompareTag("board") && collision.transform.GetComponent<EdgeCollider2D>().IsTouching(collideCollider) && playerColor == BattleControl.PlayerColor.Blue)
             {
                 BlueJumpReady();
             }
@@ -706,7 +708,7 @@ namespace UCT.Battle
         ///</summary>
         private void OnCollisionExit2D(Collision2D collision)
         {
-            if (collision.transform.CompareTag("board") && playerColor == BattleControl.PlayerColor.blue && !isJump)
+            if (collision.transform.CompareTag("board") && playerColor == BattleControl.PlayerColor.Blue && !isJump)
             {
                 BlueDown();
             }
@@ -718,9 +720,9 @@ namespace UCT.Battle
         ///若gradientTime/dingTime小于0 则使用该脚本内的gradientTime/dingTime变量。
         ///若PlayerColor输入为nullColor，则不会更改玩家的实际颜色属性。
         ///</summary>
-        public void ChangePlayerColor(Color aimColor, BattleControl.PlayerColor aimPlayerColor, float startForce = 0, PlayerDirEnum dir = PlayerDirEnum.nullDir, float gradientTime = -1, float dingTime = -1, int fx = 2)
+        public void ChangePlayerColor(Color aimColor, BattleControl.PlayerColor aimPlayerColor, float startForce = 0, PlayerDirEnum dir = PlayerDirEnum.NullDir, float gradientTime = -1, float dingTime = -1, int fx = 2)
         {
-            AudioController.instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipBattle);
+            AudioController.Instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipBattle);
 
             if (gradientTime < 0)
                 gradientTime = this.gradientTime;
@@ -730,32 +732,32 @@ namespace UCT.Battle
 
             if (gradientTime <= 0)
             {
-                spriteRenderer.color = aimColor;
+                _spriteRenderer.color = aimColor;
                 if (dingTime > 0)
                 {
-                    changeDingColor.Kill(true);
-                    changeDingScale.Kill(true);
+                    _changeDingColor.Kill(true);
+                    _changeDingScale.Kill(true);
 
-                    dingSpriteRenderer.transform.localScale = Vector3.one;
-                    dingSpriteRenderer.color = aimColor;
-                    changeDingColor = dingSpriteRenderer.DOColor(dingSpriteRenderer.color * new Color(1, 1, 1, 0), dingTime).SetEase(Ease.InOutSine);
-                    changeDingScale = dingSpriteRenderer.transform.DOScale(Vector3.one * 2.5f, dingTime).SetEase(Ease.InOutSine);
+                    _dingSpriteRenderer.transform.localScale = Vector3.one;
+                    _dingSpriteRenderer.color = aimColor;
+                    _changeDingColor = _dingSpriteRenderer.DOColor(_dingSpriteRenderer.color * new Color(1, 1, 1, 0), dingTime).SetEase(Ease.InOutSine);
+                    _changeDingScale = _dingSpriteRenderer.transform.DOScale(Vector3.one * 2.5f, dingTime).SetEase(Ease.InOutSine);
                 }
             }
             else
             {
-                changeColor.Kill(true);
-                changeColor = spriteRenderer.DOColor(aimColor, gradientTime).SetEase(Ease.InOutSine);
+                _changeColor.Kill(true);
+                _changeColor = _spriteRenderer.DOColor(aimColor, gradientTime).SetEase(Ease.InOutSine);
                 if (dingTime > 0)
                 {
 
-                    changeDingColor.Kill(true);
-                    changeDingScale.Kill(true);
+                    _changeDingColor.Kill(true);
+                    _changeDingScale.Kill(true);
 
-                    dingSpriteRenderer.transform.localScale = Vector3.one;
-                    dingSpriteRenderer.color += new Color(0, 0, 0, 1);
-                    changeDingColor = dingSpriteRenderer.DOColor(aimColor * new Color(1, 1, 1, 0), dingTime).SetEase(Ease.InOutSine);
-                    changeDingScale = dingSpriteRenderer.transform.DOScale(Vector3.one * 2.5f, dingTime).SetEase(Ease.InOutSine);
+                    _dingSpriteRenderer.transform.localScale = Vector3.one;
+                    _dingSpriteRenderer.color += new Color(0, 0, 0, 1);
+                    _changeDingColor = _dingSpriteRenderer.DOColor(aimColor * new Color(1, 1, 1, 0), dingTime).SetEase(Ease.InOutSine);
+                    _changeDingScale = _dingSpriteRenderer.transform.DOScale(Vector3.one * 2.5f, dingTime).SetEase(Ease.InOutSine);
                 }
             }
             if (playerColor != aimPlayerColor)
@@ -769,7 +771,7 @@ namespace UCT.Battle
 
             
             }
-            if (aimPlayerColor == BattleControl.PlayerColor.blue)
+            if (aimPlayerColor == BattleControl.PlayerColor.Blue)
             {
                 transform.SetParent(null);
                 BlueDown(startForce, dir);
@@ -780,9 +782,9 @@ namespace UCT.Battle
         ///<summary>
         ///让蓝心坠落
         ///</summary>
-        void BlueDown(float startForce = 0, PlayerDirEnum dir = PlayerDirEnum.nullDir)
+        void BlueDown(float startForce = 0, PlayerDirEnum dir = PlayerDirEnum.NullDir)
         {
-            if (dir != PlayerDirEnum.nullDir)
+            if (dir != PlayerDirEnum.NullDir)
             {
                 playerDir = dir;
             }
@@ -790,19 +792,19 @@ namespace UCT.Battle
             isJump = true;
             switch (playerDir)
             {
-                case PlayerDirEnum.up:
+                case PlayerDirEnum.Up:
                     moving = new Vector3(moving.x, startForce);
                     break;
 
-                case PlayerDirEnum.down:
+                case PlayerDirEnum.Down:
                     moving = new Vector3(moving.x, -startForce);
                     break;
 
-                case PlayerDirEnum.left:
+                case PlayerDirEnum.Left:
                     moving = new Vector3(-startForce, moving.y);
                     break;
 
-                case PlayerDirEnum.right:
+                case PlayerDirEnum.Right:
                     moving = new Vector3(startForce, moving.y);
                     break;
             }
@@ -914,7 +916,7 @@ namespace UCT.Battle
                 return point; //如果达到最大次数，返回当前点
             }
 
-            foreach (var box in BoxController.instance.boxes) //遍历所有战斗框
+            foreach (var box in BoxController.Instance.boxes) //遍历所有战斗框
             {
                 if (box.localPosition.z != z)//排除Z轴不同的
                     continue;
@@ -946,7 +948,7 @@ namespace UCT.Battle
             float nearestDistance = float.MaxValue; //最近距离设为最大值
             bool isParent = false;//确定框是否为复合的框，如果是，需要额外调整移动距离
 
-            foreach (var box in BoxController.instance.boxes) //遍历所有战斗框
+            foreach (var box in BoxController.Instance.boxes) //遍历所有战斗框
             {
                 if (box.localPosition.z != z)//排除Z轴不同的
                     continue;

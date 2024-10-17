@@ -15,66 +15,66 @@ namespace UCT.Overworld
     /// </summary>
     public class OverworldTalkSelect : MonoBehaviour
     {
-        public static OverworldTalkSelect instance;
+        public static OverworldTalkSelect Instance;
         public int select;
-        private Image heart;
-        private bool canSelect;
-        private TypeWritter typeWritter;
+        private Image _heart;
+        private bool _canSelect;
+        private TypeWritter _typeWritter;
         public List<string> texts;
         public string typeText;
 
         private void Awake()
         {
-            instance = this;
+            Instance = this;
         }
 
         private void Start()
         {
-            typeWritter = GameObject.Find("BackpackCanvas").GetComponent<TypeWritter>();
-            Transform heartTrans = BackpackBehaviour.instance.typeMessage.transform.Find("Heart");
+            _typeWritter = GameObject.Find("BackpackCanvas").GetComponent<TypeWritter>();
+            Transform heartTrans = BackpackBehaviour.Instance.typeMessage.transform.Find("Heart");
             GameObject heartObj;
             if (!heartTrans)
-                heartObj = Instantiate(new GameObject(), BackpackBehaviour.instance.typeMessage.transform);
+                heartObj = Instantiate(new GameObject(), BackpackBehaviour.Instance.typeMessage.transform);
             else heartObj = heartTrans.gameObject;
 
-            heart = heartObj.AddComponent<Image>() ?? heartObj.GetComponent<Image>();
-            heart.rectTransform.sizeDelta = 16 * Vector3.one;
-            heart.sprite = Resources.Load<Sprite>("Sprites/Soul");
-            heart.color = Color.clear;
+            _heart = heartObj.AddComponent<Image>() ?? heartObj.GetComponent<Image>();
+            _heart.rectTransform.sizeDelta = 16 * Vector3.one;
+            _heart.sprite = Resources.Load<Sprite>("Sprites/Soul");
+            _heart.color = Color.clear;
         }
 
         public void Open()
         {
             select = 0;
-            heart.rectTransform.anchoredPosition = new Vector2(-143.3f + Convert.ToInt32(select) * 192.5f, -18.8f);
-            heart.color = Color.red;
-            canSelect = true;
+            _heart.rectTransform.anchoredPosition = new Vector2(-143.3f + Convert.ToInt32(select) * 192.5f, -18.8f);
+            _heart.color = Color.red;
+            _canSelect = true;
         }
 
         private void Update()
         {
-            if (canSelect)
+            if (_canSelect)
             {
                 if (MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow))
                 {
                     if (select > 0)
                         select--;
                     else select = 1;
-                    heart.rectTransform.anchoredPosition = new Vector2(-143.3f + Convert.ToInt32(select) * 192.5f, -18.8f);
-                    AudioController.instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                    _heart.rectTransform.anchoredPosition = new Vector2(-143.3f + Convert.ToInt32(select) * 192.5f, -18.8f);
+                    AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
                 }
                 else if (MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow))
                 {
                     if (select < 1)
                         select++;
                     else select = 0;
-                    heart.rectTransform.anchoredPosition = new Vector2(-143.3f + Convert.ToInt32(select) * 192.5f, -18.8f);
-                    AudioController.instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                    _heart.rectTransform.anchoredPosition = new Vector2(-143.3f + Convert.ToInt32(select) * 192.5f, -18.8f);
+                    AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
                 }
 
                 if (MainControl.Instance.KeyArrowToControl(KeyCode.Z))
                 {
-                    typeWritter.TypeStop();
+                    _typeWritter.TypeStop();
                     switch (select)
                     {
                         case 0://选择了左侧选项
@@ -89,13 +89,13 @@ namespace UCT.Overworld
                             */
 
                                 case "BackMenu":
-                                    typeWritter.forceReturn = true;
+                                    _typeWritter.forceReturn = true;
                                     MainControl.Instance.OutBlack("Menu", Color.black, true, 0f);
-                                    AudioController.instance.audioSource.volume = 0;
+                                    AudioController.Instance.audioSource.volume = 0;
                                     break;
 
                                 case "Select":
-                                    AudioController.instance.GetFx(2, MainControl.Instance.AudioControl.fxClipBattle);
+                                    AudioController.Instance.GetFx(2, MainControl.Instance.AudioControl.fxClipBattle);
                                     break;
                             }
                             break;
@@ -103,8 +103,8 @@ namespace UCT.Overworld
                         case 1://选择了右侧选项
                             break;
                     }
-                    heart.color = Color.clear;
-                    canSelect = false;
+                    _heart.color = Color.clear;
+                    _canSelect = false;
                 }
             }
         }

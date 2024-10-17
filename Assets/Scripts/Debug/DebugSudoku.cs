@@ -6,20 +6,20 @@ namespace Debug
     {
         public bool change;
         public bool booooool;
-        private SpriteRenderer sprite;
-        private BoxCollider2D BoxCollider2D;
+        private SpriteRenderer _sprite;
+        private BoxCollider2D _boxCollider2D;
 
         private void Awake()
         {
-            sprite = GetComponent<SpriteRenderer>();
-            BoxCollider2D = GetComponent<BoxCollider2D>();
+            _sprite = GetComponent<SpriteRenderer>();
+            _boxCollider2D = GetComponent<BoxCollider2D>();
         }
 
         public void Changed()
         {
             if (change)
             {
-                BoxCollider2D.enabled = false;
+                _boxCollider2D.enabled = false;
                 booooool = !booooool;
                 for (int i = 0; i < 4; i++)
                 {
@@ -41,7 +41,7 @@ namespace Debug
                     }
                 }
                 change = !change;
-                BoxCollider2D.enabled = true;
+                _boxCollider2D.enabled = true;
             }
         }
 
@@ -49,9 +49,9 @@ namespace Debug
         {
             if (booooool)
             {
-                sprite.color = Color.yellow;
+                _sprite.color = Color.yellow;
             }
-            else sprite.color = Color.white;
+            else _sprite.color = Color.white;
 
             Changed();
         }

@@ -56,7 +56,7 @@ namespace UCT.Global.Core
         public bool haveInOutBlack, noInBlack;
         public bool notPauseIn;
 
-        private Image inOutBlack;
+        private Image _inOutBlack;
 
         [Header("引用用的")]
         [Header("战斗外")]
@@ -65,7 +65,7 @@ namespace UCT.Global.Core
         //[Header("战斗内")]
         //public OldBoxController OldBoxController;
 
-        private Camera cameraMainInBattle;
+        private Camera _cameraMainInBattle;
 
         public BoxDrawer mainBox;
 
@@ -228,7 +228,7 @@ namespace UCT.Global.Core
             //--------------------------------------------------------------------------------
 
             OverworldControl.hdResolution = Convert.ToBoolean(PlayerPrefs.GetInt("hdResolution", 0));
-            OverworldControl.noSFX = Convert.ToBoolean(PlayerPrefs.GetInt("noSFX", 0));
+            OverworldControl.noSfx = Convert.ToBoolean(PlayerPrefs.GetInt("noSFX", 0));
             OverworldControl.vsyncMode = (OverworldControl.VSyncMode)PlayerPrefs.GetInt("vsyncMode", 0);
         }
 
@@ -297,8 +297,8 @@ namespace UCT.Global.Core
             if (cameraShake == null)
                 cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
             cameraShake3D = GameObject.Find("3D CameraP").GetComponent<CameraShake>();
-            if (cameraMainInBattle == null)
-                cameraMainInBattle = cameraShake.GetComponent<Camera>();
+            if (_cameraMainInBattle == null)
+                _cameraMainInBattle = cameraShake.GetComponent<Camera>();
         }
 
         private void Awake()
@@ -346,33 +346,33 @@ namespace UCT.Global.Core
 
             if (haveInOutBlack)
             {
-                inOutBlack = GameObject.Find("Canvas/InOutBlack").GetComponent<Image>();
-                inOutBlack.color = Color.black;
+                _inOutBlack = GameObject.Find("Canvas/InOutBlack").GetComponent<Image>();
+                _inOutBlack.color = Color.black;
                 OverworldControl.pause = !notPauseIn;
                 if (!noInBlack)
                 {
-                    inOutBlack.DOColor(Color.clear, 0.5f).SetEase(Ease.Linear).OnKill(EndBlack);
+                    _inOutBlack.DOColor(Color.clear, 0.5f).SetEase(Ease.Linear).OnKill(EndBlack);
                     if (OverworldControl.hdResolution)
                     {
                         //CanvasController.instance.frame.DOKill();
                         //CanvasController.instance.frame.DOColor(Color.white, 0.5f);
-                        CanvasController.instance.frame.color = new Color(1, 1, 1, 1);
+                        CanvasController.Instance.frame.color = new Color(1, 1, 1, 1);
                     }
-                    else CanvasController.instance.frame.color = new Color(1, 1, 1, 0);
+                    else CanvasController.Instance.frame.color = new Color(1, 1, 1, 0);
                 }
                 else
                 {
-                    inOutBlack.color = Color.clear;
+                    _inOutBlack.color = Color.clear;
                 }
             }
-            SetCanvasFrameSprite(CanvasController.instance.framePic);
+            SetCanvasFrameSprite(CanvasController.Instance.framePic);
 
             AudioListener.volume = OverworldControl.mainVolume;
             OverworldControl.isSetting = false;
 
-            FindAndChangeAllSFX(OverworldControl.noSFX);
+            FindAndChangeAllSfx(OverworldControl.noSfx);
 
-            beatTimes = BGMBPMCount(bpm, bpmDeviation);
+            beatTimes = BgmbpmCount(bpm, bpmDeviation);
         }
         public Color RandomColor()
         {
@@ -430,8 +430,8 @@ namespace UCT.Global.Core
             }
             if (KeyArrowToControl(KeyCode.Semicolon))
             {
-                OverworldControl.noSFX = !OverworldControl.noSFX;
-                FindAndChangeAllSFX(OverworldControl.noSFX);
+                OverworldControl.noSfx = !OverworldControl.noSfx;
+                FindAndChangeAllSfx(OverworldControl.noSfx);
             }
             if (KeyArrowToControl(KeyCode.F4))
             {
@@ -445,10 +445,10 @@ namespace UCT.Global.Core
         /// <summary>
         /// 计算BGM节拍
         /// </summary>
-        List<float> BGMBPMCount(float bpm, float bpmDeviation, float musicDuration = 0)
+        List<float> BgmbpmCount(float bpm, float bpmDeviation, float musicDuration = 0)
         {
             if (musicDuration <= 0)
-                musicDuration = AudioController.instance.audioSource.clip.length;
+                musicDuration = AudioController.Instance.audioSource.clip.length;
 
             float beatInterval = 60f / bpm;
             float currentTime = bpmDeviation;
@@ -474,17 +474,17 @@ namespace UCT.Global.Core
                 return;
 
             bool firstIn = true;
-            while (currentBeatIndex < beatTimes.Count && AudioController.instance.audioSource.time >= nextBeatTime)
+            while (currentBeatIndex < beatTimes.Count && AudioController.Instance.audioSource.time >= nextBeatTime)
             {
                 if (firstIn)
                 {
                     if (currentBeatIndex % 4 == 0)
                     {
-                        AudioController.instance.GetFx(13, AudioControl.fxClipUI);
+                        AudioController.Instance.GetFx(13, AudioControl.fxClipUI);
                     }
                     else
                     {
-                        AudioController.instance.GetFx(14, AudioControl.fxClipUI);
+                        AudioController.Instance.GetFx(14, AudioControl.fxClipUI);
                     }
                 }
                 currentBeatIndex++;
@@ -620,7 +620,7 @@ namespace UCT.Global.Core
         /// <summary>
         /// 开/关 SFX
         /// </summary>
-        public void FindAndChangeAllSFX(bool isClose)
+        public void FindAndChangeAllSfx(bool isClose)
         {
             foreach (Light2D light in Resources.FindObjectsOfTypeAll(typeof(Light2D)))
             {
@@ -636,13 +636,13 @@ namespace UCT.Global.Core
 
             if (sceneState == SceneState.InBattle)
             {
-                if (cameraMainInBattle == null)
+                if (_cameraMainInBattle == null)
                 {
                     if (cameraShake == null)
                         cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
-                    cameraMainInBattle = cameraShake.GetComponent<Camera>();
+                    _cameraMainInBattle = cameraShake.GetComponent<Camera>();
                 }
-                cameraMainInBattle.GetUniversalAdditionalCameraData().renderPostProcessing = !isClose;
+                _cameraMainInBattle.GetUniversalAdditionalCameraData().renderPostProcessing = !isClose;
             }
         }
 
@@ -682,7 +682,7 @@ namespace UCT.Global.Core
 
         private void SetCanvasFrameSprite(int framePic = 2)//一般为CanvasController.instance.framePic
         {
-            Image frame = CanvasController.instance.frame;
+            Image frame = CanvasController.Instance.frame;
             if (framePic < 0)
             {
                 frame.sprite = null;
@@ -698,12 +698,12 @@ namespace UCT.Global.Core
         /// </summary>
         public void SetResolution(int resolution)
         {
-            if (cameraMainInBattle == null)
+            if (_cameraMainInBattle == null)
             {
                 if (cameraShake == null)
                     cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
                 if (cameraShake != null)
-                    cameraMainInBattle = cameraShake.GetComponent<Camera>();
+                    _cameraMainInBattle = cameraShake.GetComponent<Camera>();
             }
 
             if (!OverworldControl.hdResolution)
@@ -723,7 +723,7 @@ namespace UCT.Global.Core
                 if (sceneState == SceneState.InBattle)
                 {
                 
-                    cameraMainInBattle.rect = new Rect(0, 0, 1, 1);
+                    _cameraMainInBattle.rect = new Rect(0, 0, 1, 1);
                 }
                 // BackpackBehaviour rawImage在其脚本中控制
                 /*
@@ -735,21 +735,21 @@ namespace UCT.Global.Core
 
             rectTransform.localScale = Vector3.one;
             */
-                if (BackpackBehaviour.instance != null)
-                    BackpackBehaviour.instance.SuitResolution();
+                if (BackpackBehaviour.Instance != null)
+                    BackpackBehaviour.Instance.SuitResolution();
 
-                CanvasController.instance.DOKill();
-                CanvasController.instance.fps.rectTransform.anchoredPosition = new Vector2();
-                CanvasController.instance.frame.color = new Color(1, 1, 1, 0);
-                CanvasController.instance.setting.transform.localScale = Vector3.one;
-                CanvasController.instance.setting.rectTransform.anchoredPosition = new Vector2(0, CanvasController.instance.setting.rectTransform.anchoredPosition.y);
+                CanvasController.Instance.DOKill();
+                CanvasController.Instance.fps.rectTransform.anchoredPosition = new Vector2();
+                CanvasController.Instance.frame.color = new Color(1, 1, 1, 0);
+                CanvasController.Instance.setting.transform.localScale = Vector3.one;
+                CanvasController.Instance.setting.rectTransform.anchoredPosition = new Vector2(0, CanvasController.Instance.setting.rectTransform.anchoredPosition.y);
             }
             else
             {
                 Camera.main.rect = new Rect(0, 0.056f, 1, 0.888f);
                 if (sceneState == SceneState.InBattle)
                 {
-                    cameraMainInBattle.rect = new Rect(0, 0.056f, 1, 0.888f);
+                    _cameraMainInBattle.rect = new Rect(0, 0.056f, 1, 0.888f);
                 }
 
                 // BackpackBehaviour rawImage在其脚本中控制
@@ -762,25 +762,25 @@ namespace UCT.Global.Core
 
             rectTransform.localScale = Vector3.one * 0.89f;
             */
-                if (BackpackBehaviour.instance != null)
-                    BackpackBehaviour.instance.SuitResolution();
+                if (BackpackBehaviour.Instance != null)
+                    BackpackBehaviour.Instance.SuitResolution();
 
                 //在SetCanvasFrameSprite内设定
                 //CanvasController.instance.frame.sprite = OverworldControl.frames[CanvasController.instance.framePic];
 
-                CanvasController.instance.DOKill();
+                CanvasController.Instance.DOKill();
 
-                if (CanvasController.instance.framePic < 0)
+                if (CanvasController.Instance.framePic < 0)
                 {
-                    CanvasController.instance.frame.color = Color.black;
-                    CanvasController.instance.fps.rectTransform.anchoredPosition = new Vector2(0, -30f);
+                    CanvasController.Instance.frame.color = Color.black;
+                    CanvasController.Instance.fps.rectTransform.anchoredPosition = new Vector2(0, -30f);
                 }
                 else 
-                    CanvasController.instance.fps.rectTransform.anchoredPosition = new Vector2();
+                    CanvasController.Instance.fps.rectTransform.anchoredPosition = new Vector2();
 
-                CanvasController.instance.frame.DOColor(new Color(1, 1, 1, 1) * Convert.ToInt32(CanvasController.instance.framePic >= 0), 1f);
-                CanvasController.instance.setting.transform.localScale = Vector3.one * 0.89f;
-                CanvasController.instance.setting.rectTransform.anchoredPosition = new Vector2(142.5f, CanvasController.instance.setting.rectTransform.anchoredPosition.y);
+                CanvasController.Instance.frame.DOColor(new Color(1, 1, 1, 1) * Convert.ToInt32(CanvasController.Instance.framePic >= 0), 1f);
+                CanvasController.Instance.setting.transform.localScale = Vector3.one * 0.89f;
+                CanvasController.Instance.setting.rectTransform.anchoredPosition = new Vector2(142.5f, CanvasController.Instance.setting.rectTransform.anchoredPosition.y);
             }
 
             switch (resolution)
@@ -827,12 +827,12 @@ namespace UCT.Global.Core
         /// banMusic是渐出
         /// time大于0有动画 等于0就直接切场景 小于0时会以time的绝对值
         /// </summary>
-        public void OutBlack(string scene, Color color, bool banMusic = false, float time = 0.5f, bool Async = true)
+        public void OutBlack(string scene, Color color, bool banMusic = false, float time = 0.5f, bool async = true)
         {
             blacking = true;
             if (banMusic)
             {
-                AudioSource bgm = AudioController.instance.transform.GetComponent<AudioSource>();
+                AudioSource bgm = AudioController.Instance.transform.GetComponent<AudioSource>();
                 if (time > 0)
                     DOTween.To(() => bgm.volume, x => bgm.volume = x, 0, time).SetEase(Ease.Linear);
                 else if (time == 0)
@@ -843,39 +843,39 @@ namespace UCT.Global.Core
             OverworldControl.pause = true;
             if (time > 0)
             {
-                inOutBlack.DOColor(color, time).SetEase(Ease.Linear).OnKill(() => SwitchScene(scene));
+                _inOutBlack.DOColor(color, time).SetEase(Ease.Linear).OnKill(() => SwitchScene(scene));
                 if (!OverworldControl.hdResolution)
-                    CanvasController.instance.frame.color = new Color(1, 1, 1, 0);
+                    CanvasController.Instance.frame.color = new Color(1, 1, 1, 0);
             }
             else if (time == 0)
             {
-                inOutBlack.color = color;
-                SwitchScene(scene, Async);
+                _inOutBlack.color = color;
+                SwitchScene(scene, async);
             }
             else
             {
                 time = Mathf.Abs(time);
-                inOutBlack.color = color;
-                inOutBlack.DOColor(color, time).SetEase(Ease.Linear).OnKill(() => SwitchScene(scene));
+                _inOutBlack.color = color;
+                _inOutBlack.DOColor(color, time).SetEase(Ease.Linear).OnKill(() => SwitchScene(scene));
                 if (!OverworldControl.hdResolution)
-                    CanvasController.instance.frame.color = new Color(1, 1, 1, 0);
+                    CanvasController.Instance.frame.color = new Color(1, 1, 1, 0);
             }
         }
 
         public void OutWhite(string scene)
         {
             blacking = true;
-            inOutBlack.color = new Color(1, 1, 1, 0);
-            AudioController.instance.GetFx(6, AudioControl.fxClipUI);
-            inOutBlack.DOColor(Color.white, 5.5f).SetEase(Ease.Linear).OnKill(() => SwitchScene(scene));
+            _inOutBlack.color = new Color(1, 1, 1, 0);
+            AudioController.Instance.GetFx(6, AudioControl.fxClipUI);
+            _inOutBlack.DOColor(Color.white, 5.5f).SetEase(Ease.Linear).OnKill(() => SwitchScene(scene));
         }
 
-        public void SwitchScene(string name, bool Async = true)
+        public void SwitchScene(string name, bool async = true)
         {
             SetCanvasFrameSprite();
             if (SceneManager.GetActiveScene().name != "Menu" && SceneManager.GetActiveScene().name != "Rename" && SceneManager.GetActiveScene().name != "Story" && SceneManager.GetActiveScene().name != "Start" && SceneManager.GetActiveScene().name != "Gameover")
                 PlayerControl.lastScene = SceneManager.GetActiveScene().name;
-            if (Async)
+            if (async)
                 SceneManager.LoadSceneAsync(name);
             else SceneManager.LoadScene(name);
 
@@ -1000,7 +1000,7 @@ namespace UCT.Global.Core
         /// 然后再让打字机打个字
         /// plusText填0就自己计算
         /// </summary>
-        public void UseItem(TypeWritter typeWritter, TMP_Text tmp_Text, int sonSelect, int plusText = 0)
+        public void UseItem(TypeWritter typeWritter, TMP_Text tmpText, int sonSelect, int plusText = 0)
         {
             if (plusText == 0)
             {
@@ -1013,23 +1013,23 @@ namespace UCT.Global.Core
 
             if (PlayerControl.myItems[sonSelect - 1] >= 20000)
             {
-                typeWritter.TypeOpen(ItemControl.itemTextMaxItemSon[(PlayerControl.myItems[sonSelect - 1] + plusText) * 5 - 3], false, 0, 0, tmp_Text);
+                typeWritter.TypeOpen(ItemControl.itemTextMaxItemSon[(PlayerControl.myItems[sonSelect - 1] + plusText) * 5 - 3], false, 0, 0, tmpText);
                 PlayerControl.wearDef = int.Parse(ItemIdGetName(PlayerControl.myItems[sonSelect - 1], "Auto", 1));
                 int wearInt = PlayerControl.wearArmor;
                 PlayerControl.wearArmor = PlayerControl.myItems[sonSelect - 1];
                 PlayerControl.myItems[sonSelect - 1] = wearInt;
 
-                AudioController.instance.GetFx(3, AudioControl.fxClipUI);
+                AudioController.Instance.GetFx(3, AudioControl.fxClipUI);
             }
             else if (PlayerControl.myItems[sonSelect - 1] >= 10000)
             {
-                typeWritter.TypeOpen(ItemControl.itemTextMaxItemSon[(PlayerControl.myItems[sonSelect - 1] + plusText) * 5 - 3], false, 0, 0, tmp_Text);
+                typeWritter.TypeOpen(ItemControl.itemTextMaxItemSon[(PlayerControl.myItems[sonSelect - 1] + plusText) * 5 - 3], false, 0, 0, tmpText);
                 PlayerControl.wearAtk = int.Parse(ItemIdGetName(PlayerControl.myItems[sonSelect - 1], "Auto", 1));
                 int wearInt = PlayerControl.wearArm;
                 PlayerControl.wearArm = PlayerControl.myItems[sonSelect - 1];
                 PlayerControl.myItems[sonSelect - 1] = wearInt;
 
-                AudioController.instance.GetFx(3, AudioControl.fxClipUI);
+                AudioController.Instance.GetFx(3, AudioControl.fxClipUI);
             }
             else//食物
             {
@@ -1038,7 +1038,7 @@ namespace UCT.Global.Core
                     plusHp += 4;
 
                 typeWritter.TypeOpen(ItemControl.itemTextMaxItemSon[PlayerControl.myItems[sonSelect - 1] * 5 - 3], false,
-                    plusHp, 0, tmp_Text);
+                    plusHp, 0, tmpText);
 
                 PlayerControl.hp += plusHp;
 
@@ -1054,7 +1054,7 @@ namespace UCT.Global.Core
                         break;
                     }
                 }
-                AudioController.instance.GetFx(2, AudioControl.fxClipUI);
+                AudioController.Instance.GetFx(2, AudioControl.fxClipUI);
             }
         }
 
@@ -1065,7 +1065,7 @@ namespace UCT.Global.Core
         {
             List<string> newList = new List<string>();
             string text = "";
-            bool isXH = false;//检测是否有多个需要循环调用的特殊字符
+            bool isXh = false;//检测是否有多个需要循环调用的特殊字符
 
             for (int i = 0; i < list.Count; i++)
             {
@@ -1089,7 +1089,7 @@ namespace UCT.Global.Core
                     while (list[i][j] == '<')
                     {
                         string texters = "";
-                        while ((j != 0 && list[i][j - 1] != '>' && !isXH) || isXH)
+                        while ((j != 0 && list[i][j - 1] != '>' && !isXh) || isXh)
                         {
                             texters += list[i][j];
                             j++;
@@ -1097,12 +1097,12 @@ namespace UCT.Global.Core
                             {
                                 break;
                             }
-                            isXH = false;
+                            isXh = false;
                         }
-                        isXH = true;
+                        isXh = true;
                         text = ChangeItemDataSwitch(text, texters, isData, name, ex);
                     }
-                    isXH = false;
+                    isXh = false;
 
                     if (list[i][j] == ';')
                     {
@@ -2142,7 +2142,7 @@ namespace UCT.Global.Core
                 //spriteRenderer.color = Color.red;
                 OverworldControl.playerDeadPos = transform.position - (Vector3)battlePlayerController.sceneDrift;
                 OverworldControl.pause = true;
-                TurnController.instance.KillIEnumerator();
+                TurnController.Instance.KillIEnumerator();
                 SwitchScene("Gameover", false);
             }
             else

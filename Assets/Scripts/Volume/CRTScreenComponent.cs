@@ -9,7 +9,7 @@ namespace Volume
     /// </summary>
 
     [VolumeComponentMenuForRenderPipeline("Custom/CRT Screen", typeof(UniversalRenderPipeline))]
-    public class CRTScreenComponent : VolumeComponent, IPostProcessComponent
+    public class CrtScreenComponent : VolumeComponent, IPostProcessComponent
     {
         public BoolParameter isShow = new BoolParameter(false, true);
 

@@ -12,7 +12,7 @@ namespace UCT.Battle
     /// </summary>
     public class TurnController : MonoBehaviour
     {
-        public static TurnController instance;
+        public static TurnController Instance;
         public int turn;
         public bool isMyTurn;
 
@@ -23,7 +23,7 @@ namespace UCT.Battle
 
         private void Awake()
         {
-            instance = this;
+            Instance = this;
         }
 
         private void Start()
@@ -119,7 +119,7 @@ namespace UCT.Battle
                     Global.Other.Debug.Log("简单嵌套弹幕编写示例");
                     for (int i = 0; i < 5 * 20; i++)
                     {
-                        Timing.RunCoroutine(_TurnNest(Nest.simpleNestBullet));
+                        Timing.RunCoroutine(_TurnNest(Nest.SimpleNestBullet));
                         yield return Timing.WaitForSeconds(0.2f);
                     }
 
@@ -148,7 +148,7 @@ namespace UCT.Battle
         {
             switch (nest)
             {
-                case Nest.simpleNestBullet:
+                case Nest.SimpleNestBullet:
                     var obj = objectPools[0].GetFromPool().GetComponent<BulletController>();
 
                     obj.SetBullet("CupCake", "CupCake", new Vector3(0, -3.35f), (BattleControl.BulletColor)Random.Range(0,3), SpriteMaskInteraction.VisibleInsideMask);
@@ -178,7 +178,7 @@ namespace UCT.Battle
 
         private enum Nest
         {
-            simpleNestBullet
+            SimpleNestBullet
         }
     }
 }

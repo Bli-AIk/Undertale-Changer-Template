@@ -32,11 +32,11 @@ namespace UCT.Global.UI
         [Header("关闭自动获取材质")]
         public bool noAutoMaterial;
 
-        private PolygonCollider2D polygonCollider2D;
-        private EdgeCollider2D edgeCollider2D;
+        private PolygonCollider2D _polygonCollider2D;
+        private EdgeCollider2D _edgeCollider2D;
 
-        private LineRenderer lineRenderer;
-        private Material material;
+        private LineRenderer _lineRenderer;
+        private Material _material;
 
         private void Start()
         {
@@ -64,28 +64,28 @@ namespace UCT.Global.UI
                 }
             }
 
-            lineRenderer = gameObject.GetComponent<LineRenderer>();
-            lineRenderer.loop = true;
-            lineRenderer.positionCount = points.Count;
-            lineRenderer.startWidth = width;
-            lineRenderer.endWidth = width;
+            _lineRenderer = gameObject.GetComponent<LineRenderer>();
+            _lineRenderer.loop = true;
+            _lineRenderer.positionCount = points.Count;
+            _lineRenderer.startWidth = width;
+            _lineRenderer.endWidth = width;
             if (!noAutoMaterial)
             {
-                material = Instantiate(Resources.Load<Material>("Materials/DrawFrame"));
-                transform.Find("Back").GetComponent<SpriteRenderer>().material = material;
+                _material = Instantiate(Resources.Load<Material>("Materials/DrawFrame"));
+                transform.Find("Back").GetComponent<SpriteRenderer>().material = _material;
             }
             else
-                material = transform.Find("Back").GetComponent<SpriteRenderer>().material;
+                _material = transform.Find("Back").GetComponent<SpriteRenderer>().material;
 
             if (isCollider)
             {
-                polygonCollider2D = gameObject.AddComponent<PolygonCollider2D>() ?? gameObject.GetComponent<PolygonCollider2D>();
+                _polygonCollider2D = gameObject.AddComponent<PolygonCollider2D>() ?? gameObject.GetComponent<PolygonCollider2D>();
 
-                polygonCollider2D.pathCount = 2;
-                polygonCollider2D.SetPath(0, new Vector2[4] { new Vector2(100, 100), new Vector2(-100, 100), new Vector2(-100, -100), new Vector2(100, -100) });
+                _polygonCollider2D.pathCount = 2;
+                _polygonCollider2D.SetPath(0, new Vector2[4] { new Vector2(100, 100), new Vector2(-100, 100), new Vector2(-100, -100), new Vector2(100, -100) });
 
-                edgeCollider2D = gameObject.AddComponent<EdgeCollider2D>() ?? gameObject.GetComponent<EdgeCollider2D>();
-                edgeCollider2D.edgeRadius = width / 2;
+                _edgeCollider2D = gameObject.AddComponent<EdgeCollider2D>() ?? gameObject.GetComponent<EdgeCollider2D>();
+                _edgeCollider2D.edgeRadius = width / 2;
             }
 
             if (startDraw)
@@ -99,18 +99,18 @@ namespace UCT.Global.UI
             List<Vector2> localPoss = new List<Vector2>();
             for (int i = 0; i < points.Count; i++)
             {
-                lineRenderer.SetPosition(i, points[i].transform.position);
+                _lineRenderer.SetPosition(i, points[i].transform.position);
                 if (!useBracketId)
-                    material.SetVector("_Point" + i, points[i].transform.position);
+                    _material.SetVector("_Point" + i, points[i].transform.position);
                 else
-                    material.SetVector("_Point_" + i, points[i].transform.position);
+                    _material.SetVector("_Point_" + i, points[i].transform.position);
                 localPoss.Add(points[i].transform.localPosition);
             }
             if (isCollider)
             {
-                polygonCollider2D.SetPath(1, localPoss.ToArray());
+                _polygonCollider2D.SetPath(1, localPoss.ToArray());
                 localPoss.Add(localPoss[0]);
-                edgeCollider2D.SetPoints(localPoss);
+                _edgeCollider2D.SetPoints(localPoss);
             }
 
             if (Input.GetKeyDown(KeyCode.W))

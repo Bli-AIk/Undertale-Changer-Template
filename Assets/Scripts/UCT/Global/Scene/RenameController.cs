@@ -18,7 +18,7 @@ namespace UCT.Global.Scene
         public bool selectMax;
         public string setName;
         public int mode;
-        private Tween animMove, animScale;
+        private Tween _animMove, _animScale;
 
         private void Start()
         {
@@ -156,8 +156,8 @@ namespace UCT.Global.Scene
                                             }
                                         }
 
-                                        animMove = DOTween.To(() => tmps[1].transform.localPosition, x => tmps[1].transform.localPosition = x, new Vector3(26.95f, -7.85f), 5).SetEase(Ease.Linear);
-                                        animScale = DOTween.To(() => tmps[1].transform.localScale, x => tmps[1].transform.localScale = x, Vector3.one * 3, 5).SetEase(Ease.Linear);
+                                        _animMove = DOTween.To(() => tmps[1].transform.localPosition, x => tmps[1].transform.localPosition = x, new Vector3(26.95f, -7.85f), 5).SetEase(Ease.Linear);
+                                        _animScale = DOTween.To(() => tmps[1].transform.localScale, x => tmps[1].transform.localScale = x, Vector3.one * 3, 5).SetEase(Ease.Linear);
                                         tmps[1].GetComponent<DynamicTMP>().dynamicMode = OverworldControl.DynamicTMP.RandomShakeSingle;
                                         tmps[2].text = "";
                                         tmps[4].text = "";
@@ -270,8 +270,8 @@ namespace UCT.Global.Scene
                         {
                             case 0:
                                 mode = 1;
-                                animMove.Kill();
-                                animScale.Kill();
+                                _animMove.Kill();
+                                _animScale.Kill();
                                 tmps[1].transform.localPosition = new Vector3(8.95f, 0.6f);
                                 tmps[1].transform.localScale = Vector3.one;
                                 tmps[1].GetComponent<DynamicTMP>().dynamicMode = 0;
@@ -283,7 +283,7 @@ namespace UCT.Global.Scene
                             case 1:
                                 mode = -1;
                                 MainControl.Instance.PlayerControl.playerName = setName;
-                                AudioController.instance.transform.GetComponent<AudioSource>().Pause();
+                                AudioController.Instance.transform.GetComponent<AudioSource>().Pause();
                                 //Volume v = GameObject.Find("Global Volume").transform.GetComponent<Volume>();
                                 UnityEngine.Rendering.Volume v2 = GameObject.Find("Global Volume (1)").transform.GetComponent<UnityEngine.Rendering.Volume>();
 
@@ -294,7 +294,7 @@ namespace UCT.Global.Scene
                                 PlayerPrefs.SetInt("languagePack", MainControl.Instance.languagePack);
                                 PlayerPrefs.SetInt("dataNumber", MainControl.Instance.dataNumber);
                                 PlayerPrefs.SetInt("hdResolution", Convert.ToInt32(MainControl.Instance.OverworldControl.hdResolution));
-                                PlayerPrefs.SetInt("noSFX", Convert.ToInt32(MainControl.Instance.OverworldControl.noSFX));
+                                PlayerPrefs.SetInt("noSFX", Convert.ToInt32(MainControl.Instance.OverworldControl.noSfx));
                                 PlayerPrefs.SetInt("vsyncMode", Convert.ToInt32(MainControl.Instance.OverworldControl.vsyncMode));
 
                                 MainControl.Instance.OutWhite("Menu");
@@ -304,8 +304,8 @@ namespace UCT.Global.Scene
                     if (MainControl.Instance.KeyArrowToControl(KeyCode.X))
                     {
                         mode = 1;
-                        animMove.Kill();
-                        animScale.Kill();
+                        _animMove.Kill();
+                        _animScale.Kill();
                         tmps[1].transform.localPosition = new Vector3(8.95f, 0.6f);
                         tmps[1].transform.localScale = Vector3.one;
                         tmps[1].GetComponent<DynamicTMP>().dynamicMode = 0;

@@ -19,67 +19,67 @@ namespace UCT.Overworld
 
         public bool justSaying;
 
-        private TypeWritter typeWritter;
-        private SpriteRenderer sprite;
-        private Image spriteImage;
-        private TalkUIPositionChanger talkUIPositionChanger;
-        private int number;
-        private float clock;
-        private bool back;
+        private TypeWritter _typeWritter;
+        private SpriteRenderer _sprite;
+        private Image _spriteImage;
+        private TalkUIPositionChanger _talkUIPositionChanger;
+        private int _number;
+        private float _clock;
+        private bool _back;
 
         private void Start()
         {
-            clock = backFrame / 60f;
+            _clock = backFrame / 60f;
             if (inOverWorld)
-                talkUIPositionChanger = TalkUIPositionChanger.instance;
+                _talkUIPositionChanger = TalkUIPositionChanger.Instance;
             if (haveBack)
-                typeWritter = GetComponent<TypeWritter>();
+                _typeWritter = GetComponent<TypeWritter>();
 
             if (path != "")
             {
                 if (!useImage)
-                    sprite = transform.Find(path).GetComponent<SpriteRenderer>();
+                    _sprite = transform.Find(path).GetComponent<SpriteRenderer>();
                 else
-                    spriteImage = transform.Find(path).GetComponent<Image>();
+                    _spriteImage = transform.Find(path).GetComponent<Image>();
             }
             else
             {
                 if (!useImage)
-                    sprite = GetComponent<SpriteRenderer>();
+                    _sprite = GetComponent<SpriteRenderer>();
                 else
-                    spriteImage = GetComponent<Image>();
+                    _spriteImage = GetComponent<Image>();
             }
         }
 
         private void Update()
         {
-            if (clock > 0)
+            if (_clock > 0)
             {
-                clock -= Time.deltaTime;
+                _clock -= Time.deltaTime;
             }
-            if (justSaying || (haveBack && typeWritter.isTyping && !typeWritter.passText && !typeWritter.isStop))
+            if (justSaying || (haveBack && _typeWritter.isTyping && !_typeWritter.passText && !_typeWritter.isStop))
             {
-                if (clock <= 0 && number >= 0)
+                if (_clock <= 0 && _number >= 0)
                 {
-                    back = !back;
-                    ChangeImage(number, back);
-                    clock = backFrame / 60f;
+                    _back = !_back;
+                    ChangeImage(_number, _back);
+                    _clock = backFrame / 60f;
                 }
             }
-            else if (clock <= 0)
+            else if (_clock <= 0)
             {
-                if (back)
+                if (_back)
                 {
-                    back = false;
-                    ChangeImage(number, back);
+                    _back = false;
+                    ChangeImage(_number, _back);
                 }
-                clock = backFrame / 60f;
+                _clock = backFrame / 60f;
             }
         }
 
         public void ChangeImage(int i, bool back = false)
         {
-            talkUIPositionChanger.haveHead = i >= 0;
+            _talkUIPositionChanger.haveHead = i >= 0;
             if (i >= 0)
             {
                 Sprite spriter;
@@ -89,31 +89,31 @@ namespace UCT.Overworld
                     spriter = spritesSayBack[i];
                 if (!useImage)
                 {
-                    sprite.sprite = spriter;
-                    sprite.color = Color.white;
+                    _sprite.sprite = spriter;
+                    _sprite.color = Color.white;
                 }
                 else
                 {
-                    spriteImage.sprite = spriter;
-                    spriteImage.rectTransform.sizeDelta = new Vector2(spriter.texture.width, spriter.texture.height);
-                    spriteImage.color = Color.white;
+                    _spriteImage.sprite = spriter;
+                    _spriteImage.rectTransform.sizeDelta = new Vector2(spriter.texture.width, spriter.texture.height);
+                    _spriteImage.color = Color.white;
                 }
             }
             else
             {
                 if (!useImage)
                 {
-                    sprite.sprite = null;
-                    sprite.color = Color.clear;
+                    _sprite.sprite = null;
+                    _sprite.color = Color.clear;
                 }
                 else
                 {
-                    spriteImage.sprite = null;
-                    spriteImage.color = Color.clear;
+                    _spriteImage.sprite = null;
+                    _spriteImage.color = Color.clear;
                 }
             }
 
-            number = i;
+            _number = i;
         }
     }
 }

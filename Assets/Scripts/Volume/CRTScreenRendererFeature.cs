@@ -15,51 +15,51 @@ namespace Volume
         }
 
         public Settings settings = new Settings();
-        private GlitchArtPass pass;
+        private GlitchArtPass _pass;
 
         public override void Create()
         {
             name = "GlitchArtPass";
-            pass = new GlitchArtPass(RenderPassEvent.BeforeRenderingPostProcessing, settings.shader);
+            _pass = new GlitchArtPass(RenderPassEvent.BeforeRenderingPostProcessing, settings.shader);
         }
 
         public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
         {
-            pass.Setup(renderer.cameraColorTarget);
-            renderer.EnqueuePass(pass);
+            _pass.Setup(renderer.cameraColorTarget);
+            renderer.EnqueuePass(_pass);
         }
     }
 
     [Serializable]
     public class GlitchArtPass : ScriptableRenderPass
     {
-        private static readonly string renderTag = "GlitchArt Effects";
+        private static readonly string RenderTag = "GlitchArt Effects";
         private static readonly int MainTexId = Shader.PropertyToID("_MainTex");
         private static readonly int TempTargetId = Shader.PropertyToID("_TempTargetColorTint");
 
-        private GlitchArtComponent GlitchArtVolume;
-        private Material mat;
-        private RenderTargetIdentifier currentTarget;
+        private GlitchArtComponent _glitchArtVolume;
+        private Material _mat;
+        private RenderTargetIdentifier _currentTarget;
 
-        public GlitchArtPass(RenderPassEvent passEvent, Shader GlitchArtShader)
+        public GlitchArtPass(RenderPassEvent passEvent, Shader glitchArtShader)
         {
             renderPassEvent = passEvent;
-            if (GlitchArtShader == null)
+            if (glitchArtShader == null)
             {
                 UCT.Global.Other.Debug.Log("Shader不存在");
                 return;
             }
-            mat = CoreUtils.CreateEngineMaterial(GlitchArtShader);
+            _mat = CoreUtils.CreateEngineMaterial(glitchArtShader);
         }
 
         public void Setup(in RenderTargetIdentifier currentTarget)
         {
-            this.currentTarget = currentTarget;
+            this._currentTarget = currentTarget;
         }
 
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
-            if (mat == null)
+            if (_mat == null)
             {
                 return;
             }
@@ -68,16 +68,16 @@ namespace Volume
                 return;
             }
             VolumeStack stack = VolumeManager.instance.stack;
-            GlitchArtVolume = stack.GetComponent<GlitchArtComponent>();
-            if (GlitchArtVolume == null)
+            _glitchArtVolume = stack.GetComponent<GlitchArtComponent>();
+            if (_glitchArtVolume == null)
             {
                 return;
             }
-            if (GlitchArtVolume.isShow.value == false)
+            if (_glitchArtVolume.isShow.value == false)
             {
                 return;
             }
-            CommandBuffer cmd = CommandBufferPool.Get(renderTag);
+            CommandBuffer cmd = CommandBufferPool.Get(RenderTag);
             Render(cmd, ref renderingData);
             context.ExecuteCommandBuffer(cmd);
             CommandBufferPool.Release(cmd);
@@ -87,22 +87,22 @@ namespace Volume
         {
             ref CameraData cameraData = ref renderingData.cameraData;
             Camera camera = cameraData.camera;
-            RenderTargetIdentifier source = currentTarget;
+            RenderTargetIdentifier source = _currentTarget;
             int destination = TempTargetId;
 
-            mat.SetFloat("_AnalogGlitchMode", Convert.ToInt32(GlitchArtVolume.analogGlitchMode.value));
-            mat.SetVector("_ScanLineJitter", GlitchArtVolume.scanLineJitter.value);
-            mat.SetFloat("_HorizontalShakeMode", Convert.ToInt32(GlitchArtVolume.horizontalShakeMode.value));
-            mat.SetFloat("_HorizontalShake", GlitchArtVolume.horizontalShake.value);
-            mat.SetFloat("_ColorDriftMode", Convert.ToInt32(GlitchArtVolume.colorDriftMode.value));
-            mat.SetFloat("_ColorDrift", GlitchArtVolume.colorDrift.value);
-            mat.SetFloat("_VerticalJumpMode", Convert.ToInt32(GlitchArtVolume.verticalJumpMode.value));
-            mat.SetFloat("_VerticalJump", GlitchArtVolume.verticalJump.value);
+            _mat.SetFloat("_AnalogGlitchMode", Convert.ToInt32(_glitchArtVolume.analogGlitchMode.value));
+            _mat.SetVector("_ScanLineJitter", _glitchArtVolume.scanLineJitter.value);
+            _mat.SetFloat("_HorizontalShakeMode", Convert.ToInt32(_glitchArtVolume.horizontalShakeMode.value));
+            _mat.SetFloat("_HorizontalShake", _glitchArtVolume.horizontalShake.value);
+            _mat.SetFloat("_ColorDriftMode", Convert.ToInt32(_glitchArtVolume.colorDriftMode.value));
+            _mat.SetFloat("_ColorDrift", _glitchArtVolume.colorDrift.value);
+            _mat.SetFloat("_VerticalJumpMode", Convert.ToInt32(_glitchArtVolume.verticalJumpMode.value));
+            _mat.SetFloat("_VerticalJump", _glitchArtVolume.verticalJump.value);
 
             cmd.SetGlobalTexture(MainTexId, source);
             cmd.GetTemporaryRT(destination, cameraData.camera.scaledPixelWidth, cameraData.camera.scaledPixelHeight, 0, FilterMode.Trilinear, RenderTextureFormat.Default);
             cmd.Blit(source, destination);
-            cmd.Blit(destination, source, mat, 0);
+            cmd.Blit(destination, source, _mat, 0);
         }
     }
 }

@@ -14,11 +14,11 @@ namespace Obsolete
     [Obsolete]
     public class CreateQuadChanged : MonoBehaviour
     {
-        public static CreateQuadChanged instance;
+        public static CreateQuadChanged Instance;
 
         private void Awake()
         {
-            instance = this;
+            Instance = this;
         }
 
         //public float debug;
@@ -33,32 +33,32 @@ namespace Obsolete
 
         public float width;
         public bool haveEdgeCollider2D;
-        private EdgeCollider2D edgeCollider2D;
+        private EdgeCollider2D _edgeCollider2D;
         public List<GameObject> points = new List<GameObject>();
         public Color color;
         [SerializeField] private Material material;
         [SerializeField] private Texture mainTex;
-        private VertexHelper vh = new VertexHelper();
-        private MeshFilter meshFilter;
-        private MeshRenderer meshRenderer;
-        private LineRenderer lineRenderer;
+        private VertexHelper _vh = new VertexHelper();
+        private MeshFilter _meshFilter;
+        private MeshRenderer _meshRenderer;
+        private LineRenderer _lineRenderer;
 
         private void Start()
         {
-            meshFilter = GetComponent<MeshFilter>();
-            meshRenderer = GetComponent<MeshRenderer>();
-            lineRenderer = GetComponent<LineRenderer>();
-            lineRenderer.loop = true;
-            lineRenderer.startWidth = width;
-            lineRenderer.endWidth = width;
-            lineRenderer.positionCount = vertPoints.Count;
+            _meshFilter = GetComponent<MeshFilter>();
+            _meshRenderer = GetComponent<MeshRenderer>();
+            _lineRenderer = GetComponent<LineRenderer>();
+            _lineRenderer.loop = true;
+            _lineRenderer.startWidth = width;
+            _lineRenderer.endWidth = width;
+            _lineRenderer.positionCount = vertPoints.Count;
             for (int i = 0; i < vertPoints.Count; i++)
             {
                 points.Add(transform.Find("Point" + i).gameObject);
             }
             if (haveEdgeCollider2D)
             {
-                edgeCollider2D = gameObject.AddComponent<EdgeCollider2D>() ?? gameObject.GetComponent<EdgeCollider2D>();
+                _edgeCollider2D = gameObject.AddComponent<EdgeCollider2D>() ?? gameObject.GetComponent<EdgeCollider2D>();
             }
             ReStart();
         }
@@ -70,25 +70,25 @@ namespace Obsolete
 
         private void ReStart()
         {
-            vh.Clear();
+            _vh.Clear();
             for (int i = 0; i < vertPoints.Count; i++)
             {
                 vertPoints[i] = points[i].transform.localPosition;
-                lineRenderer.SetPosition(i, points[i].transform.position);
-                vh.AddVert(vertPoints[i], color, vertUV[i]);
+                _lineRenderer.SetPosition(i, points[i].transform.position);
+                _vh.AddVert(vertPoints[i], color, vertUV[i]);
             }
-            vh.AddTriangle(0, 2, 1);
-            vh.AddTriangle(0, 3, 2);
+            _vh.AddTriangle(0, 2, 1);
+            _vh.AddTriangle(0, 3, 2);
             Mesh mesh = new Mesh();
             mesh.name = "Quad";
-            vh.FillMesh(mesh);
-            meshFilter.mesh = mesh;
+            _vh.FillMesh(mesh);
+            _meshFilter.mesh = mesh;
 
-            meshRenderer.material = material;
-            meshRenderer.shadowCastingMode = ShadowCastingMode.Off;
-            meshRenderer.receiveShadows = false;
+            _meshRenderer.material = material;
+            _meshRenderer.shadowCastingMode = ShadowCastingMode.Off;
+            _meshRenderer.receiveShadows = false;
             // 设置主贴图
-            meshRenderer.material.mainTexture = mainTex;
+            _meshRenderer.material.mainTexture = mainTex;
 
             if (haveEdgeCollider2D)
             {
@@ -98,7 +98,7 @@ namespace Obsolete
                 {
                     points[i] = vertPoints[i] + vertEdge[i];
                 }
-                edgeCollider2D.points = points;
+                _edgeCollider2D.points = points;
             }
         }
     }

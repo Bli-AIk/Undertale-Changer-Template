@@ -12,7 +12,7 @@ namespace UCT.Battle
         public Vector2 position, size;
         public bool isBackRight;
         public float backY;
-        private SpriteRenderer sprite, spriteBack;
+        private SpriteRenderer _sprite, _spriteBack;
         public TypeWritter typeWritter;
         public TextMeshPro tmp;
 
@@ -24,8 +24,8 @@ namespace UCT.Battle
 
         private void Start()
         {
-            sprite = GetComponent<SpriteRenderer>();
-            spriteBack = transform.Find("DialogBubbleBack").GetComponent<SpriteRenderer>();
+            _sprite = GetComponent<SpriteRenderer>();
+            _spriteBack = transform.Find("DialogBubbleBack").GetComponent<SpriteRenderer>();
 
             PositionChange();
         }
@@ -36,15 +36,15 @@ namespace UCT.Battle
         public void PositionChange()
         {
             transform.localPosition = position;
-            sprite.size = size;
-            spriteBack.flipX = isBackRight;
+            _sprite.size = size;
+            _spriteBack.flipX = isBackRight;
             if (!isBackRight)
             {
-                spriteBack.transform.localPosition = new Vector3(-0.2396f, backY, 0);
+                _spriteBack.transform.localPosition = new Vector3(-0.2396f, backY, 0);
             }
             else
             {
-                spriteBack.transform.localPosition = new Vector3(4.2396f + sprite.size.x - 4, backY, 0);
+                _spriteBack.transform.localPosition = new Vector3(4.2396f + _sprite.size.x - 4, backY, 0);
             }
         }
     }

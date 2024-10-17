@@ -9,13 +9,13 @@ namespace UCT.Overworld
     /// </summary>
     public class TalkUIPositionChanger : MonoBehaviour
     {
-        public static TalkUIPositionChanger instance;
+        public static TalkUIPositionChanger Instance;
         public bool isUp;
         public bool haveHead;
 
         private void Awake()
         {
-            instance = this;
+            Instance = this;
         }
 
         private void Start()
@@ -28,7 +28,7 @@ namespace UCT.Overworld
         {
             if (cleaner)
             {
-                BackpackBehaviour.instance.typeMessage.text = "";
+                BackpackBehaviour.Instance.typeMessage.text = "";
                 if (typeWritter != null)
                     typeWritter.endString = "";
             }
@@ -40,12 +40,12 @@ namespace UCT.Overworld
             if (isUp)
             {
                 transform.localPosition = new Vector3(transform.localPosition.x, 7.77f, transform.localPosition.z);
-                BackpackBehaviour.instance.typeMessage.rectTransform.anchoredPosition = new Vector2(10 + 115f * Convert.ToInt32(haveHead), 139);
+                BackpackBehaviour.Instance.typeMessage.rectTransform.anchoredPosition = new Vector2(10 + 115f * Convert.ToInt32(haveHead), 139);
             }
             else
             {
                 transform.localPosition = new Vector3(transform.localPosition.x, 0, transform.localPosition.z);
-                BackpackBehaviour.instance.typeMessage.rectTransform.anchoredPosition = new Vector2(10 + 115f * Convert.ToInt32(haveHead), -170);
+                BackpackBehaviour.Instance.typeMessage.rectTransform.anchoredPosition = new Vector2(10 + 115f * Convert.ToInt32(haveHead), -170);
             }
         }
 
@@ -54,14 +54,14 @@ namespace UCT.Overworld
 
         private void OnEnable()
         {
-            if (BackpackBehaviour.instance.typeMessage != null)
-                BackpackBehaviour.instance.typeMessage.gameObject.SetActive(true);
+            if (BackpackBehaviour.Instance.typeMessage != null)
+                BackpackBehaviour.Instance.typeMessage.gameObject.SetActive(true);
         }
 
         private void OnDisable()
         {
-            if (BackpackBehaviour.instance.typeMessage != null)
-                BackpackBehaviour.instance.typeMessage.gameObject.SetActive(false);
+            if (BackpackBehaviour.Instance.typeMessage != null)
+                BackpackBehaviour.Instance.typeMessage.gameObject.SetActive(false);
         }
     }
 }

@@ -14,9 +14,9 @@ namespace UCT.Overworld
     public class PlayerBehaviour : MonoBehaviour
     {
         public Animator animator;
-        private Rigidbody2D rbody;
-        private BoxCollider2D boxCollider;
-        private TypeWritter typeWritter;
+        private Rigidbody2D _rbody;
+        private BoxCollider2D _boxCollider;
+        private TypeWritter _typeWritter;
         public int moveDirectionX, moveDirectionY;
         public int animDirectionX, animDirectionY;
         public float distance;
@@ -28,32 +28,32 @@ namespace UCT.Overworld
         [Header("开启倒影")]
         public bool isShadow;
 
-        private SpriteRenderer shadowSprite;
+        private SpriteRenderer _shadowSprite;
 
         //public LayerMask mask;
-        private BoxCollider2D boxTrigger;
+        private BoxCollider2D _boxTrigger;
 
         public OverworldObjTrigger saveOwObj;
-        private GameObject backpackUI;
-        private SpriteRenderer spriteRenderer;
+        private GameObject _backpackUI;
+        private SpriteRenderer _spriteRenderer;
         public float owTimer;//0.1秒，防止调查OW冲突
 
-        private AudioMixerGroup mixer = null;//需要就弄上 整这个是因为有的项目里做了回音效果
+        private AudioMixerGroup _mixer = null;//需要就弄上 整这个是因为有的项目里做了回音效果
 
         private void Awake()
         {
-            backpackUI = GameObject.Find("Main Camera/BackpackUI");
+            _backpackUI = GameObject.Find("Main Camera/BackpackUI");
         }
 
         private void Start()
         {
-            spriteRenderer = GetComponent<SpriteRenderer>();
+            _spriteRenderer = GetComponent<SpriteRenderer>();
             animator = GetComponent<Animator>();
-            rbody = GetComponent<Rigidbody2D>();
-            boxTrigger = transform.Find("Trigger").GetComponent<BoxCollider2D>();
-            boxCollider = GetComponent<BoxCollider2D>();
-            typeWritter = GameObject.Find("BackpackCanvas").GetComponent<TypeWritter>();
-            boxTrigger.transform.localPosition = boxCollider.offset;
+            _rbody = GetComponent<Rigidbody2D>();
+            _boxTrigger = transform.Find("Trigger").GetComponent<BoxCollider2D>();
+            _boxCollider = GetComponent<BoxCollider2D>();
+            _typeWritter = GameObject.Find("BackpackCanvas").GetComponent<TypeWritter>();
+            _boxTrigger.transform.localPosition = _boxCollider.offset;
             //mask = 1 << 6;
 
             transform.position = MainControl.Instance.OverworldControl.playerScenePos;
@@ -61,7 +61,7 @@ namespace UCT.Overworld
             animDirectionY = (int)MainControl.Instance.OverworldControl.animDirection.y;
 
             if (isShadow)
-                shadowSprite = transform.Find("Dir/Shadow").GetComponent<SpriteRenderer>();
+                _shadowSprite = transform.Find("Dir/Shadow").GetComponent<SpriteRenderer>();
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
@@ -89,11 +89,11 @@ namespace UCT.Overworld
         {
             if (isShadow)
             {
-                shadowSprite.sprite = spriteRenderer.sprite;
+                _shadowSprite.sprite = _spriteRenderer.sprite;
             }
 
             MainControl.Instance.OverworldControl.playerDeadPos = transform.position;
-            if (typeWritter.isTyping)
+            if (_typeWritter.isTyping)
             {
                 distance = 0;
             }
@@ -113,12 +113,12 @@ namespace UCT.Overworld
             {
                 owTimer -= Time.deltaTime;
             }
-            if (saveOwObj != null && backpackUI.transform.localPosition.z < 0)
+            if (saveOwObj != null && _backpackUI.transform.localPosition.z < 0)
             {
                 if (saveOwObj.isTriggerMode
                     || (!saveOwObj.isTriggerMode && MainControl.Instance.KeyArrowToControl(KeyCode.Z)
                                                  && ((saveOwObj.playerDir == Vector2.one) || (saveOwObj.playerDir.x == animDirectionX) || (saveOwObj.playerDir.y == animDirectionY))
-                                                 && BackpackBehaviour.instance.select == 0))
+                                                 && BackpackBehaviour.Instance.select == 0))
                 {
                     if (owTimer <= 0)
                     {
@@ -146,7 +146,7 @@ namespace UCT.Overworld
 
                             if (saveOwObj.isSave)
                             {
-                                AudioController.instance.GetFx(2, MainControl.Instance.AudioControl.fxClipUI);
+                                AudioController.Instance.GetFx(2, MainControl.Instance.AudioControl.fxClipUI);
                                 if (MainControl.Instance.PlayerControl.hp < MainControl.Instance.PlayerControl.hpMax)
                                     MainControl.Instance.PlayerControl.hp = MainControl.Instance.PlayerControl.hpMax;
                             }
@@ -185,22 +185,22 @@ namespace UCT.Overworld
 
         public void PlayWalkAudio()//动画器引用
         {
-            AudioController.instance.GetFx(Random.Range((int)walk.x, (int)walk.y), MainControl.Instance.AudioControl.fxClipWalk, 1, 1, mixer);
+            AudioController.Instance.GetFx(Random.Range((int)walk.x, (int)walk.y), MainControl.Instance.AudioControl.fxClipWalk, 1, 1, _mixer);
         }
 
         public void TriggerSpin(int i)
         {
-            boxTrigger.transform.localRotation = Quaternion.Euler(0, 0, i * 90);
+            _boxTrigger.transform.localRotation = Quaternion.Euler(0, 0, i * 90);
 
             if (i == 0 || i == 2)
             {
-                boxTrigger.offset = new Vector2(0, -0.165f);
-                boxTrigger.size = new Vector2(0.5f, 0.4f);
+                _boxTrigger.offset = new Vector2(0, -0.165f);
+                _boxTrigger.size = new Vector2(0.5f, 0.4f);
             }
             else
             {
-                boxTrigger.offset = new Vector2(0, -0.255f);
-                boxTrigger.size = new Vector2(0.5f, 0.575f);
+                _boxTrigger.offset = new Vector2(0, -0.255f);
+                _boxTrigger.size = new Vector2(0.5f, 0.575f);
             }
         }
 
@@ -213,7 +213,7 @@ namespace UCT.Overworld
 
             animator.SetFloat("Speed", Convert.ToInt32(MainControl.Instance.KeyArrowToControl(KeyCode.X, 1)) + 1);
 
-            if (MainControl.Instance.OverworldControl.isSetting || MainControl.Instance.OverworldControl.pause || BackpackBehaviour.instance.select > 0)
+            if (MainControl.Instance.OverworldControl.isSetting || MainControl.Instance.OverworldControl.pause || BackpackBehaviour.Instance.select > 0)
             {
                 animator.Play("Walk Tree", 0, 0);
                 if (MainControl.Instance.PlayerControl.canMove)
@@ -257,7 +257,7 @@ namespace UCT.Overworld
                 if (moveDirectionX != 0 || moveDirectionY != 0)
                     animDirectionY = moveDirectionY;
 
-                rbody.MovePosition(new Vector2(transform.position.x + speed * Time.deltaTime * moveDirectionX, transform.position.y + speed * Time.deltaTime * moveDirectionY));
+                _rbody.MovePosition(new Vector2(transform.position.x + speed * Time.deltaTime * moveDirectionX, transform.position.y + speed * Time.deltaTime * moveDirectionY));
 
                 if (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow, 1) && MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow, 1))//&& !(MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1) || MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1)))
                 {

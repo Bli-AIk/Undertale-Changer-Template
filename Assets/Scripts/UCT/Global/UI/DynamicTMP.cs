@@ -9,23 +9,23 @@ namespace UCT.Global.UI
     /// </summary>
     public class DynamicTMP : MonoBehaviour
     {
-        private TMP_Text tmp;
+        private TMP_Text _tmp;
         public OverworldControl.DynamicTMP dynamicMode;
-        private float randomStart;
+        private float _randomStart;
 
         private void Start()
         {
-            tmp = GetComponent<TMP_Text>();
-            randomStart = Random.Range(2, 2.5f);
+            _tmp = GetComponent<TMP_Text>();
+            _randomStart = Random.Range(2, 2.5f);
         }
 
         private void FixedUpdate()
         {
             if (dynamicMode == OverworldControl.DynamicTMP.None) return;
 
-            tmp.ForceMeshUpdate();
+            _tmp.ForceMeshUpdate();
 
-            var textInfo = tmp.textInfo;
+            var textInfo = _tmp.textInfo;
 
             switch (dynamicMode)
             {
@@ -117,7 +117,7 @@ namespace UCT.Global.UI
                         {
                             var orig = verts[charInfo.vertexIndex + j];
                             //动画
-                            verts[charInfo.vertexIndex + j] = orig + new Vector3(0, 0.05f * Mathf.Cos(randomStart * (Time.time) + orig.x * 0.45f), 0);
+                            verts[charInfo.vertexIndex + j] = orig + new Vector3(0, 0.05f * Mathf.Cos(_randomStart * (Time.time) + orig.x * 0.45f), 0);
                             orig = verts[charInfo.vertexIndex + j];
                             verts[charInfo.vertexIndex + j] = orig + new Vector3(Random.Range(-0.01f, 0.01f), Random.Range(-0.01f, 0.01f), 0);
                         }
@@ -135,7 +135,7 @@ namespace UCT.Global.UI
                         {
                             var orig = verts[charInfo.vertexIndex + j];
                             //动画
-                            verts[charInfo.vertexIndex + j] = orig + new Vector3(0, 0.05f * Mathf.Sin(randomStart * (Time.time) + orig.x * 0.45f), 0);
+                            verts[charInfo.vertexIndex + j] = orig + new Vector3(0, 0.05f * Mathf.Sin(_randomStart * (Time.time) + orig.x * 0.45f), 0);
                         }
                     }
                     break;
@@ -196,7 +196,7 @@ namespace UCT.Global.UI
             {
                 var meshInfo = textInfo.meshInfo[i];
                 meshInfo.mesh.vertices = meshInfo.vertices;
-                tmp.UpdateGeometry(meshInfo.mesh, i);
+                _tmp.UpdateGeometry(meshInfo.mesh, i);
             }
         }
 

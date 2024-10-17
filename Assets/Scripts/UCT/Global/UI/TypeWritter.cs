@@ -44,7 +44,7 @@ namespace UCT.Global.UI
         [Header("适配OW框")]
         public bool isOverworld;
 
-        private TalkUIPositionChanger talkUIPositionChanger;
+        private TalkUIPositionChanger _talkUIPositionChanger;
 
         public float pitch = 1;
         public float volume = 0.5f;
@@ -59,39 +59,39 @@ namespace UCT.Global.UI
         [Header("总有那么一些情况需要强硬手段（拔枪")]
         public bool forceReturn;
 
-        private TMP_Text tmp_Text;
+        private TMP_Text _tmpText;
 
         private void Start()
         {
             if (isOverworld)
-                talkUIPositionChanger = TalkUIPositionChanger.instance;
+                _talkUIPositionChanger = TalkUIPositionChanger.Instance;
             spriteChanger = GetComponent<SpriteChanger>();
         }
 
         public enum TypeMode
         {
             Normal,//正常的打字机
-            CantZX,//不能按ZX的打字机，使用富文本进行控制。
+            CantZx,//不能按ZX的打字机，使用富文本进行控制。
         }
 
-        private TypeMode typeMode = TypeMode.Normal;
+        private TypeMode _typeMode = TypeMode.Normal;
 
         /// <summary>
         /// 开启打字机。若打字正在进行，可强行终止。
         /// 一般情况下不需要强行打断对话。
         /// 若传入的语句中含有<autoFood>，请输入hp。若输入0，此字符将跳过。
         /// </summary>
-        public void TypeOpen(string text, bool force, int hp, int fx, TMP_Text tmp_Text, TypeMode typeMode = TypeMode.Normal)
+        public void TypeOpen(string text, bool force, int hp, int fx, TMP_Text tmpText, TypeMode typeMode = TypeMode.Normal)
         {
             isRunning = true;
-            this.typeMode = typeMode;
+            this._typeMode = typeMode;
 
             if (!force && isTyping)
                 return;
             StopAllCoroutines();
             passText = false;
             endString = "";
-            tmp_Text.text = "";
+            tmpText.text = "";
             passTextString = "";
             originString = text;
             hpIn = hp;
@@ -101,10 +101,10 @@ namespace UCT.Global.UI
             isStop = false;
             this.fx = fx;
             if (isOverworld)
-                talkUIPositionChanger.Change(true, originString.Substring(0, "<passText>".Length) == "<passText>", true, this);
+                _talkUIPositionChanger.Change(true, originString.Substring(0, "<passText>".Length) == "<passText>", true, this);
 
-            this.tmp_Text = tmp_Text;
-            Timing.RunCoroutine(_Typing(this.tmp_Text));
+            this._tmpText = tmpText;
+            Timing.RunCoroutine(_Typing(this._tmpText));
         }
 
         public void TypeStop()
@@ -113,9 +113,9 @@ namespace UCT.Global.UI
             Timing.KillCoroutines();
             isTyping = false;
             endString = "";
-            if (tmp_Text != null)
+            if (_tmpText != null)
             {
-                tmp_Text.text = "";
+                _tmpText.text = "";
             }
             passTextString = "";
         }
@@ -132,9 +132,9 @@ namespace UCT.Global.UI
             }
         }
 
-        private bool isUsedFx;
+        private bool _isUsedFx;
 
-        private IEnumerator<float> _Typing(TMP_Text tmp_Text)
+        private IEnumerator<float> _Typing(TMP_Text tmpText)
         {
             isRunning = true;
             for (int i = 0; i < originString.Length; i++)
@@ -143,7 +143,7 @@ namespace UCT.Global.UI
                     spriteChanger.justSaying = false;
 
                 isTyping = true;
-                isUsedFx = false;
+                _isUsedFx = false;
 
                 if (fxRandomPitch)
                     pitch = Random.Range(0.25f, 1.25f);
@@ -179,7 +179,7 @@ namespace UCT.Global.UI
                             string save = spText.Substring(6);
                             save = save.Substring(0, save.Length - 1);
                             useFont = int.Parse(save);
-                            tmp_Text.font = MainControl.Instance.OverworldControl.tmpFonts[useFont];
+                            tmpText.font = MainControl.Instance.OverworldControl.tmpFonts[useFont];
                         }
                         else if (MainControl.Instance.IsFrontCharactersMatch("<stop*", spText))
                         {
@@ -205,7 +205,7 @@ namespace UCT.Global.UI
                             int s = int.Parse(save);
                             if (spriteChanger != null)
                                 spriteChanger.ChangeImage(s);
-                            talkUIPositionChanger.Change(true, s >= 0, false);
+                            _talkUIPositionChanger.Change(true, s >= 0, false);
                         }
                         else if (MainControl.Instance.IsFrontCharactersMatch("<stop...*", spText))
                         {
@@ -222,14 +222,14 @@ namespace UCT.Global.UI
                                             break;
                                         yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f * Convert.ToInt32(!MainControl.Instance.OverworldControl.textWidth));
                                     }
-                                    AudioController.instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
+                                    AudioController.Instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
                                     endString += '.';
-                                    tmp_Text.text = endString;
+                                    tmpText.text = endString;
                                 }
                             }
                             else endString += "...";
                             isStop = true;
-                            tmp_Text.text = endString;
+                            tmpText.text = endString;
                         }
                         else if (MainControl.Instance.IsFrontCharactersMatch("<passText=", spText))
                         {
@@ -244,7 +244,7 @@ namespace UCT.Global.UI
                         {
                             string save = spText.Substring(11);
                             save = save.Substring(0, save.Length - 1);
-                            StorySceneController.instance.Fade(int.Parse(save));
+                            StorySceneController.Instance.Fade(int.Parse(save));
                         }
                         else if (MainControl.Instance.IsFrontCharactersMatch("<stop......*", spText))
                         {
@@ -261,25 +261,25 @@ namespace UCT.Global.UI
                                             break;
                                         yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f * Convert.ToInt32(!MainControl.Instance.OverworldControl.textWidth));
                                     }
-                                    AudioController.instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
+                                    AudioController.Instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
                                     endString += '.';
-                                    tmp_Text.text = endString;
+                                    tmpText.text = endString;
                                 }
                             }
                             else endString += "......";
                             isStop = true;
-                            tmp_Text.text = endString;
+                            tmpText.text = endString;
                         }
                         else
                         {
                             switch (spText)
                             {
                                 case "<storyMaskT>":
-                                    StorySceneController.instance.mask.SetActive(true);
+                                    StorySceneController.Instance.mask.SetActive(true);
                                     break;
 
                                 case "<storyMaskF>":
-                                    StorySceneController.instance.mask.SetActive(false);
+                                    StorySceneController.Instance.mask.SetActive(false);
                                     break;
 
                                 case "<storyExit>":
@@ -289,7 +289,7 @@ namespace UCT.Global.UI
 
                                 case "<sprite=0>":
                                     if (!pressX)
-                                        AudioController.instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
+                                        AudioController.Instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
                                     goto default;
                                 case "<stop>":
                                     if (!pressX)
@@ -336,8 +336,8 @@ namespace UCT.Global.UI
                                         spText = spText.Substring(2, spText.Length - 4);
                                         if (!pressX)
                                         {
-                                            AudioController.instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
-                                            isUsedFx = true;
+                                            AudioController.Instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
+                                            _isUsedFx = true;
 
                                             if (spriteChanger != null)
                                                 spriteChanger.justSaying = true;
@@ -345,7 +345,7 @@ namespace UCT.Global.UI
                                     }
 
                                     endString += spText;
-                                    tmp_Text.text = endString;
+                                    tmpText.text = endString;
 
                                     break;
                             }
@@ -370,8 +370,8 @@ namespace UCT.Global.UI
                         cantString = "";
                     }
                 }
-                if (cantString != "" && !pressX && !isUsedFx)
-                    AudioController.instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
+                if (cantString != "" && !pressX && !_isUsedFx)
+                    AudioController.Instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
 
                 if (!passText)
                 {
@@ -383,15 +383,15 @@ namespace UCT.Global.UI
                 if (!pressX)
                     yield return Timing.WaitForSeconds(speed - speed * 0.25f * Convert.ToInt32(!MainControl.Instance.OverworldControl.textWidth));
 
-                if (tmp_Text != null)
+                if (tmpText != null)
                 {
-                    tmp_Text.text = endString;
+                    tmpText.text = endString;
 
                     Timing.RunCoroutine(_Dynamic(endString.Length - 1, dynamicType));
                 
 
-                    if (tmp_Text.font != MainControl.Instance.OverworldControl.tmpFonts[useFont])
-                        tmp_Text.font = MainControl.Instance.OverworldControl.tmpFonts[useFont];
+                    if (tmpText.font != MainControl.Instance.OverworldControl.tmpFonts[useFont])
+                        tmpText.font = MainControl.Instance.OverworldControl.tmpFonts[useFont];
                 }
                 else Other.Debug.Log("缺失tmp_Text", "#FFFF00");
 
@@ -425,13 +425,13 @@ namespace UCT.Global.UI
                 originString = originString.Substring("<passText>".Length);
         }
 
-        List<Vector2> dynamicPos;
+        List<Vector2> _dynamicPos;
 
         IEnumerator<float> _Dynamic(int number, OverworldControl.DynamicType dynamicType)
         {
             if (dynamicType != OverworldControl.DynamicType.None)//动效相关
             {
-                var textInfo = tmp_Text.textInfo;
+                var textInfo = _tmpText.textInfo;
 
                 Vector3 orig;
                 TMP_CharacterInfo charInfo;
@@ -446,7 +446,7 @@ namespace UCT.Global.UI
                             if (pressX)
                                 break;
 
-                            tmp_Text.ForceMeshUpdate();
+                            _tmpText.ForceMeshUpdate();
 
                             Vector3 randomer = new Vector3(Random.Range(-0.05f, 0.05f), Random.Range(-0.05f, 0.05f), 0);
 
@@ -467,7 +467,7 @@ namespace UCT.Global.UI
                             {
                                 var meshInfo = textInfo.meshInfo[k];
                                 meshInfo.mesh.vertices = meshInfo.vertices;
-                                tmp_Text.UpdateGeometry(meshInfo.mesh, k);
+                                _tmpText.UpdateGeometry(meshInfo.mesh, k);
                             }
                             yield return 0;
                         }
@@ -480,7 +480,7 @@ namespace UCT.Global.UI
                         Color32 startColor;
                         Color32 endColor;
 
-                        tmp_Text.ForceMeshUpdate();
+                        _tmpText.ForceMeshUpdate();
 
                         charInfo = textInfo.characterInfo[number];
                         if (!charInfo.isVisible) break;
@@ -495,7 +495,7 @@ namespace UCT.Global.UI
                             colors[charInfo.vertexIndex + j] = new Color32(startColor.r, startColor.g, startColor.b, 0);
                         }
 
-                        tmp_Text.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
+                        _tmpText.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
 
                         float elapsedTime = 0f;
                         while (elapsedTime < fadeDuration)
@@ -513,7 +513,7 @@ namespace UCT.Global.UI
                                 colors[charInfo.vertexIndex + j] = currentColor;
                             }
 
-                            tmp_Text.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
+                            _tmpText.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
 
                             yield return 0;
                         }
@@ -526,7 +526,7 @@ namespace UCT.Global.UI
                             if (pressX)
                                 break;
 
-                            tmp_Text.ForceMeshUpdate();
+                            _tmpText.ForceMeshUpdate();
 
                             Vector3 down = new Vector3(0, -0.1f);
 
@@ -547,7 +547,7 @@ namespace UCT.Global.UI
                             {
                                 var meshInfo = textInfo.meshInfo[k];
                                 meshInfo.mesh.vertices = meshInfo.vertices;
-                                tmp_Text.UpdateGeometry(meshInfo.mesh, k);
+                                _tmpText.UpdateGeometry(meshInfo.mesh, k);
                             }
 
                             yield return 0;
@@ -557,7 +557,7 @@ namespace UCT.Global.UI
 
             }
             yield return 0;
-            tmp_Text.ForceMeshUpdate();
+            _tmpText.ForceMeshUpdate();
         }
         private void Update()
         {
@@ -566,18 +566,18 @@ namespace UCT.Global.UI
 
             if (clockTime > 0)
                 clockTime -= Time.deltaTime;
-            if (!isRunning && !passText && !isTyping && MainControl.Instance.KeyArrowToControl(KeyCode.Z) && typeMode != TypeMode.CantZX)
+            if (!isRunning && !passText && !isTyping && MainControl.Instance.KeyArrowToControl(KeyCode.Z) && _typeMode != TypeMode.CantZx)
             {
                 if (spriteChanger != null)
                     spriteChanger.ChangeImage(-1);
-                if (endInBattle)
-                    canvasAnim.SetBool("Open", true);
+                if (_endInBattle)
+                    _canvasAnim.SetBool("Open", true);
             }
-            if (passText && MainControl.Instance.KeyArrowToControl(KeyCode.Z) && typeMode != TypeMode.CantZX)
+            if (passText && MainControl.Instance.KeyArrowToControl(KeyCode.Z) && _typeMode != TypeMode.CantZx)
             {
                 PassText();
             }
-            else if (!pressX && !canNotX && MainControl.Instance.KeyArrowToControl(KeyCode.X) && typeMode != TypeMode.CantZX)//跳字
+            else if (!pressX && !canNotX && MainControl.Instance.KeyArrowToControl(KeyCode.X) && _typeMode != TypeMode.CantZx)//跳字
             {
                 if (clock != 0 && clockTime <= 0)
                 {
@@ -593,30 +593,30 @@ namespace UCT.Global.UI
         private void PassText()
         {
             endString = "";
-            if (tmp_Text != null)
+            if (_tmpText != null)
             {
-                tmp_Text.text = "";
+                _tmpText.text = "";
             }
             passText = false;
 
             passTextString = "";
             if (isOverworld)
             {
-                talkUIPositionChanger.Change(false, false, true, this);
+                _talkUIPositionChanger.Change(false, false, true, this);
                 if (originString.Substring(0, "<passText>".Length) == "<passText>")
                     originString = originString.Substring("<passText>".Length);
             }
             pressX = false;
-            Timing.RunCoroutine(_Typing(tmp_Text));
+            Timing.RunCoroutine(_Typing(_tmpText));
         }
 
-        private bool endInBattle;
-        private Animator canvasAnim;
+        private bool _endInBattle;
+        private Animator _canvasAnim;
 
         public void EndInBattle()
         {
-            canvasAnim = CanvasController.instance.animator;
-            endInBattle = true;
+            _canvasAnim = CanvasController.Instance.animator;
+            _endInBattle = true;
         }
     }
 }

@@ -8,23 +8,23 @@ namespace UCT.Battle
     /// </summary>
     public class SpriteSplitFly : MonoBehaviour
     {
-        private SpriteRenderer spriteRenderer;
-        private Rigidbody2D rbody;
+        private SpriteRenderer _spriteRenderer;
+        private Rigidbody2D _rbody;
 
         private void Awake()
         {
-            spriteRenderer = transform.GetComponent<SpriteRenderer>();
-            rbody = GetComponent<Rigidbody2D>();
+            _spriteRenderer = transform.GetComponent<SpriteRenderer>();
+            _rbody = GetComponent<Rigidbody2D>();
         }
 
         private void Update()
         {
-            spriteRenderer.color -= new Color(0, 0, 0, Time.deltaTime);
+            _spriteRenderer.color -= new Color(0, 0, 0, Time.deltaTime);
         }
 
         private void OnEnable()
         {
-            rbody.AddForce(new Vector2(Random.Range(-1f, 1) * 1, 0), ForceMode2D.Impulse);
+            _rbody.AddForce(new Vector2(Random.Range(-1f, 1) * 1, 0), ForceMode2D.Impulse);
             StartCoroutine(ReturnThis());
         }
 

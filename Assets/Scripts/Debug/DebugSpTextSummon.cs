@@ -13,9 +13,9 @@ namespace Debug
         private void Start()
         {
             puter.Add(LetterToNumber(puter[0]));
-            puter.Add(numberToNumberLetter(puter[1]));
+            puter.Add(NumberToNumberLetter(puter[1]));
             puter.Add(NineToNumber(puter[2]));
-            puter.Add(backString(puter[3]));
+            puter.Add(BackString(puter[3]));
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Debug
         /// 数字的首字母表示数字
         /// 数字换算为字母
         /// </summary>
-        private string numberToNumberLetter(string str)
+        private string NumberToNumberLetter(string str)
         {
             string returnText = "";
             string text = "0123456789 ";
@@ -93,7 +93,7 @@ namespace Debug
         /// <summary>
         /// 倒车请注意
         /// </summary>
-        private string backString(string str)
+        private string BackString(string str)
         {
             string returnText = "";
 

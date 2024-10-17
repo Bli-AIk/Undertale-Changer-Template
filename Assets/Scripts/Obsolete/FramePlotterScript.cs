@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Obsolete
@@ -8,41 +9,41 @@ namespace Obsolete
     {
         public Vector3[] points;
         public Color[] colors;
-        public Vector4[] UVs;
-        private MeshFilter meshFilter;
-        private MeshRenderer meshRenderer;
-        private VertexHelper vh = new VertexHelper();
+        [FormerlySerializedAs("UVs")] public Vector4[] uVs;
+        private MeshFilter _meshFilter;
+        private MeshRenderer _meshRenderer;
+        private VertexHelper _vh = new VertexHelper();
 
         [SerializeField] private Material material;
         [SerializeField] private Texture mainTex;
 
         private void Start()
         {
-            vh.Clear();
-            meshFilter = GetComponent<MeshFilter>();
-            meshRenderer = GetComponent<MeshRenderer>();
+            _vh.Clear();
+            _meshFilter = GetComponent<MeshFilter>();
+            _meshRenderer = GetComponent<MeshRenderer>();
 
-            meshRenderer.material = material;
-            meshRenderer.shadowCastingMode = ShadowCastingMode.Off;
-            meshRenderer.receiveShadows = false;
+            _meshRenderer.material = material;
+            _meshRenderer.shadowCastingMode = ShadowCastingMode.Off;
+            _meshRenderer.receiveShadows = false;
 
-            meshRenderer.material.mainTexture = mainTex;
+            _meshRenderer.material.mainTexture = mainTex;
 
             Mesh mesh = new Mesh();
             mesh.name = "Quad";
-            vh.FillMesh(mesh);
-            meshFilter.mesh = mesh;
+            _vh.FillMesh(mesh);
+            _meshFilter.mesh = mesh;
         }
 
         private void Update()
         {
-            vh.Clear();
+            _vh.Clear();
             for (int i = 0; i < points.Length; i++)
             {
-                vh.AddVert(points[i], colors[0], UVs[i]);
+                _vh.AddVert(points[i], colors[0], uVs[i]);
             }
-            vh.AddTriangle(0, 2, 1);
-            vh.AddTriangle(0, 3, 2);
+            _vh.AddTriangle(0, 2, 1);
+            _vh.AddTriangle(0, 3, 2);
         }
     }
 }

@@ -5,7 +5,7 @@ namespace UCT.Battle
 {
     public class EnemiesHpLineController : MonoBehaviour
     {
-        private SpriteRenderer greenSprite;
+        private SpriteRenderer _greenSprite;
 
         [Header("0¿ª")]
         public int number;
@@ -13,7 +13,7 @@ namespace UCT.Battle
         private void Start()
         {
             transform.localScale = Vector2.zero;
-            greenSprite = transform.GetChild(0).GetComponent<SpriteRenderer>();
+            _greenSprite = transform.GetChild(0).GetComponent<SpriteRenderer>();
         }
 
         private void Update()
@@ -25,7 +25,7 @@ namespace UCT.Battle
                 else
                 {
                     transform.localScale = new Vector3(42, 7.25f, 1);
-                    greenSprite.transform.localScale = new Vector3((float)MainControl.Instance.BattleControl.enemiesHp[number * 2] / MainControl.Instance.BattleControl.enemiesHp[number * 2 + 1], greenSprite.transform.localScale.y);
+                    _greenSprite.transform.localScale = new Vector3((float)MainControl.Instance.BattleControl.enemiesHp[number * 2] / MainControl.Instance.BattleControl.enemiesHp[number * 2 + 1], _greenSprite.transform.localScale.y);
                 }
             }
         }

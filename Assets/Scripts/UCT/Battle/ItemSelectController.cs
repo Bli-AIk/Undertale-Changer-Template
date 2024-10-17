@@ -15,7 +15,7 @@ namespace UCT.Battle
         public int myItemMax;
         public int myItemSelect;
         public int myItemRealSelect;
-        private Tween tweenSave;
+        private Tween _tweenSave;
 
         //SelectUIController selectUIController;
         private void Awake()
@@ -72,13 +72,13 @@ namespace UCT.Battle
 
         public void PressDown(bool isUp)
         {
-            tweenSave.Kill(true);
+            _tweenSave.Kill(true);
             if (!isUp && myItemSelect > 0)
                 sonsChanged[myItemSelect - 1].transform.localScale = Vector3.one * 2;
             else if (myItemSelect < myItemMax - 1)
                 sonsChanged[myItemSelect + 1].transform.localScale = Vector3.one * 2;
             sonsChanged[myItemSelect].transform.localScale = Vector3.one * 2;
-            tweenSave = DOTween.To(() => sonsChanged[myItemSelect].transform.localScale, x => sonsChanged[myItemSelect].transform.localScale = x, Vector3.one * 3, 0.5f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
+            _tweenSave = DOTween.To(() => sonsChanged[myItemSelect].transform.localScale, x => sonsChanged[myItemSelect].transform.localScale = x, Vector3.one * 3, 0.5f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
         }
 
         public void Close()

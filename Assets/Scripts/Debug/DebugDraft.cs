@@ -6,7 +6,7 @@ namespace Debug
 {
     public class DebugDraft : MonoBehaviour
     {
-        private bool wozhenfule;
+        private bool _wozhenfule;
 
         // Start is called before the first frame update
         private void Start()
@@ -16,10 +16,10 @@ namespace Debug
         // Update is called once per frame
         private void Update()
         {
-            if (!wozhenfule)
+            if (!_wozhenfule)
             {
                 GetComponent<TypeWritter>().TypeOpen("<color=red>text123</color>", false, 0, 0, GetComponent<TMP_Text>());
-                wozhenfule = true;
+                _wozhenfule = true;
             }
         }
     }

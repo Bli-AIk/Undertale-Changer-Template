@@ -12,7 +12,7 @@ namespace UCT.Global.Core
     /// </summary>
     public class SaveController : MonoBehaviour
     {
-        public static Dictionary<string, PlayerControl> usersData = new Dictionary<string, PlayerControl>();
+        public static Dictionary<string, PlayerControl> UsersData = new Dictionary<string, PlayerControl>();
 
         public static void SaveData(PlayerControl data, string dataName)
         {
@@ -22,7 +22,7 @@ namespace UCT.Global.Core
                 //Debug.Log("create");
                 Directory.CreateDirectory(Application.dataPath + "/Data");
             }
-            usersData[data.name] = data;
+            UsersData[data.name] = data;
             // 转换数据
             string jsonData = JsonConvert.SerializeObject(data);
 
@@ -42,7 +42,7 @@ namespace UCT.Global.Core
                 string jsonData = File.ReadAllText(path);
                 PlayerControl userData = ScriptableObject.CreateInstance<PlayerControl>(); // 使用 CreateInstance 方法
                 JsonConvert.PopulateObject(jsonData, userData); // 使用 PopulateObject 方法来填充数据
-                usersData[dataName] = userData;
+                UsersData[dataName] = userData;
                 return userData;
             }
 
@@ -74,9 +74,9 @@ namespace UCT.Global.Core
             if (File.Exists(path))
             {
                 // 从内存中移除存档数据
-                if (usersData.ContainsKey(dataName))
+                if (UsersData.ContainsKey(dataName))
                 {
-                    usersData.Remove(dataName);
+                    UsersData.Remove(dataName);
                 }
 
                 // 删除文件

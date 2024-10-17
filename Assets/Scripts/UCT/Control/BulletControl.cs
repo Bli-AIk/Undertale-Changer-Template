@@ -42,7 +42,7 @@ namespace UCT.Control
         public Vector3 startScale = new Vector3(1, 1, 1);
 
         [Header("������ɫ����")]
-        public BulletColor bulletColor = BulletColor.white;
+        public BulletColor bulletColor = BulletColor.White;
 
         [Header("Sprite����ģʽ")]
         public SpriteMaskInteraction startMask = SpriteMaskInteraction.None;

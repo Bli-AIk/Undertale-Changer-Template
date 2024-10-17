@@ -11,12 +11,12 @@ namespace UCT.Global.Audio
     /// </summary>
     public class AudioController : ObjectPool
     {
-        public static AudioController instance;
+        public static AudioController Instance;
         public AudioSource audioSource;
 
         private void Awake()
         {
-            instance = this;
+            Instance = this;
 
             obj = new GameObject();
             AudioPlayer audioPlayer = obj.AddComponent<AudioPlayer>();

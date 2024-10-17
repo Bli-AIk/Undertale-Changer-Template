@@ -159,19 +159,19 @@ namespace UCT.Global.UI
                 sonBoxDrawer[0].transform.localPosition = sonBoxDrawer[0].localPosition - localPosition;
                 sonBoxDrawer[1].transform.localPosition = sonBoxDrawer[1].localPosition - localPosition;
 
-                List<Vector2> realPointsBack0 = BoxController.instance.GetRealPoints(sonBoxDrawer[0].realPoints, sonBoxDrawer[0].rotation, sonBoxDrawer[0].transform);
-                List<Vector2> realPointsBack1 = BoxController.instance.GetRealPoints(sonBoxDrawer[1].realPoints, sonBoxDrawer[1].rotation, sonBoxDrawer[1].transform);
+                List<Vector2> realPointsBack0 = BoxController.Instance.GetRealPoints(sonBoxDrawer[0].realPoints, sonBoxDrawer[0].rotation, sonBoxDrawer[0].transform);
+                List<Vector2> realPointsBack1 = BoxController.Instance.GetRealPoints(sonBoxDrawer[1].realPoints, sonBoxDrawer[1].rotation, sonBoxDrawer[1].transform);
 
-                pointsSonSum = BoxController.instance.AddLists(realPointsBack0, realPointsBack1);
+                pointsSonSum = BoxController.Instance.AddLists(realPointsBack0, realPointsBack1);
 
 
                 //计算三大List
 
-                pointsCross = BoxController.instance.FindIntersections(realPointsBack0, realPointsBack1);
+                pointsCross = BoxController.Instance.FindIntersections(realPointsBack0, realPointsBack1);
 
-                pointsOutCross = BoxController.instance.ProcessPolygons(realPointsBack0, realPointsBack1, pointsCross);
+                pointsOutCross = BoxController.Instance.ProcessPolygons(realPointsBack0, realPointsBack1, pointsCross);
 
-                pointsInCross = BoxController.instance.AddAndSubLists(realPointsBack0, realPointsBack1, pointsCross, pointsOutCross);
+                pointsInCross = BoxController.Instance.AddAndSubLists(realPointsBack0, realPointsBack1, pointsCross, pointsOutCross);
 
 
                 //重合时合并
@@ -187,11 +187,11 @@ namespace UCT.Global.UI
                     List<Vector2> pointsFinal;
 
                     if (sonBoxDrawer[0].boxType == BoxController.BoxType.Add && sonBoxDrawer[1].boxType == BoxController.BoxType.Sub)
-                        pointsFinal = BoxController.instance.GetDifference(realPointsBack0, realPointsBack1);
+                        pointsFinal = BoxController.Instance.GetDifference(realPointsBack0, realPointsBack1);
                     else if (sonBoxDrawer[0].boxType == BoxController.BoxType.Sub && sonBoxDrawer[1].boxType == BoxController.BoxType.Add)
-                        pointsFinal = BoxController.instance.GetDifference(realPointsBack1, realPointsBack0);
+                        pointsFinal = BoxController.Instance.GetDifference(realPointsBack1, realPointsBack0);
                     else
-                        pointsFinal = BoxController.instance.GetUnion(realPointsBack0, realPointsBack1);
+                        pointsFinal = BoxController.Instance.GetUnion(realPointsBack0, realPointsBack1);
 
                     realPoints = pointsFinal;
                 }
@@ -208,7 +208,7 @@ namespace UCT.Global.UI
 
 
 
-            if (transform.parent == BoxController.instance.transform)//只有父物体为BoxController时生成框
+            if (transform.parent == BoxController.Instance.transform)//只有父物体为BoxController时生成框
             {
                 transform.localPosition = localPosition;
 
@@ -224,8 +224,8 @@ namespace UCT.Global.UI
 
             ClearComponentsData();
 
-            BoxController.instance.ReturnPool(gameObject);
-            BoxController.instance.boxes.Remove(this);
+            BoxController.Instance.ReturnPool(gameObject);
+            BoxController.Instance.boxes.Remove(this);
             if (sonBoxDrawer.Count != 0)
             {
                 pointsCross.Clear();
@@ -234,13 +234,13 @@ namespace UCT.Global.UI
 
                 for (int i = 0; i < 2; i++)
                 {
-                    sonBoxDrawer[i].transform.SetParent(BoxController.instance.transform);
+                    sonBoxDrawer[i].transform.SetParent(BoxController.Instance.transform);
                     sonBoxDrawer[i].parent = null;
                     sonBoxDrawer[i].localPosition = (Vector3)(Vector2)(sonBoxDrawer[i].localPosition + localPosition) + new Vector3(0, 0, sonBoxDrawer[i].localPosition.z);
                     sonBoxDrawer[i].transform.localPosition = sonBoxDrawer[i].localPosition;
                     sonBoxDrawer[i].rotation = AddQuaternions(rotation, sonBoxDrawer[i].rotation);
                     sonBoxDrawer[i].IsOpenComponentsData(true);
-                    BoxController.instance.boxes.Add(sonBoxDrawer[i]);
+                    BoxController.Instance.boxes.Add(sonBoxDrawer[i]);
                     sonBoxDrawer[i].SummonBox();
 
                     if (sonBoxDrawer[i].boxType == BoxController.BoxType.Sub)
@@ -259,9 +259,9 @@ namespace UCT.Global.UI
             if (parent != null)
                 parent.ExitParent();
             //SubListsWhenExitParent(GetRealPoints());
-            if (BoxController.instance.boxes.Find(x => x == this))
-                BoxController.instance.boxes.Remove(this);
-            transform.SetParent(BoxController.instance.transform);
+            if (BoxController.Instance.boxes.Find(x => x == this))
+                BoxController.Instance.boxes.Remove(this);
+            transform.SetParent(BoxController.Instance.transform);
             parent = null;
         }
 
@@ -290,12 +290,12 @@ namespace UCT.Global.UI
         /// </summary>
         public List<Vector2> SummonBox()
         {
-            return BoxController.instance.SummonBox(realPoints, rotation, transform, width, lineRenderer, edgeCollider2D, meshFilter);
+            return BoxController.Instance.SummonBox(realPoints, rotation, transform, width, lineRenderer, edgeCollider2D, meshFilter);
 
         }
         public List<Vector2> GetRealPoints(bool isLocal = true) 
         {
-            return BoxController.instance.GetRealPoints(realPoints, rotation, transform, isLocal);
+            return BoxController.Instance.GetRealPoints(realPoints, rotation, transform, isLocal);
         }
     
         /// <summary>
@@ -620,7 +620,7 @@ namespace UCT.Global.UI
         }
 
 
-        bool isUndoRedoPerformed;
+        bool _isUndoRedoPerformed;
         private void OnSceneGUI()
         {
             BoxDrawer example = (BoxDrawer)target;
@@ -659,10 +659,10 @@ namespace UCT.Global.UI
                         if (i % (example.besselInsertNumber + 1) == 0)
                             example.vertexPoints[i / (example.besselInsertNumber + 1)] = newVertexPoints;
                     example.Update();
-                    if (!isUndoRedoPerformed)
+                    if (!_isUndoRedoPerformed)
                     {
                         Undo.undoRedoPerformed += example.Update;
-                        isUndoRedoPerformed = true;
+                        _isUndoRedoPerformed = true;
                     }
                 }
             }

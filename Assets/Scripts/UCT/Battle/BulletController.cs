@@ -111,7 +111,7 @@ namespace UCT.Battle
             List<int> triggerHits,
             List<Vector2> triggerOffsets,
             Vector3 startPosition = new Vector3(),
-            BattleControl.BulletColor bulletColor = BattleControl.BulletColor.white,
+            BattleControl.BulletColor bulletColor = BattleControl.BulletColor.White,
             SpriteMaskInteraction startMask = SpriteMaskInteraction.None,
             Vector3 startRotation = new Vector3(),
             Vector3 startScale = new Vector3(),
@@ -199,9 +199,9 @@ namespace UCT.Battle
                 {
                     if (boxColliderList[i].IsTouching(collision))
                     {
-                        if (bulletColor == BattleControl.BulletColor.white
-                            || (bulletColor == BattleControl.BulletColor.orange && !MainControl.Instance.battlePlayerController.isMoving)
-                            || (bulletColor == BattleControl.BulletColor.blue && MainControl.Instance.battlePlayerController.isMoving))
+                        if (bulletColor == BattleControl.BulletColor.White
+                            || (bulletColor == BattleControl.BulletColor.Orange && !MainControl.Instance.battlePlayerController.isMoving)
+                            || (bulletColor == BattleControl.BulletColor.Blue && MainControl.Instance.battlePlayerController.isMoving))
                         {
                             HitPlayer(i);
                         }
@@ -230,19 +230,19 @@ namespace UCT.Battle
             {
                 MainControl.Instance.PlayerControl.hp -= boxHitList[i];
                 MainControl.Instance.PlayerControl.missTime = MainControl.Instance.PlayerControl.missTimeMax;
-                AudioController.instance.GetFx(5, MainControl.Instance.AudioControl.fxClipUI);
+                AudioController.Instance.GetFx(5, MainControl.Instance.AudioControl.fxClipUI);
 
                 MainControl.Instance.selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
 
                 float r = Random.Range(0, 0.025f);
-                Vector3 v3spin = MainControl.Instance.RandomPointOnSphereSurface(2.5f,new Vector3());
-                MainControl.Instance.cameraShake.Shake(new Vector3(r * MainControl.Instance.Get1Or_1(), r * MainControl.Instance.Get1Or_1(), 0), new Vector3(0, 0, v3spin.z), 4, 1f / 60f * 4f * 1.5f, "", Ease.OutElastic);
-                MainControl.Instance.cameraShake3D.Shake(new Vector3(r * MainControl.Instance.Get1Or_1(), 0, r * MainControl.Instance.Get1Or_1()), v3spin, 4, 1f / 60f * 4f * 1.5f, "3D CameraPoint", Ease.OutElastic);
+                Vector3 v3Spin = MainControl.Instance.RandomPointOnSphereSurface(2.5f,new Vector3());
+                MainControl.Instance.cameraShake.Shake(new Vector3(r * MainControl.Instance.Get1Or_1(), r * MainControl.Instance.Get1Or_1(), 0), new Vector3(0, 0, v3Spin.z), 4, 1f / 60f * 4f * 1.5f, "", Ease.OutElastic);
+                MainControl.Instance.cameraShake3D.Shake(new Vector3(r * MainControl.Instance.Get1Or_1(), 0, r * MainControl.Instance.Get1Or_1()), v3Spin, 4, 1f / 60f * 4f * 1.5f, "3D CameraPoint", Ease.OutElastic);
                 if (MainControl.Instance.PlayerControl.hp <= 0)
                     MainControl.Instance.KillPlayer();
 
 
-                if (!MainControl.Instance.OverworldControl.noSFX)
+                if (!MainControl.Instance.OverworldControl.noSfx)
                     MainControl.Instance.battlePlayerController.hitVolume.weight = 1;
             }
         }

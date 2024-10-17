@@ -11,14 +11,14 @@ namespace UCT.Battle
     /// </summary>
     public class TargetController : MonoBehaviour
     {
-        private Animator anim;
-        private bool pressZ;
+        private Animator _anim;
+        private bool _pressZ;
 
         [Header("攻击造成的伤害")]
         public int hitDamage;
 
-        private TextMeshPro hitUI, hitUIb;
-        private GameObject bar;
+        private TextMeshPro _hitUI, _hitUIb;
+        private GameObject _bar;
         public GameObject hpBar;
 
         [Header("父级传入")]
@@ -29,34 +29,34 @@ namespace UCT.Battle
 
         private void Start()
         {
-            anim = GetComponent<Animator>();
-            hitUIb = transform.Find("Move/HitTextB").GetComponent<TextMeshPro>();
-            hitUI = hitUIb.transform.GetChild(0).GetComponent<TextMeshPro>();
-            bar = transform.Find("Bar").gameObject;
+            _anim = GetComponent<Animator>();
+            _hitUIb = transform.Find("Move/HitTextB").GetComponent<TextMeshPro>();
+            _hitUI = _hitUIb.transform.GetChild(0).GetComponent<TextMeshPro>();
+            _bar = transform.Find("Bar").gameObject;
             hpBar = transform.Find("Move/EnemiesHp/EnemiesHpOn").gameObject;
         }
 
         private void OnEnable()
         {
-            if (anim == null)
-                anim = GetComponent<Animator>();
+            if (_anim == null)
+                _anim = GetComponent<Animator>();
 
             //anim.enabled = true;
-            anim.SetBool("Hit", false);
-            anim.SetFloat("MoveSpeed", 1);
-            pressZ = true;
+            _anim.SetBool("Hit", false);
+            _anim.SetFloat("MoveSpeed", 1);
+            _pressZ = true;
         }
 
         private void Update()
         {
-            if (!pressZ)
+            if (!_pressZ)
             {
                 if (MainControl.Instance.KeyArrowToControl(KeyCode.Z))
                 {
-                    pressZ = true;
-                    anim.SetBool("Hit", true);
-                    anim.SetFloat("MoveSpeed", 0);
-                    AudioController.instance.GetFx(0, MainControl.Instance.AudioControl.fxClipBattle);
+                    _pressZ = true;
+                    _anim.SetBool("Hit", true);
+                    _anim.SetFloat("MoveSpeed", 0);
+                    AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipBattle);
                     Hit();
                 }
             }
@@ -67,28 +67,28 @@ namespace UCT.Battle
         /// </summary>
         private void Hit()
         {
-            if (Mathf.Abs(bar.transform.localPosition.x) > 0.8f)
+            if (Mathf.Abs(_bar.transform.localPosition.x) > 0.8f)
                 hitDamage = (int)
-                    (2.2f / 13.2f * (14 - Mathf.Abs(bar.transform.localPosition.x))//准确度系数
+                    (2.2f / 13.2f * (14 - Mathf.Abs(_bar.transform.localPosition.x))//准确度系数
                                   * (MainControl.Instance.PlayerControl.atk + MainControl.Instance.PlayerControl.wearAtk
-                                      - MainControl.Instance.BattleControl.enemiesDEF[select] + Random.Range(0, 2)));
+                                      - MainControl.Instance.BattleControl.enemiesDef[select] + Random.Range(0, 2)));
             else
                 hitDamage = (int)
                     (2.2f / 13.2f * (14 - 0.8f)//准确度系数
                                   * (MainControl.Instance.PlayerControl.atk + MainControl.Instance.PlayerControl.wearAtk
-                                      - MainControl.Instance.BattleControl.enemiesDEF[select] + Random.Range(0, 2)));
+                                      - MainControl.Instance.BattleControl.enemiesDef[select] + Random.Range(0, 2)));
 
             if (hitDamage <= 0)
             {
                 hitDamage = 0;
 
-                hitUI.text = "<color=grey>MISS";
-                hitUIb.text = "MISS";
+                _hitUI.text = "<color=grey>MISS";
+                _hitUIb.text = "MISS";
             }
             else
             {
-                hitUI.text = "<color=red>" + hitDamage;
-                hitUIb.text = hitDamage.ToString();
+                _hitUI.text = "<color=red>" + hitDamage;
+                _hitUIb.text = hitDamage.ToString();
             }
         }
 
@@ -104,12 +104,12 @@ namespace UCT.Battle
 
         private void OpenPressZ()
         {
-            pressZ = false;
+            _pressZ = false;
         }
 
         private void ClosePressZ()
         {
-            pressZ = true;
+            _pressZ = true;
         }
 
         private void NotActive()

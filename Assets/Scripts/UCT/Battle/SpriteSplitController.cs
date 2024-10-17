@@ -12,9 +12,9 @@ namespace UCT.Battle
     /// </summary>
     public class SpriteSplitController : MonoBehaviour
     {
-        private readonly Queue<GameObject> available = new();//对象池
-        private Texture2D map;
-        private GameObject Mask;
+        private readonly Queue<GameObject> _available = new();//对象池
+        private Texture2D _map;
+        private GameObject _mask;
         public int poolCount;
         public List<Color> colorExclude;
         public Vector2 startPos;//粒子为计算出图片左上角的相对坐标
@@ -22,31 +22,31 @@ namespace UCT.Battle
 
         private void Awake()
         {
-            map = GetComponent<SpriteRenderer>().sprite.texture;
-            Mask = transform.Find("Mask").gameObject;
+            _map = GetComponent<SpriteRenderer>().sprite.texture;
+            _mask = transform.Find("Mask").gameObject;
         }
 
         private void OnEnable()
         {
-            startPos = new Vector2(-map.width / 2 * 0.05f, map.height / 2 * 0.05f);
-            if (map.width % 2 == 0)
+            startPos = new Vector2(-_map.width / 2 * 0.05f, _map.height / 2 * 0.05f);
+            if (_map.width % 2 == 0)
                 startPos += new Vector2(0.025f, 0);
-            if (map.height % 2 == 0)
+            if (_map.height % 2 == 0)
                 startPos -= new Vector2(0, 0.025f);
 
-            Mask.transform.localScale = new Vector2(map.width, map.height);
-            Mask.transform.localPosition = new Vector3(0, 0.05f * map.height);
+            _mask.transform.localScale = new Vector2(_map.width, _map.height);
+            _mask.transform.localPosition = new Vector3(0, 0.05f * _map.height);
             StartCoroutine(SummonPixel());
         }
 
         private IEnumerator SummonPixel()
         {
-            for (int y = map.height - 1; y >= 0; y--)
+            for (int y = _map.height - 1; y >= 0; y--)
             {
-                for (int x = 0; x < map.width; x++)
+                for (int x = 0; x < _map.width; x++)
                 {
                     bool skip = false;
-                    Color color = map.GetPixel(x, y);
+                    Color color = _map.GetPixel(x, y);
                     for (int i = 0; i < colorExclude.Count; i++)
                     {
                         if (color == colorExclude[i])
@@ -64,9 +64,9 @@ namespace UCT.Battle
                     obj.GetComponent<SpriteRenderer>().color = color;
                     obj.GetComponent<SpriteRenderer>().sortingOrder = GetComponent<SpriteRenderer>().sortingOrder + 1;
 
-                    obj.transform.localPosition = startPos + new Vector2(x * 0.05f, -(map.height - y - 1) * 0.05f);
+                    obj.transform.localPosition = startPos + new Vector2(x * 0.05f, -(_map.height - y - 1) * 0.05f);
                 }
-                Mask.transform.localPosition -= new Vector3(0, 0.05f);
+                _mask.transform.localPosition -= new Vector3(0, 0.05f);
                 yield return new WaitForSeconds(speed);
             }
         }
@@ -92,7 +92,7 @@ namespace UCT.Battle
         {
             gameObject.SetActive(false);
             gameObject.transform.SetParent(transform);
-            available.Enqueue(gameObject);
+            _available.Enqueue(gameObject);
         }
 
         /// <summary>
@@ -100,10 +100,10 @@ namespace UCT.Battle
         /// </summary>
         public GameObject GetFromPool()
         {
-            if (available.Count == 0)
+            if (_available.Count == 0)
                 FillPool();
 
-            var square = available.Dequeue();
+            var square = _available.Dequeue();
 
             square.SetActive(true);
             return square;

@@ -6,12 +6,12 @@ namespace Debug
 {
     public class DebugVideoController : MonoBehaviour
     {
-        private VideoPlayer videoPlayer;
+        private VideoPlayer _videoPlayer;
         public int skip;
 
         private void Start()
         {
-            videoPlayer = GetComponent<VideoPlayer>();
+            _videoPlayer = GetComponent<VideoPlayer>();
         }
 
         private void Update()
@@ -21,34 +21,34 @@ namespace Debug
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                if (videoPlayer.isPaused)
+                if (_videoPlayer.isPaused)
                 {
-                    videoPlayer.Play();
+                    _videoPlayer.Play();
                     //Debug.Log("video play");
                 }
                 else
                 {
-                    videoPlayer.Pause();
+                    _videoPlayer.Pause();
                     //Debug.Log("video pause");
                 }
             }
 
             if (Input.GetKeyDown(KeyCode.KeypadPlus))
             {
-                videoPlayer.StepForward();
+                _videoPlayer.StepForward();
                 //Debug.Log("video +");
                 //Debug.Log("frame:" + videoPlayer.frame);
             }
 
             if (Input.GetKeyDown(KeyCode.KeypadMinus))
             {
-                videoPlayer.frame -= 1;
+                _videoPlayer.frame -= 1;
                 //Debug.Log("video -");
                 //Debug.Log("frame:" + videoPlayer.frame);
             }
             if (Input.GetKeyDown(KeyCode.KeypadEnter))
             {
-                videoPlayer.frame = skip;
+                _videoPlayer.frame = skip;
                 //Debug.Log("video skip");
             }
         }

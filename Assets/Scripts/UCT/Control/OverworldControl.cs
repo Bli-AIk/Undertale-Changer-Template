@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UCT.Control
 {
@@ -29,8 +30,8 @@ namespace UCT.Control
         [Header("全局音量")]
         public float mainVolume;//全局音量
 
-        [Header("简化特效")]
-        public bool noSFX;//光效 后处理特效显示
+        [FormerlySerializedAs("noSFX")] [Header("简化特效")]
+        public bool noSfx;//光效 后处理特效显示
 
         [Header("显示FPS")]
         public bool openFPS;//显示FPS

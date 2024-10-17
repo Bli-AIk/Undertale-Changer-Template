@@ -9,7 +9,7 @@ namespace UCT.Global.Core
         public int count = 10;
 
         public GameObject obj;
-        private Queue<GameObject> availableObj = new Queue<GameObject>();
+        private Queue<GameObject> _availableObj = new Queue<GameObject>();
         public Transform parent;
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace UCT.Global.Core
 
             gameObject.SetActive(false);
             gameObject.transform.SetParent(parent);
-            availableObj.Enqueue(gameObject);
+            _availableObj.Enqueue(gameObject);
         }
 
         /// <summary>
@@ -45,10 +45,10 @@ namespace UCT.Global.Core
         /// </summary>
         public virtual GameObject GetFromPool()
         {
-            if (availableObj.Count == 0)
+            if (_availableObj.Count == 0)
                 FillPool();
 
-            var obj = availableObj.Dequeue();
+            var obj = _availableObj.Dequeue();
 
             obj.SetActive(true);
             return obj;

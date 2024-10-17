@@ -8,12 +8,12 @@ namespace UCT.Battle
     /// </summary>
     public class BulletShaderController : MonoBehaviour
     {
-        private Material material;
+        private Material _material;
         private void Start()
         {
-            material = Instantiate(Resources.Load<Material>("Materials/Bullet"));
+            _material = Instantiate(Resources.Load<Material>("Materials/Bullet"));
 
-            GetComponent<SpriteRenderer>().material = material;
+            GetComponent<SpriteRenderer>().material = _material;
         }
 
         private void Update()

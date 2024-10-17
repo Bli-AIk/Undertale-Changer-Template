@@ -5,7 +5,7 @@ using UnityEngine.Rendering.Universal;
 
 namespace Volume
 {
-    public class CRTScreenRendererFeature : ScriptableRendererFeature
+    public class CrtScreenRendererFeature : ScriptableRendererFeature
     {
         [Serializable]
         public class Settings
@@ -15,51 +15,51 @@ namespace Volume
         }
 
         public Settings settings = new Settings();
-        private CRTScreenPass pass;
+        private CrtScreenPass _pass;
 
         public override void Create()
         {
             name = "CRTScreenPass";
-            pass = new CRTScreenPass(RenderPassEvent.BeforeRenderingPostProcessing, settings.shader);
+            _pass = new CrtScreenPass(RenderPassEvent.BeforeRenderingPostProcessing, settings.shader);
         }
 
         public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
         {
-            pass.Setup(renderer.cameraColorTarget);
-            renderer.EnqueuePass(pass);
+            _pass.Setup(renderer.cameraColorTarget);
+            renderer.EnqueuePass(_pass);
         }
     }
 
     [Serializable]
-    public class CRTScreenPass : ScriptableRenderPass
+    public class CrtScreenPass : ScriptableRenderPass
     {
-        private static readonly string renderTag = "CRTScreen Effects";
+        private static readonly string RenderTag = "CRTScreen Effects";
         private static readonly int MainTexId = Shader.PropertyToID("_MainTex");
         private static readonly int TempTargetId = Shader.PropertyToID("_TempTargetColorTint");
 
-        private CRTScreenComponent CRTScreenVolume;
-        private Material mat;
-        private RenderTargetIdentifier currentTarget;
+        private CrtScreenComponent _crtScreenVolume;
+        private Material _mat;
+        private RenderTargetIdentifier _currentTarget;
 
-        public CRTScreenPass(RenderPassEvent passEvent, Shader CRTScreenShader)
+        public CrtScreenPass(RenderPassEvent passEvent, Shader crtScreenShader)
         {
             renderPassEvent = passEvent;
-            if (CRTScreenShader == null)
+            if (crtScreenShader == null)
             {
                 UCT.Global.Other.Debug.Log("Shader不存在");
                 return;
             }
-            mat = CoreUtils.CreateEngineMaterial(CRTScreenShader);
+            _mat = CoreUtils.CreateEngineMaterial(crtScreenShader);
         }
 
         public void Setup(in RenderTargetIdentifier currentTarget)
         {
-            this.currentTarget = currentTarget;
+            this._currentTarget = currentTarget;
         }
 
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
-            if (mat == null)
+            if (_mat == null)
             {
                 return;
             }
@@ -68,16 +68,16 @@ namespace Volume
                 return;
             }
             VolumeStack stack = VolumeManager.instance.stack;
-            CRTScreenVolume = stack.GetComponent<CRTScreenComponent>();
-            if (CRTScreenVolume == null)
+            _crtScreenVolume = stack.GetComponent<CrtScreenComponent>();
+            if (_crtScreenVolume == null)
             {
                 return;
             }
-            if (CRTScreenVolume.isShow.value == false)
+            if (_crtScreenVolume.isShow.value == false)
             {
                 return;
             }
-            CommandBuffer cmd = CommandBufferPool.Get(renderTag);
+            CommandBuffer cmd = CommandBufferPool.Get(RenderTag);
             Render(cmd, ref renderingData);
             context.ExecuteCommandBuffer(cmd);
             CommandBufferPool.Release(cmd);
@@ -87,17 +87,17 @@ namespace Volume
         {
             ref CameraData cameraData = ref renderingData.cameraData;
             Camera camera = cameraData.camera;
-            RenderTargetIdentifier source = currentTarget;
+            RenderTargetIdentifier source = _currentTarget;
             int destination = TempTargetId;
 
-            mat.SetVector("_Resolution", CRTScreenVolume.resolution.value);
-            mat.SetVector("_PixelScanlineBrightness", CRTScreenVolume.pixelScanlineBrightness.value);
-            mat.SetFloat("_Speed", CRTScreenVolume.speed.value);
+            _mat.SetVector("_Resolution", _crtScreenVolume.resolution.value);
+            _mat.SetVector("_PixelScanlineBrightness", _crtScreenVolume.pixelScanlineBrightness.value);
+            _mat.SetFloat("_Speed", _crtScreenVolume.speed.value);
 
             cmd.SetGlobalTexture(MainTexId, source);
             cmd.GetTemporaryRT(destination, cameraData.camera.scaledPixelWidth, cameraData.camera.scaledPixelHeight, 0, FilterMode.Trilinear, RenderTextureFormat.Default);
             cmd.Blit(source, destination);
-            cmd.Blit(destination, source, mat, 0);
+            cmd.Blit(destination, source, _mat, 0);
         }
     }
 }

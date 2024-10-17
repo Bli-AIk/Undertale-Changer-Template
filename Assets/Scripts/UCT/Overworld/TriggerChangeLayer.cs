@@ -4,8 +4,8 @@ namespace UCT.Overworld
 {
     public class TriggerChangeLayer : MonoBehaviour
     {
-        private GameObject player;
-        private SpriteRenderer spriteRenderer, spriteRendererP;
+        private GameObject _player;
+        private SpriteRenderer _spriteRenderer, _spriteRendererP;
         public int upLayer = 5, downLayer = -2;
 
         [Header("跟随父父物体的层级变化而加上1")]
@@ -13,33 +13,33 @@ namespace UCT.Overworld
 
         private void Start()
         {
-            player = GameObject.Find("Player");
-            spriteRenderer = transform.parent.GetComponent<SpriteRenderer>();
+            _player = GameObject.Find("Player");
+            _spriteRenderer = transform.parent.GetComponent<SpriteRenderer>();
             if (followParentPlus)
-                spriteRendererP = transform.parent.parent.GetComponent<SpriteRenderer>();
+                _spriteRendererP = transform.parent.parent.GetComponent<SpriteRenderer>();
         }
 
         private void OnTriggerStay2D(Collider2D collision)
         {
-            if (collision.gameObject == player)
+            if (collision.gameObject == _player)
             {
                 if (followParentPlus)
                 {
-                    if (player.transform.position.y > transform.position.y)
+                    if (_player.transform.position.y > transform.position.y)
                     {
-                        spriteRenderer.sortingOrder = spriteRendererP.sortingOrder + upLayer;
+                        _spriteRenderer.sortingOrder = _spriteRendererP.sortingOrder + upLayer;
                     }
                     else
-                        spriteRenderer.sortingOrder = spriteRendererP.sortingOrder + downLayer;
+                        _spriteRenderer.sortingOrder = _spriteRendererP.sortingOrder + downLayer;
                     return;
                 }
 
-                if (player.transform.position.y > transform.position.y)
+                if (_player.transform.position.y > transform.position.y)
                 {
-                    spriteRenderer.sortingOrder = upLayer;
+                    _spriteRenderer.sortingOrder = upLayer;
                 }
                 else
-                    spriteRenderer.sortingOrder = downLayer;
+                    _spriteRenderer.sortingOrder = downLayer;
             }
         }
     }
