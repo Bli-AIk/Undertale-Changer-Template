@@ -6,10 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="8f7c2298-d077-422b-9131-f9a839bed961" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Debug/DebugPolygonScaler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Debug/DebugPolygonScaler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Battle/BattlePlayerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Battle/BattlePlayerController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Battle/CameraShake.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Battle/CameraShake.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Battle/ProjectionCheckCollider.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Battle/ProjectionCheckCollider.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Core/MainControl.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Core/MainControl.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Scene/RenameController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Scene/RenameController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/UI/CanvasController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/UI/CanvasController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/OverworldObjTrigger.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/OverworldObjTrigger.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Other/FollowSth.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Other/FollowSth.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/UI/BoxController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/UI/BoxController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/UI/BoxDrawer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/UI/BoxDrawer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/UI/TypeWritter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/UI/TypeWritter.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,7 +130,7 @@
       <workItem from="1729157845269" duration="1422000" />
       <workItem from="1729160055207" duration="1609000" />
       <workItem from="1729162116237" duration="966000" />
-      <workItem from="1729166800953" duration="332000" />
+      <workItem from="1729166801389" duration="546000" />
     </task>
     <servers />
   </component>

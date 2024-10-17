@@ -425,9 +425,9 @@ namespace UCT.Global.UI
                 originString = originString.Substring("<passText>".Length);
         }
 
-        List<Vector2> _dynamicPos;
+        private List<Vector2> _dynamicPos;
 
-        IEnumerator<float> _Dynamic(int number, OverworldControl.DynamicType dynamicType)
+        private IEnumerator<float> _Dynamic(int number, OverworldControl.DynamicType dynamicType)
         {
             if (dynamicType != OverworldControl.DynamicType.None)//动效相关
             {

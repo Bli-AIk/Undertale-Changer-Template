@@ -70,7 +70,7 @@ namespace UCT.Global.UI
         public bool showMesh;
 #endif
 
-        void Start()
+        private void Start()
         {
             GetComponents();
             //BoxController.instance.boxes.Add(this);
@@ -218,7 +218,7 @@ namespace UCT.Global.UI
             else transform.localPosition = localPosition - parent.localPosition;
         }
 
-        void ExitParent()//离开的那个 的爹 会触发这个
+        private void ExitParent()//离开的那个 的爹 会触发这个
         {
             //Debug.Log(transform.childCount);
 
@@ -343,7 +343,7 @@ namespace UCT.Global.UI
         /// <param name="points">原始List</param>
         /// <param name="interpolation">平分点数</param>
         /// <returns></returns>
-        List<Vector2> InterpolatePoints(List<Vector2> points, int interpolation)
+        private List<Vector2> InterpolatePoints(List<Vector2> points, int interpolation)
         {
             List<Vector2> interpolatedPoints = new List<Vector2>();
 
@@ -620,7 +620,7 @@ namespace UCT.Global.UI
         }
 
 
-        bool _isUndoRedoPerformed;
+        private bool _isUndoRedoPerformed;
         private void OnSceneGUI()
         {
             BoxDrawer example = (BoxDrawer)target;

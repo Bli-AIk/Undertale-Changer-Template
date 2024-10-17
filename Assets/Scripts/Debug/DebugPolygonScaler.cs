@@ -17,7 +17,7 @@ namespace Debug
             new Vector2(-1, 1)
         };
 
-        void Update()
+        private void Update()
         {
       
 

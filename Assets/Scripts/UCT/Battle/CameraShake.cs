@@ -27,7 +27,8 @@ namespace UCT.Battle
                 _tweenMoveBack = transform.DOMove(Vector3.zero, 0.5f).OnKill(KillTweenMoveBack);
             }
         }
-        void KillTweenMoveBack()
+
+        private void KillTweenMoveBack()
         {
             _tweenMoveBack = null;
         }

@@ -6,7 +6,8 @@ namespace UCT.Global.Other
     {
         public GameObject sth;
         public Vector3 posAdd;
-        void Update()
+
+        private void Update()
         {
             if(sth != null)
             {

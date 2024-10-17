@@ -684,7 +684,7 @@ namespace UCT.Battle
             }
         }
 
-        void BlueJumpReady()
+        private void BlueJumpReady()
         {
             jumpRayDistance = 0;
             if (isJump)
@@ -782,7 +782,7 @@ namespace UCT.Battle
         ///<summary>
         ///让蓝心坠落
         ///</summary>
-        void BlueDown(float startForce = 0, PlayerDirEnum dir = PlayerDirEnum.NullDir)
+        private void BlueDown(float startForce = 0, PlayerDirEnum dir = PlayerDirEnum.NullDir)
         {
             if (dir != PlayerDirEnum.NullDir)
             {

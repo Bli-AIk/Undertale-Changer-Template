@@ -67,6 +67,7 @@ namespace UCT.Global.Core
         //public OldBoxController OldBoxController;
 
         private Camera _cameraMainInBattle;
+        public Camera mainCamera;
 
         public BoxDrawer mainBox;
 
@@ -156,7 +157,7 @@ namespace UCT.Global.Core
             }
         }
 
-        public void InitializationLoad()
+        private void InitializationLoad()
         {
             //调用ScriptableObject
             //--------------------------------------------------------------------------------
@@ -233,14 +234,15 @@ namespace UCT.Global.Core
             OverworldControl.vsyncMode = (OverworldControl.VSyncMode)PlayerPrefs.GetInt("vsyncMode", 0);
         }
 
-        public void InitializationLanguagePackFullWidth()
+        private void InitializationLanguagePackFullWidth()
         {
             //检测语言包全半角
             if (OverworldControl.textWidth != bool.Parse(ScreenMaxToOneSon(OverworldControl.settingSave, "LanguagePackFullWidth")))
             {
                 OverworldControl.textWidth = bool.Parse(ScreenMaxToOneSon(OverworldControl.settingSave, "LanguagePackFullWidth"));
-                foreach (TextChanger textChanger in Resources.FindObjectsOfTypeAll(typeof(TextChanger)))
+                foreach (var obj in Resources.FindObjectsOfTypeAll(typeof(TextChanger)))
                 {
+                    var textChanger = (TextChanger)obj;
                     textChanger.width = OverworldControl.textWidth;
                     textChanger.Set();
                     textChanger.Change();
@@ -329,6 +331,8 @@ namespace UCT.Global.Core
 
         public void Start()
         {
+            mainCamera = Camera.main;
+            
             if (PlayerControl.isDebug && PlayerControl.invincible)
                 PlayerControl.hp = PlayerControl.hpMax / 2;
 
@@ -353,13 +357,9 @@ namespace UCT.Global.Core
                 if (!noInBlack)
                 {
                     _inOutBlack.DOColor(Color.clear, 0.5f).SetEase(Ease.Linear).OnKill(EndBlack);
-                    if (OverworldControl.hdResolution)
-                    {
-                        //CanvasController.instance.frame.DOKill();
-                        //CanvasController.instance.frame.DOColor(Color.white, 0.5f);
-                        CanvasController.Instance.frame.color = new Color(1, 1, 1, 1);
-                    }
-                    else CanvasController.Instance.frame.color = new Color(1, 1, 1, 0);
+                    //CanvasController.instance.frame.DOKill();
+                    //CanvasController.instance.frame.DOColor(Color.white, 0.5f);
+                    CanvasController.Instance.frame.color = OverworldControl.hdResolution ? new Color(1, 1, 1, 1) : new Color(1, 1, 1, 0);
                 }
                 else
                 {
@@ -446,13 +446,13 @@ namespace UCT.Global.Core
         /// <summary>
         /// 计算BGM节拍
         /// </summary>
-        List<float> BgmbpmCount(float bpm, float bpmDeviation, float musicDuration = 0)
+        private List<float> BgmbpmCount(float inputBpm, float inputBpmDeviation, float musicDuration = 0)
         {
             if (musicDuration <= 0)
                 musicDuration = AudioController.Instance.audioSource.clip.length;
 
-            float beatInterval = 60f / bpm;
-            float currentTime = bpmDeviation;
+            float beatInterval = 60f / inputBpm;
+            float currentTime = inputBpmDeviation;
             List<float> beats = new();
 
             // 计算每个拍子的时间点，直到达到音乐时长
@@ -469,7 +469,7 @@ namespace UCT.Global.Core
         /// <summary>
         /// 控制节拍器
         /// </summary>
-        void Metronome()
+        private void Metronome()
         {
             if (beatTimes.Count <= 0)
                 return;
@@ -479,14 +479,7 @@ namespace UCT.Global.Core
             {
                 if (firstIn)
                 {
-                    if (currentBeatIndex % 4 == 0)
-                    {
-                        AudioController.Instance.GetFx(13, AudioControl.fxClipUI);
-                    }
-                    else
-                    {
-                        AudioController.Instance.GetFx(14, AudioControl.fxClipUI);
-                    }
+                    AudioController.Instance.GetFx(currentBeatIndex % 4 == 0 ? 13 : 14, AudioControl.fxClipUI);
                 }
                 currentBeatIndex++;
 
@@ -623,17 +616,13 @@ namespace UCT.Global.Core
         /// </summary>
         public void FindAndChangeAllSfx(bool isClose)
         {
-            foreach (Light2D light in Resources.FindObjectsOfTypeAll(typeof(Light2D)))
+            foreach (var obj in Resources.FindObjectsOfTypeAll(typeof(Light2D)))
             {
-                light.enabled = !isClose;
+                var light2D = (Light2D)obj;
+                light2D.enabled = !isClose;
             }
-            /*
-        foreach (Volume v in Resources.FindObjectsOfTypeAll(typeof(Volume)))
-        {
-            v.gameObject.SetActive(!isClose);
-        }
-        */
-            Camera.main.GetUniversalAdditionalCameraData().renderPostProcessing = !isClose;
+            
+            mainCamera.GetUniversalAdditionalCameraData().renderPostProcessing = !isClose;
 
             if (sceneState == SceneState.InBattle)
             {
@@ -684,14 +673,7 @@ namespace UCT.Global.Core
         private void SetCanvasFrameSprite(int framePic = 2)//一般为CanvasController.instance.framePic
         {
             Image frame = CanvasController.Instance.frame;
-            if (framePic < 0)
-            {
-                frame.sprite = null;
-            }
-            else
-            {
-                frame.sprite = OverworldControl.frames[framePic];
-            }
+            frame.sprite = framePic < 0 ? null : OverworldControl.frames[framePic];
         }
 
         /// <summary>
@@ -720,23 +702,14 @@ namespace UCT.Global.Core
 
             if (!OverworldControl.hdResolution)
             {
-                Camera.main.rect = new Rect(0, 0, 1, 1);
+                mainCamera.rect = new Rect(0, 0, 1, 1);
                 if (sceneState == SceneState.InBattle)
                 {
                 
                     _cameraMainInBattle.rect = new Rect(0, 0, 1, 1);
                 }
-                // BackpackBehaviour rawImage在其脚本中控制
-                /*
-            RectTransform rectTransform = BackpackBehaviour.instance.rawImage.rectTransform;
-
-            rectTransform.offsetMin = new Vector2(0, 0);
-
-            rectTransform.offsetMax = new Vector2(0, 0);
-
-            rectTransform.localScale = Vector3.one;
-            */
-                if (BackpackBehaviour.Instance != null)
+                
+                if (BackpackBehaviour.Instance)
                     BackpackBehaviour.Instance.SuitResolution();
 
                 CanvasController.Instance.DOKill();
@@ -747,27 +720,14 @@ namespace UCT.Global.Core
             }
             else
             {
-                Camera.main.rect = new Rect(0, 0.056f, 1, 0.888f);
+                if (mainCamera)
+                    mainCamera.rect = new Rect(0, 0.056f, 1, 0.888f);
+                
                 if (sceneState == SceneState.InBattle)
-                {
                     _cameraMainInBattle.rect = new Rect(0, 0.056f, 1, 0.888f);
-                }
 
-                // BackpackBehaviour rawImage在其脚本中控制
-                /*
-            RectTransform rectTransform = BackpackBehaviour.instance.rawImage.rectTransform;
-
-            rectTransform.offsetMin = new Vector2(107, 0);
-
-            rectTransform.offsetMax = new Vector2(-107, 0);
-
-            rectTransform.localScale = Vector3.one * 0.89f;
-            */
                 if (BackpackBehaviour.Instance != null)
                     BackpackBehaviour.Instance.SuitResolution();
-
-                //在SetCanvasFrameSprite内设定
-                //CanvasController.instance.frame.sprite = OverworldControl.frames[CanvasController.instance.framePic];
 
                 CanvasController.Instance.DOKill();
 
@@ -812,8 +772,8 @@ namespace UCT.Global.Core
                     break;
 
                 case 5:
-                    Screen.SetResolution(1920 / 2, 1080 / 2, OverworldControl.fullScreen);
-                    OverworldControl.resolution = new Vector2(1920 / 2, 1080 / 2);
+                    Screen.SetResolution(960, 540, OverworldControl.fullScreen);
+                    OverworldControl.resolution = new Vector2(960, 540);
                     break;
 
                 case 6:
@@ -871,14 +831,14 @@ namespace UCT.Global.Core
             _inOutBlack.DOColor(Color.white, 5.5f).SetEase(Ease.Linear).OnKill(() => SwitchScene(scene));
         }
 
-        public void SwitchScene(string name, bool async = true)
+        public void SwitchScene(string sceneName, bool async = true)
         {
             SetCanvasFrameSprite();
             if (SceneManager.GetActiveScene().name != "Menu" && SceneManager.GetActiveScene().name != "Rename" && SceneManager.GetActiveScene().name != "Story" && SceneManager.GetActiveScene().name != "Start" && SceneManager.GetActiveScene().name != "Gameover")
                 PlayerControl.lastScene = SceneManager.GetActiveScene().name;
             if (async)
-                SceneManager.LoadSceneAsync(name);
-            else SceneManager.LoadScene(name);
+                SceneManager.LoadSceneAsync(sceneName);
+            else SceneManager.LoadScene(sceneName);
 
             SetResolution(Instance.OverworldControl.resolutionLevel);
             blacking = false;
@@ -1070,15 +1030,15 @@ namespace UCT.Global.Core
 
             for (int i = 0; i < list.Count; i++)
             {
-                string name = "";
+                string empty = "";
                 for (int j = 0; j < list[i].Length; j++)
                 {
-                    if (name == "" && !isData)
+                    if (empty == "" && !isData)
                     {
                         int k = j;
                         while (list[i][j] != '\\')
                         {
-                            name += list[i][j];
+                            empty += list[i][j];
                             j++;
                             if (j >= list[i].Length)
                                 break;
@@ -1101,7 +1061,7 @@ namespace UCT.Global.Core
                             isXh = false;
                         }
                         isXh = true;
-                        text = ChangeItemDataSwitch(text, texters, isData, name, ex);
+                        text = ChangeItemDataSwitch(text, texters, isData, empty, ex);
                     }
                     isXh = false;
 
@@ -1120,9 +1080,10 @@ namespace UCT.Global.Core
         }
 
         /// <summary>
+        /// ReSharper disable once InvalidXmlDocComment
         /// ChangeItemData中检测'<''>'符号的Switch语句
         /// </summary>
-        private string ChangeItemDataSwitch(string text, string texters, bool isData, string name, List<string> ex)
+        private string ChangeItemDataSwitch(string text, string texters, bool isData, string inputName, List<string> ex)
         {
             switch (texters)
             {
@@ -1180,34 +1141,34 @@ namespace UCT.Global.Core
                     goto default;
 
                 case "<itemHp>":
-                    if (name != "" && !isData)
+                    if (inputName != "" && !isData)
                     {
-                        text += ItemIdGetName(ItemNameGetId(name, "Foods"), "Auto", 2);
+                        text += ItemIdGetName(ItemNameGetId(inputName, "Foods"), "Auto", 2);
                         break;
                     }
 
                     goto default;
 
                 case "<itemAtk>":
-                    if (name != "" && !isData)
+                    if (inputName != "" && !isData)
                     {
-                        text += ItemIdGetName(ItemNameGetId(name, "Arms"), "Auto", 1);
+                        text += ItemIdGetName(ItemNameGetId(inputName, "Arms"), "Auto", 1);
                         break;
                     }
 
                     goto default;
 
                 case "<itemDef>":
-                    if (name != "" && !isData)
+                    if (inputName != "" && !isData)
                     {
-                        text += ItemIdGetName(ItemNameGetId(name, "Armors"), "Auto", 1);
+                        text += ItemIdGetName(ItemNameGetId(inputName, "Armors"), "Auto", 1);
                         break;
                     }
 
                     goto default;
 
                 case "<getEnemiesName>":
-                    if (name != "" && !isData)
+                    if (inputName != "" && !isData)
                     {
                         text += ex[0];
                         break;
@@ -1215,7 +1176,7 @@ namespace UCT.Global.Core
 
                     goto default;
                 case "<getEnemiesATK>":
-                    if (name != "" && !isData)
+                    if (inputName != "" && !isData)
                     {
                         text += ex[1];
                         break;
@@ -1223,7 +1184,7 @@ namespace UCT.Global.Core
 
                     goto default;
                 case "<getEnemiesDEF>":
-                    if (name != "" && !isData)
+                    if (inputName != "" && !isData)
                     {
                         text += ex[2];
                         break;
@@ -1240,11 +1201,11 @@ namespace UCT.Global.Core
                     {
                         if (texters.Substring(0, 9) == "<itemName" && !isData)
                         {
-                            if (name != "")
+                            if (inputName != "")
                             {
-                                if (ItemNameGetId(name, texters.Substring(9, texters.Length - 10) + 's') < 10000)
-                                    text += ItemIdGetName(ItemNameGetId(name, texters.Substring(9, texters.Length - 10) + 's'), texters.Substring(9, texters.Length - 10) + 's', 0);
-                                else text += ItemIdGetName(ItemNameGetId(name, texters.Substring(9, texters.Length - 10) + 's'), "Auto", 0);
+                                if (ItemNameGetId(inputName, texters.Substring(9, texters.Length - 10) + 's') < 10000)
+                                    text += ItemIdGetName(ItemNameGetId(inputName, texters.Substring(9, texters.Length - 10) + 's'), texters.Substring(9, texters.Length - 10) + 's', 0);
+                                else text += ItemIdGetName(ItemNameGetId(inputName, texters.Substring(9, texters.Length - 10) + 's'), "Auto", 0);
                             }
                         }
                         else if (texters.Substring(0, 9) == "<autoLose")
@@ -1384,9 +1345,10 @@ namespace UCT.Global.Core
         {
             bool isHaveR = false;
             string save = "";
-            float x1 = 0, x2 = 0;
             if (text[0] != 'O' && text[0] != 'o' && text[0] != 'P' && text[0] != 'p')
             {
+                float x1 = 0;
+                float x2;
                 for (int i = 0; i < text.Length; i++)
                 {
                     if ((text[i] == 'r' || text[i] == 'R') && !isHaveR)
@@ -1843,7 +1805,8 @@ namespace UCT.Global.Core
             }
             else
             {
-                subText = list[realId + number];
+                if (list != null) 
+                    subText = list[realId + number];
             }
             return subText;
         }
@@ -1988,7 +1951,7 @@ namespace UCT.Global.Core
         /// </summary>
         public int ItemNameGetId(string itemName, string type)
         {
-            int id = 0, listInt = 0;
+            int id = 0, listInt;
             List<string> list;
             switch (type)
             {
@@ -2033,37 +1996,11 @@ namespace UCT.Global.Core
         }
 
         /// <summary>
-        /// 给List<Int>，检测到空的返回
-        /// </summary>
-        public int GetRealIntListCount(List<int> ints)
-        {
-            for (int i = 0; i < ints.Count; i++)
-            {
-                if (ints[i] == 0)
-                    return i;
-            }
-            return ints.Count;
-        }
-
-        public List<int> ListIntAdd(List<int> origin, int add)
-        {
-            for (int i = 0; i < origin.Count; i++)
-            {
-                if (origin[i] == 0)
-                {
-                    origin[i] = add;
-                    break;
-                }
-            }
-            return origin;
-        }
-
-        /// <summary>
         /// 随机获取-1或1
         /// </summary>
         public int Get1Or_1()
         {
-            int i = 0;
+            int i;
             do
             {
                 i = Random.Range(-1, 2);
@@ -2107,7 +2044,7 @@ namespace UCT.Global.Core
             if (totalSeconds < 0)
                 totalSeconds = 0;
 
-            int seconds = totalSeconds % 60;
+            //int seconds = totalSeconds % 60;
             totalSeconds /= 60;
             int minutes = totalSeconds % 60;
             int hours = totalSeconds / 60;

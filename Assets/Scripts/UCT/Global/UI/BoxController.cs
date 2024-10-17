@@ -41,7 +41,8 @@ namespace UCT.Global.UI
             obj.SetActive(false);
             FillPool();
         }
-        int _number;
+
+        private int _number;
         public BoxDrawer GetFromThePool()
         {
             List<Vector2> points = new List<Vector2>
@@ -62,7 +63,7 @@ namespace UCT.Global.UI
             return newBoxDrawer;
         }
 
-        void Start()
+        private void Start()
         {
             if (startSummonName != null && startSummonName != "")
             {
@@ -81,7 +82,7 @@ namespace UCT.Global.UI
         */
         }
 
-        void Update()
+        private void Update()
         {
             /*
         if (Input.GetKeyDown(KeyCode.Y))
