@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 using UnityEngine;
 
 namespace UCT.Global.UI
 {
-#endif
     /// <summary>
     /// 战斗框绘制
     /// </summary>
