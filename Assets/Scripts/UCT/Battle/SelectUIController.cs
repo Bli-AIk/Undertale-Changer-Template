@@ -316,8 +316,8 @@ namespace UCT.Battle
                             if (MainControl.Instance.KeyArrowToControl(KeyCode.Z))
                             {
                                 List<string> save = new List<string>();
-                                MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.BattleControl.actSave, save, MainControl.Instance.BattleControl.enemies[selectSon].name + "\\");
-                                MainControl.Instance.MaxToOneSon(save, actSave);
+                                MainControl.ScreenMaxToOneSon(MainControl.Instance.BattleControl.actSave, save, MainControl.Instance.BattleControl.enemies[selectSon].name + "\\");
+                                MainControl.MaxToOneSon(save, actSave);
 
                                 _textUI.text = "<color=#00000000>aa</color> * " + actSave[0];
                                 _textUIBack.text = "";
@@ -360,8 +360,8 @@ namespace UCT.Battle
                             if (MainControl.Instance.KeyArrowToControl(KeyCode.Z))
                             {
                                 List<string> save = new List<string>();
-                                MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.BattleControl.mercySave, save, MainControl.Instance.BattleControl.enemies[selectSon].name + "\\");
-                                MainControl.Instance.MaxToOneSon(save, actSave);
+                                MainControl.ScreenMaxToOneSon(MainControl.Instance.BattleControl.mercySave, save, MainControl.Instance.BattleControl.enemies[selectSon].name + "\\");
+                                MainControl.MaxToOneSon(save, actSave);
 
                                 _textUI.text = "<color=#00000000>aa</color> * " + actSave[0];
                                 if (actSave.Count > MainControl.Instance.BattleControl.enemies.Count)
@@ -779,7 +779,7 @@ namespace UCT.Battle
                     turnTextSaveChanged.Add(turnTextSave[i].Substring(turn.ToString().Length + 1));
             }
             List<string> saves = new List<string>();
-            MainControl.Instance.MaxToOneSon(turnTextSaveChanged, saves);
+            MainControl.MaxToOneSon(turnTextSaveChanged, saves);
             return saves;
         }
 

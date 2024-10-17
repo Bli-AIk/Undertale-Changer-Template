@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using DG.Tweening;
 using TMPro;
 using UCT.Battle;
@@ -189,7 +190,7 @@ namespace UCT.Global.Core
             LoadItemData(ItemControl.itemTextMax, ItemControl.itemText);
 
             MaxToSon(ItemControl.itemTextMax, new[] { "Data", "Item" }, new[] { ItemControl.itemTextMaxData, ItemControl.itemTextMaxItem });
-            ItemClassificatio();
+            ItemClassification();
 
             ItemControl.itemTextMaxData = ChangeItemData(ItemControl.itemTextMaxData, true, new List<string>());
             ItemControl.itemTextMaxItem = ChangeItemData(ItemControl.itemTextMaxItem, true, new List<string>());
@@ -374,7 +375,7 @@ namespace UCT.Global.Core
 
             FindAndChangeAllSfx(OverworldControl.noSfx);
 
-            beatTimes = BgmbpmCount(bpm, bpmDeviation);
+            beatTimes = MusicBpmCount(bpm, bpmDeviation);
         }
         public Color RandomColor()
         {
@@ -447,13 +448,13 @@ namespace UCT.Global.Core
         /// <summary>
         /// 计算BGM节拍
         /// </summary>
-        private List<float> BgmbpmCount(float inputBpm, float inputBpmDeviation, float musicDuration = 0)
+        private static List<float> MusicBpmCount(float inputBpm, float inputBpmDeviation, float musicDuration = 0)
         {
             if (musicDuration <= 0)
                 musicDuration = AudioController.Instance.audioSource.clip.length;
 
-            float beatInterval = 60f / inputBpm;
-            float currentTime = inputBpmDeviation;
+            var beatInterval = 60f / inputBpm;
+            var currentTime = inputBpmDeviation;
             List<float> beats = new();
 
             // 计算每个拍子的时间点，直到达到音乐时长
@@ -848,13 +849,13 @@ namespace UCT.Global.Core
         /// <summary>
         /// 随机生成一个六位长的英文
         /// </summary>
-        public string RandomName(int l = 6, string abc = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM")
+        public string RandomString(int length = 6, string alphabet = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM")
         {
             string text = "";
 
-            for (int i = 0; i < l; i++)
+            for (int i = 0; i < length; i++)
             {
-                text += abc[Random.Range(0, abc.Length)];
+                text += alphabet[Random.Range(0, alphabet.Length)];
             }
             return text;
         }
@@ -862,25 +863,25 @@ namespace UCT.Global.Core
         [Space]
         public bool forceJumpLoadTurn;
 
-        public IEnumerator _LoadItemDataForTurn(List<string> list, TextAsset texter)//保存的list 导入的text
+        public IEnumerator _LoadItemDataForTurn(List<string> list, TextAsset inputText)//保存的list 导入的text
         {
             list.Clear();
             string text = "";
-            for (int i = 0; i < texter.text.Length; i++)
+            for (int i = 0; i < inputText.text.Length; i++)
             {
-                if (texter.text[i] == '/' && texter.text[i + 1] == '*')
+                if (inputText.text[i] == '/' && inputText.text[i + 1] == '*')
                 {
                     i++;
-                    while (!(texter.text[i] == '/' && texter.text[i - 1] == '*'))
+                    while (!(inputText.text[i] == '/' && inputText.text[i - 1] == '*'))
                     {
                         i++;
                     }
                     i += 2;
                 }
 
-                if (texter.text[i] != '\n' && texter.text[i] != '\r' && texter.text[i] != ';')
-                    text += texter.text[i];
-                if (texter.text[i] == ';')
+                if (inputText.text[i] != '\n' && inputText.text[i] != '\r' && inputText.text[i] != ';')
+                    text += inputText.text[i];
+                if (inputText.text[i] == ';')
                 {
                     list.Add(text + ";");
                     text = "";
@@ -893,25 +894,25 @@ namespace UCT.Global.Core
         /// <summary>
         /// 调入数据(传入TextAsset)
         /// </summary>
-        private void LoadItemData(List<string> list, TextAsset texter)//保存的list 导入的text
+        private void LoadItemData(List<string> list, TextAsset inputText)//保存的list 导入的text
         {
             list.Clear();
             string text = "";
-            for (int i = 0; i < texter.text.Length; i++)
+            for (int i = 0; i < inputText.text.Length; i++)
             {
-                if (texter.text[i] == '/' && texter.text[i + 1] == '*')
+                if (inputText.text[i] == '/' && inputText.text[i + 1] == '*')
                 {
                     i++;
-                    while (!(texter.text[i] == '/' && texter.text[i - 1] == '*'))
+                    while (!(inputText.text[i] == '/' && inputText.text[i - 1] == '*'))
                     {
                         i++;
                     }
                     i += 2;
                 }
 
-                if (texter.text[i] != '\n' && texter.text[i] != '\r' && texter.text[i] != ';')
-                    text += texter.text[i];
-                if (texter.text[i] == ';')
+                if (inputText.text[i] != '\n' && inputText.text[i] != '\r' && inputText.text[i] != ';')
+                    text += inputText.text[i];
+                if (inputText.text[i] == ';')
                 {
                     list.Add(text + ";");
                     text = "";
@@ -922,24 +923,24 @@ namespace UCT.Global.Core
         /// <summary>
         /// 调入数据(传入string)
         /// </summary>
-        public void LoadItemData(List<string> list, string texter)//保存的list 导入的text
+        public void LoadItemData(List<string> list, string inputText)//保存的list 导入的text
         {
             list.Clear();
             string text = "";
-            for (int i = 0; i < texter.Length; i++)
+            for (int i = 0; i < inputText.Length; i++)
             {
-                if (texter[i] == '/' && texter[i + 1] == '*')
+                if (inputText[i] == '/' && inputText[i + 1] == '*')
                 {
                     i++;
-                    while (!(texter[i] == '/' && texter[i - 1] == '*'))
+                    while (!(inputText[i] == '/' && inputText[i - 1] == '*'))
                     {
                         i++;
                     }
                     i += 2;
                 }
-                if (texter[i] != '\n' && texter[i] != '\r' && texter[i] != ';')
-                    text += texter[i];
-                if (texter[i] == ';')
+                if (inputText[i] != '\n' && inputText[i] != '\r' && inputText[i] != ';')
+                    text += inputText[i];
+                if (inputText[i] == ';')
                 {
                     list.Add(text + ";");
                     text = "";
@@ -957,53 +958,57 @@ namespace UCT.Global.Core
         {
             if (plusText == 0)
             {
-                if (PlayerControl.myItems[sonSelect - 1] >= 20000)
-                    plusText = -20000 + ItemControl.itemFoods.Count / 3 + ItemControl.itemArms.Count / 2;
-                else if (PlayerControl.myItems[sonSelect - 1] >= 10000)
-                    plusText = -10000 + ItemControl.itemFoods.Count / 3;
-                else plusText = 0;
-            }
-
-            if (PlayerControl.myItems[sonSelect - 1] >= 20000)
-            {
-                typeWritter.TypeOpen(ItemControl.itemTextMaxItemSon[(PlayerControl.myItems[sonSelect - 1] + plusText) * 5 - 3], false, 0, 0, tmpText);
-                PlayerControl.wearDef = int.Parse(ItemIdGetName(PlayerControl.myItems[sonSelect - 1], "Auto", 1));
-                (PlayerControl.wearArmor, PlayerControl.myItems[sonSelect - 1]) = (PlayerControl.myItems[sonSelect - 1], PlayerControl.wearArmor);
-
-                AudioController.Instance.GetFx(3, AudioControl.fxClipUI);
-            }
-            else if (PlayerControl.myItems[sonSelect - 1] >= 10000)
-            {
-                typeWritter.TypeOpen(ItemControl.itemTextMaxItemSon[(PlayerControl.myItems[sonSelect - 1] + plusText) * 5 - 3], false, 0, 0, tmpText);
-                PlayerControl.wearAtk = int.Parse(ItemIdGetName(PlayerControl.myItems[sonSelect - 1], "Auto", 1));
-                (PlayerControl.wearArm, PlayerControl.myItems[sonSelect - 1]) = (PlayerControl.myItems[sonSelect - 1], PlayerControl.wearArm);
-
-                AudioController.Instance.GetFx(3, AudioControl.fxClipUI);
-            }
-            else//食物
-            {
-                int plusHp = int.Parse(ItemIdGetName(PlayerControl.myItems[sonSelect - 1], "Auto", 2));
-                if (PlayerControl.wearArm == 10001)
-                    plusHp += 4;
-
-                typeWritter.TypeOpen(ItemControl.itemTextMaxItemSon[PlayerControl.myItems[sonSelect - 1] * 5 - 3], false,
-                    plusHp, 0, tmpText);
-
-                PlayerControl.hp += plusHp;
-
-                if (PlayerControl.hp > PlayerControl.hpMax)
-                    PlayerControl.hp = PlayerControl.hpMax;
-                for (int i = 0; i < ItemControl.itemFoods.Count; i++)
+                plusText = PlayerControl.myItems[sonSelect - 1] switch
                 {
-                    if (ItemControl.itemTextMaxItemSon[PlayerControl.myItems[sonSelect - 1] * 5 - 5] == ItemControl.itemFoods[i])
+                    >= 20000 => -20000 + ItemControl.itemFoods.Count / 3 + ItemControl.itemArms.Count / 2,
+                    >= 10000 => -10000 + ItemControl.itemFoods.Count / 3,
+                    _ => 0
+                };
+            }
+
+            switch (PlayerControl.myItems[sonSelect - 1])
+            {
+                case >= 20000:
+                    typeWritter.TypeOpen(ItemControl.itemTextMaxItemSon[(PlayerControl.myItems[sonSelect - 1] + plusText) * 5 - 3], false, 0, 0, tmpText);
+                    PlayerControl.wearDef = int.Parse(ItemIdGetName(PlayerControl.myItems[sonSelect - 1], "Auto", 1));
+                    (PlayerControl.wearArmor, PlayerControl.myItems[sonSelect - 1]) = (PlayerControl.myItems[sonSelect - 1], PlayerControl.wearArmor);
+
+                    AudioController.Instance.GetFx(3, AudioControl.fxClipUI);
+                    break;
+                case >= 10000:
+                    typeWritter.TypeOpen(ItemControl.itemTextMaxItemSon[(PlayerControl.myItems[sonSelect - 1] + plusText) * 5 - 3], false, 0, 0, tmpText);
+                    PlayerControl.wearAtk = int.Parse(ItemIdGetName(PlayerControl.myItems[sonSelect - 1], "Auto", 1));
+                    (PlayerControl.wearArm, PlayerControl.myItems[sonSelect - 1]) = (PlayerControl.myItems[sonSelect - 1], PlayerControl.wearArm);
+
+                    AudioController.Instance.GetFx(3, AudioControl.fxClipUI);
+                    break;
+                //食物
+                default:
+                {
+                    int plusHp = int.Parse(ItemIdGetName(PlayerControl.myItems[sonSelect - 1], "Auto", 2));
+                    if (PlayerControl.wearArm == 10001)
+                        plusHp += 4;
+
+                    typeWritter.TypeOpen(ItemControl.itemTextMaxItemSon[PlayerControl.myItems[sonSelect - 1] * 5 - 3], false,
+                        plusHp, 0, tmpText);
+
+                    PlayerControl.hp += plusHp;
+
+                    if (PlayerControl.hp > PlayerControl.hpMax)
+                        PlayerControl.hp = PlayerControl.hpMax;
+                    for (int i = 0; i < ItemControl.itemFoods.Count; i++)
                     {
-                        string text = ItemControl.itemFoods[i + 1];
-                        text = text.Substring(1, text.Length - 1);
-                        PlayerControl.myItems[sonSelect - 1] = ItemNameGetId(text, "Foods");
-                        break;
+                        if (ItemControl.itemTextMaxItemSon[PlayerControl.myItems[sonSelect - 1] * 5 - 5] == ItemControl.itemFoods[i])
+                        {
+                            string text = ItemControl.itemFoods[i + 1];
+                            text = text.Substring(1, text.Length - 1);
+                            PlayerControl.myItems[sonSelect - 1] = ItemNameGetId(text, "Foods");
+                            break;
+                        }
                     }
+                    AudioController.Instance.GetFx(2, AudioControl.fxClipUI);
+                    break;
                 }
-                AudioController.Instance.GetFx(2, AudioControl.fxClipUI);
             }
         }
 
@@ -1037,10 +1042,10 @@ namespace UCT.Global.Core
 
                     while (t[j] == '<')
                     {
-                        string texters = "";
+                        string inputText = "";
                         while ((j != 0 && t[j - 1] != '>' && !isXh) || isXh)
                         {
-                            texters += t[j];
+                            inputText += t[j];
                             j++;
                             if (j >= t.Length)
                             {
@@ -1049,7 +1054,7 @@ namespace UCT.Global.Core
                             isXh = false;
                         }
                         isXh = true;
-                        text = ChangeItemDataSwitch(text, texters, isData, empty, ex);
+                        text = ChangeItemDataSwitch(text, inputText, isData, empty, ex);
                     }
                     isXh = false;
 
@@ -1336,28 +1341,29 @@ namespace UCT.Global.Core
             if (text[0] != 'O' && text[0] != 'o' && text[0] != 'P' && text[0] != 'p')
             {
                 float x1 = 0;
-                for (int i = 0; i < text.Length; i++)
+                foreach (var t in text)
                 {
-                    if ((text[i] == 'r' || text[i] == 'R') && !isHaveR)
+                    switch (t)
                     {
-                        x1 = float.Parse(save);
-                        save = "";
-                        isHaveR = true;
+                        case 'r' or 'R' when !isHaveR:
+                            x1 = float.Parse(save);
+                            save = "";
+                            isHaveR = true;
+                            break;
+                        case '+':
+                            plusSave = float.Parse(save);
+                            save = "";
+                            break;
+                        default:
+                            save += t;
+                            break;
                     }
-                    else if (text[i] == '+')
-                    {
-                        plusSave = float.Parse(save);
-                        save = "";
-                    }
-                    else save += text[i];
-                }
-                if (isHaveR)
-                {
-                    var x2 = float.Parse(save);
-                    return plusSave + Random.Range(x1, x2);
                 }
 
-                return plusSave + float.Parse(text);
+                if (!isHaveR) return plusSave + float.Parse(text);
+                var x2 = float.Parse(save);
+                return plusSave + Random.Range(x1, x2);
+
             }
 
             if (text == "P" || text == "p")
@@ -1400,12 +1406,12 @@ namespace UCT.Global.Core
         public Color StringVector4ToRealColor(string stringVector4, Color origin)
         {
             stringVector4 = stringVector4.Substring(1, stringVector4.Length - 2) + ",";
-            Color realVector4 = Color.white;
-            string save = "";
-            int isSet = 0;
-            for (int i = 0; i < stringVector4.Length; i++)
+            var realVector4 = Color.white;
+            var save = "";
+            var isSet = 0;
+            foreach (var t in stringVector4)
             {
-                if (stringVector4[i] == ',')
+                if (t == ',')
                 {
                     switch (isSet)
                     {
@@ -1432,7 +1438,7 @@ namespace UCT.Global.Core
                     }
                 }
                 else
-                    save += stringVector4[i];
+                    save += t;
             }
             return realVector4;
         }
@@ -1458,39 +1464,36 @@ namespace UCT.Global.Core
         /// <summary>
         /// 分配Item数据
         /// </summary>
-        private void ItemClassificatio()
+        private void ItemClassification()
         {
             ItemControl.itemFoods.Clear();
             ItemControl.itemArms.Clear();
             ItemControl.itemArmors.Clear();
             ItemControl.itemOthers.Clear();
-            for (int i = 0; i < ItemControl.itemMax.Count; i++)//总物品数
+            foreach (var countText in ItemControl.itemMax)
             {
-                string countText = ItemControl.itemMax[i];
-                string[] text = new string[4];
-                int texti = 0;
-                for (int k = 0; k < countText.Length; k++)//单物品遍历 寻找\符
+                var text = new string[4];
+                var i = 0;
+                foreach (var t in countText)
                 {
-                    if (countText[k] == '\\')
-                        texti++;
-                    else if (countText[k] != ';')
-                        text[texti] += countText[k].ToString();
+                    if (t == '\\')
+                        i++;
+                    else if (t != ';')
+                        text[i] += t.ToString();
 
-                    if (texti == 3 && countText[k] == ';')
+                    if (i != 3 || t != ';') continue;
+                    for (var j = 0; j < text.Length; j++)
                     {
-                        for (int j = 0; j < text.Length; j++)
-                        {
-                            if (j != 1)
-                                ItemClassificatioAdd(text[1], text[j]);
-                        }
-                        texti = 0;
+                        if (j != 1)
+                            ItemClassificatioAdd(text[1], text[j]);
                     }
+                    i = 0;
                 }
             }
         }
 
         /// <summary>
-        /// ItemClassificatio的一个子void
+        /// ItemClassification的一个子void
         /// </summary>
         private void ItemClassificatioAdd(string i, string origin)
         {
@@ -1523,20 +1526,20 @@ namespace UCT.Global.Core
         /// 检测 '\'字符然后分割文本到子List
         /// 批量处理string
         /// </summary>
-        public void MaxToOneSon(List<string> parentList, List<string> sonList, char font = '\\')
+        public static void MaxToOneSon(List<string> parentList, List<string> sonList, char font = '\\')
         {
             sonList.Clear();
-            string text = "";
-            for (int i = 0; i < parentList.Count; i++)
+            var text = "";
+            foreach (var t in parentList)
             {
-                for (int j = 0; j < parentList[i].Length; j++)
+                foreach (var t1 in t)
                 {
-                    if (parentList[i][j] == font || parentList[i][j] == ';')
+                    if (t1 == font || t1 == ';')
                     {
                         sonList.Add(text);
                         text = "";
                     }
-                    else text += parentList[i][j];
+                    else text += t1;
                 }
             }
         }
@@ -1550,27 +1553,27 @@ namespace UCT.Global.Core
             sonList.Clear();
             string text = "";
 
-            for (int j = 0; j < parentString.Length; j++)
+            foreach (var t in parentString)
             {
-                if (parentString[j] == font || parentString[j] == ';')
+                if (t == font || t == ';')
                 {
                     sonList.Add(text);
                     text = "";
                 }
-                else text += parentString[j];
+                else text += t;
             }
         }
 
         /// <summary>
         /// 检测到第一个'\'字符就传出
         /// </summary>
-        public string MaxToOneSon(string original, char font = '\\')
+        private static string MaxToOneSon(string original, char font = '\\')
         {
-            string final = "";
-            for (int i = 0; i < original.Length; i++)
+            var final = "";
+            foreach (var t in original)
             {
-                if (original[i] != '\\')
-                    final += original[i];
+                if (t != font)
+                    final += t;
                 else break;
             }
             return final;
@@ -1606,11 +1609,11 @@ namespace UCT.Global.Core
         /// </summary>
         public string ScreenMaxToOneSon(List<string> parentList, string screen)
         {
-            for (int i = 0; i < parentList.Count; i++)
+            foreach (var t in parentList)
             {
-                if (parentList[i].Length > screen.Length && MaxToOneSon(parentList[i]) == screen)
+                if (t.Length > screen.Length && MaxToOneSon(t) == screen)
                 {
-                    string str = parentList[i].Substring(screen.Length + 1);
+                    string str = t.Substring(screen.Length + 1);
                     str = str[..^1];
                     return str;
                 }
@@ -1623,73 +1626,54 @@ namespace UCT.Global.Core
         /// 用于游戏内文本读取
         /// 传入数据名称返回所有同名的文本包文本
         /// </summary>
-        public List<string> ScreenMaxToAllSon(List<string> parentList, string screen)
+        public static List<string> ScreenMaxToAllSon(List<string> parentList, string screen)
         {
-            List<string> list = new List<string>();
-            for (int i = 0; i < parentList.Count; i++)
-            {
-                if (parentList[i].Length > screen.Length && MaxToOneSon(parentList[i]) == screen)
-                {
-                    string str = parentList[i].Substring(screen.Length + 1);
-                    str = str[..^1];
-                    list.Add(str);
-                }
-            }
-
-            return list;
+            return (from t in parentList where t.Length > screen.Length && MaxToOneSon(t) == screen select t[(screen.Length + 1)..] into str select str[..^1]).ToList();
         }
 
         /// <summary>
         /// 检测list的前几个字符是否与传入的string screen相同。
         /// 若相同则分割文本到子List
         /// </summary>
-        public void ScreenMaxToOneSon(List<string> parentList, List<string> sonList, string screen)
+        public static void ScreenMaxToOneSon(List<string> parentList, List<string> sonList, string screen)
         {
             sonList.Clear();
-            for (int i = 0; i < parentList.Count; i++)
-            {
-                if (parentList[i].Substring(0, screen.Length) == screen)
-                {
-                    sonList.Add(parentList[i].Substring(screen.Length));
-                }
-            }
+            sonList.AddRange(from t in parentList where t[..screen.Length] == screen select t[screen.Length..]);
         }
 
         /// <summary>
         /// 再分配文本包
         /// </summary>
-        private void MaxToSon(List<string> max, string[] text, List<string>[] son)
+        private static void MaxToSon(List<string> max, string[] text, List<string>[] son)
         {
             //max.Clear();
-            for (int i = 0; i < son.Length; i++)
+            foreach (var t in son)
             {
-                son[i].Clear();
+                t.Clear();
             }
-            for (int i = 0; i < max.Count; i++)
+
+            foreach (var t in max)
             {
-                for (int j = 0; j < text.Length; j++)
+                for (var j = 0; j < text.Length; j++)
                 {
-                    if (max[i].Substring(0, text[j].Length) == text[j])
+                    if (t[..text[j].Length] == text[j])
                     {
-                        son[j].Add(max[i].Substring(text[j].Length + 1));
+                        son[j].Add(t[(text[j].Length + 1)..]);
                     }
                 }
             }
         }
 
-        public List<int> ListOrderChanger(List<int> original)
+        public static List<int> ListOrderChanger(List<int> original)
         {
-            List<int> newList = new List<int>();
-            int plusNumber = original.Count;
-            for (int i = 0; i < original.Count; i++)
+            var newList = new List<int>();
+            var plusNumber = original.Count;
+            foreach (var t in original.Where(t => t != 0))
             {
-                if (original[i] != 0)
-                {
-                    newList.Add(original[i]);
-                    plusNumber--;
-                }
+                newList.Add(t);
+                plusNumber--;
             }
-            for (int i = 0; i < plusNumber; i++)
+            for (var i = 0; i < plusNumber; i++)
             {
                 newList.Add(0);
             }
@@ -1773,26 +1757,16 @@ namespace UCT.Global.Core
                     goto case "Others";
             }
 
-            string subText = "";
+            var subText = "";
             if (number == 0)//获取语言包内的名称
             {
-                for (int i = 0; i < ItemControl.itemTextMaxItem.Count; i++)
+                foreach (var t in ItemControl.itemTextMaxItem.Where(t => t[..idName.Length] == idName))
                 {
-                    if (ItemControl.itemTextMaxItem[i].Substring(0, idName.Length) == idName)
-                    {
-                        idName = ItemControl.itemTextMaxItem[i].Substring(idName.Length + 1);
-                        break;
-                    }
+                    idName = t[(idName.Length + 1)..];
+                    break;
                 }
-                for (int i = 0; i < idName.Length; i++)
-                {
-                    if (idName[i] == '\\')
-                    {
-                        break;
-                    }
 
-                    subText += idName[i];
-                }
+                subText = idName.TakeWhile(t => t != '\\').Aggregate(subText, (current, t) => current + t);
             }
             else
             {
@@ -1940,7 +1914,7 @@ namespace UCT.Global.Core
         /// 通过物品数据名称搞到它的id.
         /// type：Foods Arms Armors Others
         /// </summary>
-        public int ItemNameGetId(string itemName, string type)
+        private int ItemNameGetId(string itemName, string type)
         {
             int id = 0, listInt;
             List<string> list;

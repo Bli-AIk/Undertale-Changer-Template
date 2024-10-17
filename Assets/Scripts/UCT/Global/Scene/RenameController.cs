@@ -124,7 +124,7 @@ namespace UCT.Global.Scene
                                     {
                                         select = 0;
                                         mode = 2;
-                                        List<string> list = MainControl.Instance.ScreenMaxToAllSon(MainControl.Instance.OverworldControl.sceneTextsSave, "RenameSp");
+                                        List<string> list = MainControl.ScreenMaxToAllSon(MainControl.Instance.OverworldControl.sceneTextsSave, "RenameSp");
                                         tmps[0].text = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename");
                                         if (MainControl.Instance.OverworldControl.textWidth)
                                             tmps[3].text = "<size=0>wwww</size><color=yellow>" + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
@@ -174,7 +174,7 @@ namespace UCT.Global.Scene
                     }
                     else if (MainControl.Instance.KeyArrowToControl(KeyCode.C, 1))
                     {
-                        setName = MainControl.Instance.RandomName(Random.Range(1, 7));
+                        setName = MainControl.Instance.RandomString(Random.Range(1, 7));
                     }
                     if (breaker) break;
                     if (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow))
