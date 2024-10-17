@@ -1664,7 +1664,7 @@ namespace UCT.Global.Core
             }
         }
 
-        public static List<int> ListOrderChanger(List<int> original)
+        public List<int> ListOrderChanger(List<int> original)
         {
             var newList = new List<int>();
             var plusNumber = original.Count;
