@@ -252,7 +252,7 @@ namespace UCT.Global.Core
             CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture(ScreenMaxToOneSon(OverworldControl.settingSave, "CultureInfo"));
         }
 
-        public void InitializationBattle()
+        private void InitializationBattle()
         {
             //BattleControl加载
             //--------------------------------------------------------------------------------
@@ -264,10 +264,9 @@ namespace UCT.Global.Core
             BattleControl.uiText = LoadLanguageData("Battle\\UIBattleText");
 
             string[] turnSave;
-            TextAsset[] textAssets;
             if (languagePackId < LanguagePackInsideNumber)
             {
-                textAssets = Resources.LoadAll<TextAsset>($"TextAssets/LanguagePacks/{GetLanguageInsideId(languagePackId)}/Battle/Turn");
+                var textAssets = Resources.LoadAll<TextAsset>($"TextAssets/LanguagePacks/{GetLanguageInsideId(languagePackId)}/Battle/Turn");
 
                 turnSave = new string[textAssets.Length];
                 for (int i = 0; i < textAssets.Length; i++)
@@ -278,13 +277,13 @@ namespace UCT.Global.Core
             else
                 turnSave = Directory.GetFiles($"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[languagePackId - LanguagePackInsideNumber]}\\Battle\\Turn");
 
-            for (int i = 0; i < turnSave.Length; i++)
+            foreach (var t in turnSave)
             {
-                string file = turnSave[i];
+                string file = t;
 
                 if (languagePackId < LanguagePackInsideNumber)
                     BattleControl.turnDialogAsset.Add(file);
-                else if (turnSave[i].Substring(turnSave[i].Length - 3) == "txt")
+                else if (t.Substring(t.Length - 3) == "txt")
                     BattleControl.turnDialogAsset.Add(File.ReadAllText(file));
             }
             LoadItemData(BattleControl.uiTextSave, BattleControl.uiText);
@@ -306,7 +305,10 @@ namespace UCT.Global.Core
 
         private void Awake()
         {
+            mainCamera = Camera.main;
+            
             languagePackId = PlayerPrefs.GetInt("languagePack", 2);
+            
             if (PlayerPrefs.GetInt("dataNumber", 0) >= 0)
                 dataNumber = PlayerPrefs.GetInt("dataNumber", 0);
             else
@@ -331,7 +333,6 @@ namespace UCT.Global.Core
 
         public void Start()
         {
-            mainCamera = Camera.main;
             
             if (PlayerControl.isDebug && PlayerControl.invincible)
                 PlayerControl.hp = PlayerControl.hpMax / 2;
@@ -388,7 +389,7 @@ namespace UCT.Global.Core
             string text = "<color=#";
             for (int i = 0; i < 6; i++)
             {
-                text += string.Format("{0:X}", Random.Range(0, 16));
+                text += $"{Random.Range(0, 16):X}";
             }
             text += "FF>";
             return text;
@@ -643,14 +644,14 @@ namespace UCT.Global.Core
         {
             if (!OverworldControl.hdResolution)
             {
-                if (OverworldControl.resolutionLevel >= 0 && OverworldControl.resolutionLevel < 4)
+                if (OverworldControl.resolutionLevel is >= 0 and < 4)
                     OverworldControl.resolutionLevel += 1;
                 else
                     OverworldControl.resolutionLevel = 0;
             }
             else
             {
-                if (OverworldControl.resolutionLevel >= 5 && OverworldControl.resolutionLevel < 6)
+                if (OverworldControl.resolutionLevel is >= 5 and < 6)
                     OverworldControl.resolutionLevel += 1;
                 else
                     OverworldControl.resolutionLevel = 5;
@@ -845,15 +846,6 @@ namespace UCT.Global.Core
         }
 
         /// <summary>
-        /// 传入string，返回删去末尾i个字符的string
-        /// </summary>
-        public string SubText(string str, int i = 1)
-        {
-            str = str.Substring(0, str.Length - i);
-            return str;
-        }
-
-        /// <summary>
         /// 随机生成一个六位长的英文
         /// </summary>
         public string RandomName(int l = 6, string abc = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM")
@@ -901,7 +893,7 @@ namespace UCT.Global.Core
         /// <summary>
         /// 调入数据(传入TextAsset)
         /// </summary>
-        public void LoadItemData(List<string> list, TextAsset texter)//保存的list 导入的text
+        private void LoadItemData(List<string> list, TextAsset texter)//保存的list 导入的text
         {
             list.Clear();
             string text = "";
@@ -976,9 +968,7 @@ namespace UCT.Global.Core
             {
                 typeWritter.TypeOpen(ItemControl.itemTextMaxItemSon[(PlayerControl.myItems[sonSelect - 1] + plusText) * 5 - 3], false, 0, 0, tmpText);
                 PlayerControl.wearDef = int.Parse(ItemIdGetName(PlayerControl.myItems[sonSelect - 1], "Auto", 1));
-                int wearInt = PlayerControl.wearArmor;
-                PlayerControl.wearArmor = PlayerControl.myItems[sonSelect - 1];
-                PlayerControl.myItems[sonSelect - 1] = wearInt;
+                (PlayerControl.wearArmor, PlayerControl.myItems[sonSelect - 1]) = (PlayerControl.myItems[sonSelect - 1], PlayerControl.wearArmor);
 
                 AudioController.Instance.GetFx(3, AudioControl.fxClipUI);
             }
@@ -986,9 +976,7 @@ namespace UCT.Global.Core
             {
                 typeWritter.TypeOpen(ItemControl.itemTextMaxItemSon[(PlayerControl.myItems[sonSelect - 1] + plusText) * 5 - 3], false, 0, 0, tmpText);
                 PlayerControl.wearAtk = int.Parse(ItemIdGetName(PlayerControl.myItems[sonSelect - 1], "Auto", 1));
-                int wearInt = PlayerControl.wearArm;
-                PlayerControl.wearArm = PlayerControl.myItems[sonSelect - 1];
-                PlayerControl.myItems[sonSelect - 1] = wearInt;
+                (PlayerControl.wearArm, PlayerControl.myItems[sonSelect - 1]) = (PlayerControl.myItems[sonSelect - 1], PlayerControl.wearArm);
 
                 AudioController.Instance.GetFx(3, AudioControl.fxClipUI);
             }
@@ -1028,33 +1016,33 @@ namespace UCT.Global.Core
             string text = "";
             bool isXh = false;//检测是否有多个需要循环调用的特殊字符
 
-            for (int i = 0; i < list.Count; i++)
+            foreach (var t in list)
             {
                 string empty = "";
-                for (int j = 0; j < list[i].Length; j++)
+                for (int j = 0; j < t.Length; j++)
                 {
                     if (empty == "" && !isData)
                     {
                         int k = j;
-                        while (list[i][j] != '\\')
+                        while (t[j] != '\\')
                         {
-                            empty += list[i][j];
+                            empty += t[j];
                             j++;
-                            if (j >= list[i].Length)
+                            if (j >= t.Length)
                                 break;
                         }
                         j = k;
                         //Debug.Log(list[i] +"/"+ name);
                     }
 
-                    while (list[i][j] == '<')
+                    while (t[j] == '<')
                     {
                         string texters = "";
-                        while ((j != 0 && list[i][j - 1] != '>' && !isXh) || isXh)
+                        while ((j != 0 && t[j - 1] != '>' && !isXh) || isXh)
                         {
-                            texters += list[i][j];
+                            texters += t[j];
                             j++;
-                            if (j >= list[i].Length)
+                            if (j >= t.Length)
                             {
                                 break;
                             }
@@ -1065,14 +1053,14 @@ namespace UCT.Global.Core
                     }
                     isXh = false;
 
-                    if (list[i][j] == ';')
+                    if (t[j] == ';')
                     {
                         newList.Add(text + ";");
                         text = "";
                     }
                     else
                     {
-                        text += list[i][j];
+                        text += t[j];
                     }
                 }
             }
@@ -1083,9 +1071,9 @@ namespace UCT.Global.Core
         /// ReSharper disable once InvalidXmlDocComment
         /// ChangeItemData中检测'<''>'符号的Switch语句
         /// </summary>
-        private string ChangeItemDataSwitch(string text, string texters, bool isData, string inputName, List<string> ex)
+        private string ChangeItemDataSwitch(string text, string inputText, bool isData, string inputName, List<string> ex)
         {
-            switch (texters)
+            switch (inputText)
             {
                 case "<playerName>":
                     text += PlayerControl.playerName;
@@ -1109,35 +1097,35 @@ namespace UCT.Global.Core
                     break;
 
                 case "<autoCheckFood>":
-                    texters = "<data13>";
+                    inputText = "<data13>";
                     goto default;
 
                 case "<autoArm>":
-                    texters = "<data14>";
+                    inputText = "<data14>";
                     goto default;
                 case "<autoArmor>":
-                    texters = "<data15>";
+                    inputText = "<data15>";
                     goto default;
 
                 case "<autoCheckArm>":
-                    texters = "<data16>";
+                    inputText = "<data16>";
                     goto default;
 
                 case "<autoCheckArmor>":
-                    texters = "<data17>";
+                    inputText = "<data17>";
                     goto default;
 
                 case "<autoLoseFood>":
-                    texters = "<data18>";
+                    inputText = "<data18>";
                     goto default;
                 case "<autoLoseArm>":
-                    texters = "<data19>";
+                    inputText = "<data19>";
                     goto default;
                 case "<autoLoseArmor>":
-                    texters = "<data20>";
+                    inputText = "<data20>";
                     goto default;
                 case "<autoLoseOther>":
-                    texters = "<data21>";
+                    inputText = "<data21>";
                     goto default;
 
                 case "<itemHp>":
@@ -1193,24 +1181,24 @@ namespace UCT.Global.Core
                     goto default;
 
                 default:
-                    if (IsFrontCharactersMatch("<data", texters))
+                    if (IsFrontCharactersMatch("<data", inputText))
                     {
-                        text += ItemControl.itemTextMaxData[int.Parse(texters.Substring(5, texters.Length - 6))].Substring(0, ItemControl.itemTextMaxData[int.Parse(texters.Substring(5, texters.Length - 6))].Length - 1);
+                        text += ItemControl.itemTextMaxData[int.Parse(inputText.Substring(5, inputText.Length - 6))].Substring(0, ItemControl.itemTextMaxData[int.Parse(inputText.Substring(5, inputText.Length - 6))].Length - 1);
                     }
-                    else if (texters.Length > 9)
+                    else if (inputText.Length > 9)
                     {
-                        if (texters.Substring(0, 9) == "<itemName" && !isData)
+                        if (inputText.Substring(0, 9) == "<itemName" && !isData)
                         {
                             if (inputName != "")
                             {
-                                if (ItemNameGetId(inputName, texters.Substring(9, texters.Length - 10) + 's') < 10000)
-                                    text += ItemIdGetName(ItemNameGetId(inputName, texters.Substring(9, texters.Length - 10) + 's'), texters.Substring(9, texters.Length - 10) + 's', 0);
-                                else text += ItemIdGetName(ItemNameGetId(inputName, texters.Substring(9, texters.Length - 10) + 's'), "Auto", 0);
+                                if (ItemNameGetId(inputName, inputText.Substring(9, inputText.Length - 10) + 's') < 10000)
+                                    text += ItemIdGetName(ItemNameGetId(inputName, inputText.Substring(9, inputText.Length - 10) + 's'), inputText.Substring(9, inputText.Length - 10) + 's', 0);
+                                else text += ItemIdGetName(ItemNameGetId(inputName, inputText.Substring(9, inputText.Length - 10) + 's'), "Auto", 0);
                             }
                         }
-                        else if (texters.Substring(0, 9) == "<autoLose")
+                        else if (inputText.Substring(0, 9) == "<autoLose")
                         {
-                            switch (texters.Substring(9, texters.Length - 10) + 's')
+                            switch (inputText.Substring(9, inputText.Length - 10) + 's')
                             {
                                 case "Food":
                                     text += ItemControl.itemTextMaxData[18];
@@ -1230,11 +1218,11 @@ namespace UCT.Global.Core
                             }
                         }
                         else
-                            text += texters;
+                            text += inputText;
                     }
                     else
                     {
-                        text += texters;
+                        text += inputText;
                     }
                     break;
             }
@@ -1254,12 +1242,12 @@ namespace UCT.Global.Core
             string final = "";
             string bet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             string betS = "abcdefghijklmnopqrstuvwxyz";
-            for (int i = 0; i < origin.Length; i++)
+            foreach (var t in origin)
             {
                 bool isPlus = false;
                 for (int j = 0; j < bet.Length; j++)
                 {
-                    if (origin[i] == bet[j])
+                    if (t == bet[j])
                     {
                         final += betS[j];
                         break;
@@ -1269,7 +1257,7 @@ namespace UCT.Global.Core
                         isPlus = true;
                 }
                 if (isPlus)
-                    final += origin[i];
+                    final += t;
             }
             return final;
         }
@@ -1282,12 +1270,12 @@ namespace UCT.Global.Core
             string final = "";
             string betS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             string bet = "abcdefghijklmnopqrstuvwxyz";
-            for (int i = 0; i < origin.Length; i++)
+            foreach (var t in origin)
             {
                 bool isPlus = false;
                 for (int j = 0; j < bet.Length; j++)
                 {
-                    if (origin[i] == bet[j])
+                    if (t == bet[j])
                     {
                         final += betS[j];
                         break;
@@ -1297,7 +1285,7 @@ namespace UCT.Global.Core
                         isPlus = true;
                 }
                 if (isPlus)
-                    final += origin[i];
+                    final += t;
             }
             return final;
         }
@@ -1312,9 +1300,9 @@ namespace UCT.Global.Core
             Vector2 realVector2 = Vector2.zero;
             string save = "";
             bool isSetX = false;
-            for (int i = 0; i < stringVector2.Length; i++)
+            foreach (var t in stringVector2)
             {
-                if (stringVector2[i] == ',')
+                if (t == ',')
                 {
                     if (!isSetX)
                     {
@@ -1329,7 +1317,7 @@ namespace UCT.Global.Core
                     }
                 }
                 else
-                    save += stringVector2[i];
+                    save += t;
             }
             return realVector2;
         }
@@ -1341,14 +1329,13 @@ namespace UCT.Global.Core
         /// 额外添加：P/p获取玩家位置 通过isY确定是X还是Y
         /// 通过xxx + xRx的形式实现一定程度上的固定。
         /// </summary>
-        public float RandomFloatChange(string text, float origin, bool isY = false, float plusSave = 0)
+        private float RandomFloatChange(string text, float origin, bool isY = false, float plusSave = 0)
         {
             bool isHaveR = false;
             string save = "";
             if (text[0] != 'O' && text[0] != 'o' && text[0] != 'P' && text[0] != 'p')
             {
                 float x1 = 0;
-                float x2;
                 for (int i = 0; i < text.Length; i++)
                 {
                     if ((text[i] == 'r' || text[i] == 'R') && !isHaveR)
@@ -1366,7 +1353,7 @@ namespace UCT.Global.Core
                 }
                 if (isHaveR)
                 {
-                    x2 = float.Parse(save);
+                    var x2 = float.Parse(save);
                     return plusSave + Random.Range(x1, x2);
                 }
 
@@ -1623,7 +1610,9 @@ namespace UCT.Global.Core
             {
                 if (parentList[i].Length > screen.Length && MaxToOneSon(parentList[i]) == screen)
                 {
-                    return SubText(parentList[i].Substring(screen.Length + 1));
+                    string str = parentList[i].Substring(screen.Length + 1);
+                    str = str[..^1];
+                    return str;
                 }
             }
 
@@ -1641,7 +1630,9 @@ namespace UCT.Global.Core
             {
                 if (parentList[i].Length > screen.Length && MaxToOneSon(parentList[i]) == screen)
                 {
-                    list.Add(SubText(parentList[i].Substring(screen.Length + 1)));
+                    string str = parentList[i].Substring(screen.Length + 1);
+                    str = str[..^1];
+                    list.Add(str);
                 }
             }
 

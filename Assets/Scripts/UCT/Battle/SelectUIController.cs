@@ -155,9 +155,7 @@ namespace UCT.Battle
         /// </summary>
         private void SpriteChange()
         {
-            Sprite sprSave = buttons[selectUI - 1].sprite;
-            buttons[selectUI - 1].sprite = spriteUI[selectUI - 1];
-            spriteUI[selectUI - 1] = sprSave;
+            (buttons[selectUI - 1].sprite, spriteUI[selectUI - 1]) = (spriteUI[selectUI - 1], buttons[selectUI - 1].sprite);
         }
 
         /// <summary>
