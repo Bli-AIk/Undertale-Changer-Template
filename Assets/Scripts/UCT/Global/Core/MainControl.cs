@@ -13,6 +13,7 @@ using UCT.Overworld;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -26,7 +27,7 @@ namespace UCT.Global.Core
     public class MainControl : MonoBehaviour
     {
         public static MainControl Instance;
-        public int languagePack;
+        [FormerlySerializedAs("languagePack")] public int languagePackId;
         public int dataNumber;
 
         public const int LanguagePackInsideNumber = 3; //内置语言包总数
@@ -138,20 +139,20 @@ namespace UCT.Global.Core
         /// </summary>
         private string LoadLanguageData(string path)
         {
-            if (languagePack < LanguagePackInsideNumber)
+            if (languagePackId < LanguagePackInsideNumber)
             {
-                return Resources.Load<TextAsset>($"TextAssets/LanguagePacks/{GetLanguageInsideId(languagePack)}/{path}").text;
+                return Resources.Load<TextAsset>($"TextAssets/LanguagePacks/{GetLanguageInsideId(languagePackId)}/{path}").text;
             }
 
-            return File.ReadAllText($"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[languagePack - LanguagePackInsideNumber]}\\{path}.txt");
+            return File.ReadAllText($"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[languagePackId - LanguagePackInsideNumber]}\\{path}.txt");
         }
 
         private void LanguagePackDetection()
         {
-            if ((languagePack < 0)
-                || (languagePack >= Directory.GetDirectories(Application.dataPath + "\\LanguagePacks").Length + LanguagePackInsideNumber))
+            if ((languagePackId < 0)
+                || (languagePackId >= Directory.GetDirectories(Application.dataPath + "\\LanguagePacks").Length + LanguagePackInsideNumber))
             {
-                languagePack = 2;
+                languagePackId = 2;
             }
         }
 
@@ -169,13 +170,13 @@ namespace UCT.Global.Core
         /// <summary>
         /// 初始化加载一大堆数据
         /// </summary>
-        public void Initialization(int lan)
+        public void Initialization(int languageId)
         {
-            if (ItemControl == null)
+            if (!ItemControl)
                 ItemControl = Resources.Load<ItemControl>("ItemControl");
 
-            if (lan != languagePack)
-                languagePack = lan;
+            if (!languageId.Equals(languagePackId))
+                languagePackId = languageId;
 
             LanguagePackDetection();
 
@@ -186,7 +187,7 @@ namespace UCT.Global.Core
             LoadItemData(ItemControl.itemMax, ItemControl.itemData);
             LoadItemData(ItemControl.itemTextMax, ItemControl.itemText);
 
-            MaxToSon(ItemControl.itemTextMax, new string[2] { "Data", "Item" }, new List<string>[2] { ItemControl.itemTextMaxData, ItemControl.itemTextMaxItem });
+            MaxToSon(ItemControl.itemTextMax, new[] { "Data", "Item" }, new[] { ItemControl.itemTextMaxData, ItemControl.itemTextMaxItem });
             ItemClassificatio();
 
             ItemControl.itemTextMaxData = ChangeItemData(ItemControl.itemTextMaxData, true, new List<string>());
@@ -262,9 +263,9 @@ namespace UCT.Global.Core
 
             string[] turnSave;
             TextAsset[] textAssets;
-            if (languagePack < LanguagePackInsideNumber)
+            if (languagePackId < LanguagePackInsideNumber)
             {
-                textAssets = Resources.LoadAll<TextAsset>($"TextAssets/LanguagePacks/{GetLanguageInsideId(languagePack)}/Battle/Turn");
+                textAssets = Resources.LoadAll<TextAsset>($"TextAssets/LanguagePacks/{GetLanguageInsideId(languagePackId)}/Battle/Turn");
 
                 turnSave = new string[textAssets.Length];
                 for (int i = 0; i < textAssets.Length; i++)
@@ -273,13 +274,13 @@ namespace UCT.Global.Core
                 }
             }
             else
-                turnSave = Directory.GetFiles($"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[languagePack - LanguagePackInsideNumber]}\\Battle\\Turn");
+                turnSave = Directory.GetFiles($"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[languagePackId - LanguagePackInsideNumber]}\\Battle\\Turn");
 
             for (int i = 0; i < turnSave.Length; i++)
             {
                 string file = turnSave[i];
 
-                if (languagePack < LanguagePackInsideNumber)
+                if (languagePackId < LanguagePackInsideNumber)
                     BattleControl.turnDialogAsset.Add(file);
                 else if (turnSave[i].Substring(turnSave[i].Length - 3) == "txt")
                     BattleControl.turnDialogAsset.Add(File.ReadAllText(file));
@@ -303,7 +304,7 @@ namespace UCT.Global.Core
 
         private void Awake()
         {
-            languagePack = PlayerPrefs.GetInt("languagePack", 2);
+            languagePackId = PlayerPrefs.GetInt("languagePack", 2);
             if (PlayerPrefs.GetInt("dataNumber", 0) >= 0)
                 dataNumber = PlayerPrefs.GetInt("dataNumber", 0);
             else
@@ -318,7 +319,7 @@ namespace UCT.Global.Core
 
             Instance = this;
             InitializationLoad();
-            Initialization(languagePack);
+            Initialization(languagePackId);
 
             if (dataNumber == -1)
             {

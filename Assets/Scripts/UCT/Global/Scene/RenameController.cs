@@ -291,7 +291,7 @@ namespace UCT.Global.Scene
                                 DOTween.To(() => v2.weight, x => v2.weight = x, 1, 5.5f).SetEase(Ease.Linear);
 
                                 SaveController.SaveData(MainControl.Instance.PlayerControl, "Data" + MainControl.Instance.dataNumber);
-                                PlayerPrefs.SetInt("languagePack", MainControl.Instance.languagePack);
+                                PlayerPrefs.SetInt("languagePack", MainControl.Instance.languagePackId);
                                 PlayerPrefs.SetInt("dataNumber", MainControl.Instance.dataNumber);
                                 PlayerPrefs.SetInt("hdResolution", Convert.ToInt32(MainControl.Instance.OverworldControl.hdResolution));
                                 PlayerPrefs.SetInt("noSFX", Convert.ToInt32(MainControl.Instance.OverworldControl.noSfx));

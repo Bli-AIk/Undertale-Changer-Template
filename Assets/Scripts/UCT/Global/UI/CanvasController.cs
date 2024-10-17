@@ -234,7 +234,7 @@ namespace UCT.Global.UI
                     _settingSelectMax = 0;
                     int settingSelectBack = _settingSelect;
                     if (onlySetSon)
-                        _settingSelect = MainControl.Instance.languagePack;
+                        _settingSelect = MainControl.Instance.languagePackId;
 
                     for (int i = 0; i < MainControl.LanguagePackInsideNumber; i++) //内置包信息
                     {
@@ -710,7 +710,7 @@ namespace UCT.Global.UI
                             {
                                 AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
                                 SettingText(false, true);
-                                MainControl.Instance.languagePack = _settingSelect;
+                                MainControl.Instance.languagePackId = _settingSelect;
                             }
                             else
                             {

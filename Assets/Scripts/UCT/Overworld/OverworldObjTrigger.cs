@@ -107,7 +107,7 @@ namespace UCT.Overworld
 
                             BackpackBehaviour.Instance.saveUI.text = $"<color=yellow>{MainControl.Instance.FillString(name, 10)}LV{MainControl.Instance.FillString(MainControl.Instance.PlayerControl.lv.ToString(), 7)}{MainControl.Instance.GetRealTime((int)MainControl.Instance.PlayerControl.gameTime)}\n{MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, SceneManager.GetActiveScene().name)}\n{MainControl.Instance.RichTextWithEnd("size", 1, "\n")}  {MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "Saved")}";
                             MainControl.Instance.PlayerControl.saveScene = SceneManager.GetActiveScene().name;
-                            PlayerPrefs.SetInt("languagePack", MainControl.Instance.languagePack);
+                            PlayerPrefs.SetInt("languagePack", MainControl.Instance.languagePackId);
                             PlayerPrefs.SetInt("dataNumber", MainControl.Instance.dataNumber);
                             PlayerPrefs.SetInt("hdResolution", Convert.ToInt32(MainControl.Instance.OverworldControl.hdResolution));
                             PlayerPrefs.SetInt("noSFX", Convert.ToInt32(MainControl.Instance.OverworldControl.noSfx));
