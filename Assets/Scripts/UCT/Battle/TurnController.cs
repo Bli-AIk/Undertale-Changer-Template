@@ -63,9 +63,9 @@ namespace UCT.Battle
         /// 回合执行系统
         /// 根据回合编号进行相应的执行
         /// </summary>
-        private IEnumerator<float> _TurnExecute(int turn)
+        private IEnumerator<float> _TurnExecute(int turnNumber)
         {
-            switch (turn)
+            switch (turnNumber)
             {
                 case 1:
                     Global.Other.Debug.Log("这是个摆烂回合……也许吧。");
@@ -79,7 +79,7 @@ namespace UCT.Battle
 
                     for (int i = 600; i > 0; i--)
                     {
-                        Global.Other.Debug.Log($"你先别急，先摆{MainControl.Instance.RandomStringColor()}{i}</color>秒");
+                        Global.Other.Debug.Log($"你先别急，先摆{MainControl.Instance.RandomStringColor(i.ToString())}秒");
                         yield return Timing.WaitForSeconds(1f);
                     }
 

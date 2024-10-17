@@ -387,7 +387,7 @@ namespace UCT.Global.Core
         /// </summary>
         public string RandomStringColor()
         {
-            string text = "<color=#";
+            var text = "<color=#";
             for (int i = 0; i < 6; i++)
             {
                 text += $"{Random.Range(0, 16):X}";
