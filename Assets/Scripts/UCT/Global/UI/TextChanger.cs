@@ -37,7 +37,7 @@ namespace UCT.Global.UI
             tmp.font = assetback;
         }
         */
-            width = MainControl.instance.OverworldControl.textWidth;
+            width = MainControl.Instance.OverworldControl.textWidth;
             /*
         if (tmp.font != assetback)
             tmp.font = assetback;

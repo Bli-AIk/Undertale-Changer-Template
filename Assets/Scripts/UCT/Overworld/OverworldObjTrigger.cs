@@ -86,32 +86,32 @@ namespace UCT.Overworld
         {
             if (saveOpen)
             {
-                if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow) || MainControl.instance.KeyArrowToControl(KeyCode.RightArrow))
+                if (MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow) || MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow))
                 {
                     saveSelect = Convert.ToInt32(!Convert.ToBoolean(saveSelect));
 
                     BackpackBehaviour.instance.saveUIHeart.anchoredPosition = new Vector2(-258 + saveSelect * 180, -44);
                 }
-                if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
+                if (MainControl.Instance.KeyArrowToControl(KeyCode.Z))
                 {
                     switch (saveSelect)
                     {
                         case 0:
 
-                            SaveController.SaveData(MainControl.instance.PlayerControl, "Data" + MainControl.instance.dataNumber);
+                            SaveController.SaveData(MainControl.Instance.PlayerControl, "Data" + MainControl.Instance.dataNumber);
                             saveSelect = 2;
-                            AudioController.instance.GetFx(12, MainControl.instance.AudioControl.fxClipUI);
-                            string name = MainControl.instance.PlayerControl.playerName;
+                            AudioController.instance.GetFx(12, MainControl.Instance.AudioControl.fxClipUI);
+                            string name = MainControl.Instance.PlayerControl.playerName;
 
                             BackpackBehaviour.instance.saveUIHeart.anchoredPosition = new Vector2(10000, 10000);
 
-                            BackpackBehaviour.instance.saveUI.text = $"<color=yellow>{MainControl.instance.FillString(name, 10)}LV{MainControl.instance.FillString(MainControl.instance.PlayerControl.lv.ToString(), 7)}{MainControl.instance.GetRealTime((int)MainControl.instance.PlayerControl.gameTime)}\n{MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, SceneManager.GetActiveScene().name)}\n{MainControl.instance.RichTextWithEnd("size", 1, "\n")}  {MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Saved")}";
-                            MainControl.instance.PlayerControl.saveScene = SceneManager.GetActiveScene().name;
-                            PlayerPrefs.SetInt("languagePack", MainControl.instance.languagePack);
-                            PlayerPrefs.SetInt("dataNumber", MainControl.instance.dataNumber);
-                            PlayerPrefs.SetInt("hdResolution", Convert.ToInt32(MainControl.instance.OverworldControl.hdResolution));
-                            PlayerPrefs.SetInt("noSFX", Convert.ToInt32(MainControl.instance.OverworldControl.noSFX));
-                            PlayerPrefs.SetInt("vsyncMode", Convert.ToInt32(MainControl.instance.OverworldControl.vsyncMode));
+                            BackpackBehaviour.instance.saveUI.text = $"<color=yellow>{MainControl.Instance.FillString(name, 10)}LV{MainControl.Instance.FillString(MainControl.Instance.PlayerControl.lv.ToString(), 7)}{MainControl.Instance.GetRealTime((int)MainControl.Instance.PlayerControl.gameTime)}\n{MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, SceneManager.GetActiveScene().name)}\n{MainControl.Instance.RichTextWithEnd("size", 1, "\n")}  {MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "Saved")}";
+                            MainControl.Instance.PlayerControl.saveScene = SceneManager.GetActiveScene().name;
+                            PlayerPrefs.SetInt("languagePack", MainControl.Instance.languagePack);
+                            PlayerPrefs.SetInt("dataNumber", MainControl.Instance.dataNumber);
+                            PlayerPrefs.SetInt("hdResolution", Convert.ToInt32(MainControl.Instance.OverworldControl.hdResolution));
+                            PlayerPrefs.SetInt("noSFX", Convert.ToInt32(MainControl.Instance.OverworldControl.noSFX));
+                            PlayerPrefs.SetInt("vsyncMode", Convert.ToInt32(MainControl.Instance.OverworldControl.vsyncMode));
                             break;
 
                         case 1:
@@ -128,7 +128,7 @@ namespace UCT.Overworld
                             goto default;
                     }
                 }
-                else if (MainControl.instance.KeyArrowToControl(KeyCode.X))
+                else if (MainControl.Instance.KeyArrowToControl(KeyCode.X))
                 {
                     BackpackBehaviour.instance.saveUIHeart.anchoredPosition = new Vector2(10000, 10000);
                     BackpackBehaviour.instance.saveBack.transform.localPosition = new Vector3(BackpackBehaviour.instance.saveBack.transform.localPosition.x, BackpackBehaviour.instance.saveBack.transform.localPosition.y, -50);
@@ -138,7 +138,7 @@ namespace UCT.Overworld
                 }
             }
             //检测相关见PlayerBehaviour
-            if (isTyping && MainControl.instance.KeyArrowToControl(KeyCode.Z) && !typeWritter.isRunning)
+            if (isTyping && MainControl.Instance.KeyArrowToControl(KeyCode.Z) && !typeWritter.isRunning)
             {
                 PressZ();
             }
@@ -166,8 +166,8 @@ namespace UCT.Overworld
                 return;
             }
 
-            MainControl.instance.PlayerControl.canMove = true;
-            MainControl.instance.OverworldControl.pause = false;
+            MainControl.Instance.PlayerControl.canMove = true;
+            MainControl.Instance.OverworldControl.pause = false;
 
             foreach (var item in funNames)
             {
@@ -189,12 +189,12 @@ namespace UCT.Overworld
             saveSelect = 0;
 
             BackpackBehaviour.instance.saveBack.transform.localPosition = new Vector3(BackpackBehaviour.instance.saveBack.transform.localPosition.x, BackpackBehaviour.instance.saveBack.transform.localPosition.y, 5);
-            string name = MainControl.instance.PlayerControl.playerName;
+            string name = MainControl.Instance.PlayerControl.playerName;
 
-            BackpackBehaviour.instance.saveUI.text = MainControl.instance.FillString(name, 10) + "LV" + MainControl.instance.FillString(MainControl.instance.PlayerControl.lv.ToString(), 7) +
-                                                     MainControl.instance.GetRealTime((int)MainControl.instance.PlayerControl.gameTime) + "\n" +
-                                                     MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, SceneManager.GetActiveScene().name) + "\n<size=1>\n</size>  " +
-                                                     MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Save") + "         " + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, "Back")
+            BackpackBehaviour.instance.saveUI.text = MainControl.Instance.FillString(name, 10) + "LV" + MainControl.Instance.FillString(MainControl.Instance.PlayerControl.lv.ToString(), 7) +
+                                                     MainControl.Instance.GetRealTime((int)MainControl.Instance.PlayerControl.gameTime) + "\n" +
+                                                     MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, SceneManager.GetActiveScene().name) + "\n<size=1>\n</size>  " +
+                                                     MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "Save") + "         " + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "Back")
                 ;
             BackpackBehaviour.instance.saveUIHeart.anchoredPosition = new Vector2(-258, -44);
         }
@@ -205,8 +205,8 @@ namespace UCT.Overworld
         public void TypeText(bool isUp, bool isMusic = true)
         {
             isTyping = true;
-            MainControl.instance.PlayerControl.canMove = false;
-            MainControl.instance.OverworldControl.pause = true;
+            MainControl.Instance.PlayerControl.canMove = false;
+            MainControl.Instance.OverworldControl.pause = true;
             TalkUIPositionChanger.instance.Change(true, true);
 
             if (TalkUIPositionChanger.instance.transform.localPosition.z < 0)
@@ -218,7 +218,7 @@ namespace UCT.Overworld
             if (typeWritter == null)
                 typeWritter = BackpackBehaviour.instance.typeWritter;
 
-            typeWritter.TypeOpen(MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, text), false, 0, 1, BackpackBehaviour.instance.typeMessage);
+            typeWritter.TypeOpen(MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, text), false, 0, 1, BackpackBehaviour.instance.typeMessage);
             if (endInBattle)
                 typeWritter.EndInBattle();
 
@@ -228,8 +228,8 @@ namespace UCT.Overworld
 
         public void AnimTypeText(bool isUp)
         {
-            MainControl.instance.PlayerControl.canMove = false;
-            MainControl.instance.OverworldControl.pause = true;
+            MainControl.Instance.PlayerControl.canMove = false;
+            MainControl.Instance.OverworldControl.pause = true;
             mainCamera.isFollow = false;
             mainCamera.transform.DOLocalMove(animEndPosPlus, animTime).SetEase(animEase).OnKill(() => TypeText(isUp, false));
             DOTween.To(() => mainCamera.followPosition, x => mainCamera.followPosition = x, animEndPosPlus, animTime).SetEase(animEase);

@@ -96,7 +96,7 @@ namespace UCT.Global.UI
             passTextString = "";
             originString = text;
             hpIn = hp;
-            hpSave = MainControl.instance.PlayerControl.hp;
+            hpSave = MainControl.Instance.PlayerControl.hp;
             clockTime = clock;
             pressX = false;
             isStop = false;
@@ -169,20 +169,20 @@ namespace UCT.Global.UI
 
                         passTextString += spText;
 
-                        if (MainControl.instance.IsFrontCharactersMatch("<fx=", spText))
+                        if (MainControl.Instance.IsFrontCharactersMatch("<fx=", spText))
                         {
                             string save = spText.Substring(4);
                             save = save.Substring(0, save.Length - 1);
                             fx = int.Parse(save);
                         }
-                        else if (MainControl.instance.IsFrontCharactersMatch("<font=", spText))
+                        else if (MainControl.Instance.IsFrontCharactersMatch("<font=", spText))
                         {
                             string save = spText.Substring(6);
                             save = save.Substring(0, save.Length - 1);
                             useFont = int.Parse(save);
-                            tmp_Text.font = MainControl.instance.OverworldControl.tmpFonts[useFont];
+                            tmp_Text.font = MainControl.Instance.OverworldControl.tmpFonts[useFont];
                         }
-                        else if (MainControl.instance.IsFrontCharactersMatch("<stop*", spText))
+                        else if (MainControl.Instance.IsFrontCharactersMatch("<stop*", spText))
                         {
                             if (!pressX)
                             {
@@ -192,14 +192,14 @@ namespace UCT.Global.UI
                                 {
                                     if (pressX)
                                         break;
-                                    yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f * Convert.ToInt32(!MainControl.instance.OverworldControl.textWidth));
+                                    yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f * Convert.ToInt32(!MainControl.Instance.OverworldControl.textWidth));
                                 }
                                 isTyping = false;
                             }
 
                             isStop = true;
                         }
-                        else if (MainControl.instance.IsFrontCharactersMatch("<image=", spText))
+                        else if (MainControl.Instance.IsFrontCharactersMatch("<image=", spText))
                         {
                             string save = spText.Substring(7);
                             save = save.Substring(0, save.Length - 1);
@@ -208,7 +208,7 @@ namespace UCT.Global.UI
                                 spriteChanger.ChangeImage(s);
                             talkUIPositionChanger.Change(true, s >= 0, false);
                         }
-                        else if (MainControl.instance.IsFrontCharactersMatch("<stop...*", spText))
+                        else if (MainControl.Instance.IsFrontCharactersMatch("<stop...*", spText))
                         {
                             if (!pressX)
                             {
@@ -221,9 +221,9 @@ namespace UCT.Global.UI
                                     {
                                         if (pressX)
                                             break;
-                                        yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f * Convert.ToInt32(!MainControl.instance.OverworldControl.textWidth));
+                                        yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f * Convert.ToInt32(!MainControl.Instance.OverworldControl.textWidth));
                                     }
-                                    AudioController.instance.GetFx(fx, MainControl.instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
+                                    AudioController.instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
                                     endString += '.';
                                     tmp_Text.text = endString;
                                 }
@@ -232,7 +232,7 @@ namespace UCT.Global.UI
                             isStop = true;
                             tmp_Text.text = endString;
                         }
-                        else if (MainControl.instance.IsFrontCharactersMatch("<passText=", spText))
+                        else if (MainControl.Instance.IsFrontCharactersMatch("<passText=", spText))
                         {
                             string save = spText.Substring(10);
                             save = save.Substring(0, save.Length - 1);
@@ -241,13 +241,13 @@ namespace UCT.Global.UI
 
                             passText = true;
                         }
-                        else if (MainControl.instance.IsFrontCharactersMatch("<storyFade", spText))
+                        else if (MainControl.Instance.IsFrontCharactersMatch("<storyFade", spText))
                         {
                             string save = spText.Substring(11);
                             save = save.Substring(0, save.Length - 1);
                             StorySceneController.instance.Fade(int.Parse(save));
                         }
-                        else if (MainControl.instance.IsFrontCharactersMatch("<stop......*", spText))
+                        else if (MainControl.Instance.IsFrontCharactersMatch("<stop......*", spText))
                         {
                             if (!pressX)
                             {
@@ -260,9 +260,9 @@ namespace UCT.Global.UI
                                     {
                                         if (pressX)
                                             break;
-                                        yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f * Convert.ToInt32(!MainControl.instance.OverworldControl.textWidth));
+                                        yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f * Convert.ToInt32(!MainControl.Instance.OverworldControl.textWidth));
                                     }
-                                    AudioController.instance.GetFx(fx, MainControl.instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
+                                    AudioController.instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
                                     endString += '.';
                                     tmp_Text.text = endString;
                                 }
@@ -285,12 +285,12 @@ namespace UCT.Global.UI
 
                                 case "<storyExit>":
                                     TypeStop();
-                                    MainControl.instance.OutBlack("Start", Color.black, true);
+                                    MainControl.Instance.OutBlack("Start", Color.black, true);
                                     break;
 
                                 case "<sprite=0>":
                                     if (!pressX)
-                                        AudioController.instance.GetFx(fx, MainControl.instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
+                                        AudioController.instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
                                     goto default;
                                 case "<stop>":
                                     if (!pressX)
@@ -298,7 +298,7 @@ namespace UCT.Global.UI
                                         //单独一个Stop的时候，不设置isTyping，这是因为有的时候这个stop的时间很短，如果true看起来有点怪。
                                         //如果需要长的Stop，建议你还是使用<stop*x>的方式来做。
                                         //isTyping = false;
-                                        yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f * Convert.ToInt32(!MainControl.instance.OverworldControl.textWidth));
+                                        yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f * Convert.ToInt32(!MainControl.Instance.OverworldControl.textWidth));
                                     }
                                     isStop = true;
                                     break;
@@ -306,17 +306,17 @@ namespace UCT.Global.UI
                                 case "<autoFood>":
 
                                     string plusString;
-                                    if (hpIn + hpSave >= MainControl.instance.PlayerControl.hpMax)
+                                    if (hpIn + hpSave >= MainControl.Instance.PlayerControl.hpMax)
                                     {
-                                        plusString = MainControl.instance.ItemControl.itemTextMaxData[22];
+                                        plusString = MainControl.Instance.ItemControl.itemTextMaxData[22];
                                         plusString = plusString.Substring(0, plusString.Length - 1);
                                     }
                                     else
                                     {
-                                        plusString = MainControl.instance.ItemControl.itemTextMaxData[12];
+                                        plusString = MainControl.Instance.ItemControl.itemTextMaxData[12];
                                         plusString = plusString.Substring(0, plusString.Length - 1);
                                     }
-                                    originString = MainControl.instance.StringRemover(originString, i - "<autoFood>".Length, i - 1, plusString);
+                                    originString = MainControl.Instance.StringRemover(originString, i - "<autoFood>".Length, i - 1, plusString);
                                     i -= spText.Length;
                                     passTextString = passTextString.Substring(0, passTextString.Length - spText.Length);
                                     break;
@@ -337,7 +337,7 @@ namespace UCT.Global.UI
                                         spText = spText.Substring(2, spText.Length - 4);
                                         if (!pressX)
                                         {
-                                            AudioController.instance.GetFx(fx, MainControl.instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
+                                            AudioController.instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
                                             isUsedFx = true;
 
                                             if (spriteChanger != null)
@@ -372,7 +372,7 @@ namespace UCT.Global.UI
                     }
                 }
                 if (cantString != "" && !pressX && !isUsedFx)
-                    AudioController.instance.GetFx(fx, MainControl.instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
+                    AudioController.instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
 
                 if (!passText)
                 {
@@ -382,7 +382,7 @@ namespace UCT.Global.UI
                 }
 
                 if (!pressX)
-                    yield return Timing.WaitForSeconds(speed - speed * 0.25f * Convert.ToInt32(!MainControl.instance.OverworldControl.textWidth));
+                    yield return Timing.WaitForSeconds(speed - speed * 0.25f * Convert.ToInt32(!MainControl.Instance.OverworldControl.textWidth));
 
                 if (tmp_Text != null)
                 {
@@ -391,8 +391,8 @@ namespace UCT.Global.UI
                     Timing.RunCoroutine(_Dynamic(endString.Length - 1, dynamicType));
                 
 
-                    if (tmp_Text.font != MainControl.instance.OverworldControl.tmpFonts[useFont])
-                        tmp_Text.font = MainControl.instance.OverworldControl.tmpFonts[useFont];
+                    if (tmp_Text.font != MainControl.Instance.OverworldControl.tmpFonts[useFont])
+                        tmp_Text.font = MainControl.Instance.OverworldControl.tmpFonts[useFont];
                 }
                 else Other.Debug.Log("缺失tmp_Text", "#FFFF00");
 
@@ -562,23 +562,23 @@ namespace UCT.Global.UI
         }
         private void Update()
         {
-            if (MainControl.instance.OverworldControl.isSetting || forceReturn)//pause在OW检测的时候会用
+            if (MainControl.Instance.OverworldControl.isSetting || forceReturn)//pause在OW检测的时候会用
                 return;
 
             if (clockTime > 0)
                 clockTime -= Time.deltaTime;
-            if (!isRunning && !passText && !isTyping && MainControl.instance.KeyArrowToControl(KeyCode.Z) && typeMode != TypeMode.CantZX)
+            if (!isRunning && !passText && !isTyping && MainControl.Instance.KeyArrowToControl(KeyCode.Z) && typeMode != TypeMode.CantZX)
             {
                 if (spriteChanger != null)
                     spriteChanger.ChangeImage(-1);
                 if (endInBattle)
                     canvasAnim.SetBool("Open", true);
             }
-            if (passText && MainControl.instance.KeyArrowToControl(KeyCode.Z) && typeMode != TypeMode.CantZX)
+            if (passText && MainControl.Instance.KeyArrowToControl(KeyCode.Z) && typeMode != TypeMode.CantZX)
             {
                 PassText();
             }
-            else if (!pressX && !canNotX && MainControl.instance.KeyArrowToControl(KeyCode.X) && typeMode != TypeMode.CantZX)//跳字
+            else if (!pressX && !canNotX && MainControl.Instance.KeyArrowToControl(KeyCode.X) && typeMode != TypeMode.CantZX)//跳字
             {
                 if (clock != 0 && clockTime <= 0)
                 {

@@ -25,7 +25,7 @@ namespace UCT.Global.Scene
 
         private void Awake()
         {
-            MainControl.instance.OverworldControl.playerScenePos = new Vector3(-0.5f, -1);
+            MainControl.Instance.OverworldControl.playerScenePos = new Vector3(-0.5f, -1);
 
             for (int i = 0; i < transform.childCount; i++)
             {
@@ -37,10 +37,10 @@ namespace UCT.Global.Scene
         {
             setData = false;
             layer = 0;
-            if (MainControl.instance.dataNumber < 0)
-                MainControl.instance.dataNumber = 0;
-            MainControl.instance.SetPlayerControl(SaveController.LoadData("Data" + MainControl.instance.dataNumber));
-            saveNumber = MainControl.instance.dataNumber;
+            if (MainControl.Instance.dataNumber < 0)
+                MainControl.Instance.dataNumber = 0;
+            MainControl.Instance.SetPlayerControl(SaveController.LoadData("Data" + MainControl.Instance.dataNumber));
+            saveNumber = MainControl.Instance.dataNumber;
             LoadLayer0();
         }
 
@@ -50,31 +50,31 @@ namespace UCT.Global.Scene
             tmps[0].text = playerControl.playerName;
             tmps[1].text = "LV " + playerControl.lv;
             //tmps[2]在update内设置
-            tmps[3].text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.settingSave, playerControl.saveScene);
+            tmps[3].text = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, playerControl.saveScene);
 
             Flash();
 
-            tmps[5].text = MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "MenuUnder") + Application.version;
+            tmps[5].text = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "MenuUnder") + Application.version;
         }
 
         private void Update()
         {
-            if (MainControl.instance.OverworldControl.isSetting || MainControl.instance.OverworldControl.pause)
+            if (MainControl.Instance.OverworldControl.isSetting || MainControl.Instance.OverworldControl.pause)
                 return;
 
-            if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow))
+            if (MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow))
             {
                 select--;
             }
-            else if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow))
+            else if (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow))
             {
                 select -= 2;
             }
-            if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow))
+            if (MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow))
             {
                 select++;
             }
-            else if (MainControl.instance.KeyArrowToControl(KeyCode.DownArrow))
+            else if (MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow))
             {
                 select += 2;
             }
@@ -99,22 +99,22 @@ namespace UCT.Global.Scene
             }
             if (layer == 0)
             {
-                if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow) || MainControl.instance.KeyArrowToControl(KeyCode.DownArrow)
-                                                                            || MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow) || MainControl.instance.KeyArrowToControl(KeyCode.RightArrow))
+                if (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow) || MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow)
+                                                                            || MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow) || MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow))
                 {
                     Flash();
                 }
-                if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
+                if (MainControl.Instance.KeyArrowToControl(KeyCode.Z))
                 {
                     if (!setData)
                         switch (select)
                         {
                             case 0:
-                                MainControl.instance.OutBlack(MainControl.instance.PlayerControl.saveScene, Color.black, true);
+                                MainControl.Instance.OutBlack(MainControl.Instance.PlayerControl.saveScene, Color.black, true);
                                 break;
 
                             case 1:
-                                MainControl.instance.OutBlack("Rename", Color.black, true);
+                                MainControl.Instance.OutBlack("Rename", Color.black, true);
                                 break;
 
                             case 2:
@@ -126,11 +126,11 @@ namespace UCT.Global.Scene
                                 goto case 2;
                             case 4:
                                 setData = true;
-                                saveNumber = MainControl.instance.dataNumber;
+                                saveNumber = MainControl.Instance.dataNumber;
                                 if (0 != (SaveController.GetDataNumber() - 1))
                                     select = 5;
                                 Flash();
-                                AudioController.instance.GetFx(1, MainControl.instance.AudioControl.fxClipUI);
+                                AudioController.instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
                                 break;
 
                             case 5:
@@ -144,7 +144,7 @@ namespace UCT.Global.Scene
                         switch (select)
                         {
                             case 2:
-                                AudioController.instance.GetFx(1, MainControl.instance.AudioControl.fxClipUI);
+                                AudioController.instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
                                 if (saveNumber > 0)
                                     saveNumber--;
                                 select = 3;
@@ -152,15 +152,15 @@ namespace UCT.Global.Scene
                                 break;
 
                             case 3:
-                                AudioController.instance.GetFx(1, MainControl.instance.AudioControl.fxClipUI);
+                                AudioController.instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
                                 if (saveNumber == (SaveController.GetDataNumber() - 1))//新建
                                 {
                                     saveNumber++;
-                                    MainControl.instance.dataNumber = saveNumber;
-                                    SaveController.SaveData(MainControl.instance.PlayerControl, "Data" + MainControl.instance.dataNumber);
-                                    MainControl.instance.SetPlayerControl(ScriptableObject.CreateInstance<PlayerControl>());
-                                    MainControl.instance.PlayerControl.playerName = "";
-                                    MainControl.instance.OutBlack("Rename", Color.black);
+                                    MainControl.Instance.dataNumber = saveNumber;
+                                    SaveController.SaveData(MainControl.Instance.PlayerControl, "Data" + MainControl.Instance.dataNumber);
+                                    MainControl.Instance.SetPlayerControl(ScriptableObject.CreateInstance<PlayerControl>());
+                                    MainControl.Instance.PlayerControl.playerName = "";
+                                    MainControl.Instance.OutBlack("Rename", Color.black);
                                 }
                                 else//下页
                                 {
@@ -179,27 +179,27 @@ namespace UCT.Global.Scene
                                 break;
 
                             case 5:
-                                if (MainControl.instance.dataNumber == saveNumber)
+                                if (MainControl.Instance.dataNumber == saveNumber)
                                 {
                                     setData = false;
                                     Flash();
-                                    AudioController.instance.GetFx(1, MainControl.instance.AudioControl.fxClipUI);
+                                    AudioController.instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
                                     break;
                                 }
                                 else
                                 {
-                                    MainControl.instance.dataNumber = saveNumber;
-                                    AudioController.instance.GetFx(1, MainControl.instance.AudioControl.fxClipUI);
+                                    MainControl.Instance.dataNumber = saveNumber;
+                                    AudioController.instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
                                     UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
                                     break;
                                 }
                         }
                 }
-                else if (MainControl.instance.KeyArrowToControl(KeyCode.X) && setData)
+                else if (MainControl.Instance.KeyArrowToControl(KeyCode.X) && setData)
                 {
                     setData = false;
                     Flash();
-                    AudioController.instance.GetFx(1, MainControl.instance.AudioControl.fxClipUI);
+                    AudioController.instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
                 }
             }
         }
@@ -217,24 +217,24 @@ namespace UCT.Global.Scene
                     list.Add("<color=yellow>");
             }
             if (!setData)
-                tmps[4].text = list[0] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Menu0") + "</color> "
-                               + list[1] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Menu1") + "</color>\n"
-                               + list[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Menu2") + "</color> "
-                               + list[3] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Menu3") + "</color>\n"
-                               + list[4] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Menu4") + "</color> "
-                               + list[5] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Menu5") + "</color>";
+                tmps[4].text = list[0] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Menu0") + "</color> "
+                               + list[1] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Menu1") + "</color>\n"
+                               + list[2] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Menu2") + "</color> "
+                               + list[3] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Menu3") + "</color>\n"
+                               + list[4] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Menu4") + "</color> "
+                               + list[5] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Menu5") + "</color>";
             else
-                tmps[4].text = list[0] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Menu12") + "</color> "
+                tmps[4].text = list[0] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Menu12") + "</color> "
                                + list[1] + "Data" + saveNumber + "</color>\n"
-                               + list[2] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Menu6") + "</color> "
-                               + list[3] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, saveNumber == (SaveController.GetDataNumber() - 1) ? "Menu10" : "Menu7") + "</color>\n"
-                               + list[4] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, 0 == (SaveController.GetDataNumber() - 1) ? "Menu8" : "Menu11") + "</color> "
-                               + list[5] + MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Menu9") + "</color>";
+                               + list[2] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Menu6") + "</color> "
+                               + list[3] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, saveNumber == (SaveController.GetDataNumber() - 1) ? "Menu10" : "Menu7") + "</color>\n"
+                               + list[4] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, 0 == (SaveController.GetDataNumber() - 1) ? "Menu8" : "Menu11") + "</color> "
+                               + list[5] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Menu9") + "</color>";
         }
 
         private void FixedUpdate()
         {
-            tmps[2].text = MainControl.instance.GetRealTime((int)MainControl.instance.PlayerControl.gameTime);
+            tmps[2].text = MainControl.Instance.GetRealTime((int)MainControl.Instance.PlayerControl.gameTime);
         }
     }
 }

@@ -55,24 +55,24 @@ namespace UCT.Overworld
         {
             if (canSelect)
             {
-                if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow))
+                if (MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow))
                 {
                     if (select > 0)
                         select--;
                     else select = 1;
                     heart.rectTransform.anchoredPosition = new Vector2(-143.3f + Convert.ToInt32(select) * 192.5f, -18.8f);
-                    AudioController.instance.GetFx(0, MainControl.instance.AudioControl.fxClipUI);
+                    AudioController.instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
                 }
-                else if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow))
+                else if (MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow))
                 {
                     if (select < 1)
                         select++;
                     else select = 0;
                     heart.rectTransform.anchoredPosition = new Vector2(-143.3f + Convert.ToInt32(select) * 192.5f, -18.8f);
-                    AudioController.instance.GetFx(0, MainControl.instance.AudioControl.fxClipUI);
+                    AudioController.instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
                 }
 
-                if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
+                if (MainControl.Instance.KeyArrowToControl(KeyCode.Z))
                 {
                     typeWritter.TypeStop();
                     switch (select)
@@ -90,12 +90,12 @@ namespace UCT.Overworld
 
                                 case "BackMenu":
                                     typeWritter.forceReturn = true;
-                                    MainControl.instance.OutBlack("Menu", Color.black, true, 0f);
+                                    MainControl.Instance.OutBlack("Menu", Color.black, true, 0f);
                                     AudioController.instance.audioSource.volume = 0;
                                     break;
 
                                 case "Select":
-                                    AudioController.instance.GetFx(2, MainControl.instance.AudioControl.fxClipBattle);
+                                    AudioController.instance.GetFx(2, MainControl.Instance.AudioControl.fxClipBattle);
                                     break;
 
                                 default:

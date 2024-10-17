@@ -40,7 +40,7 @@ namespace UCT.Overworld
         {
             animator = GetComponent<Animator>();
 
-            if (sceneSp == MainControl.instance.PlayerControl.lastScene)
+            if (sceneSp == MainControl.Instance.PlayerControl.lastScene)
             {
                 animator.SetBool(sceneBool, true);
             }
@@ -48,7 +48,7 @@ namespace UCT.Overworld
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (banTrigger && notBanSceneSp != MainControl.instance.PlayerControl.lastScene)
+            if (banTrigger && notBanSceneSp != MainControl.Instance.PlayerControl.lastScene)
                 return;
             if (!triggered && isEnter && collision.CompareTag("Player"))
             {
@@ -59,7 +59,7 @@ namespace UCT.Overworld
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            if (banTrigger && notBanSceneSp != MainControl.instance.PlayerControl.lastScene)
+            if (banTrigger && notBanSceneSp != MainControl.Instance.PlayerControl.lastScene)
                 return;
             if (!triggered && !isEnter && collision.CompareTag("Player"))
             {

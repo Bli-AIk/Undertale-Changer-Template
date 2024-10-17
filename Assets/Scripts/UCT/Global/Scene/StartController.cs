@@ -27,10 +27,10 @@ namespace UCT.Global.Scene
             text = transform.Find("SafeText").GetComponent<TextMeshPro>();
             text.color = Color.clear;
             textUnder.color = Color.clear;
-            AudioController.instance.GetFx(11, MainControl.instance.AudioControl.fxClipUI);
-            text.text = MainControl.instance.OverworldControl.sceneTextsAsset;
+            AudioController.instance.GetFx(11, MainControl.Instance.AudioControl.fxClipUI);
+            text.text = MainControl.Instance.OverworldControl.sceneTextsAsset;
 
-            PlayerControl playerControl = SaveController.LoadData("Data" + MainControl.instance.dataNumber);
+            PlayerControl playerControl = SaveController.LoadData("Data" + MainControl.Instance.dataNumber);
         }
 
         private void Update()
@@ -43,7 +43,7 @@ namespace UCT.Global.Scene
                 textUnder.DOColor(Color.white, 0.5f).SetEase(Ease.Linear);
             }
 
-            if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
+            if (MainControl.Instance.KeyArrowToControl(KeyCode.Z))
             {
                 switch (layer)
                 {
@@ -55,13 +55,13 @@ namespace UCT.Global.Scene
                     case 1:
 
                         text.DOColor(Color.clear, 1).SetEase(Ease.Linear);
-                        if (MainControl.instance.PlayerControl.playerName == "" || MainControl.instance.PlayerControl.playerName == null)
+                        if (MainControl.Instance.PlayerControl.playerName == "" || MainControl.Instance.PlayerControl.playerName == null)
                         {
-                            MainControl.instance.OutBlack("Rename", Color.black, false, 2f);
+                            MainControl.Instance.OutBlack("Rename", Color.black, false, 2f);
                         }
                         else
                         {
-                            MainControl.instance.OutBlack("Menu", Color.black, false, 2f);
+                            MainControl.Instance.OutBlack("Menu", Color.black, false, 2f);
                         }
                         break;
                 }
@@ -75,7 +75,7 @@ namespace UCT.Global.Scene
                 afkTimer -= Time.deltaTime;
             else
             {
-                MainControl.instance.OutBlack("Story", Color.black);
+                MainControl.Instance.OutBlack("Story", Color.black);
                 afkTimer = 10000000000;
             }
         }

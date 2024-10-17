@@ -113,7 +113,7 @@ namespace UCT.Global.Core
 
                 mainControl.InitializationOverworld();
                 mainControl.Start();
-                mainControl.SetResolution(instance.OverworldControl.resolutionLevel);
+                mainControl.SetResolution(Instance.OverworldControl.resolutionLevel);
                 return;
             }
             //生成
@@ -131,7 +131,7 @@ namespace UCT.Global.Core
 
             mainControl.gameObject.name = "MainControl";
             mainControl.InitializationOverworld();
-            mainControl.SetResolution(instance.OverworldControl.resolutionLevel);
+            mainControl.SetResolution(Instance.OverworldControl.resolutionLevel);
         }
     }
 }

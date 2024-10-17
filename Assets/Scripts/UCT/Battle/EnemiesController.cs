@@ -22,7 +22,7 @@ namespace UCT.Battle
         {
             if (anim.GetBool("Hit"))
             {
-                AudioController.instance.GetFx(1, MainControl.instance.AudioControl.fxClipBattle);
+                AudioController.instance.GetFx(1, MainControl.Instance.AudioControl.fxClipBattle);
                 anim.SetBool("Hit", false);
             }
         }

@@ -123,7 +123,7 @@ namespace UCT.Battle
             spriteRenderer.sortingOrder = layer;
 
             this.bulletColor = bulletColor;
-            spriteRenderer.color = MainControl.instance.BattleControl.bulletColorList[(int)this.bulletColor];
+            spriteRenderer.color = MainControl.Instance.BattleControl.bulletColorList[(int)this.bulletColor];
 
             transform.localPosition = startPosition;
 
@@ -200,8 +200,8 @@ namespace UCT.Battle
                     if (boxColliderList[i].IsTouching(collision))
                     {
                         if (bulletColor == BattleControl.BulletColor.white
-                            || (bulletColor == BattleControl.BulletColor.orange && !MainControl.instance.battlePlayerController.isMoving)
-                            || (bulletColor == BattleControl.BulletColor.blue && MainControl.instance.battlePlayerController.isMoving))
+                            || (bulletColor == BattleControl.BulletColor.orange && !MainControl.Instance.battlePlayerController.isMoving)
+                            || (bulletColor == BattleControl.BulletColor.blue && MainControl.Instance.battlePlayerController.isMoving))
                         {
                             HitPlayer(i);
                         }
@@ -226,24 +226,24 @@ namespace UCT.Battle
 
         private void HitPlayer(int i)
         {
-            if (MainControl.instance.PlayerControl.missTime < 0)
+            if (MainControl.Instance.PlayerControl.missTime < 0)
             {
-                MainControl.instance.PlayerControl.hp -= boxHitList[i];
-                MainControl.instance.PlayerControl.missTime = MainControl.instance.PlayerControl.missTimeMax;
-                AudioController.instance.GetFx(5, MainControl.instance.AudioControl.fxClipUI);
+                MainControl.Instance.PlayerControl.hp -= boxHitList[i];
+                MainControl.Instance.PlayerControl.missTime = MainControl.Instance.PlayerControl.missTimeMax;
+                AudioController.instance.GetFx(5, MainControl.Instance.AudioControl.fxClipUI);
 
-                MainControl.instance.selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
+                MainControl.Instance.selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
 
                 float r = Random.Range(0, 0.025f);
-                Vector3 v3spin = MainControl.instance.RandomPointOnSphereSurface(2.5f,new Vector3());
-                MainControl.instance.cameraShake.Shake(new Vector3(r * MainControl.instance.Get1Or_1(), r * MainControl.instance.Get1Or_1(), 0), new Vector3(0, 0, v3spin.z), 4, 1f / 60f * 4f * 1.5f, "", Ease.OutElastic);
-                MainControl.instance.cameraShake3D.Shake(new Vector3(r * MainControl.instance.Get1Or_1(), 0, r * MainControl.instance.Get1Or_1()), v3spin, 4, 1f / 60f * 4f * 1.5f, "3D CameraPoint", Ease.OutElastic);
-                if (MainControl.instance.PlayerControl.hp <= 0)
-                    MainControl.instance.KillPlayer();
+                Vector3 v3spin = MainControl.Instance.RandomPointOnSphereSurface(2.5f,new Vector3());
+                MainControl.Instance.cameraShake.Shake(new Vector3(r * MainControl.Instance.Get1Or_1(), r * MainControl.Instance.Get1Or_1(), 0), new Vector3(0, 0, v3spin.z), 4, 1f / 60f * 4f * 1.5f, "", Ease.OutElastic);
+                MainControl.Instance.cameraShake3D.Shake(new Vector3(r * MainControl.Instance.Get1Or_1(), 0, r * MainControl.Instance.Get1Or_1()), v3spin, 4, 1f / 60f * 4f * 1.5f, "3D CameraPoint", Ease.OutElastic);
+                if (MainControl.Instance.PlayerControl.hp <= 0)
+                    MainControl.Instance.KillPlayer();
 
 
-                if (!MainControl.instance.OverworldControl.noSFX)
-                    MainControl.instance.battlePlayerController.hitVolume.weight = 1;
+                if (!MainControl.Instance.OverworldControl.noSFX)
+                    MainControl.Instance.battlePlayerController.hitVolume.weight = 1;
             }
         }
 

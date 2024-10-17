@@ -18,9 +18,9 @@ namespace UCT.Battle
 
         private void Update()
         {
-            if (MainControl.instance.sceneState != MainControl.SceneState.InBattle)
+            if (MainControl.Instance.sceneState != MainControl.SceneState.InBattle)
                 return;
-            if (MainControl.instance.OverworldControl.isSetting || MainControl.instance.OverworldControl.pause)
+            if (MainControl.Instance.OverworldControl.isSetting || MainControl.Instance.OverworldControl.pause)
                 return;
         }
     }

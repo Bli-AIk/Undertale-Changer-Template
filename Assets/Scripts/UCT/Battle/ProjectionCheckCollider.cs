@@ -29,7 +29,7 @@ namespace UCT.Battle
         // Update is called once per frame
         void Update()
         {
-            Vector2 relative = (Vector2)MainControl.instance.battlePlayerController.transform.position - MainControl.instance.battlePlayerController.sceneDrift;
+            Vector2 relative = (Vector2)MainControl.Instance.battlePlayerController.transform.position - MainControl.Instance.battlePlayerController.sceneDrift;
             for (int i = 0; i < sets.Count; i++)
             {
                 Vector3 convert = sets[i].transform.position + sets[i].transform.rotation * relative;

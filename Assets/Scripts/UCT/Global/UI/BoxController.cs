@@ -69,7 +69,7 @@ namespace UCT.Global.UI
                 BoxDrawer start = GetFromThePool();
                 start.name = startSummonName;
                 start.localPosition = startSummonPos;
-                MainControl.instance.mainBox = start;
+                MainControl.Instance.mainBox = start;
             }
 
             /*测试使用

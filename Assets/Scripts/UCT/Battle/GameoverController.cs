@@ -37,8 +37,8 @@ namespace UCT.Battle
             foolDay = DateTime.Now.Month == 4 && DateTime.Now.Day == 1;
             bgm = AudioController.instance.audioSource;
             bgm.clip = clips[Convert.ToInt32(foolDay)];
-            player.transform.position = MainControl.instance.OverworldControl.playerDeadPos;
-            m_ParticleSystem.transform.position = MainControl.instance.OverworldControl.playerDeadPos;
+            player.transform.position = MainControl.Instance.OverworldControl.playerDeadPos;
+            m_ParticleSystem.transform.position = MainControl.Instance.OverworldControl.playerDeadPos;
             m_ParticleSystem.Pause();
             m_ParticleSystem.gameObject.SetActive(false);
         }
@@ -51,12 +51,12 @@ namespace UCT.Battle
                 bgm.Play();
             }
             else
-                AudioController.instance.GetFx(i, MainControl.instance.AudioControl.fxClipUI);
+                AudioController.instance.GetFx(i, MainControl.Instance.AudioControl.fxClipUI);
         }
 
         public void StartParticleSystem()
         {
-            m_ParticleSystem.transform.position = MainControl.instance.OverworldControl.playerDeadPos;
+            m_ParticleSystem.transform.position = MainControl.Instance.OverworldControl.playerDeadPos;
             m_ParticleSystem.gameObject.SetActive(true);
             m_ParticleSystem.Play();
         }
@@ -65,10 +65,10 @@ namespace UCT.Battle
         {
             List<string> strings = new List<string>
             {
-                MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "GameOver1"),
-                MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "GameOver2"),
-                MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "GameOver3"),
-                MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "GameOver4")
+                MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "GameOver1"),
+                MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "GameOver2"),
+                MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "GameOver3"),
+                MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "GameOver4")
             };
             typeWritter.TypeOpen(strings[UnityEngine.Random.Range(0, 4)], false, 0, 4, tmp);
             canChangeSence = true;
@@ -93,16 +93,16 @@ namespace UCT.Battle
 
         private void Update()
         {
-            if (!typeWritter.isTyping && MainControl.instance.KeyArrowToControl(KeyCode.Z) && canChangeSence)
+            if (!typeWritter.isTyping && MainControl.Instance.KeyArrowToControl(KeyCode.Z) && canChangeSence)
             {
                 tmp.text = "";
-                MainControl.instance.OutBlack("Example-Corridor", Color.black, true, 2);
+                MainControl.Instance.OutBlack("Example-Corridor", Color.black, true, 2);
                 canChangeSence = false;
             }
 
-            if (MainControl.instance.KeyArrowToControl(KeyCode.C) && canChangeSenceForC)
+            if (MainControl.Instance.KeyArrowToControl(KeyCode.C) && canChangeSenceForC)
             {
-                MainControl.instance.OutBlack("Example-Corridor", Color.black, true);
+                MainControl.Instance.OutBlack("Example-Corridor", Color.black, true);
                 typeWritter.TypeStop();
                 canChangeSenceForC = false;
             }

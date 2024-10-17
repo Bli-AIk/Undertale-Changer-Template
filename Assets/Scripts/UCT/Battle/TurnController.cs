@@ -79,7 +79,7 @@ namespace UCT.Battle
 
                     for (int i = 600; i > 0; i--)
                     {
-                        Global.Other.Debug.Log($"你先别急，先摆{MainControl.instance.RandomStringColor()}{i}</color>秒");
+                        Global.Other.Debug.Log($"你先别急，先摆{MainControl.Instance.RandomStringColor()}{i}</color>秒");
                         yield return Timing.WaitForSeconds(1f);
                     }
 
@@ -96,10 +96,10 @@ namespace UCT.Battle
 
                     Global.Other.Debug.Log("战斗框缩放：更改四个点的坐标");
 
-                    DOTween.To(() => MainControl.instance.mainBox.vertexPoints[0], x => MainControl.instance.mainBox.vertexPoints[0] = x, new Vector2(1.4f, MainControl.instance.mainBox.vertexPoints[0].y), 0.5f).SetEase(Ease.InOutSine);
-                    DOTween.To(() => MainControl.instance.mainBox.vertexPoints[1], x => MainControl.instance.mainBox.vertexPoints[1] = x, new Vector2(1.4f, MainControl.instance.mainBox.vertexPoints[1].y), 0.5f).SetEase(Ease.InOutSine);
-                    DOTween.To(() => MainControl.instance.mainBox.vertexPoints[2], x => MainControl.instance.mainBox.vertexPoints[2] = x, new Vector2(-1.4f, MainControl.instance.mainBox.vertexPoints[2].y), 0.5f).SetEase(Ease.InOutSine);
-                    DOTween.To(() => MainControl.instance.mainBox.vertexPoints[3], x => MainControl.instance.mainBox.vertexPoints[3] = x, new Vector2(-1.4f, MainControl.instance.mainBox.vertexPoints[3].y), 0.5f).SetEase(Ease.InOutSine);
+                    DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[0], x => MainControl.Instance.mainBox.vertexPoints[0] = x, new Vector2(1.4f, MainControl.Instance.mainBox.vertexPoints[0].y), 0.5f).SetEase(Ease.InOutSine);
+                    DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[1], x => MainControl.Instance.mainBox.vertexPoints[1] = x, new Vector2(1.4f, MainControl.Instance.mainBox.vertexPoints[1].y), 0.5f).SetEase(Ease.InOutSine);
+                    DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[2], x => MainControl.Instance.mainBox.vertexPoints[2] = x, new Vector2(-1.4f, MainControl.Instance.mainBox.vertexPoints[2].y), 0.5f).SetEase(Ease.InOutSine);
+                    DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[3], x => MainControl.Instance.mainBox.vertexPoints[3] = x, new Vector2(-1.4f, MainControl.Instance.mainBox.vertexPoints[3].y), 0.5f).SetEase(Ease.InOutSine);
 
 
                     yield return Timing.WaitForSeconds(1);
@@ -108,10 +108,10 @@ namespace UCT.Battle
                     for (int i = 0; i < 4; i++)
                     {
 
-                        DOTween.To(() => MainControl.instance.mainBox.vertexPoints[0], x => MainControl.instance.mainBox.vertexPoints[0] = x, MainControl.instance.mainBox.vertexPoints[3], 0.5f).SetEase(Ease.InOutSine);
-                        DOTween.To(() => MainControl.instance.mainBox.vertexPoints[1], x => MainControl.instance.mainBox.vertexPoints[1] = x, MainControl.instance.mainBox.vertexPoints[0], 0.5f).SetEase(Ease.InOutSine);
-                        DOTween.To(() => MainControl.instance.mainBox.vertexPoints[2], x => MainControl.instance.mainBox.vertexPoints[2] = x, MainControl.instance.mainBox.vertexPoints[1], 0.5f).SetEase(Ease.InOutSine);
-                        DOTween.To(() => MainControl.instance.mainBox.vertexPoints[3], x => MainControl.instance.mainBox.vertexPoints[3] = x, MainControl.instance.mainBox.vertexPoints[2], 0.5f).SetEase(Ease.InOutSine);
+                        DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[0], x => MainControl.Instance.mainBox.vertexPoints[0] = x, MainControl.Instance.mainBox.vertexPoints[3], 0.5f).SetEase(Ease.InOutSine);
+                        DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[1], x => MainControl.Instance.mainBox.vertexPoints[1] = x, MainControl.Instance.mainBox.vertexPoints[0], 0.5f).SetEase(Ease.InOutSine);
+                        DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[2], x => MainControl.Instance.mainBox.vertexPoints[2] = x, MainControl.Instance.mainBox.vertexPoints[1], 0.5f).SetEase(Ease.InOutSine);
+                        DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[3], x => MainControl.Instance.mainBox.vertexPoints[3] = x, MainControl.Instance.mainBox.vertexPoints[2], 0.5f).SetEase(Ease.InOutSine);
 
                         yield return Timing.WaitForSeconds(0.5f);
                     }
@@ -125,17 +125,17 @@ namespace UCT.Battle
 
                     Global.Other.Debug.Log("战斗框缩放回初始坐标以结束回合");
                     yield return Timing.WaitForSeconds(1f);
-                    DOTween.To(() => MainControl.instance.mainBox.vertexPoints[0], x => MainControl.instance.mainBox.vertexPoints[0] = x, new Vector2(5.93f, MainControl.instance.mainBox.vertexPoints[0].y), 0.5f).SetEase(Ease.InOutSine);
-                    DOTween.To(() => MainControl.instance.mainBox.vertexPoints[1], x => MainControl.instance.mainBox.vertexPoints[1] = x, new Vector2(5.93f, MainControl.instance.mainBox.vertexPoints[1].y), 0.5f).SetEase(Ease.InOutSine);
-                    DOTween.To(() => MainControl.instance.mainBox.vertexPoints[2], x => MainControl.instance.mainBox.vertexPoints[2] = x, new Vector2(-5.93f, MainControl.instance.mainBox.vertexPoints[2].y), 0.5f).SetEase(Ease.InOutSine);
-                    DOTween.To(() => MainControl.instance.mainBox.vertexPoints[3], x => MainControl.instance.mainBox.vertexPoints[3] = x, new Vector2(-5.93f, MainControl.instance.mainBox.vertexPoints[3].y), 0.5f).SetEase(Ease.InOutSine);
+                    DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[0], x => MainControl.Instance.mainBox.vertexPoints[0] = x, new Vector2(5.93f, MainControl.Instance.mainBox.vertexPoints[0].y), 0.5f).SetEase(Ease.InOutSine);
+                    DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[1], x => MainControl.Instance.mainBox.vertexPoints[1] = x, new Vector2(5.93f, MainControl.Instance.mainBox.vertexPoints[1].y), 0.5f).SetEase(Ease.InOutSine);
+                    DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[2], x => MainControl.Instance.mainBox.vertexPoints[2] = x, new Vector2(-5.93f, MainControl.Instance.mainBox.vertexPoints[2].y), 0.5f).SetEase(Ease.InOutSine);
+                    DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[3], x => MainControl.Instance.mainBox.vertexPoints[3] = x, new Vector2(-5.93f, MainControl.Instance.mainBox.vertexPoints[3].y), 0.5f).SetEase(Ease.InOutSine);
                     yield return Timing.WaitForSeconds(0.5f);
 
                     break;
             }
 
             this.turn++;
-            MainControl.instance.selectUIController.InTurn();
+            MainControl.Instance.selectUIController.InTurn();
             yield return 0;
         }
 

@@ -18,14 +18,14 @@ namespace UCT.Battle
 
         private void Update()
         {
-            if (MainControl.instance.selectUIController.selectUI == 1 && MainControl.instance.selectUIController.selectLayer == 1)
+            if (MainControl.Instance.selectUIController.selectUI == 1 && MainControl.Instance.selectUIController.selectLayer == 1)
             {
-                if (MainControl.instance.BattleControl.enemiesHp.Count - 1 < number * 2)
+                if (MainControl.Instance.BattleControl.enemiesHp.Count - 1 < number * 2)
                     transform.localScale = Vector2.zero;
                 else
                 {
                     transform.localScale = new Vector3(42, 7.25f, 1);
-                    greenSprite.transform.localScale = new Vector3((float)MainControl.instance.BattleControl.enemiesHp[number * 2] / MainControl.instance.BattleControl.enemiesHp[number * 2 + 1], greenSprite.transform.localScale.y);
+                    greenSprite.transform.localScale = new Vector3((float)MainControl.Instance.BattleControl.enemiesHp[number * 2] / MainControl.Instance.BattleControl.enemiesHp[number * 2 + 1], greenSprite.transform.localScale.y);
                 }
             }
         }

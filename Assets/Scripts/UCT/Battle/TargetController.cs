@@ -51,12 +51,12 @@ namespace UCT.Battle
         {
             if (!pressZ)
             {
-                if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
+                if (MainControl.Instance.KeyArrowToControl(KeyCode.Z))
                 {
                     pressZ = true;
                     anim.SetBool("Hit", true);
                     anim.SetFloat("MoveSpeed", 0);
-                    AudioController.instance.GetFx(0, MainControl.instance.AudioControl.fxClipBattle);
+                    AudioController.instance.GetFx(0, MainControl.Instance.AudioControl.fxClipBattle);
                     Hit();
                 }
             }
@@ -70,13 +70,13 @@ namespace UCT.Battle
             if (Mathf.Abs(bar.transform.localPosition.x) > 0.8f)
                 hitDamage = (int)
                     (2.2f / 13.2f * (14 - Mathf.Abs(bar.transform.localPosition.x))//准确度系数
-                                  * (MainControl.instance.PlayerControl.atk + MainControl.instance.PlayerControl.wearAtk
-                                      - MainControl.instance.BattleControl.enemiesDEF[select] + Random.Range(0, 2)));
+                                  * (MainControl.Instance.PlayerControl.atk + MainControl.Instance.PlayerControl.wearAtk
+                                      - MainControl.Instance.BattleControl.enemiesDEF[select] + Random.Range(0, 2)));
             else
                 hitDamage = (int)
                     (2.2f / 13.2f * (14 - 0.8f)//准确度系数
-                                  * (MainControl.instance.PlayerControl.atk + MainControl.instance.PlayerControl.wearAtk
-                                      - MainControl.instance.BattleControl.enemiesDEF[select] + Random.Range(0, 2)));
+                                  * (MainControl.Instance.PlayerControl.atk + MainControl.Instance.PlayerControl.wearAtk
+                                      - MainControl.Instance.BattleControl.enemiesDEF[select] + Random.Range(0, 2)));
 
             if (hitDamage <= 0)
             {
@@ -96,9 +96,9 @@ namespace UCT.Battle
         private void HitAnim()
         {
             hitMonster.anim.SetBool("Hit", true);
-            hpBar.transform.localScale = new Vector3((float)MainControl.instance.BattleControl.enemiesHp[select * 2] / MainControl.instance.BattleControl.enemiesHp[select * 2 + 1], 1);
-            MainControl.instance.BattleControl.enemiesHp[select * 2] -= hitDamage;
-            DOTween.To(() => hpBar.transform.localScale, x => hpBar.transform.localScale = x, new Vector3((float)MainControl.instance.BattleControl.enemiesHp[select * 2] / MainControl.instance.BattleControl.enemiesHp[select * 2 + 1], 1),
+            hpBar.transform.localScale = new Vector3((float)MainControl.Instance.BattleControl.enemiesHp[select * 2] / MainControl.Instance.BattleControl.enemiesHp[select * 2 + 1], 1);
+            MainControl.Instance.BattleControl.enemiesHp[select * 2] -= hitDamage;
+            DOTween.To(() => hpBar.transform.localScale, x => hpBar.transform.localScale = x, new Vector3((float)MainControl.Instance.BattleControl.enemiesHp[select * 2] / MainControl.Instance.BattleControl.enemiesHp[select * 2 + 1], 1),
                 0.75f).SetEase(Ease.OutSine);
         }
 

@@ -73,38 +73,38 @@ namespace UCT.Battle
             hitVolume = GetComponent<UnityEngine.Rendering.Volume>();
             hitVolume.weight = 0;
             //mask = 1 << 6;
-            MainControl.instance.PlayerControl.missTime = 0;
+            MainControl.Instance.PlayerControl.missTime = 0;
 
         }
         private void Update()
         {
-            if (!MainControl.instance.OverworldControl.noSFX && hitVolume.weight > 0)
+            if (!MainControl.Instance.OverworldControl.noSFX && hitVolume.weight > 0)
                 hitVolume.weight -= Time.deltaTime;
 
-            if (MainControl.instance.PlayerControl.hp <= 0)
+            if (MainControl.Instance.PlayerControl.hp <= 0)
             {
-                MainControl.instance.PlayerControl.hp = MainControl.instance.PlayerControl.hpMax;
+                MainControl.Instance.PlayerControl.hp = MainControl.Instance.PlayerControl.hpMax;
 
-                if (!(MainControl.instance.PlayerControl.isDebug && MainControl.instance.PlayerControl.invincible))
+                if (!(MainControl.Instance.PlayerControl.isDebug && MainControl.Instance.PlayerControl.invincible))
                 {
                     spriteRenderer.color = Color.red;
-                    MainControl.instance.OverworldControl.playerDeadPos = transform.position - (Vector3)sceneDrift;
-                    MainControl.instance.OverworldControl.pause = true;
+                    MainControl.Instance.OverworldControl.playerDeadPos = transform.position - (Vector3)sceneDrift;
+                    MainControl.Instance.OverworldControl.pause = true;
                     TurnController.instance.KillIEnumerator();
-                    MainControl.instance.SwitchScene("Gameover", false);
+                    MainControl.Instance.SwitchScene("Gameover", false);
                 }
                 else
-                    MainControl.instance.selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
+                    MainControl.Instance.selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
             }
 
-            if (MainControl.instance.OverworldControl.isSetting || MainControl.instance.OverworldControl.pause)
+            if (MainControl.Instance.OverworldControl.isSetting || MainControl.Instance.OverworldControl.pause)
                 return;
 
-            if (MainControl.instance.PlayerControl.missTime >= 0)
+            if (MainControl.Instance.PlayerControl.missTime >= 0)
             {
-                MainControl.instance.PlayerControl.missTime -= Time.deltaTime;
-                if (missAnim == null && MainControl.instance.PlayerControl.missTimeMax >= 0.4f)
-                    missAnim = spriteRenderer.DOColor(MainControl.instance.BattleControl.playerMissColorList[(int)playerColor], 0.2f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
+                MainControl.Instance.PlayerControl.missTime -= Time.deltaTime;
+                if (missAnim == null && MainControl.Instance.PlayerControl.missTimeMax >= 0.4f)
+                    missAnim = spriteRenderer.DOColor(MainControl.Instance.BattleControl.playerMissColorList[(int)playerColor], 0.2f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
             }
             else
             {
@@ -112,37 +112,37 @@ namespace UCT.Battle
                 {
                     missAnim.Kill();
                     missAnim = null;
-                    spriteRenderer.color = MainControl.instance.BattleControl.playerColorList[(int)playerColor];
+                    spriteRenderer.color = MainControl.Instance.BattleControl.playerColorList[(int)playerColor];
                 }
             }
 
             //Debug
-            if (MainControl.instance.PlayerControl.isDebug)
+            if (MainControl.Instance.PlayerControl.isDebug)
             {
                 if (Input.GetKeyDown(KeyCode.Keypad1))
-                    ChangePlayerColor(MainControl.instance.BattleControl.playerColorList[0], 0);
+                    ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[0], 0);
                 else if (Input.GetKeyDown(KeyCode.Keypad2))
-                    ChangePlayerColor(MainControl.instance.BattleControl.playerColorList[1], (BattleControl.PlayerColor)1);
+                    ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[1], (BattleControl.PlayerColor)1);
                 else if (Input.GetKeyDown(KeyCode.Keypad6))
-                    ChangePlayerColor(MainControl.instance.BattleControl.playerColorList[5], (BattleControl.PlayerColor)5);
+                    ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[5], (BattleControl.PlayerColor)5);
 
                 if (Input.GetKeyDown(KeyCode.I))
-                    ChangePlayerColor(MainControl.instance.BattleControl.playerColorList[5], (BattleControl.PlayerColor)5, 2.5f, 0);
+                    ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[5], (BattleControl.PlayerColor)5, 2.5f, 0);
                 else if (Input.GetKeyDown(KeyCode.K))
-                    ChangePlayerColor(MainControl.instance.BattleControl.playerColorList[5], (BattleControl.PlayerColor)5, 2.5f, (PlayerDirEnum)1);
+                    ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[5], (BattleControl.PlayerColor)5, 2.5f, (PlayerDirEnum)1);
                 else if (Input.GetKeyDown(KeyCode.J))
-                    ChangePlayerColor(MainControl.instance.BattleControl.playerColorList[5], (BattleControl.PlayerColor)5, 2.5f, (PlayerDirEnum)2);
+                    ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[5], (BattleControl.PlayerColor)5, 2.5f, (PlayerDirEnum)2);
                 else if (Input.GetKeyDown(KeyCode.L))
-                    ChangePlayerColor(MainControl.instance.BattleControl.playerColorList[5], (BattleControl.PlayerColor)5, 2.5f, (PlayerDirEnum)3);
+                    ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[5], (BattleControl.PlayerColor)5, 2.5f, (PlayerDirEnum)3);
 
                 if (Input.GetKeyDown(KeyCode.P))
-                    MainControl.instance.PlayerControl.hp = 0;
+                    MainControl.Instance.PlayerControl.hp = 0;
             }
         }
 
         private void FixedUpdate()
         {
-            if (MainControl.instance.OverworldControl.isSetting || MainControl.instance.OverworldControl.pause)
+            if (MainControl.Instance.OverworldControl.isSetting || MainControl.Instance.OverworldControl.pause)
                 return;
             if (!TurnController.instance.isMyTurn)
                 Moving();
@@ -180,7 +180,7 @@ namespace UCT.Battle
             switch (playerColor)
             {
                 case BattleControl.PlayerColor.red:
-                    if (MainControl.instance.KeyArrowToControl(KeyCode.X, 1))
+                    if (MainControl.Instance.KeyArrowToControl(KeyCode.X, 1))
                     {
                         speedWeightX = speedWeight;
                         speedWeightY = speedWeight;
@@ -190,32 +190,32 @@ namespace UCT.Battle
                         speedWeightX = 1;
                         speedWeightY = 1;
                     }
-                    if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1))
+                    if (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow, 1))
                     {
                         moving = new Vector3(moving.x, 1);
                     }
-                    else if (MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
+                    else if (MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow, 1))
                     {
                         moving = new Vector3(moving.x, -1);
                     }
                     else
                         moving = new Vector3(moving.x, 0);
 
-                    if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
+                    if (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow, 1) && MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow, 1))
                         moving = new Vector3(moving.x, 0);
 
-                    if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1))
+                    if (MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow, 1))
                     {
                         moving = new Vector3(1, moving.y);
                     }
-                    else if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
+                    else if (MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
                     {
                         moving = new Vector3(-1, moving.y);
                     }
                     else
                         moving = new Vector3(0, moving.y);
 
-                    if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
+                    if (MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow, 1) && MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
                         moving = new Vector3(0, moving.y);
                     break;
 
@@ -268,7 +268,7 @@ namespace UCT.Battle
                     switch (playerDir)
                     {
                         case PlayerDirEnum.up:
-                            if (MainControl.instance.KeyArrowToControl(KeyCode.X, 1))
+                            if (MainControl.Instance.KeyArrowToControl(KeyCode.X, 1))
                             {
                                 speedWeightX = speedWeight;
                             }
@@ -279,30 +279,30 @@ namespace UCT.Battle
 
                             transform.rotation = Quaternion.Euler(0, 0, 180);
                             Physics2D.gravity = new Vector2(0, 9.8f);
-                            if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1))
+                            if (MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow, 1))
                             {
                                 moving = new Vector3(1, moving.y);
                             }
-                            else if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
+                            else if (MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
                             {
                                 moving = new Vector3(-1, moving.y);
                             }
                             else
                                 moving = new Vector3(0, moving.y);
 
-                            if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
+                            if (MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow, 1) && MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
                                 moving = new Vector3(0, moving.y);
-                            if (!MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
+                            if (!MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow, 1))
                             {
-                                if (!MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) || !MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
+                                if (!MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow, 1) || !MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
                                     jumpRayDistanceForBoard = 0.2f;
-                                if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) || MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
+                                if (MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow, 1) || MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
                                 {
                                     jumpRayDistanceForBoard = 0;
                                 }
                             }
 
-                            if (MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1) && !isJump && moving.y == 0)
+                            if (MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow, 1) && !isJump && moving.y == 0)
                             {
 
 
@@ -311,7 +311,7 @@ namespace UCT.Battle
                                 jumpRayDistance = 0.2f;
                                 jumpRayDistanceForBoard = 0;
                             }
-                            if (isJump && (!MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("Box"))) && moving.y < -0)
+                            if (isJump && (!MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("Box"))) && moving.y < -0)
                             {
                                 if (infoF.collider != null && infoF.transform.position.z == transform.position.z)
                                 {
@@ -341,7 +341,7 @@ namespace UCT.Battle
                             break;
 
                         case PlayerDirEnum.down:////////////////////////////////////////////////
-                            if (MainControl.instance.KeyArrowToControl(KeyCode.X, 1))
+                            if (MainControl.Instance.KeyArrowToControl(KeyCode.X, 1))
                             {
                                 speedWeightX = speedWeight;
                             }
@@ -351,24 +351,24 @@ namespace UCT.Battle
                             }
                             transform.rotation = Quaternion.Euler(0, 0, 0);
                             Physics2D.gravity = new Vector2(0, -9.8f);
-                            if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1))
+                            if (MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow, 1))
                             {
                                 moving = new Vector3(1, moving.y);
                             }
-                            else if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
+                            else if (MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
                             {
                                 moving = new Vector3(-1, moving.y);
                             }
                             else
                                 moving = new Vector3(0, moving.y);
-                            if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
+                            if (MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow, 1) && MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
                                 moving = new Vector3(0, moving.y);
 
-                            if (!MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1))
+                            if (!MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow, 1))
                             {
-                                if (!MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) || !MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
+                                if (!MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow, 1) || !MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
                                     jumpRayDistanceForBoard = 0.2f;
-                                if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) || MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
+                                if (MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow, 1) || MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
                                 {
                                     jumpRayDistanceForBoard = 0;
 
@@ -376,14 +376,14 @@ namespace UCT.Battle
                             }
 
 
-                            if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) && !isJump && moving.y == 0)
+                            if (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow, 1) && !isJump && moving.y == 0)
                             {
                                 moving = new Vector3(moving.x, 2.15f);
                                 isJump = true;
                                 jumpRayDistance = 0.2f;
                                 jumpRayDistanceForBoard = 0;
                             }
-                            if (isJump && (!MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("Box"))) && moving.y > 0)
+                            if (isJump && (!MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("Box"))) && moving.y > 0)
                             {
                                 if (infoF.collider != null && infoF.transform.position.z == transform.position.z)
                                 {
@@ -414,7 +414,7 @@ namespace UCT.Battle
                             break;
 
                         case PlayerDirEnum.left:////////////////////////////////////////////////
-                            if (MainControl.instance.KeyArrowToControl(KeyCode.X, 1))
+                            if (MainControl.Instance.KeyArrowToControl(KeyCode.X, 1))
                             {
                                 speedWeightY = speedWeight;
                             }
@@ -424,30 +424,30 @@ namespace UCT.Battle
                             }
                             transform.rotation = Quaternion.Euler(0, 0, 270);
                             Physics2D.gravity = new Vector2(-9.8f, 0);
-                            if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1))
+                            if (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow, 1))
                             {
                                 moving = new Vector3(moving.x, 1);
                             }
-                            else if (MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
+                            else if (MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow, 1))
                             {
                                 moving = new Vector3(moving.x, -1);
                             }
                             else
                                 moving = new Vector3(moving.x, 0);
-                            if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
+                            if (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow, 1) && MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow, 1))
                                 moving = new Vector3(moving.x, 0);
-                            if (!MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1))
+                            if (!MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow, 1))
                             {
-                                if (!MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) || !MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
+                                if (!MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow, 1) || !MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow, 1))
                                     jumpRayDistanceForBoard = 0.2f;
-                                if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) || MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
+                                if (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow, 1) || MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow, 1))
                                 {
                                     jumpRayDistanceForBoard = 0;
 
                                 }
                             }
 
-                            if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) && !isJump && moving.x == 0)
+                            if (MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow, 1) && !isJump && moving.x == 0)
                             {
                             
 
@@ -456,7 +456,7 @@ namespace UCT.Battle
                                 jumpRayDistance = 0.2f;
                                 jumpRayDistanceForBoard = 0;
                             }
-                            if (isJump && (!MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("Box"))) && moving.x > 0)
+                            if (isJump && (!MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("Box"))) && moving.x > 0)
                             {
 
                                 if (infoF.collider != null && infoF.transform.position.z == transform.position.z)
@@ -487,7 +487,7 @@ namespace UCT.Battle
                             break;
 
                         case PlayerDirEnum.right:
-                            if (MainControl.instance.KeyArrowToControl(KeyCode.X, 1))
+                            if (MainControl.Instance.KeyArrowToControl(KeyCode.X, 1))
                             {
                                 speedWeightY = speedWeight;
                             }
@@ -497,23 +497,23 @@ namespace UCT.Battle
                             }
                             transform.rotation = Quaternion.Euler(0, 0, 90);
                             Physics2D.gravity = new Vector2(9.8f, 0);
-                            if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1))
+                            if (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow, 1))
                             {
                                 moving = new Vector3(moving.x, 1);
                             }
-                            else if (MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
+                            else if (MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow, 1))
                             {
                                 moving = new Vector3(moving.x, -1);
                             }
                             else
                                 moving = new Vector3(moving.x, 0);
-                            if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
+                            if (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow, 1) && MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow, 1))
                                 moving = new Vector3(moving.x, 0);
-                            if (!MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
+                            if (!MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
                             {
-                                if (!MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) || !MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
+                                if (!MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow, 1) || !MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow, 1))
                                     jumpRayDistanceForBoard = 0.2f;
-                                if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) || MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
+                                if (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow, 1) || MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow, 1))
                                 {
                                     jumpRayDistanceForBoard = 0;
 
@@ -521,7 +521,7 @@ namespace UCT.Battle
 
                             }
 
-                            if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1) && !isJump && moving.x == 0)
+                            if (MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow, 1) && !isJump && moving.x == 0)
                             {
                             
 
@@ -530,7 +530,7 @@ namespace UCT.Battle
                                 jumpRayDistance = 0.2f;
                                 jumpRayDistanceForBoard = 0;
                             }
-                            if (isJump && (!MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("Box"))) && moving.x < -0)
+                            if (isJump && (!MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("Box"))) && moving.x < -0)
                             {
                                 if (infoF.collider != null && infoF.transform.position.z == transform.position.z)
                                 {
@@ -573,32 +573,32 @@ namespace UCT.Battle
             Vector2 dirMoveX = new();
             Vector2 dirMoveY = new();
             bool isMoveX = false, isMoveY = false;
-            if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1))
+            if (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow, 1))
             {
                 dirMoveY = Vector2.up;
                 isMoveY = true;
             }
-            else if (MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
+            else if (MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow, 1))
             {
                 dirMoveY = Vector2.down;
                 isMoveY = true;
             }
 
-            if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
+            if (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow, 1) && MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow, 1))
                 isMoveY = false;
 
-            if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
+            if (MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
             {
                 dirMoveX = Vector2.left;
                 isMoveX = true;
             }
-            else if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1))
+            else if (MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow, 1))
             {
                 dirMoveX = Vector2.right;
                 isMoveX = true;
             }
 
-            if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1))
+            if (MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow, 1) && MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow, 1))
                 isMoveX = false;
 
             Ray2D rayMoveX = new(transform.position, dirMoveX);
@@ -615,9 +615,9 @@ namespace UCT.Battle
             {
                 bool x = (isMoveX || isMoveY) && infoMoveX.collider != null && (infoMoveX.collider.gameObject.CompareTag("Box") || infoMoveX.collider.gameObject.CompareTag("board"));
                 bool y = (isMoveX || isMoveY) && infoMoveY.collider != null && (infoMoveY.collider.gameObject.CompareTag("Box") || infoMoveY.collider.gameObject.CompareTag("board"));
-                if (x && !y && (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) || MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1)))
+                if (x && !y && (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow, 1) || MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow, 1)))
                     x = y;
-                if (y && !x && (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1) || MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1)))
+                if (y && !x && (MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow, 1) || MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow, 1)))
                     y = x;
 
                 isMoving = !(x || y);
@@ -658,10 +658,10 @@ namespace UCT.Battle
                 }
             }
 
-            moving.x = MainControl.instance.JudgmentNumber(false, moving.x, -5);
-            moving.y = MainControl.instance.JudgmentNumber(false, moving.y, -5);
-            moving.x = MainControl.instance.JudgmentNumber(true, moving.x, 5);
-            moving.y = MainControl.instance.JudgmentNumber(true, moving.y, 5);
+            moving.x = MainControl.Instance.JudgmentNumber(false, moving.x, -5);
+            moving.y = MainControl.Instance.JudgmentNumber(false, moving.y, -5);
+            moving.x = MainControl.Instance.JudgmentNumber(true, moving.x, 5);
+            moving.y = MainControl.Instance.JudgmentNumber(true, moving.y, 5);
         
             Vector3 newPos = transform.position + new Vector3(speedWeightX * speed * moving.x * Time.deltaTime, speedWeightY * speed * moving.y * Time.deltaTime);//速度参考：3
 
@@ -723,7 +723,7 @@ namespace UCT.Battle
         ///</summary>
         public void ChangePlayerColor(Color aimColor, BattleControl.PlayerColor aimPlayerColor, float startForce = 0, PlayerDirEnum dir = PlayerDirEnum.nullDir, float gradientTime = -1, float dingTime = -1, int fx = 2)
         {
-            AudioController.instance.GetFx(fx, MainControl.instance.AudioControl.fxClipBattle);
+            AudioController.instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipBattle);
 
             if (gradientTime < 0)
                 gradientTime = this.gradientTime;

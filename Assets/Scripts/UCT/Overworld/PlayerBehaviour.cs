@@ -54,9 +54,9 @@ namespace UCT.Overworld
             boxTrigger.transform.localPosition = boxCollider.offset;
             //mask = 1 << 6;
 
-            transform.position = MainControl.instance.OverworldControl.playerScenePos;
-            animDirectionX = (int)MainControl.instance.OverworldControl.animDirection.x;
-            animDirectionY = (int)MainControl.instance.OverworldControl.animDirection.y;
+            transform.position = MainControl.Instance.OverworldControl.playerScenePos;
+            animDirectionX = (int)MainControl.Instance.OverworldControl.animDirection.x;
+            animDirectionY = (int)MainControl.Instance.OverworldControl.animDirection.y;
 
             if (isShadow)
                 shadowSprite = transform.Find("Dir/Shadow").GetComponent<SpriteRenderer>();
@@ -90,7 +90,7 @@ namespace UCT.Overworld
                 shadowSprite.sprite = spriteRenderer.sprite;
             }
 
-            MainControl.instance.OverworldControl.playerDeadPos = transform.position;
+            MainControl.Instance.OverworldControl.playerDeadPos = transform.position;
             if (typeWritter.isTyping)
             {
                 distance = 0;
@@ -103,7 +103,7 @@ namespace UCT.Overworld
                     distance = 2;
             }
 
-            if (MainControl.instance.OverworldControl.isSetting || MainControl.instance.OverworldControl.pause)
+            if (MainControl.Instance.OverworldControl.isSetting || MainControl.Instance.OverworldControl.pause)
             {
                 return;
             }
@@ -114,7 +114,7 @@ namespace UCT.Overworld
             if (saveOwObj != null && backpackUI.transform.localPosition.z < 0)
             {
                 if (saveOwObj.isTriggerMode
-                    || (!saveOwObj.isTriggerMode && MainControl.instance.KeyArrowToControl(KeyCode.Z)
+                    || (!saveOwObj.isTriggerMode && MainControl.Instance.KeyArrowToControl(KeyCode.Z)
                                                  && ((saveOwObj.playerDir == Vector2.one) || (saveOwObj.playerDir.x == animDirectionX) || (saveOwObj.playerDir.y == animDirectionY))
                                                  && BackpackBehaviour.instance.select == 0))
                 {
@@ -124,9 +124,9 @@ namespace UCT.Overworld
                         {
                             if ((saveOwObj.onlyDir == 0) || (saveOwObj.onlyDir == -1 && animDirectionX != 0) || (saveOwObj.onlyDir == 1 && animDirectionY != 0))
                             {
-                                MainControl.instance.OverworldControl.playerScenePos = saveOwObj.newPlayerPos;
-                                MainControl.instance.OverworldControl.animDirection = new Vector2(animDirectionX, animDirectionY);
-                                MainControl.instance.OutBlack(saveOwObj.sceneName, Color.black, saveOwObj.banMusic);
+                                MainControl.Instance.OverworldControl.playerScenePos = saveOwObj.newPlayerPos;
+                                MainControl.Instance.OverworldControl.animDirection = new Vector2(animDirectionX, animDirectionY);
+                                MainControl.Instance.OutBlack(saveOwObj.sceneName, Color.black, saveOwObj.banMusic);
                                 saveOwObj.gameObject.SetActive(false);
                                 saveOwObj = null;
                             }
@@ -144,9 +144,9 @@ namespace UCT.Overworld
 
                             if (saveOwObj.isSave)
                             {
-                                AudioController.instance.GetFx(2, MainControl.instance.AudioControl.fxClipUI);
-                                if (MainControl.instance.PlayerControl.hp < MainControl.instance.PlayerControl.hpMax)
-                                    MainControl.instance.PlayerControl.hp = MainControl.instance.PlayerControl.hpMax;
+                                AudioController.instance.GetFx(2, MainControl.Instance.AudioControl.fxClipUI);
+                                if (MainControl.Instance.PlayerControl.hp < MainControl.Instance.PlayerControl.hpMax)
+                                    MainControl.Instance.PlayerControl.hp = MainControl.Instance.PlayerControl.hpMax;
                             }
                         }
                     }
@@ -175,15 +175,15 @@ namespace UCT.Overworld
         }
         */
 
-            if (MainControl.instance.OverworldControl.isSetting || MainControl.instance.OverworldControl.pause)
+            if (MainControl.Instance.OverworldControl.isSetting || MainControl.Instance.OverworldControl.pause)
                 return;
-            if (Input.GetKeyDown(KeyCode.B) && MainControl.instance.PlayerControl.isDebug)
-                MainControl.instance.OutBlack("Battle", Color.black);
+            if (Input.GetKeyDown(KeyCode.B) && MainControl.Instance.PlayerControl.isDebug)
+                MainControl.Instance.OutBlack("Battle", Color.black);
         }
 
         public void PlayWalkAudio()//动画器引用
         {
-            AudioController.instance.GetFx(Random.Range((int)walk.x, (int)walk.y), MainControl.instance.AudioControl.fxClipWalk, 1, 1, mixer);
+            AudioController.instance.GetFx(Random.Range((int)walk.x, (int)walk.y), MainControl.Instance.AudioControl.fxClipWalk, 1, 1, mixer);
         }
 
         public void TriggerSpin(int i)
@@ -205,45 +205,45 @@ namespace UCT.Overworld
         private void FixedUpdate()
         {
             float speed;
-            if (MainControl.instance.KeyArrowToControl(KeyCode.X, 1))
+            if (MainControl.Instance.KeyArrowToControl(KeyCode.X, 1))
                 speed = this.speed * 2;
             else speed = this.speed;
 
-            animator.SetFloat("Speed", System.Convert.ToInt32(MainControl.instance.KeyArrowToControl(KeyCode.X, 1)) + 1);
+            animator.SetFloat("Speed", System.Convert.ToInt32(MainControl.Instance.KeyArrowToControl(KeyCode.X, 1)) + 1);
 
-            if (MainControl.instance.OverworldControl.isSetting || MainControl.instance.OverworldControl.pause || BackpackBehaviour.instance.select > 0)
+            if (MainControl.Instance.OverworldControl.isSetting || MainControl.Instance.OverworldControl.pause || BackpackBehaviour.instance.select > 0)
             {
                 animator.Play("Walk Tree", 0, 0);
-                if (MainControl.instance.PlayerControl.canMove)
+                if (MainControl.Instance.PlayerControl.canMove)
                     animator.enabled = false;
                 return;
             }
             else
                 animator.enabled = true;
 
-            if (MainControl.instance.PlayerControl.canMove)
+            if (MainControl.Instance.PlayerControl.canMove)
             {
-                if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1))
+                if (MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow, 1))
                     moveDirectionX = 1;
-                else if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
+                else if (MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
                     moveDirectionX = -1;
                 else moveDirectionX = 0;
 
-                if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
+                if (MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow, 1) && MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
                     moveDirectionX = 0;
 
                 if (moveDirectionX != 0)
                     animDirectionX = moveDirectionX;
 
-                if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1))
+                if (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow, 1))
                 {
                     moveDirectionY = 1;
-                    if (!MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) && !MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
+                    if (!MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow, 1) && !MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
                         animDirectionX = 0;
                 }
-                else if (MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
+                else if (MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow, 1))
                 {
-                    if (!MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1) && !MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
+                    if (!MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow, 1) && !MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
                         animDirectionX = 0;
                     moveDirectionY = -1;
                 }
@@ -257,7 +257,7 @@ namespace UCT.Overworld
 
                 rbody.MovePosition(new Vector2(transform.position.x + speed * Time.deltaTime * moveDirectionX, transform.position.y + speed * Time.deltaTime * moveDirectionY));
 
-                if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))//&& !(MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1) || MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1)))
+                if (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow, 1) && MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow, 1))//&& !(MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1) || MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1)))
                 {
                     animator.SetFloat("MoveX", Random.Range(-1, 2));
                     animator.SetFloat("MoveY", Random.Range(-1, 2));

@@ -32,18 +32,18 @@ namespace UCT.Global.Scene
             tmp = transform.Find("Text").GetComponent<TextMeshPro>();
             mask = transform.Find("Mask").gameObject;
 
-            typeWritter.TypeOpen(MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.sceneTextsSave, "Text"), false, 0, 1, tmp, TypeWritter.TypeMode.CantZX);
+            typeWritter.TypeOpen(MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Text"), false, 0, 1, tmp, TypeWritter.TypeMode.CantZX);
         }
 
         private void Update()
         {
-            if (MainControl.instance.OverworldControl.isSetting || MainControl.instance.OverworldControl.pause)
+            if (MainControl.Instance.OverworldControl.isSetting || MainControl.Instance.OverworldControl.pause)
                 return;
-            if (MainControl.instance.KeyArrowToControl(KeyCode.Z))
+            if (MainControl.Instance.KeyArrowToControl(KeyCode.Z))
             {
                 typeWritter.TypeStop();
                 tmp.text = "";
-                MainControl.instance.OutBlack("Start", Color.black);
+                MainControl.Instance.OutBlack("Start", Color.black);
             }
         }
 

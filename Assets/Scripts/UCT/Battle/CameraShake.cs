@@ -18,9 +18,9 @@ namespace UCT.Battle
         {
             if (moveWithHeart && !TurnController.instance.isMyTurn)
             {
-                transform.position = new Vector3(moveExtent.x * (MainControl.instance.battlePlayerController.transform.position.x - heartBasicPos.x),
+                transform.position = new Vector3(moveExtent.x * (MainControl.Instance.battlePlayerController.transform.position.x - heartBasicPos.x),
                     0, 
-                    moveExtent.y * (MainControl.instance.battlePlayerController.transform.position.y - heartBasicPos.y));
+                    moveExtent.y * (MainControl.Instance.battlePlayerController.transform.position.y - heartBasicPos.y));
             }
             if (moveWithHeart && tweenMoveBack == null && TurnController.instance.isMyTurn && transform.position != Vector3.zero)
             {
