@@ -264,9 +264,6 @@ namespace UCT.Battle
                     spriteRenderer.material.SetFloat("_OpenMask", 1);
                     spriteRenderer.material.SetFloat("_OutSide", 1);
                     break;
-
-                default:
-                    break;
             }
         }
 

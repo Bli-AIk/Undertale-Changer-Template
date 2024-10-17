@@ -57,7 +57,7 @@ namespace UCT.Global.UI
         public OverworldControl.DynamicType dynamicType;
 
         [Header("总有那么一些情况需要强硬手段（拔枪")]
-        public bool forceReturn = false;
+        public bool forceReturn;
 
         private TMP_Text tmp_Text;
 
@@ -88,8 +88,7 @@ namespace UCT.Global.UI
 
             if (!force && isTyping)
                 return;
-            else
-                StopAllCoroutines();
+            StopAllCoroutines();
             passText = false;
             endString = "";
             tmp_Text.text = "";
@@ -147,7 +146,7 @@ namespace UCT.Global.UI
                 isUsedFx = false;
 
                 if (fxRandomPitch)
-                    pitch = UnityEngine.Random.Range(0.25f, 1.25f);
+                    pitch = Random.Range(0.25f, 1.25f);
 
 
                 if (originString[i] == '<')

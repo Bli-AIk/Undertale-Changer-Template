@@ -1,16 +1,17 @@
 using UCT.Global.Core;
 using UnityEngine;
+using UnityEngine.Video;
 
 namespace Debug
 {
     public class DebugVideoController : MonoBehaviour
     {
-        private UnityEngine.Video.VideoPlayer videoPlayer;
+        private VideoPlayer videoPlayer;
         public int skip;
 
         private void Start()
         {
-            videoPlayer = GetComponent<UnityEngine.Video.VideoPlayer>();
+            videoPlayer = GetComponent<VideoPlayer>();
         }
 
         private void Update()

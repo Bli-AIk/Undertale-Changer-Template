@@ -7,6 +7,7 @@ using UCT.Global.Audio;
 using UCT.Global.Core;
 using UCT.Global.UI;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace UCT.Global.Scene
 {
@@ -42,7 +43,7 @@ namespace UCT.Global.Scene
                 MainControl.Instance.PlayerControl.wearDef = 123;
                 MainControl.Instance.PlayerControl.saveScene = "Example-Corridor";
 
-                MainControl.Instance.PlayerControl.myItems = new List<int>() { 0, 0, 0, 0, 0, 0, 0, 0 };
+                MainControl.Instance.PlayerControl.myItems = new List<int> { 0, 0, 0, 0, 0, 0, 0, 0 };
             }
         }
 
@@ -173,7 +174,7 @@ namespace UCT.Global.Scene
                     }
                     else if (MainControl.Instance.KeyArrowToControl(KeyCode.C, 1))
                     {
-                        setName = MainControl.Instance.RandomName(UnityEngine.Random.Range(1, 7));
+                        setName = MainControl.Instance.RandomName(Random.Range(1, 7));
                     }
                     if (breaker) break;
                     if (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow))
@@ -347,9 +348,6 @@ namespace UCT.Global.Scene
                     tmps[5].text = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "MenuUnder") + Application.version;
                     if (MainControl.Instance.KeyArrowToControl(KeyCode.Z) && setName.Length < 6)
                         mode = 1;
-                    break;
-
-                default:
                     break;
             }
         }

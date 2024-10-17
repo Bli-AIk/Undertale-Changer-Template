@@ -44,8 +44,8 @@ namespace UCT.Battle
                 sons[1].transform.localPosition = sons[myItemMax + 2].transform.localPosition;
             }
             transform.DOLocalMoveX(0, 0.25f).SetEase(Ease.OutCirc);
-            sons[0].transform.DOLocalMoveY(sons[0].transform.localPosition.y + 0.05f, 0.75f, false).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutQuad);
-            sons[1].transform.DOLocalMoveY(sons[1].transform.localPosition.y - 0.05f, 0.75f, false).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutQuad);
+            sons[0].transform.DOLocalMoveY(sons[0].transform.localPosition.y + 0.05f, 0.75f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutQuad);
+            sons[1].transform.DOLocalMoveY(sons[1].transform.localPosition.y - 0.05f, 0.75f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutQuad);
             PressDown(true);
         }
 

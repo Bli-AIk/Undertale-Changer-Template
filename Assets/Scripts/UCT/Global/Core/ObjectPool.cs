@@ -10,7 +10,7 @@ namespace UCT.Global.Core
 
         public GameObject obj;
         private Queue<GameObject> availableObj = new Queue<GameObject>();
-        public Transform parent = null;
+        public Transform parent;
 
         /// <summary>
         /// 初始化/填充对象池

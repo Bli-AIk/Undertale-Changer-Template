@@ -1,8 +1,8 @@
 using System.Collections.Generic;
+using UnityEngine;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-using UnityEngine;
 
 namespace UCT.Global.UI
 {
@@ -360,7 +360,7 @@ namespace UCT.Global.UI
                     break;
                 for (int j = 1; j <= interpolation; j++)
                 {
-                    float t = (float)j / (float)(interpolation + 1);
+                    float t = j / (float)(interpolation + 1);
                     Vector2 interpolatedPoint = Vector2.Lerp(points[i], points[i + 1], t);
                     interpolatedPoints.Add(interpolatedPoint);
                 }
@@ -369,7 +369,7 @@ namespace UCT.Global.UI
             // 插入首尾之间的插值
             for (int j = 1; j <= interpolation; j++)
             {
-                float t = (float)j / (float)(interpolation + 1);
+                float t = j / (float)(interpolation + 1);
                 Vector2 interpolatedPoint = Vector2.Lerp(points[points.Count - 1], points[0], t);
                 interpolatedPoints.Add(interpolatedPoint);
             }
@@ -454,7 +454,7 @@ namespace UCT.Global.UI
             JustVertex,
             JustVertexBessel,
             All
-        };
+        }
 
         [Header("展示哪些点的坐标")]
         public ShowGizmosPoint showGizmosPoint;
@@ -553,7 +553,7 @@ namespace UCT.Global.UI
             base.OnInspectorGUI(); //绘制一次GUI。
             if (GUILayout.Button("切分(不强制刷新)"))
             {
-                example.GetComponents(false);
+                example.GetComponents();
                 example.Update();
             }
             if (GUILayout.Button("切分(强制刷新)"))
@@ -620,7 +620,7 @@ namespace UCT.Global.UI
         }
 
 
-        bool isUndoRedoPerformed = false;
+        bool isUndoRedoPerformed;
         private void OnSceneGUI()
         {
             BoxDrawer example = (BoxDrawer)target;

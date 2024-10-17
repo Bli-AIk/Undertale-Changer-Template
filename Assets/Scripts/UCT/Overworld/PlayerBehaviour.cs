@@ -1,8 +1,10 @@
+using System;
 using UCT.Global.Audio;
 using UCT.Global.Core;
 using UCT.Global.UI;
 using UnityEngine;
 using UnityEngine.Audio;
+using Random = UnityEngine.Random;
 
 namespace UCT.Overworld
 {
@@ -209,7 +211,7 @@ namespace UCT.Overworld
                 speed = this.speed * 2;
             else speed = this.speed;
 
-            animator.SetFloat("Speed", System.Convert.ToInt32(MainControl.Instance.KeyArrowToControl(KeyCode.X, 1)) + 1);
+            animator.SetFloat("Speed", Convert.ToInt32(MainControl.Instance.KeyArrowToControl(KeyCode.X, 1)) + 1);
 
             if (MainControl.Instance.OverworldControl.isSetting || MainControl.Instance.OverworldControl.pause || BackpackBehaviour.instance.select > 0)
             {
@@ -218,8 +220,8 @@ namespace UCT.Overworld
                     animator.enabled = false;
                 return;
             }
-            else
-                animator.enabled = true;
+
+            animator.enabled = true;
 
             if (MainControl.Instance.PlayerControl.canMove)
             {

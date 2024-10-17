@@ -4,9 +4,9 @@ namespace UCT.Global.Audio
 {
     public class AudioPlayer : MonoBehaviour
     {
-        private bool isPlay = false;
+        private bool isPlay;
         public AudioSource audioSource;
-        private float clock = 0;
+        private float clock;
 
         private void OnEnable()
         {

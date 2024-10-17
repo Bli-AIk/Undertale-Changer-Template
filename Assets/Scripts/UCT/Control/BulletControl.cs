@@ -24,19 +24,19 @@ namespace UCT.Control
         public Sprite sprite;
 
         [Header("�ж����С")]
-        public List<Vector2> triggerSize = new List<Vector2>() { new Vector2(1, 1) };
+        public List<Vector2> triggerSize = new List<Vector2> { new Vector2(1, 1) };
 
         [Header("�ж����˺�")]
         public List<int> triggerHit = new List<int> { 1 };
 
         [Header("�ж���ƫ��")]
-        public List<Vector2> triggerOffset = new List<Vector2>() { new Vector2() };
+        public List<Vector2> triggerOffset = new List<Vector2> { new Vector2() };
 
         [Header("��ʼ�������")]
-        public Vector3 startPosition = new Vector3();
+        public Vector3 startPosition;
 
         [Header("��ʼ��ת�Ƕ�")]
-        public Vector3 startRotation = new Vector3();
+        public Vector3 startRotation;
 
         [Header("��ʼ����")]
         public Vector3 startScale = new Vector3(1, 1, 1);

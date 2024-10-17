@@ -82,7 +82,7 @@ namespace Debug
                 {
                     if (str[i] == text[j] || str[i] == textCap[j])
                     {
-                        returnText += back[2 * j].ToString() + back[2 * j + 1].ToString();
+                        returnText += back[2 * j] + back[2 * j + 1].ToString();
                         break;
                     }
                 }

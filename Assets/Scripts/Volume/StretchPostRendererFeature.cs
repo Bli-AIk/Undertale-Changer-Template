@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -6,7 +7,7 @@ namespace Volume
 {
     public class StretchPostRendererFeature : ScriptableRendererFeature
     {
-        [System.Serializable]
+        [Serializable]
         public class Settings
         {
             public RenderPassEvent renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
@@ -18,7 +19,7 @@ namespace Volume
 
         public override void Create()
         {
-            this.name = "StretchPostPass";
+            name = "StretchPostPass";
             pass = new StretchPostPass(RenderPassEvent.BeforeRenderingPostProcessing, settings.shader);
         }
 
@@ -29,7 +30,7 @@ namespace Volume
         }
     }
 
-    [System.Serializable]
+    [Serializable]
     public class StretchPostPass : ScriptableRenderPass
     {
         private static readonly string renderTag = "StretchPost Effects";

@@ -57,7 +57,7 @@ namespace UCT.Battle
         {
             ChangeMove();
             edgeCollider2D.isTrigger = true;
-            List<Vector2> points = new List<Vector2>() { new Vector2(-spriteRenderer.size.x / 2, 0.025f), new Vector2(spriteRenderer.size.x / 2, 0.025f) };
+            List<Vector2> points = new List<Vector2> { new Vector2(-spriteRenderer.size.x / 2, 0.025f), new Vector2(spriteRenderer.size.x / 2, 0.025f) };
             edgeCollider2D.SetPoints(points);
             boxCollider2DUp.size = new Vector2(spriteRenderer.size.x, 3);
             boxCollider2DUp.offset = new Vector2(0, 1.5f);
@@ -69,7 +69,7 @@ namespace UCT.Battle
         {
             if (keepEdge)
             {
-                List<Vector2> points = new List<Vector2>() { new Vector2(-spriteRenderer.size.x / 2, 0.025f), new Vector2(spriteRenderer.size.x / 2, 0.025f) };
+                List<Vector2> points = new List<Vector2> { new Vector2(-spriteRenderer.size.x / 2, 0.025f), new Vector2(spriteRenderer.size.x / 2, 0.025f) };
                 edgeCollider2D.SetPoints(points);
                 boxCollider2DUp.size = new Vector2(spriteRenderer.size.x, 3);
                 boxCollider2DDown.size = new Vector2(spriteRenderer.size.x, 3);

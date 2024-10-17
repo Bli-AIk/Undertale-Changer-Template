@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 namespace UCT.Control
@@ -14,7 +15,7 @@ namespace UCT.Control
 
         [Header("--UI--")]
         [Header("字体存储")]
-        public List<TMPro.TMP_FontAsset> tmpFonts;
+        public List<TMP_FontAsset> tmpFonts;
 
         [Header("字体全半角")]
         public bool textWidth;//字体全半角

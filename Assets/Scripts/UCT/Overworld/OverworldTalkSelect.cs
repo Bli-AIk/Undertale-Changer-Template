@@ -97,9 +97,6 @@ namespace UCT.Overworld
                                 case "Select":
                                     AudioController.instance.GetFx(2, MainControl.Instance.AudioControl.fxClipBattle);
                                     break;
-
-                                default:
-                                    break;
                             }
                             break;
 
@@ -108,7 +105,6 @@ namespace UCT.Overworld
                     }
                     heart.color = Color.clear;
                     canSelect = false;
-                    return;
                 }
             }
         }

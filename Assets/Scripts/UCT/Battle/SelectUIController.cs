@@ -6,6 +6,7 @@ using UCT.Global.Audio;
 using UCT.Global.Core;
 using UCT.Global.UI;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace UCT.Battle
 {
@@ -62,7 +63,7 @@ namespace UCT.Battle
         private string saveTurnText = "";
 
         [Header("首次进入回合的时候播放自定义的回合文本")]
-        public bool firstIn = false;
+        public bool firstIn;
 
         public int firstInDiy = -1;
 
@@ -80,7 +81,7 @@ namespace UCT.Battle
             dialog = GameObject.Find("DialogBubble").GetComponent<DialogBubbleBehaviour>();
             dialog.gameObject.SetActive(false);
             typeWritter = GetComponent<TypeWritter>();
-            string[] loadButton = new string[] {
+            string[] loadButton = {
                 "FIGHT",
                 "ACT",
                 "ITEM",
@@ -101,10 +102,10 @@ namespace UCT.Battle
                 }
             }
             selectUI = 1;
-            TurnTextLoad(true, 0);
+            TurnTextLoad(true);
             enemiesHpLine.SetActive(false);
 
-            UITextUpdate(0);
+            UITextUpdate();
 
             hpFood = MainControl.Instance.PlayerControl.hp;
 
@@ -281,7 +282,8 @@ namespace UCT.Battle
                         enemiesHpLine.SetActive(false);
                         break;
                     }
-                    else if (MainControl.Instance.KeyArrowToControl(KeyCode.Z) && selectUI != 3)
+
+                    if (MainControl.Instance.KeyArrowToControl(KeyCode.Z) && selectUI != 3)
                     {
                         if (selectUI != 1)
                             selectLayer = 2;
@@ -526,7 +528,8 @@ namespace UCT.Battle
                                 UITextUpdate(UITextMode.Food);
                                 break;
                             }
-                            else if (MainControl.Instance.KeyArrowToControl(KeyCode.Z))
+
+                            if (MainControl.Instance.KeyArrowToControl(KeyCode.Z))
                             {
                                 selectLayer = 3; 
                                 MainControl.Instance.battlePlayerController.transform.position = (Vector3)(Vector2.one * 10000) + new Vector3(0, 0, MainControl.Instance.battlePlayerController.transform.position.z);
@@ -764,7 +767,7 @@ namespace UCT.Battle
                     load = TurnTextLoad(MainControl.Instance.BattleControl.turnTextSave, saveTurn);
                 }
 
-                saveTurnText = load[UnityEngine.Random.Range(0, load.Count)];
+                saveTurnText = load[Random.Range(0, load.Count)];
             }
             Type(saveTurnText);
         }
@@ -854,8 +857,7 @@ namespace UCT.Battle
         {
             if (0 <= i && i < 10)
                 return "0" + i;
-            else
-                return i.ToString();
+            return i.ToString();
         }
     }
 }

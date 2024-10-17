@@ -59,14 +59,12 @@ namespace UCT.Battle
                     {
                         continue;
                     }
-                    else
-                    {
-                        GameObject obj = GetFromPool();
-                        obj.GetComponent<SpriteRenderer>().color = color;
-                        obj.GetComponent<SpriteRenderer>().sortingOrder = GetComponent<SpriteRenderer>().sortingOrder + 1;
 
-                        obj.transform.localPosition = startPos + new Vector2(x * 0.05f, -(map.height - y - 1) * 0.05f);
-                    }
+                    GameObject obj = GetFromPool();
+                    obj.GetComponent<SpriteRenderer>().color = color;
+                    obj.GetComponent<SpriteRenderer>().sortingOrder = GetComponent<SpriteRenderer>().sortingOrder + 1;
+
+                    obj.transform.localPosition = startPos + new Vector2(x * 0.05f, -(map.height - y - 1) * 0.05f);
                 }
                 Mask.transform.localPosition -= new Vector3(0, 0.05f);
                 yield return new WaitForSeconds(speed);

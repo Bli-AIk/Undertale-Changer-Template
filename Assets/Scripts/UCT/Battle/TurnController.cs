@@ -179,6 +179,6 @@ namespace UCT.Battle
         private enum Nest
         {
             simpleNestBullet
-        };
+        }
     }
 }

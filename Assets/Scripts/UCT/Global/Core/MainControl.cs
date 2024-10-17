@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using DG.Tweening;
+using TMPro;
 using UCT.Battle;
 using UCT.Control;
 using UCT.Global.Audio;
@@ -13,6 +14,7 @@ using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace UCT.Global.Core
 {
@@ -29,7 +31,7 @@ namespace UCT.Global.Core
 
         public const int LanguagePackInsideNumber = 3; //内置语言包总数
 
-        public bool blacking = false;
+        public bool blacking;
 
         [Header("-BGM BPM设置-")]
         [Space]
@@ -71,7 +73,7 @@ namespace UCT.Global.Core
         {
             Normal,
             InBattle,
-        };
+        }
 
         public OverworldControl OverworldControl { get; private set; }
         public ItemControl ItemControl { get; private set; }
@@ -140,10 +142,8 @@ namespace UCT.Global.Core
             {
                 return Resources.Load<TextAsset>($"TextAssets/LanguagePacks/{GetLanguageInsideId(languagePack)}/{path}").text;
             }
-            else
-            {
-                return File.ReadAllText($"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[languagePack - LanguagePackInsideNumber]}\\{path}.txt");
-            }
+
+            return File.ReadAllText($"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[languagePack - LanguagePackInsideNumber]}\\{path}.txt");
         }
 
         private void LanguagePackDetection()
@@ -376,7 +376,7 @@ namespace UCT.Global.Core
         }
         public Color RandomColor()
         {
-            return new Color(UnityEngine.Random.Range(0, 1f), UnityEngine.Random.Range(0, 1f), UnityEngine.Random.Range(0, 1f), 1);
+            return new Color(Random.Range(0, 1f), Random.Range(0, 1f), Random.Range(0, 1f), 1);
         }
 
         /// <summary>
@@ -387,7 +387,7 @@ namespace UCT.Global.Core
             string text = "<color=#";
             for (int i = 0; i < 6; i++)
             {
-                text += string.Format("{0:X}", UnityEngine.Random.Range(0, 16));
+                text += string.Format("{0:X}", Random.Range(0, 16));
             }
             text += "FF>";
             return text;
@@ -463,8 +463,8 @@ namespace UCT.Global.Core
 
             return beats;
         }
-        public int currentBeatIndex = 0;
-        public float nextBeatTime = 0f;
+        public int currentBeatIndex;
+        public float nextBeatTime;
         /// <summary>
         /// 控制节拍器
         /// </summary>
@@ -819,9 +819,6 @@ namespace UCT.Global.Core
                     Screen.SetResolution(1920, 1080, OverworldControl.fullScreen);
                     OverworldControl.resolution = new Vector2(1920, 1080);
                     break;
-
-                default:
-                    break;
             }
         }
 
@@ -875,7 +872,7 @@ namespace UCT.Global.Core
 
         public void SwitchScene(string name, bool Async = true)
         {
-            SetCanvasFrameSprite(2);
+            SetCanvasFrameSprite();
             if (SceneManager.GetActiveScene().name != "Menu" && SceneManager.GetActiveScene().name != "Rename" && SceneManager.GetActiveScene().name != "Story" && SceneManager.GetActiveScene().name != "Start" && SceneManager.GetActiveScene().name != "Gameover")
                 PlayerControl.lastScene = SceneManager.GetActiveScene().name;
             if (Async)
@@ -904,7 +901,7 @@ namespace UCT.Global.Core
 
             for (int i = 0; i < l; i++)
             {
-                text += abc[UnityEngine.Random.Range(0, abc.Length)];
+                text += abc[Random.Range(0, abc.Length)];
             }
             return text;
         }
@@ -1003,7 +1000,7 @@ namespace UCT.Global.Core
         /// 然后再让打字机打个字
         /// plusText填0就自己计算
         /// </summary>
-        public void UseItem(TypeWritter typeWritter, TMPro.TMP_Text tmp_Text, int sonSelect, int plusText = 0)
+        public void UseItem(TypeWritter typeWritter, TMP_Text tmp_Text, int sonSelect, int plusText = 0)
         {
             if (plusText == 0)
             {
@@ -1187,7 +1184,8 @@ namespace UCT.Global.Core
                         text += ItemIdGetName(ItemNameGetId(name, "Foods"), "Auto", 2);
                         break;
                     }
-                    else goto default;
+
+                    goto default;
 
                 case "<itemAtk>":
                     if (name != "" && !isData)
@@ -1195,7 +1193,8 @@ namespace UCT.Global.Core
                         text += ItemIdGetName(ItemNameGetId(name, "Arms"), "Auto", 1);
                         break;
                     }
-                    else goto default;
+
+                    goto default;
 
                 case "<itemDef>":
                     if (name != "" && !isData)
@@ -1203,7 +1202,8 @@ namespace UCT.Global.Core
                         text += ItemIdGetName(ItemNameGetId(name, "Armors"), "Auto", 1);
                         break;
                     }
-                    else goto default;
+
+                    goto default;
 
                 case "<getEnemiesName>":
                     if (name != "" && !isData)
@@ -1211,21 +1211,24 @@ namespace UCT.Global.Core
                         text += ex[0];
                         break;
                     }
-                    else goto default;
+
+                    goto default;
                 case "<getEnemiesATK>":
                     if (name != "" && !isData)
                     {
                         text += ex[1];
                         break;
                     }
-                    else goto default;
+
+                    goto default;
                 case "<getEnemiesDEF>":
                     if (name != "" && !isData)
                     {
                         text += ex[2];
                         break;
                     }
-                    else goto default;
+
+                    goto default;
 
                 default:
                     if (IsFrontCharactersMatch("<data", texters))
@@ -1299,7 +1302,8 @@ namespace UCT.Global.Core
                         final += betS[j];
                         break;
                     }
-                    else if (j == bet.Length - 1)
+
+                    if (j == bet.Length - 1)
                         isPlus = true;
                 }
                 if (isPlus)
@@ -1326,7 +1330,8 @@ namespace UCT.Global.Core
                         final += betS[j];
                         break;
                     }
-                    else if (j == bet.Length - 1)
+
+                    if (j == bet.Length - 1)
                         isPlus = true;
                 }
                 if (isPlus)
@@ -1351,7 +1356,7 @@ namespace UCT.Global.Core
                 {
                     if (!isSetX)
                     {
-                        realVector2.x = RandomFloatChange(save, origin.x, false);
+                        realVector2.x = RandomFloatChange(save, origin.x);
                         isSetX = true;
                         save = "";
                     }
@@ -1399,35 +1404,30 @@ namespace UCT.Global.Core
                 if (isHaveR)
                 {
                     x2 = float.Parse(save);
-                    return plusSave + UnityEngine.Random.Range(x1, x2);
+                    return plusSave + Random.Range(x1, x2);
                 }
-                else
-                {
-                    return plusSave + float.Parse(text);
-                }
+
+                return plusSave + float.Parse(text);
             }
-            else if (text == "P" || text == "p")
+
+            if (text == "P" || text == "p")
             {
                 if (isY)
                 {
                     return battlePlayerController.transform.position.y;
                 }
-                else
-                {
-                    return battlePlayerController.transform.position.x;
-                }
+
+                return battlePlayerController.transform.position.x;
             }
-            else
+
+            if (text.Length > 1 && (text[0] == 'O' || text[0] == 'o') && text[1] == '+')
             {
-                if (text.Length > 1 && (text[0] == 'O' || text[0] == 'o') && text[1] == '+')
-                {
-                    //Debug.LogWarning(text.Substring(2));
-                    //Debug.Log(RandomFloatChange(text.Substring(2), origin, isY, origin));
-                    return RandomFloatChange(text.Substring(2), origin, isY, origin);
-                }
-                else
-                    return origin;
+                //Debug.LogWarning(text.Substring(2));
+                //Debug.Log(RandomFloatChange(text.Substring(2), origin, isY, origin));
+                return RandomFloatChange(text.Substring(2), origin, isY, origin);
             }
+
+            return origin;
         }
 
         /*之后回来翻才意识到这不就一个强制转换的事儿）
@@ -1646,8 +1646,7 @@ namespace UCT.Global.Core
             }
             if (float.TryParse(original, out float y))
                 return y;
-            else
-                return 99999999;
+            return 99999999;
         }
 
         /// <summary>
@@ -1837,7 +1836,8 @@ namespace UCT.Global.Core
                     {
                         break;
                     }
-                    else subText += idName[i];
+
+                    subText += idName[i];
                 }
             }
             else
@@ -2065,7 +2065,7 @@ namespace UCT.Global.Core
             int i = 0;
             do
             {
-                i = UnityEngine.Random.Range(-1, 2);
+                i = Random.Range(-1, 2);
             }
             while (i == 0);
 
@@ -2180,7 +2180,7 @@ namespace UCT.Global.Core
         /// </summary>
         public Vector3 RandomPointOnSphereSurface(float sphereRadius, Vector3 sphereCenter)
         {
-            Vector3 randomDirection = UnityEngine.Random.onUnitSphere;
+            Vector3 randomDirection = Random.onUnitSphere;
 
             randomDirection *= sphereRadius;
 

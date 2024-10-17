@@ -38,7 +38,7 @@ namespace UCT.Battle
             left,
             right,
             nullDir
-        };
+        }
 
         public PlayerDirEnum playerDir;//方向
         public Vector3 moving;
@@ -562,9 +562,6 @@ namespace UCT.Battle
                     break;
 
                 case BattleControl.PlayerColor.purple:
-                    break;
-
-                default:
                     break;
             }
 

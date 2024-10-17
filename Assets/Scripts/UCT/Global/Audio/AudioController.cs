@@ -65,7 +65,7 @@ namespace UCT.Global.Audio
             fx.GetComponent<AudioPlayer>().Playing(list[fxNumber]);
         }
 
-        public IEnumerator LayerGetFx(float time, int fxNumber, List<AudioClip> list, float volume = 0.5f, float pitch = 1, UnityEngine.Audio.AudioMixerGroup audioMixerGroup = null)
+        public IEnumerator LayerGetFx(float time, int fxNumber, List<AudioClip> list, float volume = 0.5f, float pitch = 1, AudioMixerGroup audioMixerGroup = null)
         {
             yield return new WaitForSeconds(time);
             GetFx(fxNumber, list, volume, pitch, audioMixerGroup);

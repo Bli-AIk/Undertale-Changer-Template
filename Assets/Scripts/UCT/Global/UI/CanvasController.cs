@@ -126,9 +126,9 @@ namespace UCT.Global.UI
                         }
                     }
                     if (!isSetting)
-                        settingTmpSon.text = ((int)(MainControl.Instance.OverworldControl.mainVolume * 100)).ToString() + "%\n\n" + OpenOrClose(MainControl.Instance.OverworldControl.fullScreen) + '\n' +
+                        settingTmpSon.text = ((int)(MainControl.Instance.OverworldControl.mainVolume * 100)) + "%\n\n" + OpenOrClose(MainControl.Instance.OverworldControl.fullScreen) + '\n' +
                                              MainControl.Instance.OverworldControl.resolution.x + '×' + MainControl.Instance.OverworldControl.resolution.y + '\n' + OpenOrClose(MainControl.Instance.OverworldControl.noSFX) + '\n' + OpenOrClose(MainControl.Instance.OverworldControl.openFPS);
-                    else settingTmpSon.text = "<color=yellow>" + ((int)(MainControl.Instance.OverworldControl.mainVolume * 100)).ToString() + "%</color>\n\n" + OpenOrClose(MainControl.Instance.OverworldControl.fullScreen) + '\n' +
+                    else settingTmpSon.text = "<color=yellow>" + ((int)(MainControl.Instance.OverworldControl.mainVolume * 100)) + "%</color>\n\n" + OpenOrClose(MainControl.Instance.OverworldControl.fullScreen) + '\n' +
                                               MainControl.Instance.OverworldControl.resolution.x + '×' + MainControl.Instance.OverworldControl.resolution.y + '\n' + OpenOrClose(MainControl.Instance.OverworldControl.noSFX) + '\n' + OpenOrClose(MainControl.Instance.OverworldControl.openFPS);
 
                     break;
@@ -296,8 +296,7 @@ namespace UCT.Global.UI
         {
             if (booler)
                 return MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "Open");
-            else
-                return MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "Close");
+            return MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "Close");
         }
 
         private void Update()
@@ -360,7 +359,7 @@ namespace UCT.Global.UI
                                     MainControl.Instance.OverworldControl.keyCodesBack2[settingSelect + j] = SettingControl();
                                     goto default;
                                 default:
-                                    List<KeyCode> keycodes = new List<KeyCode>()
+                                    List<KeyCode> keycodes = new List<KeyCode>
                                     {
                                         MainControl.Instance.OverworldControl.keyCodes[settingSelect + j],
                                         MainControl.Instance.OverworldControl.keyCodesBack1[settingSelect + j],
@@ -502,15 +501,12 @@ namespace UCT.Global.UI
                                     case 6:
                                         if (SceneManager.GetActiveScene().name == "Rename")
                                             return;
-                                        else if (SceneManager.GetActiveScene().name == "Menu")
+                                        if (SceneManager.GetActiveScene().name == "Menu")
                                             goto case 7;
-                                        else
-                                        {
-                                            MainControl.Instance.OutBlack("Menu", Color.black, true, animSpeed);
-                                            CloseSetting();
-                                            freeze = true;
-                                            break;
-                                        }
+                                        MainControl.Instance.OutBlack("Menu", Color.black, true, animSpeed);
+                                        CloseSetting();
+                                        freeze = true;
+                                        break;
                                     case 7:
                                         ExitSetting();
                                         break;
@@ -724,7 +720,6 @@ namespace UCT.Global.UI
                         else if (SceneManager.GetActiveScene().name != "Story" && (MainControl.Instance.KeyArrowToControl(KeyCode.X) || MainControl.Instance.KeyArrowToControl(KeyCode.V)))
                         {
                             ExitSetting(true);
-                            return;
                         }
                         break;
                 }
@@ -781,10 +776,10 @@ namespace UCT.Global.UI
             settingTmpUnder.text = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "ControlEggshell");
         }
 
-        private float m_LastUpdateShowTime = 0f;  //上一次更新帧率的时间;
+        private float m_LastUpdateShowTime;  //上一次更新帧率的时间;
         private float m_UpdateShowDeltaTime = 0.2f;//更新帧率的时间间隔;
-        private int m_FrameUpdate = 0;//帧数;
-        private float m_FPS = 0;//帧率
+        private int m_FrameUpdate;//帧数;
+        private float m_FPS;//帧率
 
         private string FPSFlash(string origin)
         {
@@ -797,7 +792,8 @@ namespace UCT.Global.UI
                 m_LastUpdateShowTime = Time.realtimeSinceStartup;
                 return ((int)m_FPS).ToString();
             }
-            else return origin;
+
+            return origin;
         }
 
         /// <summary>

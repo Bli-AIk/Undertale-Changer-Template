@@ -45,10 +45,8 @@ namespace UCT.Global.Core
                 usersData[dataName] = userData;
                 return userData;
             }
-            else
-            {
-                return null;
-            }
+
+            return null;
         }
 
         public static int GetDataNumber()

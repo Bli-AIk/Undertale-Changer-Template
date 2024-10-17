@@ -26,7 +26,7 @@ namespace UCT.Overworld
         public bool isEnter;
 
         private Animator animator;
-        private bool triggered = false;
+        private bool triggered;
 
         [Header("在上个场景为指定场景时动画器的sceneBool设true")]
         public string sceneSp;

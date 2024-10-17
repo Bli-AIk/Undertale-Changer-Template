@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -6,7 +7,7 @@ namespace Volume
 {
     public class GlitchArtRendererFeature : ScriptableRendererFeature
     {
-        [System.Serializable]
+        [Serializable]
         public class Settings
         {
             public RenderPassEvent renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
@@ -18,7 +19,7 @@ namespace Volume
 
         public override void Create()
         {
-            this.name = "GlitchArtPass";
+            name = "GlitchArtPass";
             pass = new GlitchArtPass(RenderPassEvent.BeforeRenderingPostProcessing, settings.shader);
         }
 
@@ -29,7 +30,7 @@ namespace Volume
         }
     }
 
-    [System.Serializable]
+    [Serializable]
     public class GlitchArtPass : ScriptableRenderPass
     {
         private static readonly string renderTag = "GlitchArt Effects";
@@ -89,13 +90,13 @@ namespace Volume
             RenderTargetIdentifier source = currentTarget;
             int destination = TempTargetId;
 
-            mat.SetFloat("_AnalogGlitchMode", System.Convert.ToInt32(GlitchArtVolume.analogGlitchMode.value));
+            mat.SetFloat("_AnalogGlitchMode", Convert.ToInt32(GlitchArtVolume.analogGlitchMode.value));
             mat.SetVector("_ScanLineJitter", GlitchArtVolume.scanLineJitter.value);
-            mat.SetFloat("_HorizontalShakeMode", System.Convert.ToInt32(GlitchArtVolume.horizontalShakeMode.value));
+            mat.SetFloat("_HorizontalShakeMode", Convert.ToInt32(GlitchArtVolume.horizontalShakeMode.value));
             mat.SetFloat("_HorizontalShake", GlitchArtVolume.horizontalShake.value);
-            mat.SetFloat("_ColorDriftMode", System.Convert.ToInt32(GlitchArtVolume.colorDriftMode.value));
+            mat.SetFloat("_ColorDriftMode", Convert.ToInt32(GlitchArtVolume.colorDriftMode.value));
             mat.SetFloat("_ColorDrift", GlitchArtVolume.colorDrift.value);
-            mat.SetFloat("_VerticalJumpMode", System.Convert.ToInt32(GlitchArtVolume.verticalJumpMode.value));
+            mat.SetFloat("_VerticalJumpMode", Convert.ToInt32(GlitchArtVolume.verticalJumpMode.value));
             mat.SetFloat("_VerticalJump", GlitchArtVolume.verticalJump.value);
 
             cmd.SetGlobalTexture(MainTexId, source);

@@ -87,7 +87,7 @@ namespace UCT.Battle
             }
             else
             {
-                hitUI.text = "<color=red>" + hitDamage.ToString();
+                hitUI.text = "<color=red>" + hitDamage;
                 hitUIb.text = hitDamage.ToString();
             }
         }

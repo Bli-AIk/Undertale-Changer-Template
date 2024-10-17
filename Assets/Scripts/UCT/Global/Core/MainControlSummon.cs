@@ -38,10 +38,10 @@ namespace UCT.Global.Core
         public float bpm = 120;
 
         [Header("BGM BPM偏移")]
-        public float bpmDeviation = 0;
+        public float bpmDeviation;
 
         [Header("初始化时开启节拍器")]
-        public bool openMetronome = false;
+        public bool openMetronome;
 
         [Header("-MainControl设置-")]
         [Space]

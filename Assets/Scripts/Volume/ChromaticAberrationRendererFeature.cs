@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -6,7 +7,7 @@ namespace Volume
 {
     public class ChromaticAberrationRendererFeature : ScriptableRendererFeature
     {
-        [System.Serializable]
+        [Serializable]
         public class Settings
         {
             public RenderPassEvent renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
@@ -18,7 +19,7 @@ namespace Volume
 
         public override void Create()
         {
-            this.name = "ChromaticAberrationPass";
+            name = "ChromaticAberrationPass";
             pass = new ChromaticAberrationPass(RenderPassEvent.BeforeRenderingPostProcessing, settings.shader);
         }
 
@@ -29,7 +30,7 @@ namespace Volume
         }
     }
 
-    [System.Serializable]
+    [Serializable]
     public class ChromaticAberrationPass : ScriptableRenderPass
     {
         private static readonly string renderTag = "ChromaticAberration Effects";
@@ -92,7 +93,7 @@ namespace Volume
             mat.SetFloat("_Offset", chromaticAberrationVolume.offset.value);
             mat.SetFloat("_Speed", chromaticAberrationVolume.speed.value);
             mat.SetFloat("_Height", chromaticAberrationVolume.height.value);
-            mat.SetFloat("_OnlyOri", System.Convert.ToInt32(chromaticAberrationVolume.onlyOri.value));
+            mat.SetFloat("_OnlyOri", Convert.ToInt32(chromaticAberrationVolume.onlyOri.value));
 
             cmd.SetGlobalTexture(MainTexId, source);
             cmd.GetTemporaryRT(destination, cameraData.camera.scaledPixelWidth, cameraData.camera.scaledPixelHeight, 0, FilterMode.Trilinear, RenderTextureFormat.Default);

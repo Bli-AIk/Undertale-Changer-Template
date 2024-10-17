@@ -6,6 +6,7 @@ using UCT.Global.Audio;
 using UCT.Global.Core;
 using UCT.Global.UI;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace UCT.Global.Scene
 {
@@ -186,13 +187,11 @@ namespace UCT.Global.Scene
                                     AudioController.instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
                                     break;
                                 }
-                                else
-                                {
-                                    MainControl.Instance.dataNumber = saveNumber;
-                                    AudioController.instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
-                                    UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
-                                    break;
-                                }
+
+                                MainControl.Instance.dataNumber = saveNumber;
+                                AudioController.instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                                break;
                         }
                 }
                 else if (MainControl.Instance.KeyArrowToControl(KeyCode.X) && setData)

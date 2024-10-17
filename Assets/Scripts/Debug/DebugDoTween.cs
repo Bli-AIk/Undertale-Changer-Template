@@ -7,7 +7,7 @@ namespace Debug
     {
         private void Start()
         {
-            transform.DOMove(transform.position + new Vector3(10, 0, 0), 1, false)
+            transform.DOMove(transform.position + new Vector3(10, 0, 0), 1)
                 .SetEase(Ease.InOutSine)
                 .SetLoops(-1, LoopType.Yoyo);
         }

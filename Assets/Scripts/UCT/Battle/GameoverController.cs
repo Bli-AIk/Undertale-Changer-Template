@@ -6,6 +6,7 @@ using UCT.Global.Audio;
 using UCT.Global.Core;
 using UCT.Global.UI;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace UCT.Battle
 {
@@ -70,7 +71,7 @@ namespace UCT.Battle
                 MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "GameOver3"),
                 MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "GameOver4")
             };
-            typeWritter.TypeOpen(strings[UnityEngine.Random.Range(0, 4)], false, 0, 4, tmp);
+            typeWritter.TypeOpen(strings[Random.Range(0, 4)], false, 0, 4, tmp);
             canChangeSence = true;
         }
 
@@ -80,14 +81,14 @@ namespace UCT.Battle
             {
                 var main = m_ParticleSystem.main;
                 main.loop = true;
-                main.startLifetime = UnityEngine.Random.Range(1.5f, 3);
+                main.startLifetime = Random.Range(1.5f, 3);
                 var emission = m_ParticleSystem.emission;
-                emission.rateOverDistance = UnityEngine.Random.Range(5, 51);
+                emission.rateOverDistance = Random.Range(5, 51);
                 //m_ParticleSystem.transform.position = new Vector3(UnityEngine.Random.Range(-6.85f, 6.85f), UnityEngine.Random.Range(-5.25f, 5.25f));
-                float time = UnityEngine.Random.Range(0.5f, 1f);
+                float time = Random.Range(0.5f, 1f);
 
-                m_ParticleSystem.transform.DOMoveX(UnityEngine.Random.Range(-6.85f, 6.85f), time).SetEase((Ease)UnityEngine.Random.Range(1, 35));
-                m_ParticleSystem.transform.DOMoveY(UnityEngine.Random.Range(-5.25f, 5.25f), time).SetEase((Ease)UnityEngine.Random.Range(1, 35)).OnKill(Follish);
+                m_ParticleSystem.transform.DOMoveX(Random.Range(-6.85f, 6.85f), time).SetEase((Ease)Random.Range(1, 35));
+                m_ParticleSystem.transform.DOMoveY(Random.Range(-5.25f, 5.25f), time).SetEase((Ease)Random.Range(1, 35)).OnKill(Follish);
             }
         }
 

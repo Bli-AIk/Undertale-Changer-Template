@@ -9,7 +9,7 @@ namespace Debug
         public LineRenderer movedLineRenderer; // 用于绘制移动后的多边形
         public float moveDistance = 0.5f; // 向中心移动的距离
         // 创建一个简单的多边形顶点列表
-        public  List<Vector2> vertices = new List<Vector2>()
+        public  List<Vector2> vertices = new List<Vector2>
         {
             new Vector2(-1, -1),
             new Vector2(1, -1),

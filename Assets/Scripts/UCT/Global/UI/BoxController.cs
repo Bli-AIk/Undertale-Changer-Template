@@ -285,7 +285,7 @@ namespace UCT.Global.UI
 
             meshFilter.mesh = GenerateMesh(polygon.ToArray()); // 最核心代码：构建Mesh！！
 
-            edgeCollider2D.SetPoints(AddLists(polygon, new List<Vector2>() { polygon[0] }));
+            edgeCollider2D.SetPoints(AddLists(polygon, new List<Vector2> { polygon[0] }));
             edgeCollider2D.edgeRadius = width / 2;
 
             return polygon;
@@ -351,10 +351,10 @@ namespace UCT.Global.UI
 
             // 创建Tess对象并添加轮廓
             Tess tess = new Tess();
-            tess.AddContour(contourVertices, ContourOrientation.Original);
+            tess.AddContour(contourVertices);
 
             // 进行三角剖分
-            tess.Tessellate(WindingRule.NonZero, ElementType.Polygons, 3);
+            tess.Tessellate(WindingRule.NonZero);
 
             // 创建Mesh对象
             Mesh mesh = new Mesh();
@@ -609,7 +609,7 @@ public List<Vector2> SortPoints(Vector2 initialPoint, List<Vector2> points)
                 }
             }
 
-            return new PathsD() { Clipper.MakePath(doubles.ToArray()) };
+            return new PathsD { Clipper.MakePath(doubles.ToArray()) };
         }
 
         public List<Vector2> ConvertPathToVector(PathsD path)
@@ -630,7 +630,7 @@ public List<Vector2> SortPoints(Vector2 initialPoint, List<Vector2> points)
         {
             PathsD subj = ConvertVectorToPath(a);
             PathsD clip = ConvertVectorToPath(b);
-            PathsD solution = Clipper.Union(subj, clip, FillRule.NonZero, 2);
+            PathsD solution = Clipper.Union(subj, clip, FillRule.NonZero);
 
             return ConvertPathToVector(solution);
         }
@@ -638,7 +638,7 @@ public List<Vector2> SortPoints(Vector2 initialPoint, List<Vector2> points)
         {
             PathsD subj = ConvertVectorToPath(origin);
             PathsD clip = ConvertVectorToPath(sub);
-            PathsD solution = Clipper.Difference(subj, clip, FillRule.NonZero, 2);
+            PathsD solution = Clipper.Difference(subj, clip, FillRule.NonZero);
             return ConvertPathToVector(solution);
         }
 

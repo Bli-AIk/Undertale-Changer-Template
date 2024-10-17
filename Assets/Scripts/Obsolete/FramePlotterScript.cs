@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 namespace Obsolete
@@ -12,8 +13,8 @@ namespace Obsolete
         private MeshRenderer meshRenderer;
         private VertexHelper vh = new VertexHelper();
 
-        [SerializeField] private Material material = null;
-        [SerializeField] private Texture mainTex = null;
+        [SerializeField] private Material material;
+        [SerializeField] private Texture mainTex;
 
         private void Start()
         {
@@ -22,7 +23,7 @@ namespace Obsolete
             meshRenderer = GetComponent<MeshRenderer>();
 
             meshRenderer.material = material;
-            meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            meshRenderer.shadowCastingMode = ShadowCastingMode.Off;
             meshRenderer.receiveShadows = false;
 
             meshRenderer.material.mainTexture = mainTex;

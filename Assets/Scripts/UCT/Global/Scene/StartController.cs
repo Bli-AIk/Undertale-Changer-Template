@@ -13,10 +13,10 @@ namespace UCT.Global.Scene
     public class StartController : MonoBehaviour
     {
         private TextMeshPro textUnder, text;
-        private bool textUnderOpen = false;
-        private float time = 0;
+        private bool textUnderOpen;
+        private float time;
         private GameObject title;
-        private int layer = 0;
+        private int layer;
 
         private float afkTimer = 20;
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 namespace Obsolete
@@ -35,8 +36,8 @@ namespace Obsolete
         private EdgeCollider2D edgeCollider2D;
         public List<GameObject> points = new List<GameObject>();
         public Color color;
-        [SerializeField] private Material material = null;
-        [SerializeField] private Texture mainTex = null;
+        [SerializeField] private Material material;
+        [SerializeField] private Texture mainTex;
         private VertexHelper vh = new VertexHelper();
         private MeshFilter meshFilter;
         private MeshRenderer meshRenderer;
@@ -84,7 +85,7 @@ namespace Obsolete
             meshFilter.mesh = mesh;
 
             meshRenderer.material = material;
-            meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+            meshRenderer.shadowCastingMode = ShadowCastingMode.Off;
             meshRenderer.receiveShadows = false;
             // 设置主贴图
             meshRenderer.material.mainTexture = mainTex;
