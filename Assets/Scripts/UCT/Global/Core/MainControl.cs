@@ -1725,18 +1725,18 @@ namespace UCT.Global.Core
         }
 
         /// <summary>
-        /// 识别到0后传出
+        /// 找到列表中第一个零的索引。如果列表中没有零，则返回列表的长度。
         /// </summary>
-        public int FindMax(List<int> list)
+        /// <param name="list">整数列表</param>
+        /// <returns>第一个零的索引或列表的长度</returns>
+        public static int FindFirstZeroIndex(List<int> list)
         {
             var max = list.Count;
             for (var i = 0; i < list.Count; i++)
             {
-                if (list[i] == 0)
-                {
-                    max = i;
-                    break;
-                }
+                if (list[i] != 0) continue;
+                max = i;
+                break;
             }
             return max;
         }
@@ -1777,121 +1777,15 @@ namespace UCT.Global.Core
                 default:
                     return 0;
             }
-            if (list != null)
+
+            if (list == null) return id;
+            for (var i = 0; i < list.Count / listInt; i++)
             {
-                for (var i = 0; i < list.Count / listInt; i++)
-                {
-                    if (list[i * listInt] == itemName)
-                    {
-                        id += i + 1;
-                        break;
-                    }
-                }
+                if (list[i * listInt] != itemName) continue;
+                id += i + 1;
+                break;
             }
             return id;
         }
-
-        /// <summary>
-        /// 随机获取-1或1
-        /// </summary>
-        public int Get1Or_1()
-        {
-            int i;
-            do
-            {
-                i = Random.Range(-1, 2);
-            }
-            while (i == 0);
-
-            return i;
-        }
-
-        /// <summary>
-        /// 传入数根据正负返回1/-1。
-        /// 传0返1。
-        /// </summary>
-        public int Get1Or_1(float i)
-        {
-            if (i >= 0)
-                i = 1;
-            else
-                i = -1;
-            return (int)i;
-        }
-
-        /// <summary>
-        /// 从字符串中移除指定位置的子字符串。
-        /// </summary>
-        public static string RemoveSubstring(string inputString, int startIndex, int endIndex, string add = "")
-        {
-            if (startIndex < 0 || endIndex >= inputString.Length || startIndex > endIndex)
-            {
-                Other.Debug.Log("无效的起始和结束位置");
-                return inputString;
-            }
-
-            var part1 = inputString[..startIndex]; // 从开头到A之前的部分
-            var part2 = inputString[(endIndex + 1)..]; // 从B之后到字符串末尾的部分
-            //Other.Debug.Log(inputString.Substring(startIndex + 1));
-            var result = part1 + add + part2; // 合并两部分
-            return result;
-        }
-
-        /// <summary>
-        /// 计算多边形中点
-        /// </summary>
-        public Vector2 CalculatePolygonCenter(List<Vector2> vertexPoints)
-        {
-            var center = Vector2.zero;
-
-            if (vertexPoints == null || vertexPoints.Count == 0)
-            {
-                return center;
-            }
-
-            foreach (var vertex in vertexPoints)
-            {
-                center += vertex;
-            }
-
-            center /= vertexPoints.Count;
-
-            return center;
-        }
-
-        /// <summary>
-        /// 在球体表面上生成随机点
-        /// </summary>
-        public Vector3 RandomPointOnSphereSurface(float sphereRadius, Vector3 sphereCenter)
-        {
-            var randomDirection = Random.onUnitSphere;
-
-            randomDirection *= sphereRadius;
-
-            var randomPointOnSphere = sphereCenter + randomDirection;
-
-            return randomPointOnSphere;
-        }
-        public string RichText(string richText)
-        {
-            return $"<{richText}>";
-        }
-
-        public string RichText(string richText, int number)
-        {
-            return $"<{richText}={number}>";
-        }
-
-        public string RichTextWithEnd(string richText, string internalString = default)
-        {
-            return $"<{richText}>{internalString}</{richText}>";
-        }
-
-        public string RichTextWithEnd(string richText, int number, string internalString = default)
-        {
-            return $"<{richText}={number}>{internalString}</{richText}>";
-        }
-
-
     }
 }

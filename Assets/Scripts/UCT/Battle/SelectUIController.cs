@@ -353,7 +353,7 @@ namespace UCT.Battle
                             break;
 
                         case 3://ITEM：跳2
-                            _itemSelectController.myItemMax = MainControl.Instance.FindMax(MainControl.Instance.PlayerControl.myItems);
+                            _itemSelectController.myItemMax = MainControl.FindFirstZeroIndex(MainControl.Instance.PlayerControl.myItems);
                             _itemSelectController.Open();
                             selectLayer = 2;
 
@@ -559,7 +559,7 @@ namespace UCT.Battle
                             var textUIDataChanger1 = "";
                             var textUIDataChanger2 = "";
 
-                            var myItemMax = MainControl.Instance.FindMax(MainControl.Instance.PlayerControl.myItems);
+                            var myItemMax = MainControl.FindFirstZeroIndex(MainControl.Instance.PlayerControl.myItems);
 
                             if (myItemMax > 1)
                             {
@@ -724,7 +724,7 @@ namespace UCT.Battle
 
         private void OpenDialogBubble(string textAsset)
         {
-            MainControl.Instance.BattleControl.randomTurnDir = MainControl.Instance.Get1Or_1();
+            MainControl.Instance.BattleControl.randomTurnDir = MathUtilityService.Get1Or_1();
             MainControl.Instance.LoadItemData(actSave, textAsset);
             actSave = MainControl.Instance.ChangeItemData(actSave, true, new List<string>());
             isDialog = true;

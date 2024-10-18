@@ -3,6 +3,7 @@ using DG.Tweening;
 using UCT.Control;
 using UCT.Global.Audio;
 using UCT.Global.Core;
+using UCT.Service;
 using UnityEngine;
 
 namespace UCT.Battle
@@ -235,9 +236,9 @@ namespace UCT.Battle
                 MainControl.Instance.selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
 
                 var r = Random.Range(0, 0.025f);
-                var v3Spin = MainControl.Instance.RandomPointOnSphereSurface(2.5f,new Vector3());
-                MainControl.Instance.cameraShake.Shake(new Vector3(r * MainControl.Instance.Get1Or_1(), r * MainControl.Instance.Get1Or_1(), 0), new Vector3(0, 0, v3Spin.z), 4, 1f / 60f * 4f * 1.5f, "", Ease.OutElastic);
-                MainControl.Instance.cameraShake3D.Shake(new Vector3(r * MainControl.Instance.Get1Or_1(), 0, r * MainControl.Instance.Get1Or_1()), v3Spin, 4, 1f / 60f * 4f * 1.5f, "3D CameraPoint", Ease.OutElastic);
+                var v3Spin = MathUtilityService.RandomPointOnSphereSurface(2.5f,new Vector3());
+                MainControl.Instance.cameraShake.Shake(new Vector3(r * MathUtilityService.Get1Or_1(), r * MathUtilityService.Get1Or_1(), 0), new Vector3(0, 0, v3Spin.z), 4, 1f / 60f * 4f * 1.5f, "", Ease.OutElastic);
+                MainControl.Instance.cameraShake3D.Shake(new Vector3(r * MathUtilityService.Get1Or_1(), 0, r * MathUtilityService.Get1Or_1()), v3Spin, 4, 1f / 60f * 4f * 1.5f, "3D CameraPoint", Ease.OutElastic);
                 if (MainControl.Instance.PlayerControl.hp <= 0)
                     MainControl.Instance.battlePlayerController.KillPlayer(MainControl.Instance);
 

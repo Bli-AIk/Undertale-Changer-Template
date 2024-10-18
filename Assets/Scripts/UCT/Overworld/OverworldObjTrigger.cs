@@ -106,7 +106,7 @@ namespace UCT.Overworld
 
                             BackpackBehaviour.Instance.saveUIHeart.anchoredPosition = new Vector2(10000, 10000);
 
-                            BackpackBehaviour.Instance.saveUI.text = $"<color=yellow>{TextProcessingService.PadStringToLength(name, 10)}LV{TextProcessingService.PadStringToLength(MainControl.Instance.PlayerControl.lv.ToString(), 7)}{TextProcessingService.GetRealTime((int)MainControl.Instance.PlayerControl.gameTime)}\n{TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, SceneManager.GetActiveScene().name)}\n{MainControl.Instance.RichTextWithEnd("size", 1, "\n")}  {TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Saved")}";
+                            BackpackBehaviour.Instance.saveUI.text = $"<color=yellow>{TextProcessingService.PadStringToLength(name, 10)}LV{TextProcessingService.PadStringToLength(MainControl.Instance.PlayerControl.lv.ToString(), 7)}{TextProcessingService.GetRealTime((int)MainControl.Instance.PlayerControl.gameTime)}\n{TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, SceneManager.GetActiveScene().name)}\n{TextProcessingService.RichTextWithEnd("size", 1, "\n")}  {TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Saved")}";
                             MainControl.Instance.PlayerControl.saveScene = SceneManager.GetActiveScene().name;
                             PlayerPrefs.SetInt("languagePack", MainControl.Instance.languagePackId);
                             PlayerPrefs.SetInt("dataNumber", MainControl.Instance.dataNumber);

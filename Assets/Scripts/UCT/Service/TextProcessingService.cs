@@ -174,5 +174,55 @@ namespace UCT.Service
 
             return $"{hoursString}:{minutesString}";
         }
+
+        /// <summary>
+        /// 快捷输入富文本标记
+        /// </summary>
+        public static string RichText(string richText)
+        {
+            return $"<{richText}>";
+        }
+
+        /// <summary>
+        /// 快捷输入含参富文本标记
+        /// </summary>
+        public static string RichText(string richText, int number)
+        {
+            return $"<{richText}={number}>";
+        }
+
+        /// <summary>
+        /// 快捷输入富文本标记，包含结尾
+        /// </summary>
+        public static string RichTextWithEnd(string richText, string internalString = default)
+        {
+            return $"<{richText}>{internalString}</{richText}>";
+        }
+
+        /// <summary>
+        /// 快捷输入含参富文本标记，包含结尾
+        /// </summary>
+        public static string RichTextWithEnd(string richText, int number, string internalString = default)
+        {
+            return $"<{richText}={number}>{internalString}</{richText}>";
+        }
+        
+        /// <summary>
+        /// 从字符串中移除指定位置的子字符串。
+        /// </summary>
+        public static string RemoveSubstring(string inputString, int startIndex, int endIndex, string add = "")
+        {
+            if (startIndex < 0 || endIndex >= inputString.Length || startIndex > endIndex)
+            {
+                UCT.Global.Other.Debug.Log("无效的起始和结束位置");
+                return inputString;
+            }
+
+            var part1 = inputString[..startIndex]; // 从开头到A之前的部分
+            var part2 = inputString[(endIndex + 1)..]; // 从B之后到字符串末尾的部分
+            //Other.Debug.Log(inputString.Substring(startIndex + 1));
+            var result = part1 + add + part2; // 合并两部分
+            return result;
+        }
     }
 }

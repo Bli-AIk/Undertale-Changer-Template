@@ -2,6 +2,7 @@ using TMPro;
 using UCT.Global.Audio;
 using UCT.Global.Core;
 using UCT.Global.UI;
+using UCT.Service;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -262,18 +263,18 @@ namespace UCT.Overworld
                     */
                         _uiItems.text = $"\"{MainControl.Instance.PlayerControl.playerName}\"\n\n"
                                        + $"LV {MainControl.Instance.PlayerControl.lv}\n"
-                                       + $"HP {MainControl.Instance.PlayerControl.hp}{MainControl.Instance.RichTextWithEnd("size", 12, " ")}/{MainControl.Instance.RichTextWithEnd("size", 12, " ")}{MainControl.Instance.PlayerControl.hpMax}{MainControl.Instance.RichTextWithEnd("size", 1, "\n")}\n"
+                                       + $"HP {MainControl.Instance.PlayerControl.hp}{TextProcessingService.RichTextWithEnd("size", 12, " ")}/{TextProcessingService.RichTextWithEnd("size", 12, " ")}{MainControl.Instance.PlayerControl.hpMax}{TextProcessingService.RichTextWithEnd("size", 1, "\n")}\n"
                                        + $"{MainControl.Instance.ItemControl.itemTextMaxData[1][..^1]}\n"
-                                       + $"{MainControl.Instance.RichTextWithEnd("size", 12, " ")}{(MainControl.Instance.PlayerControl.atk - 10)}{MainControl.Instance.RichTextWithEnd("size", 6, " ")}({MainControl.Instance.PlayerControl.wearAtk}){MainControl.Instance.RichTextWithEnd("size", 15, " ")} EXP:{MainControl.Instance.PlayerControl.exp}\n"
+                                       + $"{TextProcessingService.RichTextWithEnd("size", 12, " ")}{(MainControl.Instance.PlayerControl.atk - 10)}{TextProcessingService.RichTextWithEnd("size", 6, " ")}({MainControl.Instance.PlayerControl.wearAtk}){TextProcessingService.RichTextWithEnd("size", 15, " ")} EXP:{MainControl.Instance.PlayerControl.exp}\n"
                                        + $"{MainControl.Instance.ItemControl.itemTextMaxData[2][..^1]}\n"
-                                       + $"{MainControl.Instance.RichTextWithEnd("size", 12, " ")}{(MainControl.Instance.PlayerControl.def - 10)}{MainControl.Instance.RichTextWithEnd("size", 6, " ")}({MainControl.Instance.PlayerControl.wearDef}){MainControl.Instance.RichTextWithEnd("size", 15, " ")}\n"
+                                       + $"{TextProcessingService.RichTextWithEnd("size", 12, " ")}{(MainControl.Instance.PlayerControl.def - 10)}{TextProcessingService.RichTextWithEnd("size", 6, " ")}({MainControl.Instance.PlayerControl.wearDef}){TextProcessingService.RichTextWithEnd("size", 15, " ")}\n"
                                        + $"{MainControl.Instance.ItemControl.itemTextMaxData[3][..^1]}:\n"
                                        + $"{MainControl.Instance.PlayerControl.nextExp}\n\n"
                                        + $"{MainControl.Instance.ItemControl.itemTextMaxData[4][..^1]}\n"
                                        + $"{MainControl.Instance.ItemIdGetName(MainControl.Instance.PlayerControl.wearArm, "Auto", 0)}\n"
                                        + $"{MainControl.Instance.ItemControl.itemTextMaxData[5][..^1]}\n"
                                        + $"{MainControl.Instance.ItemIdGetName(MainControl.Instance.PlayerControl.wearArmor, "Auto", 0)}\n"
-                                       + $"{MainControl.Instance.RichTextWithEnd("size", 13, "\n")}"
+                                       + $"{TextProcessingService.RichTextWithEnd("size", 13, "\n")}"
                                        + $"{MainControl.Instance.ItemControl.itemTextMaxData[6][..^1]}\n"
                                        + $"{MainControl.Instance.PlayerControl.gold}";
 
