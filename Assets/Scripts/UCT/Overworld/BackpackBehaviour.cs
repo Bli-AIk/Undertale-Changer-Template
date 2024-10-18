@@ -68,7 +68,7 @@ namespace UCT.Overworld
         {
             if (!MainControl.Instance.OverworldControl.hdResolution)
             {
-                RectTransform rectTransform = rawImage.rectTransform;
+                var rectTransform = rawImage.rectTransform;
 
                 rectTransform.offsetMin = new Vector2(0, 0);
 
@@ -78,7 +78,7 @@ namespace UCT.Overworld
             }
             else
             {
-                RectTransform rectTransform = rawImage.rectTransform;
+                var rectTransform = rawImage.rectTransform;
 
                 rectTransform.offsetMin = new Vector2(107, 0);
 
@@ -135,9 +135,9 @@ namespace UCT.Overworld
                 {
                     AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
                     MainControl.Instance.PlayerControl.myItems = MainControl.Instance.ListOrderChanger(MainControl.Instance.PlayerControl.myItems);
-                    string uiSelectPlusColor = "";
+                    var uiSelectPlusColor = "";
                     _sonSelectMax = 8;
-                    for (int i = 0; i < MainControl.Instance.PlayerControl.myItems.Count; i++)
+                    for (var i = 0; i < MainControl.Instance.PlayerControl.myItems.Count; i++)
                     {
                         if (MainControl.Instance.PlayerControl.myItems[i] == 0)
                         {
@@ -153,7 +153,7 @@ namespace UCT.Overworld
                     select = 1;
                     MainControl.Instance.PlayerControl.canMove = false;
 
-                    _uiSelect.text = uiSelectPlusColor + MainControl.Instance.ItemControl.itemTextMaxData[0].Substring(0, MainControl.Instance.ItemControl.itemTextMaxData[0].Length - 1);
+                    _uiSelect.text = uiSelectPlusColor + MainControl.Instance.ItemControl.itemTextMaxData[0][..(MainControl.Instance.ItemControl.itemTextMaxData[0].Length - 1)];
                     _uiName.text = MainControl.Instance.PlayerControl.playerName;
                     _uiTexts.text = $"LV {MainControl.Instance.PlayerControl.lv}\n" +
                                    $"HP {MainControl.Instance.PlayerControl.hp}/{MainControl.Instance.PlayerControl.hpMax}\n" +

@@ -65,7 +65,7 @@ namespace UCT.Battle
 
         public void Type()
         {
-            List<string> strings = new List<string>
+            var strings = new List<string>
             {
                 TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "GameOver1"),
                 TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "GameOver2"),
@@ -86,7 +86,7 @@ namespace UCT.Battle
                 var emission = _mParticleSystem.emission;
                 emission.rateOverDistance = Random.Range(5, 51);
                 //m_ParticleSystem.transform.position = new Vector3(UnityEngine.Random.Range(-6.85f, 6.85f), UnityEngine.Random.Range(-5.25f, 5.25f));
-                float time = Random.Range(0.5f, 1f);
+                var time = Random.Range(0.5f, 1f);
 
                 _mParticleSystem.transform.DOMoveX(Random.Range(-6.85f, 6.85f), time).SetEase((Ease)Random.Range(1, 35));
                 _mParticleSystem.transform.DOMoveY(Random.Range(-5.25f, 5.25f), time).SetEase((Ease)Random.Range(1, 35)).OnKill(Follish);

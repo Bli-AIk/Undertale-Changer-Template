@@ -31,7 +31,7 @@ namespace UCT.Overworld
         private void Start()
         {
             _typeWritter = GameObject.Find("BackpackCanvas").GetComponent<TypeWritter>();
-            Transform heartTrans = BackpackBehaviour.Instance.typeMessage.transform.Find("Heart");
+            var heartTrans = BackpackBehaviour.Instance.typeMessage.transform.Find("Heart");
             GameObject heartObj;
             if (!heartTrans)
                 heartObj = Instantiate(new GameObject(), BackpackBehaviour.Instance.typeMessage.transform);

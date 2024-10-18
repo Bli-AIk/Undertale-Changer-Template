@@ -20,7 +20,7 @@ namespace UCT.Global.Core
             if (parent == null)
                 parent = transform;
 
-            for (int i = 0; i < count; i++)
+            for (var i = 0; i < count; i++)
             {
                 var newObj = Instantiate(obj, parent);
                 ReturnPool(newObj);

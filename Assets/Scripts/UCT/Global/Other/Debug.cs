@@ -10,7 +10,7 @@ namespace UCT.Global.Other
         public static void Log(object content, string color = "#FFFFFF")
         {
 #if UNITY_EDITOR
-            string text = ("<color=" + color + ">" + content + "</color>");
+            var text = ("<color=" + color + ">" + content + "</color>");
             UnityEngine.Debug.Log(text);
 #endif
         }
@@ -18,7 +18,7 @@ namespace UCT.Global.Other
         public static void Log(object content, Object context, string color = "#FFFFFF")
         {
 #if UNITY_EDITOR
-            string text = ("<color=" + color + ">" + content + "</color>");
+            var text = ("<color=" + color + ">" + content + "</color>");
             UnityEngine.Debug.Log(text, context);
 #endif
         }
@@ -26,7 +26,7 @@ namespace UCT.Global.Other
         public static void LogWarning(object content, string color = "#FFFF00")
         {
 #if UNITY_EDITOR
-            string text = ("<color=" + color + ">" + content + "</color>");
+            var text = ("<color=" + color + ">" + content + "</color>");
             UnityEngine.Debug.LogWarning(text);
 #endif
         }
@@ -34,7 +34,7 @@ namespace UCT.Global.Other
         public static void LogWarning(object content, Object context, string color = "#FFFF00")
         {
 #if UNITY_EDITOR
-            string text = ("<color=" + color + ">" + content + "</color>");
+            var text = ("<color=" + color + ">" + content + "</color>");
             UnityEngine.Debug.LogWarning(text, context);
 #endif
         }
@@ -42,7 +42,7 @@ namespace UCT.Global.Other
         public static void LogError(object content, string color = "#FF0000")
         {
 #if UNITY_EDITOR
-            string text = ("<color=" + color + ">" + content + "</color>");
+            var text = ("<color=" + color + ">" + content + "</color>");
             UnityEngine.Debug.LogError(text);
 #endif
         }
@@ -50,7 +50,7 @@ namespace UCT.Global.Other
         public static void LogError(object content, Object context, string color = "#FF0000")
         {
 #if UNITY_EDITOR
-            string text = ("<color=" + color + ">" + content + "</color>");
+            var text = ("<color=" + color + ">" + content + "</color>");
             UnityEngine.Debug.LogError(text, context);
 #endif
         }

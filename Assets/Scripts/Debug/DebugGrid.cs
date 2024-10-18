@@ -41,23 +41,23 @@ namespace Debug
 
         private void SummonGrid()
         {
-            for (int i = 0; i < transform.childCount; i++)
+            for (var i = 0; i < transform.childCount; i++)
             {
-                GameObject obj = transform.GetChild(i).gameObject;
+                var obj = transform.GetChild(i).gameObject;
                 if (obj.activeSelf)
                     ReturnPool(obj);
             }
 
             //x
-            for (int x = 1; x < divisionX; x++)
+            for (var x = 1; x < divisionX; x++)
             {
-                float length = Mathf.Abs(referenceX.y - referenceX.x);
+                var length = Mathf.Abs(referenceX.y - referenceX.x);
                 //Debug.Log(length);
-                GameObject objGrid = GetFromPool();
+                var objGrid = GetFromPool();
                 objGrid.transform.localPosition = new Vector3(length / divisionX * x - deviationX, 0, 0);
                 objGrid.GetComponent<SpriteRenderer>().color = colorY;
                 objGrid.transform.localScale = new Vector3(1, 1000, 1);
-                TextMeshPro tmp = objGrid.transform.Find("Text").GetComponent<TextMeshPro>();
+                var tmp = objGrid.transform.Find("Text").GetComponent<TextMeshPro>();
                 tmp.text = objGrid.transform.localPosition.x.ToString();
                 tmp.color = colorYForText;
                 tmp.transform.localScale = new Vector3(1, 0.001f, 1);
@@ -65,15 +65,15 @@ namespace Debug
                 tmp.fontSize = 3;
             }
             //x
-            for (int y = 1; y < divisionX; y++)
+            for (var y = 1; y < divisionX; y++)
             {
-                float length = Mathf.Abs(referenceY.y - referenceY.x);
+                var length = Mathf.Abs(referenceY.y - referenceY.x);
                 //Debug.Log(length);
-                GameObject objGrid = GetFromPool();
+                var objGrid = GetFromPool();
                 objGrid.transform.localPosition = new Vector3(0, length / divisionY * y - deviationY, 0);
                 objGrid.GetComponent<SpriteRenderer>().color = colorX;
                 objGrid.transform.localScale = new Vector3(1000, 1, 1);
-                TextMeshPro tmp = objGrid.transform.Find("Text").GetComponent<TextMeshPro>();
+                var tmp = objGrid.transform.Find("Text").GetComponent<TextMeshPro>();
                 tmp.text = objGrid.transform.localPosition.y.ToString();
                 tmp.color = colorXForText;
                 tmp.transform.localScale = new Vector3(0.001f, 1, 1);

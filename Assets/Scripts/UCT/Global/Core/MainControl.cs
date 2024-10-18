@@ -245,7 +245,7 @@ namespace UCT.Global.Core
                 var textAssets = Resources.LoadAll<TextAsset>($"TextAssets/LanguagePacks/{GetLanguageInsideId(languagePackId)}/Battle/Turn");
 
                 turnSave = new string[textAssets.Length];
-                for (int i = 0; i < textAssets.Length; i++)
+                for (var i = 0; i < textAssets.Length; i++)
                 {
                     turnSave[i] = textAssets[i].text;
                 }
@@ -255,11 +255,11 @@ namespace UCT.Global.Core
 
             foreach (var t in turnSave)
             {
-                string file = t;
+                var file = t;
 
                 if (languagePackId < LanguagePackInsideNumber)
                     BattleControl.turnDialogAsset.Add(file);
-                else if (t.Substring(t.Length - 3) == "txt")
+                else if (t[^3..] == "txt")
                     BattleControl.turnDialogAsset.Add(File.ReadAllText(file));
             }
             LoadItemData(BattleControl.uiTextSave, BattleControl.uiText);
@@ -321,7 +321,7 @@ namespace UCT.Global.Core
             }
             else
             {
-                GameObject playerOw = GameObject.Find("Player");
+                var playerOw = GameObject.Find("Player");
                 if (playerOw != null)
                     playerBehaviour = playerOw.GetComponent<PlayerBehaviour>();
             }
@@ -364,7 +364,7 @@ namespace UCT.Global.Core
         public string RandomStringColor()
         {
             var text = "<color=#";
-            for (int i = 0; i < 6; i++)
+            for (var i = 0; i < 6; i++)
             {
                 text += $"{Random.Range(0, 16):X}";
             }
@@ -451,7 +451,7 @@ namespace UCT.Global.Core
         {
             if (beatTimes.Count <= 0) return;
 
-            bool firstIn = true;
+            var firstIn = true;
             while (currentBeatIndex < beatTimes.Count && AudioController.Instance.audioSource.time >= nextBeatTime)
             {
                 if (firstIn)
@@ -647,7 +647,7 @@ namespace UCT.Global.Core
 
         private void SetCanvasFrameSprite(int framePic = 2)//一般为CanvasController.instance.framePic
         {
-            Image frame = CanvasController.Instance.frame;
+            var frame = CanvasController.Instance.frame;
             frame.sprite = framePic < 0 ? null : OverworldControl.frames[framePic];
         }
 
@@ -768,7 +768,7 @@ namespace UCT.Global.Core
             blacking = true;
             if (banMusic)
             {
-                AudioSource bgm = AudioController.Instance.transform.GetComponent<AudioSource>();
+                var bgm = AudioController.Instance.transform.GetComponent<AudioSource>();
                 if (time > 0)
                     DOTween.To(() => bgm.volume, x => bgm.volume = x, 0, time).SetEase(Ease.Linear);
                 else if (time == 0)
@@ -824,9 +824,9 @@ namespace UCT.Global.Core
         /// </summary>
         public string RandomString(int length = 6, string alphabet = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM")
         {
-            string text = "";
+            var text = "";
 
-            for (int i = 0; i < length; i++)
+            for (var i = 0; i < length; i++)
             {
                 text += alphabet[Random.Range(0, alphabet.Length)];
             }
@@ -839,8 +839,8 @@ namespace UCT.Global.Core
         public IEnumerator _LoadItemDataForTurn(List<string> list, TextAsset inputText)//保存的list 导入的text
         {
             list.Clear();
-            string text = "";
-            for (int i = 0; i < inputText.text.Length; i++)
+            var text = "";
+            for (var i = 0; i < inputText.text.Length; i++)
             {
                 if (inputText.text[i] == '/' && inputText.text[i + 1] == '*')
                 {
@@ -870,8 +870,8 @@ namespace UCT.Global.Core
         private void LoadItemData(List<string> list, TextAsset inputText)//保存的list 导入的text
         {
             list.Clear();
-            string text = "";
-            for (int i = 0; i < inputText.text.Length; i++)
+            var text = "";
+            for (var i = 0; i < inputText.text.Length; i++)
             {
                 if (inputText.text[i] == '/' && inputText.text[i + 1] == '*')
                 {
@@ -899,8 +899,8 @@ namespace UCT.Global.Core
         public void LoadItemData(List<string> list, string inputText)//保存的list 导入的text
         {
             list.Clear();
-            string text = "";
-            for (int i = 0; i < inputText.Length; i++)
+            var text = "";
+            for (var i = 0; i < inputText.Length; i++)
             {
                 if (inputText[i] == '/' && inputText[i + 1] == '*')
                 {
@@ -958,7 +958,7 @@ namespace UCT.Global.Core
                 //食物
                 default:
                 {
-                    int plusHp = int.Parse(ItemIdGetName(PlayerControl.myItems[sonSelect - 1], "Auto", 2));
+                    var plusHp = int.Parse(ItemIdGetName(PlayerControl.myItems[sonSelect - 1], "Auto", 2));
                     if (PlayerControl.wearArm == 10001)
                         plusHp += 4;
 
@@ -969,11 +969,11 @@ namespace UCT.Global.Core
 
                     if (PlayerControl.hp > PlayerControl.hpMax)
                         PlayerControl.hp = PlayerControl.hpMax;
-                    for (int i = 0; i < ItemControl.itemFoods.Count; i++)
+                    for (var i = 0; i < ItemControl.itemFoods.Count; i++)
                     {
                         if (ItemControl.itemTextMaxItemSon[PlayerControl.myItems[sonSelect - 1] * 5 - 5] == ItemControl.itemFoods[i])
                         {
-                            string text = ItemControl.itemFoods[i + 1];
+                            var text = ItemControl.itemFoods[i + 1];
                             text = text.Substring(1, text.Length - 1);
                             PlayerControl.myItems[sonSelect - 1] = ItemNameGetId(text, "Foods");
                             break;
@@ -990,18 +990,18 @@ namespace UCT.Global.Core
         /// </summary>
         public List<string> ChangeItemData(List<string> list, bool isData, List<string> ex)
         {
-            List<string> newList = new List<string>();
-            string text = "";
-            bool isXh = false;//检测是否有多个需要循环调用的特殊字符
+            var newList = new List<string>();
+            var text = "";
+            var isXh = false;//检测是否有多个需要循环调用的特殊字符
 
             foreach (var t in list)
             {
-                string empty = "";
-                for (int j = 0; j < t.Length; j++)
+                var empty = "";
+                for (var j = 0; j < t.Length; j++)
                 {
                     if (empty == "" && !isData)
                     {
-                        int k = j;
+                        var k = j;
                         while (t[j] != '\\')
                         {
                             empty += t[j];
@@ -1015,7 +1015,7 @@ namespace UCT.Global.Core
 
                     while (t[j] == '<')
                     {
-                        string inputText = "";
+                        var inputText = "";
                         while ((j != 0 && t[j - 1] != '>' && !isXh) || isXh)
                         {
                             inputText += t[j];
@@ -1161,11 +1161,11 @@ namespace UCT.Global.Core
                 default:
                     if (IsFrontCharactersMatch("<data", inputText))
                     {
-                        text += ItemControl.itemTextMaxData[int.Parse(inputText.Substring(5, inputText.Length - 6))].Substring(0, ItemControl.itemTextMaxData[int.Parse(inputText.Substring(5, inputText.Length - 6))].Length - 1);
+                        text += ItemControl.itemTextMaxData[int.Parse(inputText.Substring(5, inputText.Length - 6))][..(ItemControl.itemTextMaxData[int.Parse(inputText.Substring(5, inputText.Length - 6))].Length - 1)];
                     }
                     else if (inputText.Length > 9)
                     {
-                        if (inputText.Substring(0, 9) == "<itemName" && !isData)
+                        if (inputText[..9] == "<itemName" && !isData)
                         {
                             if (inputName != "")
                             {
@@ -1174,7 +1174,7 @@ namespace UCT.Global.Core
                                 else text += ItemIdGetName(ItemNameGetId(inputName, inputText.Substring(9, inputText.Length - 10) + 's'), "Auto", 0);
                             }
                         }
-                        else if (inputText.Substring(0, 9) == "<autoLose")
+                        else if (inputText[..9] == "<autoLose")
                         {
                             switch (inputText.Substring(9, inputText.Length - 10) + 's')
                             {
@@ -1217,13 +1217,13 @@ namespace UCT.Global.Core
         /// </summary>
         public string UppercaseToLowercase(string origin)
         {
-            string final = "";
-            string bet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            string betS = "abcdefghijklmnopqrstuvwxyz";
+            var final = "";
+            var bet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            var betS = "abcdefghijklmnopqrstuvwxyz";
             foreach (var t in origin)
             {
-                bool isPlus = false;
-                for (int j = 0; j < bet.Length; j++)
+                var isPlus = false;
+                for (var j = 0; j < bet.Length; j++)
                 {
                     if (t == bet[j])
                     {
@@ -1245,13 +1245,13 @@ namespace UCT.Global.Core
         /// </summary>
         public string LowercaseToUppercase(string origin)
         {
-            string final = "";
-            string betS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            string bet = "abcdefghijklmnopqrstuvwxyz";
+            var final = "";
+            var betS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            var bet = "abcdefghijklmnopqrstuvwxyz";
             foreach (var t in origin)
             {
-                bool isPlus = false;
-                for (int j = 0; j < bet.Length; j++)
+                var isPlus = false;
+                for (var j = 0; j < bet.Length; j++)
                 {
                     if (t == bet[j])
                     {
@@ -1275,9 +1275,9 @@ namespace UCT.Global.Core
         public Vector2 StringVector2ToRealVector2(string stringVector2, Vector3 origin)
         {
             stringVector2 = stringVector2.Substring(1, stringVector2.Length - 2) + ",";
-            Vector2 realVector2 = Vector2.zero;
-            string save = "";
-            bool isSetX = false;
+            var realVector2 = Vector2.zero;
+            var save = "";
+            var isSetX = false;
             foreach (var t in stringVector2)
             {
                 if (t == ',')
@@ -1309,8 +1309,8 @@ namespace UCT.Global.Core
         /// </summary>
         private float RandomFloatChange(string text, float origin, bool isY = false, float plusSave = 0)
         {
-            bool isHaveR = false;
-            string save = "";
+            var isHaveR = false;
+            var save = "";
             if (text[0] != 'O' && text[0] != 'o' && text[0] != 'P' && text[0] != 'p')
             {
                 float x1 = 0;
@@ -1353,7 +1353,7 @@ namespace UCT.Global.Core
             {
                 //Debug.LogWarning(text.Substring(2));
                 //Debug.Log(RandomFloatChange(text.Substring(2), origin, isY, origin));
-                return RandomFloatChange(text.Substring(2), origin, isY, origin);
+                return RandomFloatChange(text[2..], origin, isY, origin);
             }
 
             return origin;
@@ -1729,8 +1729,8 @@ namespace UCT.Global.Core
         /// </summary>
         public int FindMax(List<int> list)
         {
-            int max = list.Count;
-            for (int i = 0; i < list.Count; i++)
+            var max = list.Count;
+            for (var i = 0; i < list.Count; i++)
             {
                 if (list[i] == 0)
                 {
@@ -1779,7 +1779,7 @@ namespace UCT.Global.Core
             }
             if (list != null)
             {
-                for (int i = 0; i < list.Count / listInt; i++)
+                for (var i = 0; i < list.Count / listInt; i++)
                 {
                     if (list[i * listInt] == itemName)
                     {
@@ -1830,10 +1830,10 @@ namespace UCT.Global.Core
                 return inputString;
             }
 
-            string part1 = inputString.Substring(0, startIndex); // 从开头到A之前的部分
-            string part2 = inputString.Substring(endIndex + 1); // 从B之后到字符串末尾的部分
-            Other.Debug.Log(inputString.Substring(startIndex + 1));
-            string result = part1 + add + part2; // 合并两部分
+            var part1 = inputString[..startIndex]; // 从开头到A之前的部分
+            var part2 = inputString[(endIndex + 1)..]; // 从B之后到字符串末尾的部分
+            //Other.Debug.Log(inputString.Substring(startIndex + 1));
+            var result = part1 + add + part2; // 合并两部分
             return result;
         }
 
@@ -1842,14 +1842,14 @@ namespace UCT.Global.Core
         /// </summary>
         public Vector2 CalculatePolygonCenter(List<Vector2> vertexPoints)
         {
-            Vector2 center = Vector2.zero;
+            var center = Vector2.zero;
 
             if (vertexPoints == null || vertexPoints.Count == 0)
             {
                 return center;
             }
 
-            foreach (Vector2 vertex in vertexPoints)
+            foreach (var vertex in vertexPoints)
             {
                 center += vertex;
             }
@@ -1864,11 +1864,11 @@ namespace UCT.Global.Core
         /// </summary>
         public Vector3 RandomPointOnSphereSurface(float sphereRadius, Vector3 sphereCenter)
         {
-            Vector3 randomDirection = Random.onUnitSphere;
+            var randomDirection = Random.onUnitSphere;
 
             randomDirection *= sphereRadius;
 
-            Vector3 randomPointOnSphere = sphereCenter + randomDirection;
+            var randomPointOnSphere = sphereCenter + randomDirection;
 
             return randomPointOnSphere;
         }

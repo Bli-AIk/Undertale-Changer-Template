@@ -16,7 +16,7 @@ namespace UCT.Global.Other
         {
             if (collision.transform.CompareTag("Player"))
             {
-                PlayerBehaviour playerBehaviour = MainControl.Instance.playerBehaviour;
+                var playerBehaviour = MainControl.Instance.playerBehaviour;
                 if (playerBehaviour != null)
                 {
                     playerBehaviour.walk = range;

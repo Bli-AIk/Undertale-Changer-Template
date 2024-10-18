@@ -23,12 +23,12 @@ namespace Debug
         /// </summary>
         private string LetterToNumber(string str)
         {
-            string returnText = "";
-            string text = " abcdefghijklmnopqrstuvwxyz";
-            string textCap = " ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            for (int i = 0; i < str.Length; i++)
+            var returnText = "";
+            var text = " abcdefghijklmnopqrstuvwxyz";
+            var textCap = " ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            for (var i = 0; i < str.Length; i++)
             {
-                for (int j = 0; j < text.Length; j++)
+                for (var j = 0; j < text.Length; j++)
                 {
                     if (str[i] == text[j] || str[i] == textCap[j])
                     {
@@ -49,13 +49,13 @@ namespace Debug
         /// </summary>
         private string NumberToNumberLetter(string str)
         {
-            string returnText = "";
-            string text = "0123456789 ";
-            string textB = "ZOTtFfSsEN ";
+            var returnText = "";
+            var text = "0123456789 ";
+            var textB = "ZOTtFfSsEN ";
 
-            for (int i = 0; i < str.Length; i++)
+            for (var i = 0; i < str.Length; i++)
             {
-                for (int j = 0; j < text.Length; j++)
+                for (var j = 0; j < text.Length; j++)
                 {
                     if (str[i] == text[j])
                     {
@@ -72,13 +72,13 @@ namespace Debug
         /// </summary>
         private string NineToNumber(string str)
         {
-            string returnText = "";
-            string text = " abcdefghijklmnopqrstuvwxyz";
-            string textCap = " ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            string back = "112122233132334142435152536162637172737481828391929394";
-            for (int i = 0; i < str.Length; i++)
+            var returnText = "";
+            var text = " abcdefghijklmnopqrstuvwxyz";
+            var textCap = " ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            var back = "112122233132334142435152536162637172737481828391929394";
+            for (var i = 0; i < str.Length; i++)
             {
-                for (int j = 0; j < text.Length; j++)
+                for (var j = 0; j < text.Length; j++)
                 {
                     if (str[i] == text[j] || str[i] == textCap[j])
                     {
@@ -95,9 +95,9 @@ namespace Debug
         /// </summary>
         private string BackString(string str)
         {
-            string returnText = "";
+            var returnText = "";
 
-            for (int i = str.Length - 1; i >= 0; i--)
+            for (var i = str.Length - 1; i >= 0; i--)
             {
                 returnText += str[i];
             }

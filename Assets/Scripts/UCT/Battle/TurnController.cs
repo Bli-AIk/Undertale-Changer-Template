@@ -28,7 +28,7 @@ namespace UCT.Battle
 
         private void Start()
         {
-            GameObject saveBullet = GameObject.Find("SaveBullet");
+            var saveBullet = GameObject.Find("SaveBullet");
             //OutYourTurn();
             //弹幕
             objectPools.Add(gameObject.AddComponent<ObjectPool>());
@@ -77,7 +77,7 @@ namespace UCT.Battle
                     obj2.SetBullet("CupCake", "CupCake", new Vector3(-1, -1.6f), (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
 
 
-                    for (int i = 600; i > 0; i--)
+                    for (var i = 600; i > 0; i--)
                     {
                         Global.Other.Debug.Log($"你先别急，先摆{MainControl.Instance.RandomStringColor(i.ToString())}秒");
                         yield return Timing.WaitForSeconds(1f);
@@ -105,7 +105,7 @@ namespace UCT.Battle
                     yield return Timing.WaitForSeconds(1);
 
                     Global.Other.Debug.Log("通过更改点坐标实现的战斗框轴点旋转");
-                    for (int i = 0; i < 4; i++)
+                    for (var i = 0; i < 4; i++)
                     {
 
                         DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[0], x => MainControl.Instance.mainBox.vertexPoints[0] = x, MainControl.Instance.mainBox.vertexPoints[3], 0.5f).SetEase(Ease.InOutSine);
@@ -117,7 +117,7 @@ namespace UCT.Battle
                     }
 
                     Global.Other.Debug.Log("简单嵌套弹幕编写示例");
-                    for (int i = 0; i < 5 * 20; i++)
+                    for (var i = 0; i < 5 * 20; i++)
                     {
                         Timing.RunCoroutine(_TurnNest(Nest.SimpleNestBullet));
                         yield return Timing.WaitForSeconds(0.2f);

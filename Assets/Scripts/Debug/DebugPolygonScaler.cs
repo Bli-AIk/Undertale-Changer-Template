@@ -22,7 +22,7 @@ namespace Debug
       
 
             // 计算多边形中点并移动顶点
-            List<Vector2> movedVertices = MoveVerticesTowardsCenter(vertices, moveDistance);
+            var movedVertices = MoveVerticesTowardsCenter(vertices, moveDistance);
 
             // 绘制原始多边形
             DrawPolygon(originalLineRenderer, vertices);
@@ -34,12 +34,12 @@ namespace Debug
         // 向中心移动多边形顶点的方法
         private List<Vector2> MoveVerticesTowardsCenter(List<Vector2> originalVertices, float distance)
         {
-            Vector2 center = CalculatePolygonCenter(originalVertices);
-            List<Vector2> movedVertices = new List<Vector2>();
-            foreach (Vector2 vertex in originalVertices)
+            var center = CalculatePolygonCenter(originalVertices);
+            var movedVertices = new List<Vector2>();
+            foreach (var vertex in originalVertices)
             {
-                Vector2 direction = (center - vertex).normalized; // 从顶点到中心点的方向
-                Vector2 movedVertex = vertex + direction * distance; // 向中心点移动固定距离
+                var direction = (center - vertex).normalized; // 从顶点到中心点的方向
+                var movedVertex = vertex + direction * distance; // 向中心点移动固定距离
                 movedVertices.Add(movedVertex);
             }
             return movedVertices;
@@ -48,8 +48,8 @@ namespace Debug
         // 计算多边形中心的方法
         private Vector2 CalculatePolygonCenter(List<Vector2> vertices)
         {
-            Vector2 sum = Vector2.zero;
-            foreach (Vector2 vertex in vertices)
+            var sum = Vector2.zero;
+            foreach (var vertex in vertices)
             {
                 sum += vertex;
             }
@@ -60,7 +60,7 @@ namespace Debug
         private void DrawPolygon(LineRenderer lineRenderer, List<Vector2> vertices)
         {
             lineRenderer.positionCount = vertices.Count + 1; // 设置顶点数（+1是为了闭合多边形）
-            for (int i = 0; i < vertices.Count; i++)
+            for (var i = 0; i < vertices.Count; i++)
             {
                 lineRenderer.SetPosition(i, vertices[i]);
             }

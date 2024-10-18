@@ -24,7 +24,7 @@ namespace UCT.Global.Core
             }
             UsersData[data.name] = data;
             // 转换数据
-            string jsonData = JsonConvert.SerializeObject(data);
+            var jsonData = JsonConvert.SerializeObject(data);
 
             File.WriteAllText(Application.dataPath + string.Format("/Data/{0}.json", dataName), jsonData);
         }
@@ -35,12 +35,12 @@ namespace UCT.Global.Core
             //Debug.Log("load");
 
             SortAndRenameData();
-            string path = Application.dataPath + string.Format("/Data/{0}.json", dataName);
+            var path = Application.dataPath + string.Format("/Data/{0}.json", dataName);
             // 检查用户配置文件是否存在
             if (File.Exists(path))
             {
-                string jsonData = File.ReadAllText(path);
-                PlayerControl userData = ScriptableObject.CreateInstance<PlayerControl>(); // 使用 CreateInstance 方法
+                var jsonData = File.ReadAllText(path);
+                var userData = ScriptableObject.CreateInstance<PlayerControl>(); // 使用 CreateInstance 方法
                 JsonConvert.PopulateObject(jsonData, userData); // 使用 PopulateObject 方法来填充数据
                 UsersData[dataName] = userData;
                 return userData;
@@ -56,11 +56,11 @@ namespace UCT.Global.Core
                 return 0;
             }
 
-            int returnNumber = 0;
-            for (int i = 0; i < Directory.GetFiles(Application.dataPath + "/Data").Length; i++)
+            var returnNumber = 0;
+            for (var i = 0; i < Directory.GetFiles(Application.dataPath + "/Data").Length; i++)
             {
-                string text = Directory.GetFiles(Application.dataPath + "/Data")[i];
-                if (text.Substring(text.Length - 5) == ".json")
+                var text = Directory.GetFiles(Application.dataPath + "/Data")[i];
+                if (text[^5..] == ".json")
                     returnNumber++;
             }
             return returnNumber;
@@ -68,7 +68,7 @@ namespace UCT.Global.Core
 
         public static void DeleteData(string dataName)
         {
-            string path = Application.dataPath + string.Format("/Data/{0}.json", dataName);
+            var path = Application.dataPath + string.Format("/Data/{0}.json", dataName);
 
             // 检查存档是否存在
             if (File.Exists(path))
@@ -91,7 +91,7 @@ namespace UCT.Global.Core
 
         public static void SortAndRenameData()
         {
-            string dataPath = Application.dataPath + "/Data";
+            var dataPath = Application.dataPath + "/Data";
 
             if (!Directory.Exists(dataPath))
             {
@@ -100,16 +100,16 @@ namespace UCT.Global.Core
             }
 
             // 获取目录下所有的存档文件路径
-            string[] files = Directory.GetFiles(dataPath, "*.json");
+            var files = Directory.GetFiles(dataPath, "*.json");
 
             // 按照文件名的数字进行排序
             Array.Sort(files, (a, b) =>
             {
-                string fileNameA = Path.GetFileNameWithoutExtension(a);
-                string fileNameB = Path.GetFileNameWithoutExtension(b);
+                var fileNameA = Path.GetFileNameWithoutExtension(a);
+                var fileNameB = Path.GetFileNameWithoutExtension(b);
                 int numberA, numberB;
 
-                if (int.TryParse(fileNameA.Substring(4), out numberA) && int.TryParse(fileNameB.Substring(4), out numberB))
+                if (int.TryParse(fileNameA[4..], out numberA) && int.TryParse(fileNameB[4..], out numberB))
                 {
                     return numberA.CompareTo(numberB);
                 }
@@ -118,10 +118,10 @@ namespace UCT.Global.Core
             });
 
             // 重命名文件
-            for (int i = 0; i < files.Length; i++)
+            for (var i = 0; i < files.Length; i++)
             {
-                string newFileName = string.Format("Data{0}.json", i);
-                string newPath = Path.Combine(dataPath, newFileName);
+                var newFileName = string.Format("Data{0}.json", i);
+                var newPath = Path.Combine(dataPath, newFileName);
                 File.Move(files[i], newPath);
             }
         }

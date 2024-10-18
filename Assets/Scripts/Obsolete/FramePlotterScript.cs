@@ -29,7 +29,7 @@ namespace Obsolete
 
             _meshRenderer.material.mainTexture = mainTex;
 
-            Mesh mesh = new Mesh();
+            var mesh = new Mesh();
             mesh.name = "Quad";
             _vh.FillMesh(mesh);
             _meshFilter.mesh = mesh;
@@ -38,7 +38,7 @@ namespace Obsolete
         private void Update()
         {
             _vh.Clear();
-            for (int i = 0; i < points.Length; i++)
+            for (var i = 0; i < points.Length; i++)
             {
                 _vh.AddVert(points[i], colors[0], uVs[i]);
             }

@@ -30,14 +30,14 @@ namespace UCT.Global.UI
             switch (dynamicMode)
             {
                 case OverworldControl.DynamicTMP.RandomShake://帕金森，但是每个抖动都不一样
-                    for (int i = 0; i < textInfo.characterCount; i++)
+                    for (var i = 0; i < textInfo.characterCount; i++)
                     {
                         var charInfo = textInfo.characterInfo[i];
                         if (!charInfo.isVisible) continue;
 
                         var verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
-                        Vector3 random = new Vector3(Random.Range(-0.025f, 0.025f), Random.Range(-0.025f, 0.025f), 0);
-                        for (int j = 0; j < 4; j++)
+                        var random = new Vector3(Random.Range(-0.025f, 0.025f), Random.Range(-0.025f, 0.025f), 0);
+                        for (var j = 0; j < 4; j++)
                         {
                             var orig = verts[charInfo.vertexIndex + j];
                             //动画
@@ -48,16 +48,16 @@ namespace UCT.Global.UI
 
                 case OverworldControl.DynamicTMP.RandomShakeSingle://类似于原版战斗内的我方对话抖动：字符随机时间随机一个抖那么一下
 
-                    int randomIs = Random.Range(0, 120);
+                    var randomIs = Random.Range(0, 120);
                     if (randomIs == 0)
                     {
-                        int j = Random.Range(0, textInfo.characterCount);
+                        var j = Random.Range(0, textInfo.characterCount);
                         var charInfo = textInfo.characterInfo[j];
                         if (charInfo.isVisible)
                         {
                             var verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
-                            Vector3 random = new Vector3(Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f), 0);
-                            for (int i = 0; i < 4; i++)
+                            var random = new Vector3(Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f), 0);
+                            for (var i = 0; i < 4; i++)
                             {
                                 var orig = verts[charInfo.vertexIndex + i];
                                 //动画
@@ -68,15 +68,15 @@ namespace UCT.Global.UI
                     break;
 
                 case OverworldControl.DynamicTMP.RandomShakeAll://整齐划一的抖动
-                    Vector3 randomer = new Vector3(Random.Range(-0.05f, 0.05f), Random.Range(-0.05f, 0.05f), 0);
-                    for (int i = 0; i < textInfo.characterCount; i++)
+                    var randomer = new Vector3(Random.Range(-0.05f, 0.05f), Random.Range(-0.05f, 0.05f), 0);
+                    for (var i = 0; i < textInfo.characterCount; i++)
                     {
                         var charInfo = textInfo.characterInfo[i];
                         if (!charInfo.isVisible) continue;
 
                         var verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
 
-                        for (int j = 0; j < 4; j++)
+                        for (var j = 0; j < 4; j++)
                         {
                             var orig = verts[charInfo.vertexIndex + j];
                             //动画
@@ -86,13 +86,13 @@ namespace UCT.Global.UI
                     break;
 
                 case OverworldControl.DynamicTMP.CrazyShake://抽搐的抖动
-                    for (int i = 0; i < textInfo.characterCount; i++)
+                    for (var i = 0; i < textInfo.characterCount; i++)
                     {
                         var charInfo = textInfo.characterInfo[i];
                         if (!charInfo.isVisible) continue;
 
                         var verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
-                        for (int j = 0; j < 4; j++)
+                        for (var j = 0; j < 4; j++)
                         {
                             var orig = verts[charInfo.vertexIndex + j];
                             //动画
@@ -107,13 +107,13 @@ namespace UCT.Global.UI
                     break;
 
                 case OverworldControl.DynamicTMP.NapShake://小幽灵式抽搐的抖动
-                    for (int i = 0; i < textInfo.characterCount; i++)
+                    for (var i = 0; i < textInfo.characterCount; i++)
                     {
                         var charInfo = textInfo.characterInfo[i];
                         if (!charInfo.isVisible) continue;
 
                         var verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
-                        for (int j = 0; j < 4; j++)
+                        for (var j = 0; j < 4; j++)
                         {
                             var orig = verts[charInfo.vertexIndex + j];
                             //动画
@@ -125,13 +125,13 @@ namespace UCT.Global.UI
                     break;
 
                 case OverworldControl.DynamicTMP.NapFloat://小幽灵字符漂浮
-                    for (int i = 0; i < textInfo.characterCount; i++)
+                    for (var i = 0; i < textInfo.characterCount; i++)
                     {
                         var charInfo = textInfo.characterInfo[i];
                         if (!charInfo.isVisible) continue;
 
                         var verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
-                        for (int j = 0; j < 4; j++)
+                        for (var j = 0; j < 4; j++)
                         {
                             var orig = verts[charInfo.vertexIndex + j];
                             //动画
@@ -141,14 +141,14 @@ namespace UCT.Global.UI
                     break;
 
                 case OverworldControl.DynamicTMP.Wave:
-                    for (int i = 0; i < textInfo.characterCount; i++)
+                    for (var i = 0; i < textInfo.characterCount; i++)
                     {
                         var charInfo = textInfo.characterInfo[i];
                         if (!charInfo.isVisible) continue;
 
                         var verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
-                        Vector3 waveOffset = new Vector3(0, Mathf.Sin(Time.time * 2f + i * 0.2f) * 0.05f, 0);
-                        for (int j = 0; j < 4; j++)
+                        var waveOffset = new Vector3(0, Mathf.Sin(Time.time * 2f + i * 0.2f) * 0.05f, 0);
+                        for (var j = 0; j < 4; j++)
                         {
                             var orig = verts[charInfo.vertexIndex + j];
                             verts[charInfo.vertexIndex + j] = orig + waveOffset;
@@ -157,15 +157,15 @@ namespace UCT.Global.UI
                     break;
 
                 case OverworldControl.DynamicTMP.Explode:
-                    Vector3 center = new Vector3(0, 0, 0);
-                    for (int i = 0; i < textInfo.characterCount; i++)
+                    var center = new Vector3(0, 0, 0);
+                    for (var i = 0; i < textInfo.characterCount; i++)
                     {
                         var charInfo = textInfo.characterInfo[i];
                         if (!charInfo.isVisible) continue;
 
                         var verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
-                        Vector3 explodeOffset = (verts[charInfo.vertexIndex] - center) * Mathf.Sin(Time.time * 2f) * 0.1f;
-                        for (int j = 0; j < 4; j++)
+                        var explodeOffset = (verts[charInfo.vertexIndex] - center) * Mathf.Sin(Time.time * 2f) * 0.1f;
+                        for (var j = 0; j < 4; j++)
                         {
                             var orig = verts[charInfo.vertexIndex + j];
                             verts[charInfo.vertexIndex + j] = orig + explodeOffset;
@@ -174,14 +174,14 @@ namespace UCT.Global.UI
                     break;
 
                 case OverworldControl.DynamicTMP.Bounce:
-                    for (int i = 0; i < textInfo.characterCount; i++)
+                    for (var i = 0; i < textInfo.characterCount; i++)
                     {
                         var charInfo = textInfo.characterInfo[i];
                         if (!charInfo.isVisible) continue;
 
                         var verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
-                        Vector3 bounceOffset = new Vector3(0, Mathf.Abs(Mathf.Sin(Time.time * 2f + i * 0.1f)) * 0.1f, 0);
-                        for (int j = 0; j < 4; j++)
+                        var bounceOffset = new Vector3(0, Mathf.Abs(Mathf.Sin(Time.time * 2f + i * 0.1f)) * 0.1f, 0);
+                        for (var j = 0; j < 4; j++)
                         {
                             var orig = verts[charInfo.vertexIndex + j];
                             verts[charInfo.vertexIndex + j] = orig + bounceOffset;
@@ -192,7 +192,7 @@ namespace UCT.Global.UI
 
             }
 
-            for (int i = 0; i < textInfo.meshInfo.Length; i++)
+            for (var i = 0; i < textInfo.meshInfo.Length; i++)
             {
                 var meshInfo = textInfo.meshInfo[i];
                 meshInfo.mesh.vertices = meshInfo.vertices;

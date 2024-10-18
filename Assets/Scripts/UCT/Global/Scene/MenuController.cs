@@ -29,7 +29,7 @@ namespace UCT.Global.Scene
         {
             MainControl.Instance.OverworldControl.playerScenePos = new Vector3(-0.5f, -1);
 
-            for (int i = 0; i < transform.childCount; i++)
+            for (var i = 0; i < transform.childCount; i++)
             {
                 tmps.Add(transform.GetChild(i).GetComponent<TextMeshPro>());
             }
@@ -48,7 +48,7 @@ namespace UCT.Global.Scene
 
         private void LoadLayer0()
         {
-            PlayerControl playerControl = SaveController.LoadData("Data" + saveNumber);
+            var playerControl = SaveController.LoadData("Data" + saveNumber);
             tmps[0].text = playerControl.playerName;
             tmps[1].text = "LV " + playerControl.lv;
             //tmps[2]在update内设置
@@ -206,8 +206,8 @@ namespace UCT.Global.Scene
 
         private void Flash()
         {
-            List<string> list = new List<string>();
-            for (int i = 0; i < 6; i++)
+            var list = new List<string>();
+            for (var i = 0; i < 6; i++)
             {
                 if (_setData && i == 2 && (saveNumber == 0))
                     list.Add("<color=grey>");

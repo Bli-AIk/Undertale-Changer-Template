@@ -24,9 +24,9 @@ namespace Debug
         private void Randomer()
         {
             if (randomNumber > 0)
-                for (int i = 0; i < randomNumber; i++)
+                for (var i = 0; i < randomNumber; i++)
                 {
-                    int j = Random.Range(0, sudokos.Count);
+                    var j = Random.Range(0, sudokos.Count);
                     sudokos[j].change = true;
                     sudokos[j].Changed();
                     ///Debug.Log(j + 1);

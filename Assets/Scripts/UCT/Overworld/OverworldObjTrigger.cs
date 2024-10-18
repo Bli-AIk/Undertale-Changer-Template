@@ -102,7 +102,7 @@ namespace UCT.Overworld
                             SaveController.SaveData(MainControl.Instance.PlayerControl, "Data" + MainControl.Instance.dataNumber);
                             _saveSelect = 2;
                             AudioController.Instance.GetFx(12, MainControl.Instance.AudioControl.fxClipUI);
-                            string name = MainControl.Instance.PlayerControl.playerName;
+                            var name = MainControl.Instance.PlayerControl.playerName;
 
                             BackpackBehaviour.Instance.saveUIHeart.anchoredPosition = new Vector2(10000, 10000);
 
@@ -172,7 +172,7 @@ namespace UCT.Overworld
 
             foreach (var item in funNames)
             {
-                MethodInfo methodInfo = typeof(OverworldObjTrigger).GetMethod(item);
+                var methodInfo = typeof(OverworldObjTrigger).GetMethod(item);
                 if (methodInfo == null)
                 {
                     Global.Other.Debug.Log(item + "检测失败", gameObject);
@@ -190,7 +190,7 @@ namespace UCT.Overworld
             _saveSelect = 0;
 
             BackpackBehaviour.Instance.saveBack.transform.localPosition = new Vector3(BackpackBehaviour.Instance.saveBack.transform.localPosition.x, BackpackBehaviour.Instance.saveBack.transform.localPosition.y, 5);
-            string name = MainControl.Instance.PlayerControl.playerName;
+            var name = MainControl.Instance.PlayerControl.playerName;
 
             BackpackBehaviour.Instance.saveUI.text = TextProcessingService.PadStringToLength(name, 10) + "LV" + TextProcessingService.PadStringToLength(MainControl.Instance.PlayerControl.lv.ToString(), 7) +
                                                      TextProcessingService.GetRealTime((int)MainControl.Instance.PlayerControl.gameTime) + "\n" +

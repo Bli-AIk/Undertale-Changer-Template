@@ -52,7 +52,7 @@ namespace Obsolete
             _lineRenderer.startWidth = width;
             _lineRenderer.endWidth = width;
             _lineRenderer.positionCount = vertPoints.Count;
-            for (int i = 0; i < vertPoints.Count; i++)
+            for (var i = 0; i < vertPoints.Count; i++)
             {
                 points.Add(transform.Find("Point" + i).gameObject);
             }
@@ -71,7 +71,7 @@ namespace Obsolete
         private void ReStart()
         {
             _vh.Clear();
-            for (int i = 0; i < vertPoints.Count; i++)
+            for (var i = 0; i < vertPoints.Count; i++)
             {
                 vertPoints[i] = points[i].transform.localPosition;
                 _lineRenderer.SetPosition(i, points[i].transform.position);
@@ -79,7 +79,7 @@ namespace Obsolete
             }
             _vh.AddTriangle(0, 2, 1);
             _vh.AddTriangle(0, 3, 2);
-            Mesh mesh = new Mesh();
+            var mesh = new Mesh();
             mesh.name = "Quad";
             _vh.FillMesh(mesh);
             _meshFilter.mesh = mesh;
@@ -92,9 +92,9 @@ namespace Obsolete
 
             if (haveEdgeCollider2D)
             {
-                Vector2[] points = new Vector2[5];
+                var points = new Vector2[5];
                 points[4] = vertPoints[0] + vertEdge[0];
-                for (int i = 0; i < vertPoints.Count; i++)
+                for (var i = 0; i < vertPoints.Count; i++)
                 {
                     points[i] = vertPoints[i] + vertEdge[i];
                 }

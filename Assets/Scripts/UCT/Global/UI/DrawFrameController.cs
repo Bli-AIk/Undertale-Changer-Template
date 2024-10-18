@@ -46,7 +46,7 @@ namespace UCT.Global.UI
                 Other.Debug.Log("pointsMax < 3 , 已更改为3");
                 pointsMax = 3;
             }
-            for (int i = 0; i < pointsMax; i++)
+            for (var i = 0; i < pointsMax; i++)
             {
                 if (!useBracketId)
                     points.Add(transform.Find("Point" + i));
@@ -54,7 +54,7 @@ namespace UCT.Global.UI
                     points.Add(transform.Find("Point (" + i + ")"));
                 if (points[i] == null)
                 {
-                    GameObject obj = Instantiate(new GameObject());
+                    var obj = Instantiate(new GameObject());
                     obj.transform.SetParent(transform);
                     if (!useBracketId)
                         obj.name = "Point" + i;
@@ -96,8 +96,8 @@ namespace UCT.Global.UI
 
         private void Update()
         {
-            List<Vector2> localPoss = new List<Vector2>();
-            for (int i = 0; i < points.Count; i++)
+            var localPoss = new List<Vector2>();
+            for (var i = 0; i < points.Count; i++)
             {
                 _lineRenderer.SetPosition(i, points[i].transform.position);
                 if (!useBracketId)
@@ -115,7 +115,7 @@ namespace UCT.Global.UI
 
             if (Input.GetKeyDown(KeyCode.W))
             {
-                List<Vector2> rectangleVertices = new List<Vector2>
+                var rectangleVertices = new List<Vector2>
                 {
                     new Vector2(-1, 1),  // Top-left
                     new Vector2(1, 1),   // Top-right
@@ -129,13 +129,13 @@ namespace UCT.Global.UI
 
         private List<Transform> Draw(List<Transform> pointList, float drawRadius)
         {
-            int sides = pointList.Count;  // 根据points的数量确定边数
-            List<Transform> drawnPoints = new List<Transform>();
+            var sides = pointList.Count;  // 根据points的数量确定边数
+            var drawnPoints = new List<Transform>();
 
-            for (int i = 0; i < sides; i++)
+            for (var i = 0; i < sides; i++)
             {
-                float angle = 2 * Mathf.PI * i / sides;
-                Vector3 pos = new Vector3(Mathf.Cos(angle) * drawRadius, Mathf.Sin(angle) * drawRadius, 0);
+                var angle = 2 * Mathf.PI * i / sides;
+                var pos = new Vector3(Mathf.Cos(angle) * drawRadius, Mathf.Sin(angle) * drawRadius, 0);
 
                 if (pointList[i] != null)
                 {
@@ -156,15 +156,15 @@ namespace UCT.Global.UI
             }
 
             // Calculate the new positions for the points
-            Vector2[] newPositions = new Vector2[pointList.Count];
-            for (int i = 0; i < pointList.Count; i++)
+            var newPositions = new Vector2[pointList.Count];
+            for (var i = 0; i < pointList.Count; i++)
             {
-                Vector2 offset = vertices[i] - (Vector2)pointList[i].position;
+                var offset = vertices[i] - (Vector2)pointList[i].position;
                 newPositions[i] = vertices[i] - offset.normalized * offset.magnitude;
             }
 
             // Apply the animations using DOTween
-            for (int i = 0; i < pointList.Count; i++)
+            for (var i = 0; i < pointList.Count; i++)
             {
                 pointList[i].DOMove(new Vector3(newPositions[i].x, newPositions[i].y, 0), duration);
             }

@@ -101,7 +101,7 @@ namespace UCT.Global.UI
             isStop = false;
             this.fx = fx;
             if (isOverworld)
-                _talkUIPositionChanger.Change(true, originString.Substring(0, "<passText>".Length) == "<passText>", true, this);
+                _talkUIPositionChanger.Change(true, originString[.."<passText>".Length] == "<passText>", true, this);
 
             _tmpText = tmpText;
             Timing.RunCoroutine(_Typing(_tmpText));
@@ -137,7 +137,7 @@ namespace UCT.Global.UI
         private IEnumerator<float> _Typing(TMP_Text tmpText)
         {
             isRunning = true;
-            for (int i = 0; i < originString.Length; i++)
+            for (var i = 0; i < originString.Length; i++)
             {
                 if (spriteChanger != null)
                     spriteChanger.justSaying = false;
@@ -151,13 +151,13 @@ namespace UCT.Global.UI
 
                 if (originString[i] == '<')
                 {
-                    bool fix0 = false;
+                    var fix0 = false;
                     if (i == 0)
                         fix0 = true;
 
                     while (originString[i] == '<')
                     {
-                        string spText = "";
+                        var spText = "";
                         while (fix0 || originString[i - 1] != '>')
                         {
                             spText += originString[i];
@@ -170,14 +170,14 @@ namespace UCT.Global.UI
 
                         if (MainControl.Instance.IsFrontCharactersMatch("<fx=", spText))
                         {
-                            string save = spText.Substring(4);
-                            save = save.Substring(0, save.Length - 1);
+                            var save = spText[4..];
+                            save = save[..^1];
                             fx = int.Parse(save);
                         }
                         else if (MainControl.Instance.IsFrontCharactersMatch("<font=", spText))
                         {
-                            string save = spText.Substring(6);
-                            save = save.Substring(0, save.Length - 1);
+                            var save = spText[6..];
+                            save = save[..^1];
                             useFont = int.Parse(save);
                             tmpText.font = MainControl.Instance.OverworldControl.tmpFonts[useFont];
                         }
@@ -186,8 +186,8 @@ namespace UCT.Global.UI
                             if (!pressX)
                             {
                                 isTyping = false;
-                                float number = float.Parse(spText.Substring(6, spText.Length - 7));
-                                for (int p = 0; p < number; p++)
+                                var number = float.Parse(spText.Substring(6, spText.Length - 7));
+                                for (var p = 0; p < number; p++)
                                 {
                                     if (pressX)
                                         break;
@@ -200,9 +200,9 @@ namespace UCT.Global.UI
                         }
                         else if (MainControl.Instance.IsFrontCharactersMatch("<image=", spText))
                         {
-                            string save = spText.Substring(7);
-                            save = save.Substring(0, save.Length - 1);
-                            int s = int.Parse(save);
+                            var save = spText[7..];
+                            save = save[..^1];
+                            var s = int.Parse(save);
                             if (spriteChanger != null)
                                 spriteChanger.ChangeImage(s);
                             _talkUIPositionChanger.Change(true, s >= 0, false);
@@ -213,10 +213,10 @@ namespace UCT.Global.UI
                             {
                                 isTyping = false;
 
-                                float number = float.Parse(spText.Substring(9, spText.Length - 10));
-                                for (int l = 0; l < 3; l++)
+                                var number = float.Parse(spText.Substring(9, spText.Length - 10));
+                                for (var l = 0; l < 3; l++)
                                 {
-                                    for (int p = 0; p < number; p++)
+                                    for (var p = 0; p < number; p++)
                                     {
                                         if (pressX)
                                             break;
@@ -233,8 +233,8 @@ namespace UCT.Global.UI
                         }
                         else if (MainControl.Instance.IsFrontCharactersMatch("<passText=", spText))
                         {
-                            string save = spText.Substring(10);
-                            save = save.Substring(0, save.Length - 1);
+                            var save = spText[10..];
+                            save = save[..^1];
 
                             Invoke(nameof(PassText), float.Parse(save));
 
@@ -242,8 +242,8 @@ namespace UCT.Global.UI
                         }
                         else if (MainControl.Instance.IsFrontCharactersMatch("<storyFade", spText))
                         {
-                            string save = spText.Substring(11);
-                            save = save.Substring(0, save.Length - 1);
+                            var save = spText[11..];
+                            save = save[..^1];
                             StorySceneController.Instance.Fade(int.Parse(save));
                         }
                         else if (MainControl.Instance.IsFrontCharactersMatch("<stop......*", spText))
@@ -252,10 +252,10 @@ namespace UCT.Global.UI
                             {
                                 isTyping = false;
 
-                                float number = float.Parse(spText.Substring(12, spText.Length - 13));
-                                for (int l = 0; l < 6; l++)
+                                var number = float.Parse(spText.Substring(12, spText.Length - 13));
+                                for (var l = 0; l < 6; l++)
                                 {
-                                    for (int p = 0; p < number; p++)
+                                    for (var p = 0; p < number; p++)
                                     {
                                         if (pressX)
                                             break;
@@ -308,16 +308,16 @@ namespace UCT.Global.UI
                                     if (hpIn + hpSave >= MainControl.Instance.PlayerControl.hpMax)
                                     {
                                         plusString = MainControl.Instance.ItemControl.itemTextMaxData[22];
-                                        plusString = plusString.Substring(0, plusString.Length - 1);
+                                        plusString = plusString[..^1];
                                     }
                                     else
                                     {
                                         plusString = MainControl.Instance.ItemControl.itemTextMaxData[12];
-                                        plusString = plusString.Substring(0, plusString.Length - 1);
+                                        plusString = plusString[..^1];
                                     }
                                     originString = MainControl.RemoveSubstring(originString, i - "<autoFood>".Length, i - 1, plusString);
                                     i -= spText.Length;
-                                    passTextString = passTextString.Substring(0, passTextString.Length - spText.Length);
+                                    passTextString = passTextString[..^spText.Length];
                                     break;
 
                                 case "<changeX>":
@@ -326,7 +326,7 @@ namespace UCT.Global.UI
 
                                 case "<passText>":
                                     passText = true;
-                                    passTextString = passTextString.Substring(0, passTextString.Length - spText.Length);
+                                    passTextString = passTextString[..^spText.Length];
                                     //passTextString += spText.Length * 2 - 5;
                                     goto PassText;
                                 default://富文本
@@ -362,8 +362,8 @@ namespace UCT.Global.UI
 
                 //string cantString = ",.:;!?，。：；！？ \n\r";
 
-                string cantString = "* \n\r";
-                for (int j = 0; j < cantString.Length; j++)
+                var cantString = "* \n\r";
+                for (var j = 0; j < cantString.Length; j++)
                 {
                     if (cantString[j] == originString[i])
                     {
@@ -403,12 +403,12 @@ namespace UCT.Global.UI
                 {
                     if (originString[passTextString.Length] != '<')
                     {
-                        originString = originString.Substring(passTextString.Length - 1);
+                        originString = originString[(passTextString.Length - 1)..];
                         i -= passTextString.Length - 1;
                     }
                     else// == '<'
                     {
-                        originString = originString.Substring(passTextString.Length);
+                        originString = originString[passTextString.Length..];
                         i -= passTextString.Length;
 
                     }
@@ -422,7 +422,7 @@ namespace UCT.Global.UI
 
             isRunning = false;
             if (originString.Length > "<passText>".Length)
-                originString = originString.Substring("<passText>".Length);
+                originString = originString["<passText>".Length..];
         }
 
         private List<Vector2> _dynamicPos;
@@ -441,14 +441,14 @@ namespace UCT.Global.UI
                 switch (dynamicType)
                 {
                     case OverworldControl.DynamicType.Shake:
-                        for (int i = 0; i < 30; i++)
+                        for (var i = 0; i < 30; i++)
                         {
                             if (pressX)
                                 break;
 
                             _tmpText.ForceMeshUpdate();
 
-                            Vector3 randomer = new Vector3(Random.Range(-0.05f, 0.05f), Random.Range(-0.05f, 0.05f), 0);
+                            var randomer = new Vector3(Random.Range(-0.05f, 0.05f), Random.Range(-0.05f, 0.05f), 0);
 
                             charInfo = textInfo.characterInfo[number];
 
@@ -456,14 +456,14 @@ namespace UCT.Global.UI
 
                             verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
 
-                            for (int j = 0; j < 4; j++)
+                            for (var j = 0; j < 4; j++)
                             {
                                 orig = verts[charInfo.vertexIndex + j];
                                 //动画
                                 verts[charInfo.vertexIndex + j] = orig + randomer;
                             }
 
-                            for (int k = 0; k < textInfo.meshInfo.Length; k++)
+                            for (var k = 0; k < textInfo.meshInfo.Length; k++)
                             {
                                 var meshInfo = textInfo.meshInfo[k];
                                 meshInfo.mesh.vertices = meshInfo.vertices;
@@ -476,7 +476,7 @@ namespace UCT.Global.UI
                         break;
                     case OverworldControl.DynamicType.Fade:
 
-                        float fadeDuration = 0.1f; // 渐入时间
+                        var fadeDuration = 0.1f; // 渐入时间
                         Color32 startColor;
                         Color32 endColor;
 
@@ -490,25 +490,25 @@ namespace UCT.Global.UI
                         endColor = new Color32(startColor.r, startColor.g, startColor.b, 255);
 
                         // 设置初始颜色为透明
-                        for (int j = 0; j < 4; j++)
+                        for (var j = 0; j < 4; j++)
                         {
                             colors[charInfo.vertexIndex + j] = new Color32(startColor.r, startColor.g, startColor.b, 0);
                         }
 
                         _tmpText.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
 
-                        float elapsedTime = 0f;
+                        var elapsedTime = 0f;
                         while (elapsedTime < fadeDuration)
                         {
 
                             if (pressX)
                                 break;
                             elapsedTime += Time.deltaTime;
-                            float alpha = Mathf.Clamp01(elapsedTime / fadeDuration);
+                            var alpha = Mathf.Clamp01(elapsedTime / fadeDuration);
 
-                            Color32 currentColor = Color32.Lerp(new Color32(startColor.r, startColor.g, startColor.b, 0), endColor, alpha);
+                            var currentColor = Color32.Lerp(new Color32(startColor.r, startColor.g, startColor.b, 0), endColor, alpha);
 
-                            for (int j = 0; j < 4; j++)
+                            for (var j = 0; j < 4; j++)
                             {
                                 colors[charInfo.vertexIndex + j] = currentColor;
                             }
@@ -521,14 +521,14 @@ namespace UCT.Global.UI
 
                     case OverworldControl.DynamicType.Up:
 
-                        for (int i = 0; i < 30; i++)
+                        for (var i = 0; i < 30; i++)
                         {
                             if (pressX)
                                 break;
 
                             _tmpText.ForceMeshUpdate();
 
-                            Vector3 down = new Vector3(0, -0.1f);
+                            var down = new Vector3(0, -0.1f);
 
                             charInfo = textInfo.characterInfo[number];
 
@@ -536,14 +536,14 @@ namespace UCT.Global.UI
 
                             verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
 
-                            for (int j = 0; j < 4; j++)
+                            for (var j = 0; j < 4; j++)
                             {
                                 orig = verts[charInfo.vertexIndex + j];
                                 //动画
                                 verts[charInfo.vertexIndex + j] = orig + down * (1 - (float)i / 30);
                             }
 
-                            for (int k = 0; k < textInfo.meshInfo.Length; k++)
+                            for (var k = 0; k < textInfo.meshInfo.Length; k++)
                             {
                                 var meshInfo = textInfo.meshInfo[k];
                                 meshInfo.mesh.vertices = meshInfo.vertices;
@@ -603,8 +603,8 @@ namespace UCT.Global.UI
             if (isOverworld)
             {
                 _talkUIPositionChanger.Change(false, false, true, this);
-                if (originString.Substring(0, "<passText>".Length) == "<passText>")
-                    originString = originString.Substring("<passText>".Length);
+                if (originString[.."<passText>".Length] == "<passText>")
+                    originString = originString["<passText>".Length..];
             }
             pressX = false;
             Timing.RunCoroutine(_Typing(_tmpText));

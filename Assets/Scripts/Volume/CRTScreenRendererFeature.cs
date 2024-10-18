@@ -67,7 +67,7 @@ namespace Volume
             {
                 return;
             }
-            VolumeStack stack = VolumeManager.instance.stack;
+            var stack = VolumeManager.instance.stack;
             _glitchArtVolume = stack.GetComponent<GlitchArtComponent>();
             if (_glitchArtVolume == null)
             {
@@ -77,7 +77,7 @@ namespace Volume
             {
                 return;
             }
-            CommandBuffer cmd = CommandBufferPool.Get(RenderTag);
+            var cmd = CommandBufferPool.Get(RenderTag);
             Render(cmd, ref renderingData);
             context.ExecuteCommandBuffer(cmd);
             CommandBufferPool.Release(cmd);
@@ -85,10 +85,10 @@ namespace Volume
 
         private void Render(CommandBuffer cmd, ref RenderingData renderingData)
         {
-            ref CameraData cameraData = ref renderingData.cameraData;
-            Camera camera = cameraData.camera;
-            RenderTargetIdentifier source = _currentTarget;
-            int destination = TempTargetId;
+            ref var cameraData = ref renderingData.cameraData;
+            var camera = cameraData.camera;
+            var source = _currentTarget;
+            var destination = TempTargetId;
 
             _mat.SetFloat("_AnalogGlitchMode", Convert.ToInt32(_glitchArtVolume.analogGlitchMode.value));
             _mat.SetVector("_ScanLineJitter", _glitchArtVolume.scanLineJitter.value);

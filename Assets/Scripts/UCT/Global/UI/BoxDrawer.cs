@@ -159,8 +159,8 @@ namespace UCT.Global.UI
                 sonBoxDrawer[0].transform.localPosition = sonBoxDrawer[0].localPosition - localPosition;
                 sonBoxDrawer[1].transform.localPosition = sonBoxDrawer[1].localPosition - localPosition;
 
-                List<Vector2> realPointsBack0 = BoxController.Instance.GetRealPoints(sonBoxDrawer[0].realPoints, sonBoxDrawer[0].rotation, sonBoxDrawer[0].transform);
-                List<Vector2> realPointsBack1 = BoxController.Instance.GetRealPoints(sonBoxDrawer[1].realPoints, sonBoxDrawer[1].rotation, sonBoxDrawer[1].transform);
+                var realPointsBack0 = BoxController.Instance.GetRealPoints(sonBoxDrawer[0].realPoints, sonBoxDrawer[0].rotation, sonBoxDrawer[0].transform);
+                var realPointsBack1 = BoxController.Instance.GetRealPoints(sonBoxDrawer[1].realPoints, sonBoxDrawer[1].rotation, sonBoxDrawer[1].transform);
 
                 pointsSonSum = BoxController.Instance.AddLists(realPointsBack0, realPointsBack1);
 
@@ -232,7 +232,7 @@ namespace UCT.Global.UI
                 pointsInCross.Clear();
                 pointsOutCross.Clear();
 
-                for (int i = 0; i < 2; i++)
+                for (var i = 0; i < 2; i++)
                 {
                     sonBoxDrawer[i].transform.SetParent(BoxController.Instance.transform);
                     sonBoxDrawer[i].parent = null;
@@ -269,9 +269,9 @@ namespace UCT.Global.UI
         public Quaternion AddQuaternions(Quaternion quat1, Quaternion quat2)
         {
             // 将两个四元数转换为欧拉角，并相加
-            Vector3 euler1 = quat1.eulerAngles;
-            Vector3 euler2 = quat2.eulerAngles;
-            Vector3 summedEulerAngles = euler1 + euler2;
+            var euler1 = quat1.eulerAngles;
+            var euler2 = quat2.eulerAngles;
+            var summedEulerAngles = euler1 + euler2;
 
             // 将相加后的欧拉角转换为四元数
             return Quaternion.Euler(summedEulerAngles);
@@ -345,7 +345,7 @@ namespace UCT.Global.UI
         /// <returns></returns>
         private List<Vector2> InterpolatePoints(List<Vector2> points, int interpolation)
         {
-            List<Vector2> interpolatedPoints = new List<Vector2>();
+            var interpolatedPoints = new List<Vector2>();
 
             if (points.Count < 2)
             {
@@ -353,24 +353,24 @@ namespace UCT.Global.UI
                 return interpolatedPoints;
             }
 
-            for (int i = 0; i < points.Count; i++)
+            for (var i = 0; i < points.Count; i++)
             {
                 interpolatedPoints.Add(points[i]);
                 if (i == points.Count - 1)
                     break;
-                for (int j = 1; j <= interpolation; j++)
+                for (var j = 1; j <= interpolation; j++)
                 {
-                    float t = j / (float)(interpolation + 1);
-                    Vector2 interpolatedPoint = Vector2.Lerp(points[i], points[i + 1], t);
+                    var t = j / (float)(interpolation + 1);
+                    var interpolatedPoint = Vector2.Lerp(points[i], points[i + 1], t);
                     interpolatedPoints.Add(interpolatedPoint);
                 }
             }
 
             // 插入首尾之间的插值
-            for (int j = 1; j <= interpolation; j++)
+            for (var j = 1; j <= interpolation; j++)
             {
-                float t = j / (float)(interpolation + 1);
-                Vector2 interpolatedPoint = Vector2.Lerp(points[points.Count - 1], points[0], t);
+                var t = j / (float)(interpolation + 1);
+                var interpolatedPoint = Vector2.Lerp(points[points.Count - 1], points[0], t);
                 interpolatedPoints.Add(interpolatedPoint);
             }
             return interpolatedPoints;
@@ -381,10 +381,10 @@ namespace UCT.Global.UI
         /// </summary>
         public static List<Vector2> GenerateBezierCurve(List<Vector2> points, int besselInsertNumber, int numberPoints)
         {
-            List<Vector2> controlPoints = new List<Vector2>(points);
+            var controlPoints = new List<Vector2>(points);
 
             controlPoints.Add(controlPoints[0]);
-            List<Vector2> bezierPoints = new List<Vector2>(); // 创建一个Vector2列表用于存储生成的贝塞尔曲线上的点
+            var bezierPoints = new List<Vector2>(); // 创建一个Vector2列表用于存储生成的贝塞尔曲线上的点
 
             // 检查控制点的数量，至少需要4个控制点才能形成一个立方贝塞尔曲线
             if (controlPoints.Count < 4)
@@ -394,18 +394,18 @@ namespace UCT.Global.UI
             }
 
             // 遍历控制点列表，每次取出besselInsertNumber + 1个点生成贝塞尔曲线段
-            List<Vector2> pointList = new List<Vector2>();
-            for (int i = 0; i < controlPoints.Count - besselInsertNumber; i += besselInsertNumber + 1)
+            var pointList = new List<Vector2>();
+            for (var i = 0; i < controlPoints.Count - besselInsertNumber; i += besselInsertNumber + 1)
             {
-                for (int k = 0; k < besselInsertNumber + 2; k++)
+                for (var k = 0; k < besselInsertNumber + 2; k++)
                 {
                     pointList.Add(controlPoints[i + k]);
                 }
                 // 根据所需点的数量在当前曲线段上生成点
-                for (int j = 0; j <= numberPoints; j++)
+                for (var j = 0; j <= numberPoints; j++)
                 {
-                    float t = j / (float)numberPoints; // 计算参数t的值，用于插值
-                    Vector2 point = CalculateNthDegreeBezierPoint(pointList, t); // 调用计算贝塞尔点的函数
+                    var t = j / (float)numberPoints; // 计算参数t的值，用于插值
+                    var point = CalculateNthDegreeBezierPoint(pointList, t); // 调用计算贝塞尔点的函数
                     bezierPoints.Add(point); // 将计算得到的点添加到贝塞尔点列表中
                 }
                 pointList.Clear();
@@ -416,13 +416,13 @@ namespace UCT.Global.UI
 
         private static Vector2 CalculateNthDegreeBezierPoint(List<Vector2> controlPoints, float t)
         {
-            int n = controlPoints.Count - 1;
-            float u = 1 - t;
-            Vector2 p = Vector2.zero;
+            var n = controlPoints.Count - 1;
+            var u = 1 - t;
+            var p = Vector2.zero;
 
-            for (int i = 0; i <= n; i++)
+            for (var i = 0; i <= n; i++)
             {
-                float coefficient = BinomialCoefficient(n, i) * Mathf.Pow(u, n - i) * Mathf.Pow(t, i);
+                var coefficient = BinomialCoefficient(n, i) * Mathf.Pow(u, n - i) * Mathf.Pow(t, i);
                 p += coefficient * controlPoints[i];
             }
 
@@ -436,7 +436,7 @@ namespace UCT.Global.UI
         {
             float result = 1;
 
-            for (int i = 1; i <= k; i++)
+            for (var i = 1; i <= k; i++)
             {
                 result *= (n - i + 1) / (float)i;
             }
@@ -482,7 +482,7 @@ namespace UCT.Global.UI
             if (isBessel)
             {
 
-                for (int i = 0; i < besselPoints.Count; i++)
+                for (var i = 0; i < besselPoints.Count; i++)
                 {
                     var point = besselPoints[i];
                     if (i % (besselInsertNumber + 1) != 0)
@@ -548,7 +548,7 @@ namespace UCT.Global.UI
     {
         public override void OnInspectorGUI()
         {
-            BoxDrawer example = (BoxDrawer)target;
+            var example = (BoxDrawer)target;
 
             base.OnInspectorGUI(); //绘制一次GUI。
             if (GUILayout.Button("切分(不强制刷新)"))
@@ -590,16 +590,16 @@ namespace UCT.Global.UI
             if (GUILayout.Button("生成正多边形"))
             {
                 example.vertexPoints.Clear();
-                int sides = 3;
+                var sides = 3;
                 if (example.regularEdge >= 3)
                     sides = example.regularEdge;
                 else Other.Debug.Log("regularEdge should > 3", "#FF0000");
                 float radius = 3;
-                for (int i = sides - 1; i >= 0; i--)
+                for (var i = sides - 1; i >= 0; i--)
                 {
-                    float angle = (2 * Mathf.PI * i) / sides - example.regularAngle * Mathf.PI / 180;
-                    float x = radius * Mathf.Cos(angle);
-                    float y = radius * Mathf.Sin(angle);
+                    var angle = (2 * Mathf.PI * i) / sides - example.regularAngle * Mathf.PI / 180;
+                    var x = radius * Mathf.Cos(angle);
+                    var y = radius * Mathf.Sin(angle);
                     example.vertexPoints.Add(new Vector2(x, y));
                 }
                 example.GetComponents(true);
@@ -623,7 +623,7 @@ namespace UCT.Global.UI
         private bool _isUndoRedoPerformed;
         private void OnSceneGUI()
         {
-            BoxDrawer example = (BoxDrawer)target;
+            var example = (BoxDrawer)target;
 
             List<Vector2> vertices;
             if (example.isBessel && example.besselPoints.Count > 0)
@@ -636,19 +636,19 @@ namespace UCT.Global.UI
                 localPosition = example.localPosition;
             else localPosition = example.localPosition + example.parent.localPosition;
 
-            Quaternion rotation = example.rotation;
-            BoxDrawer parent = example.parent;
+            var rotation = example.rotation;
+            var parent = example.parent;
             while (parent != null)
             {
                 rotation = example.AddQuaternions(rotation, parent.rotation);
                 parent = parent.parent;
             }
 
-            for (int i = 0; i < vertices.Count; i++)
+            for (var i = 0; i < vertices.Count; i++)
             {
                 EditorGUI.BeginChangeCheck();
 
-                Vector3 newVertexPoints = Quaternion.Inverse(rotation) * Handles.PositionHandle(example.transform.parent.localPosition + example.localPosition + rotation * vertices[i], rotation) - example.transform.parent.localPosition;
+                var newVertexPoints = Quaternion.Inverse(rotation) * Handles.PositionHandle(example.transform.parent.localPosition + example.localPosition + rotation * vertices[i], rotation) - example.transform.parent.localPosition;
 
                 if (EditorGUI.EndChangeCheck())
                 {
@@ -669,7 +669,7 @@ namespace UCT.Global.UI
 
 
             EditorGUI.BeginChangeCheck();
-            Vector3 gameObjectPos = Handles.PositionHandle(example.transform.parent.localPosition + localPosition, rotation) - example.transform.parent.localPosition;
+            var gameObjectPos = Handles.PositionHandle(example.transform.parent.localPosition + localPosition, rotation) - example.transform.parent.localPosition;
             if (EditorGUI.EndChangeCheck())
             {
 

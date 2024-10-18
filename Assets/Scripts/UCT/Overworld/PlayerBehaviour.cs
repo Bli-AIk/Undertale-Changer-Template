@@ -68,7 +68,7 @@ namespace UCT.Overworld
         {
             if (collision.transform.CompareTag("owObjTrigger"))
             {
-                OverworldObjTrigger owObj = collision.transform.GetComponent<OverworldObjTrigger>();
+                var owObj = collision.transform.GetComponent<OverworldObjTrigger>();
                 saveOwObj = owObj;
             }
         }
@@ -77,7 +77,7 @@ namespace UCT.Overworld
         {
             if (collision.transform.CompareTag("owObjTrigger"))
             {
-                OverworldObjTrigger owObj = collision.transform.GetComponent<OverworldObjTrigger>();
+                var owObj = collision.transform.GetComponent<OverworldObjTrigger>();
                 if (owObj == saveOwObj)
                 {
                     saveOwObj = null;

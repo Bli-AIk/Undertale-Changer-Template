@@ -67,7 +67,7 @@ namespace Volume
             {
                 return;
             }
-            VolumeStack stack = VolumeManager.instance.stack;
+            var stack = VolumeManager.instance.stack;
             _chromaticAberrationVolume = stack.GetComponent<ChromaticAberrationComponent>();
             if (_chromaticAberrationVolume == null)
             {
@@ -77,7 +77,7 @@ namespace Volume
             {
                 return;
             }
-            CommandBuffer cmd = CommandBufferPool.Get(RenderTag);
+            var cmd = CommandBufferPool.Get(RenderTag);
             Render(cmd, ref renderingData);
             context.ExecuteCommandBuffer(cmd);
             CommandBufferPool.Release(cmd);
@@ -85,10 +85,10 @@ namespace Volume
 
         private void Render(CommandBuffer cmd, ref RenderingData renderingData)
         {
-            ref CameraData cameraData = ref renderingData.cameraData;
-            Camera camera = cameraData.camera;
-            RenderTargetIdentifier source = _currentTarget;
-            int destination = TempTargetId;
+            ref var cameraData = ref renderingData.cameraData;
+            var camera = cameraData.camera;
+            var source = _currentTarget;
+            var destination = TempTargetId;
 
             _mat.SetFloat("_Offset", _chromaticAberrationVolume.offset.value);
             _mat.SetFloat("_Speed", _chromaticAberrationVolume.speed.value);

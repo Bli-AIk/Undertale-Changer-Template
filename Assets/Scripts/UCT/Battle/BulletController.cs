@@ -48,7 +48,7 @@ namespace UCT.Battle
         public void SetBullet(string bulletPathName, string objName = default,
             Vector3 startPosition = default, BattleControl.BulletColor bulletColor = default, SpriteMaskInteraction startMask = default, Vector3 startRotation = default, Vector3 startScale = default)
         {
-            string path = "Assets/Bullets/" + bulletPathName;
+            var path = "Assets/Bullets/" + bulletPathName;
 
             SetBullet((BulletControl)Resources.Load(path), objName, startPosition, bulletColor, startMask, startRotation, startScale);
         }
@@ -142,7 +142,7 @@ namespace UCT.Battle
             else
                 return;
 
-            for (int i = 0; i < boxColliderList.Count; i++)
+            for (var i = 0; i < boxColliderList.Count; i++)
             {
                 Destroy(boxColliderList[0]);
                 boxColliderList.RemoveAt(0);
@@ -157,9 +157,9 @@ namespace UCT.Battle
             followMode = triggerFollowMode;
 
             //循环生成box碰撞
-            for (int i = 0; i < triggerSizes.Count; i++)
+            for (var i = 0; i < triggerSizes.Count; i++)
             {
-                BoxCollider2D save = gameObject.AddComponent<BoxCollider2D>();
+                var save = gameObject.AddComponent<BoxCollider2D>();
                 save.isTrigger = true;
                 if (followMode == FollowMode.NoFollow)
                     save.size = boxColliderSizes[i];
@@ -178,7 +178,7 @@ namespace UCT.Battle
         {
             if (followMode != FollowMode.NoFollow)
             {
-                for (int i = 0; i < boxColliderList.Count; i++)
+                for (var i = 0; i < boxColliderList.Count; i++)
                 {
                     switch (followMode)
                     {
@@ -192,10 +192,10 @@ namespace UCT.Battle
 
         private void OnTriggerStay2D(Collider2D collision)//伤害判定
         {
-            if (collision.transform.CompareTag("Player") && collision.name.Substring(0, "CheckCollider".Length) == "CheckCollider")
+            if (collision.transform.CompareTag("Player") && collision.name[.."CheckCollider".Length] == "CheckCollider")
             {
                 //if(!useExtra)
-                for (int i = 0; i < boxColliderList.Count; i++)
+                for (var i = 0; i < boxColliderList.Count; i++)
                 {
                     if (boxColliderList[i].IsTouching(collision))
                     {
@@ -234,8 +234,8 @@ namespace UCT.Battle
 
                 MainControl.Instance.selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
 
-                float r = Random.Range(0, 0.025f);
-                Vector3 v3Spin = MainControl.Instance.RandomPointOnSphereSurface(2.5f,new Vector3());
+                var r = Random.Range(0, 0.025f);
+                var v3Spin = MainControl.Instance.RandomPointOnSphereSurface(2.5f,new Vector3());
                 MainControl.Instance.cameraShake.Shake(new Vector3(r * MainControl.Instance.Get1Or_1(), r * MainControl.Instance.Get1Or_1(), 0), new Vector3(0, 0, v3Spin.z), 4, 1f / 60f * 4f * 1.5f, "", Ease.OutElastic);
                 MainControl.Instance.cameraShake3D.Shake(new Vector3(r * MainControl.Instance.Get1Or_1(), 0, r * MainControl.Instance.Get1Or_1()), v3Spin, 4, 1f / 60f * 4f * 1.5f, "3D CameraPoint", Ease.OutElastic);
                 if (MainControl.Instance.PlayerControl.hp <= 0)

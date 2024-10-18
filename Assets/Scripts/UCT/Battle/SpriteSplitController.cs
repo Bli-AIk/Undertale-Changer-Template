@@ -41,13 +41,13 @@ namespace UCT.Battle
 
         private IEnumerator SummonPixel()
         {
-            for (int y = _map.height - 1; y >= 0; y--)
+            for (var y = _map.height - 1; y >= 0; y--)
             {
-                for (int x = 0; x < _map.width; x++)
+                for (var x = 0; x < _map.width; x++)
                 {
-                    bool skip = false;
-                    Color color = _map.GetPixel(x, y);
-                    for (int i = 0; i < colorExclude.Count; i++)
+                    var skip = false;
+                    var color = _map.GetPixel(x, y);
+                    for (var i = 0; i < colorExclude.Count; i++)
                     {
                         if (color == colorExclude[i])
                         {
@@ -60,7 +60,7 @@ namespace UCT.Battle
                         continue;
                     }
 
-                    GameObject obj = GetFromPool();
+                    var obj = GetFromPool();
                     obj.GetComponent<SpriteRenderer>().color = color;
                     obj.GetComponent<SpriteRenderer>().sortingOrder = GetComponent<SpriteRenderer>().sortingOrder + 1;
 
@@ -78,7 +78,7 @@ namespace UCT.Battle
         /// </summary>
         public void FillPool()
         {
-            for (int i = 0; i < poolCount; i++)
+            for (var i = 0; i < poolCount; i++)
             {
                 var newObj = Instantiate(Resources.Load<GameObject>("Template/Square Template"), transform);
                 ReturnPool(newObj);

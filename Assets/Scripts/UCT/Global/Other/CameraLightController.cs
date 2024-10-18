@@ -27,9 +27,9 @@ namespace UCT.Global.Other
                 return;
 
             // 获取所有光源组件的引用
-            Light2D[] lights = FindObjectsOfType<Light2D>();
+            var lights = FindObjectsOfType<Light2D>();
 
-            foreach (Light2D light in lights)
+            foreach (var light in lights)
             {
                 if (light.lightType == Light2D.LightType.Global)
                     return;

@@ -23,7 +23,7 @@ namespace UCT.Global.Scene
 
         private void Start()
         {
-            for (int i = 0; i < transform.childCount; i++)
+            for (var i = 0; i < transform.childCount; i++)
             {
                 tmps.Add(transform.GetChild(i).GetComponent<TextMeshPro>());
             }
@@ -50,9 +50,9 @@ namespace UCT.Global.Scene
 
         private string Alphabet(int selectNumber)
         {
-            string bet = "A B C D E F G\nH I J K L M N\nO P Q R S T U\nV W X Y Z\na b c d e f g\nh i j k l m n\no p q r s t u\nv w x y z";
-            string final = "";
-            for (int i = 0; i < bet.Length; i++)
+            var bet = "A B C D E F G\nH I J K L M N\nO P Q R S T U\nV W X Y Z\na b c d e f g\nh i j k l m n\no p q r s t u\nv w x y z";
+            var final = "";
+            for (var i = 0; i < bet.Length; i++)
             {
                 if (i == selectNumber * 2)
                 {
@@ -70,13 +70,13 @@ namespace UCT.Global.Scene
 
         private void Selectbet(int selectNumber)
         {
-            List<string> strings = new List<string>();
+            var strings = new List<string>();
             /*
         if (!(selectNumber >= 52 && selectNumber <= 54))
             return;
         */
-            int selecter = selectNumber - 52;
-            for (int i = 0; i < 3; i++)
+            var selecter = selectNumber - 52;
+            for (var i = 0; i < 3; i++)
             {
                 if (i == selecter)
                     strings.Add("<color=yellow>");
@@ -94,7 +94,7 @@ namespace UCT.Global.Scene
             switch (mode)
             {
                 case 1:
-                    bool breaker = false;
+                    var breaker = false;
                     if ((MainControl.Instance.KeyArrowToControl(KeyCode.Z)) && setName.Length <= 6)
                     {
                         if (select < 52)
@@ -117,7 +117,7 @@ namespace UCT.Global.Scene
 
                                 case 53:
                                     if (setName.Length > 0)
-                                        setName = setName.Substring(0, setName.Length - 1);
+                                        setName = setName[..^1];
                                     break;
 
                                 case 54:
@@ -125,7 +125,7 @@ namespace UCT.Global.Scene
                                     {
                                         select = 0;
                                         mode = 2;
-                                        List<string> list = TextProcessingService.GetAllChildStringsByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "RenameSp");
+                                        var list = TextProcessingService.GetAllChildStringsByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "RenameSp");
                                         tmps[0].text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename");
                                         if (MainControl.Instance.OverworldControl.textWidth)
                                             tmps[3].text = "<size=0>wwww</size><color=yellow>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
@@ -136,7 +136,7 @@ namespace UCT.Global.Scene
                                         selectMax = true;
                                         foreach (var item in list)
                                         {
-                                            List<string> lister = new List<string>();
+                                            var lister = new List<string>();
                                             TextProcessingService.SplitStringToListWithDelimiter(item + '|', lister, '|');
                                             if ((lister[0] == MainControl.Instance.UppercaseToLowercase(setName) && !bool.Parse(lister[2])) || (lister[0] == setName && bool.Parse(lister[2])))
                                             {
@@ -171,7 +171,7 @@ namespace UCT.Global.Scene
                     else if (MainControl.Instance.KeyArrowToControl(KeyCode.X))
                     {
                         if (setName.Length > 0)
-                            setName = setName.Substring(0, setName.Length - 1);
+                            setName = setName[..^1];
                     }
                     else if (MainControl.Instance.KeyArrowToControl(KeyCode.C, 1))
                     {
@@ -286,7 +286,7 @@ namespace UCT.Global.Scene
                                 MainControl.Instance.PlayerControl.playerName = setName;
                                 AudioController.Instance.transform.GetComponent<AudioSource>().Pause();
                                 //Volume v = GameObject.Find("Global Volume").transform.GetComponent<Volume>();
-                                UnityEngine.Rendering.Volume v2 = GameObject.Find("Global Volume (1)").transform.GetComponent<UnityEngine.Rendering.Volume>();
+                                var v2 = GameObject.Find("Global Volume (1)").transform.GetComponent<UnityEngine.Rendering.Volume>();
 
                                 //DOTween.To(() => v.weight, x => v.weight = x, 0, 5.5f).SetEase(Ease.Linear);
                                 DOTween.To(() => v2.weight, x => v2.weight = x, 1, 5.5f).SetEase(Ease.Linear);

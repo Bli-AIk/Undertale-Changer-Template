@@ -21,7 +21,7 @@ namespace Debug
             {
                 _boxCollider2D.enabled = false;
                 booooool = !booooool;
-                for (int i = 0; i < 4; i++)
+                for (var i = 0; i < 4; i++)
                 {
                     var dir = i switch
                     {
@@ -31,12 +31,12 @@ namespace Debug
                         3 => Vector2.right,
                         _ => Vector2.zero,
                     };
-                    Ray2D ray = new Ray2D(transform.position, dir);
-                    RaycastHit2D info = Physics2D.Raycast(ray.origin, ray.direction, 5);
+                    var ray = new Ray2D(transform.position, dir);
+                    var info = Physics2D.Raycast(ray.origin, ray.direction, 5);
                     UCT.Global.Other.Debug.DrawRay(ray.origin, ray.direction);
                     if (info.collider != null && info.collider.transform != transform)
                     {
-                        GameObject obj = info.collider.gameObject;
+                        var obj = info.collider.gameObject;
                         obj.GetComponent<DebugSudoku>().booooool = !obj.GetComponent<DebugSudoku>().booooool;
                     }
                 }

@@ -99,9 +99,9 @@ namespace UCT.Battle
                 buttons.Add(transform.Find(t).GetComponent<SpriteRenderer>());
             }
 
-            for (int i = 0; i < MainControl.Instance.BattleControl.enemies.Count; i++)
+            for (var i = 0; i < MainControl.Instance.BattleControl.enemies.Count; i++)
             {
-                EnemiesController enemies = GameObject.Find(MainControl.Instance.BattleControl.enemies[i].name).GetComponent<EnemiesController>();
+                var enemies = GameObject.Find(MainControl.Instance.BattleControl.enemies[i].name).GetComponent<EnemiesController>();
                 if (enemies != null)
                 {
                     enemiesControllers.Add(enemies);
@@ -323,7 +323,7 @@ namespace UCT.Battle
                             LayerOneSet();
                             if (MainControl.Instance.KeyArrowToControl(KeyCode.Z))
                             {
-                                List<string> save = new List<string>();
+                                var save = new List<string>();
                                 TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.BattleControl.actSave, save, MainControl.Instance.BattleControl.enemies[selectSon].name + "\\");
                                 TextProcessingService.SplitStringToListWithDelimiter(save, actSave);
 
@@ -335,16 +335,16 @@ namespace UCT.Battle
                                     _textUI.text += "\n<color=#00000000>aa</color> * " + actSave[4];
                                 if (actSave.Count > 3 * MainControl.Instance.BattleControl.enemies.Count)
                                     _textUIBack.text += "\n* " + actSave[6];
-                                for (int i = 0; i < actSave.Count; i++)
+                                for (var i = 0; i < actSave.Count; i++)
                                 {
                                     actSave[i] += ';';
                                 }
 
                                 actSave = MainControl.Instance.ChangeItemData(actSave, false, new List<string> { enemiesControllers[selectSon].name, enemiesControllers[selectSon].atk.ToString(), enemiesControllers[selectSon].def.ToString() });
 
-                                for (int i = 0; i < actSave.Count; i++)
+                                for (var i = 0; i < actSave.Count; i++)
                                 {
-                                    actSave[i] = actSave[i].Substring(0, actSave[i].Length - 1);
+                                    actSave[i] = actSave[i][..(actSave[i].Length - 1)];
                                 }
 
                                 _textUIBack.rectTransform.anchoredPosition = new Vector2(10.75f, -3.3f);
@@ -367,7 +367,7 @@ namespace UCT.Battle
                             LayerOneSet();
                             if (MainControl.Instance.KeyArrowToControl(KeyCode.Z))
                             {
-                                List<string> save = new List<string>();
+                                var save = new List<string>();
                                 TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.BattleControl.mercySave, save, MainControl.Instance.BattleControl.enemies[selectSon].name + "\\");
                                 TextProcessingService.SplitStringToListWithDelimiter(save, actSave);
 
@@ -553,13 +553,13 @@ namespace UCT.Battle
 
                             //hpSpr.material.SetFloat("_Crop", 1);
 
-                            string textUITextChanger1 = "";
-                            string textUITextChanger2 = "";
+                            var textUITextChanger1 = "";
+                            var textUITextChanger2 = "";
 
-                            string textUIDataChanger1 = "";
-                            string textUIDataChanger2 = "";
+                            var textUIDataChanger1 = "";
+                            var textUIDataChanger2 = "";
 
-                            int myItemMax = MainControl.Instance.FindMax(MainControl.Instance.PlayerControl.myItems);
+                            var myItemMax = MainControl.Instance.FindMax(MainControl.Instance.PlayerControl.myItems);
 
                             if (myItemMax > 1)
                             {
@@ -571,7 +571,7 @@ namespace UCT.Battle
                                 textUITextChanger2 = "<color=#00000000>aa*</color>* " + MainControl.Instance.ItemIdGetName(MainControl.Instance.PlayerControl.myItems[selectSon + 2 - (selectGrandSon - 1)], "Auto", 0) + "\n";
                                 textUIDataChanger2 = MainControl.Instance.ItemIdGetData(MainControl.Instance.PlayerControl.myItems[selectSon + 2 - (selectGrandSon - 1)], "Auto", true) + "\n";
                             }
-                            int number = 8;
+                            var number = 8;
 
                             if (myItemMax >= 8)
                             {
@@ -841,7 +841,7 @@ namespace UCT.Battle
             else
             {
                 _hpFoodTween.Kill();
-                int addNumber = MainControl.Instance.PlayerControl.hp + foodNumber;
+                var addNumber = MainControl.Instance.PlayerControl.hp + foodNumber;
                 if (addNumber > MainControl.Instance.PlayerControl.hpMax)
                     addNumber = MainControl.Instance.PlayerControl.hpMax;
                 _hpFoodTween = DOTween.To(() => _hpFood, x => _hpFood = x, addNumber, 0.5f);

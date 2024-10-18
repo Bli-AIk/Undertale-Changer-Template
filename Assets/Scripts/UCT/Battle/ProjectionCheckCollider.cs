@@ -20,7 +20,7 @@ namespace UCT.Battle
             _canvasBoxProjectionSet = GameObject.Find("CanvasBoxProjectionSet");
 
             obj = (GameObject)Resources.Load("Prefabs/CheckCollider");
-            for (int i = 0; i < _canvasBoxProjectionSet.transform.childCount; i++)
+            for (var i = 0; i < _canvasBoxProjectionSet.transform.childCount; i++)
             {
                 _sets.Add(_canvasBoxProjectionSet.transform.GetChild(i).gameObject);
                 _checkColliders.Add(GetFromPool());
@@ -30,10 +30,10 @@ namespace UCT.Battle
         // Update is called once per frame
         private void Update()
         {
-            Vector2 relative = (Vector2)MainControl.Instance.battlePlayerController.transform.position - MainControl.Instance.battlePlayerController.sceneDrift;
-            for (int i = 0; i < _sets.Count; i++)
+            var relative = (Vector2)MainControl.Instance.battlePlayerController.transform.position - MainControl.Instance.battlePlayerController.sceneDrift;
+            for (var i = 0; i < _sets.Count; i++)
             {
-                Vector3 convert = _sets[i].transform.position + _sets[i].transform.rotation * relative;
+                var convert = _sets[i].transform.position + _sets[i].transform.rotation * relative;
                 _checkColliders[i].transform.position = (convert - _canvasBoxProjectionSet.transform.position);
                 _checkColliders[i].transform.rotation = _sets[i].transform.rotation;
             }

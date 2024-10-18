@@ -86,7 +86,7 @@ namespace UCT.Global.Core
             {
                 bgm = AudioController.Instance.gameObject;
             }
-            AudioSource audioSource = bgm.GetComponent<AudioSource>();
+            var audioSource = bgm.GetComponent<AudioSource>();
             audioSource.pitch = pitch;
             audioSource.volume = volume;
             audioSource.loop = loop;
@@ -97,7 +97,7 @@ namespace UCT.Global.Core
             }
 
             MainControl mainControl;
-            GameObject gameObjectM = GameObject.Find("MainControl");
+            var gameObjectM = GameObject.Find("MainControl");
             if (gameObjectM != null && gameObjectM.TryGetComponent(out mainControl))
             {
                 //Debug.LogWarning("<color=yellow>检测到本场景内有MainControl</color>", gameObject);

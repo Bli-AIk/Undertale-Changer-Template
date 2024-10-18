@@ -21,7 +21,7 @@ namespace UCT.Battle
         private void Awake()
         {
             //selectUIController = transform.parent.GetComponent<SelectUIController>();
-            for (int i = 0; i < transform.childCount; i++)
+            for (var i = 0; i < transform.childCount; i++)
             {
                 sons.Add(transform.GetChild(i).GetComponent<SpriteRenderer>());
             }
@@ -29,7 +29,7 @@ namespace UCT.Battle
 
         public void Open()
         {
-            for (int i = 2; i < sons.Count; i++)
+            for (var i = 2; i < sons.Count; i++)
             {
                 sons[i].gameObject.SetActive(i <= myItemMax + 1);
             }
@@ -90,7 +90,7 @@ namespace UCT.Battle
         {
             sons[0].color = Color.clear;
             sons[1].color = Color.clear;
-            for (int i = 0; i < sons.Count; i++)
+            for (var i = 0; i < sons.Count; i++)
             {
                 sons[i].transform.DOKill();
             }

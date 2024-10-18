@@ -19,7 +19,7 @@ namespace UCT.Global.Audio
             Instance = this;
 
             obj = new GameObject();
-            AudioPlayer audioPlayer = obj.AddComponent<AudioPlayer>();
+            var audioPlayer = obj.AddComponent<AudioPlayer>();
             audioPlayer.audioSource = obj.AddComponent<AudioSource>();
 
             obj.gameObject.name = "FX Source";
@@ -36,7 +36,7 @@ namespace UCT.Global.Audio
         {
             if (fxNumber < 0)
                 return;
-            GameObject fx = GetFromPool();
+            var fx = GetFromPool();
             fx.GetComponent<AudioSource>().volume = volume;
             fx.GetComponent<AudioSource>().pitch = pitch;
             if (audioMixerGroup == default)

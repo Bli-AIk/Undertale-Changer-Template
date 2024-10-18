@@ -135,9 +135,9 @@ namespace UCT.Global.UI
                     break;
 
                 case 1:
-                    List<string> strings = new List<string>();
+                    var strings = new List<string>();
 
-                    for (int i = 0; i < 6; i++)
+                    for (var i = 0; i < 6; i++)
                     {
                         if (isSetting && i == _settingSelect)
                             strings.Add("<color=yellow>");
@@ -159,7 +159,7 @@ namespace UCT.Global.UI
                                               TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Back");
 
                             _settingTmpSon.text = "";
-                            for (int i = 0; i < 6; i++)
+                            for (var i = 0; i < 6; i++)
                             {
                                 if (isSetting && i == _settingSelect)
                                 {
@@ -195,7 +195,7 @@ namespace UCT.Global.UI
                                               TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "ControlDefault") + '\n' +
                                               TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Back");
                             _settingTmpSon.text = "";
-                            for (int i = 6; i < 12; i++)
+                            for (var i = 6; i < 12; i++)
                             {
                                 if (isSetting && i - 6 == _settingSelect)
                                 {
@@ -223,7 +223,7 @@ namespace UCT.Global.UI
                     break;
 
                 case 2:
-                    string pathStringSaver = "";
+                    var pathStringSaver = "";
 
                     if (isSetting)
                     {
@@ -233,13 +233,13 @@ namespace UCT.Global.UI
                         _settingTmp.text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "LanguagePack") + '\n';
                     _settingTmpSon.text = "";
                     _settingSelectMax = 0;
-                    int settingSelectBack = _settingSelect;
+                    var settingSelectBack = _settingSelect;
                     if (onlySetSon)
                         _settingSelect = MainControl.Instance.languagePackId;
 
-                    for (int i = 0; i < MainControl.LanguagePackInsideNumber; i++) //内置包信息
+                    for (var i = 0; i < MainControl.LanguagePackInsideNumber; i++) //内置包信息
                     {
-                        string pathString = "TextAssets/LanguagePacks/" + MainControl.GetLanguageInsideId(i);
+                        var pathString = "TextAssets/LanguagePacks/" + MainControl.GetLanguageInsideId(i);
 
                         if (_settingSelectMax == _settingSelect)
                         {
@@ -250,7 +250,7 @@ namespace UCT.Global.UI
                         if (!onlySetSon)
                             _settingTmp.text += GetLanguagePacksName(pathString, "LanguagePackName", false) + '\n';
                     }
-                    foreach (string pathString in Directory.GetDirectories(Application.dataPath + "\\LanguagePacks"))
+                    foreach (var pathString in Directory.GetDirectories(Application.dataPath + "\\LanguagePacks"))
                     {
                         if (_settingSelectMax == _settingSelect)
                             pathStringSaver = pathString;
@@ -274,7 +274,7 @@ namespace UCT.Global.UI
         /// </summary>
         private string GetLanguagePacksName(string pathString, string returnString, bool isOutSide)
         {
-            List<string> strings = new List<string>();
+            var strings = new List<string>();
             MainControl.Instance.LoadItemData(strings, ReadFile(pathString + "\\LanguagePackInformation", isOutSide));
             strings = MainControl.Instance.ChangeItemData(strings, true, new List<string>());
             return TextProcessingService.GetFirstChildStringByPrefix(strings, returnString);
@@ -333,7 +333,7 @@ namespace UCT.Global.UI
                 SettingText(false, true);
                 if (SettingControl() != KeyCode.None)
                 {
-                    int j = 0;
+                    var j = 0;
                     switch (_controlPage)
                     {
                         case 0:
@@ -343,7 +343,7 @@ namespace UCT.Global.UI
                             j = 6;
                             goto default;
                         default:
-                            KeyCode origin = KeyCode.None;
+                            var origin = KeyCode.None;
 
                             switch (_controlSelect)
                             {
@@ -360,13 +360,13 @@ namespace UCT.Global.UI
                                     MainControl.Instance.OverworldControl.keyCodesBack2[_settingSelect + j] = SettingControl();
                                     goto default;
                                 default:
-                                    List<KeyCode> keycodes = new List<KeyCode>
+                                    var keycodes = new List<KeyCode>
                                     {
                                         MainControl.Instance.OverworldControl.keyCodes[_settingSelect + j],
                                         MainControl.Instance.OverworldControl.keyCodesBack1[_settingSelect + j],
                                         MainControl.Instance.OverworldControl.keyCodesBack2[_settingSelect + j]
                                     };
-                                    for (int i = 0; i < MainControl.Instance.OverworldControl.keyCodes.Count; i++)
+                                    for (var i = 0; i < MainControl.Instance.OverworldControl.keyCodes.Count; i++)
                                     {
                                         if (MainControl.Instance.OverworldControl.keyCodes[i] == keycodes[_controlSelect] && i != _settingSelect + j)
                                         {
@@ -374,7 +374,7 @@ namespace UCT.Global.UI
                                             break;
                                         }
                                     }
-                                    for (int i = 0; i < MainControl.Instance.OverworldControl.keyCodesBack1.Count; i++)
+                                    for (var i = 0; i < MainControl.Instance.OverworldControl.keyCodesBack1.Count; i++)
                                     {
                                         if (MainControl.Instance.OverworldControl.keyCodesBack1[i] == keycodes[_controlSelect] && i != _settingSelect + j)
                                         {
@@ -382,7 +382,7 @@ namespace UCT.Global.UI
                                             break;
                                         }
                                     }
-                                    for (int i = 0; i < MainControl.Instance.OverworldControl.keyCodesBack2.Count; i++)
+                                    for (var i = 0; i < MainControl.Instance.OverworldControl.keyCodesBack2.Count; i++)
                                     {
                                         if (MainControl.Instance.OverworldControl.keyCodesBack2[i] == keycodes[_controlSelect] && i != _settingSelect + j)
                                         {
@@ -406,7 +406,7 @@ namespace UCT.Global.UI
             {
                 if (SceneManager.GetActiveScene().name != "Story" && MainControl.Instance.KeyArrowToControl(KeyCode.V) && !MainControl.Instance.OverworldControl.isSetting && !MainControl.Instance.blacking)
                 {
-                    foreach (TypeWritter typeWritter in _typeWritters)
+                    foreach (var typeWritter in _typeWritters)
                     {
                         typeWritter.TypePause(true);
                     }
@@ -561,7 +561,7 @@ namespace UCT.Global.UI
                             }
                         }
 
-                        string textForUnder = "";
+                        var textForUnder = "";
                         switch (_settingSelect)
                         {
                             case 0:
@@ -730,7 +730,7 @@ namespace UCT.Global.UI
         private void CloseSetting(bool isLan = false)
         {
             MainControl.Instance.OverworldControl.isSetting = false;
-            foreach (TypeWritter typeWritter in _typeWritters)
+            foreach (var typeWritter in _typeWritters)
             {
                 typeWritter.TypePause(false);
             }
@@ -802,17 +802,17 @@ namespace UCT.Global.UI
         /// </summary>
         public void AnimSetHeartPos()
         {
-            Vector2 uiPos = WorldToUgui(MainControl.Instance.OverworldControl.playerDeadPos);
+            var uiPos = WorldToUgui(MainControl.Instance.OverworldControl.playerDeadPos);
             transform.Find("Heart").GetComponent<RectTransform>().anchoredPosition = uiPos;
         }
 
         public Vector2 WorldToUgui(Vector3 position)
         {
-            RectTransform canvasRectTransform = GetComponent<RectTransform>();
+            var canvasRectTransform = GetComponent<RectTransform>();
             Vector2 screenPoint = Camera.main.WorldToScreenPoint(position);//世界坐标转换为屏幕坐标
-            Vector2 screenSize = new Vector2(Screen.width, Screen.height);
+            var screenSize = new Vector2(Screen.width, Screen.height);
             screenPoint -= screenSize / 2;//将屏幕坐标变换为以屏幕中心为原点
-            Vector2 anchorPos = screenPoint / screenSize * canvasRectTransform.sizeDelta;//缩放得到UGUI坐标
+            var anchorPos = screenPoint / screenSize * canvasRectTransform.sizeDelta;//缩放得到UGUI坐标
 
             return anchorPos;
         }
@@ -827,8 +827,8 @@ namespace UCT.Global.UI
 
         public void AnimHeartGo()
         {
-            RectTransform i = transform.Find("Heart").GetComponent<RectTransform>();
-            Image j = i.GetComponent<Image>();
+            var i = transform.Find("Heart").GetComponent<RectTransform>();
+            var j = i.GetComponent<Image>();
             j.DOColor(new Color(j.color.r, j.color.g, j.color.b, 0), animSpeed).SetEase(Ease.Linear);
             DOTween.To(() => i.anchoredPosition, x => i.anchoredPosition = x, new Vector2(-330, -250), 1.5f).SetEase(Ease.OutCirc).OnKill(() => AnimOpen());
         }

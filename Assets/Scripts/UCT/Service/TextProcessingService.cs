@@ -70,7 +70,7 @@ namespace UCT.Service
             if (ignoreSemicolon && original[^1..] == ";")
                 original = original[..^1];
             var changed = "";
-            for (int i = 0; i < original.Length; i++)
+            for (var i = 0; i < original.Length; i++)
             {
                 changed += original[original.Length - i - 1];
             }
@@ -80,7 +80,7 @@ namespace UCT.Service
             {
                 original += changed[changed.Length - i - 1];
             }
-            if (float.TryParse(original, out float y))
+            if (float.TryParse(original, out var y))
                 return y;
             return 99999999;
         }
