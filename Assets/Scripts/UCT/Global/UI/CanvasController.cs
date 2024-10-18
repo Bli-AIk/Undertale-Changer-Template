@@ -7,6 +7,7 @@ using UCT.Battle;
 using UCT.Control;
 using UCT.Global.Audio;
 using UCT.Global.Core;
+using UCT.Service;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -102,27 +103,27 @@ namespace UCT.Global.UI
                     {
                         if (!isSetting)
                         {
-                            _settingTmp.text = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "Setting") + '\n' +
-                                              MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "SettingMainVolume") + '\n' +
-                                              MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "SettingControl") + '\n' +
-                                              MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "SettingFullScreen") + '\n' +
-                                              MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "SettingResolving") + '\n' +
-                                              MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "SettingSFX") + '\n' +
-                                              MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "SettingFPS") + '\n' +
-                                              MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "SettingBackMenu") + '\n' +
-                                              MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "SettingBackGame");
+                            _settingTmp.text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Setting") + '\n' +
+                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingMainVolume") + '\n' +
+                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingControl") + '\n' +
+                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingFullScreen") + '\n' +
+                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingResolving") + '\n' +
+                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingSFX") + '\n' +
+                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingFPS") + '\n' +
+                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingBackMenu") + '\n' +
+                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingBackGame");
                         }
                         else
                         {
-                            _settingTmp.text = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "Setting") + "\n<color=yellow>" +
-                                              MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "SettingMainVolume") + "</color>\n" +
-                                              MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "SettingControl") + '\n' +
-                                              MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "SettingFullScreen") + '\n' +
-                                              MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "SettingResolving") + '\n' +
-                                              MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "SettingSFX") + '\n' +
-                                              MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "SettingFPS") + '\n' +
-                                              MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "SettingBackMenu") + '\n' +
-                                              MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "SettingBackGame");
+                            _settingTmp.text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Setting") + "\n<color=yellow>" +
+                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingMainVolume") + "</color>\n" +
+                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingControl") + '\n' +
+                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingFullScreen") + '\n' +
+                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingResolving") + '\n' +
+                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingSFX") + '\n' +
+                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingFPS") + '\n' +
+                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingBackMenu") + '\n' +
+                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingBackGame");
                         }
                     }
                     if (!isSetting)
@@ -146,16 +147,16 @@ namespace UCT.Global.UI
                     switch (_controlPage)
                     {
                         case 0:
-                            _settingTmp.text = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "Control") + "</color>" + '\n' +
-                                              strings[0] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "ControlDown") + "</color>" + '\n' +
-                                              strings[1] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "ControlRight") + "</color>" + '\n' +
-                                              strings[2] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "ControlUp") + "</color>" + '\n' +
-                                              strings[3] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "ControlLeft") + "</color>" + '\n' +
-                                              strings[4] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "ControlZ") + "</color>" + '\n' +
-                                              strings[5] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "ControlX") + "</color>" + '\n' +
-                                              MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "PageDown") + '\n' +
-                                              MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "ControlDefault") + '\n' +
-                                              MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "Back");
+                            _settingTmp.text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Control") + "</color>" + '\n' +
+                                              strings[0] + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "ControlDown") + "</color>" + '\n' +
+                                              strings[1] + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "ControlRight") + "</color>" + '\n' +
+                                              strings[2] + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "ControlUp") + "</color>" + '\n' +
+                                              strings[3] + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "ControlLeft") + "</color>" + '\n' +
+                                              strings[4] + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "ControlZ") + "</color>" + '\n' +
+                                              strings[5] + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "ControlX") + "</color>" + '\n' +
+                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "PageDown") + '\n' +
+                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "ControlDefault") + '\n' +
+                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Back");
 
                             _settingTmpSon.text = "";
                             for (int i = 0; i < 6; i++)
@@ -183,16 +184,16 @@ namespace UCT.Global.UI
                             break;
 
                         case 1:
-                            _settingTmp.text = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "Control") + '\n' +
-                                              strings[0] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "ControlC") + "</color>" + '\n' +
-                                              strings[1] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "ControlV") + "</color>" + '\n' +
-                                              strings[2] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "ControlF4") + "</color>" + '\n' +
-                                              strings[3] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "ControlTab") + "</color>" + '\n' +
-                                              strings[4] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "ControlSemicolon") + "</color>" + '\n' +
-                                              strings[5] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "ControlEsc") + "</color>" + '\n' +
-                                              MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "PageUp") + '\n' +
-                                              MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "ControlDefault") + '\n' +
-                                              MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "Back");
+                            _settingTmp.text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Control") + '\n' +
+                                              strings[0] + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "ControlC") + "</color>" + '\n' +
+                                              strings[1] + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "ControlV") + "</color>" + '\n' +
+                                              strings[2] + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "ControlF4") + "</color>" + '\n' +
+                                              strings[3] + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "ControlTab") + "</color>" + '\n' +
+                                              strings[4] + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "ControlSemicolon") + "</color>" + '\n' +
+                                              strings[5] + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "ControlEsc") + "</color>" + '\n' +
+                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "PageUp") + '\n' +
+                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "ControlDefault") + '\n' +
+                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Back");
                             _settingTmpSon.text = "";
                             for (int i = 6; i < 12; i++)
                             {
@@ -229,7 +230,7 @@ namespace UCT.Global.UI
                         MainControl.Instance.Initialization(_settingSelect);
                     }
                     if (!onlySetSon)
-                        _settingTmp.text = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "LanguagePack") + '\n';
+                        _settingTmp.text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "LanguagePack") + '\n';
                     _settingTmpSon.text = "";
                     _settingSelectMax = 0;
                     int settingSelectBack = _settingSelect;
@@ -238,7 +239,7 @@ namespace UCT.Global.UI
 
                     for (int i = 0; i < MainControl.LanguagePackInsideNumber; i++) //内置包信息
                     {
-                        string pathString = "TextAssets/LanguagePacks/" + MainControl.Instance.GetLanguageInsideId(i);
+                        string pathString = "TextAssets/LanguagePacks/" + MainControl.GetLanguageInsideId(i);
 
                         if (_settingSelectMax == _settingSelect)
                         {
@@ -258,7 +259,7 @@ namespace UCT.Global.UI
                             _settingTmp.text += GetLanguagePacksName(pathString, "LanguagePackName", true) + '\n';
                     }
                     if (!onlySetSon)
-                        _settingTmp.text += MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "Back");
+                        _settingTmp.text += TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Back");
 
                     _settingTmpUnder.text = GetLanguagePacksName(pathStringSaver, "LanguagePackInformation", _settingSelect >= MainControl.LanguagePackInsideNumber) + '\n' + GetLanguagePacksName(pathStringSaver, "LanguagePackAuthor", _settingSelect >= MainControl.LanguagePackInsideNumber);
 
@@ -276,7 +277,7 @@ namespace UCT.Global.UI
             List<string> strings = new List<string>();
             MainControl.Instance.LoadItemData(strings, ReadFile(pathString + "\\LanguagePackInformation", isOutSide));
             strings = MainControl.Instance.ChangeItemData(strings, true, new List<string>());
-            return MainControl.Instance.ScreenMaxToOneSon(strings, returnString);
+            return TextProcessingService.GetFirstChildStringByPrefix(strings, returnString);
         }
 
         private string ReadFile(string pathName, bool isOutSide)
@@ -295,8 +296,8 @@ namespace UCT.Global.UI
         private string OpenOrClose(bool booler)
         {
             if (booler)
-                return MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "Open");
-            return MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "Close");
+                return TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Open");
+            return TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Close");
         }
 
         private void Update()
@@ -564,11 +565,11 @@ namespace UCT.Global.UI
                         switch (_settingSelect)
                         {
                             case 0:
-                                textForUnder = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "SettingMainVolumeTip");
+                                textForUnder = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingMainVolumeTip");
                                 break;
 
                             case 1:
-                                textForUnder = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "SettingControlTip");
+                                textForUnder = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingControlTip");
                                 break;
 
                             case 2:
@@ -576,15 +577,15 @@ namespace UCT.Global.UI
                                 switch (MainControl.Instance.OverworldControl.vsyncMode)
                                 {
                                     case OverworldControl.VSyncMode.DonNotSync:
-                                        vsyncModeAdd = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "VSyncNone");
+                                        vsyncModeAdd = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "VSyncNone");
                                         break;
 
                                     case OverworldControl.VSyncMode.SyncToRefreshRate:
-                                        vsyncModeAdd = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "VSyncFull");
+                                        vsyncModeAdd = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "VSyncFull");
                                         break;
 
                                     case OverworldControl.VSyncMode.HalfSync:
-                                        vsyncModeAdd = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "VSyncHalf");
+                                        vsyncModeAdd = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "VSyncHalf");
                                         break;
 
                                     default:
@@ -592,33 +593,33 @@ namespace UCT.Global.UI
                                 }
 
                                 if (!MainControl.Instance.OverworldControl.fullScreen)
-                                    textForUnder = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "SettingFullScreenTipOpen") + "\n" + vsyncModeAdd;
+                                    textForUnder = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingFullScreenTipOpen") + "\n" + vsyncModeAdd;
                                 else
-                                    textForUnder = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "SettingFullScreenTipClose") + "\n" + vsyncModeAdd;
+                                    textForUnder = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingFullScreenTipClose") + "\n" + vsyncModeAdd;
                                 break;
 
                             case 3:
                                 if (!MainControl.Instance.OverworldControl.hdResolution)
-                                    textForUnder = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "SettingResolvingTip");
+                                    textForUnder = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingResolvingTip");
                                 else
-                                    textForUnder = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "SettingResolvingTipHD");
+                                    textForUnder = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingResolvingTipHD");
 
                                 break;
 
                             case 4:
-                                textForUnder = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "SettingSFXTip");
+                                textForUnder = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingSFXTip");
                                 break;
 
                             case 5:
-                                textForUnder = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "SettingFPSTip");
+                                textForUnder = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingFPSTip");
                                 break;
 
                             case 6:
-                                textForUnder = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "SettingBackMenuTip");
+                                textForUnder = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingBackMenuTip");
                                 break;
 
                             case 7:
-                                textForUnder = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "SettingBackGameTip");
+                                textForUnder = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingBackGameTip");
                                 break;
                         }
                         _settingTmpUnder.text = textForUnder;
@@ -685,7 +686,7 @@ namespace UCT.Global.UI
 
                             SettingText();
                         }
-                        _settingTmpUnder.text = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "ControlUnder" + _controlSelect);
+                        _settingTmpUnder.text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "ControlUnder" + _controlSelect);
 
                         break;
 
@@ -761,7 +762,7 @@ namespace UCT.Global.UI
             _settingTmp.DOColor(Color.white, 1).SetEase(Ease.InCubic);
             DOTween.To(() => _settingTmp.rectTransform.anchoredPosition, x => _settingTmp.rectTransform.anchoredPosition = x, new Vector2(140, 140), animSpeed + 0.25f).SetEase(Ease.OutCubic);
             _settingSelect = 0;
-            _settingTmpUnder.text = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "ControlEggshell");
+            _settingTmpUnder.text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "ControlEggshell");
             SettingText();
             if (settingLevel == 2)
                 SettingText(true);
@@ -773,7 +774,7 @@ namespace UCT.Global.UI
             DOTween.To(() => setting.rectTransform.sizeDelta, x => setting.rectTransform.sizeDelta = x, new Vector2(0, setting.rectTransform.sizeDelta.y), animSpeed).SetEase(Ease.OutCirc);
             _settingTmp.DOColor(Color.white, 0).SetEase(Ease.OutCubic);
             DOTween.To(() => _settingTmp.rectTransform.anchoredPosition, x => _settingTmp.rectTransform.anchoredPosition = x, new Vector2(-610, 140), animSpeed + 0.25f).SetEase(Ease.InSine).OnKill(() => CloseSetting(isLan));
-            _settingTmpUnder.text = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "ControlEggshell");
+            _settingTmpUnder.text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "ControlEggshell");
         }
 
         private float _mLastUpdateShowTime;  //上一次更新帧率的时间;

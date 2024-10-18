@@ -5,6 +5,7 @@ using DG.Tweening;
 using UCT.Global.Audio;
 using UCT.Global.Core;
 using UCT.Global.UI;
+using UCT.Service;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -105,7 +106,7 @@ namespace UCT.Overworld
 
                             BackpackBehaviour.Instance.saveUIHeart.anchoredPosition = new Vector2(10000, 10000);
 
-                            BackpackBehaviour.Instance.saveUI.text = $"<color=yellow>{MainControl.Instance.FillString(name, 10)}LV{MainControl.Instance.FillString(MainControl.Instance.PlayerControl.lv.ToString(), 7)}{MainControl.Instance.GetRealTime((int)MainControl.Instance.PlayerControl.gameTime)}\n{MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, SceneManager.GetActiveScene().name)}\n{MainControl.Instance.RichTextWithEnd("size", 1, "\n")}  {MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "Saved")}";
+                            BackpackBehaviour.Instance.saveUI.text = $"<color=yellow>{TextProcessingService.PadStringToLength(name, 10)}LV{TextProcessingService.PadStringToLength(MainControl.Instance.PlayerControl.lv.ToString(), 7)}{TextProcessingService.GetRealTime((int)MainControl.Instance.PlayerControl.gameTime)}\n{TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, SceneManager.GetActiveScene().name)}\n{MainControl.Instance.RichTextWithEnd("size", 1, "\n")}  {TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Saved")}";
                             MainControl.Instance.PlayerControl.saveScene = SceneManager.GetActiveScene().name;
                             PlayerPrefs.SetInt("languagePack", MainControl.Instance.languagePackId);
                             PlayerPrefs.SetInt("dataNumber", MainControl.Instance.dataNumber);
@@ -191,10 +192,10 @@ namespace UCT.Overworld
             BackpackBehaviour.Instance.saveBack.transform.localPosition = new Vector3(BackpackBehaviour.Instance.saveBack.transform.localPosition.x, BackpackBehaviour.Instance.saveBack.transform.localPosition.y, 5);
             string name = MainControl.Instance.PlayerControl.playerName;
 
-            BackpackBehaviour.Instance.saveUI.text = MainControl.Instance.FillString(name, 10) + "LV" + MainControl.Instance.FillString(MainControl.Instance.PlayerControl.lv.ToString(), 7) +
-                                                     MainControl.Instance.GetRealTime((int)MainControl.Instance.PlayerControl.gameTime) + "\n" +
-                                                     MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, SceneManager.GetActiveScene().name) + "\n<size=1>\n</size>  " +
-                                                     MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "Save") + "         " + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, "Back")
+            BackpackBehaviour.Instance.saveUI.text = TextProcessingService.PadStringToLength(name, 10) + "LV" + TextProcessingService.PadStringToLength(MainControl.Instance.PlayerControl.lv.ToString(), 7) +
+                                                     TextProcessingService.GetRealTime((int)MainControl.Instance.PlayerControl.gameTime) + "\n" +
+                                                     TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, SceneManager.GetActiveScene().name) + "\n<size=1>\n</size>  " +
+                                                     TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Save") + "         " + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Back")
                 ;
             BackpackBehaviour.Instance.saveUIHeart.anchoredPosition = new Vector2(-258, -44);
         }
@@ -218,7 +219,7 @@ namespace UCT.Overworld
             if (_typeWritter == null)
                 _typeWritter = BackpackBehaviour.Instance.typeWritter;
 
-            _typeWritter.TypeOpen(MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, text), false, 0, 1, BackpackBehaviour.Instance.typeMessage);
+            _typeWritter.TypeOpen(TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, text), false, 0, 1, BackpackBehaviour.Instance.typeMessage);
             if (endInBattle)
                 _typeWritter.EndInBattle();
 

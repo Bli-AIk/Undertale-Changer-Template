@@ -239,7 +239,7 @@ namespace UCT.Battle
                 MainControl.Instance.cameraShake.Shake(new Vector3(r * MainControl.Instance.Get1Or_1(), r * MainControl.Instance.Get1Or_1(), 0), new Vector3(0, 0, v3Spin.z), 4, 1f / 60f * 4f * 1.5f, "", Ease.OutElastic);
                 MainControl.Instance.cameraShake3D.Shake(new Vector3(r * MainControl.Instance.Get1Or_1(), 0, r * MainControl.Instance.Get1Or_1()), v3Spin, 4, 1f / 60f * 4f * 1.5f, "3D CameraPoint", Ease.OutElastic);
                 if (MainControl.Instance.PlayerControl.hp <= 0)
-                    MainControl.Instance.KillPlayer();
+                    MainControl.Instance.battlePlayerController.KillPlayer(MainControl.Instance);
 
 
                 if (!MainControl.Instance.OverworldControl.noSfx)

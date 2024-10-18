@@ -54,7 +54,7 @@ namespace Volume
 
         public void Setup(in RenderTargetIdentifier currentTarget)
         {
-            this._currentTarget = currentTarget;
+            _currentTarget = currentTarget;
         }
 
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)

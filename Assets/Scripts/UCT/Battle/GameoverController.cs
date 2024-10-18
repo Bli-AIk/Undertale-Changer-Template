@@ -5,6 +5,7 @@ using TMPro;
 using UCT.Global.Audio;
 using UCT.Global.Core;
 using UCT.Global.UI;
+using UCT.Service;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -66,10 +67,10 @@ namespace UCT.Battle
         {
             List<string> strings = new List<string>
             {
-                MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "GameOver1"),
-                MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "GameOver2"),
-                MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "GameOver3"),
-                MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "GameOver4")
+                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "GameOver1"),
+                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "GameOver2"),
+                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "GameOver3"),
+                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "GameOver4")
             };
             _typeWritter.TypeOpen(strings[Random.Range(0, 4)], false, 0, 4, _tmp);
             canChangeSence = true;

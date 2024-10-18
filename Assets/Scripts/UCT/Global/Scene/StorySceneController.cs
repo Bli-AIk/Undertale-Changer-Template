@@ -3,6 +3,7 @@ using DG.Tweening;
 using TMPro;
 using UCT.Global.Core;
 using UCT.Global.UI;
+using UCT.Service;
 using UnityEngine;
 
 namespace UCT.Global.Scene
@@ -32,7 +33,7 @@ namespace UCT.Global.Scene
             _tmp = transform.Find("Text").GetComponent<TextMeshPro>();
             mask = transform.Find("Mask").gameObject;
 
-            _typeWritter.TypeOpen(MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Text"), false, 0, 1, _tmp, TypeWritter.TypeMode.CantZx);
+            _typeWritter.TypeOpen(TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Text"), false, 0, 1, _tmp, TypeWritter.TypeMode.CantZx);
         }
 
         private void Update()

@@ -134,7 +134,7 @@ namespace UCT.Battle
                     break;
             }
 
-            this.turn++;
+            turn++;
             MainControl.Instance.selectUIController.InTurn();
             yield return 0;
         }

@@ -992,6 +992,26 @@ namespace UCT.Battle
 
             return point;//如果没有找到更近的点，返回原点
         }
+
+        public void KillPlayer(MainControl mainControl)
+        {
+            mainControl.PlayerControl.hp = mainControl.PlayerControl.hpMax;
+
+            if (!(mainControl.PlayerControl.isDebug && mainControl.PlayerControl.invincible))
+            {
+                //spriteRenderer.color = Color.red;
+                mainControl.OverworldControl.playerDeadPos = transform.position - (Vector3)sceneDrift;
+                mainControl.OverworldControl.pause = true;
+                TurnController.Instance.KillIEnumerator();
+                mainControl.SwitchScene("Gameover", false);
+            }
+            else
+            {
+                mainControl.selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
+                Global.Other.Debug.Log("Debug无敌模式已将您的血量恢复", "#FF0000");
+            }
+
+        }
     }
 }
 

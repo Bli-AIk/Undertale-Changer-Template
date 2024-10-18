@@ -6,6 +6,7 @@ using UCT.Control;
 using UCT.Global.Audio;
 using UCT.Global.Core;
 using UCT.Global.UI;
+using UCT.Service;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -81,9 +82,9 @@ namespace UCT.Global.Scene
                     strings.Add("<color=yellow>");
                 else strings.Add("");
             }
-            tmps[3].text = strings[0] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename1") + "</color> " +
-                           strings[1] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename2") + "</color>  " +
-                           strings[2] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename3") + "</color>";
+            tmps[3].text = strings[0] + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename1") + "</color> " +
+                           strings[1] + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename2") + "</color>  " +
+                           strings[2] + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename3") + "</color>";
         }
 
         private void Update()
@@ -124,19 +125,19 @@ namespace UCT.Global.Scene
                                     {
                                         select = 0;
                                         mode = 2;
-                                        List<string> list = MainControl.ScreenMaxToAllSon(MainControl.Instance.OverworldControl.sceneTextsSave, "RenameSp");
-                                        tmps[0].text = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename");
+                                        List<string> list = TextProcessingService.GetAllChildStringsByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "RenameSp");
+                                        tmps[0].text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename");
                                         if (MainControl.Instance.OverworldControl.textWidth)
-                                            tmps[3].text = "<size=0>wwww</size><color=yellow>" + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
-                                                           "</color>    " + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Yes");
+                                            tmps[3].text = "<size=0>wwww</size><color=yellow>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
+                                                           "</color>    " + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Yes");
                                         else
-                                            tmps[3].text = "<size=2><color=#00000000>wwww</color></size><color=yellow>" + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
-                                                           "</color>    <color=#00000000><size=5>wwwwwwwww</size></color>" + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Yes");
+                                            tmps[3].text = "<size=2><color=#00000000>wwww</color></size><color=yellow>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
+                                                           "</color>    <color=#00000000><size=5>wwwwwwwww</size></color>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Yes");
                                         selectMax = true;
                                         foreach (var item in list)
                                         {
                                             List<string> lister = new List<string>();
-                                            MainControl.Instance.MaxToOneSon(item + '|', lister, '|');
+                                            TextProcessingService.SplitStringToListWithDelimiter(item + '|', lister, '|');
                                             if ((lister[0] == MainControl.Instance.UppercaseToLowercase(setName) && !bool.Parse(lister[2])) || (lister[0] == setName && bool.Parse(lister[2])))
                                             {
                                                 if (lister[3] == "<gaster>")
@@ -147,9 +148,9 @@ namespace UCT.Global.Scene
                                                 {
                                                     selectMax = false;
                                                     if (MainControl.Instance.OverworldControl.textWidth)
-                                                        tmps[3].text = "<size=0>wwww</size><color=yellow>" + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "GoBack") + "</color>";
+                                                        tmps[3].text = "<size=0>wwww</size><color=yellow>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "GoBack") + "</color>";
                                                     else
-                                                        tmps[3].text = "<size=2><color=#00000000>wwww</color></size><color=yellow>" + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "GoBack") + "</color>";
+                                                        tmps[3].text = "<size=2><color=#00000000>wwww</color></size><color=yellow>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "GoBack") + "</color>";
                                                 }
 
                                                 break;
@@ -255,7 +256,7 @@ namespace UCT.Global.Scene
                         if (select > 54)
                             select = 0;
                     }
-                    tmps[0].text = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename0");
+                    tmps[0].text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename0");
                     tmps[1].text = setName;
                     tmps[2].text = Alphabet(select);
                     Selectbet(select);
@@ -275,9 +276,9 @@ namespace UCT.Global.Scene
                                 tmps[1].transform.localPosition = new Vector3(8.95f, 0.6f);
                                 tmps[1].transform.localScale = Vector3.one;
                                 tmps[1].GetComponent<DynamicTMP>().dynamicMode = 0;
-                                tmps[3].text = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename1") +
-                                               MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename2") +
-                                               MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename3");
+                                tmps[3].text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename1") +
+                                               TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename2") +
+                                               TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename3");
                                 break;
 
                             case 1:
@@ -309,9 +310,9 @@ namespace UCT.Global.Scene
                         tmps[1].transform.localPosition = new Vector3(8.95f, 0.6f);
                         tmps[1].transform.localScale = Vector3.one;
                         tmps[1].GetComponent<DynamicTMP>().dynamicMode = 0;
-                        tmps[3].text = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename1") +
-                                       MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename2") +
-                                       MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename3");
+                        tmps[3].text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename1") +
+                                       TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename2") +
+                                       TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename3");
                     }
                     if (selectMax && (MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow) || MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow)))
                     {
@@ -319,21 +320,21 @@ namespace UCT.Global.Scene
                         {
                             select = 1;
                             if (MainControl.Instance.OverworldControl.textWidth)
-                                tmps[3].text = "<size=0>wwww</size>" + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
-                                               "    <color=yellow>" + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Yes") + "</color>";
+                                tmps[3].text = "<size=0>wwww</size>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
+                                               "    <color=yellow>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Yes") + "</color>";
                             else
-                                tmps[3].text = "<color=#00000000><size=2>wwww</size></color>" + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
-                                               "    <color=#00000000><size=5>wwwwwwwww</size></color><color=yellow>" + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Yes") + "</color>";
+                                tmps[3].text = "<color=#00000000><size=2>wwww</size></color>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
+                                               "    <color=#00000000><size=5>wwwwwwwww</size></color><color=yellow>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Yes") + "</color>";
                         }
                         else
                         {
                             select = 0;
                             if (MainControl.Instance.OverworldControl.textWidth)
-                                tmps[3].text = "<color=#00000000><size=0>wwww</size><color=yellow>" + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
-                                               "</color>    <color=white>" + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Yes");
+                                tmps[3].text = "<color=#00000000><size=0>wwww</size><color=yellow>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
+                                               "</color>    <color=white>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Yes");
                             else
-                                tmps[3].text = "<color=#00000000><size=2>wwww</size></color><color=yellow>" + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
-                                               "</color>    <color=#00000000><size=5>wwwwwwwww</size></color>" + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Yes");
+                                tmps[3].text = "<color=#00000000><size=2>wwww</size></color><color=yellow>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
+                                               "</color>    <color=#00000000><size=5>wwwwwwwww</size></color>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Yes");
                         }
                     }
                     break;
@@ -344,8 +345,8 @@ namespace UCT.Global.Scene
                     setName = "";
                     tmps[2].text = "";
                     tmps[3].text = "";
-                    tmps[4].text = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Teach");
-                    tmps[5].text = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "MenuUnder") + Application.version;
+                    tmps[4].text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Teach");
+                    tmps[5].text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "MenuUnder") + Application.version;
                     if (MainControl.Instance.KeyArrowToControl(KeyCode.Z) && setName.Length < 6)
                         mode = 1;
                     break;

@@ -84,7 +84,7 @@ namespace UCT.Global.UI
         public void TypeOpen(string text, bool force, int hp, int fx, TMP_Text tmpText, TypeMode typeMode = TypeMode.Normal)
         {
             isRunning = true;
-            this._typeMode = typeMode;
+            _typeMode = typeMode;
 
             if (!force && isTyping)
                 return;
@@ -103,8 +103,8 @@ namespace UCT.Global.UI
             if (isOverworld)
                 _talkUIPositionChanger.Change(true, originString.Substring(0, "<passText>".Length) == "<passText>", true, this);
 
-            this._tmpText = tmpText;
-            Timing.RunCoroutine(_Typing(this._tmpText));
+            _tmpText = tmpText;
+            Timing.RunCoroutine(_Typing(_tmpText));
         }
 
         public void TypeStop()
@@ -315,7 +315,7 @@ namespace UCT.Global.UI
                                         plusString = MainControl.Instance.ItemControl.itemTextMaxData[12];
                                         plusString = plusString.Substring(0, plusString.Length - 1);
                                     }
-                                    originString = MainControl.Instance.StringRemover(originString, i - "<autoFood>".Length, i - 1, plusString);
+                                    originString = MainControl.RemoveSubstring(originString, i - "<autoFood>".Length, i - 1, plusString);
                                     i -= spText.Length;
                                     passTextString = passTextString.Substring(0, passTextString.Length - spText.Length);
                                     break;

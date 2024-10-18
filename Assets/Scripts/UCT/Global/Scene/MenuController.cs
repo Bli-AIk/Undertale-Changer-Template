@@ -5,6 +5,7 @@ using UCT.Control;
 using UCT.Global.Audio;
 using UCT.Global.Core;
 using UCT.Global.UI;
+using UCT.Service;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -51,11 +52,11 @@ namespace UCT.Global.Scene
             tmps[0].text = playerControl.playerName;
             tmps[1].text = "LV " + playerControl.lv;
             //tmps[2]在update内设置
-            tmps[3].text = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.settingSave, playerControl.saveScene);
+            tmps[3].text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, playerControl.saveScene);
 
             Flash();
 
-            tmps[5].text = MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "MenuUnder") + Application.version;
+            tmps[5].text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "MenuUnder") + Application.version;
         }
 
         private void Update()
@@ -216,24 +217,24 @@ namespace UCT.Global.Scene
                     list.Add("<color=yellow>");
             }
             if (!_setData)
-                tmps[4].text = list[0] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Menu0") + "</color> "
-                               + list[1] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Menu1") + "</color>\n"
-                               + list[2] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Menu2") + "</color> "
-                               + list[3] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Menu3") + "</color>\n"
-                               + list[4] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Menu4") + "</color> "
-                               + list[5] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Menu5") + "</color>";
+                tmps[4].text = list[0] + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Menu0") + "</color> "
+                               + list[1] + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Menu1") + "</color>\n"
+                               + list[2] + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Menu2") + "</color> "
+                               + list[3] + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Menu3") + "</color>\n"
+                               + list[4] + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Menu4") + "</color> "
+                               + list[5] + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Menu5") + "</color>";
             else
-                tmps[4].text = list[0] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Menu12") + "</color> "
+                tmps[4].text = list[0] + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Menu12") + "</color> "
                                + list[1] + "Data" + saveNumber + "</color>\n"
-                               + list[2] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Menu6") + "</color> "
-                               + list[3] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, saveNumber == (SaveController.GetDataNumber() - 1) ? "Menu10" : "Menu7") + "</color>\n"
-                               + list[4] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, 0 == (SaveController.GetDataNumber() - 1) ? "Menu8" : "Menu11") + "</color> "
-                               + list[5] + MainControl.Instance.ScreenMaxToOneSon(MainControl.Instance.OverworldControl.sceneTextsSave, "Menu9") + "</color>";
+                               + list[2] + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Menu6") + "</color> "
+                               + list[3] + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, saveNumber == (SaveController.GetDataNumber() - 1) ? "Menu10" : "Menu7") + "</color>\n"
+                               + list[4] + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, 0 == (SaveController.GetDataNumber() - 1) ? "Menu8" : "Menu11") + "</color> "
+                               + list[5] + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Menu9") + "</color>";
         }
 
         private void FixedUpdate()
         {
-            tmps[2].text = MainControl.Instance.GetRealTime((int)MainControl.Instance.PlayerControl.gameTime);
+            tmps[2].text = TextProcessingService.GetRealTime((int)MainControl.Instance.PlayerControl.gameTime);
         }
     }
 }

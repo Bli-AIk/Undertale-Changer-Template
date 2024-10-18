@@ -6,6 +6,7 @@ using TMPro;
 using UCT.Global.Audio;
 using UCT.Global.Core;
 using UCT.Global.UI;
+using UCT.Service;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -323,8 +324,8 @@ namespace UCT.Battle
                             if (MainControl.Instance.KeyArrowToControl(KeyCode.Z))
                             {
                                 List<string> save = new List<string>();
-                                MainControl.ScreenMaxToOneSon(MainControl.Instance.BattleControl.actSave, save, MainControl.Instance.BattleControl.enemies[selectSon].name + "\\");
-                                MainControl.MaxToOneSon(save, actSave);
+                                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.BattleControl.actSave, save, MainControl.Instance.BattleControl.enemies[selectSon].name + "\\");
+                                TextProcessingService.SplitStringToListWithDelimiter(save, actSave);
 
                                 _textUI.text = "<color=#00000000>aa</color> * " + actSave[0];
                                 _textUIBack.text = "";
@@ -367,8 +368,8 @@ namespace UCT.Battle
                             if (MainControl.Instance.KeyArrowToControl(KeyCode.Z))
                             {
                                 List<string> save = new List<string>();
-                                MainControl.ScreenMaxToOneSon(MainControl.Instance.BattleControl.mercySave, save, MainControl.Instance.BattleControl.enemies[selectSon].name + "\\");
-                                MainControl.MaxToOneSon(save, actSave);
+                                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.BattleControl.mercySave, save, MainControl.Instance.BattleControl.enemies[selectSon].name + "\\");
+                                TextProcessingService.SplitStringToListWithDelimiter(save, actSave);
 
                                 _textUI.text = "<color=#00000000>aa</color> * " + actSave[0];
                                 if (actSave.Count > MainControl.Instance.BattleControl.enemies.Count)
@@ -735,7 +736,7 @@ namespace UCT.Battle
         private void KeepDialogBubble()
         {
             var save = new List<string>();
-            MainControl.Instance.MaxToOneSon(actSave[numberDialog], save);
+            TextProcessingService.SplitStringToListWithDelimiter(actSave[numberDialog], save);
             foreach (var t in enemiesControllers.Where(t => save[2] == t.name))
             {
                 _dialog.transform.SetParent(t.transform);
@@ -778,7 +779,7 @@ namespace UCT.Battle
         {
             var turnTextSaveChanged = (from t in turnTextSave where t[..turn.ToString().Length] == turn.ToString() select t[(turn.ToString().Length + 1)..]).ToList();
             var saves = new List<string>();
-            MainControl.MaxToOneSon(turnTextSaveChanged, saves);
+            TextProcessingService.SplitStringToListWithDelimiter(turnTextSaveChanged, saves);
             return saves;
         }
 

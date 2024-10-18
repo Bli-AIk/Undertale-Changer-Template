@@ -11,6 +11,7 @@ using UCT.Control;
 using UCT.Global.Audio;
 using UCT.Global.UI;
 using UCT.Overworld;
+using UCT.Service;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
@@ -28,6 +29,7 @@ namespace UCT.Global.Core
     public class MainControl : MonoBehaviour
     {
         public static MainControl Instance;
+        
         [FormerlySerializedAs("languagePack")] public int languagePackId;
         public int dataNumber;
 
@@ -92,67 +94,40 @@ namespace UCT.Global.Core
 
         public void SetPlayerControl(PlayerControl playerControl)
         {
-            PlayerControl.hp = playerControl.hp;
-            PlayerControl.hpMax = playerControl.hpMax;
-            PlayerControl.lv = playerControl.lv;
-            PlayerControl.exp = playerControl.exp;
-            PlayerControl.gold = playerControl.gold;
-            PlayerControl.wearAtk = playerControl.wearAtk;
-            PlayerControl.wearDef = playerControl.wearDef;
-            PlayerControl.nextExp = playerControl.nextExp;
-            PlayerControl.missTime = playerControl.missTime;
-            PlayerControl.missTimeMax = playerControl.missTimeMax;
-            PlayerControl.atk = playerControl.atk;
-            PlayerControl.def = playerControl.def;
-            PlayerControl.playerName = playerControl.playerName;
-            PlayerControl.myItems = playerControl.myItems;
-            PlayerControl.wearArm = playerControl.wearArm;
-            PlayerControl.wearArmor = playerControl.wearArmor;
-            PlayerControl.canMove = playerControl.canMove;
-            PlayerControl.gameTime = playerControl.gameTime;
-            PlayerControl.lastScene = playerControl.lastScene;
-            PlayerControl.saveScene = playerControl.saveScene;
-            PlayerControl.isDebug = playerControl.isDebug;
-            PlayerControl.invincible = playerControl.invincible;
+            foreach (var field in typeof(PlayerControl).GetFields())
+            {
+                field.SetValue(null, field.GetValue(playerControl));
+            }
         }
-
         /// <summary>
         /// 获取内置语言包ID
         /// </summary>
-        public string GetLanguageInsideId(int id)
-        {
-            switch (id)
+        public static string GetLanguageInsideId(int id) =>
+            id switch
             {
-                case 0:
-                    return "CN";
-
-                case 1:
-                    return "TCN";
-
-                case 2:
-                    goto default;
-                default:
-                    return "US";
-            }
-        }
+                0 => "CN",
+                1 => "TCN",
+                _ => "US"
+            };
 
         /// <summary>
         /// 加载对应语言包的数据
         /// </summary>
         private string LoadLanguageData(string path)
         {
-            if (languagePackId < LanguagePackInsideNumber)
-            {
-                return Resources.Load<TextAsset>($"TextAssets/LanguagePacks/{GetLanguageInsideId(languagePackId)}/{path}").text;
-            }
-
-            return File.ReadAllText($"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[languagePackId - LanguagePackInsideNumber]}\\{path}.txt");
+            return languagePackId < LanguagePackInsideNumber 
+                ? Resources.Load<TextAsset>($"TextAssets/LanguagePacks/{GetLanguageInsideId(languagePackId)}/{path}").text 
+                : File.ReadAllText($"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[languagePackId - LanguagePackInsideNumber]}\\{path}.txt");
         }
 
         private void LanguagePackDetection()
         {
-            if ((languagePackId < 0)
-                || (languagePackId >= Directory.GetDirectories(Application.dataPath + "\\LanguagePacks").Length + LanguagePackInsideNumber))
+            if (languagePackId < 0 ||
+                languagePackId >=
+                Directory.GetDirectories(
+                Application.dataPath +
+                "\\LanguagePacks").Length +
+                LanguagePackInsideNumber)
             {
                 languagePackId = 2;
             }
@@ -189,14 +164,14 @@ namespace UCT.Global.Core
             LoadItemData(ItemControl.itemMax, ItemControl.itemData);
             LoadItemData(ItemControl.itemTextMax, ItemControl.itemText);
 
-            MaxToSon(ItemControl.itemTextMax, new[] { "Data", "Item" }, new[] { ItemControl.itemTextMaxData, ItemControl.itemTextMaxItem });
+            TextProcessingService.ClassifyStringsByPrefix(ItemControl.itemTextMax, new[] { "Data", "Item" }, new[] { ItemControl.itemTextMaxData, ItemControl.itemTextMaxItem });
             ItemClassification();
 
             ItemControl.itemTextMaxData = ChangeItemData(ItemControl.itemTextMaxData, true, new List<string>());
             ItemControl.itemTextMaxItem = ChangeItemData(ItemControl.itemTextMaxItem, true, new List<string>());
             ItemControl.itemTextMaxItem = ChangeItemData(ItemControl.itemTextMaxItem, false, new List<string>());
 
-            MaxToOneSon(ItemControl.itemTextMaxItem, ItemControl.itemTextMaxItemSon);
+            TextProcessingService.SplitStringToListWithDelimiter(ItemControl.itemTextMaxItem, ItemControl.itemTextMaxItemSon);
             //--------------------------------------------------------------------------------
         }
 
@@ -238,9 +213,9 @@ namespace UCT.Global.Core
         private void InitializationLanguagePackFullWidth()
         {
             //检测语言包全半角
-            if (OverworldControl.textWidth != bool.Parse(ScreenMaxToOneSon(OverworldControl.settingSave, "LanguagePackFullWidth")))
+            if (OverworldControl.textWidth != bool.Parse(TextProcessingService.GetFirstChildStringByPrefix(OverworldControl.settingSave, "LanguagePackFullWidth")))
             {
-                OverworldControl.textWidth = bool.Parse(ScreenMaxToOneSon(OverworldControl.settingSave, "LanguagePackFullWidth"));
+                OverworldControl.textWidth = bool.Parse(TextProcessingService.GetFirstChildStringByPrefix(OverworldControl.settingSave, "LanguagePackFullWidth"));
                 foreach (var obj in Resources.FindObjectsOfTypeAll(typeof(TextChanger)))
                 {
                     var textChanger = (TextChanger)obj;
@@ -250,7 +225,7 @@ namespace UCT.Global.Core
                 }
             }
 
-            CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture(ScreenMaxToOneSon(OverworldControl.settingSave, "CultureInfo"));
+            CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture(TextProcessingService.GetFirstChildStringByPrefix(OverworldControl.settingSave, "CultureInfo"));
         }
 
         private void InitializationBattle()
@@ -288,9 +263,9 @@ namespace UCT.Global.Core
                     BattleControl.turnDialogAsset.Add(File.ReadAllText(file));
             }
             LoadItemData(BattleControl.uiTextSave, BattleControl.uiText);
-            ScreenMaxToOneSon(BattleControl.uiTextSave, BattleControl.actSave, "Act\\");
-            ScreenMaxToOneSon(BattleControl.uiTextSave, BattleControl.mercySave, "Mercy\\");
-            ScreenMaxToOneSon(BattleControl.uiTextSave, BattleControl.turnTextSave, "Turn\\");
+            TextProcessingService.GetFirstChildStringByPrefix(BattleControl.uiTextSave, BattleControl.actSave, "Act\\");
+            TextProcessingService.GetFirstChildStringByPrefix(BattleControl.uiTextSave, BattleControl.mercySave, "Mercy\\");
+            TextProcessingService.GetFirstChildStringByPrefix(BattleControl.uiTextSave, BattleControl.turnTextSave, "Turn\\");
 
             BattleControl.turnTextSave = ChangeItemData(BattleControl.turnTextSave, true, new List<string>());
             //--------------------------------------------------------------------------------
@@ -385,6 +360,7 @@ namespace UCT.Global.Core
         /// <summary>
         /// 生成字符串形式的随机颜色。
         /// </summary>
+        // ReSharper disable once MemberCanBePrivate.Global
         public string RandomStringColor()
         {
             var text = "<color=#";
@@ -473,8 +449,7 @@ namespace UCT.Global.Core
         /// </summary>
         private void Metronome()
         {
-            if (beatTimes.Count <= 0)
-                return;
+            if (beatTimes.Count <= 0) return;
 
             bool firstIn = true;
             while (currentBeatIndex < beatTimes.Count && AudioController.Instance.audioSource.time >= nextBeatTime)
@@ -492,11 +467,9 @@ namespace UCT.Global.Core
                 firstIn = false;
             }
 
-            if (currentBeatIndex >= beatTimes.Count)
-            {
-                nextBeatTime = beatTimes[0];
-                currentBeatIndex = 0;
-            }
+            if (currentBeatIndex < beatTimes.Count) return;
+            nextBeatTime = beatTimes[0];
+            currentBeatIndex = 0;
         }
 
         /// <summary>
@@ -1234,9 +1207,9 @@ namespace UCT.Global.Core
             return text;
         }
 
-        public bool IsFrontCharactersMatch(string original, string texters)
+        public bool IsFrontCharactersMatch(string original, string inputText)
         {
-            return texters.Length > original.Length && texters.Substring(0, original.Length) == original;
+            return inputText.Length > original.Length && inputText[..original.Length] == original;
         }
 
         /// <summary>
@@ -1485,7 +1458,7 @@ namespace UCT.Global.Core
                     for (var j = 0; j < text.Length; j++)
                     {
                         if (j != 1)
-                            ItemClassificatioAdd(text[1], text[j]);
+                            ItemClassificationAdd(text[1], text[j]);
                     }
                     i = 0;
                 }
@@ -1495,7 +1468,7 @@ namespace UCT.Global.Core
         /// <summary>
         /// ItemClassification的一个子void
         /// </summary>
-        private void ItemClassificatioAdd(string i, string origin)
+        private void ItemClassificationAdd(string i, string origin)
         {
             if (origin != "null")
                 switch (i)
@@ -1520,148 +1493,6 @@ namespace UCT.Global.Core
                         ItemControl.itemOthers.Add(origin);
                         break;
                 }
-        }
-
-        /// <summary>
-        /// 检测 '\'字符然后分割文本到子List
-        /// 批量处理string
-        /// </summary>
-        public static void MaxToOneSon(List<string> parentList, List<string> sonList, char font = '\\')
-        {
-            sonList.Clear();
-            var text = "";
-            foreach (var t in parentList)
-            {
-                foreach (var t1 in t)
-                {
-                    if (t1 == font || t1 == ';')
-                    {
-                        sonList.Add(text);
-                        text = "";
-                    }
-                    else text += t1;
-                }
-            }
-        }
-
-        /// <summary>
-        /// 检测 '\'字符然后分割文本到子List
-        /// 传入一个string
-        /// </summary>
-        public void MaxToOneSon(string parentString, List<string> sonList, char font = '\\')
-        {
-            sonList.Clear();
-            string text = "";
-
-            foreach (var t in parentString)
-            {
-                if (t == font || t == ';')
-                {
-                    sonList.Add(text);
-                    text = "";
-                }
-                else text += t;
-            }
-        }
-
-        /// <summary>
-        /// 检测到第一个'\'字符就传出
-        /// </summary>
-        private static string MaxToOneSon(string original, char font = '\\')
-        {
-            var final = "";
-            foreach (var t in original)
-            {
-                if (t != font)
-                    final += t;
-                else break;
-            }
-            return final;
-        }
-
-        /// <summary>
-        /// 反向检测第一个'\'字符就传出，可选忽视掉最后的 ; 号。
-        /// </summary>
-        public float MaxToLastFloat(string original, bool noLast = true, char font = '\\')
-        {
-            if (noLast && original.Substring(original.Length - 1) == ";")
-                original = original.Substring(0, original.Length - 1);
-            string changed = "";
-            for (int i = 0; i < original.Length; i++)
-            {
-                changed += original[original.Length - i - 1];
-            }
-            changed = MaxToOneSon(changed, font);
-            original = "";
-            for (int i = 0; i < changed.Length; i++)
-            {
-                original += changed[changed.Length - i - 1];
-            }
-            if (float.TryParse(original, out float y))
-                return y;
-            return 99999999;
-        }
-
-        /// <summary>
-        /// 用于游戏内文本读取
-        /// 传入数据名称返回文本包文本
-        /// 给第一个 返第二个)
-        /// </summary>
-        public string ScreenMaxToOneSon(List<string> parentList, string screen)
-        {
-            foreach (var t in parentList)
-            {
-                if (t.Length > screen.Length && MaxToOneSon(t) == screen)
-                {
-                    string str = t.Substring(screen.Length + 1);
-                    str = str[..^1];
-                    return str;
-                }
-            }
-
-            return "null";
-        }
-
-        /// <summary>
-        /// 用于游戏内文本读取
-        /// 传入数据名称返回所有同名的文本包文本
-        /// </summary>
-        public static List<string> ScreenMaxToAllSon(List<string> parentList, string screen)
-        {
-            return (from t in parentList where t.Length > screen.Length && MaxToOneSon(t) == screen select t[(screen.Length + 1)..] into str select str[..^1]).ToList();
-        }
-
-        /// <summary>
-        /// 检测list的前几个字符是否与传入的string screen相同。
-        /// 若相同则分割文本到子List
-        /// </summary>
-        public static void ScreenMaxToOneSon(List<string> parentList, List<string> sonList, string screen)
-        {
-            sonList.Clear();
-            sonList.AddRange(from t in parentList where t[..screen.Length] == screen select t[screen.Length..]);
-        }
-
-        /// <summary>
-        /// 再分配文本包
-        /// </summary>
-        private static void MaxToSon(List<string> max, string[] text, List<string>[] son)
-        {
-            //max.Clear();
-            foreach (var t in son)
-            {
-                t.Clear();
-            }
-
-            foreach (var t in max)
-            {
-                for (var j = 0; j < text.Length; j++)
-                {
-                    if (t[..text[j].Length] == text[j])
-                    {
-                        son[j].Add(t[(text[j].Length + 1)..]);
-                    }
-                }
-            }
         }
 
         public List<int> ListOrderChanger(List<int> original)
@@ -1989,39 +1820,9 @@ namespace UCT.Global.Core
         }
 
         /// <summary>
-        /// 给一个指定长度，然后会用空格填充原字符串
+        /// 从字符串中移除指定位置的子字符串。
         /// </summary>
-        /// <param name="origin">原字符串</param>
-        /// <param name="length">返回长度</param>
-        /// <returns></returns>
-        public string FillString(string origin, int length)
-        {
-            int forNumber = length - origin.Length;
-            for (int i = 0; i < forNumber; i++)
-            {
-                origin += " ";
-            }
-            return origin;
-        }
-
-        public string GetRealTime(int totalSeconds)
-        {
-            if (totalSeconds < 0)
-                totalSeconds = 0;
-
-            //int seconds = totalSeconds % 60;
-            totalSeconds /= 60;
-            int minutes = totalSeconds % 60;
-            int hours = totalSeconds / 60;
-
-            string hoursString = hours < 10 ? $"0{hours}" : $"{hours}";
-            string minutesString = minutes < 10 ? $"0{minutes}" : $"{minutes}";
-
-            return $"{hoursString}:{minutesString}";
-        }
-
-
-        public string StringRemover(string inputString, int startIndex, int endIndex, string add = "")
+        public static string RemoveSubstring(string inputString, int startIndex, int endIndex, string add = "")
         {
             if (startIndex < 0 || endIndex >= inputString.Length || startIndex > endIndex)
             {
@@ -2036,26 +1837,6 @@ namespace UCT.Global.Core
             return result;
         }
 
-        public void KillPlayer()
-        {
-            PlayerControl.hp = PlayerControl.hpMax;
-
-            if (!(PlayerControl.isDebug && PlayerControl.invincible))
-            {
-                //spriteRenderer.color = Color.red;
-                OverworldControl.playerDeadPos = transform.position - (Vector3)battlePlayerController.sceneDrift;
-                OverworldControl.pause = true;
-                TurnController.Instance.KillIEnumerator();
-                SwitchScene("Gameover", false);
-            }
-            else
-            {
-                selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
-                Other.Debug.Log("Debug无敌模式已将您的血量恢复", "#FF0000");
-            }
-
-        }
-    
         /// <summary>
         /// 计算多边形中点
         /// </summary>
