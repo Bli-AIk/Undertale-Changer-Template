@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace UCT.Service
 {
@@ -48,41 +49,45 @@ namespace UCT.Service
         }
 
         /// <summary>
-        /// 检测到第一个'\'字符就传出
+        /// 检测输入字符串，返回第一个分隔符之前的部分。
         /// </summary>
-        public static string SplitFirstStringWithDelimiter(string original, char delimiter = '\\')
+        public static string SplitFirstStringWithDelimiter(string input, char delimiter = '\\')
         {
-            var final = "";
-            foreach (var t in original)
+            var result = "";
+            foreach (var t in input)
             {
                 if (t != delimiter)
-                    final += t;
+                    result += t;
                 else break;
             }
-            return final;
+            return result;
         }
 
         /// <summary>
-        /// 反向检测第一个'\'字符就传出，可选忽视掉最后的 ; 号。
+        /// 从输入字符串中获取最后一个分隔符前的浮点数。
+        /// 默认忽略最后一个分号，反向搜索直到遇到指定的分隔符。
+        /// 如果无法解析浮点数，返回一个默认的极大值。
         /// </summary>
-        public static float GetLastFloatBeforeDelimiter(string original, bool ignoreSemicolon = true, char delimiter = '\\')
+        /// <param name="input">原字符串</param>
+        /// <param name="isIgnoreSemicolon">是否忽略分号</param>
+        /// <param name="delimiter">分隔符</param>
+        /// <returns>填充后的字符串</returns>
+        public static float GetLastFloatBeforeDelimiter(string input, bool isIgnoreSemicolon = true, char delimiter = '\\')
         {
-            if (ignoreSemicolon && original[^1..] == ";")
-                original = original[..^1];
+            if (isIgnoreSemicolon && input[^1..] == ";")
+                input = input[..^1];
             var changed = "";
-            for (var i = 0; i < original.Length; i++)
+            for (var i = 0; i < input.Length; i++)
             {
-                changed += original[original.Length - i - 1];
+                changed += input[input.Length - i - 1];
             }
             changed = SplitFirstStringWithDelimiter(changed, delimiter);
-            original = "";
+            input = "";
             for (var i = 0; i < changed.Length; i++)
             {
-                original += changed[changed.Length - i - 1];
+                input += changed[changed.Length - i - 1];
             }
-            if (float.TryParse(original, out var y))
-                return y;
-            return 99999999;
+            return float.TryParse(input, out var y) ? y : Mathf.Infinity;
         }
 
         /// <summary>
@@ -92,9 +97,9 @@ namespace UCT.Service
         /// </summary>
         public static string GetFirstChildStringByPrefix(List<string> parentList, string screen)
         {
-            foreach (var str in from t in parentList where t.Length > screen.Length && SplitFirstStringWithDelimiter(t) == screen select t[(screen.Length + 1)..] into str select str[..^1])
+            foreach (var result in from t in parentList where t.Length > screen.Length && SplitFirstStringWithDelimiter(t) == screen select t[(screen.Length + 1)..] into str select str[..^1])
             {
-                return str;
+                return result;
             }
 
             return "null";
@@ -106,7 +111,8 @@ namespace UCT.Service
         /// </summary>
         public static List<string> GetAllChildStringsByPrefix(List<string> parentList, string screen)
         {
-            return (from t in parentList where t.Length > screen.Length && SplitFirstStringWithDelimiter(t) == screen select t[(screen.Length + 1)..] into str select str[..^1]).ToList();
+            var result = (from t in parentList where t.Length > screen.Length && SplitFirstStringWithDelimiter(t) == screen select t[(screen.Length + 1)..] into str select str[..^1]).ToList();
+            return result;
         }
 
         /// <summary>
@@ -230,6 +236,20 @@ namespace UCT.Service
             //Other.Debug.Log(inputString.Substring(startIndex + 1));
             var result = part1 + add + part2; // 合并两部分
             return result;
+        }
+
+        /// <summary>
+        /// 随机生成一个六位长的英文
+        /// </summary>
+        public static string RandomString(int length = 6, string alphabet = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM")
+        {
+            var text = "";
+
+            for (var i = 0; i < length; i++)
+            {
+                text += alphabet[Random.Range(0, alphabet.Length)];
+            }
+            return text;
         }
     }
 }

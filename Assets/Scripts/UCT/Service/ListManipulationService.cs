@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace UCT.Service
 {
@@ -21,6 +22,26 @@ namespace UCT.Service
                 result = i;
                 break;
             }
+            return result;
+        }
+
+        /// <summary>
+        /// 重排列表，将所有非零的数值排在前面，把0排在最后。
+        /// </summary>
+        public static List<int> MoveZerosToEnd(List<int> inputList)
+        {
+            var result = new List<int>();
+            var zeroCount = inputList.Count;
+            foreach (var t in inputList.Where(t => t != 0))
+            {
+                result.Add(t);
+                zeroCount--;
+            }
+            for (var i = 0; i < zeroCount; i++)
+            {
+                result.Add(0);
+            }
+
             return result;
         }
     }

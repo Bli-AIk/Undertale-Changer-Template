@@ -175,7 +175,7 @@ namespace UCT.Global.Scene
                     }
                     else if (MainControl.Instance.KeyArrowToControl(KeyCode.C, 1))
                     {
-                        setName = MainControl.Instance.RandomString(Random.Range(1, 7));
+                        setName = TextProcessingService.RandomString(Random.Range(1, 7));
                     }
                     if (breaker) break;
                     if (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow))

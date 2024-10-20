@@ -135,7 +135,7 @@ namespace UCT.Overworld
                 else if (MainControl.Instance.KeyArrowToControl(KeyCode.C))//开启
                 {
                     AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
-                    MainControl.Instance.PlayerControl.myItems = MainControl.Instance.ListOrderChanger(MainControl.Instance.PlayerControl.myItems);
+                    MainControl.Instance.PlayerControl.myItems = ListManipulationService.MoveZerosToEnd(MainControl.Instance.PlayerControl.myItems);
                     var uiSelectPlusColor = "";
                     _sonSelectMax = 8;
                     for (var i = 0; i < MainControl.Instance.PlayerControl.myItems.Count; i++)

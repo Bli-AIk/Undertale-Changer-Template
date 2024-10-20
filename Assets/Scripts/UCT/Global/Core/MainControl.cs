@@ -769,32 +769,42 @@ namespace UCT.Global.Core
             if (banMusic)
             {
                 var bgm = AudioController.Instance.transform.GetComponent<AudioSource>();
-                if (time > 0)
-                    DOTween.To(() => bgm.volume, x => bgm.volume = x, 0, time).SetEase(Ease.Linear);
-                else if (time == 0)
-                    bgm.volume = 0;
-                else
-                    DOTween.To(() => bgm.volume, x => bgm.volume = x, 0, Mathf.Abs(time)).SetEase(Ease.Linear);
+                switch (time)
+                {
+                    case > 0:
+                        DOTween.To(() => bgm.volume, x => bgm.volume = x, 0, time).SetEase(Ease.Linear);
+                        break;
+                    case 0:
+                        bgm.volume = 0;
+                        break;
+                    default:
+                        DOTween.To(() => bgm.volume, x => bgm.volume = x, 0, Mathf.Abs(time)).SetEase(Ease.Linear);
+                        break;
+                }
             }
             OverworldControl.pause = true;
-            if (time > 0)
+            switch (time)
             {
-                _inOutBlack.DOColor(color, time).SetEase(Ease.Linear).OnKill(() => SwitchScene(scene));
-                if (!OverworldControl.hdResolution)
-                    CanvasController.Instance.frame.color = new Color(1, 1, 1, 0);
-            }
-            else if (time == 0)
-            {
-                _inOutBlack.color = color;
-                SwitchScene(scene, async);
-            }
-            else
-            {
-                time = Mathf.Abs(time);
-                _inOutBlack.color = color;
-                _inOutBlack.DOColor(color, time).SetEase(Ease.Linear).OnKill(() => SwitchScene(scene));
-                if (!OverworldControl.hdResolution)
-                    CanvasController.Instance.frame.color = new Color(1, 1, 1, 0);
+                case > 0:
+                {
+                    _inOutBlack.DOColor(color, time).SetEase(Ease.Linear).OnKill(() => SwitchScene(scene));
+                    if (!OverworldControl.hdResolution)
+                        CanvasController.Instance.frame.color = new Color(1, 1, 1, 0);
+                    break;
+                }
+                case 0:
+                    _inOutBlack.color = color;
+                    SwitchScene(scene, async);
+                    break;
+                default:
+                {
+                    time = Mathf.Abs(time);
+                    _inOutBlack.color = color;
+                    _inOutBlack.DOColor(color, time).SetEase(Ease.Linear).OnKill(() => SwitchScene(scene));
+                    if (!OverworldControl.hdResolution)
+                        CanvasController.Instance.frame.color = new Color(1, 1, 1, 0);
+                    break;
+                }
             }
         }
 
@@ -817,20 +827,6 @@ namespace UCT.Global.Core
 
             SetResolution(Instance.OverworldControl.resolutionLevel);
             blacking = false;
-        }
-
-        /// <summary>
-        /// 随机生成一个六位长的英文
-        /// </summary>
-        public string RandomString(int length = 6, string alphabet = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM")
-        {
-            var text = "";
-
-            for (var i = 0; i < length; i++)
-            {
-                text += alphabet[Random.Range(0, alphabet.Length)];
-            }
-            return text;
         }
 
         [Space]
@@ -867,7 +863,7 @@ namespace UCT.Global.Core
         /// <summary>
         /// 调入数据(传入TextAsset)
         /// </summary>
-        private void LoadItemData(List<string> list, TextAsset inputText)//保存的list 导入的text
+        public static void LoadItemData(List<string> list, TextAsset inputText)//保存的list 导入的text
         {
             list.Clear();
             var text = "";
@@ -896,7 +892,7 @@ namespace UCT.Global.Core
         /// <summary>
         /// 调入数据(传入string)
         /// </summary>
-        public void LoadItemData(List<string> list, string inputText)//保存的list 导入的text
+        public static void LoadItemData(List<string> list, string inputText)//保存的list 导入的text
         {
             list.Clear();
             var text = "";
@@ -971,13 +967,12 @@ namespace UCT.Global.Core
                         PlayerControl.hp = PlayerControl.hpMax;
                     for (var i = 0; i < ItemControl.itemFoods.Count; i++)
                     {
-                        if (ItemControl.itemTextMaxItemSon[PlayerControl.myItems[sonSelect - 1] * 5 - 5] == ItemControl.itemFoods[i])
-                        {
-                            var text = ItemControl.itemFoods[i + 1];
-                            text = text.Substring(1, text.Length - 1);
-                            PlayerControl.myItems[sonSelect - 1] = ItemNameGetId(text, "Foods");
-                            break;
-                        }
+                        if (ItemControl.itemTextMaxItemSon[PlayerControl.myItems[sonSelect - 1] * 5 - 5] !=
+                            ItemControl.itemFoods[i]) continue;
+                        var text = ItemControl.itemFoods[i + 1];
+                        text = text.Substring(1, text.Length - 1);
+                        PlayerControl.myItems[sonSelect - 1] = ItemNameGetId(text, "Foods");
+                        break;
                     }
                     AudioController.Instance.GetFx(2, AudioControl.fxClipUI);
                     break;
@@ -1493,23 +1488,6 @@ namespace UCT.Global.Core
                         ItemControl.itemOthers.Add(origin);
                         break;
                 }
-        }
-
-        public List<int> ListOrderChanger(List<int> original)
-        {
-            var newList = new List<int>();
-            var plusNumber = original.Count;
-            foreach (var t in original.Where(t => t != 0))
-            {
-                newList.Add(t);
-                plusNumber--;
-            }
-            for (var i = 0; i < plusNumber; i++)
-            {
-                newList.Add(0);
-            }
-
-            return newList;
         }
 
         /// <summary>

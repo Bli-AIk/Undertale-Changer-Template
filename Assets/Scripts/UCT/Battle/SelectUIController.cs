@@ -257,7 +257,7 @@ namespace UCT.Battle
                             }
                         else
                         {
-                            MainControl.Instance.PlayerControl.myItems = MainControl.Instance.ListOrderChanger(MainControl.Instance.PlayerControl.myItems);
+                            MainControl.Instance.PlayerControl.myItems = ListManipulationService.MoveZerosToEnd(MainControl.Instance.PlayerControl.myItems);
 
                             _textUIBack.rectTransform.anchoredPosition = new Vector2(-5, -3.3f);
                             _textUIBack.alignment = TextAlignmentOptions.TopRight;
@@ -725,7 +725,7 @@ namespace UCT.Battle
         private void OpenDialogBubble(string textAsset)
         {
             MainControl.Instance.BattleControl.randomTurnDir = MathUtilityService.Get1Or_1();
-            MainControl.Instance.LoadItemData(actSave, textAsset);
+            MainControl.LoadItemData(actSave, textAsset);
             actSave = MainControl.Instance.ChangeItemData(actSave, true, new List<string>());
             isDialog = true;
             numberDialog = 0;

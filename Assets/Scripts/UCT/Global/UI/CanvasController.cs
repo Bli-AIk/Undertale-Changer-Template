@@ -275,7 +275,7 @@ namespace UCT.Global.UI
         private string GetLanguagePacksName(string pathString, string returnString, bool isOutSide)
         {
             var strings = new List<string>();
-            MainControl.Instance.LoadItemData(strings, ReadFile(pathString + "\\LanguagePackInformation", isOutSide));
+            MainControl.LoadItemData(strings, ReadFile(pathString + "\\LanguagePackInformation", isOutSide));
             strings = MainControl.Instance.ChangeItemData(strings, true, new List<string>());
             return TextProcessingService.GetFirstChildStringByPrefix(strings, returnString);
         }
