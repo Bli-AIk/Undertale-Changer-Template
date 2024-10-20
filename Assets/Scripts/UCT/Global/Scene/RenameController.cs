@@ -138,23 +138,23 @@ namespace UCT.Global.Scene
                                         {
                                             var lister = new List<string>();
                                             TextProcessingService.SplitStringToListWithDelimiter(item + '|', lister, '|');
-                                            if ((lister[0] == MainControl.Instance.UppercaseToLowercase(setName) && !bool.Parse(lister[2])) || (lister[0] == setName && bool.Parse(lister[2])))
+                                            if ((lister[0] != MainControl.ConvertLettersCase(setName, true) ||
+                                                 bool.Parse(lister[2])) &&
+                                                (lister[0] != setName || !bool.Parse(lister[2]))) continue;
+                                            if (lister[3] == "<gaster>")
+                                                Application.Quit();
+                                            else
+                                                tmps[0].text = lister[3];
+                                            if (!bool.Parse(lister[1]))
                                             {
-                                                if (lister[3] == "<gaster>")
-                                                    Application.Quit();
+                                                selectMax = false;
+                                                if (MainControl.Instance.OverworldControl.textWidth)
+                                                    tmps[3].text = "<size=0>wwww</size><color=yellow>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "GoBack") + "</color>";
                                                 else
-                                                    tmps[0].text = lister[3];
-                                                if (!bool.Parse(lister[1]))
-                                                {
-                                                    selectMax = false;
-                                                    if (MainControl.Instance.OverworldControl.textWidth)
-                                                        tmps[3].text = "<size=0>wwww</size><color=yellow>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "GoBack") + "</color>";
-                                                    else
-                                                        tmps[3].text = "<size=2><color=#00000000>wwww</color></size><color=yellow>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "GoBack") + "</color>";
-                                                }
-
-                                                break;
+                                                    tmps[3].text = "<size=2><color=#00000000>wwww</color></size><color=yellow>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "GoBack") + "</color>";
                                             }
+
+                                            break;
                                         }
 
                                         _animMove = DOTween.To(() => tmps[1].transform.localPosition, x => tmps[1].transform.localPosition = x, new Vector3(26.95f, -7.85f), 5).SetEase(Ease.Linear);

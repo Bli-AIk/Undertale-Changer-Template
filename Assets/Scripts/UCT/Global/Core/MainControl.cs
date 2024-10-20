@@ -309,7 +309,6 @@ namespace UCT.Global.Core
 
         public void Start()
         {
-            
             if (PlayerControl.isDebug && PlayerControl.invincible)
                 PlayerControl.hp = PlayerControl.hpMax / 2;
 
@@ -610,18 +609,6 @@ namespace UCT.Global.Core
             SetResolution(OverworldControl.resolutionLevel);
         }
 
-        /// <summary>
-        /// 和分辨率设置配套的换算
-        /// </summary>
-        private static int ScreenSet(int y)
-        {
-            //if (OverworldControl.background)
-            //    y = y / 9 * 16;
-            //else
-            y = y / 3 * 4;
-            return y;
-        }
-
         private void SetCanvasFrameSprite(int framePic = 2)//一般为CanvasController.instance.framePic
         {
             var frame = CanvasController.Instance.frame;
@@ -696,43 +683,34 @@ namespace UCT.Global.Core
                 CanvasController.Instance.setting.rectTransform.anchoredPosition = new Vector2(142.5f, CanvasController.Instance.setting.rectTransform.anchoredPosition.y);
             }
 
-            switch (resolution)
+            
+            var resolutionHeights = new List<int> { 480, 768, 864, 960, 1080, 540, 1080 };
+            var resolutionWidths = GetWidthsWithHeights(resolutionHeights, 5);
+
+            var currentResolutionWidth = resolutionWidths[resolution];
+            var currentResolutionHeight = resolutionHeights[resolution];
+            
+            Screen.SetResolution(currentResolutionWidth, currentResolutionHeight, OverworldControl.fullScreen);
+            OverworldControl.resolution = new Vector2(currentResolutionWidth, currentResolutionHeight);
+        }
+
+        private static List<int> GetWidthsWithHeights(List<int> heights,int resolutionCutPoint)
+        {
+            var widths = new List<int>();
+
+            for (var i = 0; i < heights.Count; i++)
             {
-                case 0:
-                    Screen.SetResolution(ScreenSet(480), 480, OverworldControl.fullScreen);
-                    OverworldControl.resolution = new Vector2(ScreenSet(480), 480);
-                    break;
-
-                case 1:
-                    Screen.SetResolution(ScreenSet(768), 768, OverworldControl.fullScreen);
-                    OverworldControl.resolution = new Vector2(ScreenSet(768), 768);
-                    break;
-
-                case 2:
-                    Screen.SetResolution(ScreenSet(864), 864, OverworldControl.fullScreen);
-                    OverworldControl.resolution = new Vector2(ScreenSet(864), 864);
-                    break;
-
-                case 3:
-                    Screen.SetResolution(ScreenSet(960), 960, OverworldControl.fullScreen);
-                    OverworldControl.resolution = new Vector2(ScreenSet(960), 960);
-                    break;
-
-                case 4:
-                    Screen.SetResolution(ScreenSet(1080), 1080, OverworldControl.fullScreen);
-                    OverworldControl.resolution = new Vector2(ScreenSet(1080), 1080);
-                    break;
-
-                case 5:
-                    Screen.SetResolution(960, 540, OverworldControl.fullScreen);
-                    OverworldControl.resolution = new Vector2(960, 540);
-                    break;
-
-                case 6:
-                    Screen.SetResolution(1920, 1080, OverworldControl.fullScreen);
-                    OverworldControl.resolution = new Vector2(1920, 1080);
-                    break;
+                if (i < resolutionCutPoint)
+                {
+                    widths.Add(heights[i] / 3 * 4); // 4:3 aspect ratio
+                }
+                else
+                {
+                    widths.Add(heights[i] * 16 / 9); // 16:9 aspect ratio
+                }
             }
+
+            return widths;
         }
 
         /// <summary>
@@ -859,11 +837,9 @@ namespace UCT.Global.Core
 
                 if (inputText.text[i] != '\n' && inputText.text[i] != '\r' && inputText.text[i] != ';')
                     text += inputText.text[i];
-                if (inputText.text[i] == ';')
-                {
-                    list.Add(text + ";");
-                    text = "";
-                }
+                if (inputText.text[i] != ';') continue;
+                list.Add(text + ";");
+                text = "";
             }
         }
 
@@ -887,11 +863,9 @@ namespace UCT.Global.Core
                 }
                 if (inputText[i] != '\n' && inputText[i] != '\r' && inputText[i] != ';')
                     text += inputText[i];
-                if (inputText[i] == ';')
-                {
-                    list.Add(text + ";");
-                    text = "";
-                }
+                if (inputText[i] != ';') continue;
+                list.Add(text + ";");
+                text = "";
             }
         }
 
@@ -1138,38 +1112,44 @@ namespace UCT.Global.Core
                     }
                     else if (inputText.Length > 9)
                     {
-                        if (inputText[..9] == "<itemName" && !isData)
+                        switch (inputText[..9])
                         {
-                            if (inputName != "")
+                            case "<itemName" when !isData:
                             {
-                                if (ItemNameGetId(inputName, inputText.Substring(9, inputText.Length - 10) + 's') < 10000)
-                                    text += ItemIdGetName(ItemNameGetId(inputName, inputText.Substring(9, inputText.Length - 10) + 's'), inputText.Substring(9, inputText.Length - 10) + 's', 0);
-                                else text += ItemIdGetName(ItemNameGetId(inputName, inputText.Substring(9, inputText.Length - 10) + 's'), "Auto", 0);
+                                if (inputName != "")
+                                {
+                                    if (ItemNameGetId(inputName, inputText.Substring(9, inputText.Length - 10) + 's') < 10000)
+                                        text += ItemIdGetName(ItemNameGetId(inputName, inputText.Substring(9, inputText.Length - 10) + 's'), inputText.Substring(9, inputText.Length - 10) + 's', 0);
+                                    else text += ItemIdGetName(ItemNameGetId(inputName, inputText.Substring(9, inputText.Length - 10) + 's'), "Auto", 0);
+                                }
+
+                                break;
                             }
+                            case "<autoLose":
+                                switch (inputText.Substring(9, inputText.Length - 10) + 's')
+                                {
+                                    case "Food":
+                                        text += ItemControl.itemTextMaxData[18];
+                                        break;
+
+                                    case "Arm":
+                                        text += ItemControl.itemTextMaxData[19];
+                                        break;
+
+                                    case "Armor":
+                                        text += ItemControl.itemTextMaxData[20];
+                                        break;
+
+                                    case "Other":
+                                        text += ItemControl.itemTextMaxData[21];
+                                        break;
+                                }
+
+                                break;
+                            default:
+                                text += inputText;
+                                break;
                         }
-                        else if (inputText[..9] == "<autoLose")
-                        {
-                            switch (inputText.Substring(9, inputText.Length - 10) + 's')
-                            {
-                                case "Food":
-                                    text += ItemControl.itemTextMaxData[18];
-                                    break;
-
-                                case "Arm":
-                                    text += ItemControl.itemTextMaxData[19];
-                                    break;
-
-                                case "Armor":
-                                    text += ItemControl.itemTextMaxData[20];
-                                    break;
-
-                                case "Other":
-                                    text += ItemControl.itemTextMaxData[21];
-                                    break;
-                            }
-                        }
-                        else
-                            text += inputText;
                     }
                     else
                     {
@@ -1180,67 +1160,59 @@ namespace UCT.Global.Core
             return text;
         }
 
-        public bool IsFrontCharactersMatch(string original, string inputText)
+        public static bool IsFrontCharactersMatch(string original, string inputText)
         {
             return inputText.Length > original.Length && inputText[..original.Length] == original;
         }
-
         /// <summary>
-        /// 检测输入文本内的大写字母，转为全小写。
+        /// 将输入文本中的字母转换为指定的大小写。（默认大写） 
         /// </summary>
-        public string UppercaseToLowercase(string origin)
+        /// <param name="origin">输入字符串</param>
+        /// <param name="toLowercase">是否转换为小写</param>
+        /// <returns>转换后的字符串</returns>
+        public static string ConvertLettersCase(string origin, bool toLowercase)
         {
-            var final = "";
-            var bet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            var betS = "abcdefghijklmnopqrstuvwxyz";
+            var result = "";
+            const string UPPERCASE_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const string LOWERCASE_LETTERS = "abcdefghijklmnopqrstuvwxyz";
+    
             foreach (var t in origin)
             {
                 var isPlus = false;
-                for (var j = 0; j < bet.Length; j++)
+                if (toLowercase)
                 {
-                    if (t == bet[j])
+                    for (var j = 0; j < UPPERCASE_LETTERS.Length; j++)
                     {
-                        final += betS[j];
-                        break;
-                    }
+                        if (t == UPPERCASE_LETTERS[j])
+                        {
+                            result += LOWERCASE_LETTERS[j];
+                            break;
+                        }
 
-                    if (j == bet.Length - 1)
-                        isPlus = true;
+                        if (j == UPPERCASE_LETTERS.Length - 1)
+                            isPlus = true;
+                    }
+                }
+                else
+                {
+                    for (var j = 0; j < LOWERCASE_LETTERS.Length; j++)
+                    {
+                        if (t == LOWERCASE_LETTERS[j])
+                        {
+                            result += UPPERCASE_LETTERS[j];
+                            break;
+                        }
+
+                        if (j == LOWERCASE_LETTERS.Length - 1)
+                            isPlus = true;
+                    }
                 }
                 if (isPlus)
-                    final += t;
+                    result += t;
             }
-            return final;
+            return result;
         }
-
-        /// <summary>
-        /// 检测输入文本内的小写字母，转为全大写。
-        /// </summary>
-        public string LowercaseToUppercase(string origin)
-        {
-            var final = "";
-            var betS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            var bet = "abcdefghijklmnopqrstuvwxyz";
-            foreach (var t in origin)
-            {
-                var isPlus = false;
-                for (var j = 0; j < bet.Length; j++)
-                {
-                    if (t == bet[j])
-                    {
-                        final += betS[j];
-                        break;
-                    }
-
-                    if (j == bet.Length - 1)
-                        isPlus = true;
-                }
-                if (isPlus)
-                    final += t;
-            }
-            return final;
-        }
-
+       
         /// <summary>
         /// 输入形如(x,y)的向量
         /// 若向量形如(xRx，yRy)或(xrx，yry)，则在R左右取随机数

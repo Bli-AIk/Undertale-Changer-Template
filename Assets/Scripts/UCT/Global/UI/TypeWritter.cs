@@ -169,20 +169,20 @@ namespace UCT.Global.UI
 
                         passTextString += spText;
 
-                        if (MainControl.Instance.IsFrontCharactersMatch("<fx=", spText))
+                        if (MainControl.IsFrontCharactersMatch("<fx=", spText))
                         {
                             var save = spText[4..];
                             save = save[..^1];
                             fx = int.Parse(save);
                         }
-                        else if (MainControl.Instance.IsFrontCharactersMatch("<font=", spText))
+                        else if (MainControl.IsFrontCharactersMatch("<font=", spText))
                         {
                             var save = spText[6..];
                             save = save[..^1];
                             useFont = int.Parse(save);
                             tmpText.font = MainControl.Instance.OverworldControl.tmpFonts[useFont];
                         }
-                        else if (MainControl.Instance.IsFrontCharactersMatch("<stop*", spText))
+                        else if (MainControl.IsFrontCharactersMatch("<stop*", spText))
                         {
                             if (!pressX)
                             {
@@ -199,7 +199,7 @@ namespace UCT.Global.UI
 
                             isStop = true;
                         }
-                        else if (MainControl.Instance.IsFrontCharactersMatch("<image=", spText))
+                        else if (MainControl.IsFrontCharactersMatch("<image=", spText))
                         {
                             var save = spText[7..];
                             save = save[..^1];
@@ -208,7 +208,7 @@ namespace UCT.Global.UI
                                 spriteChanger.ChangeImage(s);
                             _talkUIPositionChanger.Change(true, s >= 0, false);
                         }
-                        else if (MainControl.Instance.IsFrontCharactersMatch("<stop...*", spText))
+                        else if (MainControl.IsFrontCharactersMatch("<stop...*", spText))
                         {
                             if (!pressX)
                             {
@@ -232,7 +232,7 @@ namespace UCT.Global.UI
                             isStop = true;
                             tmpText.text = endString;
                         }
-                        else if (MainControl.Instance.IsFrontCharactersMatch("<passText=", spText))
+                        else if (MainControl.IsFrontCharactersMatch("<passText=", spText))
                         {
                             var save = spText[10..];
                             save = save[..^1];
@@ -241,13 +241,13 @@ namespace UCT.Global.UI
 
                             passText = true;
                         }
-                        else if (MainControl.Instance.IsFrontCharactersMatch("<storyFade", spText))
+                        else if (MainControl.IsFrontCharactersMatch("<storyFade", spText))
                         {
                             var save = spText[11..];
                             save = save[..^1];
                             StorySceneController.Instance.Fade(int.Parse(save));
                         }
-                        else if (MainControl.Instance.IsFrontCharactersMatch("<stop......*", spText))
+                        else if (MainControl.IsFrontCharactersMatch("<stop......*", spText))
                         {
                             if (!pressX)
                             {
