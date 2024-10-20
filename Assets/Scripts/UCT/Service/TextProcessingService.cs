@@ -251,5 +251,28 @@ namespace UCT.Service
             }
             return text;
         }
+
+        /// <summary>
+        /// 生成字符串形式的随机颜色。
+        /// </summary>
+        // ReSharper disable once MemberCanBePrivate.Global
+        public static string RandomStringColor()
+        {
+            var text = "<color=#";
+            for (var i = 0; i < 6; i++)
+            {
+                text += $"{Random.Range(0, 16):X}";
+            }
+            text += "FF>";
+            return text;
+        }
+
+        /// <summary>
+        /// 生成字符串形式的随机颜色。
+        /// </summary>
+        public static string RandomStringColor(string origin)
+        {
+            return RandomStringColor() + origin + "</color>";
+        }
     }
 }

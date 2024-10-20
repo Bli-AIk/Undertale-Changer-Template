@@ -370,7 +370,7 @@ namespace UCT.Global.UI
             for (var j = 1; j <= interpolation; j++)
             {
                 var t = j / (float)(interpolation + 1);
-                var interpolatedPoint = Vector2.Lerp(points[points.Count - 1], points[0], t);
+                var interpolatedPoint = Vector2.Lerp(points[^1], points[0], t);
                 interpolatedPoints.Add(interpolatedPoint);
             }
             return interpolatedPoints;

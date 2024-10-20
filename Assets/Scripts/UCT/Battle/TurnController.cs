@@ -3,6 +3,7 @@ using DG.Tweening;
 using MEC;
 using UCT.Control;
 using UCT.Global.Core;
+using UCT.Service;
 using UnityEngine;
 
 namespace UCT.Battle
@@ -79,7 +80,7 @@ namespace UCT.Battle
 
                     for (var i = 600; i > 0; i--)
                     {
-                        Global.Other.Debug.Log($"你先别急，先摆{MainControl.Instance.RandomStringColor(i.ToString())}秒");
+                        Global.Other.Debug.Log($"你先别急，先摆{TextProcessingService.RandomStringColor(i.ToString())}秒");
                         yield return Timing.WaitForSeconds(1f);
                     }
 

@@ -322,7 +322,7 @@ namespace UCT.Global.Core
             else
             {
                 var playerOw = GameObject.Find("Player");
-                if (playerOw != null)
+                if (playerOw)
                     playerBehaviour = playerOw.GetComponent<PlayerBehaviour>();
             }
 
@@ -355,28 +355,6 @@ namespace UCT.Global.Core
         public Color RandomColor()
         {
             return new Color(Random.Range(0, 1f), Random.Range(0, 1f), Random.Range(0, 1f), 1);
-        }
-
-        /// <summary>
-        /// 生成字符串形式的随机颜色。
-        /// </summary>
-        // ReSharper disable once MemberCanBePrivate.Global
-        public string RandomStringColor()
-        {
-            var text = "<color=#";
-            for (var i = 0; i < 6; i++)
-            {
-                text += $"{Random.Range(0, 16):X}";
-            }
-            text += "FF>";
-            return text;
-        }
-        /// <summary>
-        /// 生成字符串形式的随机颜色。
-        /// </summary>
-        public string RandomStringColor(string origin)
-        {
-            return RandomStringColor() + origin + "</color>";
         }
 
         private void EndBlack()
@@ -599,20 +577,19 @@ namespace UCT.Global.Core
             
             mainCamera.GetUniversalAdditionalCameraData().renderPostProcessing = !isClose;
 
-            if (sceneState == SceneState.InBattle)
+            if (sceneState != SceneState.InBattle) return;
+            
+            if (!_cameraMainInBattle)
             {
-                if (_cameraMainInBattle == null)
-                {
-                    if (cameraShake == null)
-                        cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
-                    _cameraMainInBattle = cameraShake.GetComponent<Camera>();
-                }
-                _cameraMainInBattle.GetUniversalAdditionalCameraData().renderPostProcessing = !isClose;
+                if (!cameraShake)
+                    cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
+                _cameraMainInBattle = cameraShake.GetComponent<Camera>();
             }
+            _cameraMainInBattle.GetUniversalAdditionalCameraData().renderPostProcessing = !isClose;
         }
 
         /// <summary>
-        /// 按按tab改改分辨率那样子))
+        /// 更改分辨率相关代码
         /// </summary>
         public void ChangeResolution()
         {
@@ -636,7 +613,7 @@ namespace UCT.Global.Core
         /// <summary>
         /// 和分辨率设置配套的换算
         /// </summary>
-        private int ScreenSet(int y)
+        private static int ScreenSet(int y)
         {
             //if (OverworldControl.background)
             //    y = y / 9 * 16;
@@ -656,11 +633,11 @@ namespace UCT.Global.Core
         /// </summary>
         public void SetResolution(int resolution)
         {
-            if (_cameraMainInBattle == null)
+            if (!_cameraMainInBattle)
             {
-                if (cameraShake == null)
+                if (!cameraShake)
                     cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
-                if (cameraShake != null)
+                else
                     _cameraMainInBattle = cameraShake.GetComponent<Camera>();
             }
 
@@ -680,8 +657,7 @@ namespace UCT.Global.Core
                 mainCamera.rect = new Rect(0, 0, 1, 1);
                 if (sceneState == SceneState.InBattle)
                 {
-                
-                    _cameraMainInBattle.rect = new Rect(0, 0, 1, 1);
+                    if (_cameraMainInBattle) _cameraMainInBattle.rect = new Rect(0, 0, 1, 1);
                 }
                 
                 if (BackpackBehaviour.Instance)
@@ -699,9 +675,10 @@ namespace UCT.Global.Core
                     mainCamera.rect = new Rect(0, 0.056f, 1, 0.888f);
                 
                 if (sceneState == SceneState.InBattle)
-                    _cameraMainInBattle.rect = new Rect(0, 0.056f, 1, 0.888f);
+                    if (_cameraMainInBattle)
+                        _cameraMainInBattle.rect = new Rect(0, 0.056f, 1, 0.888f);
 
-                if (BackpackBehaviour.Instance != null)
+                if (BackpackBehaviour.Instance)
                     BackpackBehaviour.Instance.SuitResolution();
 
                 CanvasController.Instance.DOKill();
@@ -863,6 +840,7 @@ namespace UCT.Global.Core
         /// <summary>
         /// 调入数据(传入TextAsset)
         /// </summary>
+        // ReSharper disable once MemberCanBePrivate.Global
         public static void LoadItemData(List<string> list, TextAsset inputText)//保存的list 导入的text
         {
             list.Clear();

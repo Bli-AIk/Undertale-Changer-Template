@@ -7,6 +7,7 @@ using UCT.Global.Audio;
 using UCT.Global.Core;
 using UCT.Global.Scene;
 using UCT.Overworld;
+using UCT.Service;
 using UnityEngine;
 using UnityEngine.Audio;
 using Random = UnityEngine.Random;
@@ -305,17 +306,10 @@ namespace UCT.Global.UI
                                 case "<autoFood>":
 
                                     string plusString;
-                                    if (hpIn + hpSave >= MainControl.Instance.PlayerControl.hpMax)
-                                    {
-                                        plusString = MainControl.Instance.ItemControl.itemTextMaxData[22];
-                                        plusString = plusString[..^1];
-                                    }
-                                    else
-                                    {
-                                        plusString = MainControl.Instance.ItemControl.itemTextMaxData[12];
-                                        plusString = plusString[..^1];
-                                    }
-                                    originString = MainControl.RemoveSubstring(originString, i - "<autoFood>".Length, i - 1, plusString);
+                                    plusString = hpIn + hpSave >= MainControl.Instance.PlayerControl.hpMax ? MainControl.Instance.ItemControl.itemTextMaxData[22] : MainControl.Instance.ItemControl.itemTextMaxData[12];
+
+                                    plusString = plusString[..^1];
+                                    originString = TextProcessingService.RemoveSubstring(originString, i - "<autoFood>".Length, i - 1, plusString);
                                     i -= spText.Length;
                                     passTextString = passTextString[..^spText.Length];
                                     break;
@@ -331,7 +325,7 @@ namespace UCT.Global.UI
                                     goto PassText;
                                 default://富文本
 
-                                    if (spText.Length - 2 > 0 && spText[1] == '-' && spText[spText.Length - 2] == '-')
+                                    if (spText.Length - 2 > 0 && spText[1] == '-' && spText[^2] == '-')
                                     {
                                         spText = spText.Substring(2, spText.Length - 4);
                                         if (!pressX)
