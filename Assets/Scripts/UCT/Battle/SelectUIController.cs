@@ -353,7 +353,7 @@ namespace UCT.Battle
                             break;
 
                         case 3://ITEM：跳2
-                            _itemSelectController.myItemMax = MainControl.FindFirstZeroIndex(MainControl.Instance.PlayerControl.myItems);
+                            _itemSelectController.myItemMax = ListManipulationService.FindFirstZeroIndex(MainControl.Instance.PlayerControl.myItems);
                             _itemSelectController.Open();
                             selectLayer = 2;
 
@@ -559,7 +559,7 @@ namespace UCT.Battle
                             var textUIDataChanger1 = "";
                             var textUIDataChanger2 = "";
 
-                            var myItemMax = MainControl.FindFirstZeroIndex(MainControl.Instance.PlayerControl.myItems);
+                            var myItemMax = ListManipulationService.FindFirstZeroIndex(MainControl.Instance.PlayerControl.myItems);
 
                             if (myItemMax > 1)
                             {

@@ -1725,23 +1725,6 @@ namespace UCT.Global.Core
         }
 
         /// <summary>
-        /// 找到列表中第一个零的索引。如果列表中没有零，则返回列表的长度。
-        /// </summary>
-        /// <param name="list">整数列表</param>
-        /// <returns>第一个零的索引或列表的长度</returns>
-        public static int FindFirstZeroIndex(List<int> list)
-        {
-            var max = list.Count;
-            for (var i = 0; i < list.Count; i++)
-            {
-                if (list[i] != 0) continue;
-                max = i;
-                break;
-            }
-            return max;
-        }
-
-        /// <summary>
         /// 通过物品数据名称搞到它的id.
         /// type：Foods Arms Armors Others
         /// </summary>

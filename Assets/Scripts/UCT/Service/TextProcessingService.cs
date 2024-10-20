@@ -149,11 +149,13 @@ namespace UCT.Service
         /// <returns></returns>
         public static string PadStringToLength(string origin, int length)
         {
-            for (var i = 0; i < length - origin.Length; i++)
+            var result = origin;
+            
+            for (var i = 0; i < length - result.Length; i++)
             {
-                origin += " ";
+                result += " ";
             }
-            return origin;
+            return result;
         }
 
         /// <summary>
@@ -172,7 +174,8 @@ namespace UCT.Service
             var hoursString = hours < 10 ? $"0{hours}" : $"{hours}";
             var minutesString = minutes < 10 ? $"0{minutes}" : $"{minutes}";
 
-            return $"{hoursString}:{minutesString}";
+            var result = $"{hoursString}:{minutesString}";
+            return result;
         }
 
         /// <summary>
@@ -180,7 +183,8 @@ namespace UCT.Service
         /// </summary>
         public static string RichText(string richText)
         {
-            return $"<{richText}>";
+            var result = $"<{richText}>";
+            return result;
         }
 
         /// <summary>
@@ -188,7 +192,8 @@ namespace UCT.Service
         /// </summary>
         public static string RichText(string richText, int number)
         {
-            return $"<{richText}={number}>";
+            var result = $"<{richText}={number}>";
+            return result;
         }
 
         /// <summary>
@@ -196,7 +201,8 @@ namespace UCT.Service
         /// </summary>
         public static string RichTextWithEnd(string richText, string internalString = default)
         {
-            return $"<{richText}>{internalString}</{richText}>";
+            var result = $"<{richText}>{internalString}</{richText}>";
+            return result;
         }
 
         /// <summary>
@@ -204,7 +210,8 @@ namespace UCT.Service
         /// </summary>
         public static string RichTextWithEnd(string richText, int number, string internalString = default)
         {
-            return $"<{richText}={number}>{internalString}</{richText}>";
+            var result = $"<{richText}={number}>{internalString}</{richText}>";
+            return result;
         }
         
         /// <summary>
@@ -214,7 +221,7 @@ namespace UCT.Service
         {
             if (startIndex < 0 || endIndex >= inputString.Length || startIndex > endIndex)
             {
-                UCT.Global.Other.Debug.Log("无效的起始和结束位置");
+                Global.Other.Debug.Log("无效的起始和结束位置");
                 return inputString;
             }
 

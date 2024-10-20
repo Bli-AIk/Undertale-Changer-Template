@@ -7,34 +7,37 @@ namespace UCT.Service
     /// <summary>
     /// 数学相关函数
     /// </summary>
-    public class MathUtilityService
+    public static class MathUtilityService
     {
         /// <summary>
         /// 随机获取-1或1
         /// </summary>
         public static int Get1Or_1()
         {
-            int i;
+            int result;
             do
             {
-                i = Random.Range(-1, 2);
+                result = Random.Range(-1, 2);
             }
-            while (i == 0);
+            while (result == 0);
 
-            return i;
+            return result;
         }
 
         /// <summary>
         /// 传入数根据正负返回1/-1。
         /// 传0返1。
         /// </summary>
-        public static int Get1Or_1(float i)
+        public static int Get1Or_1(float input)
         {
-            if (i >= 0)
-                i = 1;
+            var result = input;
+            
+            if (result >= 0)
+                result = 1;
             else
-                i = -1;
-            return (int)i;
+                result = -1;
+            
+            return (int)result;
         }
 
         /// <summary>
@@ -42,18 +45,18 @@ namespace UCT.Service
         /// </summary>
         public static Vector2 CalculatePolygonCenter(List<Vector2> vertexPoints)
         {
-            var center = Vector2.zero;
+            var result = Vector2.zero;
 
             if (vertexPoints == null || vertexPoints.Count == 0)
             {
-                return center;
+                return result;
             }
 
-            center = vertexPoints.Aggregate(center, (current, vertex) => current + vertex);
+            result = vertexPoints.Aggregate(result, (current, vertex) => current + vertex);
 
-            center /= vertexPoints.Count;
+            result /= vertexPoints.Count;
 
-            return center;
+            return result;
         }
 
         /// <summary>
@@ -65,9 +68,9 @@ namespace UCT.Service
 
             randomDirection *= sphereRadius;
 
-            var randomPointOnSphere = sphereCenter + randomDirection;
+            var result = sphereCenter + randomDirection;
 
-            return randomPointOnSphere;
+            return result;
         }
     }
 }
