@@ -138,7 +138,7 @@ namespace UCT.Global.Scene
                                         {
                                             var lister = new List<string>();
                                             TextProcessingService.SplitStringToListWithDelimiter(item + '|', lister, '|');
-                                            if ((lister[0] != MainControl.ConvertLettersCase(setName, true) ||
+                                            if ((lister[0] != TextProcessingService.ConvertLettersCase(setName, true) ||
                                                  bool.Parse(lister[2])) &&
                                                 (lister[0] != setName || !bool.Parse(lister[2]))) continue;
                                             if (lister[3] == "<gaster>")

@@ -51,6 +51,7 @@ namespace UCT.Service
         /// <summary>
         /// 检测输入字符串，返回第一个分隔符之前的部分。
         /// </summary>
+        // ReSharper disable once MemberCanBePrivate.Global
         public static string SplitFirstStringWithDelimiter(string input, char delimiter = '\\')
         {
             var result = "";
@@ -273,6 +274,66 @@ namespace UCT.Service
         public static string RandomStringColor(string origin)
         {
             return RandomStringColor() + origin + "</color>";
+        }
+
+        /// <summary>
+        /// 检查输入文本是否以检测文本为开头。
+        /// </summary>
+        /// <param name="inputText">输入文本</param>
+        /// <param name="detectText">检测文本</param>
+        /// <returns></returns>
+        public static bool IsSameFrontTexts(string inputText, string detectText)
+        {
+            return inputText.Length > detectText.Length && inputText[..detectText.Length] == detectText;
+        }
+
+        /// <summary>
+        /// 将输入文本中的字母转换为指定的大小写。（默认大写） 
+        /// </summary>
+        /// <param name="input">输入字符串</param>
+        /// <param name="toLowercase">是否转换为小写</param>
+        /// <returns>转换后的字符串</returns>
+        public static string ConvertLettersCase(string input, bool toLowercase)
+        {
+            var result = "";
+            const string UPPERCASE_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const string LOWERCASE_LETTERS = "abcdefghijklmnopqrstuvwxyz";
+    
+            foreach (var t in input)
+            {
+                var isPlus = false;
+                if (toLowercase)
+                {
+                    for (var j = 0; j < UPPERCASE_LETTERS.Length; j++)
+                    {
+                        if (t == UPPERCASE_LETTERS[j])
+                        {
+                            result += LOWERCASE_LETTERS[j];
+                            break;
+                        }
+
+                        if (j == UPPERCASE_LETTERS.Length - 1)
+                            isPlus = true;
+                    }
+                }
+                else
+                {
+                    for (var j = 0; j < LOWERCASE_LETTERS.Length; j++)
+                    {
+                        if (t == LOWERCASE_LETTERS[j])
+                        {
+                            result += UPPERCASE_LETTERS[j];
+                            break;
+                        }
+
+                        if (j == LOWERCASE_LETTERS.Length - 1)
+                            isPlus = true;
+                    }
+                }
+                if (isPlus)
+                    result += t;
+            }
+            return result;
         }
     }
 }
