@@ -46,16 +46,9 @@ namespace UCT.Service
         public static Vector2 CalculatePolygonCenter(List<Vector2> vertexPoints)
         {
             var result = Vector2.zero;
-
-            if (vertexPoints == null || vertexPoints.Count == 0)
-            {
-                return result;
-            }
-
+            if (vertexPoints == null || vertexPoints.Count == 0) return result;
             result = vertexPoints.Aggregate(result, (current, vertex) => current + vertex);
-
             result /= vertexPoints.Count;
-
             return result;
         }
 
@@ -65,12 +58,24 @@ namespace UCT.Service
         public static Vector3 RandomPointOnSphereSurface(float sphereRadius, Vector3 sphereCenter)
         {
             var randomDirection = Random.onUnitSphere;
-
             randomDirection *= sphereRadius;
-
+            
             var result = sphereCenter + randomDirection;
-
             return result;
+        }
+        /// <summary>
+        /// 返回两个数中更大的数
+        /// </summary>
+        public static float GetGreaterNumber(float number1, float number2)
+        {
+            return number1 > number2 ? number1 : number2;
+        }
+        /// <summary>
+        /// 返回两个数中更小的数
+        /// </summary>
+        public static float GetSmallerNumber(float number1, float number2)
+        {
+            return number1 < number2 ? number1 : number2;
         }
     }
 }

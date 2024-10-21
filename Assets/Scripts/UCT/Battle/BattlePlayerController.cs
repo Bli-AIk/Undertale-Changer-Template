@@ -5,6 +5,7 @@ using UCT.Control;
 using UCT.Global.Audio;
 using UCT.Global.Core;
 using UCT.Global.UI;
+using UCT.Service;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -607,7 +608,7 @@ namespace UCT.Battle
             Global.Other.Debug.DrawRay(rayMoveY.origin, rayMoveY.direction, new Color(0, 0.5f, 0, 1));
             var infoMoveY = Physics2D.Raycast(transform.position, dirMoveY, 0.2f);
 
-            if (isMoveX && infoMoveX.collider != null && (infoMoveX.collider.gameObject.CompareTag("Box") || infoMoveX.collider.gameObject.CompareTag("board")))
+            if (isMoveX && infoMoveX.collider && (infoMoveX.collider.gameObject.CompareTag("Box") || infoMoveX.collider.gameObject.CompareTag("board")))
                 isMoving = false;
 
             if (isMoveX || isMoveY)
@@ -637,30 +638,20 @@ namespace UCT.Battle
             float movingSave = 0;
             if (playerColor == BattleControl.PlayerColor.Blue && isJump)
             {
-                switch (playerDir)
+                movingSave = playerDir switch
                 {
-                    case PlayerDirEnum.Up:
-                        movingSave = moving.y;
-                        break;
-
-                    case PlayerDirEnum.Down:
-                        movingSave = moving.y;
-                        break;
-
-                    case PlayerDirEnum.Left:
-                        movingSave = moving.x;
-                        break;
-
-                    case PlayerDirEnum.Right:
-                        movingSave = moving.x;
-                        break;
-                }
+                    PlayerDirEnum.Up => moving.y,
+                    PlayerDirEnum.Down => moving.y,
+                    PlayerDirEnum.Left => moving.x,
+                    PlayerDirEnum.Right => moving.x,
+                    _ => movingSave
+                };
             }
 
-            moving.x = MainControl.Instance.JudgmentNumber(false, moving.x, -5);
-            moving.y = MainControl.Instance.JudgmentNumber(false, moving.y, -5);
-            moving.x = MainControl.Instance.JudgmentNumber(true, moving.x, 5);
-            moving.y = MainControl.Instance.JudgmentNumber(true, moving.y, 5);
+            moving.x = MathUtilityService.GetSmallerNumber(moving.x, -5);
+            moving.y = MathUtilityService.GetSmallerNumber(moving.y, -5);
+            moving.x = MathUtilityService.GetGreaterNumber(moving.x, 5);
+            moving.y = MathUtilityService.GetGreaterNumber(moving.y, 5);
         
             var newPos = transform.position + new Vector3(speedWeightX * speed * moving.x * Time.deltaTime, speedWeightY * speed * moving.y * Time.deltaTime);//速度参考：3
 

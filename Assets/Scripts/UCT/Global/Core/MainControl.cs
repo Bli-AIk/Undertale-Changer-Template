@@ -351,7 +351,7 @@ namespace UCT.Global.Core
 
             beatTimes = MusicBpmCount(bpm, bpmDeviation);
         }
-        public Color RandomColor()
+        public Color GetRandomColor()
         {
             return new Color(Random.Range(0, 1f), Random.Range(0, 1f), Random.Range(0, 1f), 1);
         }
@@ -1362,24 +1362,6 @@ namespace UCT.Global.Core
         }
 
         /// <summary>
-        /// 在number1与number2之间判断 符合后返回number2.否则传回number1.
-        /// </summary>
-        public float JudgmentNumber(bool isGreater, float number1, float number2)
-        {
-            if (isGreater)
-            {
-                if (number1 > number2)
-                    number1 = number2;
-            }
-            else
-            {
-                if (number1 < number2)
-                    number1 = number2;
-            }
-            return number1;
-        }
-
-        /// <summary>
         /// 分配Item数据
         /// </summary>
         private void ItemClassification()
@@ -1415,29 +1397,29 @@ namespace UCT.Global.Core
         /// </summary>
         private void ItemClassificationAdd(string i, string origin)
         {
-            if (origin != "null")
-                switch (i)
-                {
-                    case "Foods":
-                        ItemControl.itemFoods.Add(origin);
-                        break;
+            if (origin == "null") return;
+            switch (i)
+            {
+                case "Foods":
+                    ItemControl.itemFoods.Add(origin);
+                    break;
 
-                    case "Arms":
-                        ItemControl.itemArms.Add(origin);
-                        break;
+                case "Arms":
+                    ItemControl.itemArms.Add(origin);
+                    break;
 
-                    case "Armors":
-                        ItemControl.itemArmors.Add(origin);
-                        break;
+                case "Armors":
+                    ItemControl.itemArmors.Add(origin);
+                    break;
 
-                    case "Others":
-                        ItemControl.itemOthers.Add(origin);
-                        break;
+                case "Others":
+                    ItemControl.itemOthers.Add(origin);
+                    break;
 
-                    default:
-                        ItemControl.itemOthers.Add(origin);
-                        break;
-                }
+                default:
+                    ItemControl.itemOthers.Add(origin);
+                    break;
+            }
         }
 
         /// <summary>
@@ -1480,35 +1462,33 @@ namespace UCT.Global.Core
                     break;
 
                 case "Auto":
-                    if (id <= 0)
+                    switch (id)
                     {
-                        list = null;
-                        realId = 0;
-                        idName = "null";
-                    }
-                    else if (id < 10000)
-                    {
-                        list = ItemControl.itemFoods;
-                        realId = id * 3 - 3;
-                        idName = list[realId];
-                    }
-                    else if (id < 20000)
-                    {
-                        list = ItemControl.itemArms;
-                        realId = (id - 10000) * 2 - 2;
-                        idName = list[realId];
-                    }
-                    else if (id < 30000)
-                    {
-                        list = ItemControl.itemArmors;
-                        realId = (id - 20000) * 2 - 2;
-                        idName = list[realId];
-                    }
-                    else
-                    {
-                        list = ItemControl.itemOthers;
-                        realId = (id - 30000) * 3 - 3;
-                        idName = list[realId];
+                        case <= 0:
+                            list = null;
+                            realId = 0;
+                            idName = "null";
+                            break;
+                        case < 10000:
+                            list = ItemControl.itemFoods;
+                            realId = id * 3 - 3;
+                            idName = list[realId];
+                            break;
+                        case < 20000:
+                            list = ItemControl.itemArms;
+                            realId = (id - 10000) * 2 - 2;
+                            idName = list[realId];
+                            break;
+                        case < 30000:
+                            list = ItemControl.itemArmors;
+                            realId = (id - 20000) * 2 - 2;
+                            idName = list[realId];
+                            break;
+                        default:
+                            list = ItemControl.itemOthers;
+                            realId = (id - 30000) * 3 - 3;
+                            idName = list[realId];
+                            break;
                     }
                     break;
 
@@ -1596,53 +1576,61 @@ namespace UCT.Global.Core
                     break;
 
                 case "Auto":
-                    if (id < 10000)
+                    switch (id)
                     {
-                        list = ItemControl.itemFoods;
-                        realId = id * 3 - 1;
-
-                        if (notJustId)
+                        case < 10000:
                         {
-                            idData = list[realId] + "HP";
-                            if (int.Parse(list[realId]) > 0)
-                                idData = $"+{idData}";
-                        }
-                        else
-                            idData = list[realId];
-                    }
-                    else if (id < 20000)
-                    {
-                        list = ItemControl.itemArms;
-                        realId = (id - 10000) * 2 - 1;
+                            list = ItemControl.itemFoods;
+                            realId = id * 3 - 1;
 
-                        if (notJustId)
-                        {
-                            idData = list[realId] + "AT";
-                            if (int.Parse(list[realId]) > 0)
-                                idData = $"+{idData}";
-                        }
-                        else
-                            idData = list[realId];
-                    }
-                    else if (id < 30000)
-                    {
-                        list = ItemControl.itemArmors;
-                        realId = (id - 20000) * 2 - 1;
+                            if (notJustId)
+                            {
+                                idData = list[realId] + "HP";
+                                if (int.Parse(list[realId]) > 0)
+                                    idData = $"+{idData}";
+                            }
+                            else
+                                idData = list[realId];
 
-                        if (notJustId)
-                        {
-                            idData = list[realId] + "DF";
-                            if (int.Parse(list[realId]) > 0)
-                                idData = $"+{idData}";
+                            break;
                         }
-                        else
+                        case < 20000:
+                        {
+                            list = ItemControl.itemArms;
+                            realId = (id - 10000) * 2 - 1;
+
+                            if (notJustId)
+                            {
+                                idData = list[realId] + "AT";
+                                if (int.Parse(list[realId]) > 0)
+                                    idData = $"+{idData}";
+                            }
+                            else
+                                idData = list[realId];
+
+                            break;
+                        }
+                        case < 30000:
+                        {
+                            list = ItemControl.itemArmors;
+                            realId = (id - 20000) * 2 - 1;
+
+                            if (notJustId)
+                            {
+                                idData = list[realId] + "DF";
+                                if (int.Parse(list[realId]) > 0)
+                                    idData = $"+{idData}";
+                            }
+                            else
+                                idData = list[realId];
+
+                            break;
+                        }
+                        default:
+                            list = ItemControl.itemOthers;
+                            realId = (id - 30000) * 3 - 1;
                             idData = list[realId];
-                    }
-                    else
-                    {
-                        list = ItemControl.itemOthers;
-                        realId = (id - 30000) * 3 - 1;
-                        idData = list[realId];
+                            break;
                     }
                     break;
 
