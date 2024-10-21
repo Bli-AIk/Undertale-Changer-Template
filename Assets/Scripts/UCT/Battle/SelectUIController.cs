@@ -743,8 +743,8 @@ namespace UCT.Battle
                 break;
             }
 
-            _dialog.size = MainControl.Instance.StringVector2ToRealVector2(save[0], _dialog.size);
-            _dialog.position = MainControl.Instance.StringVector2ToRealVector2(save[1], _dialog.position);
+            _dialog.size = TextProcessingService.StringVector2ToRealVector2(save[0], _dialog.size);
+            _dialog.position = TextProcessingService.StringVector2ToRealVector2(save[1], _dialog.position);
 
             _dialog.isBackRight = Convert.ToBoolean(save[3]);
             _dialog.backY = float.Parse(save[4]);
