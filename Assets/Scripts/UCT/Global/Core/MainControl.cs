@@ -255,12 +255,10 @@ namespace UCT.Global.Core
 
             foreach (var t in turnSave)
             {
-                var file = t;
-
                 if (languagePackId < LanguagePackInsideNumber)
-                    BattleControl.turnDialogAsset.Add(file);
+                    BattleControl.turnDialogAsset.Add(t);
                 else if (t[^3..] == "txt")
-                    BattleControl.turnDialogAsset.Add(File.ReadAllText(file));
+                    BattleControl.turnDialogAsset.Add(File.ReadAllText(t));
             }
             LoadItemData(BattleControl.uiTextSave, BattleControl.uiText);
             TextProcessingService.GetFirstChildStringByPrefix(BattleControl.uiTextSave, BattleControl.actSave, "Act\\");
@@ -685,7 +683,7 @@ namespace UCT.Global.Core
 
             
             var resolutionHeights = new List<int> { 480, 768, 864, 960, 1080, 540, 1080 };
-            var resolutionWidths = GetWidthsWithHeights(resolutionHeights, 5);
+            var resolutionWidths = GetResolutionWidthsWithHeights(resolutionHeights, 5);
 
             var currentResolutionWidth = resolutionWidths[resolution];
             var currentResolutionHeight = resolutionHeights[resolution];
@@ -693,24 +691,29 @@ namespace UCT.Global.Core
             Screen.SetResolution(currentResolutionWidth, currentResolutionHeight, OverworldControl.fullScreen);
             OverworldControl.resolution = new Vector2(currentResolutionWidth, currentResolutionHeight);
         }
-
-        private static List<int> GetWidthsWithHeights(List<int> heights,int resolutionCutPoint)
+        /// <summary>
+        /// 通过分辨率的高度转换得到宽度
+        /// </summary>
+        /// <param name="resolutionHeights">分辨率高度列表</param>
+        /// <param name="resolutionCutPoint">分辨率的切换点，列表中此值之前使用4:3的比例，之后使用16:9的比例</param>
+        /// <returns></returns>
+        private static List<int> GetResolutionWidthsWithHeights(List<int> resolutionHeights,int resolutionCutPoint)
         {
-            var widths = new List<int>();
+            var result = new List<int>();
 
-            for (var i = 0; i < heights.Count; i++)
+            for (var i = 0; i < resolutionHeights.Count; i++)
             {
                 if (i < resolutionCutPoint)
                 {
-                    widths.Add(heights[i] / 3 * 4); // 4:3 aspect ratio
+                    result.Add(resolutionHeights[i] * 4 / 3); 
                 }
                 else
                 {
-                    widths.Add(heights[i] * 16 / 9); // 16:9 aspect ratio
+                    result.Add(resolutionHeights[i] * 16 / 9);
                 }
             }
 
-            return widths;
+            return result;
         }
 
         /// <summary>
@@ -1214,8 +1217,8 @@ namespace UCT.Global.Core
         }
        
         /// <summary>
-        /// 输入形如(x,y)的向量
-        /// 若向量形如(xRx，yRy)或(xrx，yry)，则在R左右取随机数
+        /// 输入形如(x,y)的字符串向量，返回Vector2
+        /// 使用ParseFloatWithSpecialCharacters进行转换。
         /// </summary>
         public Vector2 StringVector2ToRealVector2(string stringVector2, Vector3 origin)
         {
@@ -1229,13 +1232,13 @@ namespace UCT.Global.Core
                 {
                     if (!isSetX)
                     {
-                        realVector2.x = RandomFloatChange(save, origin.x);
+                        realVector2.x = ParseFloatWithSpecialCharacters(save, origin.x);
                         isSetX = true;
                         save = "";
                     }
                     else
                     {
-                        realVector2.y = RandomFloatChange(save, origin.y, true);
+                        realVector2.y = ParseFloatWithSpecialCharacters(save, origin.y, true);
                         break;
                     }
                 }
@@ -1246,80 +1249,66 @@ namespace UCT.Global.Core
         }
 
         /// <summary>
-        /// 形如xRx / xrx / O   随机分开
-        /// 如果没有r或R的话就会返回原本的，非常的实用
-        ///
-        /// 额外添加：P/p获取玩家位置 通过isY确定是X还是Y
-        /// 通过xxx + xRx的形式实现一定程度上的固定。
+        /// 解析输入字符串以获取浮点数范围或特定值，并返回一个随机浮点数。
+        /// - 如果输入字符串包含 "r" 或 "R"，则在指定范围内生成随机值。
+        /// - 如果输入字符串包含 "P" 或 "p"，则返回玩家的位置（基于 `isY` 标志返回 X 或 Y 轴位置）。
+        /// - 如果输入字符串包含 "O" 或 "o" 且带有 '+'，则使用原始浮点数进行调整。
         /// </summary>
-        private float RandomFloatChange(string text, float origin, bool isY = false, float plusSave = 0)
+        /// <param name="text">表示浮点数或范围的输入字符串（例如 "1R5" 表示范围为 1 到 5）。</param>
+        /// <param name="origin">在某些情况下使用的默认浮点值（例如遇到 "O" 或 "o" 时）。</param>
+        /// <param name="isY">确定在使用 "P" 或 "p" 时是否返回 Y 轴位置。</param>
+        /// <param name="plusSave">对最终结果的可选调整，默认为 0。</param>
+        /// <returns>基于输入字符串的随机浮点数，如果未找到随机范围则返回原始值。</returns>
+
+        private float ParseFloatWithSpecialCharacters(string text, float origin, bool isY = false, float plusSave = 0)
         {
-            var isHaveR = false;
-            var save = "";
-            if (text[0] != 'O' && text[0] != 'o' && text[0] != 'P' && text[0] != 'p')
+            while (true)
             {
-                float x1 = 0;
-                foreach (var t in text)
+                var isHaveR = false;
+                var save = "";
+                if (text[0] != 'O' && text[0] != 'o' && text[0] != 'P' && text[0] != 'p')
                 {
-                    switch (t)
+                    float x1 = 0;
+                    foreach (var t in text)
                     {
-                        case 'r' or 'R' when !isHaveR:
-                            x1 = float.Parse(save);
-                            save = "";
-                            isHaveR = true;
-                            break;
-                        case '+':
-                            plusSave = float.Parse(save);
-                            save = "";
-                            break;
-                        default:
-                            save += t;
-                            break;
+                        switch (t)
+                        {
+                            case 'r' or 'R' when !isHaveR:
+                                x1 = float.Parse(save);
+                                save = "";
+                                isHaveR = true;
+                                break;
+                            case '+':
+                                plusSave = float.Parse(save);
+                                save = "";
+                                break;
+                            default:
+                                save += t;
+                                break;
+                        }
                     }
+
+                    if (!isHaveR) return plusSave + float.Parse(text);
+                    var x2 = float.Parse(save);
+                    return plusSave + Random.Range(x1, x2);
                 }
 
-                if (!isHaveR) return plusSave + float.Parse(text);
-                var x2 = float.Parse(save);
-                return plusSave + Random.Range(x1, x2);
-
-            }
-
-            if (text == "P" || text == "p")
-            {
-                if (isY)
+                if (text is "P" or "p")
                 {
-                    return battlePlayerController.transform.position.y;
+                    return isY
+                        ? battlePlayerController.transform.position.y
+                        : battlePlayerController.transform.position.x;
                 }
 
-                return battlePlayerController.transform.position.x;
+                if (text.Length <= 1 || (text[0] != 'O' && text[0] != 'o') || text[1] != '+') return origin;
+                text = text[2..];
+                plusSave = origin;
             }
-
-            if (text.Length > 1 && (text[0] == 'O' || text[0] == 'o') && text[1] == '+')
-            {
-                //Debug.LogWarning(text.Substring(2));
-                //Debug.Log(RandomFloatChange(text.Substring(2), origin, isY, origin));
-                return RandomFloatChange(text[2..], origin, isY, origin);
-            }
-
-            return origin;
         }
 
-        /*之后回来翻才意识到这不就一个强制转换的事儿）
-     *
-    /// <summary>
-    /// 输入形如(x,y)的向量
-    ///
-    /// </summary>
-    public Vector3 StringVector2ToRealVector3(string stringVector2)
-    {
-        Vector2 endVector2 = StringVector2ToRealVector2(stringVector2);
-        return new Vector3(endVector2.x, endVector2.y);
-    }
-    */
-
         /// <summary>
-        /// 输入形如(r,g,b,a)的向量
-        /// 同样支持随机数
+        /// 输入形如(r,g,b,a)的字符串，返回Color
+        /// 使用ParseFloatWithSpecialCharacters进行转换。
         /// </summary>
         public Color StringVector4ToRealColor(string stringVector4, Color origin)
         {
@@ -1334,19 +1323,19 @@ namespace UCT.Global.Core
                     switch (isSet)
                     {
                         case 0:
-                            realVector4.r = RandomFloatChange(save, origin.r);
+                            realVector4.r = ParseFloatWithSpecialCharacters(save, origin.r);
                             goto default;
 
                         case 1:
-                            realVector4.g = RandomFloatChange(save, origin.g);
+                            realVector4.g = ParseFloatWithSpecialCharacters(save, origin.g);
                             goto default;
 
                         case 2:
-                            realVector4.b = RandomFloatChange(save, origin.b);
+                            realVector4.b = ParseFloatWithSpecialCharacters(save, origin.b);
                             goto default;
 
                         case 3:
-                            realVector4.a = RandomFloatChange(save, origin.a);
+                            realVector4.a = ParseFloatWithSpecialCharacters(save, origin.a);
                             break;
 
                         default:

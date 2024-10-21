@@ -5,7 +5,7 @@ using UnityEngine;
 namespace UCT.Service
 {
     /// <summary>
-    /// 文本处理相关函数
+    /// 字符串、文本处理相关函数
     /// </summary>
     public static class TextProcessingService
     {
