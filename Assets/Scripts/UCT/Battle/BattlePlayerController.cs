@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using UCT.Control;
 using UCT.Global.Audio;
@@ -16,9 +17,6 @@ namespace UCT.Battle
     ///</summary>
     public class BattlePlayerController : MonoBehaviour
     {
-
-        public float test1 = -0.5f;
-        public float test2 = 0.05f;
         [Header("心变色时的ding动画速度，0为关")]
         public float dingTime;
         [Header("心渐变动画速度，0为关")]
@@ -27,7 +25,7 @@ namespace UCT.Battle
         [Header("基本属性调整")]
         public float speed;
         public float speedWeightX, speedWeightY;//速度与权重(按X乘以倍数)，速度测试为3，权重0.5f
-        private readonly float _speedWeight = 0.5f;
+        private const float SpeedWeight = 0.5f;
         [FormerlySerializedAs("hitCD")] public float hitCd;//无敌时间
         [FormerlySerializedAs("hitCDMax")] public float hitCdMax;//无敌时间
         public float displacement = 0.175f;//碰撞距离判定
@@ -185,8 +183,8 @@ namespace UCT.Battle
                 case BattleControl.PlayerColor.Red:
                     if (MainControl.Instance.KeyArrowToControl(KeyCode.X, 1))
                     {
-                        speedWeightX = _speedWeight;
-                        speedWeightY = _speedWeight;
+                        speedWeightX = SpeedWeight;
+                        speedWeightY = SpeedWeight;
                     }
                     else
                     {
@@ -250,7 +248,7 @@ namespace UCT.Battle
                         if (obj.transform.CompareTag("board"))
                         {
                             var board = obj.transform.GetComponent<BoardController>();
-                            if (!infoForBoard.collider.isTrigger && infoForBoard.collider.GetType() == typeof(EdgeCollider2D) && board.canMove)
+                            if (!infoForBoard.collider.isTrigger && infoForBoard.collider is EdgeCollider2D && board.canMove)
                             {
                                 BlueJumpReady();
                                 transform.SetParent(infoForBoard.transform);
@@ -273,7 +271,7 @@ namespace UCT.Battle
                         case PlayerDirEnum.Up:
                             if (MainControl.Instance.KeyArrowToControl(KeyCode.X, 1))
                             {
-                                speedWeightX = _speedWeight;
+                                speedWeightX = SpeedWeight;
                             }
                             else
                             {
@@ -314,9 +312,9 @@ namespace UCT.Battle
                                 jumpRayDistance = 0.2f;
                                 jumpRayDistanceForBoard = 0;
                             }
-                            if (isJump && (!MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("Box"))) && moving.y < -0)
+                            if (isJump && (!MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow, 1) || (infoF.collider && infoF.collider.gameObject.CompareTag("Box"))) && moving.y < -0)
                             {
-                                if (infoF.collider != null && infoF.transform.position.z == transform.position.z)
+                                if (infoF.collider && Mathf.Approximately(infoF.transform.position.z, transform.position.z))
                                 {
                                     jumpRayDistanceForBoard = 0.2f;
                                     moving = new Vector3(moving.x, -0);
@@ -324,7 +322,7 @@ namespace UCT.Battle
                             }
                             if (isJump)
                             {
-                                if (info.collider != null && info.transform.position.z == transform.position.z)
+                                if (info.collider && Mathf.Approximately(info.transform.position.z, transform.position.z))
                                 {
                                     var obj = info.collider.gameObject;
                                     if (obj.transform.CompareTag("Box"))
@@ -346,7 +344,7 @@ namespace UCT.Battle
                         case PlayerDirEnum.Down:////////////////////////////////////////////////
                             if (MainControl.Instance.KeyArrowToControl(KeyCode.X, 1))
                             {
-                                speedWeightX = _speedWeight;
+                                speedWeightX = SpeedWeight;
                             }
                             else
                             {
@@ -388,7 +386,7 @@ namespace UCT.Battle
                             }
                             if (isJump && (!MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("Box"))) && moving.y > 0)
                             {
-                                if (infoF.collider != null && infoF.transform.position.z == transform.position.z)
+                                if (infoF.collider && Mathf.Approximately(infoF.transform.position.z, transform.position.z))
                                 {
                                     jumpRayDistanceForBoard = 0.2f;
                                     moving = new Vector3(moving.x, 0);
@@ -397,7 +395,7 @@ namespace UCT.Battle
                             }
                             if (isJump)
                             {
-                                if (info.collider != null && info.transform.position.z == transform.position.z)
+                                if (info.collider && Mathf.Approximately(info.transform.position.z, transform.position.z))
                                 {
                                     var obj = info.collider.gameObject;
                                     if (obj.transform.CompareTag("Box"))
@@ -419,7 +417,7 @@ namespace UCT.Battle
                         case PlayerDirEnum.Left:////////////////////////////////////////////////
                             if (MainControl.Instance.KeyArrowToControl(KeyCode.X, 1))
                             {
-                                speedWeightY = _speedWeight;
+                                speedWeightY = SpeedWeight;
                             }
                             else
                             {
@@ -459,10 +457,10 @@ namespace UCT.Battle
                                 jumpRayDistance = 0.2f;
                                 jumpRayDistanceForBoard = 0;
                             }
-                            if (isJump && (!MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("Box"))) && moving.x > 0)
+                            if (isJump && (!MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow, 1) || (infoF.collider && infoF.collider.gameObject.CompareTag("Box"))) && moving.x > 0)
                             {
 
-                                if (infoF.collider != null && infoF.transform.position.z == transform.position.z)
+                                if (infoF.collider && Mathf.Approximately(infoF.transform.position.z, transform.position.z))
                                 {
                                     jumpRayDistanceForBoard = 0.2f;
                                     moving = new Vector3(0, moving.y);
@@ -470,7 +468,7 @@ namespace UCT.Battle
                             }
                             if (isJump)
                             {
-                                if (info.collider != null && info.transform.position.z == transform.position.z)
+                                if (info.collider && Mathf.Approximately(info.transform.position.z, transform.position.z))
                                 {
                                     var obj = info.collider.gameObject;
                                     if (obj.transform.CompareTag("Box"))
@@ -492,7 +490,7 @@ namespace UCT.Battle
                         case PlayerDirEnum.Right:
                             if (MainControl.Instance.KeyArrowToControl(KeyCode.X, 1))
                             {
-                                speedWeightY = _speedWeight;
+                                speedWeightY = SpeedWeight;
                             }
                             else
                             {
@@ -533,9 +531,9 @@ namespace UCT.Battle
                                 jumpRayDistance = 0.2f;
                                 jumpRayDistanceForBoard = 0;
                             }
-                            if (isJump && (!MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("Box"))) && moving.x < -0)
+                            if (isJump && (!MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow, 1) || (infoF.collider && infoF.collider.gameObject.CompareTag("Box"))) && moving.x < -0)
                             {
-                                if (infoF.collider != null && infoF.transform.position.z == transform.position.z)
+                                if (infoF.collider && Mathf.Approximately(infoF.transform.position.z, transform.position.z))
                                 {
                                     jumpRayDistanceForBoard = 0.2f;
                                     moving = new Vector3(-0, moving.y);
@@ -543,7 +541,7 @@ namespace UCT.Battle
                             }
                             if (isJump)
                             {
-                                if (info.collider != null && info.transform.position.z == transform.position.z)
+                                if (info.collider && Mathf.Approximately(info.transform.position.z, transform.position.z))
                                 {
                                     var obj = info.collider.gameObject;
                                     if (obj.transform.CompareTag("Box"))
@@ -561,11 +559,17 @@ namespace UCT.Battle
                             }
                             jumpAcceleration += Time.deltaTime * timeInterpolation;
                             break;
+                        case PlayerDirEnum.NullDir:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
                     }
                     break;
 
                 case BattleControl.PlayerColor.Purple:
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
 
@@ -684,18 +688,9 @@ namespace UCT.Battle
             }
         }
 
-        /*
-    private void OnCollisionStay2D(Collision2D collision)
-    {
-        if (collision.transform.CompareTag("board" && collision.transform.GetComponent<BoardController>().canMove && playerColor == BattleControl.PlayerColor.blue)
-        {
-            transform.SetParent(collision.transform);
-        }
-    }
-    */
 
         ///<summary>
-        ///掉出
+        /// 掉出
         ///</summary>
         private void OnCollisionExit2D(Collision2D collision)
         {
@@ -707,39 +702,40 @@ namespace UCT.Battle
 
         ///<summary>
         ///通过渐变动画将玩家的颜色改变。
-        ///若gradientTime/dingTime等于0 则不会有渐变动画/ding动画；
-        ///若gradientTime/dingTime小于0 则使用该脚本内的gradientTime/dingTime变量。
+        ///若inputGradientTime/inputDingTime等于0 则不会有渐变动画/ding动画；
+        ///若inputGradientTime/inputDingTime小于0 则使用该脚本内的gradientTime/dingTime变量。
         ///若PlayerColor输入为nullColor，则不会更改玩家的实际颜色属性。
         ///</summary>
-        public void ChangePlayerColor(Color aimColor, BattleControl.PlayerColor aimPlayerColor, float startForce = 0, PlayerDirEnum dir = PlayerDirEnum.NullDir, float gradientTime = -1, float dingTime = -1, int fx = 2)
+        // ReSharper disable once MemberCanBePrivate.Global
+        public void ChangePlayerColor(Color aimColor, BattleControl.PlayerColor aimPlayerColor, float startForce = 0, PlayerDirEnum dir = PlayerDirEnum.NullDir, float inputGradientTime = -1, float inputDingTime = -1, int fx = 2)
         {
             AudioController.Instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipBattle);
 
-            if (gradientTime < 0)
-                gradientTime = this.gradientTime;
-            if (dingTime < 0)
-                dingTime = this.dingTime;
+            if (inputGradientTime < 0)
+                inputGradientTime = this.gradientTime;
+            if (inputDingTime < 0)
+                inputDingTime = this.dingTime;
 
 
-            if (gradientTime <= 0)
+            if (inputGradientTime <= 0)
             {
                 _spriteRenderer.color = aimColor;
-                if (dingTime > 0)
+                if (inputDingTime > 0)
                 {
                     _changeDingColor.Kill(true);
                     _changeDingScale.Kill(true);
 
                     _dingSpriteRenderer.transform.localScale = Vector3.one;
                     _dingSpriteRenderer.color = aimColor;
-                    _changeDingColor = _dingSpriteRenderer.DOColor(_dingSpriteRenderer.color * new Color(1, 1, 1, 0), dingTime).SetEase(Ease.InOutSine);
-                    _changeDingScale = _dingSpriteRenderer.transform.DOScale(Vector3.one * 2.5f, dingTime).SetEase(Ease.InOutSine);
+                    _changeDingColor = _dingSpriteRenderer.DOColor(_dingSpriteRenderer.color * new Color(1, 1, 1, 0), inputDingTime).SetEase(Ease.InOutSine);
+                    _changeDingScale = _dingSpriteRenderer.transform.DOScale(Vector3.one * 2.5f, inputDingTime).SetEase(Ease.InOutSine);
                 }
             }
             else
             {
                 _changeColor.Kill(true);
-                _changeColor = _spriteRenderer.DOColor(aimColor, gradientTime).SetEase(Ease.InOutSine);
-                if (dingTime > 0)
+                _changeColor = _spriteRenderer.DOColor(aimColor, inputGradientTime).SetEase(Ease.InOutSine);
+                if (inputDingTime > 0)
                 {
 
                     _changeDingColor.Kill(true);
@@ -747,8 +743,8 @@ namespace UCT.Battle
 
                     _dingSpriteRenderer.transform.localScale = Vector3.one;
                     _dingSpriteRenderer.color += new Color(0, 0, 0, 1);
-                    _changeDingColor = _dingSpriteRenderer.DOColor(aimColor * new Color(1, 1, 1, 0), dingTime).SetEase(Ease.InOutSine);
-                    _changeDingScale = _dingSpriteRenderer.transform.DOScale(Vector3.one * 2.5f, dingTime).SetEase(Ease.InOutSine);
+                    _changeDingColor = _dingSpriteRenderer.DOColor(aimColor * new Color(1, 1, 1, 0), inputDingTime).SetEase(Ease.InOutSine);
+                    _changeDingScale = _dingSpriteRenderer.transform.DOScale(Vector3.one * 2.5f, inputDingTime).SetEase(Ease.InOutSine);
                 }
             }
             if (playerColor != aimPlayerColor)
@@ -819,7 +815,7 @@ namespace UCT.Battle
         }
 
         //定义计算点到线段最近点的方法（计算垂足）
-        private Vector2 GetNearestPointOnLine(Vector2 point, Vector2 start, Vector2 end)
+        private static Vector2 GetNearestPointOnLine(Vector2 point, Vector2 start, Vector2 end)
         {
             var line = end - start; //计算线段的向量
             var len = line.magnitude; //获取线段长度
@@ -832,7 +828,7 @@ namespace UCT.Battle
         }
 
         //定义计算位移后垂点位置的方法
-        private Vector2 CalculateDisplacedPoint(Vector2 nearestPoint, Vector2 lineStart, Vector2 lineEnd, float displacement)
+        private static Vector2 CalculateDisplacedPoint(Vector2 nearestPoint, Vector2 lineStart, Vector2 lineEnd, float displacement)
         {
             var lineDirection = (lineEnd - lineStart).normalized; //计算线段方向向量
             Vector2 perpendicularDirection = new(-lineDirection.y, lineDirection.x); //计算垂直方向向量（逆时针旋转90度）
@@ -841,7 +837,7 @@ namespace UCT.Battle
         }
 
         //定义计算内缩多边形顶点的方法
-        public List<Vector2> CalculateInwardOffset(List<Vector2> vertices, float offset)
+        private List<Vector2> CalculateInwardOffset(List<Vector2> vertices, float offset)
         {
             if (vertices == null || vertices.Count < 3) return null; //如果顶点列表为空或少于3个，返回null
 
@@ -863,13 +859,11 @@ namespace UCT.Battle
                 offsetVertices.Add(offsetCurrentVertex); //添加位移后的当前顶点到列表
                 offsetVertices.Add(offsetNextVertex); //添加位移后的下一个顶点到列表
 
-                if (i > 0) //从第二条边开始计算交点
+                if (i <= 0) continue; //从第二条边开始计算交点
+                var foundIntersection = LineLineIntersection(out var intersection, offsetVertices[i * 2 - 2], offsetVertices[i * 2 - 1], offsetCurrentVertex, offsetNextVertex);
+                if (foundIntersection)
                 {
-                    var foundIntersection = LineLineIntersection(out var intersection, offsetVertices[i * 2 - 2], offsetVertices[i * 2 - 1], offsetCurrentVertex, offsetNextVertex);
-                    if (foundIntersection)
-                    {
-                        intersectionPoints.Add(intersection); //如果找到交点，添加到交点列表
-                    }
+                    intersectionPoints.Add(intersection); //如果找到交点，添加到交点列表
                 }
             }
 
@@ -884,7 +878,7 @@ namespace UCT.Battle
         }
 
         //定义线线交点计算的方法
-        private bool LineLineIntersection(out Vector2 intersection, Vector2 point1, Vector2 point2, Vector2 point3, Vector2 point4)
+        private static bool LineLineIntersection(out Vector2 intersection, Vector2 point1, Vector2 point2, Vector2 point3, Vector2 point4)
         {
             intersection = new Vector2(); //初始化交点坐标
 
@@ -897,8 +891,8 @@ namespace UCT.Battle
 
             return true; //返回true，表示找到交点
         }
-        //定义根据位移检查并调整点位置的方法
-        public Vector3 CheckPoint(Vector3 point, float displacement, int maxDepth = 10, int currentDepth = 0, bool isInitialCall = true)
+        // 定义根据位移检查并调整点位置的方法
+        private Vector3 CheckPoint(Vector3 point, float inputDisplacement, int maxDepth = 10, int currentDepth = 0, bool isInitialCall = true)
         {
             Vector2 originalPoint = point; //保存原始点位置
             var z = point.z;
@@ -907,29 +901,20 @@ namespace UCT.Battle
                 return point; //如果达到最大次数，返回当前点
             }
 
-            foreach (var box in BoxController.Instance.boxes) //遍历所有战斗框
+            foreach (var box in BoxController.Instance.boxes.Where(box => Mathf.Approximately(box.localPosition.z, z)))
             {
-                if (box.localPosition.z != z)//排除Z轴不同的
-                    continue;
-
                 float rDis;
                 if (box.sonBoxDrawer.Count > 0)
-                    rDis = displacement + test1;
+                    rDis = inputDisplacement + -0.5f;
                 else
-                    rDis = displacement;
+                    rDis = inputDisplacement;
                 var movedVertices = CalculateInwardOffset(box.GetRealPoints(false), -rDis); //计算缩放后的多边形顶点
-                /*
-            foreach (var item in movedVertices) //遍历移动后的顶点
-            {
-                //Debug.Log(item); //记录日志
-            }
-            */
+              
                 if (IsPointInPolygon(point, movedVertices)) //如果点 在 调整后的多边形内
                 {
                     //Debug.Log(point, "#FF00FF"); //记录日志
                     return point; //返回原始坐标
                 }
-
             }
             //如果点 不在 调整后的多边形内
 
@@ -939,49 +924,38 @@ namespace UCT.Battle
             var nearestDistance = float.MaxValue; //最近距离设为最大值
             var isParent = false;//确定框是否为复合的框，如果是，需要额外调整移动距离
 
-            foreach (var box in BoxController.Instance.boxes) //遍历所有战斗框
+            foreach (var box in BoxController.Instance.boxes.Where(box => Mathf.Approximately(box.localPosition.z, z)))
             {
-                if (box.localPosition.z != z)//排除Z轴不同的
-                    continue;
-
-
                 for (int i = 0, j = box.GetRealPoints(false).Count - 1; i < box.GetRealPoints(false).Count; j = i++) //遍历框的所有边
                 {
                     var tempNearestPoint = GetNearestPointOnLine(point, box.GetRealPoints(false)[i], box.GetRealPoints(false)[j]); //计算到当前边的最近点
                     var tempDistance = Vector2.Distance(point, tempNearestPoint); //计算距离
-                    if (tempDistance < nearestDistance) //如果距离更短
-                    {
-                        nearestPoint = tempNearestPoint; //更新最近点
-                        lineStart = box.GetRealPoints(false)[i]; //更新线段起点
-                        lineEnd = box.GetRealPoints(false)[j]; //更新线段终点
-                        nearestDistance = tempDistance; //更新最近距离
-                        isParent = box.sonBoxDrawer.Count > 0;
-                    
-                    }
+                    if (!(tempDistance < nearestDistance)) continue; 
+                    //如果距离更短
+                    nearestPoint = tempNearestPoint; //更新最近点
+                    lineStart = box.GetRealPoints(false)[i]; //更新线段起点
+                    lineEnd = box.GetRealPoints(false)[j]; //更新线段终点
+                    nearestDistance = tempDistance; //更新最近距离
+                    isParent = box.sonBoxDrawer.Count > 0;
                 }
             }
 
-            if (nearestDistance < float.MaxValue) //如果找到最近点
-            {
-                if (isParent)
-                    displacement -= test2;
+            if (!(nearestDistance < float.MaxValue)) return point; //如果没有找到更近的点，返回原点
+            //如果找到最近点
+            if (isParent)
+                inputDisplacement -= 0.05f;
 
-                var moved = (Vector3)CalculateDisplacedPoint(nearestPoint, lineStart, lineEnd, -displacement) + new Vector3(0, 0, z); //计算位移后的点位置
-                //Debug.Log(moved, "#FF0000"); //记录日志
+            var moved = (Vector3)CalculateDisplacedPoint(nearestPoint, lineStart, lineEnd, -inputDisplacement) + new Vector3(0, 0, z); //计算位移后的点位置
+            //Debug.Log(moved, "#FF0000"); //记录日志
 
-                if (isInitialCall || (Vector2)moved != originalPoint) //如果是初次调用或移动后的点不等于原点
-                {
-                    var newCheck = (Vector3)(Vector2)CheckPoint(moved, displacement, maxDepth, currentDepth + 1, false) + new Vector3(0, 0, z); //递归调用，增加递归深度
-                    if (newCheck != moved) //如果移动后的点未通过检测
-                    {
-                        //因为已经在递归中处理递归深度，所以这里不需要再次调用CheckPoint
-                        return newCheck; //返回新检查点
-                    }
-                    return moved; //返回移动后的点
-                }
-            }
+            if (!isInitialCall && (Vector2)moved == originalPoint) return point; //如果没有找到更近的点，返回原点
+            //如果是初次调用或移动后的点不等于原点
+            var newCheck = (Vector3)(Vector2)CheckPoint(moved, inputDisplacement, maxDepth, currentDepth + 1, false) + new Vector3(0, 0, z); //递归调用，增加递归深度
+            return newCheck != moved ? //如果移动后的点未通过检测
+                //因为已经在递归中处理递归深度，所以这里不需要再次调用CheckPoint
+                newCheck : //返回新检查点
+                moved; //返回移动后的点
 
-            return point;//如果没有找到更近的点，返回原点
         }
 
         public void KillPlayer(MainControl mainControl)
@@ -1005,92 +979,3 @@ namespace UCT.Battle
         }
     }
 }
-
-//杂项
-/*
- 写蓝心的时候无意中搞出来的弹球式蓝心：
-
-  case BattleControl.PlayerColor.blue:
-                switch (playerDir)
-                {
-                    case PlayerDirEnum.up:
-                        transform.rotation = Quaternion.Euler(0, 0, 180);
-                        Physics2D.gravity = new Vector2(0, 9.8f);
-                        break;
-
-                    case PlayerDirEnum.down:
-                        transform.rotation = Quaternion.Euler(0, 0, 0);
-                        Physics2D.gravity = new Vector2(0, -9.8f);
-                        if (MainControl.instance.KeyArrowToControl(KeyCode.RightArrow))
-                        {
-                            moving = new Vector3(1, moving.y);
-                        }
-                        else if (MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow))
-                        {
-                            moving = new Vector3(-1, moving.y);
-                        }
-                        else
-                            moving = new Vector3(0, moving.y);
-
-                        if(MainControl.instance.KeyArrowToControl(KeyCode.UpArrow) && !isJump)
-                        {
-                            moving = new Vector3(moving.x, 2.15f);
-                            isJump = true;
-                        }
-                        if (isJump && !MainControl.instance.KeyArrowToControl(KeyCode.UpArrow) && moving.y > 0)
-                            moving = new Vector3(moving.x, 0);
-                        if (isJump)
-                        {
-                            Vector2 dirReal = new Vector2();
-                            switch (playerDir)
-                            {
-                                case PlayerDirEnum.up:
-                                    dirReal = Vector2.up;
-                                    break;
-
-                                case PlayerDirEnum.down:
-                                    dirReal = Vector2.down;
-                                    break;
-
-                                case PlayerDirEnum.left:
-                                    dirReal = Vector2.left;
-                                    break;
-
-                                case PlayerDirEnum.right:
-                                    dirReal = Vector2.right;
-                                    break;
-                            }
-                            Ray2D ray = new Ray2D(transform.position, dirReal);
-                            Debug.DrawRay(ray.origin, ray.direction, Color.blue, collideCollider.radius + 0.05f);
-                            RaycastHit2D info = Physics2D.Raycast(transform.position, dirReal, collideCollider.radius + 0.05f);//距离为圆碰撞器+0.05f
-                            if (info.collider != null && info.transform.position.z == transform.position.z)
-                            {
-                                GameObject obj = info.collider.gameObject;
-                                if (obj.transform.CompareTag("Box")
-                                {
-                                    isJump = false;
-                                }
-                            }
-
-                            moving.y -= Time.deltaTime * (float)Math.Pow(1.85f,jumpAcceleration);
-                        }
-                        else
-                        {
-                            jumpAcceleration = 1.25f;
-                            moving.y = 0;
-                        }
-                        jumpAcceleration += Time.deltaTime * 0.425f;
-                            break;
-
-                    case PlayerDirEnum.left:
-                        transform.rotation = Quaternion.Euler(0, 0, 270);
-                        Physics2D.gravity = new Vector2(-9.8f, 0);
-                        break;
-
-                    case PlayerDirEnum.right:
-                        transform.rotation = Quaternion.Euler(0, 0, 90);
-                        Physics2D.gravity = new Vector2(9.8f, 0);
-                        break;
-                }
-                break;
-*/

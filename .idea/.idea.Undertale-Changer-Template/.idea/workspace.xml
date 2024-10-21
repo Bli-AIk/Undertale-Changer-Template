@@ -5,11 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8f7c2298-d077-422b-9131-f9a839bed961" name="更改" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Fonts/UT-UI.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Fonts/UT-UI.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Battle/BattlePlayerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Battle/BattlePlayerController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Core/MainControl.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Core/MainControl.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Service/MathUtilityService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Service/MathUtilityService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -147,7 +143,7 @@
       <workItem from="1729404960640" duration="3046000" />
       <workItem from="1729410284305" duration="808000" />
       <workItem from="1729411352249" duration="4996000" />
-      <workItem from="1729482930436" duration="1544000" />
+      <workItem from="1729482930436" duration="2340000" />
     </task>
     <servers />
   </component>
