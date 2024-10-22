@@ -485,11 +485,11 @@ namespace UCT.Global.UI
 
                                     case 2:
                                         MainControl.Instance.OverworldControl.fullScreen = !MainControl.Instance.OverworldControl.fullScreen;
-                                        MainControl.Instance.SetResolution(MainControl.Instance.OverworldControl.resolutionLevel);
+                                        GameUtilityService.SetResolution(MainControl.Instance.OverworldControl.resolutionLevel);
 
                                         goto default;
                                     case 3:
-                                        MainControl.Instance.UpdateResolutionSettings();
+                                        GameUtilityService.UpdateResolutionSettings();
                                         goto default;
                                     case 4:
                                         MainControl.Instance.OverworldControl.noSfx = !MainControl.Instance.OverworldControl.noSfx;
@@ -504,7 +504,7 @@ namespace UCT.Global.UI
                                             return;
                                         if (SceneManager.GetActiveScene().name == "Menu")
                                             goto case 7;
-                                        MainControl.Instance.FadeOutAndSwitchScene("Menu", Color.black, true, animSpeed);
+                                        GameUtilityService.FadeOutAndSwitchScene("Menu", Color.black, true, animSpeed);
                                         CloseSetting();
                                         freeze = true;
                                         break;
@@ -554,7 +554,7 @@ namespace UCT.Global.UI
                                 {
                                     AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
                                     MainControl.Instance.OverworldControl.hdResolution = !MainControl.Instance.OverworldControl.hdResolution;
-                                    MainControl.Instance.UpdateResolutionSettings();
+                                    GameUtilityService.UpdateResolutionSettings();
                                     SettingText();
                                     PlayerPrefs.SetInt("hdResolution", Convert.ToInt32(MainControl.Instance.OverworldControl.hdResolution));
                                 }
@@ -841,7 +841,7 @@ namespace UCT.Global.UI
         private void AnimOpen()
         {
             animator.SetBool("Open", false);
-            MainControl.Instance.FadeOutAndSwitchScene("Battle", Color.black, false, -0.5f);
+            GameUtilityService.FadeOutAndSwitchScene("Battle", Color.black, false, -0.5f);
         }
     }
 }

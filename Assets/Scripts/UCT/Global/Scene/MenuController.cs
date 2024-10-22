@@ -114,11 +114,11 @@ namespace UCT.Global.Scene
                     switch (_select)
                     {
                         case 0:
-                            MainControl.Instance.FadeOutAndSwitchScene(MainControl.Instance.PlayerControl.saveScene, Color.black, true);
+                            GameUtilityService.FadeOutAndSwitchScene(MainControl.Instance.PlayerControl.saveScene, Color.black, true);
                             break;
 
                         case 1:
-                            MainControl.Instance.FadeOutAndSwitchScene("Rename", Color.black, true);
+                            GameUtilityService.FadeOutAndSwitchScene("Rename", Color.black, true);
                             break;
 
                         case 2:
@@ -164,7 +164,7 @@ namespace UCT.Global.Scene
                                 SaveController.SaveData(MainControl.Instance.PlayerControl, "Data" + MainControl.Instance.dataNumber);
                                 MainControl.Instance.SetPlayerControl(ScriptableObject.CreateInstance<PlayerControl>());
                                 MainControl.Instance.PlayerControl.playerName = "";
-                                MainControl.Instance.FadeOutAndSwitchScene("Rename", Color.black);
+                                GameUtilityService.FadeOutAndSwitchScene("Rename", Color.black);
                             }
                             else//下页
                             {

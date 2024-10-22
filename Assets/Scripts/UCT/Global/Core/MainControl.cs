@@ -58,16 +58,13 @@ namespace UCT.Global.Core
         public bool haveInOutBlack, noInBlack;
         public bool notPauseIn;
 
-        private Image _inOutBlack;
+        [FormerlySerializedAs("_inOutBlack")] public Image inOutBlack;
 
         [Header("引用用的")]
         [Header("战斗外")]
         public PlayerBehaviour playerBehaviour;
 
-        //[Header("战斗内")]
-        //public OldBoxController OldBoxController;
-
-        private Camera _cameraMainInBattle;
+        public Camera cameraMainInBattle;
         public Camera mainCamera;
 
         public BoxDrawer mainBox;
@@ -272,8 +269,8 @@ namespace UCT.Global.Core
             if (cameraShake == null)
                 cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
             cameraShake3D = GameObject.Find("3D CameraP").GetComponent<CameraShake>();
-            if (_cameraMainInBattle == null)
-                _cameraMainInBattle = cameraShake.GetComponent<Camera>();
+            if (cameraMainInBattle == null)
+                cameraMainInBattle = cameraShake.GetComponent<Camera>();
         }
 
         private void Awake()
@@ -324,20 +321,21 @@ namespace UCT.Global.Core
 
             if (haveInOutBlack)
             {
-                _inOutBlack = GameObject.Find("Canvas/InOutBlack").GetComponent<Image>();
-                _inOutBlack.color = Color.black;
+                inOutBlack = GameObject.Find("Canvas/InOutBlack").GetComponent<Image>();
+                inOutBlack.color = Color.black;
                 OverworldControl.pause = !notPauseIn;
                 if (!noInBlack)
                 {
-                    _inOutBlack.DOColor(Color.clear, 0.5f).SetEase(Ease.Linear).OnKill(() => OverworldControl.pause = false);
+                    inOutBlack.DOColor(Color.clear, 0.5f).SetEase(Ease.Linear).OnKill(() => OverworldControl.pause = false);
                     CanvasController.Instance.frame.color = OverworldControl.hdResolution ? new Color(1, 1, 1, 1) : new Color(1, 1, 1, 0);
                 }
                 else
                 {
-                    _inOutBlack.color = Color.clear;
+                    inOutBlack.color = Color.clear;
                 }
             }
-            SetCanvasFrameSprite(CanvasController.Instance.framePic);
+
+            GameUtilityService.SetCanvasFrameSprite(CanvasController.Instance.framePic);
 
             AudioListener.volume = OverworldControl.mainVolume;
             OverworldControl.isSetting = false;
@@ -372,7 +370,7 @@ namespace UCT.Global.Core
                 return;
             if (KeyArrowToControl(KeyCode.Tab))
             {
-                UpdateResolutionSettings();
+                GameUtilityService.UpdateResolutionSettings();
             }
             if (KeyArrowToControl(KeyCode.Semicolon))
             {
@@ -382,7 +380,7 @@ namespace UCT.Global.Core
             if (KeyArrowToControl(KeyCode.F4))
             {
                 OverworldControl.fullScreen = !OverworldControl.fullScreen;
-                SetResolution(OverworldControl.resolutionLevel);
+                GameUtilityService.SetResolution(OverworldControl.resolutionLevel);
             }
 
             if (isMetronome)
@@ -548,194 +546,13 @@ namespace UCT.Global.Core
 
             if (sceneState != SceneState.InBattle) return;
             
-            if (!_cameraMainInBattle)
+            if (!cameraMainInBattle)
             {
                 if (!cameraShake)
                     cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
-                _cameraMainInBattle = cameraShake.GetComponent<Camera>();
+                cameraMainInBattle = cameraShake.GetComponent<Camera>();
             }
-            _cameraMainInBattle.GetUniversalAdditionalCameraData().renderPostProcessing = !isClose;
-        }
-
-        /// <summary>
-        /// 更改分辨率相关代码
-        /// </summary>
-        public void UpdateResolutionSettings()
-        {
-            if (!OverworldControl.hdResolution)
-            {
-                if (OverworldControl.resolutionLevel is >= 0 and < 4)
-                    OverworldControl.resolutionLevel += 1;
-                else
-                    OverworldControl.resolutionLevel = 0;
-            }
-            else
-            {
-                if (OverworldControl.resolutionLevel is >= 5 and < 6)
-                    OverworldControl.resolutionLevel += 1;
-                else
-                    OverworldControl.resolutionLevel = 5;
-            }
-            SetResolution(OverworldControl.resolutionLevel);
-        }
-
-        private void SetCanvasFrameSprite(int framePic = 2)//一般为CanvasController.instance.framePic
-        {
-            var frame = CanvasController.Instance.frame;
-            frame.sprite = framePic < 0 ? null : OverworldControl.frames[framePic];
-        }
-
-        /// <summary>
-        /// 分辨率设置
-        /// </summary>
-        public void SetResolution(int resolution)
-        {
-            if (!_cameraMainInBattle)
-            {
-                if (!cameraShake)
-                    cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
-                else
-                    _cameraMainInBattle = cameraShake.GetComponent<Camera>();
-            }
-
-            if (!OverworldControl.hdResolution)
-            {
-                if (OverworldControl.resolutionLevel > 4)
-                    OverworldControl.resolutionLevel = 0;
-            }
-            else
-            {
-                if (OverworldControl.resolutionLevel < 5)
-                    OverworldControl.resolutionLevel = 5;
-            }
-
-            if (!OverworldControl.hdResolution)
-            {
-                mainCamera.rect = new Rect(0, 0, 1, 1);
-                if (sceneState == SceneState.InBattle)
-                {
-                    if (_cameraMainInBattle) _cameraMainInBattle.rect = new Rect(0, 0, 1, 1);
-                }
-                
-                if (BackpackBehaviour.Instance)
-                    BackpackBehaviour.Instance.SuitResolution();
-
-                CanvasController.Instance.DOKill();
-                CanvasController.Instance.fps.rectTransform.anchoredPosition = new Vector2();
-                CanvasController.Instance.frame.color = new Color(1, 1, 1, 0);
-                CanvasController.Instance.setting.transform.localScale = Vector3.one;
-                CanvasController.Instance.setting.rectTransform.anchoredPosition = new Vector2(0, CanvasController.Instance.setting.rectTransform.anchoredPosition.y);
-            }
-            else
-            {
-                if (mainCamera)
-                    mainCamera.rect = new Rect(0, 0.056f, 1, 0.888f);
-                
-                if (sceneState == SceneState.InBattle)
-                    if (_cameraMainInBattle)
-                        _cameraMainInBattle.rect = new Rect(0, 0.056f, 1, 0.888f);
-
-                if (BackpackBehaviour.Instance)
-                    BackpackBehaviour.Instance.SuitResolution();
-
-                CanvasController.Instance.DOKill();
-
-                if (CanvasController.Instance.framePic < 0)
-                {
-                    CanvasController.Instance.frame.color = Color.black;
-                    CanvasController.Instance.fps.rectTransform.anchoredPosition = new Vector2(0, -30f);
-                }
-                else 
-                    CanvasController.Instance.fps.rectTransform.anchoredPosition = new Vector2();
-
-                CanvasController.Instance.frame.DOColor(new Color(1, 1, 1, 1) * Convert.ToInt32(CanvasController.Instance.framePic >= 0), 1f);
-                CanvasController.Instance.setting.transform.localScale = Vector3.one * 0.89f;
-                CanvasController.Instance.setting.rectTransform.anchoredPosition = new Vector2(142.5f, CanvasController.Instance.setting.rectTransform.anchoredPosition.y);
-            }
-
-            
-            var resolutionHeights = new List<int> { 480, 768, 864, 960, 1080, 540, 1080 };
-            var resolutionWidths = MathUtilityService.GetResolutionWidthsWithHeights(resolutionHeights, 5);
-
-            var currentResolutionWidth = resolutionWidths[resolution];
-            var currentResolutionHeight = resolutionHeights[resolution];
-            
-            Screen.SetResolution(currentResolutionWidth, currentResolutionHeight, OverworldControl.fullScreen);
-            OverworldControl.resolution = new Vector2(currentResolutionWidth, currentResolutionHeight);
-        }
-
-        /// <summary>
-        /// 淡出并切换场景。
-        /// </summary>
-        /// <param name="scene">要切换到的场景名称</param>
-        /// <param name="fadeColor">淡出的颜色</param>
-        /// <param name="isBgmMuted">是否静音背景音乐</param>
-        /// <param name="fadeTime">淡出时间，默认为0.5秒</param>
-        /// <param name="isAsync">是否异步切换场景，默认为true</param>
-        public void FadeOutAndSwitchScene(string scene, Color fadeColor, bool isBgmMuted = false, float fadeTime = 0.5f, bool isAsync = true)
-        {
-            isSceneSwitching = true;
-            if (isBgmMuted)
-            {
-                var bgm = AudioController.Instance.transform.GetComponent<AudioSource>();
-                switch (fadeTime)
-                {
-                    case > 0:
-                        DOTween.To(() => bgm.volume, x => bgm.volume = x, 0, fadeTime).SetEase(Ease.Linear);
-                        break;
-                    case 0:
-                        bgm.volume = 0;
-                        break;
-                    default:
-                        DOTween.To(() => bgm.volume, x => bgm.volume = x, 0, Mathf.Abs(fadeTime)).SetEase(Ease.Linear);
-                        break;
-                }
-            }
-            OverworldControl.pause = true;
-            switch (fadeTime)
-            {
-                case > 0:
-                {
-                    _inOutBlack.DOColor(fadeColor, fadeTime).SetEase(Ease.Linear).OnKill(() => SwitchScene(scene));
-                    if (!OverworldControl.hdResolution)
-                        CanvasController.Instance.frame.color = new Color(1, 1, 1, 0);
-                    break;
-                }
-                case 0:
-                    _inOutBlack.color = fadeColor;
-                    SwitchScene(scene, isAsync);
-                    break;
-                default:
-                {
-                    fadeTime = Mathf.Abs(fadeTime);
-                    _inOutBlack.color = fadeColor;
-                    _inOutBlack.DOColor(fadeColor, fadeTime).SetEase(Ease.Linear).OnKill(() => SwitchScene(scene));
-                    if (!OverworldControl.hdResolution)
-                        CanvasController.Instance.frame.color = new Color(1, 1, 1, 0);
-                    break;
-                }
-            }
-        }
-
-        public void OutWhite(string scene)
-        {
-            isSceneSwitching = true;
-            _inOutBlack.color = new Color(1, 1, 1, 0);
-            AudioController.Instance.GetFx(6, AudioControl.fxClipUI);
-            _inOutBlack.DOColor(Color.white, 5.5f).SetEase(Ease.Linear).OnKill(() => SwitchScene(scene));
-        }
-
-        public void SwitchScene(string sceneName, bool async = true)
-        {
-            SetCanvasFrameSprite();
-            if (SceneManager.GetActiveScene().name != "Menu" && SceneManager.GetActiveScene().name != "Rename" && SceneManager.GetActiveScene().name != "Story" && SceneManager.GetActiveScene().name != "Start" && SceneManager.GetActiveScene().name != "Gameover")
-                PlayerControl.lastScene = SceneManager.GetActiveScene().name;
-            if (async)
-                SceneManager.LoadSceneAsync(sceneName);
-            else SceneManager.LoadScene(sceneName);
-
-            SetResolution(Instance.OverworldControl.resolutionLevel);
-            isSceneSwitching = false;
+            cameraMainInBattle.GetUniversalAdditionalCameraData().renderPostProcessing = !isClose;
         }
 
         /// <summary>

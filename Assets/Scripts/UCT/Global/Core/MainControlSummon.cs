@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UCT.Global.Audio;
 using UCT.Global.UI;
+using UCT.Service;
 using UnityEngine;
 using static UCT.Global.Core.MainControl;
 
@@ -113,7 +114,7 @@ namespace UCT.Global.Core
 
                 mainControl.InitializationOverworld();
                 mainControl.Start();
-                mainControl.SetResolution(Instance.OverworldControl.resolutionLevel);
+                GameUtilityService.SetResolution(Instance.OverworldControl.resolutionLevel);
                 return;
             }
             //生成
@@ -131,7 +132,7 @@ namespace UCT.Global.Core
 
             mainControl.gameObject.name = "MainControl";
             mainControl.InitializationOverworld();
-            mainControl.SetResolution(Instance.OverworldControl.resolutionLevel);
+            GameUtilityService.SetResolution(Instance.OverworldControl.resolutionLevel);
         }
     }
 }

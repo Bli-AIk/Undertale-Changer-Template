@@ -544,7 +544,7 @@ namespace UCT.Service
                 case "<itemHp>":
                     if (inputName != "" && !isData)
                     {
-                        text += DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, DataHandlerService.ItemNameGetId(MainControl.Instance.ItemControl, inputName, "Foods"), "Auto", 2);
+                        text += ItemIdGetName(MainControl.Instance.ItemControl, ItemNameGetId(MainControl.Instance.ItemControl, inputName, "Foods"), "Auto", 2);
                         break;
                     }
 
@@ -553,7 +553,7 @@ namespace UCT.Service
                 case "<itemAtk>":
                     if (inputName != "" && !isData)
                     {
-                        text += DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, DataHandlerService.ItemNameGetId(MainControl.Instance.ItemControl, inputName, "Arms"), "Auto", 1);
+                        text += ItemIdGetName(MainControl.Instance.ItemControl, ItemNameGetId(MainControl.Instance.ItemControl, inputName, "Arms"), "Auto", 1);
                         break;
                     }
 
@@ -562,7 +562,7 @@ namespace UCT.Service
                 case "<itemDef>":
                     if (inputName != "" && !isData)
                     {
-                        text += DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, DataHandlerService.ItemNameGetId(MainControl.Instance.ItemControl, inputName, "Armors"), "Auto", 1);
+                        text += ItemIdGetName(MainControl.Instance.ItemControl, ItemNameGetId(MainControl.Instance.ItemControl, inputName, "Armors"), "Auto", 1);
                         break;
                     }
 
@@ -606,9 +606,9 @@ namespace UCT.Service
                             {
                                 if (inputName != "")
                                 {
-                                    if (DataHandlerService.ItemNameGetId(MainControl.Instance.ItemControl, inputName, inputText.Substring(9, inputText.Length - 10) + 's') < 10000)
-                                        text += DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, DataHandlerService.ItemNameGetId(MainControl.Instance.ItemControl, inputName, inputText.Substring(9, inputText.Length - 10) + 's'), inputText.Substring(9, inputText.Length - 10) + 's', 0);
-                                    else text += DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, DataHandlerService.ItemNameGetId(MainControl.Instance.ItemControl, inputName, inputText.Substring(9, inputText.Length - 10) + 's'), "Auto", 0);
+                                    if (ItemNameGetId(MainControl.Instance.ItemControl, inputName, inputText.Substring(9, inputText.Length - 10) + 's') < 10000)
+                                        text += ItemIdGetName(MainControl.Instance.ItemControl, ItemNameGetId(MainControl.Instance.ItemControl, inputName, inputText.Substring(9, inputText.Length - 10) + 's'), inputText.Substring(9, inputText.Length - 10) + 's', 0);
+                                    else text += ItemIdGetName(MainControl.Instance.ItemControl, ItemNameGetId(MainControl.Instance.ItemControl, inputName, inputText.Substring(9, inputText.Length - 10) + 's'), "Auto", 0);
                                 }
 
                                 break;

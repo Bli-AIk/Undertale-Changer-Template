@@ -92,7 +92,7 @@ namespace UCT.Battle
                     MainControl.Instance.OverworldControl.playerDeadPos = transform.position - (Vector3)sceneDrift;
                     MainControl.Instance.OverworldControl.pause = true;
                     TurnController.Instance.KillIEnumerator();
-                    MainControl.Instance.SwitchScene("Gameover", false);
+                    GameUtilityService.SwitchScene("Gameover", false);
                 }
                 else
                     MainControl.Instance.selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
@@ -712,9 +712,9 @@ namespace UCT.Battle
             AudioController.Instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipBattle);
 
             if (inputGradientTime < 0)
-                inputGradientTime = this.gradientTime;
+                inputGradientTime = gradientTime;
             if (inputDingTime < 0)
-                inputDingTime = this.dingTime;
+                inputDingTime = dingTime;
 
 
             if (inputGradientTime <= 0)
@@ -968,7 +968,7 @@ namespace UCT.Battle
                 mainControl.OverworldControl.playerDeadPos = transform.position - (Vector3)sceneDrift;
                 mainControl.OverworldControl.pause = true;
                 TurnController.Instance.KillIEnumerator();
-                mainControl.SwitchScene("Gameover", false);
+                GameUtilityService.SwitchScene("Gameover", false);
             }
             else
             {

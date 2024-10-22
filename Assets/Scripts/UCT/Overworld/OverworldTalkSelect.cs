@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UCT.Global.Audio;
 using UCT.Global.Core;
 using UCT.Global.UI;
+using UCT.Service;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -90,7 +91,7 @@ namespace UCT.Overworld
 
                                 case "BackMenu":
                                     _typeWritter.forceReturn = true;
-                                    MainControl.Instance.FadeOutAndSwitchScene("Menu", Color.black, true, 0f);
+                                    GameUtilityService.FadeOutAndSwitchScene("Menu", Color.black, true, 0f);
                                     AudioController.Instance.audioSource.volume = 0;
                                     break;
 

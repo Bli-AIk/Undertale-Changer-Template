@@ -108,7 +108,7 @@ namespace UCT.Global.Scene
                                 case 52:
                                     if (!string.IsNullOrEmpty(MainControl.Instance.PlayerControl.playerName))
                                     {
-                                        MainControl.Instance.FadeOutAndSwitchScene("Menu", Color.black);
+                                        GameUtilityService.FadeOutAndSwitchScene("Menu", Color.black);
                                         mode = 0;
                                     }
                                     else
@@ -294,7 +294,7 @@ namespace UCT.Global.Scene
                                 PlayerPrefs.SetInt("noSFX", Convert.ToInt32(MainControl.Instance.OverworldControl.noSfx));
                                 PlayerPrefs.SetInt("vsyncMode", Convert.ToInt32(MainControl.Instance.OverworldControl.vsyncMode));
 
-                                MainControl.Instance.OutWhite("Menu");
+                                GameUtilityService.FadeOutToWhiteAndSwitchScene("Menu");
                                 break;
                         }
                     }

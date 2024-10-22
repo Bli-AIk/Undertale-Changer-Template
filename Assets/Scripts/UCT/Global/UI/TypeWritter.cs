@@ -285,7 +285,7 @@ namespace UCT.Global.UI
 
                                 case "<storyExit>":
                                     TypeStop();
-                                    MainControl.Instance.FadeOutAndSwitchScene("Start", Color.black, true);
+                                    GameUtilityService.FadeOutAndSwitchScene("Start", Color.black, true);
                                     break;
 
                                 case "<sprite=0>":

@@ -1,8 +1,8 @@
 using DG.Tweening;
 using TMPro;
-using UCT.Control;
 using UCT.Global.Audio;
 using UCT.Global.Core;
+using UCT.Service;
 using UnityEngine;
 
 namespace UCT.Global.Scene
@@ -57,11 +57,11 @@ namespace UCT.Global.Scene
                         _text.DOColor(Color.clear, 1).SetEase(Ease.Linear);
                         if (MainControl.Instance.PlayerControl.playerName == "" || MainControl.Instance.PlayerControl.playerName == null)
                         {
-                            MainControl.Instance.FadeOutAndSwitchScene("Rename", Color.black, false, 2f);
+                            GameUtilityService.FadeOutAndSwitchScene("Rename", Color.black, false, 2f);
                         }
                         else
                         {
-                            MainControl.Instance.FadeOutAndSwitchScene("Menu", Color.black, false, 2f);
+                            GameUtilityService.FadeOutAndSwitchScene("Menu", Color.black, false, 2f);
                         }
                         break;
                 }
@@ -75,7 +75,7 @@ namespace UCT.Global.Scene
                 _afkTimer -= Time.deltaTime;
             else
             {
-                MainControl.Instance.FadeOutAndSwitchScene("Story", Color.black);
+                GameUtilityService.FadeOutAndSwitchScene("Story", Color.black);
                 _afkTimer = 10000000000;
             }
         }

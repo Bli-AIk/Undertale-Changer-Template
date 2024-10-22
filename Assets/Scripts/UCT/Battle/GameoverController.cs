@@ -98,13 +98,13 @@ namespace UCT.Battle
             if (!_typeWritter.isTyping && MainControl.Instance.KeyArrowToControl(KeyCode.Z) && canChangeSence)
             {
                 _tmp.text = "";
-                MainControl.Instance.FadeOutAndSwitchScene("Example-Corridor", Color.black, true, 2);
+                GameUtilityService.FadeOutAndSwitchScene("Example-Corridor", Color.black, true, 2);
                 canChangeSence = false;
             }
 
             if (MainControl.Instance.KeyArrowToControl(KeyCode.C) && canChangeSenceForC)
             {
-                MainControl.Instance.FadeOutAndSwitchScene("Example-Corridor", Color.black, true);
+                GameUtilityService.FadeOutAndSwitchScene("Example-Corridor", Color.black, true);
                 _typeWritter.TypeStop();
                 canChangeSenceForC = false;
             }
