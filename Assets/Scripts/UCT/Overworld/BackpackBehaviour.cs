@@ -188,7 +188,7 @@ namespace UCT.Overworld
                                 foreach (var t in MainControl.Instance.PlayerControl.myItems)
                                 {
                                     if (t != 0)
-                                        _uiItems.text += $" {MainControl.Instance.ItemIdGetName(t, "Auto", 0)}\n";
+                                        _uiItems.text += $" {DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, t, "Auto", 0)}\n";
                                     else _uiItems.text += "\n";
                                 }
 
@@ -271,9 +271,9 @@ namespace UCT.Overworld
                                        + $"{MainControl.Instance.ItemControl.itemTextMaxData[3][..^1]}:\n"
                                        + $"{MainControl.Instance.PlayerControl.nextExp}\n\n"
                                        + $"{MainControl.Instance.ItemControl.itemTextMaxData[4][..^1]}\n"
-                                       + $"{MainControl.Instance.ItemIdGetName(MainControl.Instance.PlayerControl.wearArm, "Auto", 0)}\n"
+                                       + $"{DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.PlayerControl.wearArm, "Auto", 0)}\n"
                                        + $"{MainControl.Instance.ItemControl.itemTextMaxData[5][..^1]}\n"
-                                       + $"{MainControl.Instance.ItemIdGetName(MainControl.Instance.PlayerControl.wearArmor, "Auto", 0)}\n"
+                                       + $"{DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.PlayerControl.wearArmor, "Auto", 0)}\n"
                                        + $"{TextProcessingService.RichTextWithEnd("size", 13, "\n")}"
                                        + $"{MainControl.Instance.ItemControl.itemTextMaxData[6][..^1]}\n"
                                        + $"{MainControl.Instance.PlayerControl.gold}";

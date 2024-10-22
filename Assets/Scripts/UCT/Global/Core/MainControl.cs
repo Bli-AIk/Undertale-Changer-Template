@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using DG.Tweening;
 using TMPro;
 using UCT.Battle;
@@ -165,7 +164,7 @@ namespace UCT.Global.Core
             LoadItemData(ItemControl.itemTextMax, ItemControl.itemText);
 
             TextProcessingService.ClassifyStringsByPrefix(ItemControl.itemTextMax, new[] { "Data", "Item" }, new[] { ItemControl.itemTextMaxData, ItemControl.itemTextMaxItem });
-            ItemClassification(ItemControl);
+            DataHandlerService.ClassifyItemsData(ItemControl);
 
             ItemControl.itemTextMaxData = ChangeItemData(ItemControl.itemTextMaxData, true, new List<string>());
             ItemControl.itemTextMaxItem = ChangeItemData(ItemControl.itemTextMaxItem, true, new List<string>());
@@ -894,14 +893,14 @@ namespace UCT.Global.Core
             {
                 case >= 20000:
                     typeWritter.TypeOpen(ItemControl.itemTextMaxItemSon[(PlayerControl.myItems[sonSelect - 1] + plusText) * 5 - 3], false, 0, 0, tmpText);
-                    PlayerControl.wearDef = int.Parse(ItemIdGetName(PlayerControl.myItems[sonSelect - 1], "Auto", 1));
+                    PlayerControl.wearDef = int.Parse(DataHandlerService.ItemIdGetName(ItemControl, PlayerControl.myItems[sonSelect - 1], "Auto", 1));
                     (PlayerControl.wearArmor, PlayerControl.myItems[sonSelect - 1]) = (PlayerControl.myItems[sonSelect - 1], PlayerControl.wearArmor);
 
                     AudioController.Instance.GetFx(3, AudioControl.fxClipUI);
                     break;
                 case >= 10000:
                     typeWritter.TypeOpen(ItemControl.itemTextMaxItemSon[(PlayerControl.myItems[sonSelect - 1] + plusText) * 5 - 3], false, 0, 0, tmpText);
-                    PlayerControl.wearAtk = int.Parse(ItemIdGetName(PlayerControl.myItems[sonSelect - 1], "Auto", 1));
+                    PlayerControl.wearAtk = int.Parse(DataHandlerService.ItemIdGetName(ItemControl, PlayerControl.myItems[sonSelect - 1], "Auto", 1));
                     (PlayerControl.wearArm, PlayerControl.myItems[sonSelect - 1]) = (PlayerControl.myItems[sonSelect - 1], PlayerControl.wearArm);
 
                     AudioController.Instance.GetFx(3, AudioControl.fxClipUI);
@@ -909,7 +908,7 @@ namespace UCT.Global.Core
                 //食物
                 default:
                 {
-                    var plusHp = int.Parse(ItemIdGetName(PlayerControl.myItems[sonSelect - 1], "Auto", 2));
+                    var plusHp = int.Parse(DataHandlerService.ItemIdGetName(ItemControl, PlayerControl.myItems[sonSelect - 1], "Auto", 2));
                     if (PlayerControl.wearArm == 10001)
                         plusHp += 4;
 
@@ -926,7 +925,7 @@ namespace UCT.Global.Core
                             ItemControl.itemFoods[i]) continue;
                         var text = ItemControl.itemFoods[i + 1];
                         text = text.Substring(1, text.Length - 1);
-                        PlayerControl.myItems[sonSelect - 1] = ItemNameGetId(text, "Foods");
+                        PlayerControl.myItems[sonSelect - 1] = DataHandlerService.ItemNameGetId(ItemControl, text, "Foods");
                         break;
                     }
                     AudioController.Instance.GetFx(2, AudioControl.fxClipUI);
@@ -999,7 +998,8 @@ namespace UCT.Global.Core
         /// ReSharper disable once InvalidXmlDocComment
         /// ChangeItemData中检测'<''>'符号的Switch语句
         /// </summary>
-        private string ChangeItemDataSwitch(string text, string inputText, bool isData, string inputName, List<string> ex)
+        private string ChangeItemDataSwitch(string text, string inputText, bool isData, 
+            string inputName, List<string> ex)
         {
             switch (inputText)
             {
@@ -1059,7 +1059,7 @@ namespace UCT.Global.Core
                 case "<itemHp>":
                     if (inputName != "" && !isData)
                     {
-                        text += ItemIdGetName(ItemNameGetId(inputName, "Foods"), "Auto", 2);
+                        text += DataHandlerService.ItemIdGetName(ItemControl, DataHandlerService.ItemNameGetId(ItemControl, inputName, "Foods"), "Auto", 2);
                         break;
                     }
 
@@ -1068,7 +1068,7 @@ namespace UCT.Global.Core
                 case "<itemAtk>":
                     if (inputName != "" && !isData)
                     {
-                        text += ItemIdGetName(ItemNameGetId(inputName, "Arms"), "Auto", 1);
+                        text += DataHandlerService.ItemIdGetName(ItemControl, DataHandlerService.ItemNameGetId(ItemControl, inputName, "Arms"), "Auto", 1);
                         break;
                     }
 
@@ -1077,7 +1077,7 @@ namespace UCT.Global.Core
                 case "<itemDef>":
                     if (inputName != "" && !isData)
                     {
-                        text += ItemIdGetName(ItemNameGetId(inputName, "Armors"), "Auto", 1);
+                        text += DataHandlerService.ItemIdGetName(ItemControl, DataHandlerService.ItemNameGetId(ItemControl, inputName, "Armors"), "Auto", 1);
                         break;
                     }
 
@@ -1121,9 +1121,9 @@ namespace UCT.Global.Core
                             {
                                 if (inputName != "")
                                 {
-                                    if (ItemNameGetId(inputName, inputText.Substring(9, inputText.Length - 10) + 's') < 10000)
-                                        text += ItemIdGetName(ItemNameGetId(inputName, inputText.Substring(9, inputText.Length - 10) + 's'), inputText.Substring(9, inputText.Length - 10) + 's', 0);
-                                    else text += ItemIdGetName(ItemNameGetId(inputName, inputText.Substring(9, inputText.Length - 10) + 's'), "Auto", 0);
+                                    if (DataHandlerService.ItemNameGetId(ItemControl, inputName, inputText.Substring(9, inputText.Length - 10) + 's') < 10000)
+                                        text += DataHandlerService.ItemIdGetName(ItemControl, DataHandlerService.ItemNameGetId(ItemControl, inputName, inputText.Substring(9, inputText.Length - 10) + 's'), inputText.Substring(9, inputText.Length - 10) + 's', 0);
+                                    else text += DataHandlerService.ItemIdGetName(ItemControl, DataHandlerService.ItemNameGetId(ItemControl, inputName, inputText.Substring(9, inputText.Length - 10) + 's'), "Auto", 0);
                                 }
 
                                 break;
@@ -1161,333 +1161,6 @@ namespace UCT.Global.Core
                     break;
             }
             return text;
-        }
-
-        /// <summary>
-        /// 分配Item数据
-        /// </summary>
-        /// <param name="itemControl"></param>
-        public void ItemClassification(ItemControl itemControl)
-        {
-            itemControl.itemFoods.Clear();
-            itemControl.itemArms.Clear();
-            itemControl.itemArmors.Clear();
-            itemControl.itemOthers.Clear();
-            foreach (var countText in itemControl.itemMax)
-            {
-                var text = new string[4];
-                var i = 0;
-                foreach (var t in countText)
-                {
-                    if (t == '\\')
-                        i++;
-                    else if (t != ';')
-                        text[i] += t.ToString();
-
-                    if (i != 3 || t != ';') continue;
-                    for (var j = 0; j < text.Length; j++)
-                    {
-                        if (j != 1)
-                            ItemClassificationAdd(ItemControl, text[1], text[j]);
-                    }
-                    i = 0;
-                }
-            }
-        }
-
-        /// <summary>
-        /// ItemClassification的一个子void
-        /// </summary>
-        public static void ItemClassificationAdd(ItemControl itemControl, string i, string origin)
-        {
-            if (origin == "null") return;
-            switch (i)
-            {
-                case "Foods":
-                    itemControl.itemFoods.Add(origin);
-                    break;
-
-                case "Arms":
-                    itemControl.itemArms.Add(origin);
-                    break;
-
-                case "Armors":
-                    itemControl.itemArmors.Add(origin);
-                    break;
-
-                case "Others":
-                    itemControl.itemOthers.Add(origin);
-                    break;
-
-                default:
-                    itemControl.itemOthers.Add(origin);
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// 通过Id获取Item信息：
-        /// type：Foods Arms Armors Others Auto
-        /// number：0语言包名称
-        ///     1/2：data1/2.
-        ///     请勿多输.
-        ///     Arm和Armor只有1
-        /// </summary>
-        public string ItemIdGetName(int id, string type, int number)
-        {
-            int realId;
-            List<string> list;
-            string idName;//获取编号名称
-            switch (type)
-            {
-                case "Foods":
-                    list = ItemControl.itemFoods;
-                    realId = id * 3 - 3;
-                    idName = list[realId];
-                    break;
-
-                case "Arms":
-                    list = ItemControl.itemArms;
-                    realId = id * 2 - 2;
-                    idName = list[realId];
-                    break;
-
-                case "Armors":
-                    list = ItemControl.itemArmors;
-                    realId = id * 2 - 2;
-                    idName = list[realId];
-                    break;
-
-                case "Others":
-                    list = ItemControl.itemOthers;
-                    realId = id * 3 - 3;
-                    idName = list[realId];
-                    break;
-
-                case "Auto":
-                    switch (id)
-                    {
-                        case <= 0:
-                            list = null;
-                            realId = 0;
-                            idName = "null";
-                            break;
-                        case < 10000:
-                            list = ItemControl.itemFoods;
-                            realId = id * 3 - 3;
-                            idName = list[realId];
-                            break;
-                        case < 20000:
-                            list = ItemControl.itemArms;
-                            realId = (id - 10000) * 2 - 2;
-                            idName = list[realId];
-                            break;
-                        case < 30000:
-                            list = ItemControl.itemArmors;
-                            realId = (id - 20000) * 2 - 2;
-                            idName = list[realId];
-                            break;
-                        default:
-                            list = ItemControl.itemOthers;
-                            realId = (id - 30000) * 3 - 3;
-                            idName = list[realId];
-                            break;
-                    }
-                    break;
-
-                default:
-                    goto case "Others";
-            }
-
-            var subText = "";
-            if (number == 0)//获取语言包内的名称
-            {
-                foreach (var t in ItemControl.itemTextMaxItem.Where(t => t[..idName.Length] == idName))
-                {
-                    idName = t[(idName.Length + 1)..];
-                    break;
-                }
-
-                subText = idName.TakeWhile(t => t != '\\').Aggregate(subText, (current, t) => current + t);
-            }
-            else
-            {
-                if (list != null) 
-                    subText = list[realId + number];
-            }
-            return subText;
-        }
-
-        /// <summary>
-        /// 通过Id获取Item的数据（HP，ATK等）：
-        /// type：Foods Arms Armors Others Auto
-        /// justId:勾的话会加上 +xxHP/AT/DF等信息
-        /// </summary>
-        public string ItemIdGetData(int id, string type, bool notJustId = false)
-        {
-            int realId;
-            List<string> list;
-            string idData;//获取编号名称
-            switch (type)
-            {
-                case "Foods":
-                    list = ItemControl.itemFoods;
-                    realId = id * 3 - 1;
-
-                    if (notJustId)
-                    {
-                        idData = list[realId] + "HP";
-                        if (int.Parse(list[realId]) > 0)
-                            idData = $"+{idData}";
-                    }
-                    else
-                        idData = list[realId];
-                    break;
-
-                case "Arms":
-                    list = ItemControl.itemArms;
-                    realId = id * 2 - 1;
-
-                    if (notJustId)
-                    {
-                        idData = list[realId] + "AT";
-                        if (int.Parse(list[realId]) > 0)
-                            idData = $"+{idData}";
-                    }
-                    else
-                        idData = list[realId];
-                    break;
-
-                case "Armors":
-                    list = ItemControl.itemArmors;
-                    realId = id * 2 - 1;
-
-                    if (notJustId)
-                    {
-                        idData = list[realId] + "DF";
-                        if (int.Parse(list[realId]) > 0)
-                            idData = $"+{idData}";
-                    }
-                    else
-                        idData = list[realId];
-                    break;
-
-                case "Others":
-                    list = ItemControl.itemOthers;
-                    realId = id * 3 - 1;
-                    idData = list[realId];
-                    break;
-
-                case "Auto":
-                    switch (id)
-                    {
-                        case < 10000:
-                        {
-                            list = ItemControl.itemFoods;
-                            realId = id * 3 - 1;
-
-                            if (notJustId)
-                            {
-                                idData = list[realId] + "HP";
-                                if (int.Parse(list[realId]) > 0)
-                                    idData = $"+{idData}";
-                            }
-                            else
-                                idData = list[realId];
-
-                            break;
-                        }
-                        case < 20000:
-                        {
-                            list = ItemControl.itemArms;
-                            realId = (id - 10000) * 2 - 1;
-
-                            if (notJustId)
-                            {
-                                idData = list[realId] + "AT";
-                                if (int.Parse(list[realId]) > 0)
-                                    idData = $"+{idData}";
-                            }
-                            else
-                                idData = list[realId];
-
-                            break;
-                        }
-                        case < 30000:
-                        {
-                            list = ItemControl.itemArmors;
-                            realId = (id - 20000) * 2 - 1;
-
-                            if (notJustId)
-                            {
-                                idData = list[realId] + "DF";
-                                if (int.Parse(list[realId]) > 0)
-                                    idData = $"+{idData}";
-                            }
-                            else
-                                idData = list[realId];
-
-                            break;
-                        }
-                        default:
-                            list = ItemControl.itemOthers;
-                            realId = (id - 30000) * 3 - 1;
-                            idData = list[realId];
-                            break;
-                    }
-                    break;
-
-                default:
-                    goto case "Others";
-            }
-            return idData;
-        }
-
-        /// <summary>
-        /// 通过物品数据名称搞到它的id.
-        /// type：Foods Arms Armors Others
-        /// </summary>
-        private int ItemNameGetId(string itemName, string type)
-        {
-            int id = 0, listInt;
-            List<string> list;
-            switch (type)
-            {
-                case "Foods":
-                    list = ItemControl.itemFoods;
-                    listInt = 3;
-                    break;
-
-                case "Arms":
-                    list = ItemControl.itemArms;
-                    listInt = 2;
-                    id += 10000;
-                    break;
-
-                case "Armors":
-                    list = ItemControl.itemArmors;
-                    listInt = 2;
-                    id += 20000;
-                    break;
-
-                case "Others":
-                    list = ItemControl.itemOthers;
-                    listInt = 3;
-                    id += 30000;
-                    break;
-
-                default:
-                    return 0;
-            }
-
-            if (list == null) return id;
-            for (var i = 0; i < list.Count / listInt; i++)
-            {
-                if (list[i * listInt] != itemName) continue;
-                id += i + 1;
-                break;
-            }
-            return id;
         }
     }
 }

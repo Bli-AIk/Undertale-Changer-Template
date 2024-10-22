@@ -358,7 +358,7 @@ namespace UCT.Battle
                             selectLayer = 2;
 
                             if (MainControl.Instance.PlayerControl.myItems[selectSon] < 10000)
-                                UITextUpdate(UITextMode.Food, int.Parse(MainControl.Instance.ItemIdGetData(MainControl.Instance.PlayerControl.myItems[selectSon], "Auto")));
+                                UITextUpdate(UITextMode.Food, int.Parse(DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.PlayerControl.myItems[selectSon], "Auto")));
                             else
                                 UITextUpdate(UITextMode.Food);
                             break;
@@ -563,13 +563,13 @@ namespace UCT.Battle
 
                             if (myItemMax > 1)
                             {
-                                textUITextChanger1 = "<color=#00000000>aa*</color>* " + MainControl.Instance.ItemIdGetName(MainControl.Instance.PlayerControl.myItems[selectSon + 1 - (selectGrandSon - 1)], "Auto", 0) + "\n";
-                                textUIDataChanger1 = MainControl.Instance.ItemIdGetData(MainControl.Instance.PlayerControl.myItems[selectSon + 1 - (selectGrandSon - 1)], "Auto", true) + "\n";
+                                textUITextChanger1 = "<color=#00000000>aa*</color>* " + DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.PlayerControl.myItems[selectSon + 1 - (selectGrandSon - 1)], "Auto", 0) + "\n";
+                                textUIDataChanger1 = DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.PlayerControl.myItems[selectSon + 1 - (selectGrandSon - 1)], "Auto", true) + "\n";
                             }
                             if (myItemMax > 2)
                             {
-                                textUITextChanger2 = "<color=#00000000>aa*</color>* " + MainControl.Instance.ItemIdGetName(MainControl.Instance.PlayerControl.myItems[selectSon + 2 - (selectGrandSon - 1)], "Auto", 0) + "\n";
-                                textUIDataChanger2 = MainControl.Instance.ItemIdGetData(MainControl.Instance.PlayerControl.myItems[selectSon + 2 - (selectGrandSon - 1)], "Auto", true) + "\n";
+                                textUITextChanger2 = "<color=#00000000>aa*</color>* " + DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.PlayerControl.myItems[selectSon + 2 - (selectGrandSon - 1)], "Auto", 0) + "\n";
+                                textUIDataChanger2 = DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.PlayerControl.myItems[selectSon + 2 - (selectGrandSon - 1)], "Auto", true) + "\n";
                             }
                             var number = 8;
 
@@ -605,9 +605,9 @@ namespace UCT.Battle
                             _itemSelectController.myItemRealSelect = selectSon;
                             MainControl.Instance.battlePlayerController.transform.position = new Vector3(-5.175f, -0.96f - (selectGrandSon - 1) * 0.66f, MainControl.Instance.battlePlayerController.transform.position.z);
 
-                            _textUI.text = "<color=#00000000>aa*</color>* " + MainControl.Instance.ItemIdGetName(MainControl.Instance.PlayerControl.myItems[selectSon - (selectGrandSon - 1)], "Auto", 0) + "\n" +
+                            _textUI.text = "<color=#00000000>aa*</color>* " + DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.PlayerControl.myItems[selectSon - (selectGrandSon - 1)], "Auto", 0) + "\n" +
                                           textUITextChanger1 + textUITextChanger2;
-                            _textUIBack.text = MainControl.Instance.ItemIdGetData(MainControl.Instance.PlayerControl.myItems[selectSon - (selectGrandSon - 1)], "Auto", true) + "\n" + textUIDataChanger1 + textUIDataChanger2;
+                            _textUIBack.text = DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.PlayerControl.myItems[selectSon - (selectGrandSon - 1)], "Auto", true) + "\n" + textUIDataChanger1 + textUIDataChanger2;
 
                             if (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow) && selectSon > 0)
                             {
@@ -618,7 +618,7 @@ namespace UCT.Battle
                                 AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
 
                                 if (MainControl.Instance.PlayerControl.myItems[selectSon] < 10000)
-                                    UITextUpdate(UITextMode.Food, int.Parse(MainControl.Instance.ItemIdGetData(MainControl.Instance.PlayerControl.myItems[selectSon], "Auto")));
+                                    UITextUpdate(UITextMode.Food, int.Parse(DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.PlayerControl.myItems[selectSon], "Auto")));
                                 else
                                     UITextUpdate(UITextMode.Food);
                             }
@@ -631,7 +631,7 @@ namespace UCT.Battle
                                 AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
 
                                 if (MainControl.Instance.PlayerControl.myItems[selectSon] < 10000)
-                                    UITextUpdate(UITextMode.Food, int.Parse(MainControl.Instance.ItemIdGetData(MainControl.Instance.PlayerControl.myItems[selectSon], "Auto")));
+                                    UITextUpdate(UITextMode.Food, int.Parse(DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.PlayerControl.myItems[selectSon], "Auto")));
                                 else
                                     UITextUpdate(UITextMode.Food);
                             }
