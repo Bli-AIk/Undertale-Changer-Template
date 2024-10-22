@@ -29,32 +29,35 @@ namespace UCT.Global.Scene
             {
                 texts.Add(transform.GetChild(i).GetComponent<TextMeshPro>());
             }
-            if (!string.IsNullOrEmpty(MainControl.Instance.PlayerControl.playerName))
+            if (!string.IsNullOrEmpty(MainControl.Instance.playerControl.playerName))
             {
                 mode = 1;
             }
             else
             {
                 mode = 3;
-                MainControl.Instance.PlayerControl.hp = 92;
-                MainControl.Instance.PlayerControl.hpMax = 92;
-                MainControl.Instance.PlayerControl.lv = 19;
-                MainControl.Instance.PlayerControl.gold = 1000;
-                MainControl.Instance.PlayerControl.wearArm = 10001;
-                MainControl.Instance.PlayerControl.wearArmor = 20001;
-                MainControl.Instance.PlayerControl.wearAtk = 1;
-                MainControl.Instance.PlayerControl.wearDef = 123;
-                MainControl.Instance.PlayerControl.saveScene = "Example-Corridor";
+                MainControl.Instance.playerControl.hp = 92;
+                MainControl.Instance.playerControl.hpMax = 92;
+                MainControl.Instance.playerControl.lv = 19;
+                MainControl.Instance.playerControl.gold = 1000;
+                MainControl.Instance.playerControl.wearArm = 10001;
+                MainControl.Instance.playerControl.wearArmor = 20001;
+                MainControl.Instance.playerControl.wearAtk = 1;
+                MainControl.Instance.playerControl.wearDef = 123;
+                MainControl.Instance.playerControl.saveScene = "Example-Corridor";
 
-                MainControl.Instance.PlayerControl.myItems = new List<int> { 0, 0, 0, 0, 0, 0, 0, 0 };
+                MainControl.Instance.playerControl.myItems = new List<int> { 0, 0, 0, 0, 0, 0, 0, 0 };
             }
         }
 
-        private string Alphabet(int selectNumber)
+        /// <summary>
+        /// 输出起名时用于选择的文字。
+        /// </summary>
+        private static string GenerateSelectableTextForRename(int selectNumber)
         {
-            var bet = "A B C D E F G\nH I J K L M N\nO P Q R S T U\nV W X Y Z\na b c d e f g\nh i j k l m n\no p q r s t u\nv w x y z";
+            const string ALPHABET = "A B C D E F G\nH I J K L M N\nO P Q R S T U\nV W X Y Z\na b c d e f g\nh i j k l m n\no p q r s t u\nv w x y z";
             var final = "";
-            for (var i = 0; i < bet.Length; i++)
+            for (var i = 0; i < ALPHABET.Length; i++)
             {
                 if (i == selectNumber * 2)
                 {
@@ -64,7 +67,7 @@ namespace UCT.Global.Scene
                 {
                     final += "</color>";
                 }
-                final += bet[i];
+                final += ALPHABET[i];
             }
 
             return final;
@@ -89,8 +92,8 @@ namespace UCT.Global.Scene
 
         private void Update()
         {
-            if (MainControl.Instance.OverworldControl.isSetting)
-                return;
+            if (MainControl.Instance.OverworldControl.isSetting) return;
+            
             switch (mode)
             {
                 case 1:
@@ -106,7 +109,7 @@ namespace UCT.Global.Scene
                             switch (select)
                             {
                                 case 52:
-                                    if (!string.IsNullOrEmpty(MainControl.Instance.PlayerControl.playerName))
+                                    if (!string.IsNullOrEmpty(MainControl.Instance.playerControl.playerName))
                                     {
                                         GameUtilityService.FadeOutAndSwitchScene("Menu", Color.black);
                                         mode = 0;
@@ -254,7 +257,7 @@ namespace UCT.Global.Scene
                     }
                     texts[0].text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename0");
                     texts[1].text = setName;
-                    texts[2].text = Alphabet(select);
+                    texts[2].text = GenerateSelectableTextForRename(select);
                     HighlightSelectedOptions(select);
                     texts[4].text = "";
                     texts[5].text = "";
@@ -279,7 +282,7 @@ namespace UCT.Global.Scene
 
                             case 1:
                                 mode = -1;
-                                MainControl.Instance.PlayerControl.playerName = setName;
+                                MainControl.Instance.playerControl.playerName = setName;
                                 AudioController.Instance.transform.GetComponent<AudioSource>().Pause();
                                 //Volume v = GameObject.Find("Global Volume").transform.GetComponent<Volume>();
                                 var v2 = GameObject.Find("Global Volume (1)").transform.GetComponent<UnityEngine.Rendering.Volume>();
@@ -287,7 +290,7 @@ namespace UCT.Global.Scene
                                 //DOTween.To(() => v.weight, x => v.weight = x, 0, 5.5f).SetEase(Ease.Linear);
                                 DOTween.To(() => v2.weight, x => v2.weight = x, 1, 5.5f).SetEase(Ease.Linear);
 
-                                SaveController.SaveData(MainControl.Instance.PlayerControl, "Data" + MainControl.Instance.dataNumber);
+                                SaveController.SaveData(MainControl.Instance.playerControl, "Data" + MainControl.Instance.dataNumber);
                                 PlayerPrefs.SetInt("languagePack", MainControl.Instance.languagePackId);
                                 PlayerPrefs.SetInt("dataNumber", MainControl.Instance.dataNumber);
                                 PlayerPrefs.SetInt("hdResolution", Convert.ToInt32(MainControl.Instance.OverworldControl.hdResolution));

@@ -16,7 +16,7 @@ namespace Debug
 
         private void Update()
         {
-            if (!MainControl.Instance.PlayerControl.isDebug)
+            if (!MainControl.Instance.playerControl.isDebug)
                 return;
 
             if (Input.GetKeyDown(KeyCode.Space))

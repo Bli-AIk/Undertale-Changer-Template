@@ -71,12 +71,12 @@ namespace UCT.Battle
             if (Mathf.Abs(_bar.transform.localPosition.x) > 0.8f)
                 hitDamage = (int)
                     (2.2f / 13.2f * (14 - Mathf.Abs(_bar.transform.localPosition.x))//准确度系数
-                                  * (MainControl.Instance.PlayerControl.atk + MainControl.Instance.PlayerControl.wearAtk
+                                  * (MainControl.Instance.playerControl.atk + MainControl.Instance.playerControl.wearAtk
                                       - MainControl.Instance.BattleControl.enemiesDef[select] + Random.Range(0, 2)));
             else
                 hitDamage = (int)
                     (2.2f / 13.2f * (14 - 0.8f)//准确度系数
-                                  * (MainControl.Instance.PlayerControl.atk + MainControl.Instance.PlayerControl.wearAtk
+                                  * (MainControl.Instance.playerControl.atk + MainControl.Instance.playerControl.wearAtk
                                       - MainControl.Instance.BattleControl.enemiesDef[select] + Random.Range(0, 2)));
 
             if (hitDamage <= 0)

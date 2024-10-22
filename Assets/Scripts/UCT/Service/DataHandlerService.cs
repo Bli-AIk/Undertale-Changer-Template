@@ -491,7 +491,7 @@ namespace UCT.Service
             switch (inputText)
             {
                 case "<playerName>":
-                    text += MainControl.Instance.PlayerControl.playerName;
+                    text += MainControl.Instance.playerControl.playerName;
                     break;
 
                 case "<enter>"://回车
@@ -701,6 +701,41 @@ namespace UCT.Service
             }
 
             CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture(TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "CultureInfo"));
+        }
+
+        /// <summary>
+        /// 设置PlayerControl
+        /// </summary>
+        /// <param name="inputPlayerControl"></param>
+        public static PlayerControl SetPlayerControl(PlayerControl inputPlayerControl)
+        {
+            PlayerControl playerControl = new()
+            {
+                hp = inputPlayerControl.hp,
+                hpMax = inputPlayerControl.hpMax,
+                lv = inputPlayerControl.lv,
+                exp = inputPlayerControl.exp,
+                gold = inputPlayerControl.gold,
+                wearAtk = inputPlayerControl.wearAtk,
+                wearDef = inputPlayerControl.wearDef,
+                nextExp = inputPlayerControl.nextExp,
+                missTime = inputPlayerControl.missTime,
+                missTimeMax = inputPlayerControl.missTimeMax,
+                atk = inputPlayerControl.atk,
+                def = inputPlayerControl.def,
+                playerName = inputPlayerControl.playerName,
+                myItems = inputPlayerControl.myItems,
+                wearArm = inputPlayerControl.wearArm,
+                wearArmor = inputPlayerControl.wearArmor,
+                canMove = inputPlayerControl.canMove,
+                gameTime = inputPlayerControl.gameTime,
+                lastScene = inputPlayerControl.lastScene,
+                saveScene = inputPlayerControl.saveScene,
+                isDebug = inputPlayerControl.isDebug,
+                invincible = inputPlayerControl.invincible
+            };
+
+            return playerControl;
         }
     }
 }

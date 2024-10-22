@@ -55,7 +55,7 @@ namespace UCT.Global.Scene
                     case 1:
 
                         _text.DOColor(Color.clear, 1).SetEase(Ease.Linear);
-                        if (MainControl.Instance.PlayerControl.playerName == "" || MainControl.Instance.PlayerControl.playerName == null)
+                        if (MainControl.Instance.playerControl.playerName == "" || MainControl.Instance.playerControl.playerName == null)
                         {
                             GameUtilityService.FadeOutAndSwitchScene("Rename", Color.black, false, 2f);
                         }

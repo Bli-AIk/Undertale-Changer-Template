@@ -74,7 +74,7 @@ namespace UCT.Battle
             hitVolume = GetComponent<UnityEngine.Rendering.Volume>();
             hitVolume.weight = 0;
             //mask = 1 << 6;
-            MainControl.Instance.PlayerControl.missTime = 0;
+            MainControl.Instance.playerControl.missTime = 0;
 
         }
         private void Update()
@@ -82,11 +82,11 @@ namespace UCT.Battle
             if (!MainControl.Instance.OverworldControl.noSfx && hitVolume.weight > 0)
                 hitVolume.weight -= Time.deltaTime;
 
-            if (MainControl.Instance.PlayerControl.hp <= 0)
+            if (MainControl.Instance.playerControl.hp <= 0)
             {
-                MainControl.Instance.PlayerControl.hp = MainControl.Instance.PlayerControl.hpMax;
+                MainControl.Instance.playerControl.hp = MainControl.Instance.playerControl.hpMax;
 
-                if (!(MainControl.Instance.PlayerControl.isDebug && MainControl.Instance.PlayerControl.invincible))
+                if (!(MainControl.Instance.playerControl.isDebug && MainControl.Instance.playerControl.invincible))
                 {
                     _spriteRenderer.color = Color.red;
                     MainControl.Instance.OverworldControl.playerDeadPos = transform.position - (Vector3)sceneDrift;
@@ -101,10 +101,10 @@ namespace UCT.Battle
             if (MainControl.Instance.OverworldControl.isSetting || MainControl.Instance.OverworldControl.pause)
                 return;
 
-            if (MainControl.Instance.PlayerControl.missTime >= 0)
+            if (MainControl.Instance.playerControl.missTime >= 0)
             {
-                MainControl.Instance.PlayerControl.missTime -= Time.deltaTime;
-                if (_missAnim == null && MainControl.Instance.PlayerControl.missTimeMax >= 0.4f)
+                MainControl.Instance.playerControl.missTime -= Time.deltaTime;
+                if (_missAnim == null && MainControl.Instance.playerControl.missTimeMax >= 0.4f)
                     _missAnim = _spriteRenderer.DOColor(MainControl.Instance.BattleControl.playerMissColorList[(int)playerColor], 0.2f).SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
             }
             else
@@ -118,7 +118,7 @@ namespace UCT.Battle
             }
 
             //Debug
-            if (MainControl.Instance.PlayerControl.isDebug)
+            if (MainControl.Instance.playerControl.isDebug)
             {
                 if (Input.GetKeyDown(KeyCode.Keypad1))
                     ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[0], 0);
@@ -137,7 +137,7 @@ namespace UCT.Battle
                     ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[5], (BattleControl.PlayerColor)5, 2.5f, (PlayerDirEnum)3);
 
                 if (Input.GetKeyDown(KeyCode.P))
-                    MainControl.Instance.PlayerControl.hp = 0;
+                    MainControl.Instance.playerControl.hp = 0;
             }
         }
 
@@ -960,9 +960,9 @@ namespace UCT.Battle
 
         public void KillPlayer(MainControl mainControl)
         {
-            mainControl.PlayerControl.hp = mainControl.PlayerControl.hpMax;
+            mainControl.playerControl.hp = mainControl.playerControl.hpMax;
 
-            if (!(mainControl.PlayerControl.isDebug && mainControl.PlayerControl.invincible))
+            if (!(mainControl.playerControl.isDebug && mainControl.playerControl.invincible))
             {
                 //spriteRenderer.color = Color.red;
                 mainControl.OverworldControl.playerDeadPos = transform.position - (Vector3)sceneDrift;

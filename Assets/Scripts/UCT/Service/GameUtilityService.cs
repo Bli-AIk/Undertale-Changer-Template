@@ -112,7 +112,7 @@ namespace UCT.Service
         {
             SetCanvasFrameSprite();
             if (SceneManager.GetActiveScene().name != "Menu" && SceneManager.GetActiveScene().name != "Rename" && SceneManager.GetActiveScene().name != "Story" && SceneManager.GetActiveScene().name != "Start" && SceneManager.GetActiveScene().name != "Gameover")
-                MainControl.Instance.PlayerControl.lastScene = SceneManager.GetActiveScene().name;
+                MainControl.Instance.playerControl.lastScene = SceneManager.GetActiveScene().name;
             if (async)
                 SceneManager.LoadSceneAsync(sceneName);
             else SceneManager.LoadScene(sceneName);
@@ -239,7 +239,7 @@ namespace UCT.Service
         {
             if (plusText == 0)
             {
-                plusText = MainControl.Instance.PlayerControl.myItems[sonSelect - 1] switch
+                plusText = MainControl.Instance.playerControl.myItems[sonSelect - 1] switch
                 {
                     >= 20000 => -20000 + MainControl.Instance.ItemControl.itemFoods.Count / 3 + MainControl.Instance.ItemControl.itemArms.Count / 2,
                     >= 10000 => -10000 + MainControl.Instance.ItemControl.itemFoods.Count / 3,
@@ -247,7 +247,7 @@ namespace UCT.Service
                 };
             }
 
-            switch (MainControl.Instance.PlayerControl.myItems[sonSelect - 1])
+            switch (MainControl.Instance.playerControl.myItems[sonSelect - 1])
             {
                 case >= 20000:// 防具
                     ProcessArmor(typeWritter, tmpText, sonSelect, plusText);
@@ -266,24 +266,24 @@ namespace UCT.Service
 
         private static void ProcessFood(TypeWritter typeWritter, TMP_Text tmpText, int sonSelect)
         {
-            var plusHp = int.Parse(DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.PlayerControl.myItems[sonSelect - 1], "Auto", 2));
-            if (MainControl.Instance.PlayerControl.wearArm == 10001)
+            var plusHp = int.Parse(DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[sonSelect - 1], "Auto", 2));
+            if (MainControl.Instance.playerControl.wearArm == 10001)
                 plusHp += 4;
 
-            typeWritter.TypeOpen(MainControl.Instance.ItemControl.itemTextMaxItemSon[MainControl.Instance.PlayerControl.myItems[sonSelect - 1] * 5 - 3], false,
+            typeWritter.TypeOpen(MainControl.Instance.ItemControl.itemTextMaxItemSon[MainControl.Instance.playerControl.myItems[sonSelect - 1] * 5 - 3], false,
                 plusHp, 0, tmpText);
 
-            MainControl.Instance. PlayerControl.hp += plusHp;
+            MainControl.Instance. playerControl.hp += plusHp;
 
-            if (MainControl.Instance.PlayerControl.hp > MainControl.Instance.PlayerControl.hpMax)
-                MainControl.Instance.PlayerControl.hp = MainControl.Instance.PlayerControl.hpMax;
+            if (MainControl.Instance.playerControl.hp > MainControl.Instance.playerControl.hpMax)
+                MainControl.Instance.playerControl.hp = MainControl.Instance.playerControl.hpMax;
             for (var i = 0; i < MainControl.Instance.ItemControl.itemFoods.Count; i++)
             {
-                if (MainControl.Instance.ItemControl.itemTextMaxItemSon[MainControl.Instance.PlayerControl.myItems[sonSelect - 1] * 5 - 5] !=
+                if (MainControl.Instance.ItemControl.itemTextMaxItemSon[MainControl.Instance.playerControl.myItems[sonSelect - 1] * 5 - 5] !=
                     MainControl.Instance.ItemControl.itemFoods[i]) continue;
                 var text = MainControl.Instance.ItemControl.itemFoods[i + 1];
                 text = text.Substring(1, text.Length - 1);
-                MainControl.Instance. PlayerControl.myItems[sonSelect - 1] = DataHandlerService.ItemNameGetId(MainControl.Instance.ItemControl, text, "Foods");
+                MainControl.Instance. playerControl.myItems[sonSelect - 1] = DataHandlerService.ItemNameGetId(MainControl.Instance.ItemControl, text, "Foods");
                 break;
             }
             AudioController.Instance.GetFx(2, MainControl.Instance.AudioControl.fxClipUI);
@@ -291,18 +291,18 @@ namespace UCT.Service
 
         private static void ProcessArm(TypeWritter typeWritter, TMP_Text tmpText, int sonSelect, int plusText)
         {
-            typeWritter.TypeOpen(MainControl.Instance.ItemControl.itemTextMaxItemSon[(MainControl.Instance.PlayerControl.myItems[sonSelect - 1] + plusText) * 5 - 3], false, 0, 0, tmpText);
-            MainControl.Instance.PlayerControl.wearAtk = int.Parse(DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.PlayerControl.myItems[sonSelect - 1], "Auto", 1));
-            (MainControl.Instance.PlayerControl.wearArm, MainControl.Instance.PlayerControl.myItems[sonSelect - 1]) = (MainControl.Instance.PlayerControl.myItems[sonSelect - 1],MainControl.Instance. PlayerControl.wearArm);
+            typeWritter.TypeOpen(MainControl.Instance.ItemControl.itemTextMaxItemSon[(MainControl.Instance.playerControl.myItems[sonSelect - 1] + plusText) * 5 - 3], false, 0, 0, tmpText);
+            MainControl.Instance.playerControl.wearAtk = int.Parse(DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[sonSelect - 1], "Auto", 1));
+            (MainControl.Instance.playerControl.wearArm, MainControl.Instance.playerControl.myItems[sonSelect - 1]) = (MainControl.Instance.playerControl.myItems[sonSelect - 1],MainControl.Instance. playerControl.wearArm);
 
             AudioController.Instance.GetFx(3, MainControl.Instance.AudioControl.fxClipUI);
         }
 
         private static void ProcessArmor(TypeWritter typeWritter, TMP_Text tmpText, int sonSelect, int plusText)
         {
-            typeWritter.TypeOpen(MainControl.Instance.ItemControl.itemTextMaxItemSon[(MainControl.Instance.PlayerControl.myItems[sonSelect - 1] + plusText) * 5 - 3], false, 0, 0, tmpText);
-            MainControl.Instance.PlayerControl.wearDef = int.Parse(DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.PlayerControl.myItems[sonSelect - 1], "Auto", 1));
-            (MainControl.Instance.PlayerControl.wearArmor, MainControl.Instance.PlayerControl.myItems[sonSelect - 1]) = (MainControl.Instance.PlayerControl.myItems[sonSelect - 1], MainControl.Instance.PlayerControl.wearArmor);
+            typeWritter.TypeOpen(MainControl.Instance.ItemControl.itemTextMaxItemSon[(MainControl.Instance.playerControl.myItems[sonSelect - 1] + plusText) * 5 - 3], false, 0, 0, tmpText);
+            MainControl.Instance.playerControl.wearDef = int.Parse(DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[sonSelect - 1], "Auto", 1));
+            (MainControl.Instance.playerControl.wearArmor, MainControl.Instance.playerControl.myItems[sonSelect - 1]) = (MainControl.Instance.playerControl.myItems[sonSelect - 1], MainControl.Instance.playerControl.wearArmor);
 
             AudioController.Instance.GetFx(3, MainControl.Instance.AudioControl.fxClipUI);
         }

@@ -15,8 +15,7 @@ using UnityEngine.UI;
 namespace UCT.Global.Core
 {
     /// <summary>
-    /// 调用所有ScriptableObject 并负责对数据和语言包的导入
-    /// 还包括大部分常用的函数
+    /// 调用所有ScriptableObject，对场景进行初始化
     /// </summary>
 
     public class MainControl : MonoBehaviour
@@ -73,9 +72,9 @@ namespace UCT.Global.Core
             InBattle,
         }
 
+        [FormerlySerializedAs("PlayerControl")] public PlayerControl playerControl;
         public OverworldControl OverworldControl { get; private set; }
         public ItemControl ItemControl { get; private set; }
-        public PlayerControl PlayerControl { get; private set; }
         public AudioControl AudioControl { get; private set; }
         public BattleControl BattleControl { get; private set; }
 
@@ -85,19 +84,11 @@ namespace UCT.Global.Core
 
         public CameraShake cameraShake, cameraShake3D;
 
-        public void SetPlayerControl(PlayerControl playerControl)
-        {
-            foreach (var field in typeof(PlayerControl).GetFields())
-            {
-                field.SetValue(null, field.GetValue(playerControl));
-            }
-        }
-
         private void InitializationLoad()
         {
             //调用ScriptableObject
             //--------------------------------------------------------------------------------
-            PlayerControl = Resources.Load<PlayerControl>("PlayerControl");
+            playerControl = Resources.Load<PlayerControl>("PlayerControl");
             AudioControl = Resources.Load<AudioControl>("AudioControl");
             //InitializationOverworld内调用OverworldControl
             //Initialization内调用ItemControl
@@ -244,14 +235,14 @@ namespace UCT.Global.Core
 
             if (dataNumber == -1)
             {
-                SetPlayerControl(ScriptableObject.CreateInstance<PlayerControl>());
+                playerControl = DataHandlerService.SetPlayerControl(ScriptableObject.CreateInstance<PlayerControl>());
             }
         }
 
         public void Start()
         {
-            if (PlayerControl.isDebug && PlayerControl.invincible)
-                PlayerControl.hp = PlayerControl.hpMax / 2;
+            if (playerControl.isDebug && playerControl.invincible)
+                playerControl.hp = playerControl.hpMax / 2;
 
             DataHandlerService.InitializationLanguagePackFullWidth();
 
@@ -294,20 +285,20 @@ namespace UCT.Global.Core
 
         private void Update()
         {
-            PlayerControl.gameTime += Time.deltaTime;
+            playerControl.gameTime += Time.deltaTime;
 
-            if (PlayerControl.isDebug)
+            if (playerControl.isDebug)
             {
                 if (Input.GetKeyDown(KeyCode.F5))
                     SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
-                if (PlayerControl.keepInvincible)
-                    PlayerControl.hp = PlayerControl.hpMax;
+                if (playerControl.keepInvincible)
+                    playerControl.hp = playerControl.hpMax;
 
-                PlayerControl.playerName = "Debug";
+                playerControl.playerName = "Debug";
             }
-            if (PlayerControl.hpMax < PlayerControl.hp)
-                PlayerControl.hp = PlayerControl.hpMax;
+            if (playerControl.hpMax < playerControl.hp)
+                playerControl.hp = playerControl.hpMax;
 
             if (OverworldControl.isSetting)
                 return;

@@ -227,10 +227,10 @@ namespace UCT.Battle
 
         private void HitPlayer(int i)
         {
-            if (MainControl.Instance.PlayerControl.missTime < 0)
+            if (MainControl.Instance.playerControl.missTime < 0)
             {
-                MainControl.Instance.PlayerControl.hp -= boxHitList[i];
-                MainControl.Instance.PlayerControl.missTime = MainControl.Instance.PlayerControl.missTimeMax;
+                MainControl.Instance.playerControl.hp -= boxHitList[i];
+                MainControl.Instance.playerControl.missTime = MainControl.Instance.playerControl.missTimeMax;
                 AudioController.Instance.GetFx(5, MainControl.Instance.AudioControl.fxClipUI);
 
                 MainControl.Instance.selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
@@ -239,7 +239,7 @@ namespace UCT.Battle
                 var v3Spin = MathUtilityService.RandomPointOnSphereSurface(2.5f,new Vector3());
                 MainControl.Instance.cameraShake.Shake(new Vector3(r * MathUtilityService.Get1Or_1(), r * MathUtilityService.Get1Or_1(), 0), new Vector3(0, 0, v3Spin.z), 4, 1f / 60f * 4f * 1.5f, "", Ease.OutElastic);
                 MainControl.Instance.cameraShake3D.Shake(new Vector3(r * MathUtilityService.Get1Or_1(), 0, r * MathUtilityService.Get1Or_1()), v3Spin, 4, 1f / 60f * 4f * 1.5f, "3D CameraPoint", Ease.OutElastic);
-                if (MainControl.Instance.PlayerControl.hp <= 0)
+                if (MainControl.Instance.playerControl.hp <= 0)
                     MainControl.Instance.battlePlayerController.KillPlayer(MainControl.Instance);
 
 

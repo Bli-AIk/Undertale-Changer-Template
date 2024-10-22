@@ -96,7 +96,7 @@ namespace UCT.Global.UI
             passTextString = "";
             originString = text;
             hpIn = hp;
-            hpSave = MainControl.Instance.PlayerControl.hp;
+            hpSave = MainControl.Instance.playerControl.hp;
             clockTime = clock;
             pressX = false;
             isStop = false;
@@ -306,7 +306,7 @@ namespace UCT.Global.UI
                                 case "<autoFood>":
 
                                     string plusString;
-                                    plusString = hpIn + hpSave >= MainControl.Instance.PlayerControl.hpMax ? MainControl.Instance.ItemControl.itemTextMaxData[22] : MainControl.Instance.ItemControl.itemTextMaxData[12];
+                                    plusString = hpIn + hpSave >= MainControl.Instance.playerControl.hpMax ? MainControl.Instance.ItemControl.itemTextMaxData[22] : MainControl.Instance.ItemControl.itemTextMaxData[12];
 
                                     plusString = plusString[..^1];
                                     originString = TextProcessingService.RemoveSubstring(originString, i - "<autoFood>".Length, i - 1, plusString);

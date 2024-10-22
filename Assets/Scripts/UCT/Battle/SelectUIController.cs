@@ -113,7 +113,7 @@ namespace UCT.Battle
 
             UITextUpdate();
 
-            _hpFood = MainControl.Instance.PlayerControl.hp;
+            _hpFood = MainControl.Instance.playerControl.hp;
 
             InTurn();
         }
@@ -238,7 +238,7 @@ namespace UCT.Battle
                     {
                         selectLayer = 1;
                         selectGrandSon = 1;
-                        if (!(MainControl.Instance.PlayerControl.myItems[0] == 0 && selectUI == 3))
+                        if (!(MainControl.Instance.playerControl.myItems[0] == 0 && selectUI == 3))
                         {
                             AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
                             _typeWritter.TypeStop();
@@ -251,23 +251,23 @@ namespace UCT.Battle
                             }
                         else
                         {
-                            MainControl.Instance.PlayerControl.myItems = ListManipulationService.MoveZerosToEnd(MainControl.Instance.PlayerControl.myItems);
+                            MainControl.Instance.playerControl.myItems = ListManipulationService.MoveZerosToEnd(MainControl.Instance.playerControl.myItems);
 
                             _textUIBack.rectTransform.anchoredPosition = new Vector2(-5, -3.3f);
                             _textUIBack.alignment = TextAlignmentOptions.TopRight;
                             _hpSpr.material.SetFloat(IsFlashing, 1);
                             _hpSpr.material.SetColor(ColorFlash, hpColorOn);
 
-                            _hpFood = MainControl.Instance.PlayerControl.hp;
+                            _hpFood = MainControl.Instance.playerControl.hp;
 
                         }
 
-                        if (MainControl.Instance.PlayerControl.myItems[0] == 0 && selectUI == 3)
+                        if (MainControl.Instance.playerControl.myItems[0] == 0 && selectUI == 3)
                             selectLayer = 0;
                     }
 
                     //if (hpFood != MainControl.instance.PlayerControl.hp)
-                    _hpUI.text = FormatWithLeadingZero(_hpFood) + " / " + FormatWithLeadingZero(MainControl.Instance.PlayerControl.hpMax);
+                    _hpUI.text = FormatWithLeadingZero(_hpFood) + " / " + FormatWithLeadingZero(MainControl.Instance.playerControl.hpMax);
                     break;
 
                 case 1:
@@ -347,12 +347,12 @@ namespace UCT.Battle
                             break;
 
                         case 3://ITEM：跳2
-                            _itemSelectController.myItemMax = ListManipulationService.FindFirstZeroIndex(MainControl.Instance.PlayerControl.myItems);
+                            _itemSelectController.myItemMax = ListManipulationService.FindFirstZeroIndex(MainControl.Instance.playerControl.myItems);
                             _itemSelectController.Open();
                             selectLayer = 2;
 
-                            if (MainControl.Instance.PlayerControl.myItems[selectSon] < 10000)
-                                UITextUpdate(UITextMode.Food, int.Parse(DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.PlayerControl.myItems[selectSon], "Auto")));
+                            if (MainControl.Instance.playerControl.myItems[selectSon] < 10000)
+                                UITextUpdate(UITextMode.Food, int.Parse(DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectSon], "Auto")));
                             else
                                 UITextUpdate(UITextMode.Food);
                             break;
@@ -553,17 +553,17 @@ namespace UCT.Battle
                             var textUIDataChanger1 = "";
                             var textUIDataChanger2 = "";
 
-                            var myItemMax = ListManipulationService.FindFirstZeroIndex(MainControl.Instance.PlayerControl.myItems);
+                            var myItemMax = ListManipulationService.FindFirstZeroIndex(MainControl.Instance.playerControl.myItems);
 
                             if (myItemMax > 1)
                             {
-                                textUITextChanger1 = "<color=#00000000>aa*</color>* " + DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.PlayerControl.myItems[selectSon + 1 - (selectGrandSon - 1)], "Auto", 0) + "\n";
-                                textUIDataChanger1 = DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.PlayerControl.myItems[selectSon + 1 - (selectGrandSon - 1)], "Auto", true) + "\n";
+                                textUITextChanger1 = "<color=#00000000>aa*</color>* " + DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectSon + 1 - (selectGrandSon - 1)], "Auto", 0) + "\n";
+                                textUIDataChanger1 = DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectSon + 1 - (selectGrandSon - 1)], "Auto", true) + "\n";
                             }
                             if (myItemMax > 2)
                             {
-                                textUITextChanger2 = "<color=#00000000>aa*</color>* " + DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.PlayerControl.myItems[selectSon + 2 - (selectGrandSon - 1)], "Auto", 0) + "\n";
-                                textUIDataChanger2 = DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.PlayerControl.myItems[selectSon + 2 - (selectGrandSon - 1)], "Auto", true) + "\n";
+                                textUITextChanger2 = "<color=#00000000>aa*</color>* " + DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectSon + 2 - (selectGrandSon - 1)], "Auto", 0) + "\n";
+                                textUIDataChanger2 = DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectSon + 2 - (selectGrandSon - 1)], "Auto", true) + "\n";
                             }
                             var number = 8;
 
@@ -599,9 +599,9 @@ namespace UCT.Battle
                             _itemSelectController.myItemRealSelect = selectSon;
                             MainControl.Instance.battlePlayerController.transform.position = new Vector3(-5.175f, -0.96f - (selectGrandSon - 1) * 0.66f, MainControl.Instance.battlePlayerController.transform.position.z);
 
-                            _textUI.text = "<color=#00000000>aa*</color>* " + DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.PlayerControl.myItems[selectSon - (selectGrandSon - 1)], "Auto", 0) + "\n" +
+                            _textUI.text = "<color=#00000000>aa*</color>* " + DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectSon - (selectGrandSon - 1)], "Auto", 0) + "\n" +
                                           textUITextChanger1 + textUITextChanger2;
-                            _textUIBack.text = DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.PlayerControl.myItems[selectSon - (selectGrandSon - 1)], "Auto", true) + "\n" + textUIDataChanger1 + textUIDataChanger2;
+                            _textUIBack.text = DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectSon - (selectGrandSon - 1)], "Auto", true) + "\n" + textUIDataChanger1 + textUIDataChanger2;
 
                             if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow) && selectSon > 0)
                             {
@@ -611,8 +611,8 @@ namespace UCT.Battle
                                 selectSon--;
                                 AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
 
-                                if (MainControl.Instance.PlayerControl.myItems[selectSon] < 10000)
-                                    UITextUpdate(UITextMode.Food, int.Parse(DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.PlayerControl.myItems[selectSon], "Auto")));
+                                if (MainControl.Instance.playerControl.myItems[selectSon] < 10000)
+                                    UITextUpdate(UITextMode.Food, int.Parse(DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectSon], "Auto")));
                                 else
                                     UITextUpdate(UITextMode.Food);
                             }
@@ -624,13 +624,13 @@ namespace UCT.Battle
                                 selectSon++;
                                 AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
 
-                                if (MainControl.Instance.PlayerControl.myItems[selectSon] < 10000)
-                                    UITextUpdate(UITextMode.Food, int.Parse(DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.PlayerControl.myItems[selectSon], "Auto")));
+                                if (MainControl.Instance.playerControl.myItems[selectSon] < 10000)
+                                    UITextUpdate(UITextMode.Food, int.Parse(DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectSon], "Auto")));
                                 else
                                     UITextUpdate(UITextMode.Food);
                             }
 
-                            _hpUI.text = FormatWithLeadingZero(_hpFood) + " / " + FormatWithLeadingZero(MainControl.Instance.PlayerControl.hpMax);
+                            _hpUI.text = FormatWithLeadingZero(_hpFood) + " / " + FormatWithLeadingZero(MainControl.Instance.playerControl.hpMax);
                             break;
 
                         case 4:
@@ -792,7 +792,7 @@ namespace UCT.Battle
         /// </summary>
         public void UITextUpdate(UITextMode uiTextMode = 0, int foodNumber = 0)
         {
-            _hpSpr.transform.localScale = new Vector3(0.525f * MainControl.Instance.PlayerControl.hpMax, 8.5f);
+            _hpSpr.transform.localScale = new Vector3(0.525f * MainControl.Instance.playerControl.hpMax, 8.5f);
             _hpSpr.material.SetColor(ColorUnder, hpColorUnder);
             _hpSpr.material.SetColor(ColorOn, hpColorOn);
 
@@ -801,8 +801,8 @@ namespace UCT.Battle
                 case UITextMode.None:
                     goto default;
                 default:
-                    _hpSpr.material.SetFloat(Crop, (float)MainControl.Instance.PlayerControl.hp / MainControl.Instance.PlayerControl.hpMax);
-                    _hpSpr.material.SetFloat(Flash, (float)MainControl.Instance.PlayerControl.hp / MainControl.Instance.PlayerControl.hpMax);
+                    _hpSpr.material.SetFloat(Crop, (float)MainControl.Instance.playerControl.hp / MainControl.Instance.playerControl.hpMax);
+                    _hpSpr.material.SetFloat(Flash, (float)MainControl.Instance.playerControl.hp / MainControl.Instance.playerControl.hpMax);
                     break;
 
                 case UITextMode.Hit:
@@ -810,8 +810,8 @@ namespace UCT.Battle
 
                     _hpSpr.material.SetFloat(IsFlashing, 0);
                     _hpSpr.material.SetColor(ColorFlash, hpColorHit);
-                    _hpSpr.material.SetFloat(Crop, (float)MainControl.Instance.PlayerControl.hp / MainControl.Instance.PlayerControl.hpMax);
-                    _hpSpr.material.DOFloat((float)MainControl.Instance.PlayerControl.hp / MainControl.Instance.PlayerControl.hpMax, "_Flash", 0.5f).SetEase(Ease.OutCirc);
+                    _hpSpr.material.SetFloat(Crop, (float)MainControl.Instance.playerControl.hp / MainControl.Instance.playerControl.hpMax);
+                    _hpSpr.material.DOFloat((float)MainControl.Instance.playerControl.hp / MainControl.Instance.playerControl.hpMax, "_Flash", 0.5f).SetEase(Ease.OutCirc);
 
                     break;
 
@@ -819,25 +819,25 @@ namespace UCT.Battle
                     _hpSpr.material.DOKill();
 
                     _hpSpr.material.SetFloat(IsFlashing, 1);
-                    _hpSpr.material.SetFloat(Crop, (float)MainControl.Instance.PlayerControl.hp / MainControl.Instance.PlayerControl.hpMax);
-                    float addNumber = MainControl.Instance.PlayerControl.hp + foodNumber;
-                    if (addNumber > MainControl.Instance.PlayerControl.hpMax)
-                        addNumber = MainControl.Instance.PlayerControl.hpMax;
-                    _hpSpr.material.DOFloat(addNumber / MainControl.Instance.PlayerControl.hpMax, "_Flash", 0.5f).SetEase(Ease.OutCirc);
+                    _hpSpr.material.SetFloat(Crop, (float)MainControl.Instance.playerControl.hp / MainControl.Instance.playerControl.hpMax);
+                    float addNumber = MainControl.Instance.playerControl.hp + foodNumber;
+                    if (addNumber > MainControl.Instance.playerControl.hpMax)
+                        addNumber = MainControl.Instance.playerControl.hpMax;
+                    _hpSpr.material.DOFloat(addNumber / MainControl.Instance.playerControl.hpMax, "_Flash", 0.5f).SetEase(Ease.OutCirc);
                     break;
             }
 
-            _hpUI.transform.localPosition = new Vector3(9.85f + 0.0265f * (MainControl.Instance.PlayerControl.hpMax - 20), -5.825f);
-            _nameUI.text = MainControl.Instance.PlayerControl.playerName + " lv<size=3><color=#00000000>0</size></color>" + MainControl.Instance.PlayerControl.lv;
+            _hpUI.transform.localPosition = new Vector3(9.85f + 0.0265f * (MainControl.Instance.playerControl.hpMax - 20), -5.825f);
+            _nameUI.text = MainControl.Instance.playerControl.playerName + " lv<size=3><color=#00000000>0</size></color>" + MainControl.Instance.playerControl.lv;
 
             if (uiTextMode != UITextMode.Food)
-                _hpUI.text = FormatWithLeadingZero(MainControl.Instance.PlayerControl.hp) + " / " + FormatWithLeadingZero(MainControl.Instance.PlayerControl.hpMax);
+                _hpUI.text = FormatWithLeadingZero(MainControl.Instance.playerControl.hp) + " / " + FormatWithLeadingZero(MainControl.Instance.playerControl.hpMax);
             else
             {
                 _hpFoodTween.Kill();
-                var addNumber = MainControl.Instance.PlayerControl.hp + foodNumber;
-                if (addNumber > MainControl.Instance.PlayerControl.hpMax)
-                    addNumber = MainControl.Instance.PlayerControl.hpMax;
+                var addNumber = MainControl.Instance.playerControl.hp + foodNumber;
+                if (addNumber > MainControl.Instance.playerControl.hpMax)
+                    addNumber = MainControl.Instance.playerControl.hpMax;
                 _hpFoodTween = DOTween.To(() => _hpFood, x => _hpFood = x, addNumber, 0.5f);
             }
         }

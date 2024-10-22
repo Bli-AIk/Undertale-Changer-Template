@@ -148,8 +148,8 @@ namespace UCT.Overworld
                             if (saveOwObj.isSave)
                             {
                                 AudioController.Instance.GetFx(2, MainControl.Instance.AudioControl.fxClipUI);
-                                if (MainControl.Instance.PlayerControl.hp < MainControl.Instance.PlayerControl.hpMax)
-                                    MainControl.Instance.PlayerControl.hp = MainControl.Instance.PlayerControl.hpMax;
+                                if (MainControl.Instance.playerControl.hp < MainControl.Instance.playerControl.hpMax)
+                                    MainControl.Instance.playerControl.hp = MainControl.Instance.playerControl.hpMax;
                             }
                         }
                     }
@@ -180,7 +180,7 @@ namespace UCT.Overworld
 
             if (MainControl.Instance.OverworldControl.isSetting || MainControl.Instance.OverworldControl.pause)
                 return;
-            if (Input.GetKeyDown(KeyCode.B) && MainControl.Instance.PlayerControl.isDebug)
+            if (Input.GetKeyDown(KeyCode.B) && MainControl.Instance.playerControl.isDebug)
                 GameUtilityService.FadeOutAndSwitchScene("Battle", Color.black);
         }
 
@@ -217,14 +217,14 @@ namespace UCT.Overworld
             if (MainControl.Instance.OverworldControl.isSetting || MainControl.Instance.OverworldControl.pause || BackpackBehaviour.Instance.select > 0)
             {
                 animator.Play("Walk Tree", 0, 0);
-                if (MainControl.Instance.PlayerControl.canMove)
+                if (MainControl.Instance.playerControl.canMove)
                     animator.enabled = false;
                 return;
             }
 
             animator.enabled = true;
 
-            if (MainControl.Instance.PlayerControl.canMove)
+            if (MainControl.Instance.playerControl.canMove)
             {
                 if (GameUtilityService.KeyArrowToControl(KeyCode.RightArrow, 1))
                     moveDirectionX = 1;

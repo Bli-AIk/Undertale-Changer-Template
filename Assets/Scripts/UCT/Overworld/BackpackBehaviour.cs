@@ -60,7 +60,7 @@ namespace UCT.Overworld
             _backpackUIRightPoint3 = _backpackUIRight.transform.Find("Point3").gameObject;
             _backpackUILeft.transform.parent.localPosition = new Vector3(_backpackUILeft.transform.parent.localPosition.x, _backpackUILeft.transform.parent.localPosition.y, -50);
             _backpack.gameObject.SetActive(false);
-            MainControl.Instance.PlayerControl.canMove = true;
+            MainControl.Instance.playerControl.canMove = true;
 
             SuitResolution();
         }
@@ -135,12 +135,12 @@ namespace UCT.Overworld
                 else if (GameUtilityService.KeyArrowToControl(KeyCode.C))//开启
                 {
                     AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
-                    MainControl.Instance.PlayerControl.myItems = ListManipulationService.MoveZerosToEnd(MainControl.Instance.PlayerControl.myItems);
+                    MainControl.Instance.playerControl.myItems = ListManipulationService.MoveZerosToEnd(MainControl.Instance.playerControl.myItems);
                     var uiSelectPlusColor = "";
                     _sonSelectMax = 8;
-                    for (var i = 0; i < MainControl.Instance.PlayerControl.myItems.Count; i++)
+                    for (var i = 0; i < MainControl.Instance.playerControl.myItems.Count; i++)
                     {
-                        if (MainControl.Instance.PlayerControl.myItems[i] == 0)
+                        if (MainControl.Instance.playerControl.myItems[i] == 0)
                         {
                             if (i == 0)
                                 uiSelectPlusColor = "<color=grey>";
@@ -152,13 +152,13 @@ namespace UCT.Overworld
                     _backpackUILeft.transform.parent.localPosition = new Vector3(_backpackUILeft.transform.parent.localPosition.x, _backpackUILeft.transform.parent.localPosition.y, 5);
                     _clock = 0.01f;
                     select = 1;
-                    MainControl.Instance.PlayerControl.canMove = false;
+                    MainControl.Instance.playerControl.canMove = false;
 
                     _uiSelect.text = uiSelectPlusColor + MainControl.Instance.ItemControl.itemTextMaxData[0][..(MainControl.Instance.ItemControl.itemTextMaxData[0].Length - 1)];
-                    _uiName.text = MainControl.Instance.PlayerControl.playerName;
-                    _uiTexts.text = $"LV {MainControl.Instance.PlayerControl.lv}\n" +
-                                   $"HP {MainControl.Instance.PlayerControl.hp}/{MainControl.Instance.PlayerControl.hpMax}\n" +
-                                   $"G {MainControl.Instance.PlayerControl.gold}";
+                    _uiName.text = MainControl.Instance.playerControl.playerName;
+                    _uiTexts.text = $"LV {MainControl.Instance.playerControl.lv}\n" +
+                                   $"HP {MainControl.Instance.playerControl.hp}/{MainControl.Instance.playerControl.hpMax}\n" +
+                                   $"G {MainControl.Instance.playerControl.gold}";
 
                     if (select == 1)
                         FlashBackpackUIRightPoint(-8.55f * 0.5f);
@@ -174,7 +174,7 @@ namespace UCT.Overworld
 
                     if (select == 1)
                     {
-                        if (sonUse == 0 && MainControl.Instance.PlayerControl.myItems[0] != 0)
+                        if (sonUse == 0 && MainControl.Instance.playerControl.myItems[0] != 0)
                         {
                             AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
                         }
@@ -185,7 +185,7 @@ namespace UCT.Overworld
                             {
                                 sonSelect = 1;
                                 _uiItems.text = "";
-                                foreach (var t in MainControl.Instance.PlayerControl.myItems)
+                                foreach (var t in MainControl.Instance.playerControl.myItems)
                                 {
                                     if (t != 0)
                                         _uiItems.text += $" {DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, t, "Auto", 0)}\n";
@@ -199,7 +199,7 @@ namespace UCT.Overworld
                             }
                             else
                             {
-                                var plusText = MainControl.Instance.PlayerControl.myItems[sonSelect - 1] switch
+                                var plusText = MainControl.Instance.playerControl.myItems[sonSelect - 1] switch
                                 {
                                     >= 20000 => -20000 + MainControl.Instance.ItemControl.itemFoods.Count / 3 +
                                                 MainControl.Instance.ItemControl.itemArms.Count / 2,
@@ -216,21 +216,21 @@ namespace UCT.Overworld
                                     case 1:
                                         sonUse = 4;
                                         GameUtilityService.UseItem(typeWritter, typeMessage, sonSelect, plusText);
-                                        _uiTexts.text = $"LV {MainControl.Instance.PlayerControl.lv}\n" +
-                                                       $"HP {MainControl.Instance.PlayerControl.hp}/{MainControl.Instance.PlayerControl.hpMax}\n" +
-                                                       $"G {MainControl.Instance.PlayerControl.gold}";
+                                        _uiTexts.text = $"LV {MainControl.Instance.playerControl.lv}\n" +
+                                                       $"HP {MainControl.Instance.playerControl.hp}/{MainControl.Instance.playerControl.hpMax}\n" +
+                                                       $"G {MainControl.Instance.playerControl.gold}";
 
                                         goto default;
                                     case 2:
                                         sonUse = 4;
-                                        typeWritter.TypeOpen(MainControl.Instance.ItemControl.itemTextMaxItemSon[(MainControl.Instance.PlayerControl.myItems[sonSelect - 1] + plusText) * 5 - 2], false, 0, 1, typeMessage);
+                                        typeWritter.TypeOpen(MainControl.Instance.ItemControl.itemTextMaxItemSon[(MainControl.Instance.playerControl.myItems[sonSelect - 1] + plusText) * 5 - 2], false, 0, 1, typeMessage);
 
                                         goto default;
                                     case 3:
                                         sonUse = 4;
-                                        typeWritter.TypeOpen(MainControl.Instance.ItemControl.itemTextMaxItemSon[(MainControl.Instance.PlayerControl.myItems[sonSelect - 1] + plusText) * 5 - 1], false, 0, 1, typeMessage);
+                                        typeWritter.TypeOpen(MainControl.Instance.ItemControl.itemTextMaxItemSon[(MainControl.Instance.playerControl.myItems[sonSelect - 1] + plusText) * 5 - 1], false, 0, 1, typeMessage);
 
-                                        MainControl.Instance.PlayerControl.myItems[sonSelect - 1] = 0;
+                                        MainControl.Instance.playerControl.myItems[sonSelect - 1] = 0;
                                         goto default;
                                     default:
                                         if (!typeWritter.isTyping)
@@ -261,22 +261,22 @@ namespace UCT.Overworld
                     BackpackUIRightPoint2.transform.localPosition = new Vector3(BackpackUIRightPoint2.transform.localPosition.x, -11.3f);
                     BackpackUIRightPoint3.transform.localPosition = new Vector3(BackpackUIRightPoint3.transform.localPosition.x, -11.3f);
                     */
-                        _uiItems.text = $"\"{MainControl.Instance.PlayerControl.playerName}\"\n\n"
-                                       + $"LV {MainControl.Instance.PlayerControl.lv}\n"
-                                       + $"HP {MainControl.Instance.PlayerControl.hp}{TextProcessingService.RichTextWithEnd("size", 12, " ")}/{TextProcessingService.RichTextWithEnd("size", 12, " ")}{MainControl.Instance.PlayerControl.hpMax}{TextProcessingService.RichTextWithEnd("size", 1, "\n")}\n"
+                        _uiItems.text = $"\"{MainControl.Instance.playerControl.playerName}\"\n\n"
+                                       + $"LV {MainControl.Instance.playerControl.lv}\n"
+                                       + $"HP {MainControl.Instance.playerControl.hp}{TextProcessingService.RichTextWithEnd("size", 12, " ")}/{TextProcessingService.RichTextWithEnd("size", 12, " ")}{MainControl.Instance.playerControl.hpMax}{TextProcessingService.RichTextWithEnd("size", 1, "\n")}\n"
                                        + $"{MainControl.Instance.ItemControl.itemTextMaxData[1][..^1]}\n"
-                                       + $"{TextProcessingService.RichTextWithEnd("size", 12, " ")}{(MainControl.Instance.PlayerControl.atk - 10)}{TextProcessingService.RichTextWithEnd("size", 6, " ")}({MainControl.Instance.PlayerControl.wearAtk}){TextProcessingService.RichTextWithEnd("size", 15, " ")} EXP:{MainControl.Instance.PlayerControl.exp}\n"
+                                       + $"{TextProcessingService.RichTextWithEnd("size", 12, " ")}{(MainControl.Instance.playerControl.atk - 10)}{TextProcessingService.RichTextWithEnd("size", 6, " ")}({MainControl.Instance.playerControl.wearAtk}){TextProcessingService.RichTextWithEnd("size", 15, " ")} EXP:{MainControl.Instance.playerControl.exp}\n"
                                        + $"{MainControl.Instance.ItemControl.itemTextMaxData[2][..^1]}\n"
-                                       + $"{TextProcessingService.RichTextWithEnd("size", 12, " ")}{(MainControl.Instance.PlayerControl.def - 10)}{TextProcessingService.RichTextWithEnd("size", 6, " ")}({MainControl.Instance.PlayerControl.wearDef}){TextProcessingService.RichTextWithEnd("size", 15, " ")}\n"
+                                       + $"{TextProcessingService.RichTextWithEnd("size", 12, " ")}{(MainControl.Instance.playerControl.def - 10)}{TextProcessingService.RichTextWithEnd("size", 6, " ")}({MainControl.Instance.playerControl.wearDef}){TextProcessingService.RichTextWithEnd("size", 15, " ")}\n"
                                        + $"{MainControl.Instance.ItemControl.itemTextMaxData[3][..^1]}:\n"
-                                       + $"{MainControl.Instance.PlayerControl.nextExp}\n\n"
+                                       + $"{MainControl.Instance.playerControl.nextExp}\n\n"
                                        + $"{MainControl.Instance.ItemControl.itemTextMaxData[4][..^1]}\n"
-                                       + $"{DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.PlayerControl.wearArm, "Auto", 0)}\n"
+                                       + $"{DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.wearArm, "Auto", 0)}\n"
                                        + $"{MainControl.Instance.ItemControl.itemTextMaxData[5][..^1]}\n"
-                                       + $"{DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.PlayerControl.wearArmor, "Auto", 0)}\n"
+                                       + $"{DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.wearArmor, "Auto", 0)}\n"
                                        + $"{TextProcessingService.RichTextWithEnd("size", 13, "\n")}"
                                        + $"{MainControl.Instance.ItemControl.itemTextMaxData[6][..^1]}\n"
-                                       + $"{MainControl.Instance.PlayerControl.gold}";
+                                       + $"{MainControl.Instance.playerControl.gold}";
 
 
                     }
@@ -396,7 +396,7 @@ namespace UCT.Overworld
 
         private void BackpackExit()
         {
-            MainControl.Instance.PlayerControl.canMove = true;
+            MainControl.Instance.playerControl.canMove = true;
             sonSelect = 0;
             select = 0;
             _backpack.gameObject.SetActive(false);

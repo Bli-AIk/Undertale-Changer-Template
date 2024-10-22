@@ -98,15 +98,15 @@ namespace UCT.Overworld
                     {
                         case 0:
 
-                            SaveController.SaveData(MainControl.Instance.PlayerControl, "Data" + MainControl.Instance.dataNumber);
+                            SaveController.SaveData(MainControl.Instance.playerControl, "Data" + MainControl.Instance.dataNumber);
                             _saveSelect = 2;
                             AudioController.Instance.GetFx(12, MainControl.Instance.AudioControl.fxClipUI);
-                            var name = MainControl.Instance.PlayerControl.playerName;
+                            var name = MainControl.Instance.playerControl.playerName;
 
                             BackpackBehaviour.Instance.saveUIHeart.anchoredPosition = new Vector2(10000, 10000);
 
-                            BackpackBehaviour.Instance.saveUI.text = $"<color=yellow>{TextProcessingService.PadStringToLength(name, 10)}LV{TextProcessingService.PadStringToLength(MainControl.Instance.PlayerControl.lv.ToString(), 7)}{TextProcessingService.GetRealTime((int)MainControl.Instance.PlayerControl.gameTime)}\n{TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, SceneManager.GetActiveScene().name)}\n{TextProcessingService.RichTextWithEnd("size", 1, "\n")}  {TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Saved")}";
-                            MainControl.Instance.PlayerControl.saveScene = SceneManager.GetActiveScene().name;
+                            BackpackBehaviour.Instance.saveUI.text = $"<color=yellow>{TextProcessingService.PadStringToLength(name, 10)}LV{TextProcessingService.PadStringToLength(MainControl.Instance.playerControl.lv.ToString(), 7)}{TextProcessingService.GetRealTime((int)MainControl.Instance.playerControl.gameTime)}\n{TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, SceneManager.GetActiveScene().name)}\n{TextProcessingService.RichTextWithEnd("size", 1, "\n")}  {TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Saved")}";
+                            MainControl.Instance.playerControl.saveScene = SceneManager.GetActiveScene().name;
                             PlayerPrefs.SetInt("languagePack", MainControl.Instance.languagePackId);
                             PlayerPrefs.SetInt("dataNumber", MainControl.Instance.dataNumber);
                             PlayerPrefs.SetInt("hdResolution", Convert.ToInt32(MainControl.Instance.OverworldControl.hdResolution));
@@ -166,7 +166,7 @@ namespace UCT.Overworld
                 return;
             }
 
-            MainControl.Instance.PlayerControl.canMove = true;
+            MainControl.Instance.playerControl.canMove = true;
             MainControl.Instance.OverworldControl.pause = false;
 
             foreach (var item in funNames)
@@ -189,10 +189,10 @@ namespace UCT.Overworld
             _saveSelect = 0;
 
             BackpackBehaviour.Instance.saveBack.transform.localPosition = new Vector3(BackpackBehaviour.Instance.saveBack.transform.localPosition.x, BackpackBehaviour.Instance.saveBack.transform.localPosition.y, 5);
-            var name = MainControl.Instance.PlayerControl.playerName;
+            var name = MainControl.Instance.playerControl.playerName;
 
-            BackpackBehaviour.Instance.saveUI.text = TextProcessingService.PadStringToLength(name, 10) + "LV" + TextProcessingService.PadStringToLength(MainControl.Instance.PlayerControl.lv.ToString(), 7) +
-                                                     TextProcessingService.GetRealTime((int)MainControl.Instance.PlayerControl.gameTime) + "\n" +
+            BackpackBehaviour.Instance.saveUI.text = TextProcessingService.PadStringToLength(name, 10) + "LV" + TextProcessingService.PadStringToLength(MainControl.Instance.playerControl.lv.ToString(), 7) +
+                                                     TextProcessingService.GetRealTime((int)MainControl.Instance.playerControl.gameTime) + "\n" +
                                                      TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, SceneManager.GetActiveScene().name) + "\n<size=1>\n</size>  " +
                                                      TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Save") + "         " + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Back")
                 ;
@@ -205,7 +205,7 @@ namespace UCT.Overworld
         public void TypeText(bool isUp, bool isMusic = true)
         {
             _isTyping = true;
-            MainControl.Instance.PlayerControl.canMove = false;
+            MainControl.Instance.playerControl.canMove = false;
             MainControl.Instance.OverworldControl.pause = true;
             TalkUIPositionChanger.Instance.Change(true, true);
 
@@ -228,7 +228,7 @@ namespace UCT.Overworld
 
         public void AnimTypeText(bool isUp)
         {
-            MainControl.Instance.PlayerControl.canMove = false;
+            MainControl.Instance.playerControl.canMove = false;
             MainControl.Instance.OverworldControl.pause = true;
             mainCamera.isFollow = false;
             mainCamera.transform.DOLocalMove(animEndPosPlus, animTime).SetEase(animEase).OnKill(() => TypeText(isUp, false));
