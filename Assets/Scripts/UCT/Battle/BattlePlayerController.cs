@@ -652,10 +652,10 @@ namespace UCT.Battle
                 };
             }
 
-            moving.x = MathUtilityService.GetSmallerNumber(moving.x, -5);
-            moving.y = MathUtilityService.GetSmallerNumber(moving.y, -5);
-            moving.x = MathUtilityService.GetGreaterNumber(moving.x, 5);
-            moving.y = MathUtilityService.GetGreaterNumber(moving.y, 5);
+            moving.x = MathUtilityService.GetGreaterNumber(moving.x, -5);
+            moving.y = MathUtilityService.GetGreaterNumber(moving.y, -5);
+            moving.x = MathUtilityService.GetSmallerNumber(moving.x, 5);
+            moving.y = MathUtilityService.GetSmallerNumber(moving.y, 5);
         
             var newPos = transform.position + new Vector3(speedWeightX * speed * moving.x * Time.deltaTime, speedWeightY * speed * moving.y * Time.deltaTime);//速度参考：3
 
