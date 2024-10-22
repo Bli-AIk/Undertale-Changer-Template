@@ -117,7 +117,7 @@ namespace UCT.Overworld
             if (saveOwObj != null && _backpackUI.transform.localPosition.z < 0)
             {
                 if (saveOwObj.isTriggerMode
-                    || (!saveOwObj.isTriggerMode && MainControl.Instance.KeyArrowToControl(KeyCode.Z)
+                    || (!saveOwObj.isTriggerMode && GameUtilityService.KeyArrowToControl(KeyCode.Z)
                                                  && ((saveOwObj.playerDir == Vector2.one) || (saveOwObj.playerDir.x == animDirectionX) || (saveOwObj.playerDir.y == animDirectionY))
                                                  && BackpackBehaviour.Instance.select == 0))
                 {
@@ -208,11 +208,11 @@ namespace UCT.Overworld
         private void FixedUpdate()
         {
             float speed;
-            if (MainControl.Instance.KeyArrowToControl(KeyCode.X, 1))
+            if (GameUtilityService.KeyArrowToControl(KeyCode.X, 1))
                 speed = this.speed * 2;
             else speed = this.speed;
 
-            animator.SetFloat("Speed", Convert.ToInt32(MainControl.Instance.KeyArrowToControl(KeyCode.X, 1)) + 1);
+            animator.SetFloat("Speed", Convert.ToInt32(GameUtilityService.KeyArrowToControl(KeyCode.X, 1)) + 1);
 
             if (MainControl.Instance.OverworldControl.isSetting || MainControl.Instance.OverworldControl.pause || BackpackBehaviour.Instance.select > 0)
             {
@@ -226,27 +226,27 @@ namespace UCT.Overworld
 
             if (MainControl.Instance.PlayerControl.canMove)
             {
-                if (MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow, 1))
+                if (GameUtilityService.KeyArrowToControl(KeyCode.RightArrow, 1))
                     moveDirectionX = 1;
-                else if (MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
+                else if (GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow, 1))
                     moveDirectionX = -1;
                 else moveDirectionX = 0;
 
-                if (MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow, 1) && MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
+                if (GameUtilityService.KeyArrowToControl(KeyCode.RightArrow, 1) && GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow, 1))
                     moveDirectionX = 0;
 
                 if (moveDirectionX != 0)
                     animDirectionX = moveDirectionX;
 
-                if (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow, 1))
+                if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow, 1))
                 {
                     moveDirectionY = 1;
-                    if (!MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow, 1) && !MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
+                    if (!GameUtilityService.KeyArrowToControl(KeyCode.RightArrow, 1) && !GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow, 1))
                         animDirectionX = 0;
                 }
-                else if (MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow, 1))
+                else if (GameUtilityService.KeyArrowToControl(KeyCode.DownArrow, 1))
                 {
-                    if (!MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow, 1) && !MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow, 1))
+                    if (!GameUtilityService.KeyArrowToControl(KeyCode.RightArrow, 1) && !GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow, 1))
                         animDirectionX = 0;
                     moveDirectionY = -1;
                 }
@@ -260,7 +260,7 @@ namespace UCT.Overworld
 
                 _rbody.MovePosition(new Vector2(transform.position.x + speed * Time.deltaTime * moveDirectionX, transform.position.y + speed * Time.deltaTime * moveDirectionY));
 
-                if (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow, 1) && MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow, 1))//&& !(MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1) || MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1)))
+                if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow, 1) && GameUtilityService.KeyArrowToControl(KeyCode.DownArrow, 1))//&& !(MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1) || MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1)))
                 {
                     animator.SetFloat("MoveX", Random.Range(-1, 2));
                     animator.SetFloat("MoveY", Random.Range(-1, 2));

@@ -95,14 +95,14 @@ namespace UCT.Battle
 
         private void Update()
         {
-            if (!_typeWritter.isTyping && MainControl.Instance.KeyArrowToControl(KeyCode.Z) && canChangeSence)
+            if (!_typeWritter.isTyping && GameUtilityService.KeyArrowToControl(KeyCode.Z) && canChangeSence)
             {
                 _tmp.text = "";
                 GameUtilityService.FadeOutAndSwitchScene("Example-Corridor", Color.black, true, 2);
                 canChangeSence = false;
             }
 
-            if (MainControl.Instance.KeyArrowToControl(KeyCode.C) && canChangeSenceForC)
+            if (GameUtilityService.KeyArrowToControl(KeyCode.C) && canChangeSenceForC)
             {
                 GameUtilityService.FadeOutAndSwitchScene("Example-Corridor", Color.black, true);
                 _typeWritter.TypeStop();

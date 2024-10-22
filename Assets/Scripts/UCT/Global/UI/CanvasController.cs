@@ -309,7 +309,7 @@ namespace UCT.Global.UI
             else
                 fps.text = "";
 
-            if (MainControl.Instance.KeyArrowToControl(KeyCode.Escape, 1))
+            if (GameUtilityService.KeyArrowToControl(KeyCode.Escape, 1))
             {
                 if (_exitImage.color.a < 1)
                     _exitImage.color += Time.deltaTime * Color.white;
@@ -321,7 +321,7 @@ namespace UCT.Global.UI
                 }
                 else Application.Quit();
             }
-            if (MainControl.Instance.KeyArrowToControl(KeyCode.Escape, 2))
+            if (GameUtilityService.KeyArrowToControl(KeyCode.Escape, 2))
             {
                 _clock = 0;
                 _exitImage.color = new Color(1, 1, 1, 0);
@@ -404,7 +404,7 @@ namespace UCT.Global.UI
 
             if ((openTurn && TurnController.Instance != null && TurnController.Instance.isMyTurn) || !openTurn)
             {
-                if (SceneManager.GetActiveScene().name != "Story" && MainControl.Instance.KeyArrowToControl(KeyCode.V) && !MainControl.Instance.OverworldControl.isSetting && !MainControl.Instance.isSceneSwitching)
+                if (SceneManager.GetActiveScene().name != "Story" && GameUtilityService.KeyArrowToControl(KeyCode.V) && !MainControl.Instance.OverworldControl.isSetting && !MainControl.Instance.isSceneSwitching)
                 {
                     foreach (var typeWritter in _typeWritters)
                     {
@@ -426,14 +426,14 @@ namespace UCT.Global.UI
                     case 0:
                         if (!_isSettingName)
                         {
-                            if (MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow))
+                            if (GameUtilityService.KeyArrowToControl(KeyCode.DownArrow))
                             {
                                 AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
                                 _settingSelect++;
                                 if (_settingSelect > 7)
                                     _settingSelect = 0;
                             }
-                            else if (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow))
+                            else if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow))
                             {
                                 AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
                                 _settingSelect--;
@@ -443,7 +443,7 @@ namespace UCT.Global.UI
                         }
                         else
                         {
-                            if (MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow, 1) || MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow))
+                            if (GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow, 1) || GameUtilityService.KeyArrowToControl(KeyCode.DownArrow))
                             {
                                 if (MainControl.Instance.OverworldControl.mainVolume > 0)
                                 {
@@ -453,7 +453,7 @@ namespace UCT.Global.UI
                                 }
                                 SettingText(false, true);
                             }
-                            else if (MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow, 1) || MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow))
+                            else if (GameUtilityService.KeyArrowToControl(KeyCode.RightArrow, 1) || GameUtilityService.KeyArrowToControl(KeyCode.UpArrow))
                             {
                                 if (MainControl.Instance.OverworldControl.mainVolume < 1)
                                 {
@@ -465,7 +465,7 @@ namespace UCT.Global.UI
                             }
                         }
 
-                        if (MainControl.Instance.KeyArrowToControl(KeyCode.Z))
+                        if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
                         {
                             AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
                             if (!_isSettingName)
@@ -522,7 +522,7 @@ namespace UCT.Global.UI
                                 _isSettingName = false;
                             }
                         }
-                        else if (SceneManager.GetActiveScene().name != "Story" && (MainControl.Instance.KeyArrowToControl(KeyCode.X) || MainControl.Instance.KeyArrowToControl(KeyCode.V)))
+                        else if (SceneManager.GetActiveScene().name != "Story" && (GameUtilityService.KeyArrowToControl(KeyCode.X) || GameUtilityService.KeyArrowToControl(KeyCode.V)))
                         {
                             if (!_isSettingName)
                             {
@@ -536,7 +536,7 @@ namespace UCT.Global.UI
                                 _isSettingName = false;
                             }
                         }
-                        else if (MainControl.Instance.KeyArrowToControl(KeyCode.C))
+                        else if (GameUtilityService.KeyArrowToControl(KeyCode.C))
                         {
                             if (!_isSettingName)
                             {
@@ -626,21 +626,21 @@ namespace UCT.Global.UI
                         break;
 
                     case 1:
-                        if (MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow))
+                        if (GameUtilityService.KeyArrowToControl(KeyCode.DownArrow))
                         {
                             AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
                             _settingSelect++;
                             if (_settingSelect > 8)
                                 _settingSelect = 0;
                         }
-                        else if (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow))
+                        else if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow))
                         {
                             AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
                             _settingSelect--;
                             if (_settingSelect < 0)
                                 _settingSelect = 8;
                         }
-                        if (MainControl.Instance.KeyArrowToControl(KeyCode.Z))
+                        if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
                         {
                             AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
                             if (_settingSelect < 6)
@@ -657,7 +657,7 @@ namespace UCT.Global.UI
                                         break;
                                 }
                             else if (_settingSelect == 7)
-                                MainControl.Instance.ApplyDefaultControl();
+                                GameUtilityService.ApplyDefaultControl();
                             else
                             {
                                 settingLevel = 0;
@@ -669,7 +669,7 @@ namespace UCT.Global.UI
 
                             SettingText(false, true);
                         }
-                        else if (MainControl.Instance.KeyArrowToControl(KeyCode.X))
+                        else if (GameUtilityService.KeyArrowToControl(KeyCode.X))
                         {
                             settingLevel = 0;
                             _settingSelect = 0;
@@ -677,7 +677,7 @@ namespace UCT.Global.UI
                             SettingText();
                             return;
                         }
-                        else if (MainControl.Instance.KeyArrowToControl(KeyCode.C))
+                        else if (GameUtilityService.KeyArrowToControl(KeyCode.C))
                         {
                             AudioController.Instance.GetFx(3, MainControl.Instance.AudioControl.fxClipUI);
                             if (_controlSelect < 2)
@@ -691,21 +691,21 @@ namespace UCT.Global.UI
                         break;
 
                     case 2:
-                        if (MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow))
+                        if (GameUtilityService.KeyArrowToControl(KeyCode.DownArrow))
                         {
                             AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
                             _settingSelect++;
                             if (_settingSelect > _settingSelectMax)
                                 _settingSelect = 0;
                         }
-                        else if (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow))
+                        else if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow))
                         {
                             AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
                             _settingSelect--;
                             if (_settingSelect < 0)
                                 _settingSelect = _settingSelectMax;
                         }
-                        if (MainControl.Instance.KeyArrowToControl(KeyCode.Z))
+                        if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
                         {
                             if (_settingSelect != _settingSelectMax)
                             {
@@ -718,7 +718,7 @@ namespace UCT.Global.UI
                                 ExitSetting(true);
                             }
                         }
-                        else if (SceneManager.GetActiveScene().name != "Story" && (MainControl.Instance.KeyArrowToControl(KeyCode.X) || MainControl.Instance.KeyArrowToControl(KeyCode.V)))
+                        else if (SceneManager.GetActiveScene().name != "Story" && (GameUtilityService.KeyArrowToControl(KeyCode.X) || GameUtilityService.KeyArrowToControl(KeyCode.V)))
                         {
                             ExitSetting(true);
                         }

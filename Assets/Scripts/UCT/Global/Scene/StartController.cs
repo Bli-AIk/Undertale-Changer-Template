@@ -43,7 +43,7 @@ namespace UCT.Global.Scene
                 _textUnder.DOColor(Color.white, 0.5f).SetEase(Ease.Linear);
             }
 
-            if (MainControl.Instance.KeyArrowToControl(KeyCode.Z))
+            if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
             {
                 switch (_layer)
                 {

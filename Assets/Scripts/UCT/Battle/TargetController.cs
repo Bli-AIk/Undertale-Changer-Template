@@ -2,6 +2,7 @@ using DG.Tweening;
 using TMPro;
 using UCT.Global.Audio;
 using UCT.Global.Core;
+using UCT.Service;
 using UnityEngine;
 
 namespace UCT.Battle
@@ -51,7 +52,7 @@ namespace UCT.Battle
         {
             if (!_pressZ)
             {
-                if (MainControl.Instance.KeyArrowToControl(KeyCode.Z))
+                if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
                 {
                     _pressZ = true;
                     _anim.SetBool("Hit", true);

@@ -86,13 +86,13 @@ namespace UCT.Overworld
         {
             if (_saveOpen)
             {
-                if (MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow) || MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow))
+                if (GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow) || GameUtilityService.KeyArrowToControl(KeyCode.RightArrow))
                 {
                     _saveSelect = Convert.ToInt32(!Convert.ToBoolean(_saveSelect));
 
                     BackpackBehaviour.Instance.saveUIHeart.anchoredPosition = new Vector2(-258 + _saveSelect * 180, -44);
                 }
-                if (MainControl.Instance.KeyArrowToControl(KeyCode.Z))
+                if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
                 {
                     switch (_saveSelect)
                     {
@@ -128,7 +128,7 @@ namespace UCT.Overworld
                             goto default;
                     }
                 }
-                else if (MainControl.Instance.KeyArrowToControl(KeyCode.X))
+                else if (GameUtilityService.KeyArrowToControl(KeyCode.X))
                 {
                     BackpackBehaviour.Instance.saveUIHeart.anchoredPosition = new Vector2(10000, 10000);
                     BackpackBehaviour.Instance.saveBack.transform.localPosition = new Vector3(BackpackBehaviour.Instance.saveBack.transform.localPosition.x, BackpackBehaviour.Instance.saveBack.transform.localPosition.y, -50);
@@ -138,7 +138,7 @@ namespace UCT.Overworld
                 }
             }
             //检测相关见PlayerBehaviour
-            if (_isTyping && MainControl.Instance.KeyArrowToControl(KeyCode.Z) && !_typeWritter.isRunning)
+            if (_isTyping && GameUtilityService.KeyArrowToControl(KeyCode.Z) && !_typeWritter.isRunning)
             {
                 PressZ();
             }

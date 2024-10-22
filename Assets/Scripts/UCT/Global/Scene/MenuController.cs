@@ -67,19 +67,19 @@ namespace UCT.Global.Scene
             if (MainControl.Instance.OverworldControl.isSetting || MainControl.Instance.OverworldControl.pause)
                 return;
 
-            if (MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow))
+            if (GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow))
             {
                 _select--;
             }
-            else if (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow))
+            else if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow))
             {
                 _select -= 2;
             }
-            if (MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow))
+            if (GameUtilityService.KeyArrowToControl(KeyCode.RightArrow))
             {
                 _select++;
             }
-            else if (MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow))
+            else if (GameUtilityService.KeyArrowToControl(KeyCode.DownArrow))
             {
                 _select += 2;
             }
@@ -103,12 +103,12 @@ namespace UCT.Global.Scene
 
             if (layer != 0) return;
             
-            if (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow) || MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow)
-                                                                        || MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow) || MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow))
+            if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow) || GameUtilityService.KeyArrowToControl(KeyCode.DownArrow)
+                                                                      || GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow) || GameUtilityService.KeyArrowToControl(KeyCode.RightArrow))
             {
                 Flash();
             }
-            if (MainControl.Instance.KeyArrowToControl(KeyCode.Z))
+            if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
             {
                 if (!_setData)
                     switch (_select)
@@ -197,7 +197,7 @@ namespace UCT.Global.Scene
                             break;
                     }
             }
-            else if (MainControl.Instance.KeyArrowToControl(KeyCode.X) && _setData)
+            else if (GameUtilityService.KeyArrowToControl(KeyCode.X) && _setData)
             {
                 _setData = false;
                 Flash();

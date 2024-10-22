@@ -560,18 +560,18 @@ namespace UCT.Global.UI
 
             if (clockTime > 0)
                 clockTime -= Time.deltaTime;
-            if (!isRunning && !passText && !isTyping && MainControl.Instance.KeyArrowToControl(KeyCode.Z) && _typeMode != TypeMode.CantZx)
+            if (!isRunning && !passText && !isTyping && GameUtilityService.KeyArrowToControl(KeyCode.Z) && _typeMode != TypeMode.CantZx)
             {
                 if (spriteChanger != null)
                     spriteChanger.ChangeImage(-1);
                 if (_endInBattle)
                     _canvasAnim.SetBool("Open", true);
             }
-            if (passText && MainControl.Instance.KeyArrowToControl(KeyCode.Z) && _typeMode != TypeMode.CantZx)
+            if (passText && GameUtilityService.KeyArrowToControl(KeyCode.Z) && _typeMode != TypeMode.CantZx)
             {
                 PassText();
             }
-            else if (!pressX && !canNotX && MainControl.Instance.KeyArrowToControl(KeyCode.X) && _typeMode != TypeMode.CantZx)//跳字
+            else if (!pressX && !canNotX && GameUtilityService.KeyArrowToControl(KeyCode.X) && _typeMode != TypeMode.CantZx)//跳字
             {
                 if (clock != 0 && clockTime <= 0)
                 {

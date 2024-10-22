@@ -40,7 +40,7 @@ namespace UCT.Global.Scene
         {
             if (MainControl.Instance.OverworldControl.isSetting || MainControl.Instance.OverworldControl.pause)
                 return;
-            if (MainControl.Instance.KeyArrowToControl(KeyCode.Z))
+            if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
             {
                 _typeWritter.TypeStop();
                 _tmp.text = "";

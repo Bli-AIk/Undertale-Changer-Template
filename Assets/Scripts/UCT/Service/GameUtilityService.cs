@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using DG.Tweening;
+using TMPro;
 using UCT.Battle;
 using UCT.Global.Audio;
 using UCT.Global.Core;
@@ -9,6 +10,7 @@ using UCT.Overworld;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
+using Random = UnityEngine.Random;
 
 namespace UCT.Service
 {
@@ -225,6 +227,232 @@ namespace UCT.Service
                 MainControl.Instance.cameraMainInBattle = MainControl.Instance.cameraShake.GetComponent<Camera>();
             }
             MainControl.Instance.  cameraMainInBattle.GetUniversalAdditionalCameraData().renderPostProcessing = !isClose;
+        }
+
+        /// <summary>
+        /// 传入使用背包的哪个物体
+        /// 然后就使用 打true会顺带把背包顺序整理下
+        /// 然后再让打字机打个字
+        /// plusText填0就自己计算
+        /// </summary>
+        public static void UseItem(TypeWritter typeWritter, TMP_Text tmpText, int sonSelect, int plusText = 0)
+        {
+            if (plusText == 0)
+            {
+                plusText = MainControl.Instance.PlayerControl.myItems[sonSelect - 1] switch
+                {
+                    >= 20000 => -20000 + MainControl.Instance.ItemControl.itemFoods.Count / 3 + MainControl.Instance.ItemControl.itemArms.Count / 2,
+                    >= 10000 => -10000 + MainControl.Instance.ItemControl.itemFoods.Count / 3,
+                    _ => 0
+                };
+            }
+
+            switch (MainControl.Instance.PlayerControl.myItems[sonSelect - 1])
+            {
+                case >= 20000:// 防具
+                    ProcessArmor(typeWritter, tmpText, sonSelect, plusText);
+                    break;
+                case >= 10000:// 武器
+                    ProcessArm(typeWritter, tmpText, sonSelect, plusText);
+                    break;
+                // 食物
+                default:
+                {
+                    ProcessFood(typeWritter, tmpText, sonSelect);
+                    break;
+                }
+            }
+        }
+
+        private static void ProcessFood(TypeWritter typeWritter, TMP_Text tmpText, int sonSelect)
+        {
+            var plusHp = int.Parse(DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.PlayerControl.myItems[sonSelect - 1], "Auto", 2));
+            if (MainControl.Instance.PlayerControl.wearArm == 10001)
+                plusHp += 4;
+
+            typeWritter.TypeOpen(MainControl.Instance.ItemControl.itemTextMaxItemSon[MainControl.Instance.PlayerControl.myItems[sonSelect - 1] * 5 - 3], false,
+                plusHp, 0, tmpText);
+
+            MainControl.Instance. PlayerControl.hp += plusHp;
+
+            if (MainControl.Instance.PlayerControl.hp > MainControl.Instance.PlayerControl.hpMax)
+                MainControl.Instance.PlayerControl.hp = MainControl.Instance.PlayerControl.hpMax;
+            for (var i = 0; i < MainControl.Instance.ItemControl.itemFoods.Count; i++)
+            {
+                if (MainControl.Instance.ItemControl.itemTextMaxItemSon[MainControl.Instance.PlayerControl.myItems[sonSelect - 1] * 5 - 5] !=
+                    MainControl.Instance.ItemControl.itemFoods[i]) continue;
+                var text = MainControl.Instance.ItemControl.itemFoods[i + 1];
+                text = text.Substring(1, text.Length - 1);
+                MainControl.Instance. PlayerControl.myItems[sonSelect - 1] = DataHandlerService.ItemNameGetId(MainControl.Instance.ItemControl, text, "Foods");
+                break;
+            }
+            AudioController.Instance.GetFx(2, MainControl.Instance.AudioControl.fxClipUI);
+        }
+
+        private static void ProcessArm(TypeWritter typeWritter, TMP_Text tmpText, int sonSelect, int plusText)
+        {
+            typeWritter.TypeOpen(MainControl.Instance.ItemControl.itemTextMaxItemSon[(MainControl.Instance.PlayerControl.myItems[sonSelect - 1] + plusText) * 5 - 3], false, 0, 0, tmpText);
+            MainControl.Instance.PlayerControl.wearAtk = int.Parse(DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.PlayerControl.myItems[sonSelect - 1], "Auto", 1));
+            (MainControl.Instance.PlayerControl.wearArm, MainControl.Instance.PlayerControl.myItems[sonSelect - 1]) = (MainControl.Instance.PlayerControl.myItems[sonSelect - 1],MainControl.Instance. PlayerControl.wearArm);
+
+            AudioController.Instance.GetFx(3, MainControl.Instance.AudioControl.fxClipUI);
+        }
+
+        private static void ProcessArmor(TypeWritter typeWritter, TMP_Text tmpText, int sonSelect, int plusText)
+        {
+            typeWritter.TypeOpen(MainControl.Instance.ItemControl.itemTextMaxItemSon[(MainControl.Instance.PlayerControl.myItems[sonSelect - 1] + plusText) * 5 - 3], false, 0, 0, tmpText);
+            MainControl.Instance.PlayerControl.wearDef = int.Parse(DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.PlayerControl.myItems[sonSelect - 1], "Auto", 1));
+            (MainControl.Instance.PlayerControl.wearArmor, MainControl.Instance.PlayerControl.myItems[sonSelect - 1]) = (MainControl.Instance.PlayerControl.myItems[sonSelect - 1], MainControl.Instance.PlayerControl.wearArmor);
+
+            AudioController.Instance.GetFx(3, MainControl.Instance.AudioControl.fxClipUI);
+        }
+
+        /// <summary>
+        /// 传入默认KeyCode并转换为游戏内键位。
+        /// mode:0按下 1持续 2抬起
+        /// </summary>
+        public static bool KeyArrowToControl(KeyCode key, int mode = 0)
+        {
+            var overworldControl = MainControl.Instance.OverworldControl;
+            return mode switch
+            {
+                0 => key switch
+                {
+                    KeyCode.DownArrow => Input.GetKeyDown(overworldControl.keyCodes[0]) || Input.GetKeyDown(overworldControl.keyCodesBack1[0]) || Input.GetKeyDown(overworldControl.keyCodesBack2[0]),
+                    KeyCode.RightArrow => Input.GetKeyDown(overworldControl.keyCodes[1]) || Input.GetKeyDown(overworldControl.keyCodesBack1[1]) || Input.GetKeyDown(overworldControl.keyCodesBack2[1]),
+                    KeyCode.UpArrow => Input.GetKeyDown(overworldControl.keyCodes[2]) || Input.GetKeyDown(overworldControl.keyCodesBack1[2]) || Input.GetKeyDown(overworldControl.keyCodesBack2[2]),
+                    KeyCode.LeftArrow => Input.GetKeyDown(overworldControl.keyCodes[3]) || Input.GetKeyDown(overworldControl.keyCodesBack1[3]) || Input.GetKeyDown(overworldControl.keyCodesBack2[3]),
+                    KeyCode.Z => Input.GetKeyDown(overworldControl.keyCodes[4]) || Input.GetKeyDown(overworldControl.keyCodesBack1[4]) || Input.GetKeyDown(overworldControl.keyCodesBack2[4]),
+                    KeyCode.X => Input.GetKeyDown(overworldControl.keyCodes[5]) || Input.GetKeyDown(overworldControl.keyCodesBack1[5]) || Input.GetKeyDown(overworldControl.keyCodesBack2[5]),
+                    KeyCode.C => Input.GetKeyDown(overworldControl.keyCodes[6]) || Input.GetKeyDown(overworldControl.keyCodesBack1[6]) || Input.GetKeyDown(overworldControl.keyCodesBack2[6]),
+                    KeyCode.V => Input.GetKeyDown(overworldControl.keyCodes[7]) || Input.GetKeyDown(overworldControl.keyCodesBack1[7]) || Input.GetKeyDown(overworldControl.keyCodesBack2[7]),
+                    KeyCode.F4 => Input.GetKeyDown(overworldControl.keyCodes[8]) || Input.GetKeyDown(overworldControl.keyCodesBack1[8]) || Input.GetKeyDown(overworldControl.keyCodesBack2[8]),
+                    KeyCode.Tab => Input.GetKeyDown(overworldControl.keyCodes[9]) || Input.GetKeyDown(overworldControl.keyCodesBack1[9]) || Input.GetKeyDown(overworldControl.keyCodesBack2[9]),
+                    KeyCode.Semicolon => Input.GetKeyDown(overworldControl.keyCodes[10]) || Input.GetKeyDown(overworldControl.keyCodesBack1[10]) || Input.GetKeyDown(overworldControl.keyCodesBack2[10]),
+                    KeyCode.Escape => Input.GetKeyDown(overworldControl.keyCodes[11]) || Input.GetKeyDown(overworldControl.keyCodesBack1[11]) || Input.GetKeyDown(overworldControl.keyCodesBack2[11]),
+                    _ => false,
+                },
+                1 => key switch
+                {
+                    KeyCode.DownArrow => Input.GetKey(overworldControl.keyCodes[0]) || Input.GetKey(overworldControl.keyCodesBack1[0]) || Input.GetKey(overworldControl.keyCodesBack2[0]),
+                    KeyCode.RightArrow => Input.GetKey(overworldControl.keyCodes[1]) || Input.GetKey(overworldControl.keyCodesBack1[1]) || Input.GetKey(overworldControl.keyCodesBack2[1]),
+                    KeyCode.UpArrow => Input.GetKey(overworldControl.keyCodes[2]) || Input.GetKey(overworldControl.keyCodesBack1[2]) || Input.GetKey(overworldControl.keyCodesBack2[2]),
+                    KeyCode.LeftArrow => Input.GetKey(overworldControl.keyCodes[3]) || Input.GetKey(overworldControl.keyCodesBack1[3]) || Input.GetKey(overworldControl.keyCodesBack2[3]),
+                    KeyCode.Z => Input.GetKey(overworldControl.keyCodes[4]) || Input.GetKey(overworldControl.keyCodesBack1[4]) || Input.GetKey(overworldControl.keyCodesBack2[4]),
+                    KeyCode.X => Input.GetKey(overworldControl.keyCodes[5]) || Input.GetKey(overworldControl.keyCodesBack1[5]) || Input.GetKey(overworldControl.keyCodesBack2[5]),
+                    KeyCode.C => Input.GetKey(overworldControl.keyCodes[6]) || Input.GetKey(overworldControl.keyCodesBack1[6]) || Input.GetKey(overworldControl.keyCodesBack2[6]),
+                    KeyCode.V => Input.GetKey(overworldControl.keyCodes[7]) || Input.GetKey(overworldControl.keyCodesBack1[7]) || Input.GetKey(overworldControl.keyCodesBack2[7]),
+                    KeyCode.F4 => Input.GetKey(overworldControl.keyCodes[8]) || Input.GetKey(overworldControl.keyCodesBack1[8]) || Input.GetKey(overworldControl.keyCodesBack2[8]),
+                    KeyCode.Tab => Input.GetKey(overworldControl.keyCodes[9]) || Input.GetKey(overworldControl.keyCodesBack1[9]) || Input.GetKey(overworldControl.keyCodesBack2[9]),
+                    KeyCode.Semicolon => Input.GetKey(overworldControl.keyCodes[10]) || Input.GetKey(overworldControl.keyCodesBack1[10]) || Input.GetKey(overworldControl.keyCodesBack2[10]),
+                    KeyCode.Escape => Input.GetKey(overworldControl.keyCodes[11]) || Input.GetKey(overworldControl.keyCodesBack1[11]) || Input.GetKey(overworldControl.keyCodesBack2[11]),
+                    _ => false,
+                },
+                2 => key switch
+                {
+                    KeyCode.DownArrow => Input.GetKeyUp(overworldControl.keyCodes[0]) || Input.GetKeyUp(overworldControl.keyCodesBack1[0]) || Input.GetKeyUp(overworldControl.keyCodesBack2[0]),
+                    KeyCode.RightArrow => Input.GetKeyUp(overworldControl.keyCodes[1]) || Input.GetKeyUp(overworldControl.keyCodesBack1[1]) || Input.GetKeyUp(overworldControl.keyCodesBack2[1]),
+                    KeyCode.UpArrow => Input.GetKeyUp(overworldControl.keyCodes[2]) || Input.GetKeyUp(overworldControl.keyCodesBack1[2]) || Input.GetKeyUp(overworldControl.keyCodesBack2[2]),
+                    KeyCode.LeftArrow => Input.GetKeyUp(overworldControl.keyCodes[3]) || Input.GetKeyUp(overworldControl.keyCodesBack1[3]) || Input.GetKeyUp(overworldControl.keyCodesBack2[3]),
+                    KeyCode.Z => Input.GetKeyUp(overworldControl.keyCodes[4]) || Input.GetKeyUp(overworldControl.keyCodesBack1[4]) || Input.GetKeyUp(overworldControl.keyCodesBack2[4]),
+                    KeyCode.X => Input.GetKeyUp(overworldControl.keyCodes[5]) || Input.GetKeyUp(overworldControl.keyCodesBack1[5]) || Input.GetKeyUp(overworldControl.keyCodesBack2[5]),
+                    KeyCode.C => Input.GetKeyUp(overworldControl.keyCodes[6]) || Input.GetKeyUp(overworldControl.keyCodesBack1[6]) || Input.GetKeyUp(overworldControl.keyCodesBack2[6]),
+                    KeyCode.V => Input.GetKeyUp(overworldControl.keyCodes[7]) || Input.GetKeyUp(overworldControl.keyCodesBack1[7]) || Input.GetKeyUp(overworldControl.keyCodesBack2[7]),
+                    KeyCode.F4 => Input.GetKeyUp(overworldControl.keyCodes[8]) || Input.GetKeyUp(overworldControl.keyCodesBack1[8]) || Input.GetKeyUp(overworldControl.keyCodesBack2[8]),
+                    KeyCode.Tab => Input.GetKeyUp(overworldControl.keyCodes[9]) || Input.GetKeyUp(overworldControl.keyCodesBack1[9]) || Input.GetKeyUp(overworldControl.keyCodesBack2[9]),
+                    KeyCode.Semicolon => Input.GetKeyUp(overworldControl.keyCodes[10]) || Input.GetKeyUp(overworldControl.keyCodesBack1[10]) || Input.GetKeyUp(overworldControl.keyCodesBack2[10]),
+                    KeyCode.Escape => Input.GetKeyUp(overworldControl.keyCodes[11]) || Input.GetKeyUp(overworldControl.keyCodesBack1[11]) || Input.GetKeyUp(overworldControl.keyCodesBack2[11]),
+                    _ => false,
+                },
+                _ => false,
+            };
+        }
+
+        /// <summary>
+        /// 应用默认键位
+        /// </summary>
+        public static void ApplyDefaultControl()
+        {
+            var overworldControl = MainControl.Instance.OverworldControl;
+            overworldControl.keyCodes = new List<KeyCode>
+            {
+                KeyCode.DownArrow,
+                KeyCode.RightArrow,
+                KeyCode.UpArrow,
+                KeyCode.LeftArrow,
+                KeyCode.Z,
+                KeyCode.X,
+                KeyCode.C,
+                KeyCode.V,
+                KeyCode.F4,
+                KeyCode.None,
+                KeyCode.None,
+                KeyCode.Escape
+            };
+
+            overworldControl.keyCodesBack1 = new List<KeyCode>
+            {
+                KeyCode.S,
+                KeyCode.D,
+                KeyCode.W,
+                KeyCode.A,
+                KeyCode.Return,
+                KeyCode.RightShift,
+                KeyCode.RightControl,
+                KeyCode.None,
+                KeyCode.None,
+                KeyCode.None,
+                KeyCode.None,
+                KeyCode.None
+            };
+            overworldControl.keyCodesBack2 = new List<KeyCode>
+            {
+                KeyCode.None,
+                KeyCode.None,
+                KeyCode.None,
+                KeyCode.None,
+                KeyCode.None,
+                KeyCode.LeftShift,
+                KeyCode.LeftControl,
+                KeyCode.None,
+                KeyCode.None,
+                KeyCode.None,
+                KeyCode.None,
+                KeyCode.None
+            };
+        }
+
+        public static Color GetRandomColor()
+        {
+            return new Color(Random.Range(0, 1f), Random.Range(0, 1f), Random.Range(0, 1f), 1);
+        }
+
+        /// <summary>
+        /// 控制节拍器
+        /// </summary>
+        public static void Metronome()
+        {
+            if (MainControl.Instance.beatTimes.Count <= 0) return;
+
+            var firstIn = true;
+            while (MainControl.Instance.currentBeatIndex < MainControl.Instance.beatTimes.Count && AudioController.Instance.audioSource.time >= MainControl.Instance.nextBeatTime)
+            {
+                if (firstIn)
+                {
+                    AudioController.Instance.GetFx(MainControl.Instance.currentBeatIndex % 4 == 0 ? 13 : 14, MainControl.Instance.AudioControl.fxClipUI);
+                }
+                MainControl.Instance. currentBeatIndex++;
+
+                if (MainControl.Instance.currentBeatIndex < MainControl.Instance.beatTimes.Count)
+                {
+                    MainControl.Instance.nextBeatTime = MainControl.Instance.beatTimes[MainControl.Instance.currentBeatIndex];
+                }
+                firstIn = false;
+            }
+
+            if (MainControl.Instance.currentBeatIndex <MainControl.Instance. beatTimes.Count) return;
+            MainControl.Instance. nextBeatTime =MainControl.Instance. beatTimes[0];
+            MainControl.Instance.   currentBeatIndex = 0;
         }
     }
 }

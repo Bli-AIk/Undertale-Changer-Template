@@ -126,13 +126,13 @@ namespace UCT.Overworld
                 _uiItems.gameObject.SetActive(false);
                 _backpackUIRight.transform.localPosition = new Vector3(_backpackUIRight.transform.localPosition.x, _backpackUIRight.transform.localPosition.y, -50);
             }
-            if ((MainControl.Instance.KeyArrowToControl(KeyCode.X) || MainControl.Instance.KeyArrowToControl(KeyCode.C)) && sonSelect == 0)
+            if ((GameUtilityService.KeyArrowToControl(KeyCode.X) || GameUtilityService.KeyArrowToControl(KeyCode.C)) && sonSelect == 0)
             {
                 if (_backpack.gameObject.activeSelf)//关闭
                 {
                     BackpackExit();
                 }
-                else if (MainControl.Instance.KeyArrowToControl(KeyCode.C))//开启
+                else if (GameUtilityService.KeyArrowToControl(KeyCode.C))//开启
                 {
                     AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
                     MainControl.Instance.PlayerControl.myItems = ListManipulationService.MoveZerosToEnd(MainControl.Instance.PlayerControl.myItems);
@@ -168,7 +168,7 @@ namespace UCT.Overworld
             }
             if (_backpack.gameObject.activeSelf && !typeWritter.isTyping)
             {
-                if (MainControl.Instance.KeyArrowToControl(KeyCode.Z))
+                if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
                 {
                     MainControl.Instance.playerBehaviour.owTimer = 0.1f;
 
@@ -215,7 +215,7 @@ namespace UCT.Overworld
 
                                     case 1:
                                         sonUse = 4;
-                                        MainControl.Instance.UseItem(typeWritter, typeMessage, sonSelect, plusText);
+                                        GameUtilityService.UseItem(typeWritter, typeMessage, sonSelect, plusText);
                                         _uiTexts.text = $"LV {MainControl.Instance.PlayerControl.lv}\n" +
                                                        $"HP {MainControl.Instance.PlayerControl.hp}/{MainControl.Instance.PlayerControl.hpMax}\n" +
                                                        $"G {MainControl.Instance.PlayerControl.gold}";
@@ -281,7 +281,7 @@ namespace UCT.Overworld
 
                     }
                 }
-                if ((MainControl.Instance.KeyArrowToControl(KeyCode.X)) && sonUse != 4)
+                if ((GameUtilityService.KeyArrowToControl(KeyCode.X)) && sonUse != 4)
                 {
                     if (select == 2 || (select == 1 && sonUse == 0))
                         sonSelect = 0;
@@ -293,7 +293,7 @@ namespace UCT.Overworld
 
                 if (sonUse != 4)
                 {
-                    if (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow))
+                    if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow))
                     {
                         if (select > 1 && sonSelect == 0)
                         {
@@ -306,7 +306,7 @@ namespace UCT.Overworld
                             sonSelect -= 1;
                         }
                     }
-                    else if (MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow))
+                    else if (GameUtilityService.KeyArrowToControl(KeyCode.DownArrow))
                     {
                         if (select < 2 && sonSelect == 0)
                         {
@@ -320,7 +320,7 @@ namespace UCT.Overworld
                         }
                     }
                 }
-                if (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow) || MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow))
+                if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow) || GameUtilityService.KeyArrowToControl(KeyCode.DownArrow))
                 {
                     if (select == 1)
                         FlashBackpackUIRightPoint(-8.55f * 0.5f);
@@ -330,13 +330,13 @@ namespace UCT.Overworld
 
                 if (sonUse != 0)
                 {
-                    if (MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow) && sonUse is > 1 and < 4)
+                    if (GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow) && sonUse is > 1 and < 4)
                     {
                         sonUse -= 1;
 
                         AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
                     }
-                    else if (MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow) && sonUse < 3)
+                    else if (GameUtilityService.KeyArrowToControl(KeyCode.RightArrow) && sonUse < 3)
                     {
                         sonUse += 1;
 

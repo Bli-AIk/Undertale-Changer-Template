@@ -95,7 +95,7 @@ namespace UCT.Global.Scene
             {
                 case 1:
                     var breaker = false;
-                    if ((MainControl.Instance.KeyArrowToControl(KeyCode.Z)) && setName.Length <= 6)
+                    if ((GameUtilityService.KeyArrowToControl(KeyCode.Z)) && setName.Length <= 6)
                     {
                         if (select < 52)
                         {
@@ -168,17 +168,17 @@ namespace UCT.Global.Scene
                                     break;
                             }
                     }
-                    else if (MainControl.Instance.KeyArrowToControl(KeyCode.X))
+                    else if (GameUtilityService.KeyArrowToControl(KeyCode.X))
                     {
                         if (setName.Length > 0)
                             setName = setName[..^1];
                     }
-                    else if (MainControl.Instance.KeyArrowToControl(KeyCode.C, 1))
+                    else if (GameUtilityService.KeyArrowToControl(KeyCode.C, 1))
                     {
                         setName = TextProcessingService.RandomString(Random.Range(1, 7));
                     }
                     if (breaker) break;
-                    if (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow))
+                    if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow))
                     {
                         switch (select)
                         {
@@ -207,7 +207,7 @@ namespace UCT.Global.Scene
                         if (select < 0)
                             select = 54;
                     }
-                    else if (MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow))
+                    else if (GameUtilityService.KeyArrowToControl(KeyCode.DownArrow))
                     {
                         switch (select)
                         {
@@ -240,13 +240,13 @@ namespace UCT.Global.Scene
                         if (select > 54)
                             select = 0;
                     }
-                    if (MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow))
+                    if (GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow))
                     {
                         select -= 1;
                         if (select < 0)
                             select = 54;
                     }
-                    else if (MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow))
+                    else if (GameUtilityService.KeyArrowToControl(KeyCode.RightArrow))
                     {
                         select += 1;
                         if (select > 54)
@@ -261,7 +261,7 @@ namespace UCT.Global.Scene
                     break;
 
                 case 2:
-                    if (MainControl.Instance.KeyArrowToControl(KeyCode.Z))
+                    if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
                     {
                         switch (select)
                         {
@@ -298,7 +298,7 @@ namespace UCT.Global.Scene
                                 break;
                         }
                     }
-                    if (MainControl.Instance.KeyArrowToControl(KeyCode.X))
+                    if (GameUtilityService.KeyArrowToControl(KeyCode.X))
                     {
                         mode = 1;
                         _animMove.Kill();
@@ -310,7 +310,7 @@ namespace UCT.Global.Scene
                                        TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename2") +
                                        TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename3");
                     }
-                    if (selectMax && (MainControl.Instance.KeyArrowToControl(KeyCode.LeftArrow) || MainControl.Instance.KeyArrowToControl(KeyCode.RightArrow)))
+                    if (selectMax && (GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow) || GameUtilityService.KeyArrowToControl(KeyCode.RightArrow)))
                     {
                         if (select == 0)
                         {
@@ -343,7 +343,7 @@ namespace UCT.Global.Scene
                     texts[3].text = "";
                     texts[4].text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Teach");
                     texts[5].text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "MenuUnder") + Application.version;
-                    if (MainControl.Instance.KeyArrowToControl(KeyCode.Z) && setName.Length < 6)
+                    if (GameUtilityService.KeyArrowToControl(KeyCode.Z) && setName.Length < 6)
                         mode = 1;
                     break;
             }
