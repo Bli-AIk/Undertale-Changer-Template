@@ -165,7 +165,7 @@ namespace UCT.Global.Core
             LoadItemData(ItemControl.itemTextMax, ItemControl.itemText);
 
             TextProcessingService.ClassifyStringsByPrefix(ItemControl.itemTextMax, new[] { "Data", "Item" }, new[] { ItemControl.itemTextMaxData, ItemControl.itemTextMaxItem });
-            ItemClassification();
+            ItemClassification(ItemControl);
 
             ItemControl.itemTextMaxData = ChangeItemData(ItemControl.itemTextMaxData, true, new List<string>());
             ItemControl.itemTextMaxItem = ChangeItemData(ItemControl.itemTextMaxItem, true, new List<string>());
@@ -1166,13 +1166,14 @@ namespace UCT.Global.Core
         /// <summary>
         /// 分配Item数据
         /// </summary>
-        private void ItemClassification()
+        /// <param name="itemControl"></param>
+        public void ItemClassification(ItemControl itemControl)
         {
-            ItemControl.itemFoods.Clear();
-            ItemControl.itemArms.Clear();
-            ItemControl.itemArmors.Clear();
-            ItemControl.itemOthers.Clear();
-            foreach (var countText in ItemControl.itemMax)
+            itemControl.itemFoods.Clear();
+            itemControl.itemArms.Clear();
+            itemControl.itemArmors.Clear();
+            itemControl.itemOthers.Clear();
+            foreach (var countText in itemControl.itemMax)
             {
                 var text = new string[4];
                 var i = 0;
@@ -1187,7 +1188,7 @@ namespace UCT.Global.Core
                     for (var j = 0; j < text.Length; j++)
                     {
                         if (j != 1)
-                            ItemClassificationAdd(text[1], text[j]);
+                            ItemClassificationAdd(ItemControl, text[1], text[j]);
                     }
                     i = 0;
                 }
@@ -1197,29 +1198,29 @@ namespace UCT.Global.Core
         /// <summary>
         /// ItemClassification的一个子void
         /// </summary>
-        private void ItemClassificationAdd(string i, string origin)
+        public static void ItemClassificationAdd(ItemControl itemControl, string i, string origin)
         {
             if (origin == "null") return;
             switch (i)
             {
                 case "Foods":
-                    ItemControl.itemFoods.Add(origin);
+                    itemControl.itemFoods.Add(origin);
                     break;
 
                 case "Arms":
-                    ItemControl.itemArms.Add(origin);
+                    itemControl.itemArms.Add(origin);
                     break;
 
                 case "Armors":
-                    ItemControl.itemArmors.Add(origin);
+                    itemControl.itemArmors.Add(origin);
                     break;
 
                 case "Others":
-                    ItemControl.itemOthers.Add(origin);
+                    itemControl.itemOthers.Add(origin);
                     break;
 
                 default:
-                    ItemControl.itemOthers.Add(origin);
+                    itemControl.itemOthers.Add(origin);
                     break;
             }
         }
