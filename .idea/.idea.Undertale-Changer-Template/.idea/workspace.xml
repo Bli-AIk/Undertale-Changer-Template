@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f7c2298-d077-422b-9131-f9a839bed961" name="更改" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Battle/SelectUIController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Battle/SelectUIController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Core/MainControl.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Core/MainControl.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/UI/CanvasController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/UI/CanvasController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Service/DataHandlerService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Service/DataHandlerService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Service/MathUtilityService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Service/MathUtilityService.cs" afterDir="false" />
-    </list>
+    <list default="true" id="8f7c2298-d077-422b-9131-f9a839bed961" name="更改" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -152,7 +145,7 @@
       <workItem from="1729569450825" duration="573000" />
       <workItem from="1729570067721" duration="303000" />
       <workItem from="1729570440750" duration="140000" />
-      <workItem from="1729570870929" duration="2044000" />
+      <workItem from="1729570870929" duration="2114000" />
     </task>
     <servers />
   </component>

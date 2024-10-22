@@ -100,5 +100,30 @@ namespace UCT.Service
 
             return beats;
         }
+
+        /// <summary>
+        /// 通过分辨率的高度转换得到宽度
+        /// </summary>
+        /// <param name="resolutionHeights">分辨率高度列表</param>
+        /// <param name="resolutionCutPoint">分辨率的切换点，列表中此值之前使用4:3的比例，之后使用16:9的比例</param>
+        /// <returns></returns>
+        public static List<int> GetResolutionWidthsWithHeights(List<int> resolutionHeights,int resolutionCutPoint)
+        {
+            var result = new List<int>();
+
+            for (var i = 0; i < resolutionHeights.Count; i++)
+            {
+                if (i < resolutionCutPoint)
+                {
+                    result.Add(resolutionHeights[i] * 4 / 3); 
+                }
+                else
+                {
+                    result.Add(resolutionHeights[i] * 16 / 9);
+                }
+            }
+
+            return result;
+        }
     }
 }

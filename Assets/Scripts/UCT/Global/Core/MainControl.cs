@@ -660,37 +660,13 @@ namespace UCT.Global.Core
 
             
             var resolutionHeights = new List<int> { 480, 768, 864, 960, 1080, 540, 1080 };
-            var resolutionWidths = GetResolutionWidthsWithHeights(resolutionHeights, 5);
+            var resolutionWidths = MathUtilityService.GetResolutionWidthsWithHeights(resolutionHeights, 5);
 
             var currentResolutionWidth = resolutionWidths[resolution];
             var currentResolutionHeight = resolutionHeights[resolution];
             
             Screen.SetResolution(currentResolutionWidth, currentResolutionHeight, OverworldControl.fullScreen);
             OverworldControl.resolution = new Vector2(currentResolutionWidth, currentResolutionHeight);
-        }
-        /// <summary>
-        /// 通过分辨率的高度转换得到宽度
-        /// </summary>
-        /// <param name="resolutionHeights">分辨率高度列表</param>
-        /// <param name="resolutionCutPoint">分辨率的切换点，列表中此值之前使用4:3的比例，之后使用16:9的比例</param>
-        /// <returns></returns>
-        private static List<int> GetResolutionWidthsWithHeights(List<int> resolutionHeights,int resolutionCutPoint)
-        {
-            var result = new List<int>();
-
-            for (var i = 0; i < resolutionHeights.Count; i++)
-            {
-                if (i < resolutionCutPoint)
-                {
-                    result.Add(resolutionHeights[i] * 4 / 3); 
-                }
-                else
-                {
-                    result.Add(resolutionHeights[i] * 16 / 9);
-                }
-            }
-
-            return result;
         }
 
         /// <summary>
