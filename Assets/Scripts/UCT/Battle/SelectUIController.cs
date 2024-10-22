@@ -199,7 +199,7 @@ namespace UCT.Battle
             TurnTextLoad();
             _itemSelectController.gameObject.SetActive(true);
 
-            MainControl.Instance.forceJumpLoadTurn = false;
+            MainControl.Instance.ForceJumpLoadTurn = false;
 
             MainControl.Instance.battlePlayerController.collideCollider.enabled = false;
         }
@@ -340,7 +340,7 @@ namespace UCT.Battle
                                     actSave[i] += ';';
                                 }
 
-                                actSave = MainControl.Instance.ChangeItemData(actSave, false, new List<string> { enemiesControllers[selectSon].name, enemiesControllers[selectSon].atk.ToString(), enemiesControllers[selectSon].def.ToString() });
+                                actSave = DataHandlerService.ChangeItemData(actSave, false, new List<string> { enemiesControllers[selectSon].name, enemiesControllers[selectSon].atk.ToString(), enemiesControllers[selectSon].def.ToString() });
 
                                 for (var i = 0; i < actSave.Count; i++)
                                 {
@@ -683,7 +683,7 @@ namespace UCT.Battle
                     break;
 
                 case 3:
-                    MainControl.Instance.forceJumpLoadTurn = true;
+                    MainControl.Instance.ForceJumpLoadTurn = true;
                     firstIn = false;
 
                     if (((selectUI == 1) && !_target.gameObject.activeSelf))
@@ -725,8 +725,8 @@ namespace UCT.Battle
         private void OpenDialogBubble(string textAsset)
         {
             MainControl.Instance.BattleControl.randomTurnDir = MathUtilityService.Get1Or_1();
-            MainControl.LoadItemData(actSave, textAsset);
-            actSave = MainControl.Instance.ChangeItemData(actSave, true, new List<string>());
+            DataHandlerService.LoadItemData(actSave, textAsset);
+            actSave = DataHandlerService.ChangeItemData(actSave, true, new List<string>());
             isDialog = true;
             numberDialog = 0;
             //if (selectUI == 1)

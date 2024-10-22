@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using UCT.Control;
+using UCT.Global.Core;
+using UnityEngine;
 
 namespace UCT.Service
 {
@@ -329,6 +332,317 @@ namespace UCT.Service
                 break;
             }
             return id;
+        }
+
+        public static IEnumerator _LoadItemDataForTurn(List<string> list, TextAsset inputText)//保存的list 导入的text
+        {
+            list.Clear();
+            var text = "";
+            for (var i = 0; i < inputText.text.Length; i++)
+            {
+                if (inputText.text[i] == '/' && inputText.text[i + 1] == '*')
+                {
+                    i++;
+                    while (!(inputText.text[i] == '/' && inputText.text[i - 1] == '*'))
+                    {
+                        i++;
+                    }
+                    i += 2;
+                }
+
+                if (inputText.text[i] != '\n' && inputText.text[i] != '\r' && inputText.text[i] != ';')
+                    text += inputText.text[i];
+                if (inputText.text[i] == ';')
+                {
+                    list.Add(text + ";");
+                    text = "";
+                }
+                if ((i + 1) % 2 == 0 && !MainControl.ForceJumpLoadTurn)
+                    yield return 0;
+            }
+        }
+
+        /// <summary>
+        /// 调入数据(传入TextAsset)
+        /// </summary>
+        // ReSharper disable once MemberCanBePrivate.Global
+        public static void LoadItemData(List<string> list, TextAsset inputText)//保存的list 导入的text
+        {
+            list.Clear();
+            var text = "";
+            for (var i = 0; i < inputText.text.Length; i++)
+            {
+                if (inputText.text[i] == '/' && inputText.text[i + 1] == '*')
+                {
+                    i++;
+                    while (!(inputText.text[i] == '/' && inputText.text[i - 1] == '*'))
+                    {
+                        i++;
+                    }
+                    i += 2;
+                }
+
+                if (inputText.text[i] != '\n' && inputText.text[i] != '\r' && inputText.text[i] != ';')
+                    text += inputText.text[i];
+                if (inputText.text[i] != ';') continue;
+                list.Add(text + ";");
+                text = "";
+            }
+        }
+
+        /// <summary>
+        /// 调入数据(传入string)
+        /// </summary>
+        public static void LoadItemData(List<string> list, string inputText)//保存的list 导入的text
+        {
+            list.Clear();
+            var text = "";
+            for (var i = 0; i < inputText.Length; i++)
+            {
+                if (inputText[i] == '/' && inputText[i + 1] == '*')
+                {
+                    i++;
+                    while (!(inputText[i] == '/' && inputText[i - 1] == '*'))
+                    {
+                        i++;
+                    }
+                    i += 2;
+                }
+                if (inputText[i] != '\n' && inputText[i] != '\r' && inputText[i] != ';')
+                    text += inputText[i];
+                if (inputText[i] != ';') continue;
+                list.Add(text + ";");
+                text = "";
+            }
+        }
+
+        /// <summary>
+        /// 转换特殊字符
+        /// </summary>
+        public static List<string> ChangeItemData(List<string> list, bool isData, List<string> ex)
+        {
+            var newList = new List<string>();
+            var text = "";
+            var isXh = false;//检测是否有多个需要循环调用的特殊字符
+
+            foreach (var t in list)
+            {
+                var empty = "";
+                for (var j = 0; j < t.Length; j++)
+                {
+                    if (empty == "" && !isData)
+                    {
+                        var k = j;
+                        while (t[j] != '\\')
+                        {
+                            empty += t[j];
+                            j++;
+                            if (j >= t.Length)
+                                break;
+                        }
+                        j = k;
+                        //Debug.Log(list[i] +"/"+ name);
+                    }
+
+                    while (t[j] == '<')
+                    {
+                        var inputText = "";
+                        while ((j != 0 && t[j - 1] != '>' && !isXh) || isXh)
+                        {
+                            inputText += t[j];
+                            j++;
+                            if (j >= t.Length)
+                            {
+                                break;
+                            }
+                            isXh = false;
+                        }
+                        isXh = true;
+                        text = ChangeItemDataSwitch(text, inputText, isData, empty, ex);
+                    }
+                    isXh = false;
+
+                    if (t[j] == ';')
+                    {
+                        newList.Add(text + ";");
+                        text = "";
+                    }
+                    else
+                    {
+                        text += t[j];
+                    }
+                }
+            }
+            return newList;
+        }
+
+        /// <summary>
+        /// ReSharper disable once InvalidXmlDocComment
+        /// ChangeItemData中检测'<''>'符号的Switch语句
+        /// </summary>
+        private static string ChangeItemDataSwitch(string text, string inputText, bool isData, 
+            string inputName, List<string> ex)
+        {
+            switch (inputText)
+            {
+                case "<playerName>":
+                    text += MainControl.Instance.PlayerControl.playerName;
+                    break;
+
+                case "<enter>"://回车
+                    text += "\n";
+                    break;
+
+                case "<stop...>":
+                    text += ".<stop>.<stop>.<stop>";
+                    break;
+
+                case "<stop......>":
+                    text += ".<stop>.<stop>.<stop>.<stop>.<stop>.<stop>";
+                    break;
+
+                case "<autoFoodFull>":
+                    text += MainControl.Instance.ItemControl.itemTextMaxData[11][..^1] + "\n";
+                    text += "<autoFood>";
+                    break;
+
+                case "<autoCheckFood>":
+                    inputText = "<data13>";
+                    goto default;
+
+                case "<autoArm>":
+                    inputText = "<data14>";
+                    goto default;
+                case "<autoArmor>":
+                    inputText = "<data15>";
+                    goto default;
+
+                case "<autoCheckArm>":
+                    inputText = "<data16>";
+                    goto default;
+
+                case "<autoCheckArmor>":
+                    inputText = "<data17>";
+                    goto default;
+
+                case "<autoLoseFood>":
+                    inputText = "<data18>";
+                    goto default;
+                case "<autoLoseArm>":
+                    inputText = "<data19>";
+                    goto default;
+                case "<autoLoseArmor>":
+                    inputText = "<data20>";
+                    goto default;
+                case "<autoLoseOther>":
+                    inputText = "<data21>";
+                    goto default;
+
+                case "<itemHp>":
+                    if (inputName != "" && !isData)
+                    {
+                        text += DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, DataHandlerService.ItemNameGetId(MainControl.Instance.ItemControl, inputName, "Foods"), "Auto", 2);
+                        break;
+                    }
+
+                    goto default;
+
+                case "<itemAtk>":
+                    if (inputName != "" && !isData)
+                    {
+                        text += DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, DataHandlerService.ItemNameGetId(MainControl.Instance.ItemControl, inputName, "Arms"), "Auto", 1);
+                        break;
+                    }
+
+                    goto default;
+
+                case "<itemDef>":
+                    if (inputName != "" && !isData)
+                    {
+                        text += DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, DataHandlerService.ItemNameGetId(MainControl.Instance.ItemControl, inputName, "Armors"), "Auto", 1);
+                        break;
+                    }
+
+                    goto default;
+
+                case "<getEnemiesName>":
+                    if (inputName != "" && !isData)
+                    {
+                        text += ex[0];
+                        break;
+                    }
+
+                    goto default;
+                case "<getEnemiesATK>":
+                    if (inputName != "" && !isData)
+                    {
+                        text += ex[1];
+                        break;
+                    }
+
+                    goto default;
+                case "<getEnemiesDEF>":
+                    if (inputName != "" && !isData)
+                    {
+                        text += ex[2];
+                        break;
+                    }
+
+                    goto default;
+
+                default:
+                    if (TextProcessingService.IsSameFrontTexts(inputText, "<data"))
+                    {
+                        text += MainControl.Instance.ItemControl.itemTextMaxData[int.Parse(inputText.Substring(5, inputText.Length - 6))][..(MainControl.Instance.ItemControl.itemTextMaxData[int.Parse(inputText.Substring(5, inputText.Length - 6))].Length - 1)];
+                    }
+                    else if (inputText.Length > 9)
+                    {
+                        switch (inputText[..9])
+                        {
+                            case "<itemName" when !isData:
+                            {
+                                if (inputName != "")
+                                {
+                                    if (DataHandlerService.ItemNameGetId(MainControl.Instance.ItemControl, inputName, inputText.Substring(9, inputText.Length - 10) + 's') < 10000)
+                                        text += DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, DataHandlerService.ItemNameGetId(MainControl.Instance.ItemControl, inputName, inputText.Substring(9, inputText.Length - 10) + 's'), inputText.Substring(9, inputText.Length - 10) + 's', 0);
+                                    else text += DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, DataHandlerService.ItemNameGetId(MainControl.Instance.ItemControl, inputName, inputText.Substring(9, inputText.Length - 10) + 's'), "Auto", 0);
+                                }
+
+                                break;
+                            }
+                            case "<autoLose":
+                                switch (inputText.Substring(9, inputText.Length - 10) + 's')
+                                {
+                                    case "Food":
+                                        text += MainControl.Instance.ItemControl.itemTextMaxData[18];
+                                        break;
+
+                                    case "Arm":
+                                        text += MainControl.Instance.ItemControl.itemTextMaxData[19];
+                                        break;
+
+                                    case "Armor":
+                                        text += MainControl.Instance.ItemControl.itemTextMaxData[20];
+                                        break;
+
+                                    case "Other":
+                                        text += MainControl.Instance.ItemControl.itemTextMaxData[21];
+                                        break;
+                                }
+
+                                break;
+                            default:
+                                text += inputText;
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        text += inputText;
+                    }
+                    break;
+            }
+            return text;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using UCT.Global.Audio;
 using UnityEngine;
 
 namespace UCT.Service
@@ -76,6 +77,28 @@ namespace UCT.Service
         public static float GetSmallerNumber(float number1, float number2)
         {
             return number1 < number2 ? number1 : number2;
+        }
+
+        /// <summary>
+        /// 计算BGM节拍
+        /// </summary>
+        public static List<float> MusicBpmCount(float inputBpm, float inputBpmDeviation, float musicDuration = 0)
+        {
+            if (musicDuration <= 0)
+                musicDuration = AudioController.Instance.audioSource.clip.length;
+
+            var beatInterval = 60f / inputBpm;
+            var currentTime = inputBpmDeviation;
+            List<float> beats = new();
+
+            // 计算每个拍子的时间点，直到达到音乐时长
+            while (currentTime < musicDuration)
+            {
+                beats.Add(currentTime);
+                currentTime += beatInterval;
+            }
+
+            return beats;
         }
     }
 }

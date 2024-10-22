@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -160,15 +159,15 @@ namespace UCT.Global.Core
             //--------------------------------------------------------------------------------
             ItemControl.itemText = LoadLanguageData("UI\\ItemText");
 
-            LoadItemData(ItemControl.itemMax, ItemControl.itemData);
-            LoadItemData(ItemControl.itemTextMax, ItemControl.itemText);
+            DataHandlerService.LoadItemData(ItemControl.itemMax, ItemControl.itemData);
+            DataHandlerService.LoadItemData(ItemControl.itemTextMax, ItemControl.itemText);
 
             TextProcessingService.ClassifyStringsByPrefix(ItemControl.itemTextMax, new[] { "Data", "Item" }, new[] { ItemControl.itemTextMaxData, ItemControl.itemTextMaxItem });
             DataHandlerService.ClassifyItemsData(ItemControl);
 
-            ItemControl.itemTextMaxData = ChangeItemData(ItemControl.itemTextMaxData, true, new List<string>());
-            ItemControl.itemTextMaxItem = ChangeItemData(ItemControl.itemTextMaxItem, true, new List<string>());
-            ItemControl.itemTextMaxItem = ChangeItemData(ItemControl.itemTextMaxItem, false, new List<string>());
+            ItemControl.itemTextMaxData = DataHandlerService.ChangeItemData(ItemControl.itemTextMaxData, true, new List<string>());
+            ItemControl.itemTextMaxItem = DataHandlerService.ChangeItemData(ItemControl.itemTextMaxItem, true, new List<string>());
+            ItemControl.itemTextMaxItem = DataHandlerService.ChangeItemData(ItemControl.itemTextMaxItem, false, new List<string>());
 
             TextProcessingService.SplitStringToListWithDelimiter(ItemControl.itemTextMaxItem, ItemControl.itemTextMaxItemSon);
             //--------------------------------------------------------------------------------
@@ -185,7 +184,7 @@ namespace UCT.Global.Core
 
             OverworldControl.settingAsset = LoadLanguageData("UI\\Setting");
 
-            LoadItemData(OverworldControl.settingSave, OverworldControl.settingAsset);
+            DataHandlerService.LoadItemData(OverworldControl.settingSave, OverworldControl.settingAsset);
 
             if (sceneState == SceneState.InBattle)
                 return;
@@ -196,11 +195,11 @@ namespace UCT.Global.Core
 
             if (SceneManager.GetActiveScene().name == "Start")
                 return;
-            LoadItemData(OverworldControl.sceneTextsSave, OverworldControl.sceneTextsAsset);
+            DataHandlerService.LoadItemData(OverworldControl.sceneTextsSave, OverworldControl.sceneTextsAsset);
 
-            OverworldControl.settingSave = ChangeItemData(OverworldControl.settingSave, true, new List<string>());
+            OverworldControl.settingSave = DataHandlerService.ChangeItemData(OverworldControl.settingSave, true, new List<string>());
 
-            OverworldControl.sceneTextsSave = ChangeItemData(OverworldControl.sceneTextsSave, true, new List<string>());
+            OverworldControl.sceneTextsSave = DataHandlerService.ChangeItemData(OverworldControl.sceneTextsSave, true, new List<string>());
 
             //--------------------------------------------------------------------------------
 
@@ -259,12 +258,13 @@ namespace UCT.Global.Core
                 else if (t[^3..] == "txt")
                     BattleControl.turnDialogAsset.Add(File.ReadAllText(t));
             }
-            LoadItemData(BattleControl.uiTextSave, BattleControl.uiText);
+
+            DataHandlerService.LoadItemData(BattleControl.uiTextSave, BattleControl.uiText);
             TextProcessingService.GetFirstChildStringByPrefix(BattleControl.uiTextSave, BattleControl.actSave, "Act\\");
             TextProcessingService.GetFirstChildStringByPrefix(BattleControl.uiTextSave, BattleControl.mercySave, "Mercy\\");
             TextProcessingService.GetFirstChildStringByPrefix(BattleControl.uiTextSave, BattleControl.turnTextSave, "Turn\\");
 
-            BattleControl.turnTextSave = ChangeItemData(BattleControl.turnTextSave, true, new List<string>());
+            BattleControl.turnTextSave = DataHandlerService.ChangeItemData(BattleControl.turnTextSave, true, new List<string>());
             //--------------------------------------------------------------------------------
             //OldBoxController = GameObject.Find("MainFrame").GetComponent<OldBoxController>();
             battlePlayerController = GameObject.Find("Player").GetComponent<BattlePlayerController>();
@@ -330,8 +330,6 @@ namespace UCT.Global.Core
                 if (!noInBlack)
                 {
                     _inOutBlack.DOColor(Color.clear, 0.5f).SetEase(Ease.Linear).OnKill(EndBlack);
-                    //CanvasController.instance.frame.DOKill();
-                    //CanvasController.instance.frame.DOColor(Color.white, 0.5f);
                     CanvasController.Instance.frame.color = OverworldControl.hdResolution ? new Color(1, 1, 1, 1) : new Color(1, 1, 1, 0);
                 }
                 else
@@ -346,7 +344,7 @@ namespace UCT.Global.Core
 
             FindAndChangeAllSfx(OverworldControl.noSfx);
 
-            beatTimes = MusicBpmCount(bpm, bpmDeviation);
+            beatTimes = MathUtilityService.MusicBpmCount(bpm, bpmDeviation);
         }
         public Color GetRandomColor()
         {
@@ -395,27 +393,7 @@ namespace UCT.Global.Core
             if (isMetronome)
                 Metronome();
         }
-        /// <summary>
-        /// 计算BGM节拍
-        /// </summary>
-        private static List<float> MusicBpmCount(float inputBpm, float inputBpmDeviation, float musicDuration = 0)
-        {
-            if (musicDuration <= 0)
-                musicDuration = AudioController.Instance.audioSource.clip.length;
 
-            var beatInterval = 60f / inputBpm;
-            var currentTime = inputBpmDeviation;
-            List<float> beats = new();
-
-            // 计算每个拍子的时间点，直到达到音乐时长
-            while (currentTime < musicDuration)
-            {
-                beats.Add(currentTime);
-                currentTime += beatInterval;
-            }
-
-            return beats;
-        }
         public int currentBeatIndex;
         public float nextBeatTime;
         /// <summary>
@@ -787,89 +765,7 @@ namespace UCT.Global.Core
         }
 
         [Space]
-        public bool forceJumpLoadTurn;
-
-        public IEnumerator _LoadItemDataForTurn(List<string> list, TextAsset inputText)//保存的list 导入的text
-        {
-            list.Clear();
-            var text = "";
-            for (var i = 0; i < inputText.text.Length; i++)
-            {
-                if (inputText.text[i] == '/' && inputText.text[i + 1] == '*')
-                {
-                    i++;
-                    while (!(inputText.text[i] == '/' && inputText.text[i - 1] == '*'))
-                    {
-                        i++;
-                    }
-                    i += 2;
-                }
-
-                if (inputText.text[i] != '\n' && inputText.text[i] != '\r' && inputText.text[i] != ';')
-                    text += inputText.text[i];
-                if (inputText.text[i] == ';')
-                {
-                    list.Add(text + ";");
-                    text = "";
-                }
-                if ((i + 1) % 2 == 0 && !forceJumpLoadTurn)
-                    yield return 0;
-            }
-        }
-
-        /// <summary>
-        /// 调入数据(传入TextAsset)
-        /// </summary>
-        // ReSharper disable once MemberCanBePrivate.Global
-        public static void LoadItemData(List<string> list, TextAsset inputText)//保存的list 导入的text
-        {
-            list.Clear();
-            var text = "";
-            for (var i = 0; i < inputText.text.Length; i++)
-            {
-                if (inputText.text[i] == '/' && inputText.text[i + 1] == '*')
-                {
-                    i++;
-                    while (!(inputText.text[i] == '/' && inputText.text[i - 1] == '*'))
-                    {
-                        i++;
-                    }
-                    i += 2;
-                }
-
-                if (inputText.text[i] != '\n' && inputText.text[i] != '\r' && inputText.text[i] != ';')
-                    text += inputText.text[i];
-                if (inputText.text[i] != ';') continue;
-                list.Add(text + ";");
-                text = "";
-            }
-        }
-
-        /// <summary>
-        /// 调入数据(传入string)
-        /// </summary>
-        public static void LoadItemData(List<string> list, string inputText)//保存的list 导入的text
-        {
-            list.Clear();
-            var text = "";
-            for (var i = 0; i < inputText.Length; i++)
-            {
-                if (inputText[i] == '/' && inputText[i + 1] == '*')
-                {
-                    i++;
-                    while (!(inputText[i] == '/' && inputText[i - 1] == '*'))
-                    {
-                        i++;
-                    }
-                    i += 2;
-                }
-                if (inputText[i] != '\n' && inputText[i] != '\r' && inputText[i] != ';')
-                    text += inputText[i];
-                if (inputText[i] != ';') continue;
-                list.Add(text + ";");
-                text = "";
-            }
-        }
+        public static bool ForceJumpLoadTurn;
 
         /// <summary>
         /// 传入使用背包的哪个物体
@@ -932,235 +828,6 @@ namespace UCT.Global.Core
                     break;
                 }
             }
-        }
-
-        /// <summary>
-        /// 转换特殊字符
-        /// </summary>
-        public List<string> ChangeItemData(List<string> list, bool isData, List<string> ex)
-        {
-            var newList = new List<string>();
-            var text = "";
-            var isXh = false;//检测是否有多个需要循环调用的特殊字符
-
-            foreach (var t in list)
-            {
-                var empty = "";
-                for (var j = 0; j < t.Length; j++)
-                {
-                    if (empty == "" && !isData)
-                    {
-                        var k = j;
-                        while (t[j] != '\\')
-                        {
-                            empty += t[j];
-                            j++;
-                            if (j >= t.Length)
-                                break;
-                        }
-                        j = k;
-                        //Debug.Log(list[i] +"/"+ name);
-                    }
-
-                    while (t[j] == '<')
-                    {
-                        var inputText = "";
-                        while ((j != 0 && t[j - 1] != '>' && !isXh) || isXh)
-                        {
-                            inputText += t[j];
-                            j++;
-                            if (j >= t.Length)
-                            {
-                                break;
-                            }
-                            isXh = false;
-                        }
-                        isXh = true;
-                        text = ChangeItemDataSwitch(text, inputText, isData, empty, ex);
-                    }
-                    isXh = false;
-
-                    if (t[j] == ';')
-                    {
-                        newList.Add(text + ";");
-                        text = "";
-                    }
-                    else
-                    {
-                        text += t[j];
-                    }
-                }
-            }
-            return newList;
-        }
-
-        /// <summary>
-        /// ReSharper disable once InvalidXmlDocComment
-        /// ChangeItemData中检测'<''>'符号的Switch语句
-        /// </summary>
-        private string ChangeItemDataSwitch(string text, string inputText, bool isData, 
-            string inputName, List<string> ex)
-        {
-            switch (inputText)
-            {
-                case "<playerName>":
-                    text += PlayerControl.playerName;
-                    break;
-
-                case "<enter>"://回车
-                    text += "\n";
-                    break;
-
-                case "<stop...>":
-                    text += ".<stop>.<stop>.<stop>";
-                    break;
-
-                case "<stop......>":
-                    text += ".<stop>.<stop>.<stop>.<stop>.<stop>.<stop>";
-                    break;
-
-                case "<autoFoodFull>":
-                    text += ItemControl.itemTextMaxData[11][..^1] + "\n";
-                    text += "<autoFood>";
-                    break;
-
-                case "<autoCheckFood>":
-                    inputText = "<data13>";
-                    goto default;
-
-                case "<autoArm>":
-                    inputText = "<data14>";
-                    goto default;
-                case "<autoArmor>":
-                    inputText = "<data15>";
-                    goto default;
-
-                case "<autoCheckArm>":
-                    inputText = "<data16>";
-                    goto default;
-
-                case "<autoCheckArmor>":
-                    inputText = "<data17>";
-                    goto default;
-
-                case "<autoLoseFood>":
-                    inputText = "<data18>";
-                    goto default;
-                case "<autoLoseArm>":
-                    inputText = "<data19>";
-                    goto default;
-                case "<autoLoseArmor>":
-                    inputText = "<data20>";
-                    goto default;
-                case "<autoLoseOther>":
-                    inputText = "<data21>";
-                    goto default;
-
-                case "<itemHp>":
-                    if (inputName != "" && !isData)
-                    {
-                        text += DataHandlerService.ItemIdGetName(ItemControl, DataHandlerService.ItemNameGetId(ItemControl, inputName, "Foods"), "Auto", 2);
-                        break;
-                    }
-
-                    goto default;
-
-                case "<itemAtk>":
-                    if (inputName != "" && !isData)
-                    {
-                        text += DataHandlerService.ItemIdGetName(ItemControl, DataHandlerService.ItemNameGetId(ItemControl, inputName, "Arms"), "Auto", 1);
-                        break;
-                    }
-
-                    goto default;
-
-                case "<itemDef>":
-                    if (inputName != "" && !isData)
-                    {
-                        text += DataHandlerService.ItemIdGetName(ItemControl, DataHandlerService.ItemNameGetId(ItemControl, inputName, "Armors"), "Auto", 1);
-                        break;
-                    }
-
-                    goto default;
-
-                case "<getEnemiesName>":
-                    if (inputName != "" && !isData)
-                    {
-                        text += ex[0];
-                        break;
-                    }
-
-                    goto default;
-                case "<getEnemiesATK>":
-                    if (inputName != "" && !isData)
-                    {
-                        text += ex[1];
-                        break;
-                    }
-
-                    goto default;
-                case "<getEnemiesDEF>":
-                    if (inputName != "" && !isData)
-                    {
-                        text += ex[2];
-                        break;
-                    }
-
-                    goto default;
-
-                default:
-                    if (TextProcessingService.IsSameFrontTexts(inputText, "<data"))
-                    {
-                        text += ItemControl.itemTextMaxData[int.Parse(inputText.Substring(5, inputText.Length - 6))][..(ItemControl.itemTextMaxData[int.Parse(inputText.Substring(5, inputText.Length - 6))].Length - 1)];
-                    }
-                    else if (inputText.Length > 9)
-                    {
-                        switch (inputText[..9])
-                        {
-                            case "<itemName" when !isData:
-                            {
-                                if (inputName != "")
-                                {
-                                    if (DataHandlerService.ItemNameGetId(ItemControl, inputName, inputText.Substring(9, inputText.Length - 10) + 's') < 10000)
-                                        text += DataHandlerService.ItemIdGetName(ItemControl, DataHandlerService.ItemNameGetId(ItemControl, inputName, inputText.Substring(9, inputText.Length - 10) + 's'), inputText.Substring(9, inputText.Length - 10) + 's', 0);
-                                    else text += DataHandlerService.ItemIdGetName(ItemControl, DataHandlerService.ItemNameGetId(ItemControl, inputName, inputText.Substring(9, inputText.Length - 10) + 's'), "Auto", 0);
-                                }
-
-                                break;
-                            }
-                            case "<autoLose":
-                                switch (inputText.Substring(9, inputText.Length - 10) + 's')
-                                {
-                                    case "Food":
-                                        text += ItemControl.itemTextMaxData[18];
-                                        break;
-
-                                    case "Arm":
-                                        text += ItemControl.itemTextMaxData[19];
-                                        break;
-
-                                    case "Armor":
-                                        text += ItemControl.itemTextMaxData[20];
-                                        break;
-
-                                    case "Other":
-                                        text += ItemControl.itemTextMaxData[21];
-                                        break;
-                                }
-
-                                break;
-                            default:
-                                text += inputText;
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        text += inputText;
-                    }
-                    break;
-            }
-            return text;
         }
     }
 }
