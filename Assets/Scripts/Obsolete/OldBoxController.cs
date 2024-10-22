@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
-namespace UCT.Global.UI
+namespace Obsolete
 {
     /// <summary>
     /// 使用LineRenderer与多边形shader绘制多边形框，用于战斗框、UI等。
@@ -43,7 +43,7 @@ namespace UCT.Global.UI
             points.Clear();
             if (pointsMax < 3)
             {
-                Other.Debug.Log("pointsMax < 3 , 已更改为3");
+                UCT.Global.Other.Debug.Log("pointsMax < 3 , 已更改为3");
                 pointsMax = 3;
             }
             for (var i = 0; i < pointsMax; i++)
@@ -151,7 +151,7 @@ namespace UCT.Global.UI
         {
             if (pointList.Count != vertices.Count)
             {
-                Other.Debug.Log("The number of points and vertices must be the same.");
+                UCT.Global.Other.Debug.Log("The number of points and vertices must be the same.");
                 return;
             }
 
