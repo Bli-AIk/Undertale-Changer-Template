@@ -340,7 +340,7 @@ namespace UCT.Global.Core
             AudioListener.volume = OverworldControl.mainVolume;
             OverworldControl.isSetting = false;
 
-            ToggleAllSfx(OverworldControl.noSfx);
+            GameUtilityService.ToggleAllSfx(OverworldControl.noSfx);
 
             beatTimes = MathUtilityService.MusicBpmCount(bpm, bpmDeviation);
         }
@@ -375,7 +375,7 @@ namespace UCT.Global.Core
             if (KeyArrowToControl(KeyCode.Semicolon))
             {
                 OverworldControl.noSfx = !OverworldControl.noSfx;
-                ToggleAllSfx(OverworldControl.noSfx);
+                GameUtilityService.ToggleAllSfx(OverworldControl.noSfx);
             }
             if (KeyArrowToControl(KeyCode.F4))
             {
@@ -532,30 +532,6 @@ namespace UCT.Global.Core
         }
 
         /// <summary>
-        /// 开/关 SFX
-        /// </summary>
-        public void ToggleAllSfx(bool isClose)
-        {
-            foreach (var obj in Resources.FindObjectsOfTypeAll(typeof(Light2D)))
-            {
-                var light2D = (Light2D)obj;
-                light2D.enabled = !isClose;
-            }
-            
-            mainCamera.GetUniversalAdditionalCameraData().renderPostProcessing = !isClose;
-
-            if (sceneState != SceneState.InBattle) return;
-            
-            if (!cameraMainInBattle)
-            {
-                if (!cameraShake)
-                    cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
-                cameraMainInBattle = cameraShake.GetComponent<Camera>();
-            }
-            cameraMainInBattle.GetUniversalAdditionalCameraData().renderPostProcessing = !isClose;
-        }
-
-        /// <summary>
         /// 传入使用背包的哪个物体
         /// 然后就使用 打true会顺带把背包顺序整理下
         /// 然后再让打字机打个字
@@ -575,21 +551,21 @@ namespace UCT.Global.Core
 
             switch (PlayerControl.myItems[sonSelect - 1])
             {
-                case >= 20000:
+                case >= 20000:// 防具
                     typeWritter.TypeOpen(ItemControl.itemTextMaxItemSon[(PlayerControl.myItems[sonSelect - 1] + plusText) * 5 - 3], false, 0, 0, tmpText);
                     PlayerControl.wearDef = int.Parse(DataHandlerService.ItemIdGetName(ItemControl, PlayerControl.myItems[sonSelect - 1], "Auto", 1));
                     (PlayerControl.wearArmor, PlayerControl.myItems[sonSelect - 1]) = (PlayerControl.myItems[sonSelect - 1], PlayerControl.wearArmor);
 
                     AudioController.Instance.GetFx(3, AudioControl.fxClipUI);
                     break;
-                case >= 10000:
+                case >= 10000:// 武器
                     typeWritter.TypeOpen(ItemControl.itemTextMaxItemSon[(PlayerControl.myItems[sonSelect - 1] + plusText) * 5 - 3], false, 0, 0, tmpText);
                     PlayerControl.wearAtk = int.Parse(DataHandlerService.ItemIdGetName(ItemControl, PlayerControl.myItems[sonSelect - 1], "Auto", 1));
                     (PlayerControl.wearArm, PlayerControl.myItems[sonSelect - 1]) = (PlayerControl.myItems[sonSelect - 1], PlayerControl.wearArm);
 
                     AudioController.Instance.GetFx(3, AudioControl.fxClipUI);
                     break;
-                //食物
+                // 食物
                 default:
                 {
                     var plusHp = int.Parse(DataHandlerService.ItemIdGetName(ItemControl, PlayerControl.myItems[sonSelect - 1], "Auto", 2));

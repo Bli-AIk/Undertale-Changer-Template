@@ -493,7 +493,7 @@ namespace UCT.Global.UI
                                         goto default;
                                     case 4:
                                         MainControl.Instance.OverworldControl.noSfx = !MainControl.Instance.OverworldControl.noSfx;
-                                        MainControl.Instance.ToggleAllSfx(MainControl.Instance.OverworldControl.noSfx);
+                                        GameUtilityService.ToggleAllSfx(MainControl.Instance.OverworldControl.noSfx);
                                         PlayerPrefs.SetInt("noSFX", Convert.ToInt32(MainControl.Instance.OverworldControl.noSfx));
                                         goto default;
                                     case 5:

@@ -7,6 +7,7 @@ using UCT.Global.Core;
 using UCT.Global.UI;
 using UCT.Overworld;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 
 namespace UCT.Service
@@ -200,6 +201,30 @@ namespace UCT.Service
             }
 
             SetResolution(MainControl.Instance.OverworldControl.resolutionLevel);
+        }
+
+        /// <summary>
+        /// 开/关 SFX
+        /// </summary>
+        public static void ToggleAllSfx(bool isClose)
+        {
+            foreach (var obj in Resources.FindObjectsOfTypeAll(typeof(Light2D)))
+            {
+                var light2D = (Light2D)obj;
+                light2D.enabled = !isClose;
+            }
+            
+            MainControl.Instance.mainCamera.GetUniversalAdditionalCameraData().renderPostProcessing = !isClose;
+
+            if (MainControl.Instance.sceneState != MainControl.SceneState.InBattle) return;
+            
+            if (!MainControl.Instance.cameraMainInBattle)
+            {
+                if (!MainControl.Instance.cameraShake)
+                    MainControl.Instance.cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
+                MainControl.Instance.cameraMainInBattle = MainControl.Instance.cameraShake.GetComponent<Camera>();
+            }
+            MainControl.Instance.  cameraMainInBattle.GetUniversalAdditionalCameraData().renderPostProcessing = !isClose;
         }
     }
 }
