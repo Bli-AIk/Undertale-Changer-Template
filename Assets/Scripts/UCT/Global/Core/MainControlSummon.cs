@@ -58,10 +58,9 @@ namespace UCT.Global.Core
 
         private void Awake()
         {
-            GameObject canvas;
             if (CanvasController.Instance == null)
             {
-                canvas = Instantiate(Resources.Load<GameObject>("Prefabs/Canvas"));
+                var canvas = Instantiate(Resources.Load<GameObject>("Prefabs/Canvas"));
                 canvas.name = "Canvas";
                 CanvasController.Instance.framePic = framePic;
                 CanvasController.Instance.renderMode = renderMode;
@@ -97,9 +96,8 @@ namespace UCT.Global.Core
                 audioSource.Play();
             }
 
-            MainControl mainControl;
             var gameObjectM = GameObject.Find("MainControl");
-            if (gameObjectM != null && gameObjectM.TryGetComponent(out mainControl))
+            if (gameObjectM != null && gameObjectM.TryGetComponent(out MainControl mainControl))
             {
                 //Debug.LogWarning("<color=yellow>检测到本场景内有MainControl</color>", gameObject);
 
@@ -114,6 +112,7 @@ namespace UCT.Global.Core
 
                 mainControl.InitializationOverworld();
                 mainControl.Start();
+                mainControl.mainCamera = Camera.main;
                 GameUtilityService.SetResolution(Instance.OverworldControl.resolutionLevel);
                 return;
             }
@@ -132,6 +131,7 @@ namespace UCT.Global.Core
 
             mainControl.gameObject.name = "MainControl";
             mainControl.InitializationOverworld();
+            mainControl.mainCamera = Camera.main;
             GameUtilityService.SetResolution(Instance.OverworldControl.resolutionLevel);
         }
     }

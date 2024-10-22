@@ -709,32 +709,29 @@ namespace UCT.Service
         /// <param name="inputPlayerControl"></param>
         public static PlayerControl SetPlayerControl(PlayerControl inputPlayerControl)
         {
-            PlayerControl playerControl = new()
-            {
-                hp = inputPlayerControl.hp,
-                hpMax = inputPlayerControl.hpMax,
-                lv = inputPlayerControl.lv,
-                exp = inputPlayerControl.exp,
-                gold = inputPlayerControl.gold,
-                wearAtk = inputPlayerControl.wearAtk,
-                wearDef = inputPlayerControl.wearDef,
-                nextExp = inputPlayerControl.nextExp,
-                missTime = inputPlayerControl.missTime,
-                missTimeMax = inputPlayerControl.missTimeMax,
-                atk = inputPlayerControl.atk,
-                def = inputPlayerControl.def,
-                playerName = inputPlayerControl.playerName,
-                myItems = inputPlayerControl.myItems,
-                wearArm = inputPlayerControl.wearArm,
-                wearArmor = inputPlayerControl.wearArmor,
-                canMove = inputPlayerControl.canMove,
-                gameTime = inputPlayerControl.gameTime,
-                lastScene = inputPlayerControl.lastScene,
-                saveScene = inputPlayerControl.saveScene,
-                isDebug = inputPlayerControl.isDebug,
-                invincible = inputPlayerControl.invincible
-            };
-
+            var playerControl = ScriptableObject.CreateInstance<PlayerControl>();
+            playerControl.hp = inputPlayerControl.hp;
+            playerControl.hpMax = inputPlayerControl.hpMax;
+            playerControl.lv = inputPlayerControl.lv;
+            playerControl.exp = inputPlayerControl.exp;
+            playerControl.gold = inputPlayerControl.gold;
+            playerControl.wearAtk = inputPlayerControl.wearAtk;
+            playerControl.wearDef = inputPlayerControl.wearDef;
+            playerControl.nextExp = inputPlayerControl.nextExp;
+            playerControl.missTime = inputPlayerControl.missTime;
+            playerControl.missTimeMax = inputPlayerControl.missTimeMax;
+            playerControl.atk = inputPlayerControl.atk;
+            playerControl.def = inputPlayerControl.def;
+            playerControl.playerName = inputPlayerControl.playerName;
+            playerControl.myItems = inputPlayerControl.myItems;
+            playerControl.wearArm = inputPlayerControl.wearArm;
+            playerControl.wearArmor = inputPlayerControl.wearArmor;
+            playerControl.canMove = inputPlayerControl.canMove;
+            playerControl.gameTime = inputPlayerControl.gameTime;
+            playerControl.lastScene = inputPlayerControl.lastScene;
+            playerControl.saveScene = inputPlayerControl.saveScene;
+            playerControl.isDebug = inputPlayerControl.isDebug;
+            playerControl.invincible = inputPlayerControl.invincible;
             return playerControl;
         }
     }

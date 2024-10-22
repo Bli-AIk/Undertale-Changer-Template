@@ -213,8 +213,6 @@ namespace UCT.Global.Core
 
         private void Awake()
         {
-            mainCamera = Camera.main;
-            
             languagePackId = PlayerPrefs.GetInt("languagePack", 2);
             
             if (PlayerPrefs.GetInt("dataNumber", 0) >= 0)
@@ -279,7 +277,7 @@ namespace UCT.Global.Core
             OverworldControl.isSetting = false;
 
             GameUtilityService.ToggleAllSfx(OverworldControl.noSfx);
-
+        
             beatTimes = MathUtilityService.MusicBpmCount(bpm, bpmDeviation);
         }
 

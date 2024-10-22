@@ -55,7 +55,9 @@ namespace UCT.Service
 
             if (!MainControl.Instance.OverworldControl.hdResolution)
             {
+                //if (MainControl.Instance.mainCamera)
                 MainControl.Instance.mainCamera.rect = new Rect(0, 0, 1, 1);
+
                 if (MainControl.Instance.sceneState == MainControl.SceneState.InBattle)
                 {
                     if (MainControl.Instance.cameraMainInBattle) MainControl.Instance.cameraMainInBattle.rect = new Rect(0, 0, 1, 1);
@@ -72,8 +74,8 @@ namespace UCT.Service
             }
             else
             {
-                if (MainControl.Instance.mainCamera)
-                    MainControl.Instance.mainCamera.rect = new Rect(0, 0.056f, 1, 0.888f);
+                //if (MainControl.Instance.mainCamera)
+                MainControl.Instance.mainCamera.rect = new Rect(0, 0.056f, 1, 0.888f);
                 
                 if (MainControl.Instance.sceneState == MainControl.SceneState.InBattle)
                     if (MainControl.Instance.cameraMainInBattle)
@@ -215,8 +217,9 @@ namespace UCT.Service
                 var light2D = (Light2D)obj;
                 light2D.enabled = !isClose;
             }
-            
-            MainControl.Instance.mainCamera.GetUniversalAdditionalCameraData().renderPostProcessing = !isClose;
+
+            if (MainControl.Instance.mainCamera) 
+                MainControl.Instance.mainCamera.GetUniversalAdditionalCameraData().renderPostProcessing = !isClose;
 
             if (MainControl.Instance.sceneState != MainControl.SceneState.InBattle) return;
             

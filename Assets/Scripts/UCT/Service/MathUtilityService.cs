@@ -84,6 +84,8 @@ namespace UCT.Service
         /// </summary>
         public static List<float> MusicBpmCount(float inputBpm, float inputBpmDeviation, float musicDuration = 0)
         {
+            if (AudioController.Instance.audioSource.clip == null) return new List<float>();
+            
             if (musicDuration <= 0)
                 musicDuration = AudioController.Instance.audioSource.clip.length;
 
