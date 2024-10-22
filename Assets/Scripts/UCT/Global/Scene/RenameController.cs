@@ -108,7 +108,7 @@ namespace UCT.Global.Scene
                                 case 52:
                                     if (MainControl.Instance.PlayerControl.playerName != "" && MainControl.Instance.PlayerControl.playerName != null)
                                     {
-                                        MainControl.Instance.OutBlack("Menu", Color.black);
+                                        MainControl.Instance.FadeOutAndSwitchScene("Menu", Color.black);
                                         mode = 0;
                                     }
                                     else

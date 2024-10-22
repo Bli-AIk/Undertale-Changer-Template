@@ -404,7 +404,7 @@ namespace UCT.Global.UI
 
             if ((openTurn && TurnController.Instance != null && TurnController.Instance.isMyTurn) || !openTurn)
             {
-                if (SceneManager.GetActiveScene().name != "Story" && MainControl.Instance.KeyArrowToControl(KeyCode.V) && !MainControl.Instance.OverworldControl.isSetting && !MainControl.Instance.blacking)
+                if (SceneManager.GetActiveScene().name != "Story" && MainControl.Instance.KeyArrowToControl(KeyCode.V) && !MainControl.Instance.OverworldControl.isSetting && !MainControl.Instance.isSceneSwitching)
                 {
                     foreach (var typeWritter in _typeWritters)
                     {
@@ -489,11 +489,11 @@ namespace UCT.Global.UI
 
                                         goto default;
                                     case 3:
-                                        MainControl.Instance.ChangeResolution();
+                                        MainControl.Instance.UpdateResolutionSettings();
                                         goto default;
                                     case 4:
                                         MainControl.Instance.OverworldControl.noSfx = !MainControl.Instance.OverworldControl.noSfx;
-                                        MainControl.Instance.FindAndChangeAllSfx(MainControl.Instance.OverworldControl.noSfx);
+                                        MainControl.Instance.ToggleAllSfx(MainControl.Instance.OverworldControl.noSfx);
                                         PlayerPrefs.SetInt("noSFX", Convert.ToInt32(MainControl.Instance.OverworldControl.noSfx));
                                         goto default;
                                     case 5:
@@ -504,7 +504,7 @@ namespace UCT.Global.UI
                                             return;
                                         if (SceneManager.GetActiveScene().name == "Menu")
                                             goto case 7;
-                                        MainControl.Instance.OutBlack("Menu", Color.black, true, animSpeed);
+                                        MainControl.Instance.FadeOutAndSwitchScene("Menu", Color.black, true, animSpeed);
                                         CloseSetting();
                                         freeze = true;
                                         break;
@@ -554,7 +554,7 @@ namespace UCT.Global.UI
                                 {
                                     AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
                                     MainControl.Instance.OverworldControl.hdResolution = !MainControl.Instance.OverworldControl.hdResolution;
-                                    MainControl.Instance.ChangeResolution();
+                                    MainControl.Instance.UpdateResolutionSettings();
                                     SettingText();
                                     PlayerPrefs.SetInt("hdResolution", Convert.ToInt32(MainControl.Instance.OverworldControl.hdResolution));
                                 }
@@ -841,7 +841,7 @@ namespace UCT.Global.UI
         private void AnimOpen()
         {
             animator.SetBool("Open", false);
-            MainControl.Instance.OutBlack("Battle", Color.black, false, -0.5f);
+            MainControl.Instance.FadeOutAndSwitchScene("Battle", Color.black, false, -0.5f);
         }
     }
 }

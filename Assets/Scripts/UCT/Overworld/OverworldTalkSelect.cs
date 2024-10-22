@@ -90,7 +90,7 @@ namespace UCT.Overworld
 
                                 case "BackMenu":
                                     _typeWritter.forceReturn = true;
-                                    MainControl.Instance.OutBlack("Menu", Color.black, true, 0f);
+                                    MainControl.Instance.FadeOutAndSwitchScene("Menu", Color.black, true, 0f);
                                     AudioController.Instance.audioSource.volume = 0;
                                     break;
 

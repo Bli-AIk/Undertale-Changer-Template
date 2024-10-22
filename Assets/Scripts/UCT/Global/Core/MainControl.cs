@@ -33,7 +33,7 @@ namespace UCT.Global.Core
 
         public const int LanguagePackInsideNumber = 3; //内置语言包总数
 
-        public bool blacking;
+        [FormerlySerializedAs("blacking")] public bool isSceneSwitching;
 
         [Header("-BGM BPM设置-")]
         [Space]
@@ -329,7 +329,7 @@ namespace UCT.Global.Core
                 OverworldControl.pause = !notPauseIn;
                 if (!noInBlack)
                 {
-                    _inOutBlack.DOColor(Color.clear, 0.5f).SetEase(Ease.Linear).OnKill(EndBlack);
+                    _inOutBlack.DOColor(Color.clear, 0.5f).SetEase(Ease.Linear).OnKill(() => OverworldControl.pause = false);
                     CanvasController.Instance.frame.color = OverworldControl.hdResolution ? new Color(1, 1, 1, 1) : new Color(1, 1, 1, 0);
                 }
                 else
@@ -342,18 +342,13 @@ namespace UCT.Global.Core
             AudioListener.volume = OverworldControl.mainVolume;
             OverworldControl.isSetting = false;
 
-            FindAndChangeAllSfx(OverworldControl.noSfx);
+            ToggleAllSfx(OverworldControl.noSfx);
 
             beatTimes = MathUtilityService.MusicBpmCount(bpm, bpmDeviation);
         }
         public Color GetRandomColor()
         {
             return new Color(Random.Range(0, 1f), Random.Range(0, 1f), Random.Range(0, 1f), 1);
-        }
-
-        private void EndBlack()
-        {
-            OverworldControl.pause = false;
         }
 
         private void Update()
@@ -377,12 +372,12 @@ namespace UCT.Global.Core
                 return;
             if (KeyArrowToControl(KeyCode.Tab))
             {
-                ChangeResolution();
+                UpdateResolutionSettings();
             }
             if (KeyArrowToControl(KeyCode.Semicolon))
             {
                 OverworldControl.noSfx = !OverworldControl.noSfx;
-                FindAndChangeAllSfx(OverworldControl.noSfx);
+                ToggleAllSfx(OverworldControl.noSfx);
             }
             if (KeyArrowToControl(KeyCode.F4))
             {
@@ -541,7 +536,7 @@ namespace UCT.Global.Core
         /// <summary>
         /// 开/关 SFX
         /// </summary>
-        public void FindAndChangeAllSfx(bool isClose)
+        public void ToggleAllSfx(bool isClose)
         {
             foreach (var obj in Resources.FindObjectsOfTypeAll(typeof(Light2D)))
             {
@@ -565,7 +560,7 @@ namespace UCT.Global.Core
         /// <summary>
         /// 更改分辨率相关代码
         /// </summary>
-        public void ChangeResolution()
+        public void UpdateResolutionSettings()
         {
             if (!OverworldControl.hdResolution)
             {
@@ -670,48 +665,51 @@ namespace UCT.Global.Core
         }
 
         /// <summary>
-        /// 淡出 输入跳转场景名称
-        /// banMusic是渐出
-        /// time大于0有动画 等于0就直接切场景 小于0时会以time的绝对值
+        /// 淡出并切换场景。
         /// </summary>
-        public void OutBlack(string scene, Color color, bool banMusic = false, float time = 0.5f, bool async = true)
+        /// <param name="scene">要切换到的场景名称</param>
+        /// <param name="fadeColor">淡出的颜色</param>
+        /// <param name="isBgmMuted">是否静音背景音乐</param>
+        /// <param name="fadeTime">淡出时间，默认为0.5秒</param>
+        /// <param name="isAsync">是否异步切换场景，默认为true</param>
+        public void FadeOutAndSwitchScene(string scene, Color fadeColor, bool isBgmMuted = false, float fadeTime = 0.5f, bool isAsync = true)
         {
-            blacking = true;
-            if (banMusic)
+            isSceneSwitching = true;
+            if (isBgmMuted)
             {
                 var bgm = AudioController.Instance.transform.GetComponent<AudioSource>();
-                switch (time)
+                switch (fadeTime)
                 {
                     case > 0:
-                        DOTween.To(() => bgm.volume, x => bgm.volume = x, 0, time).SetEase(Ease.Linear);
+                        DOTween.To(() => bgm.volume, x => bgm.volume = x, 0, fadeTime).SetEase(Ease.Linear);
                         break;
                     case 0:
                         bgm.volume = 0;
                         break;
                     default:
-                        DOTween.To(() => bgm.volume, x => bgm.volume = x, 0, Mathf.Abs(time)).SetEase(Ease.Linear);
+                        DOTween.To(() => bgm.volume, x => bgm.volume = x, 0, Mathf.Abs(fadeTime)).SetEase(Ease.Linear);
                         break;
                 }
             }
             OverworldControl.pause = true;
-            switch (time)
+            switch (fadeTime)
             {
                 case > 0:
                 {
-                    _inOutBlack.DOColor(color, time).SetEase(Ease.Linear).OnKill(() => SwitchScene(scene));
+                    _inOutBlack.DOColor(fadeColor, fadeTime).SetEase(Ease.Linear).OnKill(() => SwitchScene(scene));
                     if (!OverworldControl.hdResolution)
                         CanvasController.Instance.frame.color = new Color(1, 1, 1, 0);
                     break;
                 }
                 case 0:
-                    _inOutBlack.color = color;
-                    SwitchScene(scene, async);
+                    _inOutBlack.color = fadeColor;
+                    SwitchScene(scene, isAsync);
                     break;
                 default:
                 {
-                    time = Mathf.Abs(time);
-                    _inOutBlack.color = color;
-                    _inOutBlack.DOColor(color, time).SetEase(Ease.Linear).OnKill(() => SwitchScene(scene));
+                    fadeTime = Mathf.Abs(fadeTime);
+                    _inOutBlack.color = fadeColor;
+                    _inOutBlack.DOColor(fadeColor, fadeTime).SetEase(Ease.Linear).OnKill(() => SwitchScene(scene));
                     if (!OverworldControl.hdResolution)
                         CanvasController.Instance.frame.color = new Color(1, 1, 1, 0);
                     break;
@@ -721,7 +719,7 @@ namespace UCT.Global.Core
 
         public void OutWhite(string scene)
         {
-            blacking = true;
+            isSceneSwitching = true;
             _inOutBlack.color = new Color(1, 1, 1, 0);
             AudioController.Instance.GetFx(6, AudioControl.fxClipUI);
             _inOutBlack.DOColor(Color.white, 5.5f).SetEase(Ease.Linear).OnKill(() => SwitchScene(scene));
@@ -737,11 +735,8 @@ namespace UCT.Global.Core
             else SceneManager.LoadScene(sceneName);
 
             SetResolution(Instance.OverworldControl.resolutionLevel);
-            blacking = false;
+            isSceneSwitching = false;
         }
-
-        [Space]
-        public static bool ForceJumpLoadTurn;
 
         /// <summary>
         /// 传入使用背包的哪个物体

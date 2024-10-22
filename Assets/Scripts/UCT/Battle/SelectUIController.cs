@@ -102,12 +102,10 @@ namespace UCT.Battle
             for (var i = 0; i < MainControl.Instance.BattleControl.enemies.Count; i++)
             {
                 var enemies = GameObject.Find(MainControl.Instance.BattleControl.enemies[i].name).GetComponent<EnemiesController>();
-                if (enemies != null)
-                {
-                    enemiesControllers.Add(enemies);
-                    enemiesControllers[i].atk = MainControl.Instance.BattleControl.enemiesAtk[i];
-                    enemiesControllers[i].def = MainControl.Instance.BattleControl.enemiesDef[i];
-                }
+                if (enemies == null) continue;
+                enemiesControllers.Add(enemies);
+                enemiesControllers[i].atk = MainControl.Instance.BattleControl.enemiesAtk[i];
+                enemiesControllers[i].def = MainControl.Instance.BattleControl.enemiesDef[i];
             }
             selectUI = 1;
             TurnTextLoad(true);
@@ -130,23 +128,20 @@ namespace UCT.Battle
 
             _dialog.gameObject.SetActive(isDialog);
 
-            if (isDialog)
+            if (!isDialog) return;
+            if ((_dialog.typeWritter.isTyping || (!MainControl.Instance.KeyArrowToControl(KeyCode.Z))) &&
+                ((selectUI != 1 && _textUI.text != "") || numberDialog != 0)) return;
+            if (numberDialog < actSave.Count)
+                KeepDialogBubble();
+            else//敌方回合：开！
             {
-                if ((!_dialog.typeWritter.isTyping && (MainControl.Instance.KeyArrowToControl(KeyCode.Z))) || ((selectUI == 1 || _textUI.text == "") && numberDialog == 0))
-                {
-                    if (numberDialog < actSave.Count)
-                        KeepDialogBubble();
-                    else//敌方回合：开！
-                    {
-                        isDialog = false;
+                isDialog = false;
 
-                        TurnController.Instance.OutYourTurn();
+                TurnController.Instance.OutYourTurn();
 
-                        _itemSelectController.gameObject.SetActive(false);
-                        actSave = new List<string>();
-                        selectLayer = 4;
-                    }
-                }
+                _itemSelectController.gameObject.SetActive(false);
+                actSave = new List<string>();
+                selectLayer = 4;
             }
         }
 
@@ -178,11 +173,10 @@ namespace UCT.Battle
                 selectSon++;
                 AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
             }
-            if (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow) && selectSon > 0)
-            {
-                selectSon--;
-                AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
-            }
+
+            if (!MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow) || selectSon <= 0) return;
+            selectSon--;
+            AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
         }
 
         /// <summary>
@@ -199,7 +193,7 @@ namespace UCT.Battle
             TurnTextLoad();
             _itemSelectController.gameObject.SetActive(true);
 
-            MainControl.Instance.ForceJumpLoadTurn = false;
+            //DataHandlerService.ForceJumpLoadTurn = false;
 
             MainControl.Instance.battlePlayerController.collideCollider.enabled = false;
         }
@@ -683,7 +677,7 @@ namespace UCT.Battle
                     break;
 
                 case 3:
-                    MainControl.Instance.ForceJumpLoadTurn = true;
+                    //DataHandlerService.ForceJumpLoadTurn  = true;
                     firstIn = false;
 
                     if (((selectUI == 1) && !_target.gameObject.activeSelf))

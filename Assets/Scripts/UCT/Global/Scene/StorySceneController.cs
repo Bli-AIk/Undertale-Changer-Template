@@ -44,7 +44,7 @@ namespace UCT.Global.Scene
             {
                 _typeWritter.TypeStop();
                 _tmp.text = "";
-                MainControl.Instance.OutBlack("Start", Color.black);
+                MainControl.Instance.FadeOutAndSwitchScene("Start", Color.black);
             }
         }
 

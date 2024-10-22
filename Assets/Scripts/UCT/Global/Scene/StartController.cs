@@ -57,11 +57,11 @@ namespace UCT.Global.Scene
                         _text.DOColor(Color.clear, 1).SetEase(Ease.Linear);
                         if (MainControl.Instance.PlayerControl.playerName == "" || MainControl.Instance.PlayerControl.playerName == null)
                         {
-                            MainControl.Instance.OutBlack("Rename", Color.black, false, 2f);
+                            MainControl.Instance.FadeOutAndSwitchScene("Rename", Color.black, false, 2f);
                         }
                         else
                         {
-                            MainControl.Instance.OutBlack("Menu", Color.black, false, 2f);
+                            MainControl.Instance.FadeOutAndSwitchScene("Menu", Color.black, false, 2f);
                         }
                         break;
                 }
@@ -75,7 +75,7 @@ namespace UCT.Global.Scene
                 _afkTimer -= Time.deltaTime;
             else
             {
-                MainControl.Instance.OutBlack("Story", Color.black);
+                MainControl.Instance.FadeOutAndSwitchScene("Story", Color.black);
                 _afkTimer = 10000000000;
             }
         }

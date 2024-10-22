@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UCT.Control;
 using UCT.Global.Core;
@@ -12,6 +11,7 @@ namespace UCT.Service
     /// </summary>
     public static class DataHandlerService
     {
+        
         /// <summary>
         /// 分配Item数据
         /// </summary>
@@ -333,7 +333,9 @@ namespace UCT.Service
             }
             return id;
         }
-
+        
+        /*
+        public static bool ForceJumpLoadTurn;
         public static IEnumerator _LoadItemDataForTurn(List<string> list, TextAsset inputText)//保存的list 导入的text
         {
             list.Clear();
@@ -357,11 +359,12 @@ namespace UCT.Service
                     list.Add(text + ";");
                     text = "";
                 }
-                if ((i + 1) % 2 == 0 && !MainControl.ForceJumpLoadTurn)
+                if ((i + 1) % 2 == 0 && !ForceJumpLoadTurn)
                     yield return 0;
             }
         }
-
+        */
+        
         /// <summary>
         /// 调入数据(传入TextAsset)
         /// </summary>

@@ -128,7 +128,7 @@ namespace UCT.Overworld
                             {
                                 MainControl.Instance.OverworldControl.playerScenePos = saveOwObj.newPlayerPos;
                                 MainControl.Instance.OverworldControl.animDirection = new Vector2(animDirectionX, animDirectionY);
-                                MainControl.Instance.OutBlack(saveOwObj.sceneName, Color.black, saveOwObj.banMusic);
+                                MainControl.Instance.FadeOutAndSwitchScene(saveOwObj.sceneName, Color.black, saveOwObj.banMusic);
                                 saveOwObj.gameObject.SetActive(false);
                                 saveOwObj = null;
                             }
@@ -180,7 +180,7 @@ namespace UCT.Overworld
             if (MainControl.Instance.OverworldControl.isSetting || MainControl.Instance.OverworldControl.pause)
                 return;
             if (Input.GetKeyDown(KeyCode.B) && MainControl.Instance.PlayerControl.isDebug)
-                MainControl.Instance.OutBlack("Battle", Color.black);
+                MainControl.Instance.FadeOutAndSwitchScene("Battle", Color.black);
         }
 
         public void PlayWalkAudio()//动画器引用
