@@ -8,13 +8,15 @@ using UCT.Global.Core;
 using UCT.Global.UI;
 using UCT.Service;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace UCT.Global.Scene
 {
     public class RenameController : MonoBehaviour
     {
-        public List<TextMeshPro> tmps;
+        // ReSharper disable once StringLiteralTypo
+        [FormerlySerializedAs("tmps")] public List<TextMeshPro> texts;
         public int select;
         public bool selectMax;
         public string setName;
@@ -25,9 +27,9 @@ namespace UCT.Global.Scene
         {
             for (var i = 0; i < transform.childCount; i++)
             {
-                tmps.Add(transform.GetChild(i).GetComponent<TextMeshPro>());
+                texts.Add(transform.GetChild(i).GetComponent<TextMeshPro>());
             }
-            if (MainControl.Instance.PlayerControl.playerName != "" && MainControl.Instance.PlayerControl.playerName != null)
+            if (!string.IsNullOrEmpty(MainControl.Instance.PlayerControl.playerName))
             {
                 mode = 1;
             }
@@ -68,21 +70,19 @@ namespace UCT.Global.Scene
             return final;
         }
 
-        private void Selectbet(int selectNumber)
+        /// <summary>
+        /// 根据给定的选择索引更新可选项的高亮状态.
+        /// 高亮显示所选的选项为黄色.
+        /// </summary>
+        private void HighlightSelectedOptions(int selectNumber)
         {
             var strings = new List<string>();
-            /*
-        if (!(selectNumber >= 52 && selectNumber <= 54))
-            return;
-        */
-            var selecter = selectNumber - 52;
+            var selectId = selectNumber - 52;
             for (var i = 0; i < 3; i++)
             {
-                if (i == selecter)
-                    strings.Add("<color=yellow>");
-                else strings.Add("");
+                strings.Add(i == selectId ? "<color=yellow>" : "");
             }
-            tmps[3].text = strings[0] + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename1") + "</color> " +
+            texts[3].text = strings[0] + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename1") + "</color> " +
                            strings[1] + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename2") + "</color>  " +
                            strings[2] + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename3") + "</color>";
         }
@@ -106,7 +106,7 @@ namespace UCT.Global.Scene
                             switch (select)
                             {
                                 case 52:
-                                    if (MainControl.Instance.PlayerControl.playerName != "" && MainControl.Instance.PlayerControl.playerName != null)
+                                    if (!string.IsNullOrEmpty(MainControl.Instance.PlayerControl.playerName))
                                     {
                                         MainControl.Instance.FadeOutAndSwitchScene("Menu", Color.black);
                                         mode = 0;
@@ -126,12 +126,12 @@ namespace UCT.Global.Scene
                                         select = 0;
                                         mode = 2;
                                         var list = TextProcessingService.GetAllChildStringsByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "RenameSp");
-                                        tmps[0].text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename");
+                                        texts[0].text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename");
                                         if (MainControl.Instance.OverworldControl.textWidth)
-                                            tmps[3].text = "<size=0>wwww</size><color=yellow>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
+                                            texts[3].text = "<size=0>wwww</size><color=yellow>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
                                                            "</color>    " + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Yes");
                                         else
-                                            tmps[3].text = "<size=2><color=#00000000>wwww</color></size><color=yellow>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
+                                            texts[3].text = "<size=2><color=#00000000>wwww</color></size><color=yellow>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
                                                            "</color>    <color=#00000000><size=5>wwwwwwwww</size></color>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Yes");
                                         selectMax = true;
                                         foreach (var item in list)
@@ -144,25 +144,25 @@ namespace UCT.Global.Scene
                                             if (lister[3] == "<gaster>")
                                                 Application.Quit();
                                             else
-                                                tmps[0].text = lister[3];
+                                                texts[0].text = lister[3];
                                             if (!bool.Parse(lister[1]))
                                             {
                                                 selectMax = false;
                                                 if (MainControl.Instance.OverworldControl.textWidth)
-                                                    tmps[3].text = "<size=0>wwww</size><color=yellow>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "GoBack") + "</color>";
+                                                    texts[3].text = "<size=0>wwww</size><color=yellow>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "GoBack") + "</color>";
                                                 else
-                                                    tmps[3].text = "<size=2><color=#00000000>wwww</color></size><color=yellow>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "GoBack") + "</color>";
+                                                    texts[3].text = "<size=2><color=#00000000>wwww</color></size><color=yellow>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "GoBack") + "</color>";
                                             }
 
                                             break;
                                         }
 
-                                        _animMove = DOTween.To(() => tmps[1].transform.localPosition, x => tmps[1].transform.localPosition = x, new Vector3(26.95f, -7.85f), 5).SetEase(Ease.Linear);
-                                        _animScale = DOTween.To(() => tmps[1].transform.localScale, x => tmps[1].transform.localScale = x, Vector3.one * 3, 5).SetEase(Ease.Linear);
-                                        tmps[1].GetComponent<DynamicTMP>().dynamicMode = OverworldControl.DynamicTMP.RandomShakeSingle;
-                                        tmps[2].text = "";
-                                        tmps[4].text = "";
-                                        tmps[5].text = "";
+                                        _animMove = DOTween.To(() => texts[1].transform.localPosition, x => texts[1].transform.localPosition = x, new Vector3(26.95f, -7.85f), 5).SetEase(Ease.Linear);
+                                        _animScale = DOTween.To(() => texts[1].transform.localScale, x => texts[1].transform.localScale = x, Vector3.one * 3, 5).SetEase(Ease.Linear);
+                                        texts[1].GetComponent<DynamicTMP>().dynamicMode = OverworldControl.DynamicTMP.RandomShakeSingle;
+                                        texts[2].text = "";
+                                        texts[4].text = "";
+                                        texts[5].text = "";
                                         breaker = true;
                                     }
                                     break;
@@ -180,66 +180,62 @@ namespace UCT.Global.Scene
                     if (breaker) break;
                     if (MainControl.Instance.KeyArrowToControl(KeyCode.UpArrow))
                     {
-                        if (select >= 31 && select <= 32)
+                        switch (select)
                         {
-                            select -= 12;
-                        }
-                        else if (select < 26 || (select > 32 && select < 52))
-                            select -= 7;
-                        else if (select >= 52 && select <= 54)
-                        {
-                            switch (select)
-                            {
-                                case 52:
-                                    select = 47;
-                                    break;
+                            case >= 31 and <= 32:
+                                select -= 12;
+                                break;
+                            case < 26:
+                            case > 32 and < 52:
+                                select -= 7;
+                                break;
+                            case >= 52 and <= 54:
+                                select = select switch
+                                {
+                                    52 => 47,
+                                    53 => 49,
+                                    54 => 45,
+                                    _ => select
+                                };
 
-                                case 53:
-                                    select = 49;
-                                    break;
-
-                                case 54:
-                                    select = 45;
-                                    break;
-                            }
+                                break;
+                            default:
+                                select -= 5;
+                                break;
                         }
-                        else select -= 5;
 
                         if (select < 0)
                             select = 54;
                     }
                     else if (MainControl.Instance.KeyArrowToControl(KeyCode.DownArrow))
                     {
-                        if (select >= 19 && select <= 20)
+                        switch (select)
                         {
-                            select += 12;
+                            case >= 19 and <= 20:
+                                select += 12;
+                                break;
+                            case < 21 or > 25 and < 45:
+                                select += 7;
+                                break;
+                            case >= 45:
+                                select = select switch
+                                {
+                                    <= 46 => 54,
+                                    <= 48 => 52,
+                                    <= 51 => 53,
+                                    _ => select switch
+                                    {
+                                        52 => 0,
+                                        53 => 2,
+                                        54 => 5,
+                                        _ => select
+                                    }
+                                };
+                                break;
+                            default:
+                                select += 5;
+                                break;
                         }
-                        else if (select < 21 || (select > 25 && select < 45))
-                            select += 7;
-                        else if (select >= 45)
-                        {
-                            if (select <= 46)
-                                select = 54;
-                            else if (select <= 48)
-                                select = 52;
-                            else if (select <= 51)
-                                select = 53;
-                            else switch (select)
-                            {
-                                case 52:
-                                    select = 0;
-                                    break;
-
-                                case 53:
-                                    select = 2;
-                                    break;
-
-                                case 54:
-                                    select = 5;
-                                    break;
-                            }
-                        }
-                        else select += 5;
 
                         if (select > 54)
                             select = 0;
@@ -256,12 +252,12 @@ namespace UCT.Global.Scene
                         if (select > 54)
                             select = 0;
                     }
-                    tmps[0].text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename0");
-                    tmps[1].text = setName;
-                    tmps[2].text = Alphabet(select);
-                    Selectbet(select);
-                    tmps[4].text = "";
-                    tmps[5].text = "";
+                    texts[0].text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename0");
+                    texts[1].text = setName;
+                    texts[2].text = Alphabet(select);
+                    HighlightSelectedOptions(select);
+                    texts[4].text = "";
+                    texts[5].text = "";
                     break;
 
                 case 2:
@@ -273,10 +269,10 @@ namespace UCT.Global.Scene
                                 mode = 1;
                                 _animMove.Kill();
                                 _animScale.Kill();
-                                tmps[1].transform.localPosition = new Vector3(8.95f, 0.6f);
-                                tmps[1].transform.localScale = Vector3.one;
-                                tmps[1].GetComponent<DynamicTMP>().dynamicMode = 0;
-                                tmps[3].text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename1") +
+                                texts[1].transform.localPosition = new Vector3(8.95f, 0.6f);
+                                texts[1].transform.localScale = Vector3.one;
+                                texts[1].GetComponent<DynamicTMP>().dynamicMode = 0;
+                                texts[3].text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename1") +
                                                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename2") +
                                                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename3");
                                 break;
@@ -307,10 +303,10 @@ namespace UCT.Global.Scene
                         mode = 1;
                         _animMove.Kill();
                         _animScale.Kill();
-                        tmps[1].transform.localPosition = new Vector3(8.95f, 0.6f);
-                        tmps[1].transform.localScale = Vector3.one;
-                        tmps[1].GetComponent<DynamicTMP>().dynamicMode = 0;
-                        tmps[3].text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename1") +
+                        texts[1].transform.localPosition = new Vector3(8.95f, 0.6f);
+                        texts[1].transform.localScale = Vector3.one;
+                        texts[1].GetComponent<DynamicTMP>().dynamicMode = 0;
+                        texts[3].text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename1") +
                                        TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename2") +
                                        TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Rename3");
                     }
@@ -320,33 +316,33 @@ namespace UCT.Global.Scene
                         {
                             select = 1;
                             if (MainControl.Instance.OverworldControl.textWidth)
-                                tmps[3].text = "<size=0>wwww</size>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
+                                texts[3].text = "<size=0>wwww</size>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
                                                "    <color=yellow>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Yes") + "</color>";
                             else
-                                tmps[3].text = "<color=#00000000><size=2>wwww</size></color>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
+                                texts[3].text = "<color=#00000000><size=2>wwww</size></color>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
                                                "    <color=#00000000><size=5>wwwwwwwww</size></color><color=yellow>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Yes") + "</color>";
                         }
                         else
                         {
                             select = 0;
                             if (MainControl.Instance.OverworldControl.textWidth)
-                                tmps[3].text = "<color=#00000000><size=0>wwww</size><color=yellow>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
+                                texts[3].text = "<color=#00000000><size=0>wwww</size><color=yellow>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
                                                "</color>    <color=white>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Yes");
                             else
-                                tmps[3].text = "<color=#00000000><size=2>wwww</size></color><color=yellow>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
+                                texts[3].text = "<color=#00000000><size=2>wwww</size></color><color=yellow>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
                                                "</color>    <color=#00000000><size=5>wwwwwwwww</size></color>" + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Yes");
                         }
                     }
                     break;
 
                 case 3:
-                    tmps[0].text = "";
-                    tmps[1].text = "";
+                    texts[0].text = "";
+                    texts[1].text = "";
                     setName = "";
-                    tmps[2].text = "";
-                    tmps[3].text = "";
-                    tmps[4].text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Teach");
-                    tmps[5].text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "MenuUnder") + Application.version;
+                    texts[2].text = "";
+                    texts[3].text = "";
+                    texts[4].text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Teach");
+                    texts[5].text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "MenuUnder") + Application.version;
                     if (MainControl.Instance.KeyArrowToControl(KeyCode.Z) && setName.Length < 6)
                         mode = 1;
                     break;

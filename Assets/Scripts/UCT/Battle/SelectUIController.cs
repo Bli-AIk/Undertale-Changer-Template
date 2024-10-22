@@ -680,7 +680,7 @@ namespace UCT.Battle
                     //DataHandlerService.ForceJumpLoadTurn  = true;
                     firstIn = false;
 
-                    if (((selectUI == 1) && !_target.gameObject.activeSelf))
+                    if (selectUI == 1 && !_target.gameObject.activeSelf)
                     {
                         if (MainControl.Instance.battlePlayerController.transform.position != (Vector3)MainControl.Instance.battlePlayerController.sceneDrift + new Vector3(0, 0, MainControl.Instance.battlePlayerController.transform.position.z))
                         {
