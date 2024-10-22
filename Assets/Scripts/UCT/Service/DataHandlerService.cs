@@ -1,7 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using UCT.Control;
 using UCT.Global.Core;
+using UCT.Global.UI;
 using UnityEngine;
 
 namespace UCT.Service
@@ -11,7 +14,6 @@ namespace UCT.Service
     /// </summary>
     public static class DataHandlerService
     {
-        
         /// <summary>
         /// 分配Item数据
         /// </summary>
@@ -646,6 +648,59 @@ namespace UCT.Service
                     break;
             }
             return text;
+        }
+
+        /// <summary>
+        /// 获取内置语言包ID
+        /// </summary>
+        public static string GetLanguageInsideId(int id) =>
+            id switch
+            {
+                0 => "CN",
+                1 => "TCN",
+                _ => "US"
+            };
+
+        /// <summary>
+        /// 检测当前语言包ID是否在有效范围内。如果不在有效范围内，
+        /// 则将语言包ID设置为默认值2。
+        /// </summary>
+        /// <param name="id">语言包ID</param>
+        public static int LanguagePackDetection(int id)
+        {
+            if (id < 0 || id >= Directory.GetDirectories(Application.dataPath + "\\LanguagePacks").Length + MainControl.LanguagePackInsideNumber)
+                return 2;
+            return id;
+        }
+
+        /// <summary>
+        /// 加载对应语言包的数据
+        /// </summary>
+        public static string LoadLanguageData(string path, int id)
+        {
+            return id < MainControl.LanguagePackInsideNumber 
+                ? Resources.Load<TextAsset>($"TextAssets/LanguagePacks/{DataHandlerService.GetLanguageInsideId(id)}/{path}").text 
+                : File.ReadAllText($"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[id - MainControl.LanguagePackInsideNumber]}\\{path}.txt");
+        }
+
+        /// <summary>
+        /// 检测语言包全半角
+        /// </summary>
+        public static void InitializationLanguagePackFullWidth()
+        {
+            if (MainControl.Instance.OverworldControl.textWidth != bool.Parse(TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "LanguagePackFullWidth")))
+            {
+                MainControl.Instance.OverworldControl.textWidth = bool.Parse(TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "LanguagePackFullWidth"));
+                foreach (var obj in Resources.FindObjectsOfTypeAll(typeof(TextChanger)))
+                {
+                    var textChanger = (TextChanger)obj;
+                    textChanger.width = MainControl.Instance.OverworldControl.textWidth;
+                    textChanger.Set();
+                    textChanger.Change();
+                }
+            }
+
+            CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture(TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "CultureInfo"));
         }
     }
 }

@@ -239,7 +239,7 @@ namespace UCT.Global.UI
 
                     for (var i = 0; i < MainControl.LanguagePackInsideNumber; i++) //内置包信息
                     {
-                        var pathString = "TextAssets/LanguagePacks/" + MainControl.GetLanguageInsideId(i);
+                        var pathString = "TextAssets/LanguagePacks/" + DataHandlerService.GetLanguageInsideId(i);
 
                         if (_settingSelectMax == _settingSelect)
                         {

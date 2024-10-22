@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using DG.Tweening;
 using UCT.Battle;
@@ -56,6 +55,9 @@ namespace UCT.Global.Core
 
         [FormerlySerializedAs("_inOutBlack")] public Image inOutBlack;
 
+        public int currentBeatIndex;
+        public float nextBeatTime;
+        
         [Header("引用用的")]
         [Header("战斗外")]
         public PlayerBehaviour playerBehaviour;
@@ -90,39 +92,6 @@ namespace UCT.Global.Core
                 field.SetValue(null, field.GetValue(playerControl));
             }
         }
-        /// <summary>
-        /// 获取内置语言包ID
-        /// </summary>
-        public static string GetLanguageInsideId(int id) =>
-            id switch
-            {
-                0 => "CN",
-                1 => "TCN",
-                _ => "US"
-            };
-
-        /// <summary>
-        /// 加载对应语言包的数据
-        /// </summary>
-        private string LoadLanguageData(string path)
-        {
-            return languagePackId < LanguagePackInsideNumber 
-                ? Resources.Load<TextAsset>($"TextAssets/LanguagePacks/{GetLanguageInsideId(languagePackId)}/{path}").text 
-                : File.ReadAllText($"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[languagePackId - LanguagePackInsideNumber]}\\{path}.txt");
-        }
-
-        private void LanguagePackDetection()
-        {
-            if (languagePackId < 0 ||
-                languagePackId >=
-                Directory.GetDirectories(
-                Application.dataPath +
-                "\\LanguagePacks").Length +
-                LanguagePackInsideNumber)
-            {
-                languagePackId = 2;
-            }
-        }
 
         private void InitializationLoad()
         {
@@ -146,11 +115,11 @@ namespace UCT.Global.Core
             if (!languageId.Equals(languagePackId))
                 languagePackId = languageId;
 
-            LanguagePackDetection();
+            languagePackId = DataHandlerService.LanguagePackDetection(languagePackId);
 
             //ItemControl加载
             //--------------------------------------------------------------------------------
-            ItemControl.itemText = LoadLanguageData("UI\\ItemText");
+            ItemControl.itemText = DataHandlerService.LoadLanguageData("UI\\ItemText", languagePackId);
 
             DataHandlerService.LoadItemData(ItemControl.itemMax, ItemControl.itemData);
             DataHandlerService.LoadItemData(ItemControl.itemTextMax, ItemControl.itemText);
@@ -168,14 +137,14 @@ namespace UCT.Global.Core
 
         public void InitializationOverworld()
         {
-            LanguagePackDetection();
+            languagePackId = DataHandlerService.LanguagePackDetection(languagePackId);
 
             if (OverworldControl == null)
             {
                 OverworldControl = Resources.Load<OverworldControl>("OverworldControl");
             }
 
-            OverworldControl.settingAsset = LoadLanguageData("UI\\Setting");
+            OverworldControl.settingAsset = DataHandlerService.LoadLanguageData("UI\\Setting", languagePackId);
 
             DataHandlerService.LoadItemData(OverworldControl.settingSave, OverworldControl.settingAsset);
 
@@ -184,7 +153,7 @@ namespace UCT.Global.Core
             //OverworldControl加载
             //--------------------------------------------------------------------------------
 
-            OverworldControl.sceneTextsAsset = LoadLanguageData($"Overworld\\{SceneManager.GetActiveScene().name}");
+            OverworldControl.sceneTextsAsset = DataHandlerService.LoadLanguageData($"Overworld\\{SceneManager.GetActiveScene().name}", languagePackId);
 
             if (SceneManager.GetActiveScene().name == "Start")
                 return;
@@ -201,24 +170,6 @@ namespace UCT.Global.Core
             OverworldControl.vsyncMode = (OverworldControl.VSyncMode)PlayerPrefs.GetInt("vsyncMode", 0);
         }
 
-        private void InitializationLanguagePackFullWidth()
-        {
-            //检测语言包全半角
-            if (OverworldControl.textWidth != bool.Parse(TextProcessingService.GetFirstChildStringByPrefix(OverworldControl.settingSave, "LanguagePackFullWidth")))
-            {
-                OverworldControl.textWidth = bool.Parse(TextProcessingService.GetFirstChildStringByPrefix(OverworldControl.settingSave, "LanguagePackFullWidth"));
-                foreach (var obj in Resources.FindObjectsOfTypeAll(typeof(TextChanger)))
-                {
-                    var textChanger = (TextChanger)obj;
-                    textChanger.width = OverworldControl.textWidth;
-                    textChanger.Set();
-                    textChanger.Change();
-                }
-            }
-
-            CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture(TextProcessingService.GetFirstChildStringByPrefix(OverworldControl.settingSave, "CultureInfo"));
-        }
-
         private void InitializationBattle()
         {
             //BattleControl加载
@@ -228,12 +179,12 @@ namespace UCT.Global.Core
 
             BattleControl.turnDialogAsset = new List<string>();
 
-            BattleControl.uiText = LoadLanguageData("Battle\\UIBattleText");
+            BattleControl.uiText = DataHandlerService.LoadLanguageData("Battle\\UIBattleText", languagePackId);
 
             string[] turnSave;
             if (languagePackId < LanguagePackInsideNumber)
             {
-                var textAssets = Resources.LoadAll<TextAsset>($"TextAssets/LanguagePacks/{GetLanguageInsideId(languagePackId)}/Battle/Turn");
+                var textAssets = Resources.LoadAll<TextAsset>($"TextAssets/LanguagePacks/{DataHandlerService.GetLanguageInsideId(languagePackId)}/Battle/Turn");
 
                 turnSave = new string[textAssets.Length];
                 for (var i = 0; i < textAssets.Length; i++)
@@ -302,7 +253,7 @@ namespace UCT.Global.Core
             if (PlayerControl.isDebug && PlayerControl.invincible)
                 PlayerControl.hp = PlayerControl.hpMax / 2;
 
-            InitializationLanguagePackFullWidth();
+            DataHandlerService.InitializationLanguagePackFullWidth();
 
             if (sceneState == SceneState.InBattle)
             {
@@ -378,7 +329,5 @@ namespace UCT.Global.Core
             if (isMetronome) GameUtilityService.Metronome();
         }
 
-        public int currentBeatIndex;
-        public float nextBeatTime;
     }
 }
