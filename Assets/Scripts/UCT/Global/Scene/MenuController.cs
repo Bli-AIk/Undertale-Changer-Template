@@ -45,10 +45,10 @@ namespace UCT.Global.Scene
         {
             _setData = false;
             layer = 0;
-            if (MainControl.Instance.dataNumber < 0)
-                MainControl.Instance.dataNumber = 0;
-            MainControl.Instance.playerControl = DataHandlerService.SetPlayerControl(SaveController.LoadData("Data" + MainControl.Instance.dataNumber));
-            saveNumber = MainControl.Instance.dataNumber;
+            if (MainControl.Instance.saveDataId < 0)
+                MainControl.Instance.saveDataId = 0;
+            MainControl.Instance.playerControl = DataHandlerService.SetPlayerControl(SaveController.LoadData("Data" + MainControl.Instance.saveDataId));
+            saveNumber = MainControl.Instance.saveDataId;
             LoadLayer0();
         }
 
@@ -136,7 +136,7 @@ namespace UCT.Global.Scene
                             goto case 2;
                         case 4:
                             _setData = true;
-                            saveNumber = MainControl.Instance.dataNumber;
+                            saveNumber = MainControl.Instance.saveDataId;
                             if (0 != (SaveController.GetDataNumber() - 1))
                                 _select = 5;
                             Flash();
@@ -166,8 +166,8 @@ namespace UCT.Global.Scene
                             if (saveNumber == (SaveController.GetDataNumber() - 1))//新建
                             {
                                 saveNumber++;
-                                MainControl.Instance.dataNumber = saveNumber;
-                                SaveController.SaveData(MainControl.Instance.playerControl, "Data" + MainControl.Instance.dataNumber);
+                                MainControl.Instance.saveDataId = saveNumber;
+                                SaveController.SaveData(MainControl.Instance.playerControl, "Data" + MainControl.Instance.saveDataId);
                                 MainControl.Instance.playerControl = DataHandlerService.SetPlayerControl(ScriptableObject.CreateInstance<PlayerControl>());
                                 MainControl.Instance.playerControl.playerName = "";
                                 GameUtilityService.FadeOutAndSwitchScene("Rename", Color.black);
@@ -189,7 +189,7 @@ namespace UCT.Global.Scene
                             break;
 
                         case 5:
-                            if (MainControl.Instance.dataNumber == saveNumber)
+                            if (MainControl.Instance.saveDataId == saveNumber)
                             {
                                 _setData = false;
                                 Flash();
@@ -197,7 +197,7 @@ namespace UCT.Global.Scene
                                 break;
                             }
 
-                            MainControl.Instance.dataNumber = saveNumber;
+                            MainControl.Instance.saveDataId = saveNumber;
                             AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
                             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
                             break;

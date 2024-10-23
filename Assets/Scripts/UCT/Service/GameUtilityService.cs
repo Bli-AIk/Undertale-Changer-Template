@@ -126,9 +126,9 @@ namespace UCT.Service
         public static void FadeOutToWhiteAndSwitchScene(string scene)
         {
             MainControl.Instance.isSceneSwitching = true;
-            MainControl.Instance.inOutBlack.color = new Color(1, 1, 1, 0);
+            MainControl.Instance.sceneSwitchingFadeImage.color = new Color(1, 1, 1, 0);
             AudioController.Instance.GetFx(6, MainControl.Instance.AudioControl.fxClipUI);
-            MainControl.Instance.inOutBlack.DOColor(Color.white, 5.5f).SetEase(Ease.Linear).OnKill(() => SwitchScene(scene));
+            MainControl.Instance.sceneSwitchingFadeImage.DOColor(Color.white, 5.5f).SetEase(Ease.Linear).OnKill(() => SwitchScene(scene));
         }
 
         /// <summary>
@@ -163,20 +163,20 @@ namespace UCT.Service
             {
                 case > 0:
                 {
-                    MainControl.Instance.inOutBlack.DOColor(fadeColor, fadeTime).SetEase(Ease.Linear).OnKill(() => GameUtilityService.SwitchScene(scene));
+                    MainControl.Instance.sceneSwitchingFadeImage.DOColor(fadeColor, fadeTime).SetEase(Ease.Linear).OnKill(() => GameUtilityService.SwitchScene(scene));
                     if (!MainControl.Instance.OverworldControl.hdResolution)
                         CanvasController.Instance.frame.color = new Color(1, 1, 1, 0);
                     break;
                 }
                 case 0:
-                    MainControl.Instance.inOutBlack.color = fadeColor;
+                    MainControl.Instance.sceneSwitchingFadeImage.color = fadeColor;
                     GameUtilityService.SwitchScene(scene, isAsync);
                     break;
                 default:
                 {
                     fadeTime = Mathf.Abs(fadeTime);
-                    MainControl.Instance.inOutBlack.color = fadeColor;
-                    MainControl.Instance.inOutBlack.DOColor(fadeColor, fadeTime).SetEase(Ease.Linear).OnKill(() => GameUtilityService.SwitchScene(scene));
+                    MainControl.Instance.sceneSwitchingFadeImage.color = fadeColor;
+                    MainControl.Instance.sceneSwitchingFadeImage.DOColor(fadeColor, fadeTime).SetEase(Ease.Linear).OnKill(() => GameUtilityService.SwitchScene(scene));
                     if (!MainControl.Instance.OverworldControl.hdResolution)
                         CanvasController.Instance.frame.color = new Color(1, 1, 1, 0);
                     break;
@@ -433,12 +433,13 @@ namespace UCT.Service
         /// <summary>
         /// 控制节拍器
         /// </summary>
-        public static void Metronome()
+        /// <param name="instanceBeatTimes"></param>
+        public static void Metronome(List<float> instanceBeatTimes)
         {
-            if (MainControl.Instance.beatTimes.Count <= 0) return;
+            if (instanceBeatTimes.Count <= 0) return;
 
             var firstIn = true;
-            while (MainControl.Instance.currentBeatIndex < MainControl.Instance.beatTimes.Count && AudioController.Instance.audioSource.time >= MainControl.Instance.nextBeatTime)
+            while (MainControl.Instance.currentBeatIndex < instanceBeatTimes.Count && AudioController.Instance.audioSource.time >= MainControl.Instance.nextBeatSecond)
             {
                 if (firstIn)
                 {
@@ -446,15 +447,15 @@ namespace UCT.Service
                 }
                 MainControl.Instance. currentBeatIndex++;
 
-                if (MainControl.Instance.currentBeatIndex < MainControl.Instance.beatTimes.Count)
+                if (MainControl.Instance.currentBeatIndex < instanceBeatTimes.Count)
                 {
-                    MainControl.Instance.nextBeatTime = MainControl.Instance.beatTimes[MainControl.Instance.currentBeatIndex];
+                    MainControl.Instance.nextBeatSecond = instanceBeatTimes[MainControl.Instance.currentBeatIndex];
                 }
                 firstIn = false;
             }
 
-            if (MainControl.Instance.currentBeatIndex <MainControl.Instance. beatTimes.Count) return;
-            MainControl.Instance. nextBeatTime =MainControl.Instance. beatTimes[0];
+            if (MainControl.Instance.currentBeatIndex <instanceBeatTimes.Count) return;
+            MainControl.Instance. nextBeatSecond =instanceBeatTimes[0];
             MainControl.Instance.   currentBeatIndex = 0;
         }
     }

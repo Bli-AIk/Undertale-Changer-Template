@@ -290,9 +290,9 @@ namespace UCT.Global.Scene
                                 //DOTween.To(() => v.weight, x => v.weight = x, 0, 5.5f).SetEase(Ease.Linear);
                                 DOTween.To(() => v2.weight, x => v2.weight = x, 1, 5.5f).SetEase(Ease.Linear);
 
-                                SaveController.SaveData(MainControl.Instance.playerControl, "Data" + MainControl.Instance.dataNumber);
+                                SaveController.SaveData(MainControl.Instance.playerControl, "Data" + MainControl.Instance.saveDataId);
                                 PlayerPrefs.SetInt("languagePack", MainControl.Instance.languagePackId);
-                                PlayerPrefs.SetInt("dataNumber", MainControl.Instance.dataNumber);
+                                PlayerPrefs.SetInt("dataNumber", MainControl.Instance.saveDataId);
                                 PlayerPrefs.SetInt("hdResolution", Convert.ToInt32(MainControl.Instance.OverworldControl.hdResolution));
                                 PlayerPrefs.SetInt("noSFX", Convert.ToInt32(MainControl.Instance.OverworldControl.noSfx));
                                 PlayerPrefs.SetInt("vsyncMode", Convert.ToInt32(MainControl.Instance.OverworldControl.vsyncMode));

@@ -22,56 +22,74 @@ namespace UCT.Global.Core
     {
         public static MainControl Instance;
         
-        [FormerlySerializedAs("languagePack")] public int languagePackId;
-        public int dataNumber;
-
-        public const int LanguagePackInsideNumber = 3; //内置语言包总数
-
-        [FormerlySerializedAs("blacking")] public bool isSceneSwitching;
-
-        [Header("-BGM BPM设置-")]
-        [Space]
-        [Header("BGM BPM")]
-        public float bpm;
-
-        [Header("BGM BPM偏移")]
-        public float bpmDeviation;
-
-        [Header("开启节拍器")]
-        public bool isMetronome;
-
-        [Header("-BGM BPM计算结果-")]
-        [Space]
-        public List<float> beatTimes;
-
-        [Header("-MainControl设置-")]
-        [Space]
-        [Header("状态:正常,战斗内")]
-        public SceneState sceneState;
-
-        public bool haveInOutBlack, noInBlack;
-        public bool notPauseIn;
-
-        [FormerlySerializedAs("_inOutBlack")] public Image inOutBlack;
-
-        public int currentBeatIndex;
-        public float nextBeatTime;
-        
-        [Header("引用用的")]
-        [Header("战斗外")]
-        public PlayerBehaviour playerBehaviour;
-
-        public Camera cameraMainInBattle;
-        public Camera mainCamera;
-
-        public BoxDrawer mainBox;
-
         public enum SceneState
         {
             Normal,
             InBattle,
         }
+        [Header("=== 场景状态设置 ===")]
+        public SceneState sceneState;
+        
+        [Space]
+        
+        [Header("=== 语言包相关设置 ===")]
+        [Header("语言包ID")]
+        [FormerlySerializedAs("languagePack")] public int languagePackId;
+        [Header("内置语言包总数")]
+        public const int LanguagePackInsideNumber = 3; 
+        
+        [Space]
+        
+        [Header("=== 存档相关设置 ===")]
+        [Header("存档id")]
+        [FormerlySerializedAs("dataNumber")] public int saveDataId;
+        
+        [Space]
+        
+        [Header("=== 场景切换相关设置 ===")]
+        
+        [Header("当前场景是否启用渐入渐出")]
+        [FormerlySerializedAs("haveInOutBlack")] public bool isSceneSwitchingFadeTransitionEnabled;
+        [Header("当前场景是否关闭渐入")]
+        [FormerlySerializedAs("noInBlack")] public bool isSceneSwitchingFadeInDisabled; 
+        [Header("当前场景是否在渐入时不暂停")]
+        [FormerlySerializedAs("notPauseIn")] public bool isSceneSwitchingFadeInUnpaused;
+        [Header("场景切换使用的Image")]
+        [FormerlySerializedAs("_inOutBlack")] public Image sceneSwitchingFadeImage;
+        [Header("场景是否在切换")]
+        [FormerlySerializedAs("blacking")] public bool isSceneSwitching;
 
+        [Space]
+        
+        [Header("=== BPM相关设置 ===")]
+        [Header("BGM BPM")]
+        public float bpm;
+        [Header("BGM BPM偏移")]
+        public float bpmDeviation;
+        [Header("是否开启节拍器")]
+        public bool isMetronome;
+
+        [Space]
+        
+        [Header("=== BGM BPM计算结果 ===")]
+        [Header("每拍所在的秒数列表")]
+        [FormerlySerializedAs("beatTimes")] public List<float> beatSeconds;
+        [Header("当前节拍数")]
+        public int currentBeatIndex; 
+        [Header("下一节拍所在时间")] 
+        [FormerlySerializedAs("nextBeatTime")] public float nextBeatSecond;
+        
+        [Space]
+        
+        [Header("=== UI与画面相关 ===")]
+        public Camera cameraMainInBattle;
+        public Camera mainCamera;
+        public BoxDrawer mainBox;
+        
+        [Space]
+
+        [Header("=== 角色与行为控制 ===")]
+        public PlayerBehaviour playerBehaviour;
         [FormerlySerializedAs("PlayerControl")] public PlayerControl playerControl;
         public OverworldControl OverworldControl { get; private set; }
         public ItemControl ItemControl { get; private set; }
@@ -83,6 +101,9 @@ namespace UCT.Global.Core
         public SelectUIController selectUIController;
 
         public CameraShake cameraShake, cameraShake3D;
+
+
+        
 
         private void InitializationLoad()
         {
@@ -216,22 +237,22 @@ namespace UCT.Global.Core
             languagePackId = PlayerPrefs.GetInt("languagePack", 2);
             
             if (PlayerPrefs.GetInt("dataNumber", 0) >= 0)
-                dataNumber = PlayerPrefs.GetInt("dataNumber", 0);
+                saveDataId = PlayerPrefs.GetInt("dataNumber", 0);
             else
             {
                 PlayerPrefs.SetInt("dataNumber", 0);
-                dataNumber = 0;
+                saveDataId = 0;
             }
-            if (dataNumber > (SaveController.GetDataNumber() - 1))
+            if (saveDataId > (SaveController.GetDataNumber() - 1))
             {
-                dataNumber = (SaveController.GetDataNumber() - 1);
+                saveDataId = (SaveController.GetDataNumber() - 1);
             }
 
             Instance = this;
             InitializationLoad();
             Initialization(languagePackId);
 
-            if (dataNumber == -1)
+            if (saveDataId == -1)
             {
                 playerControl = DataHandlerService.SetPlayerControl(ScriptableObject.CreateInstance<PlayerControl>());
             }
@@ -255,19 +276,19 @@ namespace UCT.Global.Core
                     playerBehaviour = playerOw.GetComponent<PlayerBehaviour>();
             }
 
-            if (haveInOutBlack)
+            if (isSceneSwitchingFadeTransitionEnabled)
             {
-                inOutBlack = GameObject.Find("Canvas/InOutBlack").GetComponent<Image>();
-                inOutBlack.color = Color.black;
-                OverworldControl.pause = !notPauseIn;
-                if (!noInBlack)
+                sceneSwitchingFadeImage = GameObject.Find("Canvas/InOutBlack").GetComponent<Image>();
+                sceneSwitchingFadeImage.color = Color.black;
+                OverworldControl.pause = !isSceneSwitchingFadeInUnpaused;
+                if (!isSceneSwitchingFadeInDisabled)
                 {
-                    inOutBlack.DOColor(Color.clear, 0.5f).SetEase(Ease.Linear).OnKill(() => OverworldControl.pause = false);
+                    sceneSwitchingFadeImage.DOColor(Color.clear, 0.5f).SetEase(Ease.Linear).OnKill(() => OverworldControl.pause = false);
                     CanvasController.Instance.frame.color = OverworldControl.hdResolution ? new Color(1, 1, 1, 1) : new Color(1, 1, 1, 0);
                 }
                 else
                 {
-                    inOutBlack.color = Color.clear;
+                    sceneSwitchingFadeImage.color = Color.clear;
                 }
             }
 
@@ -278,7 +299,7 @@ namespace UCT.Global.Core
 
             GameUtilityService.ToggleAllSfx(OverworldControl.noSfx);
         
-            beatTimes = MathUtilityService.MusicBpmCount(bpm, bpmDeviation);
+            beatSeconds = MathUtilityService.MusicBpmCount(bpm, bpmDeviation);
         }
 
         private void Update()
@@ -315,7 +336,7 @@ namespace UCT.Global.Core
                 GameUtilityService.SetResolution(OverworldControl.resolutionLevel);
             }
 
-            if (isMetronome) GameUtilityService.Metronome();
+            if (isMetronome) GameUtilityService.Metronome(MainControl.Instance.beatSeconds);
         }
 
     }

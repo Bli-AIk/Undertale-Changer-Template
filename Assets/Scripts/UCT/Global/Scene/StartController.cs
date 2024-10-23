@@ -30,7 +30,7 @@ namespace UCT.Global.Scene
             AudioController.Instance.GetFx(11, MainControl.Instance.AudioControl.fxClipUI);
             _text.text = MainControl.Instance.OverworldControl.sceneTextsAsset;
 
-            var playerControl = SaveController.LoadData("Data" + MainControl.Instance.dataNumber);
+            var playerControl = SaveController.LoadData("Data" + MainControl.Instance.saveDataId);
         }
 
         private void Update()

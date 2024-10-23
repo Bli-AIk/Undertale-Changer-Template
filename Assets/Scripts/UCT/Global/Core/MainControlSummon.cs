@@ -102,9 +102,9 @@ namespace UCT.Global.Core
                 //Debug.LogWarning("<color=yellow>检测到本场景内有MainControl</color>", gameObject);
 
                 mainControl.sceneState = sceneState;
-                mainControl.haveInOutBlack = haveInOutBlack;
-                mainControl.noInBlack = noInBlack;
-                mainControl.notPauseIn = notPauseIn;
+                mainControl.isSceneSwitchingFadeTransitionEnabled = haveInOutBlack;
+                mainControl.isSceneSwitchingFadeInDisabled = noInBlack;
+                mainControl.isSceneSwitchingFadeInUnpaused = notPauseIn;
 
                 mainControl.bpm = bpm;
                 mainControl.bpmDeviation = bpmDeviation;
@@ -121,9 +121,9 @@ namespace UCT.Global.Core
 
             mainControl = gameObject.AddComponent<MainControl>();
             mainControl.sceneState = sceneState;
-            mainControl.haveInOutBlack = haveInOutBlack;
-            mainControl.noInBlack = noInBlack;
-            mainControl.notPauseIn = notPauseIn;
+            mainControl.isSceneSwitchingFadeTransitionEnabled = haveInOutBlack;
+            mainControl.isSceneSwitchingFadeInDisabled = noInBlack;
+            mainControl.isSceneSwitchingFadeInUnpaused = notPauseIn;
 
             mainControl.bpm = bpm;
             mainControl.bpmDeviation = bpmDeviation;
