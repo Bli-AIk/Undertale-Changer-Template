@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+// ReSharper disable HeuristicUnreachableCode
 
 namespace Obsolete
 {
@@ -40,6 +41,9 @@ namespace Obsolete
 
         private void Start()
         {
+            ObsoleteTip();
+            return;
+            
             points.Clear();
             if (pointsMax < 3)
             {
@@ -96,6 +100,8 @@ namespace Obsolete
 
         private void Update()
         {
+            ObsoleteTip();
+            return;
             var localPoss = new List<Vector2>();
             for (var i = 0; i < points.Count; i++)
             {
@@ -129,6 +135,8 @@ namespace Obsolete
 
         private List<Transform> Draw(List<Transform> pointList, float drawRadius)
         {
+            ObsoleteTip();
+            return new List<Transform>();
             var sides = pointList.Count;  // 根据points的数量确定边数
             var drawnPoints = new List<Transform>();
 
@@ -149,6 +157,8 @@ namespace Obsolete
 
         private void AnimateToRectangle(List<Transform> pointList, float duration, List<Vector2> vertices)
         {
+            ObsoleteTip();
+            return;
             if (pointList.Count != vertices.Count)
             {
                 UCT.Global.Other.Debug.Log("The number of points and vertices must be the same.");
@@ -168,6 +178,11 @@ namespace Obsolete
             {
                 pointList[i].DOMove(new Vector3(newPositions[i].x, newPositions[i].y, 0), duration);
             }
+        }
+
+        private void ObsoleteTip()
+        {
+            UCT.Global.Other.Debug.Log("你正在使用废弃的脚本：OldBoxController\n该脚本已无法使用，请使用新的脚本：BoxController", this);
         }
     }
 }
