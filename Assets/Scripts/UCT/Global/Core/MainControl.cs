@@ -66,14 +66,12 @@ namespace UCT.Global.Core
         public float bpm;
         [Header("BGM BPM偏移")]
         public float bpmDeviation;
-        [Header("是否开启节拍器")]
-        public bool isMetronome;
-
-        [Space]
-        
-        [Header("=== BGM BPM计算结果 ===")]
         [Header("每拍所在的秒数列表")]
         [FormerlySerializedAs("beatTimes")] public List<float> beatSeconds;
+        
+        [Header("=== 节拍器 ===")]
+        [Header("是否开启节拍器")]
+        public bool isMetronome;
         [Header("当前节拍数")]
         public int currentBeatIndex; 
         [Header("下一节拍所在时间")] 
