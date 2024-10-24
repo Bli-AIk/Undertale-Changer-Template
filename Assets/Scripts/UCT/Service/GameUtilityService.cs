@@ -429,34 +429,5 @@ namespace UCT.Service
         {
             return new Color(Random.Range(0, 1f), Random.Range(0, 1f), Random.Range(0, 1f), 1);
         }
-
-        /// <summary>
-        /// 控制节拍器
-        /// </summary>
-        /// <param name="instanceBeatTimes"></param>
-        public static void Metronome(List<float> instanceBeatTimes)
-        {
-            if (instanceBeatTimes.Count <= 0) return;
-
-            var firstIn = true;
-            while (MainControl.Instance.currentBeatIndex < instanceBeatTimes.Count && AudioController.Instance.audioSource.time >= MainControl.Instance.nextBeatSecond)
-            {
-                if (firstIn)
-                {
-                    AudioController.Instance.GetFx(MainControl.Instance.currentBeatIndex % 4 == 0 ? 13 : 14, MainControl.Instance.AudioControl.fxClipUI);
-                }
-                MainControl.Instance. currentBeatIndex++;
-
-                if (MainControl.Instance.currentBeatIndex < instanceBeatTimes.Count)
-                {
-                    MainControl.Instance.nextBeatSecond = instanceBeatTimes[MainControl.Instance.currentBeatIndex];
-                }
-                firstIn = false;
-            }
-
-            if (MainControl.Instance.currentBeatIndex <instanceBeatTimes.Count) return;
-            MainControl.Instance. nextBeatSecond =instanceBeatTimes[0];
-            MainControl.Instance.   currentBeatIndex = 0;
-        }
     }
 }

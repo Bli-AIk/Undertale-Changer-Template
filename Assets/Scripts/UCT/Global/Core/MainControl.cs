@@ -61,24 +61,6 @@ namespace UCT.Global.Core
 
         [Space]
         
-        [Header("=== BPM相关设置 ===")]
-        [Header("BGM BPM")]
-        public float bpm;
-        [Header("BGM BPM偏移")]
-        public float bpmDeviation;
-        [Header("每拍所在的秒数列表")]
-        [FormerlySerializedAs("beatTimes")] public List<float> beatSeconds;
-        
-        [Header("=== 节拍器 ===")]
-        [Header("是否开启节拍器")]
-        public bool isMetronome;
-        [Header("当前节拍数")]
-        public int currentBeatIndex; 
-        [Header("下一节拍所在时间")] 
-        [FormerlySerializedAs("nextBeatTime")] public float nextBeatSecond;
-        
-        [Space]
-        
         [Header("=== UI与画面相关 ===")]
         public Camera cameraMainInBattle;
         public Camera mainCamera;
@@ -297,7 +279,6 @@ namespace UCT.Global.Core
 
             GameUtilityService.ToggleAllSfx(OverworldControl.noSfx);
         
-            beatSeconds = MathUtilityService.MusicBpmCount(bpm, bpmDeviation);
         }
 
         private void Update()
@@ -334,7 +315,6 @@ namespace UCT.Global.Core
                 GameUtilityService.SetResolution(OverworldControl.resolutionLevel);
             }
 
-            if (isMetronome) GameUtilityService.Metronome(MainControl.Instance.beatSeconds);
         }
 
     }

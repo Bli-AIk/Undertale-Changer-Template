@@ -80,30 +80,6 @@ namespace UCT.Service
         }
 
         /// <summary>
-        /// 计算BGM节拍
-        /// </summary>
-        public static List<float> MusicBpmCount(float inputBpm, float inputBpmDeviation, float musicDuration = 0)
-        {
-            if (AudioController.Instance.audioSource.clip == null) return new List<float>();
-            
-            if (musicDuration <= 0)
-                musicDuration = AudioController.Instance.audioSource.clip.length;
-
-            var beatInterval = 60f / inputBpm;
-            var currentTime = inputBpmDeviation;
-            List<float> beats = new();
-
-            // 计算每个拍子的时间点，直到达到音乐时长
-            while (currentTime < musicDuration)
-            {
-                beats.Add(currentTime);
-                currentTime += beatInterval;
-            }
-
-            return beats;
-        }
-
-        /// <summary>
         /// 通过分辨率的高度转换得到宽度
         /// </summary>
         /// <param name="resolutionHeights">分辨率高度列表</param>

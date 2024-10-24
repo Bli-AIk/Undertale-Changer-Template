@@ -35,15 +35,6 @@ namespace UCT.Global.Core
         [Header("BGM循环播放初始状态")]
         public bool loop = true;
 
-        [Header("BGM BPM")]
-        public float bpm = 120;
-
-        [Header("BGM BPM偏移")]
-        public float bpmDeviation;
-
-        [Header("初始化时开启节拍器")]
-        public bool openMetronome;
-
         [Header("-MainControl设置-")]
         [Space]
         [Header("黑场状态相关")]
@@ -106,10 +97,6 @@ namespace UCT.Global.Core
                 mainControl.isSceneSwitchingFadeInDisabled = noInBlack;
                 mainControl.isSceneSwitchingFadeInUnpaused = notPauseIn;
 
-                mainControl.bpm = bpm;
-                mainControl.bpmDeviation = bpmDeviation;
-                mainControl.isMetronome = openMetronome;
-
                 mainControl.InitializationOverworld();
                 mainControl.Start();
                 mainControl.mainCamera = Camera.main;
@@ -124,10 +111,6 @@ namespace UCT.Global.Core
             mainControl.isSceneSwitchingFadeTransitionEnabled = haveInOutBlack;
             mainControl.isSceneSwitchingFadeInDisabled = noInBlack;
             mainControl.isSceneSwitchingFadeInUnpaused = notPauseIn;
-
-            mainControl.bpm = bpm;
-            mainControl.bpmDeviation = bpmDeviation;
-            mainControl.isMetronome = openMetronome;
 
             mainControl.gameObject.name = "MainControl";
             mainControl.InitializationOverworld();
