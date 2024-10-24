@@ -13,8 +13,10 @@ namespace UCT.Global.Other
         [Header("=== BPM相关设置 ===")]
         [Header("BGM BPM")]
         public float bpm = 120;
+        private float _bpmBackup = 120;
         [Header("BGM BPM偏移")]
         public float bpmDeviation; 
+        private float _bpmDeviationBackup;
         [Header("每拍所在的秒数列表")]
         public List<float> beatSeconds;
         [Space]
@@ -33,7 +35,14 @@ namespace UCT.Global.Other
 
         private void Update()
         {
-            MetronomePlayer(beatSeconds);
+            if (!Mathf.Approximately(bpm, _bpmBackup) || !Mathf.Approximately(bpmDeviation, _bpmDeviationBackup))
+            {
+                _bpmBackup = bpm;
+                _bpmDeviationBackup = bpmDeviation;
+                Start();
+            }
+            
+            CalculateAndPlayMetronome(beatSeconds);
         }
 
         /// <summary>
@@ -63,7 +72,7 @@ namespace UCT.Global.Other
         /// 控制节拍器
         /// </summary>
         /// <param name="instanceBeatTimes"></param>
-        private void MetronomePlayer(List<float> instanceBeatTimes)
+        private void CalculateAndPlayMetronome(List<float> instanceBeatTimes)
         {
             if (instanceBeatTimes.Count <= 0) return;
 
@@ -71,6 +80,9 @@ namespace UCT.Global.Other
             while (currentBeatIndex < instanceBeatTimes.Count &&
                    AudioController.Instance.audioSource.time >= nextBeatSecond)
             {
+                if (!Mathf.Approximately(bpm, _bpmBackup) || !Mathf.Approximately(bpmDeviation, _bpmDeviationBackup))
+                    return;
+                
                 if (firstIn && isPlayMetronome)
                     AudioController.Instance.GetFx(currentBeatIndex % 4 == 0 ? 13 : 14,
                         MainControl.Instance.AudioControl.fxClipUI);
