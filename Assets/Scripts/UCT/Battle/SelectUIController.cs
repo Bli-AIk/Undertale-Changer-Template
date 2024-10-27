@@ -122,6 +122,9 @@ namespace UCT.Battle
         {
             if (MainControl.Instance.OverworldControl.isSetting || MainControl.Instance.OverworldControl.pause)
                 return;
+            
+            if (MainControl.Instance.playerControl.isDebug)
+                NameUIUpdate();
 
             if (TurnController.Instance.isMyTurn)
                 MyTurn();
@@ -828,7 +831,7 @@ namespace UCT.Battle
             }
 
             _hpUI.transform.localPosition = new Vector3(9.85f + 0.0265f * (MainControl.Instance.playerControl.hpMax - 20), -5.825f);
-            _nameUI.text = MainControl.Instance.playerControl.playerName + " lv<size=3><color=#00000000>0</size></color>" + MainControl.Instance.playerControl.lv;
+            NameUIUpdate();
 
             if (uiTextMode != UITextMode.Food)
                 _hpUI.text = FormatWithLeadingZero(MainControl.Instance.playerControl.hp) + " / " + FormatWithLeadingZero(MainControl.Instance.playerControl.hpMax);
@@ -842,10 +845,15 @@ namespace UCT.Battle
             }
         }
 
+        private void NameUIUpdate()
+        {
+            _nameUI.text = MainControl.Instance.playerControl.playerName + " lv<size=3><color=#00000000>0</size></color>" + MainControl.Instance.playerControl.lv;
+        }
+
         /// <summary>
         /// 将数字格式化为两位数（前导零）显示，例如将 1 显示为 01。
         /// </summary>
-        private string FormatWithLeadingZero(int i)
+        private static string FormatWithLeadingZero(int i)
         {
             return i.ToString("D2");
         }
