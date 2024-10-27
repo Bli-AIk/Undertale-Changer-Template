@@ -42,7 +42,7 @@ namespace UCT.Service
                     MainControl.Instance.cameraMainInBattle = MainControl.Instance.cameraShake.GetComponent<Camera>();
             }
 
-            if (!MainControl.Instance.OverworldControl.hdResolution)
+            if (!MainControl.Instance.OverworldControl.isUsingHDFrame)
             {
                 if (MainControl.Instance.OverworldControl.resolutionLevel > 4)
                     MainControl.Instance.OverworldControl.resolutionLevel = 0;
@@ -53,7 +53,7 @@ namespace UCT.Service
                     MainControl.Instance.OverworldControl.resolutionLevel = 5;
             }
 
-            if (!MainControl.Instance.OverworldControl.hdResolution)
+            if (!MainControl.Instance.OverworldControl.isUsingHDFrame)
             {
                 //if (MainControl.Instance.mainCamera)
                 MainControl.Instance.mainCamera.rect = new Rect(0, 0, 1, 1);
@@ -164,7 +164,7 @@ namespace UCT.Service
                 case > 0:
                 {
                     MainControl.Instance.sceneSwitchingFadeImage.DOColor(fadeColor, fadeTime).SetEase(Ease.Linear).OnKill(() => GameUtilityService.SwitchScene(scene));
-                    if (!MainControl.Instance.OverworldControl.hdResolution)
+                    if (!MainControl.Instance.OverworldControl.isUsingHDFrame)
                         CanvasController.Instance.frame.color = new Color(1, 1, 1, 0);
                     break;
                 }
@@ -177,7 +177,7 @@ namespace UCT.Service
                     fadeTime = Mathf.Abs(fadeTime);
                     MainControl.Instance.sceneSwitchingFadeImage.color = fadeColor;
                     MainControl.Instance.sceneSwitchingFadeImage.DOColor(fadeColor, fadeTime).SetEase(Ease.Linear).OnKill(() => GameUtilityService.SwitchScene(scene));
-                    if (!MainControl.Instance.OverworldControl.hdResolution)
+                    if (!MainControl.Instance.OverworldControl.isUsingHDFrame)
                         CanvasController.Instance.frame.color = new Color(1, 1, 1, 0);
                     break;
                 }
@@ -185,26 +185,28 @@ namespace UCT.Service
         }
 
         /// <summary>
-        /// 更改分辨率
+        /// 更新游戏的分辨率并返回更改后的resolutionLevel值。
         /// </summary>
-        public static void UpdateResolutionSettings()
+        public static int UpdateResolutionSettings(bool isUsingHdFrame, int resolutionLevel)
         {
-            if (!MainControl.Instance.OverworldControl.hdResolution)
+            if (!isUsingHdFrame)
             {
-                if (MainControl.Instance.OverworldControl.resolutionLevel is >= 0 and < 4)
-                    MainControl.Instance.OverworldControl.resolutionLevel += 1;
+                if (resolutionLevel is >= 0 and < 4)
+                    resolutionLevel += 1;
                 else
-                    MainControl.Instance.OverworldControl.resolutionLevel = 0;
+                    resolutionLevel = 0;
             }
             else
             {
-                if (MainControl.Instance.OverworldControl.resolutionLevel is >= 5 and < 6)
-                    MainControl.Instance.OverworldControl.resolutionLevel += 1;
+                if (resolutionLevel is >= 5 and < 6)
+                    resolutionLevel += 1;
                 else
-                    MainControl.Instance.OverworldControl.resolutionLevel = 5;
+                    resolutionLevel = 5;
             }
 
-            SetResolution(MainControl.Instance.OverworldControl.resolutionLevel);
+            SetResolution(resolutionLevel);
+
+            return resolutionLevel;
         }
 
         /// <summary>

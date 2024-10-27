@@ -489,7 +489,7 @@ namespace UCT.Global.UI
 
                                         goto default;
                                     case 3:
-                                        GameUtilityService.UpdateResolutionSettings();
+                                        MainControl.Instance.OverworldControl.resolutionLevel = GameUtilityService.UpdateResolutionSettings(MainControl.Instance.OverworldControl.isUsingHDFrame, MainControl.Instance.OverworldControl.resolutionLevel);
                                         goto default;
                                     case 4:
                                         MainControl.Instance.OverworldControl.noSfx = !MainControl.Instance.OverworldControl.noSfx;
@@ -553,10 +553,10 @@ namespace UCT.Global.UI
                                 else if (_settingSelect == 3)
                                 {
                                     AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
-                                    MainControl.Instance.OverworldControl.hdResolution = !MainControl.Instance.OverworldControl.hdResolution;
-                                    GameUtilityService.UpdateResolutionSettings();
+                                    MainControl.Instance.OverworldControl.isUsingHDFrame = !MainControl.Instance.OverworldControl.isUsingHDFrame;
+                                    MainControl.Instance.OverworldControl.resolutionLevel = GameUtilityService.UpdateResolutionSettings(MainControl.Instance.OverworldControl.isUsingHDFrame, MainControl.Instance.OverworldControl.resolutionLevel);
                                     SettingText();
-                                    PlayerPrefs.SetInt("hdResolution", Convert.ToInt32(MainControl.Instance.OverworldControl.hdResolution));
+                                    PlayerPrefs.SetInt("hdResolution", Convert.ToInt32(MainControl.Instance.OverworldControl.isUsingHDFrame));
                                 }
                             }
                         }
@@ -599,7 +599,7 @@ namespace UCT.Global.UI
                                 break;
 
                             case 3:
-                                if (!MainControl.Instance.OverworldControl.hdResolution)
+                                if (!MainControl.Instance.OverworldControl.isUsingHDFrame)
                                     textForUnder = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingResolvingTip");
                                 else
                                     textForUnder = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingResolvingTipHD");

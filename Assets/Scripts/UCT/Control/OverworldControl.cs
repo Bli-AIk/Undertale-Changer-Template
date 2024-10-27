@@ -58,7 +58,7 @@ namespace UCT.Control
         public Vector2 animDirection;
 
         [Header("HD边框")]
-        public bool hdResolution;
+        [FormerlySerializedAs("hdResolution")] public bool isUsingHDFrame;
 
         public List<Sprite> frames;
 

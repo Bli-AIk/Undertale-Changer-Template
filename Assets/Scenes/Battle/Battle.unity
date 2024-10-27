@@ -3654,7 +3654,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   width: 0
-  Options:
+  options:
   - {x: 5, y: 4, z: 19.5, w: 0}
   - {x: 2, y: -8.85, z: 20, w: 0}
 --- !u!114 &999867831
@@ -4935,7 +4935,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   width: 0
-  Options:
+  options:
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &1373284518
@@ -5341,7 +5341,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3b5cea9dcecc6b40a08bd4351171480, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  num: 0
+  number: 0
 --- !u!1 &1389938131
 GameObject:
   m_ObjectHideFlags: 0
@@ -6215,7 +6215,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   width: 0
-  Options:
+  options:
   - {x: 0, y: 76.28, z: 0, w: 0}
   - {x: 0, y: 76.28, z: 0, w: 0}
 --- !u!1001 &1518212138
@@ -6648,7 +6648,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   width: 0
-  Options:
+  options:
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &1535267428
@@ -6899,15 +6899,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9f39c8fbace57c4b9fb0522a52a9bbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  test1: -0.5
-  test2: 0.05
   dingTime: 0.5
   gradientTime: 0.5
   speed: 3
   speedWeightX: 0
   speedWeightY: 0
-  hitCD: 0
-  hitCDMax: 0
+  hitCd: 0
+  hitCdMax: 0
   displacement: 0.175
   isMoving: 0
   timeInterpolation: -0.225
@@ -7036,7 +7034,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3b5cea9dcecc6b40a08bd4351171480, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  num: 2
+  number: 0
 --- !u!1 &1601239022
 GameObject:
   m_ObjectHideFlags: 0
@@ -7319,7 +7317,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3b5cea9dcecc6b40a08bd4351171480, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  num: 1
+  number: 0
 --- !u!1001 &1642844445
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7732,7 +7730,7 @@ MonoBehaviour:
   hpColorUnder: {r: 1, g: 0, b: 0, a: 1}
   hpColorOn: {r: 1, g: 1, b: 0, a: 1}
   hpColorHit: {r: 1, g: 1, b: 1, a: 1}
-  numDialog: 0
+  numberDialog: 0
   isDialog: 0
   spriteUI:
   - {fileID: 21300000, guid: f4350d8ad983d4e419cf36a71cd8fb14, type: 3}
@@ -7977,7 +7975,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   width: 0
-  Options:
+  options:
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
 --- !u!1001 &1739653563

@@ -157,7 +157,7 @@ namespace UCT.Global.Core
 
             //--------------------------------------------------------------------------------
 
-            OverworldControl.hdResolution = Convert.ToBoolean(PlayerPrefs.GetInt("hdResolution", 0));
+            OverworldControl.isUsingHDFrame = Convert.ToBoolean(PlayerPrefs.GetInt("hdResolution", 0));
             OverworldControl.noSfx = Convert.ToBoolean(PlayerPrefs.GetInt("noSFX", 0));
             OverworldControl.vsyncMode = (OverworldControl.VSyncMode)PlayerPrefs.GetInt("vsyncMode", 0);
         }
@@ -264,7 +264,7 @@ namespace UCT.Global.Core
                 if (!isSceneSwitchingFadeInDisabled)
                 {
                     sceneSwitchingFadeImage.DOColor(Color.clear, 0.5f).SetEase(Ease.Linear).OnKill(() => OverworldControl.pause = false);
-                    CanvasController.Instance.frame.color = OverworldControl.hdResolution ? new Color(1, 1, 1, 1) : new Color(1, 1, 1, 0);
+                    CanvasController.Instance.frame.color = OverworldControl.isUsingHDFrame ? new Color(1, 1, 1, 1) : new Color(1, 1, 1, 0);
                 }
                 else
                 {
@@ -300,22 +300,31 @@ namespace UCT.Global.Core
 
             if (OverworldControl.isSetting)
                 return;
+            UpdateSettings();
+
+        }
+        /// <summary>
+        /// 控制按键设置分辨率、切换音效和全屏模式。
+        /// </summary>
+        private void UpdateSettings()
+        {
             if (GameUtilityService.KeyArrowToControl(KeyCode.Tab))
             {
-                GameUtilityService.UpdateResolutionSettings();
+                OverworldControl.resolutionLevel =
+                    GameUtilityService.UpdateResolutionSettings(OverworldControl.isUsingHDFrame,
+                        OverworldControl.resolutionLevel);
             }
             if (GameUtilityService.KeyArrowToControl(KeyCode.Semicolon))
             {
                 OverworldControl.noSfx = !OverworldControl.noSfx;
                 GameUtilityService.ToggleAllSfx(OverworldControl.noSfx);
             }
+            // ReSharper disable once InvertIf
             if (GameUtilityService.KeyArrowToControl(KeyCode.F4))
             {
                 OverworldControl.fullScreen = !OverworldControl.fullScreen;
                 GameUtilityService.SetResolution(OverworldControl.resolutionLevel);
             }
-
         }
-
     }
 }

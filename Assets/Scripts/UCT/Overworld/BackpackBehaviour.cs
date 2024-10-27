@@ -67,7 +67,7 @@ namespace UCT.Overworld
 
         public void SuitResolution()
         {
-            if (!MainControl.Instance.OverworldControl.hdResolution)
+            if (!MainControl.Instance.OverworldControl.isUsingHDFrame)
             {
                 var rectTransform = rawImage.rectTransform;
 
