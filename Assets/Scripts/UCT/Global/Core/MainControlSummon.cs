@@ -30,7 +30,7 @@ namespace UCT.Global.Core
         public float volume = 0.5f;
 
         [Header("BGM音调")]
-        public float pitch = 1;
+        public float pitch = 0.5f;
 
         [Header("BGM循环播放初始状态")]
         public bool loop = true;
