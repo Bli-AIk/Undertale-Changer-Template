@@ -287,13 +287,7 @@ namespace UCT.Global.Core
 
             if (playerControl.isDebug)
             {
-                if (Input.GetKeyDown(KeyCode.F5))
-                    SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-
-                if (playerControl.keepInvincible)
-                    playerControl.hp = playerControl.hpMax;
-
-                playerControl.playerName = "Debug";
+                DebugUpdate();
             }
             if (playerControl.hpMax < playerControl.hp)
                 playerControl.hp = playerControl.hpMax;
@@ -303,6 +297,32 @@ namespace UCT.Global.Core
             UpdateSettings();
 
         }
+
+        /// <summary>
+        /// 开启Debug后，在每帧执行
+        /// </summary>
+        private void DebugUpdate()
+        {
+            // F5刷新场景
+            if (Input.GetKeyDown(KeyCode.F5))
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            // 无敌模式 Ctrl+i开启
+            if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl) && Input.GetKeyDown(KeyCode.I))
+            {
+                playerControl.keepInvincible = !playerControl.keepInvincible;
+                Other.Debug.Log("Debug: 无敌模式已开启！", "#FFFF00");
+            }
+
+            if (playerControl.keepInvincible)
+                playerControl.hp = playerControl.hpMax;
+            // 强制重命名playerName为Debug
+            playerControl.playerName = TextProcessingService.RandomStringColor("D") +
+                                       TextProcessingService.RandomStringColor("e") +
+                                       TextProcessingService.RandomStringColor("b") +
+                                       TextProcessingService.RandomStringColor("u") +
+                                       TextProcessingService.RandomStringColor("g");
+        }
+
         /// <summary>
         /// 控制按键设置分辨率、切换音效和全屏模式。
         /// </summary>
