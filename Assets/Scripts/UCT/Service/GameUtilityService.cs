@@ -431,5 +431,17 @@ namespace UCT.Service
         {
             return new Color(Random.Range(0, 1f), Random.Range(0, 1f), Random.Range(0, 1f), 1);
         }
+
+        public static Color GetDifferentRandomColor(Color colorToAvoid)
+        {
+            Color newColor;
+            do
+            {
+                newColor = GameUtilityService.GetRandomColor();
+            } 
+            while (newColor == colorToAvoid);
+
+            return newColor;
+        }
     }
 }

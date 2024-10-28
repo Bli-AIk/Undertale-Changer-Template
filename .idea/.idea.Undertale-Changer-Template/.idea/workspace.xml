@@ -5,7 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8f7c2298-d077-422b-9131-f9a839bed961" name="更改" comment="">
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Debug/DebugStringGradient.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Scripts/Debug/DebugStringGradient.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Service/GameUtilityService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Service/GameUtilityService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Service/TextProcessingService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Service/TextProcessingService.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,20 +56,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
-    &quot;附加到 Unity 编辑器.附加到 Unity 编辑器.executor&quot;: &quot;Debug&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "develop",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.keymap",
+    "vue.rearranger.settings.migration": "true",
+    "附加到 Unity 编辑器.附加到 Unity 编辑器.executor": "Debug"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="附加到 Unity 编辑器.附加到 Unity 编辑器">
     <configuration name="启动 Unity" type="RunUnityExe" factoryName="Unity Executable">
       <option name="EXE_PATH" value="D:\Unity Editor\2021.3.15f1\Editor\Unity.exe" />
@@ -170,7 +174,7 @@
       <workItem from="1730015599984" duration="1149000" />
       <workItem from="1730028800967" duration="3846000" />
       <workItem from="1730032779800" duration="2702000" />
-      <workItem from="1730088687314" duration="325000" />
+      <workItem from="1730088687314" duration="3832000" />
     </task>
     <servers />
   </component>

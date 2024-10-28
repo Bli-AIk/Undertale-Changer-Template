@@ -241,7 +241,7 @@ namespace UCT.Service
         }
 
         /// <summary>
-        /// 随机生成一个六位长的英文
+        /// 随机生成一串英文字符串。
         /// </summary>
         public static string RandomString(int length = 6, string alphabet = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM")
         {
@@ -252,6 +252,47 @@ namespace UCT.Service
                 text += alphabet[Random.Range(0, alphabet.Length)];
             }
             return text;
+        }
+        /// <summary>
+        /// 生成指定颜色的字符串形式。
+        /// </summary>
+        /// <param name="hexColor">颜色的16进制字符串</param>
+        /// <returns>带有指定颜色的字符串格式</returns>
+        public static string StringColor(string hexColor)
+        {
+            return $"<color=#{hexColor}FF>";
+        }
+
+        /// <summary>
+        /// 生成指定颜色的字符串形式，并包含原始文本。
+        /// </summary>
+        /// <param name="hexColor">颜色的16进制字符串</param>
+        /// <param name="inputString">原始文本。</param>
+        /// <returns>带有指定颜色的字符串格式</returns>
+        public static string StringColor(string hexColor, string inputString)
+        {
+            return $"<color=#{hexColor}FF>{inputString}</color>";
+        }
+
+        /// <summary>
+        /// 生成指定Color的字符串形式。
+        /// </summary>
+        /// <param name="color">目标颜色。</param>
+        /// <returns>带有指定颜色的字符串格式</returns>
+        public static string StringColor(Color color)
+        {
+            return $"<color=#{ColorUtility.ToHtmlStringRGB(color)}FF>";
+        }
+
+        /// <summary>
+        /// 生成指定Color的字符串形式，并包含原始文本。
+        /// </summary>
+        /// <param name="color">目标颜色。</param>
+        /// <param name="inputString">原始文本。</param>
+        /// <returns>带有指定颜色的字符串格式</returns>
+        public static string StringColor(Color color, string inputString)
+        {
+            return $"<color=#{ColorUtility.ToHtmlStringRGB(color)}FF>{inputString}</color>";
         }
 
         /// <summary>
@@ -272,9 +313,9 @@ namespace UCT.Service
         /// <summary>
         /// 生成字符串形式的随机颜色。
         /// </summary>
-        public static string RandomStringColor(string origin)
+        public static string RandomStringColor(string inputString)
         {
-            return RandomStringColor() + origin + "</color>";
+            return RandomStringColor() + inputString + "</color>";
         }
 
         /// <summary>
