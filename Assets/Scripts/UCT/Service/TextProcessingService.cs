@@ -289,52 +289,14 @@ namespace UCT.Service
         }
 
         /// <summary>
-        /// 将输入文本中的字母转换为指定的大小写。（默认大写） 
+        /// 将输入文本中的字母转换为指定的大小写。
         /// </summary>
         /// <param name="input">输入字符串</param>
         /// <param name="toLowercase">是否转换为小写</param>
         /// <returns>转换后的字符串</returns>
         public static string ConvertLettersCase(string input, bool toLowercase)
         {
-            var result = "";
-            const string UPPERCASE_LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            const string LOWERCASE_LETTERS = "abcdefghijklmnopqrstuvwxyz";
-    
-            foreach (var t in input)
-            {
-                var isPlus = false;
-                if (toLowercase)
-                {
-                    for (var j = 0; j < UPPERCASE_LETTERS.Length; j++)
-                    {
-                        if (t == UPPERCASE_LETTERS[j])
-                        {
-                            result += LOWERCASE_LETTERS[j];
-                            break;
-                        }
-
-                        if (j == UPPERCASE_LETTERS.Length - 1)
-                            isPlus = true;
-                    }
-                }
-                else
-                {
-                    for (var j = 0; j < LOWERCASE_LETTERS.Length; j++)
-                    {
-                        if (t == LOWERCASE_LETTERS[j])
-                        {
-                            result += UPPERCASE_LETTERS[j];
-                            break;
-                        }
-
-                        if (j == LOWERCASE_LETTERS.Length - 1)
-                            isPlus = true;
-                    }
-                }
-                if (isPlus)
-                    result += t;
-            }
-            return result;
+            return toLowercase ? input.ToLower() : input.ToUpper();
         }
 
 
