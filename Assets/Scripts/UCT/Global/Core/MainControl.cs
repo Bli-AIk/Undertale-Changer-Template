@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Debug;
 using DG.Tweening;
 using UCT.Battle;
 using UCT.Control;
@@ -82,7 +83,7 @@ namespace UCT.Global.Core
 
         public CameraShake cameraShake, cameraShake3D;
 
-
+        private readonly DebugStringGradient _debugStringGradient = new("Debug");
         
 
         private void InitializationLoad()
@@ -316,11 +317,7 @@ namespace UCT.Global.Core
             if (playerControl.keepInvincible)
                 playerControl.hp = playerControl.hpMax;
             // 强制重命名playerName为Debug
-            playerControl.playerName = TextProcessingService.RandomStringColor("D") +
-                                       TextProcessingService.RandomStringColor("e") +
-                                       TextProcessingService.RandomStringColor("b") +
-                                       TextProcessingService.RandomStringColor("u") +
-                                       TextProcessingService.RandomStringColor("g");
+            playerControl.playerName = _debugStringGradient.UpdateStringGradient();
         }
 
         /// <summary>

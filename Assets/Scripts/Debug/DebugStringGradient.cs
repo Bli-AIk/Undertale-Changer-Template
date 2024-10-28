@@ -16,7 +16,7 @@ namespace Debug
         private readonly string _gradientString;
         private readonly List<Color> _colorList, _targetColorList;
 
-        private DebugStringGradient(string text)
+        public DebugStringGradient(string text)
         {
             _defaultColor = GameUtilityService.GetRandomColor(); 
             _targetColor = GameUtilityService.GetDifferentRandomColor(_defaultColor);
@@ -34,7 +34,7 @@ namespace Debug
         }
 
         
-        private string UpdateStringGradient()
+        public string UpdateStringGradient()
         {
             string result = null;
             for (var i = 0; i < _gradientString.Length; i++)
