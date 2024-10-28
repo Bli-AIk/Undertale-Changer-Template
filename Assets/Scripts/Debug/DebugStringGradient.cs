@@ -11,10 +11,11 @@ namespace Debug
     {
         private readonly Color _defaultColor;
         private Color _targetColor;
-        private readonly List<int> _gradientNumberList;
+        private readonly List<int> _gradientNumberList = new();
         private const int GradientNumberMax = 120;
         private readonly string _gradientString;
-        private readonly List<Color> _colorList, _targetColorList;
+        private readonly List<Color> _colorList = new();
+        private readonly List<Color> _targetColorList = new();
 
         public DebugStringGradient(string text)
         {
@@ -22,14 +23,11 @@ namespace Debug
             _targetColor = GameUtilityService.GetDifferentRandomColor(_defaultColor);
             _gradientString = text;
             
-            _colorList = new List<Color>(text.Length);
-            _gradientNumberList = new List<int>(text.Length);
-            
             for (var i = 0; i < text.Length; i++)
             {
-                _colorList[i] = _defaultColor;
-                _targetColorList[i] = _targetColor;
-                _gradientNumberList[i] = -i;
+                _colorList.Add(_defaultColor);
+                _targetColorList.Add(_targetColor);
+                _gradientNumberList.Add(-i);
             }
         }
 

@@ -83,7 +83,7 @@ namespace UCT.Global.Core
 
         public CameraShake cameraShake, cameraShake3D;
 
-        private readonly DebugStringGradient _debugStringGradient = new("Debug");
+        private DebugStringGradient _debugStringGradient = new("Debug");
         
 
         private void InitializationLoad()
@@ -279,7 +279,8 @@ namespace UCT.Global.Core
             OverworldControl.isSetting = false;
 
             GameUtilityService.ToggleAllSfx(OverworldControl.noSfx);
-        
+            
+            _debugStringGradient = new DebugStringGradient("Debug");
         }
 
         private void Update()
@@ -316,6 +317,12 @@ namespace UCT.Global.Core
 
             if (playerControl.keepInvincible)
                 playerControl.hp = playerControl.hpMax;
+
+            if (_debugStringGradient == null)
+            {
+                Other.Debug.Log("NO");
+                return;
+            }
             // 强制重命名playerName为Debug
             playerControl.playerName = _debugStringGradient.UpdateStringGradient();
         }
