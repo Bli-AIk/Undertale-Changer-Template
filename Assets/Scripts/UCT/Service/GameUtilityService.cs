@@ -437,7 +437,7 @@ namespace UCT.Service
             Color newColor;
             do
             {
-                newColor = GameUtilityService.GetRandomColor();
+                newColor = GetRandomColor();
             } 
             while (newColor == colorToAvoid);
 
