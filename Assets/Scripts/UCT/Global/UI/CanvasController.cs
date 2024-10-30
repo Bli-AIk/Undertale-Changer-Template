@@ -22,6 +22,7 @@ namespace UCT.Global.UI
         public int framePic;
 
         public static CanvasController Instance;
+        private static readonly int Open = Animator.StringToHash("Open");
         public bool openTurn;//敌人回合不能开
         public TextMeshProUGUI fps;
         public Image frame;
@@ -280,34 +281,24 @@ namespace UCT.Global.UI
             return TextProcessingService.GetFirstChildStringByPrefix(strings, returnString);
         }
 
-        private string ReadFile(string pathName, bool isOutSide)
+        private static string ReadFile(string pathName, bool isOutSide)
         {
-            string strs;
-            if (!isOutSide)
-                strs = Resources.Load<TextAsset>(pathName).text;
-            else
-                strs = File.ReadAllText(pathName + ".txt");
-            return strs;
+            return !isOutSide ? Resources.Load<TextAsset>(pathName).text : File.ReadAllText(pathName + ".txt");
         }
 
         /// <summary>
         /// 返回开/关文本
         /// </summary>
-        private string OpenOrClose(bool booler)
+        private static string OpenOrClose(bool inputBool)
         {
-            if (booler)
-                return TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Open");
-            return TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Close");
+            return TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, inputBool ? "Open" : "Close");
         }
 
         private void Update()
         {
             if (freeze)
                 return;
-            if (MainControl.Instance.OverworldControl.openFPS)
-                fps.text = FPSFlash(fps.text);
-            else
-                fps.text = "";
+            fps.text = MainControl.Instance.OverworldControl.openFPS ? UpdateFPS(fps.text) : "";
 
             if (GameUtilityService.KeyArrowToControl(KeyCode.Escape, 1))
             {
@@ -599,10 +590,7 @@ namespace UCT.Global.UI
                                 break;
 
                             case 3:
-                                if (!MainControl.Instance.OverworldControl.isUsingHDFrame)
-                                    textForUnder = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingResolvingTip");
-                                else
-                                    textForUnder = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingResolvingTipHD");
+                                textForUnder = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, !MainControl.Instance.OverworldControl.isUsingHDFrame ? "SettingResolvingTip" : "SettingResolvingTipHD");
 
                                 break;
 
@@ -778,23 +766,24 @@ namespace UCT.Global.UI
         }
 
         private float _mLastUpdateShowTime;  //上一次更新帧率的时间;
-        private float _mUpdateShowDeltaTime = 0.2f;//更新帧率的时间间隔;
+        private const float MUpdateShowDeltaTime = 0.2f;//更新帧率的时间间隔;
         private int _mFrameUpdate;//帧数;
         private float _mFPS;//帧率
 
-        private string FPSFlash(string origin)
+        /// <summary>
+        /// 计算并返回当前帧率的字符串表示，每隔指定时间刷新一次。
+        /// </summary>
+        /// <param name="input">未到间隔时间时返回input</param>
+        /// <returns>当前帧率（FPS）的整数形式的字符串表示。</returns>
+        private string UpdateFPS(string input)
         {
             _mFrameUpdate++;
-            if (Time.realtimeSinceStartup - _mLastUpdateShowTime >= _mUpdateShowDeltaTime)
-            {
-                //FPS = 某段时间内的总帧数 / 某段时间
-                _mFPS = _mFrameUpdate / (Time.realtimeSinceStartup - _mLastUpdateShowTime);
-                _mFrameUpdate = 0;
-                _mLastUpdateShowTime = Time.realtimeSinceStartup;
-                return ((int)_mFPS).ToString();
-            }
-
-            return origin;
+            if (!(Time.realtimeSinceStartup - _mLastUpdateShowTime >= MUpdateShowDeltaTime)) return input;
+            //FPS = 某段时间内的总帧数 / 某段时间
+            _mFPS = _mFrameUpdate / (Time.realtimeSinceStartup - _mLastUpdateShowTime);
+            _mFrameUpdate = 0;
+            _mLastUpdateShowTime = Time.realtimeSinceStartup;
+            return ((int)_mFPS).ToString();
         }
 
         /// <summary>
@@ -802,17 +791,23 @@ namespace UCT.Global.UI
         /// </summary>
         public void AnimSetHeartPos()
         {
-            var uiPos = WorldToUgui(MainControl.Instance.OverworldControl.playerDeadPos);
+            var uiPos = WorldToUGUI(MainControl.Instance.OverworldControl.playerDeadPos);
             transform.Find("Heart").GetComponent<RectTransform>().anchoredPosition = uiPos;
         }
 
-        public Vector2 WorldToUgui(Vector3 position)
+        private Vector2 WorldToUGUI(Vector3 position)
         {
             var canvasRectTransform = GetComponent<RectTransform>();
-            Vector2 screenPoint = Camera.main.WorldToScreenPoint(position);//世界坐标转换为屏幕坐标
+            if (Camera.main == null)
+            {
+                Other.Debug.LogError("未找到主摄像机！");
+                return position;
+            }
+
+            Vector2 screenPoint = Camera.main.WorldToScreenPoint(position); //世界坐标转换为屏幕坐标
             var screenSize = new Vector2(Screen.width, Screen.height);
-            screenPoint -= screenSize / 2;//将屏幕坐标变换为以屏幕中心为原点
-            var anchorPos = screenPoint / screenSize * canvasRectTransform.sizeDelta;//缩放得到UGUI坐标
+            screenPoint -= screenSize / 2; //将屏幕坐标变换为以屏幕中心为原点
+            var anchorPos = screenPoint / screenSize * canvasRectTransform.sizeDelta; //缩放得到UGUI坐标
 
             return anchorPos;
         }
@@ -840,7 +835,7 @@ namespace UCT.Global.UI
 
         private void AnimOpen()
         {
-            animator.SetBool("Open", false);
+            animator.SetBool(Open, false);
             GameUtilityService.FadeOutAndSwitchScene("Battle", Color.black, false, -0.5f);
         }
     }
