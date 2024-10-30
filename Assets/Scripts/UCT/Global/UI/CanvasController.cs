@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using DG.Tweening;
 using TMPro;
 using UCT.Battle;
@@ -273,7 +274,7 @@ namespace UCT.Global.UI
         /// 获取语言包信息
         /// 返回returnString
         /// </summary>
-        private string GetLanguagePacksName(string pathString, string returnString, bool isOutSide)
+        private static string GetLanguagePacksName(string pathString, string returnString, bool isOutSide)
         {
             var strings = new List<string>();
             DataHandlerService.LoadItemData(strings, ReadFile(pathString + "\\LanguagePackInformation", isOutSide));
@@ -322,73 +323,68 @@ namespace UCT.Global.UI
             if (_isSettingControl)
             {
                 SettingText(false, true);
-                if (SettingControl() != KeyCode.None)
+                if (SettingControl() == KeyCode.None) return;
+                var j = 0;
+                switch (_controlPage)
                 {
-                    var j = 0;
-                    switch (_controlPage)
-                    {
-                        case 0:
-                            j = 0;
-                            goto default;
-                        case 1:
-                            j = 6;
-                            goto default;
-                        default:
-                            var origin = KeyCode.None;
+                    case 0:
+                        j = 0;
+                        goto default;
+                    case 1:
+                        j = 6;
+                        goto default;
+                    default:
+                        var origin = KeyCode.None;
 
-                            switch (_controlSelect)
-                            {
-                                case 0:
-                                    origin = MainControl.Instance.OverworldControl.keyCodes[_settingSelect + j];
-                                    MainControl.Instance.OverworldControl.keyCodes[_settingSelect + j] = SettingControl();
-                                    goto default;
-                                case 1:
-                                    origin = MainControl.Instance.OverworldControl.keyCodesBack1[_settingSelect + j];
-                                    MainControl.Instance.OverworldControl.keyCodesBack1[_settingSelect + j] = SettingControl();
-                                    goto default;
-                                case 2:
-                                    origin = MainControl.Instance.OverworldControl.keyCodesBack2[_settingSelect + j];
-                                    MainControl.Instance.OverworldControl.keyCodesBack2[_settingSelect + j] = SettingControl();
-                                    goto default;
-                                default:
-                                    var keycodes = new List<KeyCode>
-                                    {
-                                        MainControl.Instance.OverworldControl.keyCodes[_settingSelect + j],
-                                        MainControl.Instance.OverworldControl.keyCodesBack1[_settingSelect + j],
-                                        MainControl.Instance.OverworldControl.keyCodesBack2[_settingSelect + j]
-                                    };
-                                    for (var i = 0; i < MainControl.Instance.OverworldControl.keyCodes.Count; i++)
-                                    {
-                                        if (MainControl.Instance.OverworldControl.keyCodes[i] == keycodes[_controlSelect] && i != _settingSelect + j)
-                                        {
-                                            MainControl.Instance.OverworldControl.keyCodes[i] = origin;
-                                            break;
-                                        }
-                                    }
-                                    for (var i = 0; i < MainControl.Instance.OverworldControl.keyCodesBack1.Count; i++)
-                                    {
-                                        if (MainControl.Instance.OverworldControl.keyCodesBack1[i] == keycodes[_controlSelect] && i != _settingSelect + j)
-                                        {
-                                            MainControl.Instance.OverworldControl.keyCodesBack1[i] = origin;
-                                            break;
-                                        }
-                                    }
-                                    for (var i = 0; i < MainControl.Instance.OverworldControl.keyCodesBack2.Count; i++)
-                                    {
-                                        if (MainControl.Instance.OverworldControl.keyCodesBack2[i] == keycodes[_controlSelect] && i != _settingSelect + j)
-                                        {
-                                            MainControl.Instance.OverworldControl.keyCodesBack2[i] = origin;
-                                            break;
-                                        }
-                                    }
-                                    SettingText();
+                        switch (_controlSelect)
+                        {
+                            case 0:
+                                origin = MainControl.Instance.OverworldControl.keyCodes[_settingSelect + j];
+                                MainControl.Instance.OverworldControl.keyCodes[_settingSelect + j] = SettingControl();
+                                goto default;
+                            case 1:
+                                origin = MainControl.Instance.OverworldControl.keyCodesBack1[_settingSelect + j];
+                                MainControl.Instance.OverworldControl.keyCodesBack1[_settingSelect + j] = SettingControl();
+                                goto default;
+                            case 2:
+                                origin = MainControl.Instance.OverworldControl.keyCodesBack2[_settingSelect + j];
+                                MainControl.Instance.OverworldControl.keyCodesBack2[_settingSelect + j] = SettingControl();
+                                goto default;
+                            default:
+                                var keycodes = new List<KeyCode>
+                                {
+                                    MainControl.Instance.OverworldControl.keyCodes[_settingSelect + j],
+                                    MainControl.Instance.OverworldControl.keyCodesBack1[_settingSelect + j],
+                                    MainControl.Instance.OverworldControl.keyCodesBack2[_settingSelect + j]
+                                };
+                                for (var i = 0; i < MainControl.Instance.OverworldControl.keyCodes.Count; i++)
+                                {
+                                    if (MainControl.Instance.OverworldControl.keyCodes[i] != keycodes[_controlSelect] ||
+                                        i == _settingSelect + j) continue;
+                                    MainControl.Instance.OverworldControl.keyCodes[i] = origin;
                                     break;
-                            }
+                                }
+                                for (var i = 0; i < MainControl.Instance.OverworldControl.keyCodesBack1.Count; i++)
+                                {
+                                    if (MainControl.Instance.OverworldControl.keyCodesBack1[i] !=
+                                        keycodes[_controlSelect] || i == _settingSelect + j) continue;
+                                    MainControl.Instance.OverworldControl.keyCodesBack1[i] = origin;
+                                    break;
+                                }
+                                for (var i = 0; i < MainControl.Instance.OverworldControl.keyCodesBack2.Count; i++)
+                                {
+                                    if (MainControl.Instance.OverworldControl.keyCodesBack2[i] !=
+                                        keycodes[_controlSelect] || i == _settingSelect + j) continue;
+                                    MainControl.Instance.OverworldControl.keyCodesBack2[i] = origin;
+                                    break;
+                                }
+                                SettingText();
+                                break;
+                        }
 
-                            break;
-                    }
-                    _isSettingControl = false;
+                        break;
                 }
+                _isSettingControl = false;
 
                 return;
             }
@@ -531,23 +527,26 @@ namespace UCT.Global.UI
                         {
                             if (!_isSettingName)
                             {
-                                if (_settingSelect == 2)
+                                switch (_settingSelect)
                                 {
-                                    AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
-                                    if ((int)MainControl.Instance.OverworldControl.vsyncMode < 2)
-                                        MainControl.Instance.OverworldControl.vsyncMode++;
-                                    else
-                                        MainControl.Instance.OverworldControl.vsyncMode = OverworldControl.VSyncMode.DonNotSync;
+                                    case 2:
+                                    {
+                                        AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                                        if ((int)MainControl.Instance.OverworldControl.vsyncMode < 2)
+                                            MainControl.Instance.OverworldControl.vsyncMode++;
+                                        else
+                                            MainControl.Instance.OverworldControl.vsyncMode = OverworldControl.VSyncMode.DonNotSync;
 
-                                    PlayerPrefs.SetInt("vsyncMode", Convert.ToInt32(MainControl.Instance.OverworldControl.vsyncMode));
-                                }
-                                else if (_settingSelect == 3)
-                                {
-                                    AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
-                                    MainControl.Instance.OverworldControl.isUsingHDFrame = !MainControl.Instance.OverworldControl.isUsingHDFrame;
-                                    MainControl.Instance.OverworldControl.resolutionLevel = GameUtilityService.UpdateResolutionSettings(MainControl.Instance.OverworldControl.isUsingHDFrame, MainControl.Instance.OverworldControl.resolutionLevel);
-                                    SettingText();
-                                    PlayerPrefs.SetInt("hdResolution", Convert.ToInt32(MainControl.Instance.OverworldControl.isUsingHDFrame));
+                                        PlayerPrefs.SetInt("vsyncMode", Convert.ToInt32(MainControl.Instance.OverworldControl.vsyncMode));
+                                        break;
+                                    }
+                                    case 3:
+                                        AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                                        MainControl.Instance.OverworldControl.isUsingHDFrame = !MainControl.Instance.OverworldControl.isUsingHDFrame;
+                                        MainControl.Instance.OverworldControl.resolutionLevel = GameUtilityService.UpdateResolutionSettings(MainControl.Instance.OverworldControl.isUsingHDFrame, MainControl.Instance.OverworldControl.resolutionLevel);
+                                        SettingText();
+                                        PlayerPrefs.SetInt("hdResolution", Convert.ToInt32(MainControl.Instance.OverworldControl.isUsingHDFrame));
+                                        break;
                                 }
                             }
                         }
@@ -631,28 +630,28 @@ namespace UCT.Global.UI
                         if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
                         {
                             AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
-                            if (_settingSelect < 6)
-                                _isSettingControl = true;
-                            else if (_settingSelect == 6)
-                                switch (_controlPage)
-                                {
-                                    case 0:
-                                        _controlPage = 1;
-                                        break;
-
-                                    case 1:
-                                        _controlPage = 0;
-                                        break;
-                                }
-                            else if (_settingSelect == 7)
-                                GameUtilityService.ApplyDefaultControl();
-                            else
+                            switch (_settingSelect)
                             {
-                                settingLevel = 0;
-                                _settingSelect = 0;
+                                case < 6:
+                                    _isSettingControl = true;
+                                    break;
+                                case 6:
+                                    _controlPage = _controlPage switch
+                                    {
+                                        0 => 1,
+                                        1 => 0,
+                                        _ => _controlPage
+                                    };
+                                    break;
+                                case 7:
+                                    GameUtilityService.ApplyDefaultControl();
+                                    break;
+                                default:
+                                    settingLevel = 0;
+                                    _settingSelect = 0;
 
-                                SettingText();
-                                return;
+                                    SettingText();
+                                    return;
                             }
 
                             SettingText(false, true);
@@ -726,21 +725,9 @@ namespace UCT.Global.UI
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
 
-        private KeyCode SettingControl()
+        private static KeyCode SettingControl()
         {
-            if (Input.anyKeyDown)
-            {
-                foreach (KeyCode item in Enum.GetValues(typeof(KeyCode)))
-                {
-                    if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(2))
-                        continue;
-                    if (Input.GetKeyDown(item))
-                    {
-                        return item;
-                    }
-                }
-            }
-            return KeyCode.None;
+            return !Input.anyKeyDown ? KeyCode.None : Enum.GetValues(typeof(KeyCode)).Cast<KeyCode>().Where(_ => !Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1) && !Input.GetMouseButtonDown(2)).FirstOrDefault(Input.GetKeyDown);
         }
 
         public void InSetting()
@@ -785,7 +772,6 @@ namespace UCT.Global.UI
             _mLastUpdateShowTime = Time.realtimeSinceStartup;
             return ((int)_mFPS).ToString();
         }
-
         /// <summary>
         /// Anim调用
         /// </summary>
@@ -814,10 +800,7 @@ namespace UCT.Global.UI
 
         public void AnimSetHeartRed(int isRed)
         {
-            if (Convert.ToBoolean(isRed))
-                transform.Find("Heart").GetComponent<Image>().color = Color.red;
-            else
-                transform.Find("Heart").GetComponent<Image>().color = Color.clear;
+            transform.Find("Heart").GetComponent<Image>().color = Convert.ToBoolean(isRed) ? Color.red : Color.clear;
         }
 
         public void AnimHeartGo()
@@ -825,7 +808,7 @@ namespace UCT.Global.UI
             var i = transform.Find("Heart").GetComponent<RectTransform>();
             var j = i.GetComponent<Image>();
             j.DOColor(new Color(j.color.r, j.color.g, j.color.b, 0), animSpeed).SetEase(Ease.Linear);
-            DOTween.To(() => i.anchoredPosition, x => i.anchoredPosition = x, new Vector2(-330, -250), 1.5f).SetEase(Ease.OutCirc).OnKill(() => AnimOpen());
+            DOTween.To(() => i.anchoredPosition, x => i.anchoredPosition = x, new Vector2(-330, -250), 1.5f).SetEase(Ease.OutCirc).OnKill(AnimOpen);
         }
 
         public void PlayFX(int i)
