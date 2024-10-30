@@ -10,22 +10,22 @@ namespace Debug
     public class DebugStringGradient
     {
         private readonly List<int> _gradientNumberList = new();
-        private const int GradientNumberMax = 120;
+        private const int GradientNumberMax = 60;
         private readonly string _gradientString;
         private readonly List<Color> _colorList = new();
         private readonly List<Color> _targetColorList = new();
-
+        private Color _newColor;
         public DebugStringGradient(string text)
         {
-            var defaultColor = Color.white;
-             var targetColor = GameUtilityService.GetDifferentRandomColor(defaultColor);
+            var defaultColor =GameUtilityService.GetRandomColor();
+             var targetColor = GameUtilityService.GetSimilarButDifferentColor(defaultColor);
             _gradientString = text;
             
             for (var i = 0; i < text.Length; i++)
             {
                 _colorList.Add(defaultColor);
                 _targetColorList.Add(targetColor);
-                _gradientNumberList.Add(-i * 60);
+                _gradientNumberList.Add(-i * 10);
             }
         }
 
@@ -40,8 +40,12 @@ namespace Debug
                 if (_gradientNumberList[i] >= GradientNumberMax)
                 {
                     _gradientNumberList[i] = 0; // 重置为0
+                    
+                    if (i == 0)
+                        _newColor = GameUtilityService.GetSimilarButDifferentColor(_colorList[i]);
+                    
                     _colorList[i] = _targetColorList[i];
-                    _targetColorList[i] = GameUtilityService.GetDifferentRandomColor(_colorList[i]);
+                    _targetColorList[i] = _newColor;
                 }
 
                 // 如果当前值 >= 0，进行颜色计算

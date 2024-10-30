@@ -429,7 +429,8 @@ namespace UCT.Service
 
         public static Color GetRandomColor()
         {
-            return new Color(Random.Range(0, 1f), Random.Range(0, 1f), Random.Range(0, 1f), 1);
+            var random = new System.Random();
+            return new Color((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble(), 1);
         }
 
         public static Color GetDifferentRandomColor(Color colorToAvoid)
@@ -442,6 +443,20 @@ namespace UCT.Service
             while (newColor == colorToAvoid);
 
             return newColor;
+        }
+        
+        public static Color GetSimilarButDifferentColor(Color originalColor, float hueOffset = 0.05f, float saturationOffset = 0.1f, float valueOffset = 0.1f)
+        {
+            // 使用可控的随机生成器
+            var random = new System.Random();
+    
+            Color.RGBToHSV(originalColor, out var h, out var s, out var v);
+
+            h = Mathf.Repeat(h + (float)(random.NextDouble() * 2 - 1) * hueOffset, 1.0f);
+            s = Mathf.Clamp01(s + (float)(random.NextDouble() * 2 - 1) * saturationOffset);
+            v = Mathf.Clamp01(v + (float)(random.NextDouble() * 2 - 1) * valueOffset);
+
+            return Color.HSVToRGB(h, s, v);
         }
     }
 }
