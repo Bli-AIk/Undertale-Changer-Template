@@ -132,7 +132,7 @@ namespace UCT.Global.Scene
                             break;
 
                         case 3:
-                            CanvasController.Instance.settingLevel = 2;
+                            CanvasController.Instance.settingsLayer = CanvasController.SettingsLayer.LanguageConfiguration;
                             goto case 2;
                         case 4:
                             _setData = true;

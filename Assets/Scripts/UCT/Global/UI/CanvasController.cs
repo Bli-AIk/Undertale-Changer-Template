@@ -39,8 +39,14 @@ namespace UCT.Global.UI
 
         private int _settingSelect, _settingSelectMax;//目前 Max仅用于配置语言包
 
+        public enum SettingsLayer
+        {
+            Home,//主层级
+            KeyConfiguration,//按键设置层级
+            LanguageConfiguration,//语言包层级
+        };
         [HideInInspector]
-        public int settingLevel;//切换层级 0层默认 1层按键设置 2层语言包配置
+        public SettingsLayer settingsLayer;//切换层级 0层默认 1层按键设置 2层语言包配置
 
         private int _controlPage, _controlSelect;//Page是翻页 Select是切换主次按键设置
         private bool _isSettingName;//是否选中
@@ -77,7 +83,7 @@ namespace UCT.Global.UI
 
         public void Start()
         {
-            settingLevel = 0;
+            settingsLayer = SettingsLayer.Home;
             setting.rectTransform.sizeDelta = new Vector2(0, setting.rectTransform.sizeDelta.y);
             _settingTmp.color = Color.white;
             _settingTmp.rectTransform.anchoredPosition = new Vector2(-610, 140);
@@ -98,9 +104,9 @@ namespace UCT.Global.UI
 
         private void SettingText(bool onlySetSon = false, bool isSetting = false)
         {
-            switch (settingLevel)
+            switch (settingsLayer)
             {
-                case 0:
+                case SettingsLayer.Home:
                     if (!onlySetSon)
                     {
                         if (!isSetting)
@@ -136,7 +142,7 @@ namespace UCT.Global.UI
 
                     break;
 
-                case 1:
+                case SettingsLayer.KeyConfiguration:
                     var strings = new List<string>();
 
                     for (var i = 0; i < 6; i++)
@@ -224,7 +230,7 @@ namespace UCT.Global.UI
 
                     break;
 
-                case 2:
+                case SettingsLayer.LanguageConfiguration:
                     var pathStringSaver = "";
 
                     if (isSetting)
@@ -407,7 +413,7 @@ namespace UCT.Global.UI
             _settingSoul.rectTransform.anchoredPosition = new Vector2(-325f, -28f + _settingSelect * -37);
 
             if (!(_settingTmp.rectTransform.anchoredPosition.x > 125)) return;
-            switch (settingLevel)
+            switch (settingsLayer)
             {
                 case 0:
                     if (!_isSettingName)
@@ -464,7 +470,7 @@ namespace UCT.Global.UI
                                     break;
 
                                 case 1:
-                                    settingLevel = 1;
+                                    settingsLayer = SettingsLayer.KeyConfiguration;
                                     SettingText();
                                     _settingSelect = 0;
                                     break;
@@ -611,7 +617,7 @@ namespace UCT.Global.UI
                     _settingTmpUnder.text = textForUnder;
                     break;
 
-                case 1:
+                case SettingsLayer.KeyConfiguration:
                     if (GameUtilityService.KeyArrowToControl(KeyCode.DownArrow))
                     {
                         AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
@@ -646,7 +652,7 @@ namespace UCT.Global.UI
                                 GameUtilityService.ApplyDefaultControl();
                                 break;
                             default:
-                                settingLevel = 0;
+                                settingsLayer = 0;
                                 _settingSelect = 0;
 
                                 SettingText();
@@ -657,7 +663,7 @@ namespace UCT.Global.UI
                     }
                     else if (GameUtilityService.KeyArrowToControl(KeyCode.X))
                     {
-                        settingLevel = 0;
+                        settingsLayer = 0;
                         _settingSelect = 0;
 
                         SettingText();
@@ -676,7 +682,7 @@ namespace UCT.Global.UI
 
                     break;
 
-                case 2:
+                case SettingsLayer.LanguageConfiguration:
                     if (GameUtilityService.KeyArrowToControl(KeyCode.DownArrow))
                     {
                         AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
@@ -737,13 +743,13 @@ namespace UCT.Global.UI
             _settingSelect = 0;
             _settingTmpUnder.text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "ControlEggshell");
             SettingText();
-            if (settingLevel == 2)
+            if (settingsLayer == SettingsLayer.LanguageConfiguration)
                 SettingText(true);
         }
 
         private void ExitSetting(bool isLan = false)
         {
-            settingLevel = 0;
+            settingsLayer = 0;
             DOTween.To(() => setting.rectTransform.sizeDelta, x => setting.rectTransform.sizeDelta = x, new Vector2(0, setting.rectTransform.sizeDelta.y), animSpeed).SetEase(Ease.OutCirc);
             _settingTmp.DOColor(Color.white, 0).SetEase(Ease.OutCubic);
             DOTween.To(() => _settingTmp.rectTransform.anchoredPosition, x => _settingTmp.rectTransform.anchoredPosition = x, new Vector2(-610, 140), animSpeed + 0.25f).SetEase(Ease.InSine).OnKill(() => CloseSetting(isLan));
