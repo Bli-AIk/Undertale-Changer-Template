@@ -58,9 +58,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   components:
   - {fileID: 8133619234732192967}
-  - {fileID: -6058264418041624216}
   - {fileID: 8350349414379319508}
   - {fileID: -8336938524950401636}
+--- !u!114 &2447156059463330921
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: CrtScreenComponent
+  m_EditorClassIdentifier: Assembly-CSharp:Volume:CrtScreenComponent
+  active: 1
+  <displayName>k__BackingField: 
+  isShow:
+    m_OverrideState: 1
+    m_Value: 1
+  resolution:
+    m_OverrideState: 1
+    m_Value: {x: 50, y: 50}
+  pixelScanlineBrightness:
+    m_OverrideState: 1
+    m_Value: {x: 0.225, y: 0.85, z: 0.05, w: 0.95}
+  speed:
+    m_OverrideState: 1
+    m_Value: 1
 --- !u!114 &8133619234732192967
 MonoBehaviour:
   m_ObjectHideFlags: 3

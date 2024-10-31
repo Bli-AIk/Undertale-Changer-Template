@@ -5,7 +5,7 @@ using UnityEngine.Rendering.Universal;
 
 namespace Volume
 {
-    public class CrtScreenRendererFeature : ScriptableRendererFeature
+    public class GlitchArtRendererFeature : ScriptableRendererFeature
     {
         [Serializable]
         public class Settings
@@ -15,12 +15,12 @@ namespace Volume
         }
 
         public Settings settings = new Settings();
-        private CrtScreenPass _pass;
+        private GlitchArtPass _pass;
 
         public override void Create()
         {
-            name = "CRTScreenPass";
-            _pass = new CrtScreenPass(RenderPassEvent.BeforeRenderingPostProcessing, settings.shader);
+            name = "GlitchArtPass";
+            _pass = new GlitchArtPass(RenderPassEvent.BeforeRenderingPostProcessing, settings.shader);
         }
 
         public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
@@ -31,25 +31,25 @@ namespace Volume
     }
 
     [Serializable]
-    public class CrtScreenPass : ScriptableRenderPass
+    public class GlitchArtPass : ScriptableRenderPass
     {
-        private static readonly string RenderTag = "CRTScreen Effects";
+        private static readonly string RenderTag = "GlitchArt Effects";
         private static readonly int MainTexId = Shader.PropertyToID("_MainTex");
         private static readonly int TempTargetId = Shader.PropertyToID("_TempTargetColorTint");
 
-        private CrtScreenComponent _crtScreenVolume;
+        private GlitchArtComponent _glitchArtVolume;
         private Material _mat;
         private RenderTargetIdentifier _currentTarget;
 
-        public CrtScreenPass(RenderPassEvent passEvent, Shader crtScreenShader)
+        public GlitchArtPass(RenderPassEvent passEvent, Shader glitchArtShader)
         {
             renderPassEvent = passEvent;
-            if (crtScreenShader == null)
+            if (glitchArtShader == null)
             {
                 UCT.Global.Other.Debug.Log("Shader不存在");
                 return;
             }
-            _mat = CoreUtils.CreateEngineMaterial(crtScreenShader);
+            _mat = CoreUtils.CreateEngineMaterial(glitchArtShader);
         }
 
         public void Setup(in RenderTargetIdentifier currentTarget)
@@ -68,12 +68,12 @@ namespace Volume
                 return;
             }
             var stack = VolumeManager.instance.stack;
-            _crtScreenVolume = stack.GetComponent<CrtScreenComponent>();
-            if (_crtScreenVolume == null)
+            _glitchArtVolume = stack.GetComponent<GlitchArtComponent>();
+            if (_glitchArtVolume == null)
             {
                 return;
             }
-            if (_crtScreenVolume.isShow.value == false)
+            if (_glitchArtVolume.isShow.value == false)
             {
                 return;
             }
@@ -90,9 +90,14 @@ namespace Volume
             var source = _currentTarget;
             var destination = TempTargetId;
 
-            _mat.SetVector("_Resolution", _crtScreenVolume.resolution.value);
-            _mat.SetVector("_PixelScanlineBrightness", _crtScreenVolume.pixelScanlineBrightness.value);
-            _mat.SetFloat("_Speed", _crtScreenVolume.speed.value);
+            _mat.SetFloat("_AnalogGlitchMode", Convert.ToInt32(_glitchArtVolume.analogGlitchMode.value));
+            _mat.SetVector("_ScanLineJitter", _glitchArtVolume.scanLineJitter.value);
+            _mat.SetFloat("_HorizontalShakeMode", Convert.ToInt32(_glitchArtVolume.horizontalShakeMode.value));
+            _mat.SetFloat("_HorizontalShake", _glitchArtVolume.horizontalShake.value);
+            _mat.SetFloat("_ColorDriftMode", Convert.ToInt32(_glitchArtVolume.colorDriftMode.value));
+            _mat.SetFloat("_ColorDrift", _glitchArtVolume.colorDrift.value);
+            _mat.SetFloat("_VerticalJumpMode", Convert.ToInt32(_glitchArtVolume.verticalJumpMode.value));
+            _mat.SetFloat("_VerticalJump", _glitchArtVolume.verticalJump.value);
 
             cmd.SetGlobalTexture(MainTexId, source);
             cmd.GetTemporaryRT(destination, cameraData.camera.scaledPixelWidth, cameraData.camera.scaledPixelHeight, 0, FilterMode.Trilinear, RenderTextureFormat.Default);

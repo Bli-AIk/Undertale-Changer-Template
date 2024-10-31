@@ -10,39 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e0eae60ad9a9e9244a6887d4e776a99b, type: 3}
-  m_Name: GlitchArtPass
+  m_Name: CRTScreenPass
   m_EditorClassIdentifier: 
   m_Active: 1
   settings:
     renderPassEvent: 550
-    shader: {fileID: -6465566751694194690, guid: d36daaca1236fcd4c975e01e02036176,
+    shader: {fileID: -6465566751694194690, guid: 607f6d7639d7f354e84540194f93bca3,
       type: 3}
-  pass:
-    <renderPassEvent>k__BackingField: 550
-    m_ColorStoreActions: 0000000000000000000000000000000000000000000000000000000000000000
-    m_DepthStoreAction: 0
-    m_OverriddenColorStoreActions: 
-    m_OverriddenDepthStoreAction: 0
-    <overrideCameraTarget>k__BackingField: 0
-    <isBlitRenderPass>k__BackingField: 0
-    <useNativeRenderPass>k__BackingField: 1
-    <renderTargetWidth>k__BackingField: -1
-    <renderTargetHeight>k__BackingField: -1
-    <renderTargetSampleCount>k__BackingField: -1
-    <depthOnly>k__BackingField: 0
-    <isLastPass>k__BackingField: 0
-    <renderPassQueueIndex>k__BackingField: -1
-    <renderTargetFormat>k__BackingField: 0000000000000000000000000000000000000000000000000000000000000000
-    m_InputAttachmentIsTransient: 
-    m_Input: 0
-    m_ClearFlag: 0
-    m_ClearColor:
-      r: 0
-      g: 0
-      b: 0
-      a: 1
-    GlitchArtVolume: {fileID: 0}
-    mat: {fileID: 0}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60,8 +34,8 @@ MonoBehaviour:
       type: 3}
   m_RendererFeatures:
   - {fileID: 2264132949354156685}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: -328802072970137823}
+  - {fileID: 8447456358522118238}
   - {fileID: 6939219352180137151}
   m_RendererFeatureMap: 8d1283eaebd06b1f21ef33b741dc6ffb5e605331cd643b75bf9c36393c0f4d60
   m_UseNativeRenderPass: 0
@@ -161,36 +135,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aafce205e18fecb418fdaa7c92dfb436, type: 3}
-  m_Name: CRTScreenPass
+  m_Name: GlitchArtPass
   m_EditorClassIdentifier: 
   m_Active: 1
   settings:
     renderPassEvent: 550
-    shader: {fileID: -6465566751694194690, guid: 607f6d7639d7f354e84540194f93bca3,
+    shader: {fileID: -6465566751694194690, guid: d36daaca1236fcd4c975e01e02036176,
       type: 3}
-  pass:
-    <renderPassEvent>k__BackingField: 550
-    m_ColorStoreActions: 0000000000000000000000000000000000000000000000000000000000000000
-    m_DepthStoreAction: 0
-    m_OverriddenColorStoreActions: 
-    m_OverriddenDepthStoreAction: 0
-    <overrideCameraTarget>k__BackingField: 0
-    <isBlitRenderPass>k__BackingField: 0
-    <useNativeRenderPass>k__BackingField: 1
-    <renderTargetWidth>k__BackingField: -1
-    <renderTargetHeight>k__BackingField: -1
-    <renderTargetSampleCount>k__BackingField: -1
-    <depthOnly>k__BackingField: 0
-    <isLastPass>k__BackingField: 0
-    <renderPassQueueIndex>k__BackingField: -1
-    <renderTargetFormat>k__BackingField: 0000000000000000000000000000000000000000000000000000000000000000
-    m_InputAttachmentIsTransient: 
-    m_Input: 0
-    m_ClearFlag: 0
-    m_ClearColor:
-      r: 0
-      g: 0
-      b: 0
-      a: 1
-    CRTScreenVolume: {fileID: 0}
-    mat: {fileID: 0}
