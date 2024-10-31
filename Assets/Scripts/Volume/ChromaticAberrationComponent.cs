@@ -11,14 +11,14 @@ namespace Volume
     [VolumeComponentMenuForRenderPipeline("Custom/Chromatic Aberration", typeof(UniversalRenderPipeline))]
     public class ChromaticAberrationComponent : VolumeComponent, IPostProcessComponent
     {
-        public BoolParameter isShow = new BoolParameter(false, true);
+        public BoolParameter isShow = new(false, true);
 
         [Header("Settings")]
-        public FloatParameter offset = new FloatParameter(0.02f, true);
+        public FloatParameter offset = new(0.02f, true);
 
-        public FloatParameter speed = new FloatParameter(10, true);
-        public FloatParameter height = new FloatParameter(0.15f, true);
-        public BoolParameter onlyOri = new BoolParameter(false, true);
+        public FloatParameter speed = new(10, true);
+        public FloatParameter height = new(0.15f, true);
+        public BoolParameter onlyOri = new(false, true);
 
         public bool IsActive()
         {

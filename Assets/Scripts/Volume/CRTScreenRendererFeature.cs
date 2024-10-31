@@ -10,11 +10,10 @@ namespace Volume
         [Serializable]
         public class Settings
         {
-            public RenderPassEvent renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
             public Shader shader;
         }
 
-        public Settings settings = new Settings();
+        public Settings settings = new();
         private CrtScreenPass _pass;
 
         public override void Create()
@@ -33,9 +32,12 @@ namespace Volume
     [Serializable]
     public class CrtScreenPass : ScriptableRenderPass
     {
-        private static readonly string RenderTag = "CRTScreen Effects";
+        private const string RenderTag = "CRTScreen Effects";
         private static readonly int MainTexId = Shader.PropertyToID("_MainTex");
         private static readonly int TempTargetId = Shader.PropertyToID("_TempTargetColorTint");
+        private static readonly int Resolution1 = Shader.PropertyToID("_Resolution");
+        private static readonly int PixelScanlineBrightness = Shader.PropertyToID("_PixelScanlineBrightness");
+        private static readonly int Speed = Shader.PropertyToID("_Speed");
 
         private CRTScreenComponent _crtScreenVolume;
         private Material _mat;
@@ -90,9 +92,9 @@ namespace Volume
             var source = _currentTarget;
             var destination = TempTargetId;
 
-            _mat.SetVector("_Resolution", _crtScreenVolume.resolution.value);
-            _mat.SetVector("_PixelScanlineBrightness", _crtScreenVolume.pixelScanlineBrightness.value);
-            _mat.SetFloat("_Speed", _crtScreenVolume.speed.value);
+            _mat.SetVector(Resolution1, _crtScreenVolume.resolution.value);
+            _mat.SetVector(PixelScanlineBrightness, _crtScreenVolume.pixelScanlineBrightness.value);
+            _mat.SetFloat(Speed, _crtScreenVolume.speed.value);
 
             cmd.SetGlobalTexture(MainTexId, source);
             cmd.GetTemporaryRT(destination, cameraData.camera.scaledPixelWidth, cameraData.camera.scaledPixelHeight, 0, FilterMode.Trilinear, RenderTextureFormat.Default);

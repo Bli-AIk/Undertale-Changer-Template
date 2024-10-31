@@ -10,11 +10,10 @@ namespace Volume
         [Serializable]
         public class Settings
         {
-            public RenderPassEvent renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
             public Shader shader;
         }
 
-        public Settings settings = new Settings();
+        public Settings settings = new();
         private ChromaticAberrationPass _pass;
 
         public override void Create()
@@ -33,9 +32,13 @@ namespace Volume
     [Serializable]
     public class ChromaticAberrationPass : ScriptableRenderPass
     {
-        private static readonly string RenderTag = "ChromaticAberration Effects";
+        private const string RenderTag = "ChromaticAberration Effects";
         private static readonly int MainTexId = Shader.PropertyToID("_MainTex");
         private static readonly int TempTargetId = Shader.PropertyToID("_TempTargetColorTint");
+        private static readonly int Offset = Shader.PropertyToID("_Offset");
+        private static readonly int Speed = Shader.PropertyToID("_Speed");
+        private static readonly int Height = Shader.PropertyToID("_Height");
+        private static readonly int OnlyOri = Shader.PropertyToID("_OnlyOri");
 
         private ChromaticAberrationComponent _chromaticAberrationVolume;
         private Material _mat;
@@ -90,10 +93,10 @@ namespace Volume
             var source = _currentTarget;
             var destination = TempTargetId;
 
-            _mat.SetFloat("_Offset", _chromaticAberrationVolume.offset.value);
-            _mat.SetFloat("_Speed", _chromaticAberrationVolume.speed.value);
-            _mat.SetFloat("_Height", _chromaticAberrationVolume.height.value);
-            _mat.SetFloat("_OnlyOri", Convert.ToInt32(_chromaticAberrationVolume.onlyOri.value));
+            _mat.SetFloat(Offset, _chromaticAberrationVolume.offset.value);
+            _mat.SetFloat(Speed, _chromaticAberrationVolume.speed.value);
+            _mat.SetFloat(Height, _chromaticAberrationVolume.height.value);
+            _mat.SetFloat(OnlyOri, Convert.ToInt32(_chromaticAberrationVolume.onlyOri.value));
 
             cmd.SetGlobalTexture(MainTexId, source);
             cmd.GetTemporaryRT(destination, cameraData.camera.scaledPixelWidth, cameraData.camera.scaledPixelHeight, 0, FilterMode.Trilinear, RenderTextureFormat.Default);

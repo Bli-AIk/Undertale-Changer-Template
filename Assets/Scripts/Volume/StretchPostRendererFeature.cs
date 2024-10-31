@@ -10,11 +10,10 @@ namespace Volume
         [Serializable]
         public class Settings
         {
-            public RenderPassEvent renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
             public Shader shader;
         }
 
-        public Settings settings = new Settings();
+        public Settings settings = new();
         private StretchPostPass _pass;
 
         public override void Create()
@@ -33,9 +32,10 @@ namespace Volume
     [Serializable]
     public class StretchPostPass : ScriptableRenderPass
     {
-        private static readonly string RenderTag = "StretchPost Effects";
+        private const string RenderTag = "StretchPost Effects";
         private static readonly int MainTexId = Shader.PropertyToID("_MainTex");
         private static readonly int TempTargetId = Shader.PropertyToID("_TempTargetColorTint");
+        private static readonly int Draw = Shader.PropertyToID("_Draw");
 
         private StretchPostComponent _stretchPostVolume;
         private Material _mat;
@@ -90,7 +90,7 @@ namespace Volume
             var source = _currentTarget;
             var destination = TempTargetId;
 
-            _mat.SetVector("_Draw", _stretchPostVolume.draw.value);
+            _mat.SetVector(Draw, _stretchPostVolume.draw.value);
 
             cmd.SetGlobalTexture(MainTexId, source);
             cmd.GetTemporaryRT(destination, cameraData.camera.scaledPixelWidth, cameraData.camera.scaledPixelHeight, 0, FilterMode.Trilinear, RenderTextureFormat.Default);

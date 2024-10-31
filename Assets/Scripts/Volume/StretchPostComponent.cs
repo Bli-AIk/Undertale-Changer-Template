@@ -11,10 +11,10 @@ namespace Volume
     [VolumeComponentMenuForRenderPipeline("Custom/Stretch Post", typeof(UniversalRenderPipeline))]
     public class StretchPostComponent : VolumeComponent, IPostProcessComponent
     {
-        public BoolParameter isShow = new BoolParameter(false, true);
+        public BoolParameter isShow = new(false, true);
 
         [Header("Settings")]
-        public Vector2Parameter draw = new Vector2Parameter(new Vector2(), true);
+        public Vector2Parameter draw = new(new Vector2(), true);
 
         public bool IsActive()
         {

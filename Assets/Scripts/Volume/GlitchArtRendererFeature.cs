@@ -10,11 +10,10 @@ namespace Volume
         [Serializable]
         public class Settings
         {
-            public RenderPassEvent renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
             public Shader shader;
         }
 
-        public Settings settings = new Settings();
+        public Settings settings = new();
         private GlitchArtPass _pass;
 
         public override void Create()
@@ -36,6 +35,14 @@ namespace Volume
         private static readonly string RenderTag = "GlitchArt Effects";
         private static readonly int MainTexId = Shader.PropertyToID("_MainTex");
         private static readonly int TempTargetId = Shader.PropertyToID("_TempTargetColorTint");
+        private static readonly int AnalogGlitchMode = Shader.PropertyToID("_AnalogGlitchMode");
+        private static readonly int ScanLineJitter = Shader.PropertyToID("_ScanLineJitter");
+        private static readonly int HorizontalShakeMode = Shader.PropertyToID("_HorizontalShakeMode");
+        private static readonly int HorizontalShake = Shader.PropertyToID("_HorizontalShake");
+        private static readonly int ColorDriftMode = Shader.PropertyToID("_ColorDriftMode");
+        private static readonly int ColorDrift = Shader.PropertyToID("_ColorDrift");
+        private static readonly int VerticalJumpMode = Shader.PropertyToID("_VerticalJumpMode");
+        private static readonly int VerticalJump = Shader.PropertyToID("_VerticalJump");
 
         private GlitchArtComponent _glitchArtVolume;
         private Material _mat;
@@ -90,14 +97,14 @@ namespace Volume
             var source = _currentTarget;
             var destination = TempTargetId;
 
-            _mat.SetFloat("_AnalogGlitchMode", Convert.ToInt32(_glitchArtVolume.analogGlitchMode.value));
-            _mat.SetVector("_ScanLineJitter", _glitchArtVolume.scanLineJitter.value);
-            _mat.SetFloat("_HorizontalShakeMode", Convert.ToInt32(_glitchArtVolume.horizontalShakeMode.value));
-            _mat.SetFloat("_HorizontalShake", _glitchArtVolume.horizontalShake.value);
-            _mat.SetFloat("_ColorDriftMode", Convert.ToInt32(_glitchArtVolume.colorDriftMode.value));
-            _mat.SetFloat("_ColorDrift", _glitchArtVolume.colorDrift.value);
-            _mat.SetFloat("_VerticalJumpMode", Convert.ToInt32(_glitchArtVolume.verticalJumpMode.value));
-            _mat.SetFloat("_VerticalJump", _glitchArtVolume.verticalJump.value);
+            _mat.SetFloat(AnalogGlitchMode, Convert.ToInt32(_glitchArtVolume.analogGlitchMode.value));
+            _mat.SetVector(ScanLineJitter, _glitchArtVolume.scanLineJitter.value);
+            _mat.SetFloat(HorizontalShakeMode, Convert.ToInt32(_glitchArtVolume.horizontalShakeMode.value));
+            _mat.SetFloat(HorizontalShake, _glitchArtVolume.horizontalShake.value);
+            _mat.SetFloat(ColorDriftMode, Convert.ToInt32(_glitchArtVolume.colorDriftMode.value));
+            _mat.SetFloat(ColorDrift, _glitchArtVolume.colorDrift.value);
+            _mat.SetFloat(VerticalJumpMode, Convert.ToInt32(_glitchArtVolume.verticalJumpMode.value));
+            _mat.SetFloat(VerticalJump, _glitchArtVolume.verticalJump.value);
 
             cmd.SetGlobalTexture(MainTexId, source);
             cmd.GetTemporaryRT(destination, cameraData.camera.scaledPixelWidth, cameraData.camera.scaledPixelHeight, 0, FilterMode.Trilinear, RenderTextureFormat.Default);
