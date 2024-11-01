@@ -107,35 +107,32 @@ namespace UCT.Global.UI
             switch (settingsLayer)
             {
                 case SettingsLayer.Home:
+                    var settingsKeys = new[]
+                    {
+                        "Setting",
+                        "SettingMainVolume",
+                        "SettingControl",
+                        "SettingFullScreen",
+                        "SettingResolving",
+                        "SettingSFX",
+                        "SettingFPS",
+                        "SettingBackMenu",
+                        "SettingBackGame"
+                    };
+
                     if (!onlySetSon)
                     {
-                        if (!isSetting)
-                        {
-                            _settingTmp.text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Setting") + '\n' +
-                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingMainVolume") + '\n' +
-                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingControl") + '\n' +
-                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingFullScreen") + '\n' +
-                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingResolving") + '\n' +
-                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingSFX") + '\n' +
-                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingFPS") + '\n' +
-                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingBackMenu") + '\n' +
-                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingBackGame");
-                        }
-                        else
-                        {
-                            _settingTmp.text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Setting") + "\n<color=yellow>" +
-                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingMainVolume") + "</color>\n" +
-                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingControl") + '\n' +
-                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingFullScreen") + '\n' +
-                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingResolving") + '\n' +
-                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingSFX") + '\n' +
-                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingFPS") + '\n' +
-                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingBackMenu") + '\n' +
-                                              TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "SettingBackGame");
-                        }
+                        var settingsText = settingsKeys.Select(key =>
+                            TextProcessingService.GetFirstChildStringByPrefix(
+                                MainControl.Instance.OverworldControl.settingSave, key)).ToList();
+
+                        if (isSetting)
+                            settingsText[1] = $"<color=yellow>{settingsText[1]}</color>"; // 为 SettingMainVolume 添加颜色
+                        _settingTmp.text = string.Join("\n", settingsText);
                     }
+                    
                     if (!isSetting)
-                        _settingTmpSon.text = ((int)(MainControl.Instance.OverworldControl.mainVolume * 100)) + "%\n\n" + OpenOrClose(MainControl.Instance.OverworldControl.fullScreen) + '\n' +
+                        _settingTmpSon.text = (int)(MainControl.Instance.OverworldControl.mainVolume * 100) + "%\n\n" + OpenOrClose(MainControl.Instance.OverworldControl.fullScreen) + '\n' +
                                              MainControl.Instance.OverworldControl.resolution.x + '×' + MainControl.Instance.OverworldControl.resolution.y + '\n' + OpenOrClose(MainControl.Instance.OverworldControl.noSfx) + '\n' + OpenOrClose(MainControl.Instance.OverworldControl.openFPS);
                     else _settingTmpSon.text = "<color=yellow>" + ((int)(MainControl.Instance.OverworldControl.mainVolume * 100)) + "%</color>\n\n" + OpenOrClose(MainControl.Instance.OverworldControl.fullScreen) + '\n' +
                                               MainControl.Instance.OverworldControl.resolution.x + '×' + MainControl.Instance.OverworldControl.resolution.y + '\n' + OpenOrClose(MainControl.Instance.OverworldControl.noSfx) + '\n' + OpenOrClose(MainControl.Instance.OverworldControl.openFPS);
@@ -273,6 +270,8 @@ namespace UCT.Global.UI
 
                     _settingSelect = settingSelectBack;
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
@@ -715,6 +714,8 @@ namespace UCT.Global.UI
                         ExitSetting(true);
                     }
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
