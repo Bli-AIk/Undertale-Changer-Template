@@ -45,10 +45,20 @@ namespace UCT.Global.UI
             KeyConfiguration,//按键设置层级
             LanguageConfiguration,//语言包层级
         };
-        [HideInInspector]
-        public SettingsLayer settingsLayer;//切换层级 0层默认 1层按键设置 2层语言包配置
 
-        private int _controlPage, _controlSelect;//Page是翻页 Select是切换主次按键设置
+        [HideInInspector] public SettingsLayer settingsLayer;
+
+        private int _keyPage;//用于控制（按键设置）的翻页。
+
+        private enum KeyMapping//用于控制（按键设置）的主次键位。
+        {
+            MainKeyMap,
+            SecondaryKeyMap1,
+            SecondaryKeyMap2
+        }
+
+        private KeyMapping _keyMapping;
+        
         private bool _isSettingName;//是否选中
         private float _saveVolume;
         private bool _isSettingControl;
@@ -107,27 +117,29 @@ namespace UCT.Global.UI
             switch (settingsLayer)
             {
                 case SettingsLayer.Home:
-                    var settingsKeys = new[]
-                    {
-                        "Setting",
-                        "SettingMainVolume",
-                        "SettingControl",
-                        "SettingFullScreen",
-                        "SettingResolving",
-                        "SettingSFX",
-                        "SettingFPS",
-                        "SettingBackMenu",
-                        "SettingBackGame"
-                    };
 
                     if (!onlySetSon)
                     {
+                        var settingsKeys = new[]
+                        {
+                            "Setting",
+                            "SettingMainVolume",
+                            "SettingControl",
+                            "SettingFullScreen",
+                            "SettingResolving",
+                            "SettingSFX",
+                            "SettingFPS",
+                            "SettingBackMenu",
+                            "SettingBackGame"
+                        };
+                        
                         var settingsText = settingsKeys.Select(key =>
                             TextProcessingService.GetFirstChildStringByPrefix(
                                 MainControl.Instance.OverworldControl.settingSave, key)).ToList();
 
                         if (isSetting)
                             settingsText[1] = $"<color=yellow>{settingsText[1]}</color>"; // 为 SettingMainVolume 添加颜色
+                        
                         _settingTmp.text = string.Join("\n", settingsText);
                     }
                     
@@ -149,7 +161,7 @@ namespace UCT.Global.UI
                         else
                             strings.Add("");
                     }
-                    switch (_controlPage)
+                    switch (_keyPage)
                     {
                         case 0:
                             _settingTmp.text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Control") + "</color>" + '\n' +
@@ -170,17 +182,17 @@ namespace UCT.Global.UI
                                 {
                                     _settingTmpSon.text += "<color=yellow>";
                                 }
-                                switch (_controlSelect)
+                                switch (_keyMapping)
                                 {
-                                    case 0:
+                                    case KeyMapping.MainKeyMap:
                                         _settingTmpSon.text += MainControl.Instance.OverworldControl.keyCodes[i] + "</color>\n";
                                         break;
 
-                                    case 1:
+                                    case KeyMapping.SecondaryKeyMap1:
                                         _settingTmpSon.text += MainControl.Instance.OverworldControl.keyCodesBack1[i] + "</color>\n";
                                         break;
 
-                                    case 2:
+                                    case KeyMapping.SecondaryKeyMap2:
                                         _settingTmpSon.text += MainControl.Instance.OverworldControl.keyCodesBack2[i] + "</color>\n";
                                         break;
                                 }
@@ -206,17 +218,17 @@ namespace UCT.Global.UI
                                 {
                                     _settingTmpSon.text += "<color=yellow>";
                                 }
-                                switch (_controlSelect)
+                                switch (_keyMapping)
                                 {
-                                    case 0:
+                                    case KeyMapping.MainKeyMap:
                                         _settingTmpSon.text += MainControl.Instance.OverworldControl.keyCodes[i] + "</color>\n";
                                         break;
 
-                                    case 1:
+                                    case KeyMapping.SecondaryKeyMap1:
                                         _settingTmpSon.text += MainControl.Instance.OverworldControl.keyCodesBack1[i] + "</color>\n";
                                         break;
 
-                                    case 2:
+                                    case KeyMapping.SecondaryKeyMap2:
                                         _settingTmpSon.text += MainControl.Instance.OverworldControl.keyCodesBack2[i] + "</color>\n";
                                         break;
                                 }
@@ -330,7 +342,7 @@ namespace UCT.Global.UI
                 SettingText(false, true);
                 if (SettingControl() == KeyCode.None) return;
                 var j = 0;
-                switch (_controlPage)
+                switch (_keyPage)
                 {
                     case 0:
                         j = 0;
@@ -341,17 +353,17 @@ namespace UCT.Global.UI
                     default:
                         var origin = KeyCode.None;
 
-                        switch (_controlSelect)
+                        switch (_keyMapping)
                         {
-                            case 0:
+                            case KeyMapping.MainKeyMap:
                                 origin = MainControl.Instance.OverworldControl.keyCodes[_settingSelect + j];
                                 MainControl.Instance.OverworldControl.keyCodes[_settingSelect + j] = SettingControl();
                                 goto default;
-                            case 1:
+                            case KeyMapping.SecondaryKeyMap1:
                                 origin = MainControl.Instance.OverworldControl.keyCodesBack1[_settingSelect + j];
                                 MainControl.Instance.OverworldControl.keyCodesBack1[_settingSelect + j] = SettingControl();
                                 goto default;
-                            case 2:
+                            case KeyMapping.SecondaryKeyMap2:
                                 origin = MainControl.Instance.OverworldControl.keyCodesBack2[_settingSelect + j];
                                 MainControl.Instance.OverworldControl.keyCodesBack2[_settingSelect + j] = SettingControl();
                                 goto default;
@@ -364,7 +376,7 @@ namespace UCT.Global.UI
                                 };
                                 for (var i = 0; i < MainControl.Instance.OverworldControl.keyCodes.Count; i++)
                                 {
-                                    if (MainControl.Instance.OverworldControl.keyCodes[i] != keycodes[_controlSelect] ||
+                                    if (MainControl.Instance.OverworldControl.keyCodes[i] != keycodes[(int)_keyMapping] ||
                                         i == _settingSelect + j) continue;
                                     MainControl.Instance.OverworldControl.keyCodes[i] = origin;
                                     break;
@@ -372,14 +384,14 @@ namespace UCT.Global.UI
                                 for (var i = 0; i < MainControl.Instance.OverworldControl.keyCodesBack1.Count; i++)
                                 {
                                     if (MainControl.Instance.OverworldControl.keyCodesBack1[i] !=
-                                        keycodes[_controlSelect] || i == _settingSelect + j) continue;
+                                        keycodes[(int)_keyMapping] || i == _settingSelect + j) continue;
                                     MainControl.Instance.OverworldControl.keyCodesBack1[i] = origin;
                                     break;
                                 }
                                 for (var i = 0; i < MainControl.Instance.OverworldControl.keyCodesBack2.Count; i++)
                                 {
                                     if (MainControl.Instance.OverworldControl.keyCodesBack2[i] !=
-                                        keycodes[_controlSelect] || i == _settingSelect + j) continue;
+                                        keycodes[(int)_keyMapping] || i == _settingSelect + j) continue;
                                     MainControl.Instance.OverworldControl.keyCodesBack2[i] = origin;
                                     break;
                                 }
@@ -394,7 +406,7 @@ namespace UCT.Global.UI
                 return;
             }
 
-            if ((openTurn && TurnController.Instance != null && TurnController.Instance.isMyTurn) || !openTurn)
+            if ((openTurn && TurnController.Instance && TurnController.Instance.isMyTurn) || !openTurn)
             {
                 if (SceneManager.GetActiveScene().name != "Story" && GameUtilityService.KeyArrowToControl(KeyCode.V) && !MainControl.Instance.OverworldControl.isSetting && !MainControl.Instance.isSceneSwitching)
                 {
@@ -640,11 +652,11 @@ namespace UCT.Global.UI
                                 _isSettingControl = true;
                                 break;
                             case 6:
-                                _controlPage = _controlPage switch
+                                _keyPage = _keyPage switch
                                 {
                                     0 => 1,
                                     1 => 0,
-                                    _ => _controlPage
+                                    _ => _keyPage
                                 };
                                 break;
                             case 7:
@@ -671,13 +683,14 @@ namespace UCT.Global.UI
                     else if (GameUtilityService.KeyArrowToControl(KeyCode.C))
                     {
                         AudioController.Instance.GetFx(3, MainControl.Instance.AudioControl.fxClipUI);
-                        if (_controlSelect < 2)
-                            _controlSelect++;
-                        else _controlSelect = 0;
+                        if ((int)_keyMapping < 2)
+                            _keyMapping++;
+                        else
+                            _keyMapping = 0;
 
                         SettingText();
                     }
-                    _settingTmpUnder.text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "ControlUnder" + _controlSelect);
+                    _settingTmpUnder.text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "ControlUnder" + (int)_keyMapping);
 
                     break;
 

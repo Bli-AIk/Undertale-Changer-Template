@@ -67,7 +67,7 @@ ControlV\设置;
 ControlF4\全屏;
 ControlTab\更改分辨率;
 ControlSemicolon\更改视觉效果;
-ControlEsc\退出游戏键;
+ControlEsc\退出游戏;
 ControlDefault\恢复默认设置;
 
 ControlEggshell\~嘟嘟嘟嘟嘟嘟嘟~;

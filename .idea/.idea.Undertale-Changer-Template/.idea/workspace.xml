@@ -6,6 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="8f7c2298-d077-422b-9131-f9a839bed961" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Fonts/SonFonts/SIMSUN.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Fonts/SonFonts/SIMSUN.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/LanguagePacks/CN_Template/UI/Setting.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/LanguagePacks/CN_Template/UI/Setting.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/UI/Setting.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/UI/Setting.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/CN/UI/Setting.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/CN/UI/Setting.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/UI/Setting.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/UI/Setting.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/UI/CanvasController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/UI/CanvasController.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -182,6 +187,8 @@
       <workItem from="1730349682488" duration="2220000" />
       <workItem from="1730366465382" duration="1466000" />
       <workItem from="1730434557107" duration="2112000" />
+      <workItem from="1730466288953" duration="2390000" />
+      <workItem from="1730513445181" duration="2503000" />
     </task>
     <servers />
   </component>
@@ -209,13 +216,6 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
-  </component>
-  <component name="XDebuggerManager">
-    <watches-manager>
-      <configuration name="UNITY_DEBUG_RUN_CONFIGURATION">
-        <watch expression="playerControl" language="C#" />
-      </configuration>
-    </watches-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
