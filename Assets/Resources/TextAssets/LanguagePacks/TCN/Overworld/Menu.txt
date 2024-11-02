@@ -1,19 +1,19 @@
 /*
-MENU與設置內的文本存儲。
+MENU與設定內的文字儲存。
 格式：
-讀取名稱\文本;
+讀取名稱\文字;
 
 一般來說 讀取名稱是固定的。
 特殊地，
 RenameSp\name|true|true|text;
-格式爲試圖給特殊名稱起名時的設定，其中以第一個true或false判斷是否允許重命名爲此名稱，第二個true或false判斷name內的文本檢測時是否分大小寫。
-特別地，如果text文本爲</gester>，則將崩潰遊戲。
+格式為試圖為特殊名稱命名時的設定，其中以第一個true或false判斷是否允許重命名為此名稱，第二個true或false判斷name內的文字偵測時是否分大小寫。
+特別地，如果text文字為</gester>，則會崩潰遊戲。
 
-<playerName>獲取玩家名稱
+<playerName>取得玩家名稱
 */
 Menu0\繼續;
-Menu1\重置;
-Menu2\設置;
+Menu1\重設;
+Menu2\設定;
 Menu3\語言;
 Menu4\存檔;
 Menu5\退出;
@@ -25,4 +25,4 @@ Menu10\新建;
 Menu11\刪除;
 Menu12\存檔;
 
-MenuUnder\Undertale (c)  toby fox 2015<enter>undertale changer V;
+MenuUnder\Undertale (c) toby fox 2015<enter>undertale changer V;

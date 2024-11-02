@@ -5,20 +5,35 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8f7c2298-d077-422b-9131-f9a839bed961" name="更改" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/LanguagePacks/CN_Template/Battle/Round.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/LanguagePacks/CN_Template/UI/Setting.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/LanguagePacks/CN_Template/UI/Setting.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/Battle/Round.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/Battle/Turn/MonsterText0.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/Battle/Turn/MonsterText0.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/Battle/Turn/MonsterText1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/Battle/Turn/MonsterText1.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/Battle/UIBattleText.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/Battle/UIBattleText.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/LanguagePackInformation.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/LanguagePackInformation.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/Overworld/Example-Corridor.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/Overworld/Example-Corridor.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/Overworld/Example-Ruins.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/Overworld/Example-Ruins.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/UI/ItemText.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/UI/ItemText.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/UI/Setting.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/UI/Setting.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/CN/UI/Setting.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/CN/UI/Setting.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Battle.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Battle.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Battle/Turn.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Battle/Turn.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Battle/Turn/MonsterText0.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Battle/Turn/MonsterText0.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Battle/Turn/MonsterText0.txt.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Battle/Turn/MonsterText0.txt.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Battle/Turn/MonsterText1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Battle/Turn/MonsterText1.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Battle/Turn/MonsterText1.txt.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Battle/Turn/MonsterText1.txt.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Battle/UIBattleText.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Battle/UIBattleText.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Battle/UIBattleText.txt.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Battle/UIBattleText.txt.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/LanguagePackInformation.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/LanguagePackInformation.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Overworld.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Overworld.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Overworld/Example-Corridor.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Overworld/Example-Corridor.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Overworld/Example-Corridor.txt.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Overworld/Example-Corridor.txt.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Overworld/Example-Ruins.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Overworld/Example-Ruins.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Overworld/Example-Ruins.txt.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Overworld/Example-Ruins.txt.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Overworld/Gameover.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Overworld/Gameover.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Overworld/Gameover.txt.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Overworld/Gameover.txt.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Overworld/Menu.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Overworld/Menu.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Overworld/Menu.txt.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Overworld/Menu.txt.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Overworld/Rename.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Overworld/Rename.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Overworld/Rename.txt.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Overworld/Rename.txt.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Overworld/Start.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Overworld/Start.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Overworld/Start.txt.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Overworld/Start.txt.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Overworld/Story.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Overworld/Story.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Overworld/Story.txt.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/Overworld/Story.txt.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/UI.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/UI.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/UI/ItemText.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/UI/ItemText.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/UI/ItemText.txt.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/UI/ItemText.txt.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/UI/Setting.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/UI/Setting.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/UI/Setting.txt.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/UI/Setting.txt.meta" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -196,7 +211,7 @@
       <workItem from="1730366465382" duration="1466000" />
       <workItem from="1730434557107" duration="2112000" />
       <workItem from="1730466288953" duration="2390000" />
-      <workItem from="1730513445181" duration="9065000" />
+      <workItem from="1730513445181" duration="9371000" />
     </task>
     <servers />
   </component>

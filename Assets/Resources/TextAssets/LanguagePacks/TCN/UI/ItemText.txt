@@ -1,63 +1,63 @@
-/*儲存揹包相關的文本顯示。
-具體編寫格式爲：
-Item\數據名稱\顯示名稱\食用顯示\調查顯示\丟棄顯示;   用於顯示Item的中文名稱
-Data\顯示名稱;   用於其餘顯示
+/*儲存背包相關的文字顯示。
+具體編寫格式為：
+Item\資料名稱\顯示名稱\食用顯示\調查顯示\丟棄顯示; 用於顯示Item的中文名稱
+Data\顯示名稱; 用於其餘顯示
 
 若修改語言包，請僅修改 顯示名稱 及 其後 的內容 *而不要* 更改前面的內容。
-無法自己增加額外的文本， 只能修改 遊戲內的文本 。
+無法自行增加額外的文本， 只能修改 遊戲內的文本 。
 
-請 不要 修改Data前綴的數據的 順序 ，也 建議 不要 修改Item前綴的數據的 順序 。
-請 不要 修改Data前綴的數據的 順序 ，也 建議 不要 修改Item前綴的數據的 順序 。
-請 不要 修改Data前綴的數據的 順序 ，也 建議 不要 修改Item前綴的數據的 順序 。
+請 不要 修改Data前綴的資料的 順序 ，也 建議 不要 修改Item前綴的資料的 順序 。
+請 不要 修改Data前綴的資料的 順序 ，也 建議 不要 修改Item前綴的資料的 順序 。
+請 不要 修改Data前綴的資料的 順序 ，也 建議 不要 修改Item前綴的資料的 順序 。
 
 不要忘記每段後要加上 ";" 符號。
 你可以打回車，在語句內外都行。
 建議進行更改前先 備份 此文件。
-更改完畢後請確定本txt格式爲 UTF-8  若不是請在 “另存爲” 中修改爲 UTF-8 並 覆蓋 此文件。
+更改完畢後請確定本txt格式為 UTF-8 若不是請在 “另存為” 中修改為 UTF-8 並 覆寫 此檔案。
 
-特殊字符輸入：
+特殊字元輸入：
 
-<data0> 調用data中的文字 其中的 0 爲編號，這個編號是從0開始計數而不是從1開始的。
-可更改 (禁止套娃！！！！！！！)
+<data0> 呼叫data中的文字 其中的 0 為編號，這個編號是從0開始計數而不是從1開始的。
+可更改 (禁止嵌套！！！！！！！)
 
-<autoFoodFull>自動檢測玩家血量和該物品回覆血量，然後顯示 
-* 你喫掉了XX。
-* 你回覆了XXHP！/你的HP已滿。 
-<autoFood>字符同上，但是沒有前半句。(你食用了XX。)
-請注意，該字符只能放在 食用顯示 內，在別的位置上時，程序會無視掉它。
+<autoFoodFull>自動偵測玩家血液量及該物品回復血量，然後顯示
+* 你吃掉了XX。
+* 你回覆了XXHP！ /你的HP已滿。
+<autoFood>字元同上，但是沒有前半句。 (你食用了XX。)
+請注意，該字元只能放在 食用顯示 內，在別的位置上時，程式會無視它。
 
-<autoCheckFood>自動檢測該食物並顯示 * “名稱”-治癒 XX HP
--子項<itemHp>獲取食物補充的hp 
--子項<itemNameFood>獲取物品名稱。其中的 Food 可以改爲 Arm/Armor/Other
+<autoCheckFood>自動偵測該食物並顯示 * “姓名”-治癒 XX HP
+-子項<itemHp>取得食物補充的hp
+-子項<itemNameFood>取得物品名稱。其中的 Food 可以改為 Arm/Armor/Other
 
-<autoArm>自動檢測該武器並顯示 * 你裝備了XX。
-<autoArmor>自動檢測該防具並顯示 * 你裝備了XX。
+<autoArm>自動偵測該武器並顯示 * 你裝備了XX。
+<autoArmor>自動偵測該防具並顯示 * 你裝備了XX。
 
-<autoCheckArm>自動檢測該武器並顯示 * “名稱”-武器 AT XX
--字項<itemAtk>獲取ATK
-<autoCheckArmor>自動檢測該防具並顯示 * “名稱”-防具 DF XX
--字項<itemDef>獲取DEF
+<autoCheckArm>自動偵測該武器並顯示 * “名稱”-武器 AT XX
+-字項<itemAtk>取得ATK
+<autoCheckArmor>自動偵測該防具並顯示 * “名稱”-防具 DF XX
+-字項<itemDef>取得DEF
 
-<autoLoseFood>自動檢測物品名稱並顯示 * XX被你扔掉了。其中的 Food 可以改爲 Arm/Armor/Other
-以上原理均爲調用data。
+<autoLoseFood>自動偵測物品名稱並顯示 * XX被你丟掉了。其中的 Food 可以改為 Arm/Armor/Other
+以上原理均為呼叫data。
 
-打字機特殊字符(通用)輸入：
-<stop>字符會使打字機經過此字符時會短暫停頓。
-(該字符不會被打出 一般用於標點符號前/後。原理爲使用預設的“停頓打字速度”打出一個空字符，從而實現停頓。
-在舊模板中，打字機經過標點符號就會停頓，但這也導致了一些特殊情況無法解決。因此，修改爲必須手動添加該字符。
-請注意，按下X後不會在此字符處停頓。該字符可疊加使用。停頓速度根據打字機的設置而定——簡單來說就是你改不了)
+打字機特殊字元(通用)輸入：
+<stop>字元會使打字機經過此字元時會短暫停頓。
+(該字符不會被打出 一般用於標點符號前/後。原理為使用預設的「停頓打字速度」打出一個空字符，從而實現停頓。
+在舊模板中，打字機經過標點符號就會停頓，但這也導致了一些特殊情況無法解決。因此，修改為必須手動新增該字元。
+請注意，按下X後不會在此字元處停頓。此字元可疊加使用。停頓速度依打字機的設定而定－簡單來說就是你改不了)
 
-<enter>回車符 
+<enter>回車符
 
-</else>顯示分隔符，如果若食物有多種顯示文本，使用該符號分割。
--一般情況下，各個文本顯示出現的概率均等。(WIP 未完成 勿用)
+</else>顯示分隔符，如果若食物有多種顯示文本，請使用該符號分割。
+-一般情況下，各個文字顯示出現的機率均等。 (WIP 未完成 勿用)
 
-如果你需要輸入很長的一段文字或單純想要玩家多按那麼一下子Z鍵，你可以在一段文本內插入 <passText>字符
-打字機檢測該字符後會停止打字，玩家若按下Z鍵將會清空當前文本並繼續打字狀態。
-此前的富文本將失效，因爲此前的文本都清空了。
+如果你需要輸入很長的一段文字或單純想要玩家多按那麼一下子Z鍵，你可以在一段文字內插入 <passText>字符
+打字機偵測該字元後會停止打字，玩家若按下Z鍵將會清空目前文字並繼續打字狀態。
+先前的富文本將失效，因為先前的文字都清空了。
 
 富文本輸入示意：
-<color=#00000000>顏色符 支持RGBA 十六進制
+<color=#00000000>顏色符 支援RGBA 十六進位
 </color>去除顏色
 
 <b>粗體
@@ -69,22 +69,22 @@ Data\顯示名稱;   用於其餘顯示
 <size=50>更改字體大小
 </size>去除更改
 
-<color=red>顏色符 具體支持名稱請自行瀏覽器搜索“富文本”或“Unity 富文本”
+<color=red>顏色符 特定支援名稱請自行瀏覽器搜尋“富文本”或“Unity 富文本”
 </color>去除顏色
 
-—————————劇———透———注———意—————————
-*此文檔包含遊戲內劇情內容*
-爲了您的遊戲體驗，若您未完成遊戲流程，請勿瀏覽此文本包。
-另外不要把兩個註釋連着寫 至少隔3字符 否則可能會報錯。
+—————————劇———透———註———意—————————
+*此文件包含遊戲內劇情內容*
+為了您的遊戲體驗，若您未完成遊戲流程，請勿瀏覽此文字包。
+另外不要把兩個註解連著寫 至少隔3字符 否則可能會報錯。
 
 */
 
 /* I T E M */
-Item\baaaaaaaaaaaaaaaa\兩份喫的\<autoFoodFull><enter>* 又得測試，寄了<stop><stop...><passText>* 不過還是蠻順利的嘛。\<autoCheckFood><enter>* 不可名狀的玩意兒<stop><stop...><passText><color=yellow>* 草測試成功了我操！！！\<autoLoseFood>;
-Item\bang\一份喫的\* 你嚐了一口這剩下的玩意兒。<stop><enter><autoFood>\<autoCheckFood><enter>* 仍舊是不可名狀<stop><stop...>\<autoLoseFood>;
+Item\baaaaaaaaaaaaaaaa\兩份吃的\<autoFoodFull><enter>* 又得測試，寄了<stop><stop...><passText>* 不過還蠻順利的嘛。 \<autoCheckFood><enter>* 不可名狀的玩意兒<stop><stop...><passText><color=yellow>* 草測試成功了我操！ ！ ！ \<autoLoseFood>;
+Item\bang\一份吃的\* 你嚐了一口這剩下的玩意兒。 <stop><enter><autoFood>\<autoCheckFood><enter>* 仍舊是不可名狀<stop><stop...>\<autoLoseFood>;
 
 Item\pia1\破爛玩具刀\<autoArm>\<autoCheckArm>\<autoLoseArm>;
-Item\pia2\<color=yellow>黃金聖劍普拉斯</color>\<autoArm><enter>* 金色傳說了屬於是。\<autoCheckArm><enter>* 嗯...你媽的什麼玩意(\* <color=red>你就這麼丟了？<stop>？<stop>？</color>;
+Item\pia2\<color=yellow>黃金聖劍普拉斯</color>\<autoArm><enter>* 金色傳說了屬於是。 \<autoCheckArm><enter>* 嗯...你媽的什麼玩意(\* <color=red>你就這麼丟了？<stop>？<stop>？</color>;
 
 
 Item\tatata1\測試用紙殼子\<autoArmor>\<autoCheckArmor>\<autoLoseArmor>;
@@ -93,32 +93,32 @@ Item\tatata2\能穿的玩意兒\<autoArmor>\<autoCheckArmor>\<autoLoseArmor>;
 
 /* D A T A */
 
-Data\物品<enter></color>狀態;/*顏色檢測變灰是刻在代碼裏的，如果不要可以把</color>寫在最前面*/
+Data\物品<enter></color>狀態;/*顏色偵測變灰是刻在程式碼裡的，如果不要可以把</color>寫在最前面*/
 Data\攻擊;/*狀態*/
 Data\防禦;
 Data\ 還需;
 Data\武器:;
 Data\防具:;
 Data\金錢:;
-Data\測試;/*7 編寫過程中測試所用文字 無實義 可以不改但別刪*/
+Data\測試;/*7 寫過程中測試所用文字 無實義 可以不改但別刪*/
 Data\使用<size=55> </size>;
 Data\說明<size=90> </size>;
 Data\丟棄;/*編號：10*/
 
 /*
 物品 使用/調查/丟棄
-11+ 
+11+
 */
 
-Data\* 你喫掉了<itemNameFood>。<stop>;
-Data\* 你回覆了<autoFood>HP！<stop>;/*未用到<itemHp>。這一步需要實時檢測，故在打字機中單獨插入一個檢測方法。這裏的 <autoFood> 只會用來檢測在哪裏插入HP數*/
-Data\* “<itemNameFood>”-治癒 <itemHp> HP<stop>;
-Data\* 你裝備了<itemNameArm>。<stop>;
-Data\* 你裝備了<itemNameArmor>。<stop>;
+Data\* 你吃了<itemNameFood>。 <stop>;
+Data\* 你回覆了<autoFood>HP！ <stop>;/*未用到<itemHp>。這一步驟需要即時檢測，故在打字機中單獨插入一個檢測方法。這裡的 <autoFood> 只會用來偵測在哪裡插入HP數*/
+Data\* “<itemNameFood>” - 治癒 <itemHp> HP<stop>;
+Data\* 你裝備了<itemNameArm>。 <stop>;
+Data\* 你裝備了<itemNameArmor>。 <stop>;
 Data\* “<itemNameArm>” - 武器 <stop>AT <itemAtk><stop>;
 Data\* “<itemNameArmor>” - 防具 <stop>DF <itemDef><stop>;
-Data\* <itemNameFood>被你扔掉了。<stop>;
-Data\* <itemNameArm>被你扔掉了。<stop>;
-Data\* <itemNameArmor>被你扔掉了。<stop>;/*20*/
-Data\* <itemNameOther>被你扔掉了。<stop>;
-Data\* 你的HP已滿。<stop>;
+Data\* <itemNameFood>被你丟掉了。 <stop>;
+Data\* <itemNameArm>被你丟掉了。 <stop>;
+Data\* <itemNameArmor>被你丟掉了。 <stop>;/*20*/
+Data\* <itemNameOther>被你丟掉了。 <stop>;
+Data\* 你的HP已滿。 <stop>;

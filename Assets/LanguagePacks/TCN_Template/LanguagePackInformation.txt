@@ -4,6 +4,6 @@
 LanguagePackName\繁體中文範本包;
 
 /* 建議在此標示各人員及職位 如xxx(原文),xxx(翻譯),xxx(校對)等。 */
-LanguagePackAuthor\作者：AIk(原始文本);
+LanguagePackAuthor\作者：AIk(原始文本), Google 翻譯;
 
-LanguagePackInformation\繁體中文模板包，內容與 繁體中文(內建) 一致，<enter>供修改使用，修改前記得備份。 ;
+LanguagePackInformation\繁體中文模板包，內容與 繁體中文(內建) 一致，<enter>供修改使用，修改前記得備份。;
