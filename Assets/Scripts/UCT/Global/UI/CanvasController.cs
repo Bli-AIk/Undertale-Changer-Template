@@ -109,248 +109,7 @@ namespace UCT.Global.UI
 
             UpdateSettingDisplay();
         }
-        /// <summary>
-        /// 更新当前设置层的显示内容。根据设置层调用相应的配置方法。
-        /// </summary>
-        /// <param name="isOnlySetSon">是否仅设置子项。</param>
-        /// <param name="isSetting">是否正在进行设置。</param>
-        private void UpdateSettingDisplay(bool isOnlySetSon = false, bool isSetting = false)
-        {
-            switch (settingsLayer)
-            {
-                case SettingsLayer.Home:
-                    HomeConfiguration(isOnlySetSon, isSetting);
-                    break;
-
-                case SettingsLayer.KeyConfiguration:
-                    KeyConfiguration(isSetting);
-                    break;
-
-                case SettingsLayer.LanguageConfiguration:
-                    LanguageConfiguration(isOnlySetSon, isSetting);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-
-        private void HomeConfiguration(bool onlySetSon, bool isSetting)
-        {
-            if (!onlySetSon)
-            {
-                var settingsOptions = new[]
-                {
-                    "Setting", "SettingMainVolume", "SettingControl",
-                    "SettingFullScreen", "SettingResolving", 
-                    "SettingSFX", "SettingFPS", 
-                    "SettingBackMenu", "SettingBackGame"
-                };
-                        
-                var settingsText = settingsOptions.Select(key =>
-                    TextProcessingService.GetFirstChildStringByPrefix(
-                        MainControl.Instance.OverworldControl.settingSave, key)).ToList();
-
-                if (isSetting)
-                    settingsText[1] = $"<color=yellow>{settingsText[1]}</color>"; // 为 SettingMainVolume 添加颜色
-                        
-                _settingTmp.text = string.Join("\n", settingsText);
-            }
-
-            if (!isSetting)
-                _settingTmpSon.text = "\n" +
-                                      (int)(MainControl.Instance.OverworldControl.mainVolume * 100) + "%\n\n" +
-                                      OpenOrClose(MainControl.Instance.OverworldControl.fullScreen) + '\n' +
-                                      MainControl.Instance.OverworldControl.resolution.x + '×' +
-                                      MainControl.Instance.OverworldControl.resolution.y + '\n' +
-                                      OpenOrClose(MainControl.Instance.OverworldControl.noSfx) + '\n' +
-                                      OpenOrClose(MainControl.Instance.OverworldControl.openFPS) + '\n';
-            else
-                _settingTmpSon.text = "\n" +
-                                      "<color=yellow>" +
-                                      (int)(MainControl.Instance.OverworldControl.mainVolume * 100) +
-                                      "%</color>\n\n" +
-                                      OpenOrClose(MainControl.Instance.OverworldControl.fullScreen) + '\n' +
-                                      MainControl.Instance.OverworldControl.resolution.x + '×' +
-                                      MainControl.Instance.OverworldControl.resolution.y + '\n' +
-                                      OpenOrClose(MainControl.Instance.OverworldControl.noSfx) + '\n' +
-                                      OpenOrClose(MainControl.Instance.OverworldControl.openFPS) + '\n';
-        }
-
-        private void LanguageConfiguration(bool onlySetSon, bool isSetting)
-        {
-            var pathStringSaver = "";
-
-            if (isSetting)
-            {
-                MainControl.Instance.Initialization(_settingSelect);
-            }
-            if (!onlySetSon)
-                _settingTmp.text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "LanguagePack") + '\n';
-            _settingTmpSon.text = "";
-            _settingSelectMax = 0;
-            var settingSelectBack = _settingSelect;
-            if (onlySetSon)
-                _settingSelect = MainControl.Instance.languagePackId;
-
-            for (var i = 0; i < MainControl.LanguagePackInsideNumber; i++) //内置包信息
-            {
-                var pathString = "TextAssets/LanguagePacks/" + DataHandlerService.GetLanguageInsideId(i);
-
-                if (_settingSelectMax == _settingSelect)
-                {
-                    pathStringSaver = pathString;
-                }
-                _settingSelectMax++;
-
-                if (!onlySetSon)
-                    _settingTmp.text += GetLanguagePacksName(pathString, "LanguagePackName", false) + '\n';
-            }
-            foreach (var pathString in Directory.GetDirectories(Application.dataPath + "\\LanguagePacks"))
-            {
-                if (_settingSelectMax == _settingSelect)
-                    pathStringSaver = pathString;
-                _settingSelectMax++;
-                if (!onlySetSon)
-                    _settingTmp.text += GetLanguagePacksName(pathString, "LanguagePackName", true) + '\n';
-            }
-            if (!onlySetSon)
-                _settingTmp.text += TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Back");
-
-            _settingTmpUnder.text = GetLanguagePacksName(pathStringSaver, "LanguagePackInformation", _settingSelect >= MainControl.LanguagePackInsideNumber) + '\n' + GetLanguagePacksName(pathStringSaver, "LanguagePackAuthor", _settingSelect >= MainControl.LanguagePackInsideNumber);
-
-            _settingSelect = settingSelectBack;
-        }
-
-        private void KeyConfiguration(bool isSetting)
-        {
-            var strings = new List<string>();
-
-            for (var i = 0; i < 6; i++)
-            {
-                if (isSetting && i == _settingSelect)
-                    strings.Add("<color=yellow>");
-                else
-                    strings.Add("");
-            }
-
-            List<string> prefixes;
-            StringBuilder result;
-            switch (_keyPage)
-            {
-                case 0:
-                    prefixes = new List<string>
-                    {
-                        "Control", 
-                        "ControlDown", "ControlRight", "ControlUp", "ControlLeft", 
-                        "ControlZ", "ControlX", "PageDown", "ControlDefault",
-                        "Back"
-                    };
-
-                    result = new StringBuilder();
-                    for (var i = 0; i < prefixes.Count; i++)
-                    {
-                        if (i > 0 && i - 1 < strings.Count) 
-                            result.Append(strings[i - 1]);
-                        result.Append(TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, prefixes[i]));
-                        if (i < prefixes.Count - 1)
-                            result.Append("</color>\n");
-                    }
-
-                    _settingTmp.text = result.ToString();
-
-                    _settingTmpSon.text = "\n";
-                    for (var i = 0; i < 6; i++)
-                    {
-                        if (isSetting && i == _settingSelect)
-                        {
-                            _settingTmpSon.text += "<color=yellow>";
-                        }
-
-                        _settingTmpSon.text += _keyMapping switch
-                        {
-                            KeyMapping.MainKeyMap => MainControl.Instance.OverworldControl.keyCodes[i] +
-                                                     "</color>\n",
-                            KeyMapping.SecondaryKeyMap1 => MainControl.Instance.OverworldControl.keyCodesBack1
-                                [i] + "</color>\n",
-                            KeyMapping.SecondaryKeyMap2 => MainControl.Instance.OverworldControl.keyCodesBack2
-                                [i] + "</color>\n",
-                            _ => throw new ArgumentOutOfRangeException()
-                        };
-                    }
-
-                    break;
-
-                case 1:
-                    prefixes = new List<string>
-                    {
-                        "Control", "ControlC", "ControlV", "ControlF4", 
-                        "ControlTab", "ControlSemicolon", "ControlEsc", 
-                        "PageUp", "ControlDefault", "Back"
-                    };
-                    result = new StringBuilder();
-                    for (var i = 0; i < prefixes.Count; i++)
-                    {
-                        if (i > 0 && i - 1 < strings.Count)
-                            result.Append(strings[i - 1]);
-                        result.Append(TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, prefixes[i]));
-                        if (i < prefixes.Count - 3)
-                            result.Append("</color>\n");
-                        else if (i < prefixes.Count - 1)
-                            result.Append("\n");
-                    }
-                    _settingTmp.text = result.ToString();
-
-                    _settingTmpSon.text = "\n";
-                    for (var i = 6; i < 12; i++)
-                    {
-                        if (isSetting && i - 6 == _settingSelect)
-                        {
-                            _settingTmpSon.text += "<color=yellow>";
-                        }
-
-                        _settingTmpSon.text += _keyMapping switch
-                        {
-                            KeyMapping.MainKeyMap => MainControl.Instance.OverworldControl.keyCodes[i] +
-                                                     "</color>\n",
-                            KeyMapping.SecondaryKeyMap1 => MainControl.Instance.OverworldControl.keyCodesBack1
-                                [i] + "</color>\n",
-                            KeyMapping.SecondaryKeyMap2 => MainControl.Instance.OverworldControl.keyCodesBack2
-                                [i] + "</color>\n",
-                            _ => throw new ArgumentOutOfRangeException()
-                        };
-                    }
-
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// 获取语言包信息
-        /// 返回returnString
-        /// </summary>
-        private static string GetLanguagePacksName(string pathString, string returnString, bool isOutSide)
-        {
-            var strings = new List<string>();
-            DataHandlerService.LoadItemData(strings, ReadFile(pathString + "\\LanguagePackInformation", isOutSide));
-            strings = DataHandlerService.ChangeItemData(strings, true, new List<string>());
-            return TextProcessingService.GetFirstChildStringByPrefix(strings, returnString);
-        }
-
-        private static string ReadFile(string pathName, bool isOutSide)
-        {
-            return !isOutSide ? 
-                Resources.Load<TextAsset>(pathName).text : File.ReadAllText(pathName + ".txt");
-        }
-
-        /// <summary>
-        /// 返回开/关文本
-        /// </summary>
-        private static string OpenOrClose(bool inputBool)
-        {
-            return TextProcessingService.GetFirstChildStringByPrefix
-                (MainControl.Instance.OverworldControl.settingSave, inputBool ? "Open" : "Close");
-        }
-
+        
         private void Update()
         {
             if (freeze) return;
@@ -447,18 +206,19 @@ namespace UCT.Global.UI
 
             if ((openTurn && TurnController.Instance && TurnController.Instance.isMyTurn) || !openTurn)
             {
-                if (SceneManager.GetActiveScene().name != "Story" && GameUtilityService.KeyArrowToControl(KeyCode.V) && !MainControl.Instance.OverworldControl.isSetting && !MainControl.Instance.isSceneSwitching)
+                if (SceneManager.GetActiveScene().name != "Story" && 
+                    GameUtilityService.KeyArrowToControl(KeyCode.V) && 
+                    !MainControl.Instance.OverworldControl.isSetting &&
+                    !MainControl.Instance.isSceneSwitching)
                 {
                     foreach (var typeWritter in _typeWritters)
                     {
                         typeWritter.TypePause(true);
                     }
-
                     OpenSetting();
                 }
             }
-            if (!MainControl.Instance.OverworldControl.isSetting)
-                return;
+            if (!MainControl.Instance.OverworldControl.isSetting) return;
 
             _settingSoul.rectTransform.anchoredPosition = new Vector2(-225f, 147.5f + _settingSelect * -37.5f);
 
@@ -777,6 +537,255 @@ namespace UCT.Global.UI
 
 
         /// <summary>
+        /// 更新当前设置层的显示内容。根据设置层调用相应的配置方法。
+        /// </summary>
+        /// <param name="isOnlySetSon">是否仅设置子项。</param>
+        /// <param name="isSetting">是否正在进行设置。</param>
+        private void UpdateSettingDisplay(bool isOnlySetSon = false, bool isSetting = false)
+        {
+            switch (settingsLayer)
+            {
+                case SettingsLayer.Home:
+                    HomeConfiguration(isOnlySetSon, isSetting);
+                    break;
+
+                case SettingsLayer.KeyConfiguration:
+                    KeyConfiguration(isSetting);
+                    break;
+
+                case SettingsLayer.LanguageConfiguration:
+                    LanguageConfiguration(isOnlySetSon, isSetting);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+        /// <summary>
+        /// 设置Home页配置
+        /// </summary>
+        private void HomeConfiguration(bool onlySetSon, bool isSetting)
+        {
+            if (!onlySetSon)
+            {
+                var settingsOptions = new[]
+                {
+                    "Setting", "SettingMainVolume", "SettingControl",
+                    "SettingFullScreen", "SettingResolving", 
+                    "SettingSFX", "SettingFPS", 
+                    "SettingBackMenu", "SettingBackGame"
+                };
+                        
+                var settingsText = settingsOptions.Select(key =>
+                    TextProcessingService.GetFirstChildStringByPrefix(
+                        MainControl.Instance.OverworldControl.settingSave, key)).ToList();
+
+                if (isSetting)
+                    settingsText[1] = $"<color=yellow>{settingsText[1]}</color>"; // 为 SettingMainVolume 添加颜色
+                        
+                _settingTmp.text = string.Join("\n", settingsText);
+            }
+
+            if (!isSetting)
+                _settingTmpSon.text = "\n" +
+                                      (int)(MainControl.Instance.OverworldControl.mainVolume * 100) + "%\n\n" +
+                                      OpenOrClose(MainControl.Instance.OverworldControl.fullScreen) + '\n' +
+                                      MainControl.Instance.OverworldControl.resolution.x + '×' +
+                                      MainControl.Instance.OverworldControl.resolution.y + '\n' +
+                                      OpenOrClose(MainControl.Instance.OverworldControl.noSfx) + '\n' +
+                                      OpenOrClose(MainControl.Instance.OverworldControl.openFPS) + '\n';
+            else
+                _settingTmpSon.text = "\n" +
+                                      "<color=yellow>" +
+                                      (int)(MainControl.Instance.OverworldControl.mainVolume * 100) +
+                                      "%</color>\n\n" +
+                                      OpenOrClose(MainControl.Instance.OverworldControl.fullScreen) + '\n' +
+                                      MainControl.Instance.OverworldControl.resolution.x + '×' +
+                                      MainControl.Instance.OverworldControl.resolution.y + '\n' +
+                                      OpenOrClose(MainControl.Instance.OverworldControl.noSfx) + '\n' +
+                                      OpenOrClose(MainControl.Instance.OverworldControl.openFPS) + '\n';
+        }
+
+        /// <summary>
+        /// 设置键位页配置
+        /// </summary>
+        private void KeyConfiguration(bool isSetting)
+        {
+            var strings = new List<string>();
+
+            for (var i = 0; i < 6; i++)
+            {
+                if (isSetting && i == _settingSelect)
+                    strings.Add("<color=yellow>");
+                else
+                    strings.Add("");
+            }
+
+            List<string> prefixes;
+            StringBuilder result;
+            switch (_keyPage)
+            {
+                case 0:
+                    prefixes = new List<string>
+                    {
+                        "Control", 
+                        "ControlDown", "ControlRight", "ControlUp", "ControlLeft", 
+                        "ControlZ", "ControlX", "PageDown", "ControlDefault",
+                        "Back"
+                    };
+
+                    result = new StringBuilder();
+                    for (var i = 0; i < prefixes.Count; i++)
+                    {
+                        if (i > 0 && i - 1 < strings.Count) 
+                            result.Append(strings[i - 1]);
+                        result.Append(TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, prefixes[i]));
+                        if (i < prefixes.Count - 1)
+                            result.Append("</color>\n");
+                    }
+
+                    _settingTmp.text = result.ToString();
+
+                    _settingTmpSon.text = "\n";
+                    for (var i = 0; i < 6; i++)
+                    {
+                        if (isSetting && i == _settingSelect)
+                        {
+                            _settingTmpSon.text += "<color=yellow>";
+                        }
+
+                        _settingTmpSon.text += _keyMapping switch
+                        {
+                            KeyMapping.MainKeyMap => MainControl.Instance.OverworldControl.keyCodes[i] +
+                                                     "</color>\n",
+                            KeyMapping.SecondaryKeyMap1 => MainControl.Instance.OverworldControl.keyCodesBack1
+                                [i] + "</color>\n",
+                            KeyMapping.SecondaryKeyMap2 => MainControl.Instance.OverworldControl.keyCodesBack2
+                                [i] + "</color>\n",
+                            _ => throw new ArgumentOutOfRangeException()
+                        };
+                    }
+
+                    break;
+
+                case 1:
+                    prefixes = new List<string>
+                    {
+                        "Control", "ControlC", "ControlV", "ControlF4", 
+                        "ControlTab", "ControlSemicolon", "ControlEsc", 
+                        "PageUp", "ControlDefault", "Back"
+                    };
+                    result = new StringBuilder();
+                    for (var i = 0; i < prefixes.Count; i++)
+                    {
+                        if (i > 0 && i - 1 < strings.Count)
+                            result.Append(strings[i - 1]);
+                        result.Append(TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, prefixes[i]));
+                        if (i < prefixes.Count - 3)
+                            result.Append("</color>\n");
+                        else if (i < prefixes.Count - 1)
+                            result.Append("\n");
+                    }
+                    _settingTmp.text = result.ToString();
+
+                    _settingTmpSon.text = "\n";
+                    for (var i = 6; i < 12; i++)
+                    {
+                        if (isSetting && i - 6 == _settingSelect)
+                        {
+                            _settingTmpSon.text += "<color=yellow>";
+                        }
+
+                        _settingTmpSon.text += _keyMapping switch
+                        {
+                            KeyMapping.MainKeyMap => MainControl.Instance.OverworldControl.keyCodes[i] +
+                                                     "</color>\n",
+                            KeyMapping.SecondaryKeyMap1 => MainControl.Instance.OverworldControl.keyCodesBack1
+                                [i] + "</color>\n",
+                            KeyMapping.SecondaryKeyMap2 => MainControl.Instance.OverworldControl.keyCodesBack2
+                                [i] + "</color>\n",
+                            _ => throw new ArgumentOutOfRangeException()
+                        };
+                    }
+
+                    break;
+            }
+        }
+        /// <summary>
+        /// 设置语言包页配置
+        /// </summary>
+        private void LanguageConfiguration(bool onlySetSon, bool isSetting)
+        {
+            var pathStringSaver = "";
+
+            if (isSetting)
+                MainControl.Instance.Initialization(_settingSelect);
+            
+            if (!onlySetSon)
+                _settingTmp.text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "LanguagePack") + '\n';
+            _settingTmpSon.text = "";
+            _settingSelectMax = 0;
+            var settingSelectBack = _settingSelect;
+            if (onlySetSon)
+                _settingSelect = MainControl.Instance.languagePackId;
+
+            for (var i = 0; i < MainControl.LanguagePackInsideNumber; i++) //内置包信息
+            {
+                var pathString = "TextAssets/LanguagePacks/" + DataHandlerService.GetLanguageInsideId(i);
+
+                if (_settingSelectMax == _settingSelect)
+                {
+                    pathStringSaver = pathString;
+                }
+                _settingSelectMax++;
+
+                if (!onlySetSon)
+                    _settingTmp.text += GetLanguagePacksName(pathString, "LanguagePackName", false) + '\n';
+            }
+            foreach (var pathString in Directory.GetDirectories(Application.dataPath + "\\LanguagePacks"))
+            {
+                if (_settingSelectMax == _settingSelect)
+                    pathStringSaver = pathString;
+                _settingSelectMax++;
+                if (!onlySetSon)
+                    _settingTmp.text += GetLanguagePacksName(pathString, "LanguagePackName", true) + '\n';
+            }
+            if (!onlySetSon)
+                _settingTmp.text += TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Back");
+
+            _settingTmpUnder.text = GetLanguagePacksName(pathStringSaver, "LanguagePackInformation", _settingSelect >= MainControl.LanguagePackInsideNumber) + '\n' + GetLanguagePacksName(pathStringSaver, "LanguagePackAuthor", _settingSelect >= MainControl.LanguagePackInsideNumber);
+
+            _settingSelect = settingSelectBack;
+        }
+        /// <summary>
+        /// 获取语言包信息
+        /// </summary>
+        /// <param name="pathString">语言包路径</param>
+        /// <param name="returnString">返回的字符串标识</param>
+        /// <param name="isOutSide">是否为外部路径</param>
+        private static string GetLanguagePacksName(string pathString, string returnString, bool isOutSide)
+        {
+            var strings = new List<string>();
+            DataHandlerService.LoadItemData(strings, ReadFile(pathString + "\\LanguagePackInformation", isOutSide));
+            strings = DataHandlerService.ChangeItemData(strings, true, new List<string>());
+            return TextProcessingService.GetFirstChildStringByPrefix(strings, returnString);
+        }
+
+        private static string ReadFile(string pathName, bool isOutSide)
+        {
+            return !isOutSide ? 
+                Resources.Load<TextAsset>(pathName).text : File.ReadAllText(pathName + ".txt");
+        }
+
+        /// <summary>
+        /// 返回开/关文本
+        /// </summary>
+        private static string OpenOrClose(bool inputBool)
+        {
+            return TextProcessingService.GetFirstChildStringByPrefix
+                (MainControl.Instance.OverworldControl.settingSave, inputBool ? "Open" : "Close");
+        }
+
+        /// <summary>
         /// 检测并返回按下的设置控制键
         /// </summary>
         /// <returns>按下的键</returns>
@@ -810,7 +819,6 @@ namespace UCT.Global.UI
         /// <summary>
         /// 退出设置页面
         /// </summary>
-        
         private void ExitSetting(bool isLan = false)
         {
             settingsLayer = 0;
@@ -851,16 +859,19 @@ namespace UCT.Global.UI
             _mLastUpdateShowTime = Time.realtimeSinceStartup;
             return ((int)_mFPS).ToString();
         }
-        /// <summary>
-        /// Anim调用
-        /// </summary>
+        // 以下函数供Animator使用
         public void AnimSetHeartPos()
         {
-            var uiPos = WorldToUGUI(MainControl.Instance.OverworldControl.playerDeadPos);
+            var uiPos = WorldPositionToUGUI(MainControl.Instance.OverworldControl.playerDeadPos);
             transform.Find("Heart").GetComponent<RectTransform>().anchoredPosition = uiPos;
         }
 
-        private Vector2 WorldToUGUI(Vector3 position)
+        /// <summary>
+        /// 将世界坐标转换为UGUI坐标
+        /// </summary>
+        /// <param name="position">世界坐标</param>
+        /// <returns>转换后的UGUI坐标</returns>
+        private Vector2 WorldPositionToUGUI(Vector3 position)
         {
             var canvasRectTransform = GetComponent<RectTransform>();
             if (Camera.main == null)
@@ -868,15 +879,15 @@ namespace UCT.Global.UI
                 Other.Debug.LogError("未找到主摄像机！");
                 return position;
             }
-
             Vector2 screenPoint = Camera.main.WorldToScreenPoint(position); //世界坐标转换为屏幕坐标
             var screenSize = new Vector2(Screen.width, Screen.height);
             screenPoint -= screenSize / 2; //将屏幕坐标变换为以屏幕中心为原点
             var anchorPos = screenPoint / screenSize * canvasRectTransform.sizeDelta; //缩放得到UGUI坐标
-
             return anchorPos;
         }
 
+
+        
         public void AnimSetHeartRed(int isRed)
         {
             transform.Find("Heart").GetComponent<Image>().color = Convert.ToBoolean(isRed) ? Color.red : Color.clear;
@@ -887,18 +898,16 @@ namespace UCT.Global.UI
             var i = transform.Find("Heart").GetComponent<RectTransform>();
             var j = i.GetComponent<Image>();
             j.DOColor(new Color(j.color.r, j.color.g, j.color.b, 0), AnimSpeed).SetEase(Ease.Linear);
-            DOTween.To(() => i.anchoredPosition, x => i.anchoredPosition = x, new Vector2(-330, -250), 1.5f).SetEase(Ease.OutCirc).OnKill(AnimOpen);
+            DOTween.To(() => i.anchoredPosition, x => i.anchoredPosition = x, new Vector2(-330, -250), 1.5f).SetEase(Ease.OutCirc).OnKill(() =>
+            {
+                animator.SetBool(Open, false);
+                GameUtilityService.FadeOutAndSwitchScene("Battle", Color.black, false, -0.5f);
+            });
         }
 
         public void PlayFX(int i)
         {
             AudioController.Instance.GetFx(i, MainControl.Instance.AudioControl.fxClipUI);
-        }
-
-        private void AnimOpen()
-        {
-            animator.SetBool(Open, false);
-            GameUtilityService.FadeOutAndSwitchScene("Battle", Color.black, false, -0.5f);
         }
     }
 }
