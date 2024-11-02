@@ -46,7 +46,7 @@ namespace UCT.Global.UI
             Home,//主层级
             KeyConfiguration,//按键设置层级
             LanguageConfiguration,//语言包层级
-        };
+        }
 
         [HideInInspector] public SettingsLayer settingsLayer;
 
@@ -157,10 +157,23 @@ namespace UCT.Global.UI
             }
 
             if (!isSetting)
-                _settingTmpSon.text = "\n" + (int)(MainControl.Instance.OverworldControl.mainVolume * 100) + "%\n\n" + OpenOrClose(MainControl.Instance.OverworldControl.fullScreen) + '\n' +
-                                      MainControl.Instance.OverworldControl.resolution.x + '×' + MainControl.Instance.OverworldControl.resolution.y + '\n' + OpenOrClose(MainControl.Instance.OverworldControl.noSfx) + '\n' + OpenOrClose(MainControl.Instance.OverworldControl.openFPS)+ '\n' ;
-            else _settingTmpSon.text = "\n" + "<color=yellow>" + ((int)(MainControl.Instance.OverworldControl.mainVolume * 100)) + "%</color>\n\n" + OpenOrClose(MainControl.Instance.OverworldControl.fullScreen) + '\n' +
-                                       MainControl.Instance.OverworldControl.resolution.x + '×' + MainControl.Instance.OverworldControl.resolution.y + '\n' + OpenOrClose(MainControl.Instance.OverworldControl.noSfx) + '\n' + OpenOrClose(MainControl.Instance.OverworldControl.openFPS)+ '\n' ;
+                _settingTmpSon.text = "\n" +
+                                      (int)(MainControl.Instance.OverworldControl.mainVolume * 100) + "%\n\n" +
+                                      OpenOrClose(MainControl.Instance.OverworldControl.fullScreen) + '\n' +
+                                      MainControl.Instance.OverworldControl.resolution.x + '×' +
+                                      MainControl.Instance.OverworldControl.resolution.y + '\n' +
+                                      OpenOrClose(MainControl.Instance.OverworldControl.noSfx) + '\n' +
+                                      OpenOrClose(MainControl.Instance.OverworldControl.openFPS) + '\n';
+            else
+                _settingTmpSon.text = "\n" +
+                                      "<color=yellow>" +
+                                      (int)(MainControl.Instance.OverworldControl.mainVolume * 100) +
+                                      "%</color>\n\n" +
+                                      OpenOrClose(MainControl.Instance.OverworldControl.fullScreen) + '\n' +
+                                      MainControl.Instance.OverworldControl.resolution.x + '×' +
+                                      MainControl.Instance.OverworldControl.resolution.y + '\n' +
+                                      OpenOrClose(MainControl.Instance.OverworldControl.noSfx) + '\n' +
+                                      OpenOrClose(MainControl.Instance.OverworldControl.openFPS) + '\n';
         }
 
         private void LanguageConfiguration(bool onlySetSon, bool isSetting)
@@ -325,7 +338,8 @@ namespace UCT.Global.UI
 
         private static string ReadFile(string pathName, bool isOutSide)
         {
-            return !isOutSide ? Resources.Load<TextAsset>(pathName).text : File.ReadAllText(pathName + ".txt");
+            return !isOutSide ? 
+                Resources.Load<TextAsset>(pathName).text : File.ReadAllText(pathName + ".txt");
         }
 
         /// <summary>
@@ -333,13 +347,14 @@ namespace UCT.Global.UI
         /// </summary>
         private static string OpenOrClose(bool inputBool)
         {
-            return TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, inputBool ? "Open" : "Close");
+            return TextProcessingService.GetFirstChildStringByPrefix
+                (MainControl.Instance.OverworldControl.settingSave, inputBool ? "Open" : "Close");
         }
 
         private void Update()
         {
-            if (freeze)
-                return;
+            if (freeze) return;
+            
             fps.text = MainControl.Instance.OverworldControl.openFPS ? UpdateFPS(fps.text) : "";
 
             if (GameUtilityService.KeyArrowToControl(KeyCode.Escape, 1))
@@ -364,7 +379,7 @@ namespace UCT.Global.UI
             if (_isSettingControl)
             {
                 UpdateSettingDisplay(false, true);
-                if (SettingControl() == KeyCode.None) return;
+                if (GetSettingControlKey() == KeyCode.None) return;
                 var j = 0;
                 switch (_keyPage)
                 {
@@ -381,15 +396,15 @@ namespace UCT.Global.UI
                         {
                             case KeyMapping.MainKeyMap:
                                 origin = MainControl.Instance.OverworldControl.keyCodes[_settingSelect + j];
-                                MainControl.Instance.OverworldControl.keyCodes[_settingSelect + j] = SettingControl();
+                                MainControl.Instance.OverworldControl.keyCodes[_settingSelect + j] = GetSettingControlKey();
                                 goto default;
                             case KeyMapping.SecondaryKeyMap1:
                                 origin = MainControl.Instance.OverworldControl.keyCodesBack1[_settingSelect + j];
-                                MainControl.Instance.OverworldControl.keyCodesBack1[_settingSelect + j] = SettingControl();
+                                MainControl.Instance.OverworldControl.keyCodesBack1[_settingSelect + j] = GetSettingControlKey();
                                 goto default;
                             case KeyMapping.SecondaryKeyMap2:
                                 origin = MainControl.Instance.OverworldControl.keyCodesBack2[_settingSelect + j];
-                                MainControl.Instance.OverworldControl.keyCodesBack2[_settingSelect + j] = SettingControl();
+                                MainControl.Instance.OverworldControl.keyCodesBack2[_settingSelect + j] = GetSettingControlKey();
                                 goto default;
                             default:
                                 var keycodes = new List<KeyCode>
@@ -761,9 +776,18 @@ namespace UCT.Global.UI
         }
 
 
-        private static KeyCode SettingControl()
+        /// <summary>
+        /// 检测并返回按下的设置控制键
+        /// </summary>
+        /// <returns>按下的键</returns>
+        private static KeyCode GetSettingControlKey()
         {
-            return !Input.anyKeyDown ? KeyCode.None : Enum.GetValues(typeof(KeyCode)).Cast<KeyCode>().Where(_ => !Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1) && !Input.GetMouseButtonDown(2)).FirstOrDefault(Input.GetKeyDown);
+            return !Input.anyKeyDown ? KeyCode.None : Enum.GetValues(typeof(KeyCode))
+                    .Cast<KeyCode>()
+                    .Where(_ => !Input.GetMouseButtonDown(0) &&
+                                !Input.GetMouseButtonDown(1) &&
+                                !Input.GetMouseButtonDown(2))
+                    .FirstOrDefault(Input.GetKeyDown);
         }
 
         /// <summary>
@@ -773,12 +797,10 @@ namespace UCT.Global.UI
         {
             MainControl.Instance.OverworldControl.isSetting = true;
             settingImage.DOColor(new Color(0, 0, 0, 0.75f), AnimSpeed);
-            //DOTween.To(() => settingImage.rectTransform.sizeDelta, x => settingImage.rectTransform.sizeDelta = x, new Vector2(6000, settingImage.rectTransform.sizeDelta.y), animSpeed).SetEase(Ease.InCirc);
             _settingTmp.DOColor(Color.white, AnimSpeed).SetEase(Ease.Linear);
             _settingTmpSon.DOColor(Color.white, AnimSpeed).SetEase(Ease.Linear);
             _settingTmpUnder.DOColor(Color.white, AnimSpeed).SetEase(Ease.Linear);
             _settingSoul.DOColor(Color.red, AnimSpeed).SetEase(Ease.Linear);
-            //DOTween.To(() => _settingTmp.rectTransform.anchoredPosition, x => _settingTmp.rectTransform.anchoredPosition = x, new Vector2(140, 140), AnimSpeed + 0.25f).SetEase(Ease.OutCubic);
             _settingSelect = 0;
             _settingTmpUnder.text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "ControlEggshell");
             UpdateSettingDisplay();
