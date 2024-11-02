@@ -177,29 +177,24 @@ namespace UCT.Global.UI
                                               TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "ControlDefault") + '\n' +
                                               TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Back");
 
-                            _settingTmpSon.text = "";
+                            _settingTmpSon.text = "\n";
                             for (var i = 0; i < 6; i++)
                             {
                                 if (isSetting && i == _settingSelect)
                                 {
                                     _settingTmpSon.text += "<color=yellow>";
                                 }
-                                switch (_keyMapping)
+
+                                _settingTmpSon.text += _keyMapping switch
                                 {
-                                    case KeyMapping.MainKeyMap:
-                                        _settingTmpSon.text += MainControl.Instance.OverworldControl.keyCodes[i] + "</color>\n";
-                                        break;
-
-                                    case KeyMapping.SecondaryKeyMap1:
-                                        _settingTmpSon.text += MainControl.Instance.OverworldControl.keyCodesBack1[i] + "</color>\n";
-                                        break;
-
-                                    case KeyMapping.SecondaryKeyMap2:
-                                        _settingTmpSon.text += MainControl.Instance.OverworldControl.keyCodesBack2[i] + "</color>\n";
-                                        break;
-                                    default:
-                                        throw new ArgumentOutOfRangeException();
-                                }
+                                    KeyMapping.MainKeyMap => MainControl.Instance.OverworldControl.keyCodes[i] +
+                                                             "</color>\n",
+                                    KeyMapping.SecondaryKeyMap1 => MainControl.Instance.OverworldControl.keyCodesBack1
+                                        [i] + "</color>\n",
+                                    KeyMapping.SecondaryKeyMap2 => MainControl.Instance.OverworldControl.keyCodesBack2
+                                        [i] + "</color>\n",
+                                    _ => throw new ArgumentOutOfRangeException()
+                                };
                             }
 
                             break;
@@ -215,29 +210,24 @@ namespace UCT.Global.UI
                                               TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "PageUp") + '\n' +
                                               TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "ControlDefault") + '\n' +
                                               TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Back");
-                            _settingTmpSon.text = "";
+                            _settingTmpSon.text = "\n";
                             for (var i = 6; i < 12; i++)
                             {
                                 if (isSetting && i - 6 == _settingSelect)
                                 {
                                     _settingTmpSon.text += "<color=yellow>";
                                 }
-                                switch (_keyMapping)
+
+                                _settingTmpSon.text += _keyMapping switch
                                 {
-                                    case KeyMapping.MainKeyMap:
-                                        _settingTmpSon.text += MainControl.Instance.OverworldControl.keyCodes[i] + "</color>\n";
-                                        break;
-
-                                    case KeyMapping.SecondaryKeyMap1:
-                                        _settingTmpSon.text += MainControl.Instance.OverworldControl.keyCodesBack1[i] + "</color>\n";
-                                        break;
-
-                                    case KeyMapping.SecondaryKeyMap2:
-                                        _settingTmpSon.text += MainControl.Instance.OverworldControl.keyCodesBack2[i] + "</color>\n";
-                                        break;
-                                    default:
-                                        throw new ArgumentOutOfRangeException();
-                                }
+                                    KeyMapping.MainKeyMap => MainControl.Instance.OverworldControl.keyCodes[i] +
+                                                             "</color>\n",
+                                    KeyMapping.SecondaryKeyMap1 => MainControl.Instance.OverworldControl.keyCodesBack1
+                                        [i] + "</color>\n",
+                                    KeyMapping.SecondaryKeyMap2 => MainControl.Instance.OverworldControl.keyCodesBack2
+                                        [i] + "</color>\n",
+                                    _ => throw new ArgumentOutOfRangeException()
+                                };
                             }
 
                             break;
