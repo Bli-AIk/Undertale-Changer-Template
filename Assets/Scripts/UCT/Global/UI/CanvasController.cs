@@ -95,10 +95,9 @@ namespace UCT.Global.UI
         public void Start()
         {
             settingsLayer = SettingsLayer.Home;
-            //settingImage.rectTransform.sizeDelta = new Vector2(0, settingImage.rectTransform.sizeDelta.y);
-            _settingTmp.color = Color.white;
-            _settingTmp.rectTransform.anchoredPosition = new Vector2(-610, 140);
-
+            _settingTmp.color = Color.clear;
+            _settingTmpSon.color = Color.clear;
+            _settingTmpUnder.color = Color.clear;
             freeze = false;
 
             _canvas.renderMode = renderMode;
@@ -145,10 +144,10 @@ namespace UCT.Global.UI
                     }
                     
                     if (!isSetting)
-                        _settingTmpSon.text = (int)(MainControl.Instance.OverworldControl.mainVolume * 100) + "%\n\n" + OpenOrClose(MainControl.Instance.OverworldControl.fullScreen) + '\n' +
-                                             MainControl.Instance.OverworldControl.resolution.x + '×' + MainControl.Instance.OverworldControl.resolution.y + '\n' + OpenOrClose(MainControl.Instance.OverworldControl.noSfx) + '\n' + OpenOrClose(MainControl.Instance.OverworldControl.openFPS);
-                    else _settingTmpSon.text = "<color=yellow>" + ((int)(MainControl.Instance.OverworldControl.mainVolume * 100)) + "%</color>\n\n" + OpenOrClose(MainControl.Instance.OverworldControl.fullScreen) + '\n' +
-                                              MainControl.Instance.OverworldControl.resolution.x + '×' + MainControl.Instance.OverworldControl.resolution.y + '\n' + OpenOrClose(MainControl.Instance.OverworldControl.noSfx) + '\n' + OpenOrClose(MainControl.Instance.OverworldControl.openFPS);
+                        _settingTmpSon.text = "\n" + (int)(MainControl.Instance.OverworldControl.mainVolume * 100) + "%\n\n" + OpenOrClose(MainControl.Instance.OverworldControl.fullScreen) + '\n' +
+                                             MainControl.Instance.OverworldControl.resolution.x + '×' + MainControl.Instance.OverworldControl.resolution.y + '\n' + OpenOrClose(MainControl.Instance.OverworldControl.noSfx) + '\n' + OpenOrClose(MainControl.Instance.OverworldControl.openFPS)+ '\n' ;
+                    else _settingTmpSon.text = "\n" + "<color=yellow>" + ((int)(MainControl.Instance.OverworldControl.mainVolume * 100)) + "%</color>\n\n" + OpenOrClose(MainControl.Instance.OverworldControl.fullScreen) + '\n' +
+                                              MainControl.Instance.OverworldControl.resolution.x + '×' + MainControl.Instance.OverworldControl.resolution.y + '\n' + OpenOrClose(MainControl.Instance.OverworldControl.noSfx) + '\n' + OpenOrClose(MainControl.Instance.OverworldControl.openFPS)+ '\n' ;
 
                     break;
 
@@ -196,6 +195,8 @@ namespace UCT.Global.UI
                                     case KeyMapping.SecondaryKeyMap2:
                                         _settingTmpSon.text += MainControl.Instance.OverworldControl.keyCodesBack2[i] + "</color>\n";
                                         break;
+                                    default:
+                                        throw new ArgumentOutOfRangeException();
                                 }
                             }
 
@@ -232,6 +233,8 @@ namespace UCT.Global.UI
                                     case KeyMapping.SecondaryKeyMap2:
                                         _settingTmpSon.text += MainControl.Instance.OverworldControl.keyCodesBack2[i] + "</color>\n";
                                         break;
+                                    default:
+                                        throw new ArgumentOutOfRangeException();
                                 }
                             }
 
@@ -416,7 +419,7 @@ namespace UCT.Global.UI
                         typeWritter.TypePause(true);
                     }
 
-                    InSetting();
+                    OpenSetting();
                 }
             }
             if (!MainControl.Instance.OverworldControl.isSetting)
@@ -424,7 +427,7 @@ namespace UCT.Global.UI
 
             _settingSoul.rectTransform.anchoredPosition = new Vector2(-325f, -28f + _settingSelect * -37);
 
-            if (!(_settingTmp.rectTransform.anchoredPosition.x > 125)) return;
+            if (!(settingImage.color.a > 0.7)) return;
             switch (settingsLayer)
             {
                 case 0:
@@ -509,7 +512,11 @@ namespace UCT.Global.UI
                                     if (SceneManager.GetActiveScene().name == "Menu")
                                         goto case 7;
                                     GameUtilityService.FadeOutAndSwitchScene("Menu", Color.black, true, AnimSpeed);
-                                    CloseSetting();
+                                    MainControl.Instance.OverworldControl.isSetting = false;
+                                    foreach (var typeWritter in _typeWritters)
+                                    {
+                                        typeWritter.TypePause(false);
+                                    }
                                     freeze = true;
                                     break;
                                 case 7:
@@ -733,16 +740,6 @@ namespace UCT.Global.UI
             }
         }
 
-        private void CloseSetting(bool isLan = false)
-        {
-            MainControl.Instance.OverworldControl.isSetting = false;
-            foreach (var typeWritter in _typeWritters)
-            {
-                typeWritter.TypePause(false);
-            }
-            if (isLan)
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
 
         private static KeyCode SettingControl()
         {
@@ -752,27 +749,41 @@ namespace UCT.Global.UI
         /// <summary>
         /// 进入设置页面
         /// </summary>
-        public void InSetting()
+        public void OpenSetting()
         {
             MainControl.Instance.OverworldControl.isSetting = true;
             settingImage.DOColor(new Color(0, 0, 0, 0.75f), AnimSpeed);
             //DOTween.To(() => settingImage.rectTransform.sizeDelta, x => settingImage.rectTransform.sizeDelta = x, new Vector2(6000, settingImage.rectTransform.sizeDelta.y), animSpeed).SetEase(Ease.InCirc);
-            _settingTmp.DOColor(Color.white, 1).SetEase(Ease.InCubic);
-            DOTween.To(() => _settingTmp.rectTransform.anchoredPosition, x => _settingTmp.rectTransform.anchoredPosition = x, new Vector2(140, 140), AnimSpeed + 0.25f).SetEase(Ease.OutCubic);
+            _settingTmp.DOColor(Color.white, AnimSpeed).SetEase(Ease.InCubic);
+            _settingTmpSon.DOColor(Color.white, AnimSpeed).SetEase(Ease.InCubic);
+            _settingTmpUnder.DOColor(Color.white, AnimSpeed).SetEase(Ease.InCubic);
+            //DOTween.To(() => _settingTmp.rectTransform.anchoredPosition, x => _settingTmp.rectTransform.anchoredPosition = x, new Vector2(140, 140), AnimSpeed + 0.25f).SetEase(Ease.OutCubic);
             _settingSelect = 0;
             _settingTmpUnder.text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "ControlEggshell");
             SettingText();
             if (settingsLayer == SettingsLayer.LanguageConfiguration)
                 SettingText(true);
         }
-
+        /// <summary>
+        /// 退出设置页面
+        /// </summary>
+        
         private void ExitSetting(bool isLan = false)
         {
             settingsLayer = 0;
             settingImage.DOColor(Color.clear, AnimSpeed);
-            //DOTween.To(() => settingImage.rectTransform.sizeDelta, x => settingImage.rectTransform.sizeDelta = x, new Vector2(0, settingImage.rectTransform.sizeDelta.y), animSpeed).SetEase(Ease.OutCirc);
-            _settingTmp.DOColor(Color.white, 0).SetEase(Ease.OutCubic);
-            DOTween.To(() => _settingTmp.rectTransform.anchoredPosition, x => _settingTmp.rectTransform.anchoredPosition = x, new Vector2(-610, 140), AnimSpeed + 0.25f).SetEase(Ease.InSine).OnKill(() => CloseSetting(isLan));
+            _settingTmp.DOColor(Color.clear, AnimSpeed).SetEase(Ease.OutCubic).OnKill(() =>
+            {
+                MainControl.Instance.OverworldControl.isSetting = false;
+                foreach (var typeWritter in _typeWritters)
+                {
+                    typeWritter.TypePause(false);
+                }
+                if (isLan)
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            });
+            _settingTmpSon.DOColor(Color.clear, AnimSpeed).SetEase(Ease.OutCubic);
+            _settingTmpUnder.DOColor(Color.clear, AnimSpeed).SetEase(Ease.OutCubic);
             _settingTmpUnder.text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "ControlEggshell");
         }
 
@@ -847,3 +858,4 @@ namespace UCT.Global.UI
         }
     }
 }
+

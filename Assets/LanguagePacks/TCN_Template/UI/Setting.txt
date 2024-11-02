@@ -12,7 +12,7 @@ RenameSp\name|true|true|text;
 <playerName>獲取玩家名稱
 */
 
-LanguagePack\       語言;
+LanguagePack\<align=center>語言</align>;
 /* 全半角設定，中日韓等全角字符居多的語言建議設爲true，會對遊戲內的文本進行微調。 */
 LanguagePackFullWidth\true;
 /* 需要輸入準確的語言文化代碼，且不得有多餘字符，用於CultureInfo檢測。 */
@@ -25,7 +25,7 @@ Example-Corridor\最後的長廊;
 
 /* 設置相關 */
 
-Setting\       設置;
+Setting\<align=center>設置</align>;
 SettingMainVolume\主音量;
 SettingControl\控制;
 SettingFullScreen\全屏;
@@ -55,7 +55,7 @@ SettingFPSTip\設置幀率是否顯示。;
 SettingBackMenuTip\未保存的數據將會丟失。;
 SettingBackGameTip\返回並繼續遊戲。;
 
-Control\       控制;
+Control\<align=center>控制</align>;
 ControlDown\下;
 ControlRight\右;
 ControlUp\上;

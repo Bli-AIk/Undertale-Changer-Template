@@ -128,7 +128,7 @@ namespace UCT.Global.Scene
                             break;
 
                         case 2:
-                            CanvasController.Instance.InSetting();
+                            CanvasController.Instance.OpenSetting();
                             break;
 
                         case 3:

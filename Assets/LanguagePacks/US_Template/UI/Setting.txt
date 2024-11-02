@@ -27,7 +27,7 @@ Example-Corridor\Last Corridor;
 
 
 
-LanguagePack\       Language;
+LanguagePack\<align=center>Language</align>;
 /* 
 Full width setting. It is recommended to set the language with most full width characters such as China, Japan and Korea to true, which will fine tune the text in the game. */
 LanguagePackFullWidth\false;
@@ -36,7 +36,7 @@ LanguagePackFullWidth\false;
 
 CultureInfo\en-US;
 
-Setting\       Settings;
+Setting\<align=center>Settings</align>;
 SettingMainVolume\Master volume;
 SettingControl\Controls;
 SettingFullScreen\Full screen;
@@ -66,7 +66,7 @@ SettingFPSTip\Set whether FPS is displayed.;
 SettingBackMenuTip\Unsaved data will be lost.;
 SettingBackGameTip\Go back and continue the game.;
 
-Control\       Control;
+Control\<align=center>Control</align>;
 ControlDown\Down;
 ControlRight\Right;
 ControlUp\Up;
