@@ -594,10 +594,8 @@ namespace UCT.Global.UI
                                       OpenOrClose(MainControl.Instance.OverworldControl.noSfx) + '\n' +
                                       OpenOrClose(MainControl.Instance.OverworldControl.openFPS) + '\n';
             else
-                _settingTmpSon.text = "\n" +
-                                      "<color=yellow>" +
-                                      (int)(MainControl.Instance.OverworldControl.mainVolume * 100) +
-                                      "%</color>\n\n" +
+                _settingTmpSon.text = "\n" + "<color=yellow>" +
+                                      (int)(MainControl.Instance.OverworldControl.mainVolume * 100) + "%</color>\n\n" +
                                       OpenOrClose(MainControl.Instance.OverworldControl.fullScreen) + '\n' +
                                       MainControl.Instance.OverworldControl.resolution.x + '×' +
                                       MainControl.Instance.OverworldControl.resolution.y + '\n' +
@@ -905,7 +903,7 @@ namespace UCT.Global.UI
             });
         }
 
-        public void PlayFX(int i)
+        public void AnimPlayFX(int i)
         {
             AudioController.Instance.GetFx(i, MainControl.Instance.AudioControl.fxClipUI);
         }

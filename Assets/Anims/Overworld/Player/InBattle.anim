@@ -104,7 +104,7 @@ AnimationClip:
     intParameter: 1
     messageOptions: 0
   - time: 0
-    functionName: PlayFX
+    functionName: AnimPlayFX
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -125,7 +125,7 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.13333334
-    functionName: PlayFX
+    functionName: AnimPlayFX
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -139,7 +139,7 @@ AnimationClip:
     intParameter: 1
     messageOptions: 0
   - time: 0.13333334
-    functionName: PlayFX
+    functionName: AnimPlayFX
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -167,7 +167,7 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.26666668
-    functionName: PlayFX
+    functionName: AnimPlayFX
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
@@ -195,7 +195,7 @@ AnimationClip:
     intParameter: 0
     messageOptions: 0
   - time: 0.4
-    functionName: PlayFX
+    functionName: AnimPlayFX
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
