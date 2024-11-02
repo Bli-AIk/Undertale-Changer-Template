@@ -37,7 +37,9 @@ namespace UCT.Global.UI
         public RenderMode renderMode;
 
         private static readonly int Open = Animator.StringToHash("Open");
-        private int _settingSelect, _settingSelectMax;//目前 Max仅用于配置语言包
+        private int _settingSelect;
+        private const int SettingSelectMax = 7;
+        private int _languagePackSelectMax;//目前 Max仅用于配置语言包
         private Image _exitImage;
         private float _clock;
 
@@ -232,7 +234,7 @@ namespace UCT.Global.UI
                         {
                             AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
                             _settingSelect++;
-                            if (_settingSelect > 7)
+                            if (_settingSelect > SettingSelectMax)
                                 _settingSelect = 0;
                         }
                         else if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow))
@@ -240,7 +242,7 @@ namespace UCT.Global.UI
                             AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
                             _settingSelect--;
                             if (_settingSelect < 0)
-                                _settingSelect = 7;
+                                _settingSelect = SettingSelectMax;
                         }
                     }
                     else
@@ -502,7 +504,7 @@ namespace UCT.Global.UI
                     {
                         AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
                         _settingSelect++;
-                        if (_settingSelect > _settingSelectMax)
+                        if (_settingSelect > _languagePackSelectMax)
                             _settingSelect = 0;
                     }
                     else if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow))
@@ -510,11 +512,11 @@ namespace UCT.Global.UI
                         AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
                         _settingSelect--;
                         if (_settingSelect < 0)
-                            _settingSelect = _settingSelectMax;
+                            _settingSelect = _languagePackSelectMax;
                     }
                     if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
                     {
-                        if (_settingSelect != _settingSelectMax)
+                        if (_settingSelect != _languagePackSelectMax)
                         {
                             AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
                             UpdateSettingDisplay(false, true);
@@ -721,7 +723,7 @@ namespace UCT.Global.UI
             if (!onlySetSon)
                 _settingTmp.text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "LanguagePack") + '\n';
             _settingTmpSon.text = "";
-            _settingSelectMax = 0;
+            _languagePackSelectMax = 0;
             var settingSelectBack = _settingSelect;
             if (onlySetSon)
                 _settingSelect = MainControl.Instance.languagePackId;
@@ -730,20 +732,20 @@ namespace UCT.Global.UI
             {
                 var pathString = "TextAssets/LanguagePacks/" + DataHandlerService.GetLanguageInsideId(i);
 
-                if (_settingSelectMax == _settingSelect)
+                if (_languagePackSelectMax == _settingSelect)
                 {
                     pathStringSaver = pathString;
                 }
-                _settingSelectMax++;
+                _languagePackSelectMax++;
 
                 if (!onlySetSon)
                     _settingTmp.text += GetLanguagePacksName(pathString, "LanguagePackName", false) + '\n';
             }
             foreach (var pathString in Directory.GetDirectories(Application.dataPath + "\\LanguagePacks"))
             {
-                if (_settingSelectMax == _settingSelect)
+                if (_languagePackSelectMax == _settingSelect)
                     pathStringSaver = pathString;
-                _settingSelectMax++;
+                _languagePackSelectMax++;
                 if (!onlySetSon)
                     _settingTmp.text += GetLanguagePacksName(pathString, "LanguagePackName", true) + '\n';
             }
