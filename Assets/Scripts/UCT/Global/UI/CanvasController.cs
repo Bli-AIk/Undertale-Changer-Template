@@ -95,9 +95,11 @@ namespace UCT.Global.UI
         public void Start()
         {
             settingsLayer = SettingsLayer.Home;
+            settingImage.color = Color.clear;
             _settingTmp.color = Color.clear;
             _settingTmpSon.color = Color.clear;
             _settingTmpUnder.color = Color.clear;
+            _settingSoul.color = new Color(1, 0, 0, 0);
             freeze = false;
 
             _canvas.renderMode = renderMode;
@@ -425,7 +427,7 @@ namespace UCT.Global.UI
             if (!MainControl.Instance.OverworldControl.isSetting)
                 return;
 
-            _settingSoul.rectTransform.anchoredPosition = new Vector2(-325f, -28f + _settingSelect * -37);
+            _settingSoul.rectTransform.anchoredPosition = new Vector2(-225f, 147.5f + _settingSelect * -37.5f);
 
             if (!(settingImage.color.a > 0.7)) return;
             switch (settingsLayer)
@@ -754,9 +756,10 @@ namespace UCT.Global.UI
             MainControl.Instance.OverworldControl.isSetting = true;
             settingImage.DOColor(new Color(0, 0, 0, 0.75f), AnimSpeed);
             //DOTween.To(() => settingImage.rectTransform.sizeDelta, x => settingImage.rectTransform.sizeDelta = x, new Vector2(6000, settingImage.rectTransform.sizeDelta.y), animSpeed).SetEase(Ease.InCirc);
-            _settingTmp.DOColor(Color.white, AnimSpeed).SetEase(Ease.InCubic);
-            _settingTmpSon.DOColor(Color.white, AnimSpeed).SetEase(Ease.InCubic);
-            _settingTmpUnder.DOColor(Color.white, AnimSpeed).SetEase(Ease.InCubic);
+            _settingTmp.DOColor(Color.white, AnimSpeed).SetEase(Ease.Linear);
+            _settingTmpSon.DOColor(Color.white, AnimSpeed).SetEase(Ease.Linear);
+            _settingTmpUnder.DOColor(Color.white, AnimSpeed).SetEase(Ease.Linear);
+            _settingSoul.DOColor(Color.red, AnimSpeed).SetEase(Ease.Linear);
             //DOTween.To(() => _settingTmp.rectTransform.anchoredPosition, x => _settingTmp.rectTransform.anchoredPosition = x, new Vector2(140, 140), AnimSpeed + 0.25f).SetEase(Ease.OutCubic);
             _settingSelect = 0;
             _settingTmpUnder.text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "ControlEggshell");
@@ -772,7 +775,7 @@ namespace UCT.Global.UI
         {
             settingsLayer = 0;
             settingImage.DOColor(Color.clear, AnimSpeed);
-            _settingTmp.DOColor(Color.clear, AnimSpeed).SetEase(Ease.OutCubic).OnKill(() =>
+            _settingTmp.DOColor(Color.clear, AnimSpeed).SetEase(Ease.Linear).OnKill(() =>
             {
                 MainControl.Instance.OverworldControl.isSetting = false;
                 foreach (var typeWritter in _typeWritters)
@@ -782,8 +785,9 @@ namespace UCT.Global.UI
                 if (isLan)
                     SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             });
-            _settingTmpSon.DOColor(Color.clear, AnimSpeed).SetEase(Ease.OutCubic);
-            _settingTmpUnder.DOColor(Color.clear, AnimSpeed).SetEase(Ease.OutCubic);
+            _settingTmpSon.DOColor(Color.clear, AnimSpeed).SetEase(Ease.Linear);
+            _settingTmpUnder.DOColor(Color.clear, AnimSpeed).SetEase(Ease.Linear);
+            _settingSoul.DOColor(new Color(1, 0, 0, 0), AnimSpeed).SetEase(Ease.Linear);
             _settingTmpUnder.text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "ControlEggshell");
         }
 
