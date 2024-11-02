@@ -11,6 +11,7 @@ using UCT.Global.Core;
 using UCT.Service;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace UCT.Global.UI
@@ -32,7 +33,7 @@ namespace UCT.Global.UI
         public List<Sprite> sprites;
         public List<Vector2> sizes;
 
-        public Image setting;
+        [FormerlySerializedAs("setting")] public Image settingImage;
         private Image _settingSoul;
         private TextMeshProUGUI _settingTmp, _settingTmpSon, _settingTmpUnder;
         public RenderMode renderMode;
@@ -71,7 +72,7 @@ namespace UCT.Global.UI
 
         public Animator animator;
 
-        public float animSpeed = 0.25f;
+        private const float AnimSpeed = 0.25f;
         private void Awake()
         {
             Instance = this;
@@ -81,11 +82,11 @@ namespace UCT.Global.UI
             fps = transform.Find("FPS Text").GetComponent<TextMeshProUGUI>();
             _exitImage = transform.Find("Exit Image").GetComponent<Image>();
 
+            settingImage = transform.Find("Setting").GetComponent<Image>();
             _settingTmp = transform.Find("Setting/Setting Text").GetComponent<TextMeshProUGUI>();
             _settingTmpSon = _settingTmp.transform.Find("Setting Son").GetComponent<TextMeshProUGUI>();
             _settingSoul = _settingTmp.transform.Find("Soul").GetComponent<Image>();
             _settingTmpUnder = _settingTmp.transform.Find("Setting Under").GetComponent<TextMeshProUGUI>();
-            setting = transform.Find("Setting").GetComponent<Image>();
 
             frame = transform.Find("Frame").GetComponent<Image>();
             _typeWritters = (TypeWritter[])Resources.FindObjectsOfTypeAll(typeof(TypeWritter));
@@ -94,7 +95,7 @@ namespace UCT.Global.UI
         public void Start()
         {
             settingsLayer = SettingsLayer.Home;
-            setting.rectTransform.sizeDelta = new Vector2(0, setting.rectTransform.sizeDelta.y);
+            //settingImage.rectTransform.sizeDelta = new Vector2(0, settingImage.rectTransform.sizeDelta.y);
             _settingTmp.color = Color.white;
             _settingTmp.rectTransform.anchoredPosition = new Vector2(-610, 140);
 
@@ -507,7 +508,7 @@ namespace UCT.Global.UI
                                         return;
                                     if (SceneManager.GetActiveScene().name == "Menu")
                                         goto case 7;
-                                    GameUtilityService.FadeOutAndSwitchScene("Menu", Color.black, true, animSpeed);
+                                    GameUtilityService.FadeOutAndSwitchScene("Menu", Color.black, true, AnimSpeed);
                                     CloseSetting();
                                     freeze = true;
                                     break;
@@ -748,12 +749,16 @@ namespace UCT.Global.UI
             return !Input.anyKeyDown ? KeyCode.None : Enum.GetValues(typeof(KeyCode)).Cast<KeyCode>().Where(_ => !Input.GetMouseButtonDown(0) && !Input.GetMouseButtonDown(1) && !Input.GetMouseButtonDown(2)).FirstOrDefault(Input.GetKeyDown);
         }
 
+        /// <summary>
+        /// 进入设置页面
+        /// </summary>
         public void InSetting()
         {
             MainControl.Instance.OverworldControl.isSetting = true;
-            DOTween.To(() => setting.rectTransform.sizeDelta, x => setting.rectTransform.sizeDelta = x, new Vector2(6000, setting.rectTransform.sizeDelta.y), animSpeed).SetEase(Ease.InCirc);
+            settingImage.DOColor(new Color(0, 0, 0, 0.75f), AnimSpeed);
+            //DOTween.To(() => settingImage.rectTransform.sizeDelta, x => settingImage.rectTransform.sizeDelta = x, new Vector2(6000, settingImage.rectTransform.sizeDelta.y), animSpeed).SetEase(Ease.InCirc);
             _settingTmp.DOColor(Color.white, 1).SetEase(Ease.InCubic);
-            DOTween.To(() => _settingTmp.rectTransform.anchoredPosition, x => _settingTmp.rectTransform.anchoredPosition = x, new Vector2(140, 140), animSpeed + 0.25f).SetEase(Ease.OutCubic);
+            DOTween.To(() => _settingTmp.rectTransform.anchoredPosition, x => _settingTmp.rectTransform.anchoredPosition = x, new Vector2(140, 140), AnimSpeed + 0.25f).SetEase(Ease.OutCubic);
             _settingSelect = 0;
             _settingTmpUnder.text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "ControlEggshell");
             SettingText();
@@ -764,9 +769,10 @@ namespace UCT.Global.UI
         private void ExitSetting(bool isLan = false)
         {
             settingsLayer = 0;
-            DOTween.To(() => setting.rectTransform.sizeDelta, x => setting.rectTransform.sizeDelta = x, new Vector2(0, setting.rectTransform.sizeDelta.y), animSpeed).SetEase(Ease.OutCirc);
+            settingImage.DOColor(Color.clear, AnimSpeed);
+            //DOTween.To(() => settingImage.rectTransform.sizeDelta, x => settingImage.rectTransform.sizeDelta = x, new Vector2(0, settingImage.rectTransform.sizeDelta.y), animSpeed).SetEase(Ease.OutCirc);
             _settingTmp.DOColor(Color.white, 0).SetEase(Ease.OutCubic);
-            DOTween.To(() => _settingTmp.rectTransform.anchoredPosition, x => _settingTmp.rectTransform.anchoredPosition = x, new Vector2(-610, 140), animSpeed + 0.25f).SetEase(Ease.InSine).OnKill(() => CloseSetting(isLan));
+            DOTween.To(() => _settingTmp.rectTransform.anchoredPosition, x => _settingTmp.rectTransform.anchoredPosition = x, new Vector2(-610, 140), AnimSpeed + 0.25f).SetEase(Ease.InSine).OnKill(() => CloseSetting(isLan));
             _settingTmpUnder.text = TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "ControlEggshell");
         }
 
@@ -825,7 +831,7 @@ namespace UCT.Global.UI
         {
             var i = transform.Find("Heart").GetComponent<RectTransform>();
             var j = i.GetComponent<Image>();
-            j.DOColor(new Color(j.color.r, j.color.g, j.color.b, 0), animSpeed).SetEase(Ease.Linear);
+            j.DOColor(new Color(j.color.r, j.color.g, j.color.b, 0), AnimSpeed).SetEase(Ease.Linear);
             DOTween.To(() => i.anchoredPosition, x => i.anchoredPosition = x, new Vector2(-330, -250), 1.5f).SetEase(Ease.OutCirc).OnKill(AnimOpen);
         }
 

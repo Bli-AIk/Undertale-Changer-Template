@@ -69,8 +69,8 @@ namespace UCT.Service
                 CanvasController.Instance.DOKill();
                 CanvasController.Instance.fps.rectTransform.anchoredPosition = new Vector2();
                 CanvasController.Instance.frame.color = new Color(1, 1, 1, 0);
-                CanvasController.Instance.setting.transform.localScale = Vector3.one;
-                CanvasController.Instance.setting.rectTransform.anchoredPosition = new Vector2(0, CanvasController.Instance.setting.rectTransform.anchoredPosition.y);
+                //CanvasController.Instance.settingImage.transform.localScale = Vector3.one;
+                //CanvasController.Instance.settingImage.rectTransform.anchoredPosition = new Vector2(0, CanvasController.Instance.settingImage.rectTransform.anchoredPosition.y);
             }
             else
             {
@@ -95,8 +95,8 @@ namespace UCT.Service
                     CanvasController.Instance.fps.rectTransform.anchoredPosition = new Vector2();
 
                 CanvasController.Instance.frame.DOColor(new Color(1, 1, 1, 1) * Convert.ToInt32(CanvasController.Instance.framePic >= 0), 1f);
-                CanvasController.Instance.setting.transform.localScale = Vector3.one * 0.89f;
-                CanvasController.Instance.setting.rectTransform.anchoredPosition = new Vector2(142.5f, CanvasController.Instance.setting.rectTransform.anchoredPosition.y);
+                //CanvasController.Instance.settingImage.transform.localScale = Vector3.one * 0.89f;
+                //CanvasController.Instance.settingImage.rectTransform.anchoredPosition = new Vector2(142.5f, CanvasController.Instance.settingImage.rectTransform.anchoredPosition.y);
             }
 
             
