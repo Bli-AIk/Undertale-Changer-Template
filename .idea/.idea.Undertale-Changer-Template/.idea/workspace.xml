@@ -6,9 +6,19 @@
   <component name="ChangeListManager">
     <list default="true" id="8f7c2298-d077-422b-9131-f9a839bed961" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/LanguagePacks/CN_Template/Battle/Round.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/LanguagePacks/CN_Template/UI/Setting.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/LanguagePacks/CN_Template/UI/Setting.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/Battle/Round.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/Battle/Turn/MonsterText0.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/Battle/Turn/MonsterText0.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/Battle/Turn/MonsterText1.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/Battle/Turn/MonsterText1.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/Battle/UIBattleText.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/Battle/UIBattleText.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/LanguagePackInformation.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/LanguagePackInformation.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/Overworld/Example-Corridor.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/Overworld/Example-Corridor.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/Overworld/Example-Ruins.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/Overworld/Example-Ruins.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/UI/ItemText.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/UI/ItemText.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/UI/Setting.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/UI/Setting.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/CN/UI/Setting.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/CN/UI/Setting.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/UI/CanvasController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/UI/CanvasController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/UI/Setting.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/UI/Setting.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,6 +51,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UCT/Service/DataHandlerService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UCT/Service/GameUtilityService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Volume/CRTScreenRendererFeature.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.2d.psdimporter@6.0.6/Editor/TexturePlatformSettingsController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ide.rider@3.0.34/Rider/Editor/ProjectGeneration/ProjectGeneration.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.render-pipelines.universal@12.1.8/Editor/ScriptableRendererDataEditor.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
@@ -185,7 +196,7 @@
       <workItem from="1730366465382" duration="1466000" />
       <workItem from="1730434557107" duration="2112000" />
       <workItem from="1730466288953" duration="2390000" />
-      <workItem from="1730513445181" duration="8454000" />
+      <workItem from="1730513445181" duration="9065000" />
     </task>
     <servers />
   </component>
