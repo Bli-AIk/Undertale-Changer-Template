@@ -25,12 +25,9 @@ namespace UCT.Global.UI
         public int framePic;
 
         public static CanvasController Instance;
-        private static readonly int Open = Animator.StringToHash("Open");
         public bool openTurn;//敌人回合不能开
         public TextMeshProUGUI fps;
         public Image frame;
-        private Image _exitImage;
-        private float _clock;
         public List<Sprite> sprites;
         public List<Vector2> sizes;
 
@@ -39,7 +36,10 @@ namespace UCT.Global.UI
         private TextMeshProUGUI _settingTmp, _settingTmpSon, _settingTmpUnder;
         public RenderMode renderMode;
 
+        private static readonly int Open = Animator.StringToHash("Open");
         private int _settingSelect, _settingSelectMax;//目前 Max仅用于配置语言包
+        private Image _exitImage;
+        private float _clock;
 
         public enum SettingsLayer
         {
@@ -77,18 +77,15 @@ namespace UCT.Global.UI
         private void Awake()
         {
             Instance = this;
-
             animator = GetComponent<Animator>();
             _canvas = GetComponent<Canvas>();
             fps = transform.Find("FPS Text").GetComponent<TextMeshProUGUI>();
             _exitImage = transform.Find("Exit Image").GetComponent<Image>();
-
             settingImage = transform.Find("Setting").GetComponent<Image>();
             _settingTmp = transform.Find("Setting/Setting Text").GetComponent<TextMeshProUGUI>();
             _settingTmpSon = _settingTmp.transform.Find("Setting Son").GetComponent<TextMeshProUGUI>();
             _settingSoul = _settingTmp.transform.Find("Soul").GetComponent<Image>();
             _settingTmpUnder = _settingTmp.transform.Find("Setting Under").GetComponent<TextMeshProUGUI>();
-
             frame = transform.Find("Frame").GetComponent<Image>();
             _typeWritters = (TypeWritter[])Resources.FindObjectsOfTypeAll(typeof(TypeWritter));
         }
@@ -106,9 +103,7 @@ namespace UCT.Global.UI
             _canvas.renderMode = renderMode;
 
             if (_canvas.renderMode == RenderMode.ScreenSpaceCamera)
-            {
                 _canvas.worldCamera = Camera.main;
-            }
 
             _mLastUpdateShowTime = Time.realtimeSinceStartup;
 
