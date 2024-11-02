@@ -55,7 +55,7 @@ SettingFPSTip\設定幀率是否顯示。 ;
 SettingBackMenuTip\未儲存的資料將會遺失。 ;
 SettingBackGameTip\返回並繼續遊戲。 ;
 
-Control\<align=center>控制<align=center>;
+Control\<align=center>控制</align>;
 ControlDown\下;
 ControlRight\右;
 ControlUp\上;

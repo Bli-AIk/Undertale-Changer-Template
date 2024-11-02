@@ -6,4 +6,4 @@ LanguagePackName\English template package;
 /* It is suggested to indicate personnel and positions here, such as xxx (original text), xxx (translation), xxx (proofreading), etc. */
 LanguagePackAuthor\Author:Google translation(translation);
 
-LanguagePackInformation\The content of the English template package is consistent with the English (built-in) for modification. Remember to back it up before modification.;
+LanguagePackInformation\The content of the English template package is consistent with the English  (built-in) for modification. Remember to back it up before modification.;

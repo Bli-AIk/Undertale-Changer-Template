@@ -312,7 +312,7 @@ namespace UCT.Global.Core
             if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl) && Input.GetKeyDown(KeyCode.I))
             {
                 playerControl.keepInvincible = !playerControl.keepInvincible;
-                Other.Debug.Log("Debug: 无敌模式已开启！", "#FFFF00");
+                Other.Debug.Log("Debug: 无敌模式已开启！（Crtl+I）", "#FFFF00");
             }
 
             if (playerControl.keepInvincible)

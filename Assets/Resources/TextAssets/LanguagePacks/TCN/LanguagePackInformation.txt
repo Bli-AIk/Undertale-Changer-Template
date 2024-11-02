@@ -1,7 +1,7 @@
 /*
 配置語言包訊息
 */
-LanguagePackName\繁體中文<gradient="White to Yellow - UTC">(內建)</gradient>;
+LanguagePackName\繁體中文<gradient="White to Yellow - UTC">（內建）</gradient>;
 
 /* 建議在此標明各人員及職位 如xxx(原文),xxx(翻譯),xxx(校對)等。 */
 LanguagePackAuthor\作者：AIk(原始文本), Google 翻譯;
