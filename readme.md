@@ -20,7 +20,7 @@ If you are an English speaking user, please select the en-annotations branch whe
 
 - en [English](readme.md)
 - zh_CN [简体中文](README.zh_CN.md)
-- zh_TW [繁体中文](README.zh_TW.md)
+- zh_TW [繁體中文](README.zh_TW.md)
 
 ## Table of Contents
 
