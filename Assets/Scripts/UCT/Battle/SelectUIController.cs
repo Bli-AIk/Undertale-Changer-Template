@@ -599,22 +599,14 @@ namespace UCT.Battle
                             }
                             else //if (myItemMax < number)
                             {
-                                if (myItemMax >= 6)
+                                number = myItemMax switch
                                 {
-                                    number = 8;
-                                }
-                                else if (myItemMax >= 4)
-                                {
-                                    number = 7;
-                                }
-                                else if (myItemMax >= 2)
-                                {
-                                    number = 6;
-                                }
-                                else if (myItemMax >= 1)
-                                {
-                                    number = 5;
-                                }
+                                    >= 6 => 8,
+                                    >= 4 => 7,
+                                    >= 2 => 6,
+                                    >= 1 => 5,
+                                    _ => number
+                                };
                                 if (myItemMax % 2 == 0)
                                 {
                                     _itemSelectController.myItemSelect = selectedName + (number - 1 - myItemMax);
@@ -625,9 +617,9 @@ namespace UCT.Battle
                             _itemSelectController.myItemRealSelect = selectedName;
                             MainControl.Instance.battlePlayerController.transform.position = new Vector3(-5.175f, -0.96f - selectedOption * 0.66f, MainControl.Instance.battlePlayerController.transform.position.z);
 
-                            _textUI.text = "<color=#00000000>aa*</color>* " + DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectedName - (selectedOption - 2)], "Auto", 0) + "\n" +
+                            _textUI.text = "<color=#00000000>aa*</color>* " + DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectedName - selectedOption], "Auto", 0) + "\n" +
                                           textUITextChanger1 + textUITextChanger2;
-                            _textUIBack.text = DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectedName - (selectedOption - 2)], "Auto", true) + "\n" + textUIDataChanger1 + textUIDataChanger2;
+                            _textUIBack.text = DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectedName - selectedOption], "Auto", true) + "\n" + textUIDataChanger1 + textUIDataChanger2;
 
                             if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow) && selectedName > 0)
                             {
