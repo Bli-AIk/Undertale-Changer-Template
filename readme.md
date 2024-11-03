@@ -10,8 +10,6 @@ Currently, **UCT** remains in a **semi-finished** state, so please do not use th
 # Undetale-Changer-Template
 An UNDERTALE fan game template based on unity engine.
 
-If you are an English speaking user, please select the en-annotations branch when downloading.
-
 [![license](https://img.shields.io/github/license/Bli-AIk/Undertale-Changer-Template
 )](LICENSE)
 <img src="https://img.shields.io/github/repo-size/Bli-AIk/Undertale-Changer-Template.svg"/>
