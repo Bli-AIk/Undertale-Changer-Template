@@ -1,6 +1,11 @@
 # Look at me before downloading!!
-At present, the Github version of UCT is frequently updated.
-Please do not use the current version for your game production. This version is for learning only, please look forward to the new version of UCT!
+You are currently viewing the **[Main](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/main)** branch of **UCT**, which temporarily holds the latest content as of **July 2024** and is intended to serve as a provisional stable version~~(maybe)~~.
+
+The latest updates are primarily released on the **[Develop](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/develop)** branch. If you need the newest changes, it is recommended to switch to this branch.
+
+Currently, **UCT** remains in a **semi-finished** state, so please do not use this version for game production.
+
+**This version is for learning purposes only. Stay tuned for future updates to UCT.**
 
 # Undetale-Changer-Template
 An UNDERTALE fan game template based on unity engine.
@@ -71,5 +76,4 @@ But it is not recommended to use the 2022 version, otherwise the template may ha
 ## License
 
 [GNU General Public License v3.0](../main/LICENSE)
-
 

@@ -1,6 +1,11 @@
 # 下载前先看看我！！！！
-目前，UCT的Github版本经常更新。
-请不要将当前版本用于游戏制作。此版本仅供学习，请期待UCT的新版本。
+你正在浏览的是 **UCT** 的 **[Main](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/main)** 分支，该分支暂时保存了截至 **2024 年 7 月**的最新内容，作为一个临时稳定~~（存疑）~~版本运行。
+
+最新的更新内容主要在 **[Develop](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/develop)** 分支发布。如果你需要最新的改动，建议切换到该分支。
+
+当前 **UCT** 仍处于**半成品**阶段，因此请勿将此版本用于游戏制作。
+
+**此版本仅供学习使用，敬请期待 UCT 的后续更新。**
 
 # Undertale-Changer-Template
 一个基于Unity引擎的UNDERTALE同人游戏模板。
