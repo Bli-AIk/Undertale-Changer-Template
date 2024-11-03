@@ -1,5 +1,5 @@
 # Look at me before downloading!!
-You are currently viewing the **[Main](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/main)** branch of **UCT**, which temporarily holds the latest content as of **July 2024** and is intended to serve as a provisional stable version(maybe).
+You are currently viewing the **[Main](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/main)** branch of **UCT**, which temporarily holds the content as of **July 2024** and is intended to serve as a provisional stable version(maybe).
 
 The latest updates are primarily released on the **[Develop](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/develop)** branch. If you need the newest changes, it is recommended to switch to this branch.
 
