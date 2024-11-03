@@ -73,6 +73,8 @@ But it is not recommended to use the 2022 version, otherwise the template may ha
 
 [Wiki](https://github.com/Bli-AIk/Undertale-Changer-Template/wiki)
 
+(Please note that this wiki is written based on an old version of UCT, and it may have some differences with the current version)
+
 ## License
 
 [GNU General Public License v3.0](../main/LICENSE)

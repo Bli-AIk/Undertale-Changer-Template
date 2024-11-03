@@ -69,6 +69,8 @@
 
 [Wiki](https://github.com/Bli-AIk/Undertale-Changer-Template/wiki/Home%E2%80%90zh_HK)
 
+（請注意，此Wiki是根據舊版的UCT而編寫的，它可能與目前版本的部分內容有差異）
+
 ## 許可證
 
 [GNU通用公共許可證 v3.0(GNU General Public License v3.0)](../main/LICENSE)
