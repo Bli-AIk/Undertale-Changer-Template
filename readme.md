@@ -1,7 +1,7 @@
 # Look at me before downloading!!
-You are currently browsing the **Develop** branch of **UCT**, which is actively maintained and updated frequently.
+You are currently browsing the **[Develop](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/develop)** branch of **UCT**, which is actively maintained and updated frequently.
 
-As of **July 2024**, the content archive is stored in the **Main** branch. If you prefer a more stable (perhaps) version, it is recommended to switch to that branch.
+As of **July 2024**, the content archive is stored in the [**Main**](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/main) branch. If you prefer a more stable (perhaps) version, it is recommended to switch to that branch.
 
 Currently, **UCT** remains in a **semi-finished** state, so please do not use this version for game production.
 
