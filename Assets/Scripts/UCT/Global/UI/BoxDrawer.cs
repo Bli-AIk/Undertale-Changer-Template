@@ -16,16 +16,8 @@ namespace UCT.Global.UI
 
     public class BoxDrawer : MonoBehaviour
     {
-        /*
-    public enum Test
-    {
-        n,a,b,c,d,e,
-    }
-    public Test test = Test.n;
-
-    */
         public Vector3 localPosition;
-        [Header("别用Transform的旋转")]
+        [Header("使用这个旋转替代Transform的旋转")]
         public Quaternion rotation; // 获取当前物体的旋转
         [Header("线宽")]
         public float width = 0.15f;
@@ -73,8 +65,6 @@ namespace UCT.Global.UI
         private void Start()
         {
             GetComponents();
-            //BoxController.instance.boxes.Add(this);
-
 
             lineRenderer = GetComponent<LineRenderer>();
 
@@ -95,116 +85,69 @@ namespace UCT.Global.UI
         //float testTimer;
         public void Update()
         {
-            if (parent != null)
-                transform.tag = "Untagged";
-            else
-                transform.tag = "Box";
+            transform.tag = parent ? "Untagged" : "Box";
 
             if (boxType == BoxController.BoxType.Sub)
                 ClearComponentsData();
-            /*
-        switch (test)
-        {
-            case Test.a:
-                localPosition = new Vector3(Mathf.Cos(Time.time * 6) * 5, Mathf.Sin(Time.time * 6) * 5);
-                break;
-            case Test.b:
-                rotation = Quaternion.Euler(0, 0, Mathf.Cos(Time.time * 10) * 180);
-                break;
-            case Test.c:
-                testTimer += Time.deltaTime;
-                if (testTimer > 1)
-                {
-                    localPosition = new Vector3(Random.Range(-5, 5), Random.Range(-5, 5));
-                    testTimer = 0;
-                }
-                break;
-            case Test.d:
-                for (int i = 0; i < vertexPoints.Count; i++)
-                {
-                    vertexPoints[i] = new Vector2(Random.Range(-10, 10), Random.Range(-10, 10));
-                }
-                break;
-            case Test.e:
-                localPosition = new Vector3(0, Mathf.Tan(Time.time));
-                break;
-            default:
-                break;
-        }
-        foreach (var item in sonBoxDrawer)
-        {
-            if (!item.gameObject.activeSelf)
+
+            switch (sonBoxDrawer.Count)
             {
-                ExitParent();
-            }
-
-        }
-        */
-
-            if (sonBoxDrawer.Count == 0 && transform.childCount == 0)//作为纯子级
-            {
-
-                if (isBessel)
-                    realPoints = GenerateBezierCurve(besselPoints, besselInsertNumber, besselPointsNumber);
-                else
-                    realPoints = vertexPoints;
-
-            }
-            else if (sonBoxDrawer.Count == 2 && transform.childCount == 2)//作为父级
-            {
-
-                pointsSonSum.Clear();
-
-                //更新一下两个子级的位置坐标
-                sonBoxDrawer[0].transform.localPosition = sonBoxDrawer[0].localPosition - localPosition;
-                sonBoxDrawer[1].transform.localPosition = sonBoxDrawer[1].localPosition - localPosition;
-
-                var realPointsBack0 = BoxController.Instance.GetRealPoints(sonBoxDrawer[0].realPoints, sonBoxDrawer[0].rotation, sonBoxDrawer[0].transform);
-                var realPointsBack1 = BoxController.Instance.GetRealPoints(sonBoxDrawer[1].realPoints, sonBoxDrawer[1].rotation, sonBoxDrawer[1].transform);
-
-                pointsSonSum = BoxController.Instance.AddLists(realPointsBack0, realPointsBack1);
-
-
-                //计算三大List
-
-                pointsCross = BoxController.Instance.FindIntersections(realPointsBack0, realPointsBack1);
-
-                pointsOutCross = BoxController.Instance.ProcessPolygons(realPointsBack0, realPointsBack1, pointsCross);
-
-                pointsInCross = BoxController.Instance.AddAndSubLists(realPointsBack0, realPointsBack1, pointsCross, pointsOutCross);
-
-
-                //重合时合并
-                if (!(pointsCross.Count == 0 && pointsInCross.Count == 0))
+                //作为纯子级
+                case 0 when transform.childCount == 0:
                 {
-                    /*
-                List<Vector2> points;
-
-                points = BoxController.instance.AddLists(pointsCross, pointsSonSum);
-                points = BoxController.instance.SubLists(points, pointsInCross);
-                List<Vector2> pointsFinal = BoxController.instance.SortPoints(BoxController.instance.CalculatePolygonCenter(BoxController.instance.AddLists(pointsCross, pointsInCross)), points);
-                */
-                    List<Vector2> pointsFinal;
-
-                    if (sonBoxDrawer[0].boxType == BoxController.BoxType.Add && sonBoxDrawer[1].boxType == BoxController.BoxType.Sub)
-                        pointsFinal = BoxController.Instance.GetDifference(realPointsBack0, realPointsBack1);
-                    else if (sonBoxDrawer[0].boxType == BoxController.BoxType.Sub && sonBoxDrawer[1].boxType == BoxController.BoxType.Add)
-                        pointsFinal = BoxController.Instance.GetDifference(realPointsBack1, realPointsBack0);
-                    else
-                        pointsFinal = BoxController.Instance.GetUnion(realPointsBack0, realPointsBack1);
-
-                    realPoints = pointsFinal;
+                    realPoints = isBessel ? GenerateBezierCurve(besselPoints, besselInsertNumber, besselPointsNumber) : vertexPoints;
+                    break;
                 }
-                else//不重合就解散
+                //作为父级
+                case 2 when transform.childCount == 2:
                 {
+                    pointsSonSum.Clear();
+
+                    //更新一下两个子级的位置坐标
+                    sonBoxDrawer[0].transform.localPosition = sonBoxDrawer[0].localPosition - localPosition;
+                    sonBoxDrawer[1].transform.localPosition = sonBoxDrawer[1].localPosition - localPosition;
+
+                    var realPointsBack0 = BoxController.Instance.GetRealPoints(sonBoxDrawer[0].realPoints, sonBoxDrawer[0].rotation, sonBoxDrawer[0].transform);
+                    var realPointsBack1 = BoxController.Instance.GetRealPoints(sonBoxDrawer[1].realPoints, sonBoxDrawer[1].rotation, sonBoxDrawer[1].transform);
+
+                    pointsSonSum = BoxController.Instance.AddLists(realPointsBack0, realPointsBack1);
+
+
+                    //计算三大List
+
+                    pointsCross = BoxController.Instance.FindIntersections(realPointsBack0, realPointsBack1);
+
+                    pointsOutCross = BoxController.Instance.ProcessPolygons(realPointsBack0, realPointsBack1, pointsCross);
+
+                    pointsInCross = BoxController.Instance.AddAndSubLists(realPointsBack0, realPointsBack1, pointsCross, pointsOutCross);
+
+
+                    //重合时合并
+                    if (!(pointsCross.Count == 0 && pointsInCross.Count == 0))
+                    {
+                        var pointsFinal = sonBoxDrawer[0].boxType switch
+                        {
+                            BoxController.BoxType.Add when sonBoxDrawer[1].boxType == BoxController.BoxType.Sub =>
+                                BoxController.Instance.GetDifference(realPointsBack0, realPointsBack1),
+                            BoxController.BoxType.Sub when sonBoxDrawer[1].boxType == BoxController.BoxType.Add =>
+                                BoxController.Instance.GetDifference(realPointsBack1, realPointsBack0),
+                            _ => BoxController.Instance.GetUnion(realPointsBack0, realPointsBack1)
+                        };
+
+                        realPoints = pointsFinal;
+                    }
+                    else//不重合就解散
+                    {
+                        ExitParent();
+                        return;
+                    }
+
+                    break;
+                }
+                default:
                     ExitParent();
-                    return;
-                }
-
-
-
+                    break;
             }
-            else ExitParent();
 
 
 
@@ -256,7 +199,7 @@ namespace UCT.Global.UI
             localPosition = Vector3.zero;
             rotation = Quaternion.identity;
 
-            if (parent != null)
+            if (parent)
                 parent.ExitParent();
             //SubListsWhenExitParent(GetRealPoints());
             if (BoxController.Instance.boxes.Find(x => x == this))
@@ -266,7 +209,7 @@ namespace UCT.Global.UI
         }
 
         // 函数用于将两个四元数相加
-        public Quaternion AddQuaternions(Quaternion quat1, Quaternion quat2)
+        public static Quaternion AddQuaternions(Quaternion quat1, Quaternion quat2)
         {
             // 将两个四元数转换为欧拉角，并相加
             var euler1 = quat1.eulerAngles;
@@ -277,21 +220,13 @@ namespace UCT.Global.UI
             return Quaternion.Euler(summedEulerAngles);
         }
 
-        /*
-    public void SubListsWhenExitParent(List<Vector2> subList)
-    {
-        parent.realPoints = BoxController.instance.SubLists(parent.realPoints, subList);
-        if (parent.parent != null)
-            parent.SubListsWhenExitParent(subList);
-    }
-    */
         /// <summary>
         /// 通过BoxController生成框
         /// </summary>
-        public List<Vector2> SummonBox()
+        private void SummonBox()
         {
-            return BoxController.Instance.SummonBox(realPoints, rotation, transform, width, lineRenderer, edgeCollider2D, meshFilter);
-
+            BoxController.Instance.SummonBox(realPoints, rotation, transform, width, lineRenderer,
+                edgeCollider2D, meshFilter);
         }
         public List<Vector2> GetRealPoints(bool isLocal = true) 
         {
@@ -309,7 +244,8 @@ namespace UCT.Global.UI
             lineRenderer.enabled = isOpen;
 
         }
-        public void ClearComponentsData()
+
+        private void ClearComponentsData()
         {
             meshFilter.mesh = null;
             lineRenderer.positionCount = 0;
@@ -319,7 +255,6 @@ namespace UCT.Global.UI
         /// <summary>
         /// 获取组件
         /// </summary>
-        /// 
         public void GetComponents(bool forceBesselFlash = false)
         {
             if (!forceBesselFlash)
@@ -343,7 +278,7 @@ namespace UCT.Global.UI
         /// <param name="points">原始List</param>
         /// <param name="interpolation">平分点数</param>
         /// <returns></returns>
-        private List<Vector2> InterpolatePoints(List<Vector2> points, int interpolation)
+        private static List<Vector2> InterpolatePoints(List<Vector2> points, int interpolation)
         {
             var interpolatedPoints = new List<Vector2>();
 
@@ -379,7 +314,7 @@ namespace UCT.Global.UI
         /// <summary>
         /// 生成贝塞尔曲线上的点
         /// </summary>
-        public static List<Vector2> GenerateBezierCurve(List<Vector2> points, int besselInsertNumber, int numberPoints)
+        private static List<Vector2> GenerateBezierCurve(List<Vector2> points, int besselInsertNumber, int numberPoints)
         {
             var controlPoints = new List<Vector2>(points);
 
@@ -566,10 +501,10 @@ namespace UCT.Global.UI
             {
                 example.vertexPoints = new List<Vector2>
                 {
-                    new Vector2(5.93f,1.4f),
-                    new Vector2(5.93f,-1.4f),
-                    new Vector2(-5.93f,-1.4f),
-                    new Vector2(-5.93f,1.4f),
+                    new(5.93f,1.4f),
+                    new(5.93f,-1.4f),
+                    new(-5.93f,-1.4f),
+                    new(-5.93f,1.4f),
                 };
                 example.GetComponents(true);
                 example.Update();
@@ -579,44 +514,31 @@ namespace UCT.Global.UI
             {
                 example.vertexPoints = new List<Vector2>
                 {
-                    new Vector2(1.4f,1.4f),
-                    new Vector2(1.4f,-1.4f),
-                    new Vector2(-1.4f,-1.4f),
-                    new Vector2(-1.4f,1.4f),
+                    new(1.4f,1.4f),
+                    new(1.4f,-1.4f),
+                    new(-1.4f,-1.4f),
+                    new(-1.4f,1.4f),
                 };
                 example.GetComponents(true);
                 example.Update();
             }
-            if (GUILayout.Button("生成正多边形"))
-            {
-                example.vertexPoints.Clear();
-                var sides = 3;
-                if (example.regularEdge >= 3)
-                    sides = example.regularEdge;
-                else Other.Debug.Log("regularEdge should > 3", "#FF0000");
-                float radius = 3;
-                for (var i = sides - 1; i >= 0; i--)
-                {
-                    var angle = (2 * Mathf.PI * i) / sides - example.regularAngle * Mathf.PI / 180;
-                    var x = radius * Mathf.Cos(angle);
-                    var y = radius * Mathf.Sin(angle);
-                    example.vertexPoints.Add(new Vector2(x, y));
-                }
-                example.GetComponents(true);
-                example.Update();
-            }
 
-            /*
-        if (GUILayout.Button("R A N D O M"))
-        {
+            if (!GUILayout.Button("生成正多边形")) return;
             example.vertexPoints.Clear();
-            for (int i = 0; i < Random.Range(3,100); i++)
+            var sides = 3;
+            if (example.regularEdge >= 3)
+                sides = example.regularEdge;
+            else Other.Debug.Log("regularEdge should > 3", "#FF0000");
+            const float radius = 3;
+            for (var i = sides - 1; i >= 0; i--)
             {
-                example.vertexPoints.Add(new Vector2(Random.Range(-5, 5f), Random.Range(-5, 5f)));
+                var angle = (2 * Mathf.PI * i) / sides - example.regularAngle * Mathf.PI / 180;
+                var x = radius * Mathf.Cos(angle);
+                var y = radius * Mathf.Sin(angle);
+                example.vertexPoints.Add(new Vector2(x, y));
             }
+            example.GetComponents(true);
             example.Update();
-        }
-        */
         }
 
 
@@ -632,15 +554,15 @@ namespace UCT.Global.UI
                 vertices = example.vertexPoints;
 
             Vector3 localPosition;
-            if (example.parent == null)
+            if (!example.parent)
                 localPosition = example.localPosition;
             else localPosition = example.localPosition + example.parent.localPosition;
 
             var rotation = example.rotation;
             var parent = example.parent;
-            while (parent != null)
+            while (parent)
             {
-                rotation = example.AddQuaternions(rotation, parent.rotation);
+                rotation = BoxDrawer.AddQuaternions(rotation, parent.rotation);
                 parent = parent.parent;
             }
 
@@ -650,35 +572,26 @@ namespace UCT.Global.UI
 
                 var newVertexPoints = Quaternion.Inverse(rotation) * Handles.PositionHandle(example.transform.parent.localPosition + example.localPosition + rotation * vertices[i], rotation) - example.transform.parent.localPosition;
 
-                if (EditorGUI.EndChangeCheck())
-                {
-                    example.GetComponents();
-                    Undo.RecordObject(example, "Changed point " + i);
-                    vertices[i] = newVertexPoints;
-                    if (example.isBessel)
-                        if (i % (example.besselInsertNumber + 1) == 0)
-                            example.vertexPoints[i / (example.besselInsertNumber + 1)] = newVertexPoints;
-                    example.Update();
-                    if (!_isUndoRedoPerformed)
-                    {
-                        Undo.undoRedoPerformed += example.Update;
-                        _isUndoRedoPerformed = true;
-                    }
-                }
+                if (!EditorGUI.EndChangeCheck()) continue;
+                example.GetComponents();
+                Undo.RecordObject(example, "Changed point " + i);
+                vertices[i] = newVertexPoints;
+                if (example.isBessel)
+                    if (i % (example.besselInsertNumber + 1) == 0)
+                        example.vertexPoints[i / (example.besselInsertNumber + 1)] = newVertexPoints;
+                example.Update();
+                if (_isUndoRedoPerformed) continue;
+                Undo.undoRedoPerformed += example.Update;
+                _isUndoRedoPerformed = true;
             }
 
 
             EditorGUI.BeginChangeCheck();
             var gameObjectPos = Handles.PositionHandle(example.transform.parent.localPosition + localPosition, rotation) - example.transform.parent.localPosition;
-            if (EditorGUI.EndChangeCheck())
-            {
-
-                if (example.parent == null) 
-                    example.localPosition = gameObjectPos;
-                else example.localPosition = gameObjectPos - example.parent.localPosition;
-
-           
-            }
+            if (!EditorGUI.EndChangeCheck()) return;
+            if (!example.parent) 
+                example.localPosition = gameObjectPos;
+            else example.localPosition = gameObjectPos - example.parent.localPosition;
         }
     }
 #endif
