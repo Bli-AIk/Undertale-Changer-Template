@@ -13,17 +13,17 @@ namespace UCT.Service
         public static T GetMaxEnumValue<T>() where T : Enum
         {
             var values = Enum.GetValues(typeof(T));
-            dynamic maxValue = values.GetValue(0); // 初始化为第一个值
+            var maxValue = (T)values.GetValue(0);
 
-            foreach (var value in values)
+            foreach (T value in values)
             {
-                if ((dynamic)value > maxValue)
+                if (Convert.ToInt32(value) > Convert.ToInt32(maxValue))
                 {
-                    maxValue = value; // 更新最大值
+                    maxValue = value; 
                 }
             }
 
-            return (T)maxValue;
+            return maxValue;
         }
         /// <summary>
         /// 获取枚举的最小项
@@ -31,17 +31,17 @@ namespace UCT.Service
         public static T GetMinEnumValue<T>() where T : Enum
         {
             var values = Enum.GetValues(typeof(T));
-            dynamic minValue = values.GetValue(0); // 初始化为第一个值
+            var minValue = (T)values.GetValue(0); 
 
-            foreach (var value in values)
+            foreach (T value in values)
             {
-                if ((dynamic)value < minValue)
+                if (Convert.ToInt32(value) < Convert.ToInt32(minValue))
                 {
-                    minValue = value; // 更新最小值
+                    minValue = value; 
                 }
             }
 
-            return (T)minValue;
+            return minValue;
         }
     }
 }
