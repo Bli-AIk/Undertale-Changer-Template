@@ -24,6 +24,7 @@ namespace UCT.Battle
         private static readonly int ColorUnder = Shader.PropertyToID("_ColorUnder");
         private static readonly int Crop = Shader.PropertyToID("_Crop");
         private static readonly int Flash = Shader.PropertyToID("_Flash");
+        
         private TextMeshPro _nameUI, _hpUI, _textUI, _textUIBack;
         private SpriteRenderer _hpSpr;
 
@@ -44,8 +45,15 @@ namespace UCT.Battle
         public List<SpriteRenderer> buttons;
         public List<Vector2> playerUIPos;
 
-        [Header("四个按钮UI的选择 0开")]
-        public int selectUI;
+        public enum SelectedButton
+        {
+            Fight,
+            Act,
+            Item,
+            Mercy
+        }
+        [Header("选择的按钮")]
+        public SelectedButton selectedButton;
 
         [Header("层")]
         public int selectLayer;//0选择按钮 1选择名称 2Act选项/背包层 3执行层 进入敌方回合后归零
@@ -107,7 +115,7 @@ namespace UCT.Battle
                 enemiesControllers[i].atk = MainControl.Instance.BattleControl.enemiesAtk[i];
                 enemiesControllers[i].def = MainControl.Instance.BattleControl.enemiesDef[i];
             }
-            selectUI = 1;
+            selectedButton = EnumService.GetMinEnumValue<SelectedButton>();
             TurnTextLoad(true);
             _enemiesHpLine.SetActive(false);
 
@@ -133,7 +141,7 @@ namespace UCT.Battle
 
             if (!isDialog) return;
             if ((_dialog.typeWritter.isTyping || (!GameUtilityService.KeyArrowToControl(KeyCode.Z))) &&
-                ((selectUI != 1 && _textUI.text != "") || numberDialog != 0)) return;
+                ((selectedButton != SelectedButton.Fight && _textUI.text != "") || numberDialog != 0)) return;
             if (numberDialog < actSave.Count)
                 KeepDialogBubble();
             else//敌方回合：开！
@@ -161,7 +169,8 @@ namespace UCT.Battle
         /// </summary>
         private void SpriteChange()
         {
-            (buttons[selectUI - 1].sprite, spriteUI[selectUI - 1]) = (spriteUI[selectUI - 1], buttons[selectUI - 1].sprite);
+            (buttons[(int)selectedButton].sprite, spriteUI[(int)selectedButton]) = (
+                spriteUI[(int)selectedButton], buttons[(int)selectedButton].sprite);
         }
 
         /// <summary>
@@ -189,7 +198,7 @@ namespace UCT.Battle
         {
             TurnController.Instance.isMyTurn = true;
             selectLayer = 0;
-            selectUI = 1;
+            selectedButton = EnumService.GetMinEnumValue<SelectedButton>();
             selectSon = 0;
             selectGrandSon = 0;
             SpriteChange();
@@ -210,30 +219,32 @@ namespace UCT.Battle
             {
                 case 0:
 
-                    MainControl.Instance.battlePlayerController.transform.position = (Vector3)playerUIPos[selectUI - 1] + new Vector3(0, 0, MainControl.Instance.battlePlayerController.transform.position.z);
+                    MainControl.Instance.battlePlayerController.transform.position =
+                        (Vector3)playerUIPos[(int)selectedButton] + new Vector3(0, 0,
+                            MainControl.Instance.battlePlayerController.transform.position.z);
                     if (GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow))
                     {
                         AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
-                        if (selectUI >= 1)
+                        if (selectedButton >= EnumService.GetMinEnumValue<SelectedButton>())
                         {
                             SpriteChange();
-                            if (selectUI == 1)
-                                selectUI = 4;
+                            if (selectedButton == EnumService.GetMinEnumValue<SelectedButton>())
+                                selectedButton = EnumService.GetMaxEnumValue<SelectedButton>();
                             else
-                                selectUI -= 1;
+                                selectedButton -= 1;
                             SpriteChange();
                         }
                     }
                     else if (GameUtilityService.KeyArrowToControl(KeyCode.RightArrow))
                     {
                         AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
-                        if (selectUI <= 4)
+                        if (selectedButton <= EnumService.GetMaxEnumValue<SelectedButton>()) 
                         {
                             SpriteChange();
-                            if (selectUI == 4)
-                                selectUI = 1;
+                            if (selectedButton == EnumService.GetMaxEnumValue<SelectedButton>())
+                                selectedButton = EnumService.GetMinEnumValue<SelectedButton>();
                             else
-                                selectUI += 1;
+                                selectedButton += 1;
                             SpriteChange();
                         }
                     }
@@ -241,13 +252,13 @@ namespace UCT.Battle
                     {
                         selectLayer = 1;
                         selectGrandSon = 1;
-                        if (!(MainControl.Instance.playerControl.myItems[0] == 0 && selectUI == 3))
+                        if (!(MainControl.Instance.playerControl.myItems[0] == 0 && selectedButton == SelectedButton.Item))
                         {
                             AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
                             _typeWritter.TypeStop();
                             _textUI.text = "";
                         }
-                        if (selectUI != 3)
+                        if (selectedButton != SelectedButton.Item)
                             foreach (var t in MainControl.Instance.BattleControl.enemies)
                             {
                                 _textUI.text += "<color=#00000000>aa*</color>* " + t.name + "\n";
@@ -265,7 +276,7 @@ namespace UCT.Battle
 
                         }
 
-                        if (MainControl.Instance.playerControl.myItems[0] == 0 && selectUI == 3)
+                        if (MainControl.Instance.playerControl.myItems[0] == 0 && selectedButton == SelectedButton.Item)
                             selectLayer = 0;
                     }
 
@@ -286,9 +297,9 @@ namespace UCT.Battle
                         break;
                     }
 
-                    if (GameUtilityService.KeyArrowToControl(KeyCode.Z) && selectUI != 3)
+                    if (GameUtilityService.KeyArrowToControl(KeyCode.Z) && selectedButton != SelectedButton.Item)
                     {
-                        if (selectUI != 1)
+                        if (selectedButton != SelectedButton.Fight)
                             selectLayer = 2;
                         else
                         {
@@ -300,9 +311,9 @@ namespace UCT.Battle
                         _textUI.text = "";
                         AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
                     }
-                    switch (selectUI)
+                    switch (selectedButton)
                     {
-                        case 1://FIGHT：选择敌人
+                        case SelectedButton.Fight://FIGHT：选择敌人
                             _enemiesHpLine.SetActive(true);
                             LayerOneSet();
                             if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
@@ -316,7 +327,7 @@ namespace UCT.Battle
                             }
                             break;
 
-                        case 2://ACT：选择敌人
+                        case SelectedButton.Act://ACT：选择敌人
                             LayerOneSet();
                             if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
                             {
@@ -349,7 +360,7 @@ namespace UCT.Battle
                             }
                             break;
 
-                        case 3://ITEM：跳2
+                        case SelectedButton.Item://ITEM：跳2
                             _itemSelectController.myItemMax = ListManipulationService.FindFirstZeroIndex(MainControl.Instance.playerControl.myItems);
                             _itemSelectController.Open();
                             selectLayer = 2;
@@ -360,7 +371,7 @@ namespace UCT.Battle
                                 UITextUpdate(UITextMode.Food);
                             break;
 
-                        case 4://MERCY：选择敌人
+                        case SelectedButton.Mercy://MERCY：选择敌人
                             LayerOneSet();
                             if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
                             {
@@ -375,13 +386,15 @@ namespace UCT.Battle
                                     _textUI.text += "\n<color=#00000000>aa</color> * " + actSave[4];
                             }
                             break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
                     }
                     break;
 
                 case 2:
-                    switch (selectUI)
+                    switch (selectedButton)
                     {
-                        case 2:
+                        case SelectedButton.Act:
                             if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow) && selectGrandSon - 2 >= 1)
                             {
                                 AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
@@ -513,7 +526,7 @@ namespace UCT.Battle
 
                             break;
 
-                        case 3:
+                        case SelectedButton.Item:
                             if (GameUtilityService.KeyArrowToControl(KeyCode.X))
                             {
                                 selectLayer = 0;
@@ -636,7 +649,7 @@ namespace UCT.Battle
                             _hpUI.text = FormatWithLeadingZero(_hpFood) + " / " + FormatWithLeadingZero(MainControl.Instance.playerControl.hpMax);
                             break;
 
-                        case 4:
+                        case SelectedButton.Mercy:
                             MainControl.Instance.battlePlayerController.transform.position = new Vector3(-5.175f, -0.96f - (selectGrandSon - 1) * 0.66f, MainControl.Instance.battlePlayerController.transform.position.z);
                             if (GameUtilityService.KeyArrowToControl(KeyCode.X))
                             {
@@ -683,7 +696,7 @@ namespace UCT.Battle
                     //DataHandlerService.ForceJumpLoadTurn  = true;
                     firstIn = false;
 
-                    if (selectUI == 1 && !_target.gameObject.activeSelf)
+                    if (selectedButton == SelectedButton.Fight && !_target.gameObject.activeSelf)
                     {
                         if (MainControl.Instance.battlePlayerController.transform.position != (Vector3)MainControl.Instance.battlePlayerController.sceneDrift + new Vector3(0, 0, MainControl.Instance.battlePlayerController.transform.position.z))
                         {
@@ -697,13 +710,13 @@ namespace UCT.Battle
                         MainControl.Instance.battlePlayerController.collideCollider.enabled = true;
                         if (!isDialog)
                         {
-                            if (selectUI != 1 && _textUI.text == "")
+                            if (selectedButton != SelectedButton.Fight && _textUI.text == "")
                             {
                                 OpenDialogBubble(MainControl.Instance.BattleControl.turnDialogAsset[TurnController.Instance.turn]);
                                 MainControl.Instance.battlePlayerController.transform.position = (Vector3)MainControl.Instance.battlePlayerController.sceneDrift + new Vector3(0, 0, MainControl.Instance.battlePlayerController.transform.position.z);
                                 break;
                             }
-                            if (selectUI != 1 && !_typeWritter.isTyping)
+                            if (selectedButton != SelectedButton.Fight && !_typeWritter.isTyping)
                             {
                                 if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
                                 {
@@ -726,8 +739,6 @@ namespace UCT.Battle
             actSave = DataHandlerService.ChangeItemData(actSave, true, new List<string>());
             isDialog = true;
             numberDialog = 0;
-            //if (selectUI == 1)
-            //    KeepDialogBubble();
         }
 
         private void KeepDialogBubble()

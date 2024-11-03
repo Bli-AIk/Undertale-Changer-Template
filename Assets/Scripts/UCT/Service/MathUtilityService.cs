@@ -6,7 +6,7 @@ using UnityEngine;
 namespace UCT.Service
 {
     /// <summary>
-    /// 数学相关函数
+    /// 数学计算相关函数
     /// </summary>
     public static class MathUtilityService
     {

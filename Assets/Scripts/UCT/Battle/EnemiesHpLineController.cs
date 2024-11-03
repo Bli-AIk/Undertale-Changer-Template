@@ -18,7 +18,7 @@ namespace UCT.Battle
 
         private void Update()
         {
-            if (MainControl.Instance.selectUIController.selectUI != 1 ||
+            if (MainControl.Instance.selectUIController.selectedButton != SelectUIController.SelectedButton.Fight ||
                 MainControl.Instance.selectUIController.selectLayer != 1) return;
             if (MainControl.Instance.BattleControl.enemiesHp.Count - 1 < number * 2)
                 transform.localScale = Vector2.zero;
