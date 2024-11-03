@@ -163,8 +163,6 @@ namespace UCT.Global.UI
 
         private void ExitParent()//离开的那个 的爹 会触发这个
         {
-            //Debug.Log(transform.childCount);
-
             ClearComponentsData();
 
             BoxController.Instance.ReturnPool(gameObject);
@@ -566,11 +564,19 @@ namespace UCT.Global.UI
                 parent = parent.parent;
             }
 
+            if (Mathf.Approximately(rotation.x, 0) && Mathf.Approximately(rotation.y, 0) &&
+                Mathf.Approximately(rotation.z, 0) && Mathf.Approximately(rotation.w, 0)) 
+                rotation = new Quaternion(0, 0, 0, 1);
+
             for (var i = 0; i < vertices.Count; i++)
             {
                 EditorGUI.BeginChangeCheck();
 
-                var newVertexPoints = Quaternion.Inverse(rotation) * Handles.PositionHandle(example.transform.parent.localPosition + example.localPosition + rotation * vertices[i], rotation) - example.transform.parent.localPosition;
+                var newVertexPoints =
+                    Quaternion.Inverse(rotation) * Handles.PositionHandle(
+                        example.transform.parent.localPosition + example.localPosition + rotation * vertices[i],
+                        rotation) -
+                    example.transform.parent.localPosition;
 
                 if (!EditorGUI.EndChangeCheck()) continue;
                 example.GetComponents();
@@ -587,7 +593,9 @@ namespace UCT.Global.UI
 
 
             EditorGUI.BeginChangeCheck();
-            var gameObjectPos = Handles.PositionHandle(example.transform.parent.localPosition + localPosition, rotation) - example.transform.parent.localPosition;
+            var gameObjectPos =
+                Handles.PositionHandle(example.transform.parent.localPosition + localPosition, rotation) -
+                example.transform.parent.localPosition;
             if (!EditorGUI.EndChangeCheck()) return;
             if (!example.parent) 
                 example.localPosition = gameObjectPos;
