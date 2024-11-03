@@ -403,6 +403,9 @@ namespace UCT.Battle
                 case SelectedLayer.OptionLayer:
                     switch (selectedButton)
                     {
+                        
+                        case SelectedButton.Fight:
+                            break;
                         case SelectedButton.Act:
                             if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow) && selectedOption - 2 >= 0)
                             {
@@ -570,8 +573,6 @@ namespace UCT.Battle
                                 break;
                             }
 
-                            //hpSpr.material.SetFloat("_Crop", 1);
-
                             var textUITextChanger1 = "";
                             var textUITextChanger2 = "";
 
@@ -698,6 +699,8 @@ namespace UCT.Battle
                             }
 
                             break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
                     }
                     break;
 
@@ -738,6 +741,10 @@ namespace UCT.Battle
                     }
 
                     break;
+                case SelectedLayer.TurnLayer:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
