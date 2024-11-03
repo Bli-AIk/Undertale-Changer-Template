@@ -8,7 +8,6 @@ using UCT.Global.Core;
 using UCT.Global.UI;
 using UCT.Service;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace UCT.Battle
@@ -212,7 +211,7 @@ namespace UCT.Battle
             selectedLayer = SelectedLayer.ButtonLayer;
             selectedButton = EnumService.GetMinEnumValue<SelectedButton>();
             selectedName = 0;
-            selectedOption = 0;
+            selectedOption = 1;
             SpriteChange();
             TurnTextLoad();
             _itemSelectController.gameObject.SetActive(true);
