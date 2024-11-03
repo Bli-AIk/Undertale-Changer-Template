@@ -5,7 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8f7c2298-d077-422b-9131-f9a839bed961" name="更改" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Service/EnumService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Service/EnumService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Fonts/SonFonts/SIMSUN.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Fonts/SonFonts/SIMSUN.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Battle/EnemiesHpLineController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Battle/EnemiesHpLineController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Battle/SelectUIController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Battle/SelectUIController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -193,6 +197,7 @@
       <workItem from="1730513445181" duration="10978000" />
       <workItem from="1730545888449" duration="7720000" />
       <workItem from="1730602223710" duration="4207000" />
+      <workItem from="1730606840563" duration="3547000" />
     </task>
     <servers />
   </component>

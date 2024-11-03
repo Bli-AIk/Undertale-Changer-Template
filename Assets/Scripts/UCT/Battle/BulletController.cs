@@ -41,11 +41,6 @@ namespace UCT.Battle
             spriteRenderer = GetComponent<SpriteRenderer>();
         }
 
-        private void Start()
-        {
-            //if (useExtra)
-            //    extra = GetComponent<Collider2D>();
-        }
         public void SetBullet(string bulletPathName, string objName = default,
             Vector3 startPosition = default, BattleControl.BulletColor bulletColor = default, SpriteMaskInteraction startMask = default, Vector3 startRotation = default, Vector3 startScale = default)
         {
@@ -53,13 +48,13 @@ namespace UCT.Battle
 
             SetBullet((BulletControl)Resources.Load(path), objName, startPosition, bulletColor, startMask, startRotation, startScale);
         }
-        public void SetBullet(BulletControl bulletControl, string objName = default,
+
+        private void SetBullet(BulletControl bulletControl, string objName = default,
             Vector3 startPosition = default, BattleControl.BulletColor bulletColor = default, SpriteMaskInteraction startMask = default, Vector3 startRotation = default, Vector3 startScale = default)
         {
-            Global.Other.Debug.LogWarning(startPosition);
+            //Global.Other.Debug.LogWarning(startPosition);
 
-            if (objName == default)
-                objName = bulletControl.objName;
+            objName ??= bulletControl.objName;
 
             if (startPosition == default)
                 startPosition = bulletControl.startPosition;
@@ -102,8 +97,7 @@ namespace UCT.Battle
         /// <param name="startPosition">设置起始位置（相对坐标）。</param>
         /// <param name="startRotation">设置旋转角度，一般只需更改Z轴。</param>
         /// <param name="startScale">若弹幕不需拉伸，StartScale一般设置(1,1,1)。检测到Z为0时会归位到(1,1,1)。</param>
-
-        public void SetBullet(
+        private void SetBullet(
             string objName,
             string typeName,
             int layer,

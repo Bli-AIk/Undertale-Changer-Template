@@ -52,11 +52,20 @@ namespace UCT.Battle
             Item,
             Mercy
         }
-        [Header("选择的按钮")]
+        [Header("按钮")]
         public SelectedButton selectedButton;
 
-        [Header("层")]
-        public int selectLayer;//0选择按钮 1选择名称 2Act选项/背包层 3执行层 进入敌方回合后归零
+        public enum SelectedLayer
+        {
+            ButtonLayer,//按钮层，仅能选择按钮
+            NameLayer,//名称层，用于显示、选择怪物名称
+            OptionLayer,//选项层，用于选择选项
+            NarratorLayer,//对话层，用于显示对话
+            TurnLayer//回合层，在此层时进入敌方回合
+        }
+        
+        [Header("层级")]
+        public SelectedLayer selectedLayer;
 
         [Header("子选择")]
         public int selectSon;
@@ -152,7 +161,7 @@ namespace UCT.Battle
 
                 _itemSelectController.gameObject.SetActive(false);
                 actSave = new List<string>();
-                selectLayer = 4;
+                selectedLayer = SelectedLayer.TurnLayer;
             }
         }
 
@@ -197,15 +206,13 @@ namespace UCT.Battle
         public void InTurn()
         {
             TurnController.Instance.isMyTurn = true;
-            selectLayer = 0;
+            selectedLayer = SelectedLayer.ButtonLayer;
             selectedButton = EnumService.GetMinEnumValue<SelectedButton>();
             selectSon = 0;
             selectGrandSon = 0;
             SpriteChange();
             TurnTextLoad();
             _itemSelectController.gameObject.SetActive(true);
-
-            //DataHandlerService.ForceJumpLoadTurn = false;
 
             MainControl.Instance.battlePlayerController.collideCollider.enabled = false;
         }
@@ -215,9 +222,9 @@ namespace UCT.Battle
         /// </summary>
         private void MyTurn()
         {
-            switch (selectLayer)
+            switch (selectedLayer)
             {
-                case 0:
+                case SelectedLayer.ButtonLayer:
 
                     MainControl.Instance.battlePlayerController.transform.position =
                         (Vector3)playerUIPos[(int)selectedButton] + new Vector3(0, 0,
@@ -250,7 +257,7 @@ namespace UCT.Battle
                     }
                     if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
                     {
-                        selectLayer = 1;
+                        selectedLayer = SelectedLayer.NameLayer;
                         selectGrandSon = 1;
                         if (!(MainControl.Instance.playerControl.myItems[0] == 0 && selectedButton == SelectedButton.Item))
                         {
@@ -277,17 +284,17 @@ namespace UCT.Battle
                         }
 
                         if (MainControl.Instance.playerControl.myItems[0] == 0 && selectedButton == SelectedButton.Item)
-                            selectLayer = 0;
+                            selectedLayer = SelectedLayer.ButtonLayer;
                     }
 
                     //if (hpFood != MainControl.instance.PlayerControl.hp)
                     _hpUI.text = FormatWithLeadingZero(_hpFood) + " / " + FormatWithLeadingZero(MainControl.Instance.playerControl.hpMax);
                     break;
 
-                case 1:
+                case SelectedLayer.NameLayer:
                     if (GameUtilityService.KeyArrowToControl(KeyCode.X))
                     {
-                        selectLayer = 0;
+                        selectedLayer = SelectedLayer.ButtonLayer;
                         selectSon = 0;
                         if (!firstIn)
                             TurnTextLoad();
@@ -300,10 +307,10 @@ namespace UCT.Battle
                     if (GameUtilityService.KeyArrowToControl(KeyCode.Z) && selectedButton != SelectedButton.Item)
                     {
                         if (selectedButton != SelectedButton.Fight)
-                            selectLayer = 2;
+                            selectedLayer = SelectedLayer.OptionLayer;
                         else
                         {
-                            selectLayer = 3;
+                            selectedLayer = SelectedLayer.NarratorLayer;
                             SpriteChange();
                         }
 
@@ -363,7 +370,7 @@ namespace UCT.Battle
                         case SelectedButton.Item://ITEM：跳2
                             _itemSelectController.myItemMax = ListManipulationService.FindFirstZeroIndex(MainControl.Instance.playerControl.myItems);
                             _itemSelectController.Open();
-                            selectLayer = 2;
+                            selectedLayer = SelectedLayer.OptionLayer;
 
                             if (MainControl.Instance.playerControl.myItems[selectSon] < 10000)
                                 UITextUpdate(UITextMode.Food, int.Parse(DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectSon], "Auto")));
@@ -391,7 +398,7 @@ namespace UCT.Battle
                     }
                     break;
 
-                case 2:
+                case SelectedLayer.OptionLayer:
                     switch (selectedButton)
                     {
                         case SelectedButton.Act:
@@ -436,7 +443,7 @@ namespace UCT.Battle
                             MainControl.Instance.battlePlayerController.transform.position = new Vector3(playerPosX, playerPosY, MainControl.Instance.battlePlayerController.transform.position.z);
                             if (GameUtilityService.KeyArrowToControl(KeyCode.X))
                             {
-                                selectLayer = 1;
+                                selectedLayer = SelectedLayer.NameLayer;
                                 selectGrandSon = 1;
                                 _textUI.text = "";
                                 _textUIBack.text = "";
@@ -517,7 +524,7 @@ namespace UCT.Battle
                                 }
 
                                 _textUIBack.text = "";
-                                selectLayer = 3;
+                                selectedLayer = SelectedLayer.NarratorLayer;
                                 MainControl.Instance.battlePlayerController.transform.position = (Vector3)(Vector2.one * 10000) + new Vector3(0, 0, MainControl.Instance.battlePlayerController.transform.position.z);
                                 Type(actSave[2 * (selectGrandSon + 1) - 3]);
                                 SpriteChange();
@@ -529,7 +536,7 @@ namespace UCT.Battle
                         case SelectedButton.Item:
                             if (GameUtilityService.KeyArrowToControl(KeyCode.X))
                             {
-                                selectLayer = 0;
+                                selectedLayer = SelectedLayer.ButtonLayer;
                                 selectSon = 0;
                                 if (!firstIn)
                                     TurnTextLoad();
@@ -547,7 +554,7 @@ namespace UCT.Battle
 
                             if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
                             {
-                                selectLayer = 3; 
+                                selectedLayer = SelectedLayer.NarratorLayer; 
                                 MainControl.Instance.battlePlayerController.transform.position = (Vector3)(Vector2.one * 10000) + new Vector3(0, 0, MainControl.Instance.battlePlayerController.transform.position.z);
                                 GameUtilityService.UseItem(_typeWritter, _textUI, selectSon + 1);
                                 SpriteChange();
@@ -653,7 +660,7 @@ namespace UCT.Battle
                             MainControl.Instance.battlePlayerController.transform.position = new Vector3(-5.175f, -0.96f - (selectGrandSon - 1) * 0.66f, MainControl.Instance.battlePlayerController.transform.position.z);
                             if (GameUtilityService.KeyArrowToControl(KeyCode.X))
                             {
-                                selectLayer = 1;
+                                selectedLayer = SelectedLayer.NameLayer;
                                 selectGrandSon = 1;
                                 _textUI.text = "";
                                 foreach (var t in MainControl.Instance.BattleControl.enemies)
@@ -663,7 +670,7 @@ namespace UCT.Battle
                             }
                             else if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
                             {
-                                selectLayer = 3;
+                                selectedLayer = SelectedLayer.NarratorLayer;
                                 MainControl.Instance.battlePlayerController.transform.position = (Vector3)(Vector2.one * 10000) + new Vector3(0, 0, MainControl.Instance.battlePlayerController.transform.position.z);
                                 if (actSave[2 * (selectGrandSon + 1) - 3] != "Null")
                                     Type(actSave[2 * (selectGrandSon + 1) - 3]);
@@ -692,7 +699,7 @@ namespace UCT.Battle
                     }
                     break;
 
-                case 3:
+                case SelectedLayer.NarratorLayer:
                     //DataHandlerService.ForceJumpLoadTurn  = true;
                     firstIn = false;
 
