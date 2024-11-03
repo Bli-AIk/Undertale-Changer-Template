@@ -151,8 +151,8 @@ namespace UCT.Battle
             _dialog.gameObject.SetActive(isDialog);
 
             if (!isDialog) return;
-            if ((_dialog.typeWritter.isTyping || (!GameUtilityService.KeyArrowToControl(KeyCode.Z))) &&
-                ((selectedButton != SelectedButton.Fight && _textUI.text != "") || numberDialog != 0)) return;
+            if ((_dialog.typeWritter.isTyping || !GameUtilityService.KeyArrowToControl(KeyCode.Z)) &&
+                (selectedButton != SelectedButton.Fight && _textUI.text != "" || numberDialog != 0)) return;
             if (numberDialog < actSave.Count)
                 KeepDialogBubble();
             else//敌方回合：开！
@@ -531,7 +531,7 @@ namespace UCT.Battle
                                 _textUIBack.text = "";
                                 selectedLayer = SelectedLayer.NarratorLayer;
                                 MainControl.Instance.battlePlayerController.transform.position = (Vector3)(Vector2.one * 10000) + new Vector3(0, 0, MainControl.Instance.battlePlayerController.transform.position.z);
-                                Type(actSave[2 * (selectedOption) - 3]);
+                                Type(actSave[2 * selectedOption - 3]);
                                 SpriteChange();
                                 _itemSelectController.Close();
                             }
@@ -583,13 +583,13 @@ namespace UCT.Battle
 
                             if (myItemMax > 1)
                             {
-                                textUITextChanger1 = "<color=#00000000>aa*</color>* " + DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectedName + 1 - (selectedOption - 2)], "Auto", 0) + "\n";
-                                textUIDataChanger1 = DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectedName + 1 - (selectedOption - 2)], "Auto", true) + "\n";
+                                textUITextChanger1 = "<color=#00000000>aa*</color>* " + DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectedName + 1 - selectedOption], "Auto", 0) + "\n";
+                                textUIDataChanger1 = DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectedName + 1 - selectedOption], "Auto", true) + "\n";
                             }
                             if (myItemMax > 2)
                             {
-                                textUITextChanger2 = "<color=#00000000>aa*</color>* " + DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectedName + 2 - (selectedOption - 2)], "Auto", 0) + "\n";
-                                textUIDataChanger2 = DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectedName + 2 - (selectedOption - 2)], "Auto", true) + "\n";
+                                textUITextChanger2 = "<color=#00000000>aa*</color>* " + DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectedName + 2 - selectedOption], "Auto", 0) + "\n";
+                                textUIDataChanger2 = DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectedName + 2 - selectedOption], "Auto", true) + "\n";
                             }
                             var number = 8;
 
@@ -623,7 +623,7 @@ namespace UCT.Battle
                                     _itemSelectController.myItemSelect = selectedName + (number - myItemMax);
                             }
                             _itemSelectController.myItemRealSelect = selectedName;
-                            MainControl.Instance.battlePlayerController.transform.position = new Vector3(-5.175f, -0.96f - (selectedOption - 2) * 0.66f, MainControl.Instance.battlePlayerController.transform.position.z);
+                            MainControl.Instance.battlePlayerController.transform.position = new Vector3(-5.175f, -0.96f - selectedOption * 0.66f, MainControl.Instance.battlePlayerController.transform.position.z);
 
                             _textUI.text = "<color=#00000000>aa*</color>* " + DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectedName - (selectedOption - 2)], "Auto", 0) + "\n" +
                                           textUITextChanger1 + textUITextChanger2;
@@ -660,7 +660,7 @@ namespace UCT.Battle
                             break;
 
                         case SelectedButton.Mercy:
-                            MainControl.Instance.battlePlayerController.transform.position = new Vector3(-5.175f, -0.96f - (selectedOption - 2) * 0.66f, MainControl.Instance.battlePlayerController.transform.position.z);
+                            MainControl.Instance.battlePlayerController.transform.position = new Vector3(-5.175f, -0.96f - selectedOption * 0.66f, MainControl.Instance.battlePlayerController.transform.position.z);
                             if (GameUtilityService.KeyArrowToControl(KeyCode.X))
                             {
                                 selectedLayer = SelectedLayer.NameLayer;
