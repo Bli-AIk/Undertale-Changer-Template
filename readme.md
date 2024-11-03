@@ -8,7 +8,7 @@ Currently, **UCT** remains in a **semi-finished** state, so please do not use th
 **This version is for learning purposes only. Stay tuned for future updates to UCT.**
 
 # Undertale-Changer-Template
-An [**UNDERTALE**](https://undertale.com/) fan game template based on [**unity engine**](unity.com).
+An [**UNDERTALE**](https://undertale.com/) fan game template based on [**unity engine**](https://unity.com).
 
 [![license](https://img.shields.io/github/license/Bli-AIk/Undertale-Changer-Template
 )](LICENSE)
