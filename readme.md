@@ -1,13 +1,14 @@
 # Look at me before downloading!!
-UCT will undergo a large-scale update in the near future.
-At present, the Github version of UCT is frequently updated. If you want a stable version, please visit gamejolt, you can download the current version of the [gamejolt page](https://gamejolt.com/games/undertale_changer_template/771575) first.
-But gamejolt version has some issues, especially for English users, it may generate some bugs.
-Please do not use the current version for your game production. This version is for learning only, please look forward to the new version of UCT!
+You are currently browsing the **Develop** branch of **UCT**, which is actively maintained and updated frequently.
+
+As of **July 2024**, the content archive is stored in the **Main** branch. If you prefer a more stable (perhaps) version, it is recommended to switch to that branch.
+
+Currently, **UCT** remains in a **semi-finished** state, so please do not use this version for game production.
+
+**This version is for learning purposes only. Stay tuned for future updates to UCT.**
 
 # Undetale-Changer-Template
 An UNDERTALE fan game template based on unity engine.
-
-If you are an English speaking user, please select the en-annotations branch when downloading.
 
 [![license](https://img.shields.io/github/license/Bli-AIk/Undertale-Changer-Template
 )](LICENSE)
@@ -17,7 +18,7 @@ If you are an English speaking user, please select the en-annotations branch whe
 
 - en [English](readme.md)
 - zh_CN [简体中文](README.zh_CN.md)
-- zh-HK [繁体中文](README.zh_HK.md)
+- zh_TW [繁体中文](README.zh_TW.md)
 
 ## Table of Contents
 
@@ -70,8 +71,9 @@ But it is not recommended to use the 2022 version, otherwise the template may ha
 
 [Wiki](https://github.com/Bli-AIk/Undertale-Changer-Template/wiki)
 
+(Please note that this wiki is written based on an old version of UCT, and it may have some differences with the current version)
+
 ## License
 
 [GNU General Public License v3.0](../main/LICENSE)
-
 
