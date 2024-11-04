@@ -702,10 +702,12 @@ namespace UCT.Battle
 
                     if (selectedButton == SelectedButton.Fight && !_target.gameObject.activeSelf)
                     {
-                        if (MainControl.Instance.battlePlayerController.transform.position != (Vector3)MainControl.Instance.battlePlayerController.sceneDrift + new Vector3(0, 0, MainControl.Instance.battlePlayerController.transform.position.z))
+                        if (!isDialog) 
                         {
                             _textUI.text = "";
-                            MainControl.Instance.battlePlayerController.transform.position = (Vector3)MainControl.Instance.battlePlayerController.sceneDrift + new Vector3(0, 0, MainControl.Instance.battlePlayerController.transform.position.z);
+                            MainControl.Instance.battlePlayerController.transform.position =
+                                (Vector3)MainControl.Instance.battlePlayerController.sceneDrift + new Vector3(0, 0,
+                                    MainControl.Instance.battlePlayerController.transform.position.z);
                             OpenDialogBubble(MainControl.Instance.BattleControl.turnDialogAsset[TurnController.Instance.turn]);
                         }
                     }
