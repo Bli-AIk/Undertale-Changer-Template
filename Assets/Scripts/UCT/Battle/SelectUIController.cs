@@ -544,7 +544,7 @@ namespace UCT.Battle
                                 selectedLayer = SelectedLayer.ButtonLayer;
                                 selectedName = 0;
                                 if (!firstIn)
-                                    TurnTextLoad();
+                                    TurnTextLoad(false,0);
                                 else
                                     TurnTextLoad(true, firstInDiy);
                                 _itemSelectController.Close();
@@ -559,8 +559,10 @@ namespace UCT.Battle
 
                             if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
                             {
-                                selectedLayer = SelectedLayer.NarratorLayer; 
-                                MainControl.Instance.battlePlayerController.transform.position = (Vector3)(Vector2.one * 10000) + new Vector3(0, 0, MainControl.Instance.battlePlayerController.transform.position.z);
+                                selectedLayer = SelectedLayer.NarratorLayer;
+                                MainControl.Instance.battlePlayerController.transform.position =
+                                    (Vector3)(Vector2.one * 10000) + new Vector3(0, 0,
+                                        MainControl.Instance.battlePlayerController.transform.position.z);
                                 GameUtilityService.UseItem(_typeWritter, _textUI, selectedName + 1);
                                 SpriteChange();
                                 _itemSelectController.Close();
@@ -790,6 +792,7 @@ namespace UCT.Battle
 
                 _saveTurnText = load[Random.Range(0, load.Count)];
             }
+
             Type(_saveTurnText);
         }
 

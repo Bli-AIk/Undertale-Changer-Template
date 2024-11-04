@@ -19,6 +19,7 @@ namespace UCT.Global.UI
     /// </summary>
     public class TypeWritter : MonoBehaviour
     {
+        private static readonly int Open = Animator.StringToHash("Open");
         public string originString, endString, passTextString;
         public bool isRunning;//打字机是否在运行
         public bool isTyping;//是否在 打出字符
@@ -80,9 +81,9 @@ namespace UCT.Global.UI
         /// <summary>
         /// 开启打字机。若打字正在进行，可强行终止。
         /// 一般情况下不需要强行打断对话。
-        /// 若传入的语句中含有<autoFood>，请输入hp。若输入0，此字符将跳过。
+        /// 若传入的语句中含有autoFood，请输入hp。若输入0，此字符将跳过。
         /// </summary>
-        public void TypeOpen(string text, bool force, int hp, int fx, TMP_Text tmpText, TypeMode typeMode = TypeMode.Normal)
+        public void TypeOpen(string text, bool force, int hp, int inputFX, TMP_Text tmpText, TypeMode typeMode = TypeMode.Normal)
         {
             isRunning = true;
             _typeMode = typeMode;
@@ -100,7 +101,7 @@ namespace UCT.Global.UI
             clockTime = clock;
             pressX = false;
             isStop = false;
-            this.fx = fx;
+            this.fx = inputFX;
             if (isOverworld)
                 _talkUIPositionChanger.Change(true, originString[.."<passText>".Length] == "<passText>", true, this);
 
@@ -114,14 +115,14 @@ namespace UCT.Global.UI
             Timing.KillCoroutines();
             isTyping = false;
             endString = "";
-            if (_tmpText != null)
+            if (_tmpText)
             {
                 _tmpText.text = "";
             }
             passTextString = "";
         }
 
-        public void TypePause(bool pause)
+        public static void TypePause(bool pause)
         {
             if (pause)
             {
@@ -140,7 +141,7 @@ namespace UCT.Global.UI
             isRunning = true;
             for (var i = 0; i < originString.Length; i++)
             {
-                if (spriteChanger != null)
+                if (spriteChanger)
                     spriteChanger.justSaying = false;
 
                 isTyping = true;
@@ -152,9 +153,7 @@ namespace UCT.Global.UI
 
                 if (originString[i] == '<')
                 {
-                    var fix0 = false;
-                    if (i == 0)
-                        fix0 = true;
+                    var fix0 = i == 0;
 
                     while (originString[i] == '<')
                     {
@@ -304,16 +303,19 @@ namespace UCT.Global.UI
                                     break;
 
                                 case "<autoFood>":
-
-                                    string plusString;
-                                    plusString = hpIn + hpSave >= MainControl.Instance.playerControl.hpMax ? MainControl.Instance.ItemControl.itemTextMaxData[22] : MainControl.Instance.ItemControl.itemTextMaxData[12];
+                                    var plusString = hpIn + hpSave >= MainControl.Instance.playerControl.hpMax
+                                        ? MainControl.Instance.ItemControl.itemTextMaxData[22]
+                                        : MainControl.Instance.ItemControl.itemTextMaxData[12];
 
                                     plusString = plusString[..^1];
-                                    originString = TextProcessingService.RemoveSubstring(originString, i - "<autoFood>".Length, i - 1, plusString);
+                                    originString = TextProcessingService.RemoveSubstring(originString,
+                                        i - "<autoFood>".Length, i - 1, plusString);
                                     i -= spText.Length;
                                     passTextString = passTextString[..^spText.Length];
                                     break;
-
+                                case "<itemHp>":
+                                    Other.Debug.Log("itemHp");
+                                    break;
                                 case "<changeX>":
                                     canNotX = !canNotX;
                                     break;
@@ -395,20 +397,11 @@ namespace UCT.Global.UI
                 }
                 else
                 {
-                    if (originString[passTextString.Length] != '<')
-                    {
-                        originString = originString[(passTextString.Length - 1)..];
-                        i -= passTextString.Length - 1;
-                    }
-                    else// == '<'
-                    {
-                        originString = originString[passTextString.Length..];
-                        i -= passTextString.Length;
-
-                    }
+                    originString = originString[passTextString.Length] != '<'
+                        ? originString[(passTextString.Length - 1)..]
+                        : originString[passTextString.Length..];
                     break;
                 }
-                //pressX = false;
                 canNotX = false;
                 isStop = false;
                 PassText:;//这是个标签注意
@@ -421,18 +414,17 @@ namespace UCT.Global.UI
 
         private List<Vector2> _dynamicPos;
 
-        private IEnumerator<float> _Dynamic(int number, OverworldControl.DynamicType dynamicType)
+        private IEnumerator<float> _Dynamic(int number, OverworldControl.DynamicType inputDynamicType)
         {
-            if (dynamicType != OverworldControl.DynamicType.None)//动效相关
+            if (inputDynamicType != OverworldControl.DynamicType.None)//动效相关
             {
                 var textInfo = _tmpText.textInfo;
 
                 Vector3 orig;
                 TMP_CharacterInfo charInfo;
                 Vector3[] verts;
-                Color32[] colors;
 
-                switch (dynamicType)
+                switch (inputDynamicType)
                 {
                     case OverworldControl.DynamicType.Shake:
                         for (var i = 0; i < 30; i++)
@@ -442,7 +434,7 @@ namespace UCT.Global.UI
 
                             _tmpText.ForceMeshUpdate();
 
-                            var randomer = new Vector3(Random.Range(-0.05f, 0.05f), Random.Range(-0.05f, 0.05f), 0);
+                            var randomNumber = new Vector3(Random.Range(-0.05f, 0.05f), Random.Range(-0.05f, 0.05f), 0);
 
                             charInfo = textInfo.characterInfo[number];
 
@@ -454,7 +446,7 @@ namespace UCT.Global.UI
                             {
                                 orig = verts[charInfo.vertexIndex + j];
                                 //动画
-                                verts[charInfo.vertexIndex + j] = orig + randomer;
+                                verts[charInfo.vertexIndex + j] = orig + randomNumber;
                             }
 
                             for (var k = 0; k < textInfo.meshInfo.Length; k++)
@@ -470,18 +462,16 @@ namespace UCT.Global.UI
                         break;
                     case OverworldControl.DynamicType.Fade:
 
-                        var fadeDuration = 0.1f; // 渐入时间
-                        Color32 startColor;
-                        Color32 endColor;
+                        const float fadeDuration = 0.1f; // 渐入时间
 
                         _tmpText.ForceMeshUpdate();
 
                         charInfo = textInfo.characterInfo[number];
                         if (!charInfo.isVisible) break;
 
-                        colors = textInfo.meshInfo[charInfo.materialReferenceIndex].colors32;
-                        startColor = colors[charInfo.vertexIndex];
-                        endColor = new Color32(startColor.r, startColor.g, startColor.b, 255);
+                        var colors = textInfo.meshInfo[charInfo.materialReferenceIndex].colors32;
+                        var startColor = colors[charInfo.vertexIndex];
+                        var endColor = new Color32(startColor.r, startColor.g, startColor.b, 255);
 
                         // 设置初始颜色为透明
                         for (var j = 0; j < 4; j++)
@@ -547,6 +537,10 @@ namespace UCT.Global.UI
                             yield return 0;
                         }
                         break;
+                    case OverworldControl.DynamicType.None:
+                        throw new ArgumentOutOfRangeException(nameof(inputDynamicType), inputDynamicType, null);
+                    default:
+                        throw new ArgumentOutOfRangeException(nameof(inputDynamicType), inputDynamicType, null);
                 }
 
             }
@@ -565,7 +559,7 @@ namespace UCT.Global.UI
                 if (spriteChanger != null)
                     spriteChanger.ChangeImage(-1);
                 if (_endInBattle)
-                    _canvasAnim.SetBool("Open", true);
+                    _canvasAnim.SetBool(Open, true);
             }
             if (passText && GameUtilityService.KeyArrowToControl(KeyCode.Z) && _typeMode != TypeMode.CantZx)
             {

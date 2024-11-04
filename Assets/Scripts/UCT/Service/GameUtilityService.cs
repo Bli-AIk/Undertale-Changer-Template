@@ -275,7 +275,9 @@ namespace UCT.Service
             if (MainControl.Instance.playerControl.wearArm == 10001)
                 plusHp += 4;
 
-            typeWritter.TypeOpen(MainControl.Instance.ItemControl.itemTextMaxItemSon[MainControl.Instance.playerControl.myItems[sonSelect - 1] * 5 - 3], false,
+            typeWritter.TypeOpen(
+                MainControl.Instance.ItemControl.itemTextMaxItemSon[
+                    MainControl.Instance.playerControl.myItems[sonSelect - 1] * 5 - 3], false,
                 plusHp, 0, tmpText);
 
             MainControl.Instance. playerControl.hp += plusHp;

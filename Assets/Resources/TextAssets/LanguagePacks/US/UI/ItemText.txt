@@ -124,7 +124,7 @@ item use/info/drop
 */
 
 Data\* You ate <itemNameFood>.<stop>;
-Data\* You recovered <autoFood> HP!<stop>;/*<itemHp>is not used. This step requires real-time detection, so a separate detection method is inserted into the typewriter.The <autoFood> here is only used to detect where the HP value is inserted*/
+Data\* You recovered <itemHp> HP!<stop>;
 Data\* "<itemNameFood>" - Heals <itemHp> HP<stop>;
 Data\* You equipped <itemNameArm>.<stop>;
 Data\* You equipped <itemNameArmor>.<stop>;

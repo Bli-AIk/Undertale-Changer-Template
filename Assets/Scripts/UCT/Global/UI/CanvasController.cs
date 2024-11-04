@@ -215,7 +215,7 @@ namespace UCT.Global.UI
                 {
                     foreach (var typeWritter in _typeWritters)
                     {
-                        typeWritter.TypePause(true);
+                        TypeWritter.TypePause(true);
                     }
                     OpenSetting();
                 }
@@ -312,7 +312,7 @@ namespace UCT.Global.UI
                                     MainControl.Instance.OverworldControl.isSetting = false;
                                     foreach (var typeWritter in _typeWritters)
                                     {
-                                        typeWritter.TypePause(false);
+                                        TypeWritter.TypePause(false);
                                     }
                                     freeze = true;
                                     break;
@@ -828,7 +828,7 @@ namespace UCT.Global.UI
                 MainControl.Instance.OverworldControl.isSetting = false;
                 foreach (var typeWritter in _typeWritters)
                 {
-                    typeWritter.TypePause(false);
+                    TypeWritter.TypePause(false);
                 }
                 if (isLan)
                     SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
