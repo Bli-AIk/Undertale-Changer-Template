@@ -138,6 +138,13 @@ namespace UCT.Global.UI
 
         private IEnumerator<float> _Typing(TMP_Text tmpText)
         {
+            float TypeStopSeconds()
+            {
+                return Timing.WaitForSeconds(speed -
+                                             speed * 0.25f * Convert.ToInt32(!MainControl.Instance
+                                                 .OverworldControl.textWidth));
+            }
+
             isRunning = true;
             for (var i = 0; i < originString.Length; i++)
             {
@@ -294,10 +301,12 @@ namespace UCT.Global.UI
                                 case "<stop>":
                                     if (!pressX)
                                     {
-                                        //单独一个Stop的时候，不设置isTyping，这是因为有的时候这个stop的时间很短，如果true看起来有点怪。
-                                        //如果需要长的Stop，建议你还是使用<stop*x>的方式来做。
+                                        //单独一个Stop的时候，不设置isTyping，这是因为有的时候这个stop的时间很短，
+                                        //所以 isTyping = true 之后，显示起来有点怪。
+                                        //如果需要长的Stop，建议还是使用<stop*x>的方式来做。
                                         //isTyping = false;
-                                        yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f * Convert.ToInt32(!MainControl.Instance.OverworldControl.textWidth));
+                                        yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f *
+                                            Convert.ToInt32(!MainControl.Instance.OverworldControl.textWidth));
                                     }
                                     isStop = true;
                                     break;
@@ -314,8 +323,9 @@ namespace UCT.Global.UI
                                     passTextString = passTextString[..^spText.Length];
                                     break;
                                 case "<itemHp>":
-                                    Other.Debug.Log("itemHp");
-                                    break;
+                                    spText = hpIn.ToString();
+                                    yield return TypeStopSeconds();
+                                    goto default;
                                 case "<changeX>":
                                     canNotX = !canNotX;
                                     break;
@@ -377,7 +387,7 @@ namespace UCT.Global.UI
                 }
 
                 if (!pressX)
-                    yield return Timing.WaitForSeconds(speed - speed * 0.25f * Convert.ToInt32(!MainControl.Instance.OverworldControl.textWidth));
+                    yield return TypeStopSeconds();
 
                 if (tmpText != null)
                 {

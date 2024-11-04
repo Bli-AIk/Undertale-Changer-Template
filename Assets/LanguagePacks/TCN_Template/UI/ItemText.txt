@@ -111,7 +111,7 @@ Data\丟棄;/*編號：10*/
 */
 
 Data\* 你吃了<itemNameFood>。 <stop>;
-Data\* 你回覆了<itemHp> HP！ <stop>;/*未用到<itemHp>。這一步驟需要即時檢測，故在打字機中單獨插入一個檢測方法。這裡的 <autoFood> 只會用來偵測在哪裡插入HP數*/
+Data\* 你回覆了 <itemHp> HP！ <stop>;/*未用到<itemHp>。這一步驟需要即時檢測，故在打字機中單獨插入一個檢測方法。這裡的 <autoFood> 只會用來偵測在哪裡插入HP數*/
 Data\* “<itemNameFood>” - 治癒 <itemHp> HP<stop>;
 Data\* 你裝備了<itemNameArm>。 <stop>;
 Data\* 你裝備了<itemNameArmor>。 <stop>;

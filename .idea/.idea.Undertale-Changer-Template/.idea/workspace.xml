@@ -6,18 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="8f7c2298-d077-422b-9131-f9a839bed961" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Fonts/SonFonts/SIMSUN.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Fonts/SonFonts/SIMSUN.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Fonts/UT-UI.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Fonts/UT-UI.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/LanguagePacks/CN_Template/UI/ItemText.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/LanguagePacks/CN_Template/UI/ItemText.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/UI/ItemText.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/UI/ItemText.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/LanguagePacks/US_Template/UI/ItemText.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/LanguagePacks/US_Template/UI/ItemText.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/CN/UI/ItemText.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/CN/UI/ItemText.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/UI/ItemText.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/UI/ItemText.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/US/UI/ItemText.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/US/UI/ItemText.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Battle/SelectUIController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Battle/SelectUIController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/UI/CanvasController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/UI/CanvasController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/UI/TypeWritter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/UI/TypeWritter.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Service/GameUtilityService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Service/GameUtilityService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -121,10 +117,10 @@
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
       <method v="2" />
     </configuration>
-    <configuration name="附加到 Unity 编辑器" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="27856">
+    <configuration name="附加到 Unity 编辑器" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="17492">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="27856" />
+      <option name="pid" value="17492" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -215,6 +211,7 @@
       <workItem from="1730690782413" duration="2985000" />
       <workItem from="1730711778022" duration="1148000" />
       <workItem from="1730726361405" duration="2240000" />
+      <workItem from="1730759400199" duration="954000" />
     </task>
     <servers />
   </component>
@@ -248,29 +245,16 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/Scripts/UCT/Service/GameUtilityService.cs</url>
-          <line>277</line>
+          <line>273</line>
           <properties documentPath="D:\Unity Projects\Undertale-Changer-Template\Assets\Scripts\UCT\Service\GameUtilityService.cs" containingFunctionPresentation="方法 'ProcessFood'">
             <startOffsets>
-              <option value="12336" />
+              <option value="12063" />
             </startOffsets>
             <endOffsets>
-              <option value="12558" />
+              <option value="12224" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="11" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/UCT/Global/UI/TypeWritter.cs</url>
-          <line>146</line>
-          <properties documentPath="D:\Unity Projects\Undertale-Changer-Template\Assets\Scripts\UCT\Global\UI\TypeWritter.cs" containingFunctionPresentation="方法 '_Typing'">
-            <startOffsets>
-              <option value="3904" />
-            </startOffsets>
-            <endOffsets>
-              <option value="3920" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="12" />
+          <option name="timeStamp" value="13" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

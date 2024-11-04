@@ -111,7 +111,7 @@ Data\丢弃;/*编号：10*/
 */
 
 Data\* 你吃掉了<itemNameFood>。<stop>;
-Data\* 你回复了<itemHp> HP！<stop>;
+Data\* 你回复了 <itemHp> HP！<stop>;
 Data\* “<itemNameFood>” - 治愈 <itemHp> HP<stop>;
 Data\* 你装备了<itemNameArm>。<stop>;
 Data\* 你装备了<itemNameArmor>。<stop>;

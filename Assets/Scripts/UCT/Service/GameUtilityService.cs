@@ -272,8 +272,8 @@ namespace UCT.Service
         private static void ProcessFood(TypeWritter typeWritter, TMP_Text tmpText, int sonSelect)
         {
             var plusHp = int.Parse(DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[sonSelect - 1], "Auto", 2));
-            if (MainControl.Instance.playerControl.wearArm == 10001)
-                plusHp += 4;
+            //if (MainControl.Instance.playerControl.wearArm == 10001)
+            //    plusHp += 4;
 
             typeWritter.TypeOpen(
                 MainControl.Instance.ItemControl.itemTextMaxItemSon[
