@@ -261,12 +261,10 @@ namespace UCT.Battle
                     {
                         selectedLayer = SelectedLayer.NameLayer;
                         selectedOption = 0;
-                        if (!(MainControl.Instance.playerControl.myItems[0] == 0 && selectedButton == SelectedButton.Item))
-                        {
-                            AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
-                            _typeWritter.TypeStop();
-                            _textUI.text = "";
-                        }
+                        AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                        _typeWritter.TypeStop();
+                        _textUI.text = "";
+                        
                         if (selectedButton != SelectedButton.Item)
                             foreach (var t in MainControl.Instance.BattleControl.enemies)
                             {

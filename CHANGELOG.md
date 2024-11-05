@@ -50,7 +50,7 @@ XX年/XX月/XX日 完成
 ## v1.0.2 -> v1.0.3 BUG修复
 - [x] 修复Battle场景中执行Fight后敌人对话卡死的问题
 - [x] 修复Battle场景中使用item后游戏/编辑器崩溃的问题
-- [ ] 修复Battle场景中在ButtonLayer打字机输入未完毕时使用item后打字机显示仍为ButtonLayer文本的问题
+- [x] 修复Battle场景中在ButtonLayer打字机输入未完毕时使用item后打字机显示仍为ButtonLayer文本的问题
 - [ ] 修复OW场景中仍然使用废弃框UI的问题
 - [ ] 修复打字机无法识别\<X\>富文本的问题
 
