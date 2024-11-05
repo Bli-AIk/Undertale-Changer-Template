@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f7c2298-d077-422b-9131-f9a839bed961" name="更改" comment="">
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/CN/Battle/UIBattleText.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/CN/Battle/UIBattleText.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/UI/TypeWritter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/UI/TypeWritter.cs" afterDir="false" />
-    </list>
+    <list default="true" id="8f7c2298-d077-422b-9131-f9a839bed961" name="更改" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -206,6 +203,7 @@
       <workItem from="1730726361405" duration="2240000" />
       <workItem from="1730759400199" duration="1465000" />
       <workItem from="1730780406695" duration="1773000" />
+      <workItem from="1730782277943" duration="803000" />
     </task>
     <servers />
   </component>
