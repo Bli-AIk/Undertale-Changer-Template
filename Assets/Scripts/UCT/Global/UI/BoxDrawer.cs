@@ -16,6 +16,8 @@ namespace UCT.Global.UI
 
     public class BoxDrawer : MonoBehaviour
     {
+        [Header("是否不需要BoxController")]
+        public bool isWithoutBoxController;
         public Vector3 localPosition;
         [Header("使用这个旋转替代Transform的旋转")]
         public Quaternion rotation; // 获取当前物体的旋转
@@ -86,6 +88,16 @@ namespace UCT.Global.UI
         public void Update()
         {
             transform.tag = parent ? "Untagged" : "Box";
+            
+            if (isWithoutBoxController)
+            {
+                realPoints = isBessel
+                    ? GenerateBezierCurve(besselPoints, besselInsertNumber, besselPointsNumber)
+                    : vertexPoints;
+                SummonBox();
+                return;
+            }
+            
 
             if (boxType == BoxController.BoxType.Sub)
                 ClearComponentsData();
@@ -95,7 +107,9 @@ namespace UCT.Global.UI
                 //作为纯子级
                 case 0 when transform.childCount == 0:
                 {
-                    realPoints = isBessel ? GenerateBezierCurve(besselPoints, besselInsertNumber, besselPointsNumber) : vertexPoints;
+                    realPoints = isBessel
+                        ? GenerateBezierCurve(besselPoints, besselInsertNumber, besselPointsNumber)
+                        : vertexPoints;
                     break;
                 }
                 //作为父级
@@ -107,8 +121,10 @@ namespace UCT.Global.UI
                     sonBoxDrawer[0].transform.localPosition = sonBoxDrawer[0].localPosition - localPosition;
                     sonBoxDrawer[1].transform.localPosition = sonBoxDrawer[1].localPosition - localPosition;
 
-                    var realPointsBack0 = BoxController.Instance.GetRealPoints(sonBoxDrawer[0].realPoints, sonBoxDrawer[0].rotation, sonBoxDrawer[0].transform);
-                    var realPointsBack1 = BoxController.Instance.GetRealPoints(sonBoxDrawer[1].realPoints, sonBoxDrawer[1].rotation, sonBoxDrawer[1].transform);
+                    var realPointsBack0 = BoxController.Instance.GetRealPoints(sonBoxDrawer[0].realPoints,
+                        sonBoxDrawer[0].rotation, sonBoxDrawer[0].transform);
+                    var realPointsBack1 = BoxController.Instance.GetRealPoints(sonBoxDrawer[1].realPoints,
+                        sonBoxDrawer[1].rotation, sonBoxDrawer[1].transform);
 
                     pointsSonSum = BoxController.Instance.AddLists(realPointsBack0, realPointsBack1);
 
@@ -117,9 +133,12 @@ namespace UCT.Global.UI
 
                     pointsCross = BoxController.Instance.FindIntersections(realPointsBack0, realPointsBack1);
 
-                    pointsOutCross = BoxController.Instance.ProcessPolygons(realPointsBack0, realPointsBack1, pointsCross);
+                    pointsOutCross =
+                        BoxController.Instance.ProcessPolygons(realPointsBack0, 
+                            realPointsBack1, pointsCross);
 
-                    pointsInCross = BoxController.Instance.AddAndSubLists(realPointsBack0, realPointsBack1, pointsCross, pointsOutCross);
+                    pointsInCross = BoxController.Instance.AddAndSubLists(realPointsBack0, realPointsBack1, pointsCross,
+                        pointsOutCross);
 
 
                     //重合时合并
@@ -177,7 +196,8 @@ namespace UCT.Global.UI
                 {
                     sonBoxDrawer[i].transform.SetParent(BoxController.Instance.transform);
                     sonBoxDrawer[i].parent = null;
-                    sonBoxDrawer[i].localPosition = (Vector3)(Vector2)(sonBoxDrawer[i].localPosition + localPosition) + new Vector3(0, 0, sonBoxDrawer[i].localPosition.z);
+                    sonBoxDrawer[i].localPosition = (Vector3)(Vector2)(sonBoxDrawer[i].localPosition + localPosition) +
+                                                    new Vector3(0, 0, sonBoxDrawer[i].localPosition.z);
                     sonBoxDrawer[i].transform.localPosition = sonBoxDrawer[i].localPosition;
                     sonBoxDrawer[i].rotation = AddQuaternions(rotation, sonBoxDrawer[i].rotation);
                     sonBoxDrawer[i].IsOpenComponentsData(true);
@@ -408,7 +428,8 @@ namespace UCT.Global.UI
                 Gizmos.color = Color.yellow;
                 foreach (var point in realPoints)
                 {
-                    Gizmos.DrawSphere(transform.TransformPoint(rotation * (new Vector3(point.x, point.y, 0))), 0.1f / 2);
+                    Gizmos.DrawSphere(transform.TransformPoint(rotation * new Vector3(point.x, point.y, 0)),
+                        0.1f / 2);
                 }
             }
 
@@ -436,7 +457,8 @@ namespace UCT.Global.UI
 
                     }
 
-                    Gizmos.DrawSphere(transform.TransformPoint(rotation * new Vector3(point.x, point.y, 0)), 0.1f);
+                    Gizmos.DrawSphere(
+                        transform.TransformPoint(rotation * new Vector3(point.x, point.y, 0)), 0.1f);
                 }
                 return;
             }

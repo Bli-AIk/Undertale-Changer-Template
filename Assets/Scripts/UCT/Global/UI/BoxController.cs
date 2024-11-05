@@ -227,41 +227,43 @@ namespace UCT.Global.UI
         /// <summary>
         /// 生成框
         /// </summary>
-        public List<Vector2> SummonBox(List<Vector2> list, Quaternion rotation, Transform transform, float width = 0.15f, LineRenderer lineRenderer = null, EdgeCollider2D edgeCollider2D = null, MeshFilter meshFilter = null)
+        public void SummonBox(List<Vector2> list, Quaternion rotation, Transform inputTransform,
+            float inputWidth = 0.15f, LineRenderer lineRenderer = null, EdgeCollider2D edgeCollider2D = null,
+            MeshFilter meshFilter = null)
         {
-            if (lineRenderer == null)
+            if (!lineRenderer)
             {
-                lineRenderer = transform.GetComponent<LineRenderer>();
-                if (lineRenderer == null)
+                lineRenderer = inputTransform.GetComponent<LineRenderer>();
+                if (!lineRenderer)
                 {
-                    lineRenderer = transform.gameObject.AddComponent<LineRenderer>();
-                    lineRenderer.startWidth = width;
-                    lineRenderer.endWidth = width;
+                    lineRenderer = inputTransform.gameObject.AddComponent<LineRenderer>();
+                    lineRenderer.startWidth = inputWidth;
+                    lineRenderer.endWidth = inputWidth;
                     lineRenderer.material = Resources.Load<Material>("Materials/BoxLine");
                     lineRenderer.loop = true;
                 }
             }
 
-            if (edgeCollider2D == null)
+            if (!edgeCollider2D)
             {
-                edgeCollider2D = transform.GetComponent<EdgeCollider2D>();
-                if (edgeCollider2D == null)
+                edgeCollider2D = inputTransform.GetComponent<EdgeCollider2D>();
+                if (!edgeCollider2D)
                 {
-                    edgeCollider2D = transform.gameObject.AddComponent<EdgeCollider2D>();
+                    edgeCollider2D = inputTransform.gameObject.AddComponent<EdgeCollider2D>();
                 }
             }
 
-            if (meshFilter == null)
+            if (!meshFilter)
             {
-                meshFilter = transform.GetComponent<MeshFilter>();
-                if (meshFilter == null)
+                meshFilter = inputTransform.GetComponent<MeshFilter>();
+                if (!meshFilter)
                 {
-                    meshFilter = transform.gameObject.AddComponent<MeshFilter>();
+                    meshFilter = inputTransform.gameObject.AddComponent<MeshFilter>();
 
-                    var meshRenderer = transform.GetComponent<MeshRenderer>();
-                    if (meshRenderer == null)
+                    var meshRenderer = inputTransform.GetComponent<MeshRenderer>();
+                    if (!meshRenderer)
                     {
-                        meshRenderer = transform.gameObject.AddComponent<MeshRenderer>();
+                        meshRenderer = inputTransform.gameObject.AddComponent<MeshRenderer>();
                         meshRenderer.material = Resources.Load<Material>("Materials/BoxBack");
                     }
 
@@ -281,15 +283,13 @@ namespace UCT.Global.UI
 
             for (var i = 0; i < polygon.Count; i++)
             {
-                lineRenderer.SetPosition(i, (Vector3)polygon[i] + transform.position);
+                lineRenderer.SetPosition(i, (Vector3)polygon[i] + inputTransform.position);
             }
 
             meshFilter.mesh = GenerateMesh(polygon.ToArray()); // 最核心代码：构建Mesh！！
 
             edgeCollider2D.SetPoints(AddLists(polygon, new List<Vector2> { polygon[0] }));
-            edgeCollider2D.edgeRadius = width / 2;
-
-            return polygon;
+            edgeCollider2D.edgeRadius = inputWidth / 2;
         }
         /// <summary>
         /// 计算坐标获取RealPoints
