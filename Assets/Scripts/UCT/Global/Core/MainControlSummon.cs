@@ -43,10 +43,6 @@ namespace UCT.Global.Core
         public bool haveInOutBlack, noInBlack;
         public bool notPauseIn;
 
-        [Space]
-        [Header("战斗内场景额外设置")]
-        public List<int> poolCount;
-
         private void Awake()
         {
             if (CanvasController.Instance == null)
@@ -90,23 +86,19 @@ namespace UCT.Global.Core
             var gameObjectM = GameObject.Find("MainControl");
             if (gameObjectM != null && gameObjectM.TryGetComponent(out MainControl mainControl))
             {
-                //Debug.LogWarning("<color=yellow>检测到本场景内有MainControl</color>", gameObject);
-
-                mainControl.sceneState = sceneState;
-                mainControl.isSceneSwitchingFadeTransitionEnabled = haveInOutBlack;
-                mainControl.isSceneSwitchingFadeInDisabled = noInBlack;
-                mainControl.isSceneSwitchingFadeInUnpaused = notPauseIn;
-
-                mainControl.InitializationOverworld();
-                mainControl.Start();
-                mainControl.mainCamera = Camera.main;
-                GameUtilityService.SetResolution(Instance.OverworldControl.resolutionLevel);
+                ExistingMainControlSetup(mainControl);
                 return;
             }
-            //生成
+            NonexistentMainControlSetup();
+        }
+        /// <summary>
+        /// 在未生成MainControl的情况下初始化MainControl
+        /// </summary>
+        private void NonexistentMainControlSetup()
+        {
             DontDestroyOnLoad(transform);
 
-            mainControl = gameObject.AddComponent<MainControl>();
+            var mainControl = gameObject.AddComponent<MainControl>();
             mainControl.sceneState = sceneState;
             mainControl.isSceneSwitchingFadeTransitionEnabled = haveInOutBlack;
             mainControl.isSceneSwitchingFadeInDisabled = noInBlack;
@@ -114,6 +106,22 @@ namespace UCT.Global.Core
 
             mainControl.gameObject.name = "MainControl";
             mainControl.InitializationOverworld();
+            mainControl.mainCamera = Camera.main;
+            GameUtilityService.SetResolution(Instance.OverworldControl.resolutionLevel);
+        }
+        /// <summary>
+        /// 在已生成MainControl的情况下初始化MainControl
+        /// </summary>
+        private void ExistingMainControlSetup(MainControl mainControl)
+        {
+            mainControl.sceneState = sceneState;
+            mainControl.sceneState = sceneState;
+            mainControl.isSceneSwitchingFadeTransitionEnabled = haveInOutBlack;
+            mainControl.isSceneSwitchingFadeInDisabled = noInBlack;
+            mainControl.isSceneSwitchingFadeInUnpaused = notPauseIn;
+
+            mainControl.InitializationOverworld();
+            mainControl.Start();
             mainControl.mainCamera = Camera.main;
             GameUtilityService.SetResolution(Instance.OverworldControl.resolutionLevel);
         }

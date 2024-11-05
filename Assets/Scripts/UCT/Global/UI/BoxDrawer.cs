@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using UCT.Service;
 using UnityEngine;
+using UnityEngine.Serialization;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -7,7 +9,7 @@ using UnityEditor;
 namespace UCT.Global.UI
 {
     /// <summary>
-    /// 战斗框绘制
+    /// 单个战斗框绘制
     /// </summary>
     [RequireComponent(typeof(MeshFilter))]
     [RequireComponent(typeof(MeshRenderer))]
@@ -16,8 +18,9 @@ namespace UCT.Global.UI
 
     public class BoxDrawer : MonoBehaviour
     {
-        [Header("是否不需要BoxController")]
-        public bool isWithoutBoxController;
+        [Header("是否是单独存在的框")]
+        public bool isIndividualBox;// 常用于OW，也需要BoxController，但是不需要是它的父级
+        
         public Vector3 localPosition;
         [Header("使用这个旋转替代Transform的旋转")]
         public Quaternion rotation; // 获取当前物体的旋转
@@ -89,7 +92,7 @@ namespace UCT.Global.UI
         {
             transform.tag = parent ? "Untagged" : "Box";
             
-            if (isWithoutBoxController)
+            if (isIndividualBox)
             {
                 realPoints = isBessel
                     ? GenerateBezierCurve(besselPoints, besselInsertNumber, besselPointsNumber)
@@ -121,23 +124,23 @@ namespace UCT.Global.UI
                     sonBoxDrawer[0].transform.localPosition = sonBoxDrawer[0].localPosition - localPosition;
                     sonBoxDrawer[1].transform.localPosition = sonBoxDrawer[1].localPosition - localPosition;
 
-                    var realPointsBack0 = BoxController.Instance.GetRealPoints(sonBoxDrawer[0].realPoints,
+                    var realPointsBack0 = BoxService.GetRealPoints(sonBoxDrawer[0].realPoints,
                         sonBoxDrawer[0].rotation, sonBoxDrawer[0].transform);
-                    var realPointsBack1 = BoxController.Instance.GetRealPoints(sonBoxDrawer[1].realPoints,
+                    var realPointsBack1 = BoxService.GetRealPoints(sonBoxDrawer[1].realPoints,
                         sonBoxDrawer[1].rotation, sonBoxDrawer[1].transform);
 
-                    pointsSonSum = BoxController.Instance.AddLists(realPointsBack0, realPointsBack1);
+                    pointsSonSum = BoxService.AddLists(realPointsBack0, realPointsBack1);
 
 
                     //计算三大List
 
-                    pointsCross = BoxController.Instance.FindIntersections(realPointsBack0, realPointsBack1);
+                    pointsCross = BoxService.FindIntersections(realPointsBack0, realPointsBack1);
 
                     pointsOutCross =
-                        BoxController.Instance.ProcessPolygons(realPointsBack0, 
+                        BoxService.ProcessPolygons(realPointsBack0, 
                             realPointsBack1, pointsCross);
 
-                    pointsInCross = BoxController.Instance.AddAndSubLists(realPointsBack0, realPointsBack1, pointsCross,
+                    pointsInCross = BoxService.AddAndSubLists(realPointsBack0, realPointsBack1, pointsCross,
                         pointsOutCross);
 
 
@@ -147,10 +150,10 @@ namespace UCT.Global.UI
                         var pointsFinal = sonBoxDrawer[0].boxType switch
                         {
                             BoxController.BoxType.Add when sonBoxDrawer[1].boxType == BoxController.BoxType.Sub =>
-                                BoxController.Instance.GetDifference(realPointsBack0, realPointsBack1),
+                                BoxService.GetDifference(realPointsBack0, realPointsBack1),
                             BoxController.BoxType.Sub when sonBoxDrawer[1].boxType == BoxController.BoxType.Add =>
-                                BoxController.Instance.GetDifference(realPointsBack1, realPointsBack0),
-                            _ => BoxController.Instance.GetUnion(realPointsBack0, realPointsBack1)
+                                BoxService.GetDifference(realPointsBack1, realPointsBack0),
+                            _ => BoxService.GetUnion(realPointsBack0, realPointsBack1)
                         };
 
                         realPoints = pointsFinal;
@@ -243,12 +246,13 @@ namespace UCT.Global.UI
         /// </summary>
         private void SummonBox()
         {
-            BoxController.Instance.SummonBox(realPoints, rotation, transform, width, lineRenderer,
+            BoxService.SummonBox(realPoints, rotation, transform, width, lineRenderer,
                 edgeCollider2D, meshFilter);
         }
+        
         public List<Vector2> GetRealPoints(bool isLocal = true) 
         {
-            return BoxController.Instance.GetRealPoints(realPoints, rotation, transform, isLocal);
+            return BoxService.GetRealPoints(realPoints, rotation, transform, isLocal);
         }
     
         /// <summary>
