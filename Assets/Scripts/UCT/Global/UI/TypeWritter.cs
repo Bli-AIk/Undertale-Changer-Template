@@ -135,16 +135,10 @@ namespace UCT.Global.UI
         }
 
         private bool _isUsedFx;
-
+        private bool _isJumpingText;
+        
         private IEnumerator<float> _Typing(TMP_Text tmpText)
         {
-            float TypeStopSeconds()
-            {
-                return Timing.WaitForSeconds(speed -
-                                             speed * 0.25f * Convert.ToInt32(!MainControl.Instance
-                                                 .OverworldControl.textWidth));
-            }
-
             isRunning = true;
             for (var i = 0; i < originString.Length; i++)
             {
@@ -175,6 +169,8 @@ namespace UCT.Global.UI
 
                         passTextString += spText;
 
+                        
+                        
                         if (TextProcessingService.IsSameFrontTexts(spText, "<fx="))
                         {
                             var save = spText[4..];
@@ -190,13 +186,13 @@ namespace UCT.Global.UI
                         }
                         else if (TextProcessingService.IsSameFrontTexts(spText, "<stop*"))
                         {
-                            if (!pressX)
+                            if (!(pressX || _isJumpingText))
                             {
                                 isTyping = false;
                                 var number = float.Parse(spText.Substring(6, spText.Length - 7));
                                 for (var p = 0; p < number; p++)
                                 {
-                                    if (pressX)
+                                    if (pressX || _isJumpingText)
                                         break;
                                     yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f * Convert.ToInt32(!MainControl.Instance.OverworldControl.textWidth));
                                 }
@@ -216,7 +212,7 @@ namespace UCT.Global.UI
                         }
                         else if (TextProcessingService.IsSameFrontTexts(spText, "<stop...*"))
                         {
-                            if (!pressX)
+                            if (!(pressX || _isJumpingText))
                             {
                                 isTyping = false;
 
@@ -225,7 +221,7 @@ namespace UCT.Global.UI
                                 {
                                     for (var p = 0; p < number; p++)
                                     {
-                                        if (pressX)
+                                        if (pressX || _isJumpingText)
                                             break;
                                         yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f * Convert.ToInt32(!MainControl.Instance.OverworldControl.textWidth));
                                     }
@@ -255,7 +251,7 @@ namespace UCT.Global.UI
                         }
                         else if (TextProcessingService.IsSameFrontTexts(spText, "<stop......*"))
                         {
-                            if (!pressX)
+                            if (!(pressX || _isJumpingText))
                             {
                                 isTyping = false;
 
@@ -264,7 +260,7 @@ namespace UCT.Global.UI
                                 {
                                     for (var p = 0; p < number; p++)
                                     {
-                                        if (pressX)
+                                        if (pressX || _isJumpingText)
                                             break;
                                         yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f * Convert.ToInt32(!MainControl.Instance.OverworldControl.textWidth));
                                     }
@@ -279,6 +275,11 @@ namespace UCT.Global.UI
                         }
                         else
                         {
+                            if (spText[0] == '<' && spText[2] == '>')
+                            {
+                                spText = spText[1].ToString();
+                            }
+                            
                             switch (spText)
                             {
                                 case "<storyMaskT>":
@@ -295,11 +296,11 @@ namespace UCT.Global.UI
                                     break;
 
                                 case "<sprite=0>":
-                                    if (!pressX)
+                                    if (!(pressX || _isJumpingText))
                                         AudioController.Instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
                                     goto default;
                                 case "<stop>":
-                                    if (!pressX)
+                                    if (!(pressX || _isJumpingText))
                                     {
                                         //单独一个Stop的时候，不设置isTyping，这是因为有的时候这个stop的时间很短，
                                         //所以 isTyping = true 之后，显示起来有点怪。
@@ -329,7 +330,12 @@ namespace UCT.Global.UI
                                 case "<changeX>":
                                     canNotX = !canNotX;
                                     break;
-
+                                case "<jumpText>":
+                                    _isJumpingText = true;
+                                    break;   
+                                case "</jumpText>":
+                                    _isJumpingText = false;
+                                    break;
                                 case "<passText>":
                                     passText = true;
                                     passTextString = passTextString[..^spText.Length];
@@ -340,7 +346,7 @@ namespace UCT.Global.UI
                                     if (spText.Length - 2 > 0 && spText[1] == '-' && spText[^2] == '-')
                                     {
                                         spText = spText.Substring(2, spText.Length - 4);
-                                        if (!pressX)
+                                        if (!(pressX || _isJumpingText))
                                         {
                                             AudioController.Instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
                                             _isUsedFx = true;
@@ -376,7 +382,7 @@ namespace UCT.Global.UI
                         cantString = "";
                     }
                 }
-                if (cantString != "" && !pressX && !_isUsedFx)
+                if (cantString != "" && !(pressX || _isJumpingText) && !_isUsedFx)
                     AudioController.Instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
 
                 if (!passText)
@@ -386,7 +392,7 @@ namespace UCT.Global.UI
                 
                 }
 
-                if (!pressX)
+                if (!(pressX || _isJumpingText))
                     yield return TypeStopSeconds();
 
                 if (tmpText != null)
@@ -420,6 +426,14 @@ namespace UCT.Global.UI
             isRunning = false;
             if (originString.Length > "<passText>".Length)
                 originString = originString["<passText>".Length..];
+            yield break;
+
+            float TypeStopSeconds()
+            {
+                return Timing.WaitForSeconds(speed -
+                                             speed * 0.25f * Convert.ToInt32(!MainControl.Instance
+                                                 .OverworldControl.textWidth));
+            }
         }
 
         private List<Vector2> _dynamicPos;
@@ -439,7 +453,7 @@ namespace UCT.Global.UI
                     case OverworldControl.DynamicType.Shake:
                         for (var i = 0; i < 30; i++)
                         {
-                            if (pressX)
+                            if (pressX || _isJumpingText)
                                 break;
 
                             _tmpText.ForceMeshUpdate();
@@ -495,7 +509,7 @@ namespace UCT.Global.UI
                         while (elapsedTime < fadeDuration)
                         {
 
-                            if (pressX)
+                            if (pressX || _isJumpingText)
                                 break;
                             elapsedTime += Time.deltaTime;
                             var alpha = Mathf.Clamp01(elapsedTime / fadeDuration);
@@ -517,7 +531,7 @@ namespace UCT.Global.UI
 
                         for (var i = 0; i < 30; i++)
                         {
-                            if (pressX)
+                            if (pressX || _isJumpingText)
                                 break;
 
                             _tmpText.ForceMeshUpdate();
@@ -564,7 +578,8 @@ namespace UCT.Global.UI
 
             if (clockTime > 0)
                 clockTime -= Time.deltaTime;
-            if (!isRunning && !passText && !isTyping && GameUtilityService.KeyArrowToControl(KeyCode.Z) && _typeMode != TypeMode.CantZx)
+            if (!isRunning && !passText && !isTyping && GameUtilityService.KeyArrowToControl(KeyCode.Z) &&
+                _typeMode != TypeMode.CantZx)
             {
                 if (spriteChanger != null)
                     spriteChanger.ChangeImage(-1);
@@ -575,7 +590,8 @@ namespace UCT.Global.UI
             {
                 PassText();
             }
-            else if (!pressX && !canNotX && GameUtilityService.KeyArrowToControl(KeyCode.X) && _typeMode != TypeMode.CantZx)//跳字
+            else if (!(pressX || _isJumpingText) && !canNotX && GameUtilityService.KeyArrowToControl(KeyCode.X) &&
+                     _typeMode != TypeMode.CantZx) //跳字
             {
                 if (clock != 0 && clockTime <= 0)
                 {
