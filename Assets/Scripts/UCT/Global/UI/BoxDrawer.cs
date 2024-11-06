@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UCT.Service;
 using UnityEngine;
-using UnityEngine.Serialization;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -18,8 +17,12 @@ namespace UCT.Global.UI
 
     public class BoxDrawer : MonoBehaviour
     {
-        [Header("是否是单独存在的框")]
-        public bool isIndividualBox;// 常用于OW，也需要BoxController，但是不需要是它的父级
+        /// <summary>
+        /// 它需要场景内存在BoxController，但它可以不是是它的父级。
+        /// 单独存在的框不可以设为加减框。
+        /// </summary>
+        [Header("是否是单独存在的框（常用于OW）")]
+        public bool isIndividualBox;
         
         public Vector3 localPosition;
         [Header("使用这个旋转替代Transform的旋转")]
@@ -89,18 +92,13 @@ namespace UCT.Global.UI
 
         public void Update()
         {
-            transform.tag = parent ? "Untagged" : "Box";
-            
             if (isIndividualBox)
             {
-                transform.localPosition = localPosition;
-                realPoints = isBessel
-                    ? GenerateBezierCurve(besselPoints, besselInsertNumber, besselPointsNumber)
-                    : vertexPoints;
-                SummonBox();
+                SetIndividualBox();
                 return;
             }
             
+            transform.tag = parent ? "Untagged" : "Box";
 
             if (boxType == BoxController.BoxType.Sub)
                 ClearComponentsData();
@@ -109,78 +107,95 @@ namespace UCT.Global.UI
             {
                 //作为纯子级
                 case 0 when transform.childCount == 0:
-                {
                     realPoints = isBessel
                         ? GenerateBezierCurve(besselPoints, besselInsertNumber, besselPointsNumber)
                         : vertexPoints;
                     break;
-                }
-                //作为父级
                 case 2 when transform.childCount == 2:
-                {
-                    pointsSonSum.Clear();
-
-                    //更新一下两个子级的位置坐标
-                    sonBoxDrawer[0].transform.localPosition = sonBoxDrawer[0].localPosition - localPosition;
-                    sonBoxDrawer[1].transform.localPosition = sonBoxDrawer[1].localPosition - localPosition;
-
-                    var realPointsBack0 = BoxService.GetRealPoints(sonBoxDrawer[0].realPoints,
-                        sonBoxDrawer[0].rotation, sonBoxDrawer[0].transform);
-                    var realPointsBack1 = BoxService.GetRealPoints(sonBoxDrawer[1].realPoints,
-                        sonBoxDrawer[1].rotation, sonBoxDrawer[1].transform);
-
-                    pointsSonSum = BoxService.AddLists(realPointsBack0, realPointsBack1);
-
-
-                    //计算三大List
-
-                    pointsCross = BoxService.FindIntersections(realPointsBack0, realPointsBack1);
-
-                    pointsOutCross =
-                        BoxService.ProcessPolygons(realPointsBack0, 
-                            realPointsBack1, pointsCross);
-
-                    pointsInCross = BoxService.AddAndSubLists(realPointsBack0, realPointsBack1, pointsCross,
-                        pointsOutCross);
-
-
-                    //重合时合并
-                    if (!(pointsCross.Count == 0 && pointsInCross.Count == 0))
-                    {
-                        var pointsFinal = sonBoxDrawer[0].boxType switch
-                        {
-                            BoxController.BoxType.Add when sonBoxDrawer[1].boxType == BoxController.BoxType.Sub =>
-                                BoxService.GetDifference(realPointsBack0, realPointsBack1),
-                            BoxController.BoxType.Sub when sonBoxDrawer[1].boxType == BoxController.BoxType.Add =>
-                                BoxService.GetDifference(realPointsBack1, realPointsBack0),
-                            _ => BoxService.GetUnion(realPointsBack0, realPointsBack1)
-                        };
-
-                        realPoints = pointsFinal;
-                    }
-                    else//不重合就解散
-                    {
-                        ExitParent();
-                        return;
-                    }
-
-                    break;
-                }
+                    if (SetParentBox()) return; break;
                 default:
                     ExitParent();
                     break;
             }
 
-
-
-            if (transform.parent == BoxController.Instance.transform)//只有父物体为BoxController时生成框
+            var boxController = BoxController.Instance.transform;
+            if (transform.parent != boxController) 
+                transform.localPosition = localPosition - parent.localPosition;
+            else 
             {
                 transform.localPosition = localPosition;
 
-                if (boxType != BoxController.BoxType.Sub)//减框不绘制
+                if (boxType != BoxController.BoxType.Sub) // 减框不绘制
                     SummonBox();
             }
-            else transform.localPosition = localPosition - parent.localPosition;
+        }
+        /// <summary>
+        /// 设置作为父级的框
+        /// </summary>
+        private bool SetParentBox()
+        {
+            pointsSonSum.Clear();
+
+            //更新一下两个子级的位置坐标
+            sonBoxDrawer[0].transform.localPosition = sonBoxDrawer[0].localPosition - localPosition;
+            sonBoxDrawer[1].transform.localPosition = sonBoxDrawer[1].localPosition - localPosition;
+
+            var realPointsBack0 = BoxService.GetRealPoints(sonBoxDrawer[0].realPoints,
+                sonBoxDrawer[0].rotation, sonBoxDrawer[0].transform);
+            var realPointsBack1 = BoxService.GetRealPoints(sonBoxDrawer[1].realPoints,
+                sonBoxDrawer[1].rotation, sonBoxDrawer[1].transform);
+
+            pointsSonSum = BoxService.AddLists(realPointsBack0, realPointsBack1);
+
+
+            //计算三大List
+
+            pointsCross = BoxService.FindIntersections(realPointsBack0, realPointsBack1);
+
+            pointsOutCross =
+                BoxService.ProcessPolygons(realPointsBack0, 
+                    realPointsBack1, pointsCross);
+
+            pointsInCross = BoxService.AddAndSubLists(realPointsBack0, realPointsBack1, pointsCross,
+                pointsOutCross);
+
+
+            //重合时合并
+            if (!(pointsCross.Count == 0 && pointsInCross.Count == 0))
+            {
+                var pointsFinal = sonBoxDrawer[0].boxType switch
+                {
+                    BoxController.BoxType.Add when sonBoxDrawer[1].boxType == BoxController.BoxType.Sub =>
+                        BoxService.GetDifference(realPointsBack0, realPointsBack1),
+                    BoxController.BoxType.Sub when sonBoxDrawer[1].boxType == BoxController.BoxType.Add =>
+                        BoxService.GetDifference(realPointsBack1, realPointsBack0),
+                    _ => BoxService.GetUnion(realPointsBack0, realPointsBack1)
+                };
+
+                realPoints = pointsFinal;
+            }
+            else//不重合就解散
+            {
+                ExitParent();
+                return true;
+            }
+
+            return false;
+        }
+        /// <summary>
+        /// 设置单独存在的框
+        /// </summary>
+        private void SetIndividualBox()
+        {
+            transform.localPosition = localPosition;
+            realPoints = isBessel
+                ? GenerateBezierCurve(besselPoints, besselInsertNumber, besselPointsNumber)
+                : vertexPoints;
+            SummonBox();
+
+            if (boxType == BoxController.BoxType.None) return;
+            Other.Debug.LogError($"{gameObject.name}是单独存在的框，它的boxType不可以设为{boxType}！已将其设为None。");
+            boxType = BoxController.BoxType.None;
         }
 
         private void ExitParent()//离开的那个 的爹 会触发这个
@@ -189,6 +204,8 @@ namespace UCT.Global.UI
 
             BoxController.Instance.ReturnPool(gameObject);
             BoxController.Instance.boxes.Remove(this);
+            var boxController = BoxController.Instance.transform;
+            
             if (sonBoxDrawer.Count != 0)
             {
                 pointsCross.Clear();
@@ -197,7 +214,7 @@ namespace UCT.Global.UI
 
                 for (var i = 0; i < 2; i++)
                 {
-                    sonBoxDrawer[i].transform.SetParent(BoxController.Instance.transform);
+                    sonBoxDrawer[i].transform.SetParent(boxController);
                     sonBoxDrawer[i].parent = null;
                     sonBoxDrawer[i].localPosition = (Vector3)(Vector2)(sonBoxDrawer[i].localPosition + localPosition) +
                                                     new Vector3(0, 0, sonBoxDrawer[i].localPosition.z);
@@ -225,7 +242,7 @@ namespace UCT.Global.UI
             //SubListsWhenExitParent(GetRealPoints());
             if (BoxController.Instance.boxes.Find(x => x == this))
                 BoxController.Instance.boxes.Remove(this);
-            transform.SetParent(BoxController.Instance.transform);
+            transform.SetParent(boxController);
             parent = null;
         }
 

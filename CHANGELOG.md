@@ -44,6 +44,8 @@ XX年/XX月/XX日 完成
 
 2024/11/4 计划
 
+
+
 2024/11/4 完成
 
 
@@ -51,7 +53,7 @@ XX年/XX月/XX日 完成
 - [x] 修复Battle场景中执行Fight后敌人对话卡死的问题
 - [x] 修复Battle场景中使用item后游戏/编辑器崩溃的问题
 - [x] 修复Battle场景中在ButtonLayer打字机输入未完毕时使用item后打字机显示仍为ButtonLayer文本的问题
-- [ ] 修复OW场景中仍然使用废弃框UI的问题
+- [x] 修复OW场景中仍然使用废弃框UI的问题
 - [x] 修复打字机无法识别\<X\>富文本的问题
 - [x] 增加新的富文本\<JumpText\>用于跳过打字机输入大段文本
 
@@ -63,8 +65,13 @@ XX年/XX月/XX日 完成
 
 
 
+2024/11/6 完成
+
+附：OW场景UI修复目前仅在长廊场景有效，将在v1.0.4修复。
+
 ## v1.0.3 -> v1.0.4 UI显示修复
 
+- [ ] 将OW场景中的框UI轴点均改为正中
 - [ ] 对各个场景UI位置、大小进行检查和修复
 - [ ] 使用\<indent\>替换透明字符缩进
 - [ ] 将主摄像机放置在DontDestroyOnLoad，由MainControlSummon生成（类似于MainControl、BGMControl的生成方式）

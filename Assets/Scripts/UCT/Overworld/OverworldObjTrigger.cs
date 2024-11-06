@@ -90,7 +90,7 @@ namespace UCT.Overworld
                 {
                     _saveSelect = Convert.ToInt32(!Convert.ToBoolean(_saveSelect));
 
-                    BackpackBehaviour.Instance.saveUIHeart.anchoredPosition = new Vector2(-258 + _saveSelect * 180, -44);
+                    BackpackBehaviour.Instance.saveHeart.anchoredPosition = new Vector2(-258 + _saveSelect * 180, -44);
                 }
                 if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
                 {
@@ -101,11 +101,11 @@ namespace UCT.Overworld
                             SaveController.SaveData(MainControl.Instance.playerControl, "Data" + MainControl.Instance.saveDataId);
                             _saveSelect = 2;
                             AudioController.Instance.GetFx(12, MainControl.Instance.AudioControl.fxClipUI);
-                            var name = MainControl.Instance.playerControl.playerName;
+                            var playerName = MainControl.Instance.playerControl.playerName;
 
-                            BackpackBehaviour.Instance.saveUIHeart.anchoredPosition = new Vector2(10000, 10000);
+                            BackpackBehaviour.Instance.saveHeart.anchoredPosition = new Vector2(10000, 10000);
 
-                            BackpackBehaviour.Instance.saveUI.text = $"<color=yellow>{TextProcessingService.PadStringToLength(name, 10)}LV{TextProcessingService.PadStringToLength(MainControl.Instance.playerControl.lv.ToString(), 7)}{TextProcessingService.GetRealTime((int)MainControl.Instance.playerControl.gameTime)}\n{TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, SceneManager.GetActiveScene().name)}\n{TextProcessingService.RichTextWithEnd("size", 1, "\n")}  {TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Saved")}";
+                            BackpackBehaviour.Instance.saveText.text = $"<color=yellow>{TextProcessingService.PadStringToLength(playerName, 10)}LV{TextProcessingService.PadStringToLength(MainControl.Instance.playerControl.lv.ToString(), 7)}{TextProcessingService.GetRealTime((int)MainControl.Instance.playerControl.gameTime)}\n{TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, SceneManager.GetActiveScene().name)}\n{TextProcessingService.RichTextWithEnd("size", 1, "\n")}  {TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Saved")}";
                             MainControl.Instance.playerControl.saveScene = SceneManager.GetActiveScene().name;
                             PlayerPrefs.SetInt("languagePack", MainControl.Instance.languagePackId);
                             PlayerPrefs.SetInt("dataNumber", MainControl.Instance.saveDataId);
@@ -117,9 +117,9 @@ namespace UCT.Overworld
                         case 1:
                             goto default;
                         default:
-                            BackpackBehaviour.Instance.saveUIHeart.anchoredPosition = new Vector2(10000, 10000);
-                            BackpackBehaviour.Instance.saveBack.transform.localPosition = new Vector3(BackpackBehaviour.Instance.saveBack.transform.localPosition.x, BackpackBehaviour.Instance.saveBack.transform.localPosition.y, -50);
-                            BackpackBehaviour.Instance.saveUI.text = "";
+                            BackpackBehaviour.Instance.saveHeart.anchoredPosition = new Vector2(10000, 10000);
+                            BackpackBehaviour.Instance.saveUI.localPosition = new Vector3(BackpackBehaviour.Instance.saveUI.localPosition.x, BackpackBehaviour.Instance.saveUI.localPosition.y, -50);
+                            BackpackBehaviour.Instance.saveText.text = "";
                             PressZ();
                             _saveOpen = false;
                             break;
@@ -130,9 +130,9 @@ namespace UCT.Overworld
                 }
                 else if (GameUtilityService.KeyArrowToControl(KeyCode.X))
                 {
-                    BackpackBehaviour.Instance.saveUIHeart.anchoredPosition = new Vector2(10000, 10000);
-                    BackpackBehaviour.Instance.saveBack.transform.localPosition = new Vector3(BackpackBehaviour.Instance.saveBack.transform.localPosition.x, BackpackBehaviour.Instance.saveBack.transform.localPosition.y, -50);
-                    BackpackBehaviour.Instance.saveUI.text = "";
+                    BackpackBehaviour.Instance.saveHeart.anchoredPosition = new Vector2(10000, 10000);
+                    BackpackBehaviour.Instance.saveUI.localPosition = new Vector3(BackpackBehaviour.Instance.saveUI.localPosition.x, BackpackBehaviour.Instance.saveUI.localPosition.y, -50);
+                    BackpackBehaviour.Instance.saveText.text = "";
                     PressZ();
                     _saveOpen = false;
                 }
@@ -190,21 +190,21 @@ namespace UCT.Overworld
             _saveOpen = true;
             _saveSelect = 0;
 
-            BackpackBehaviour.Instance.saveBack.transform.localPosition = new Vector3(BackpackBehaviour.Instance.saveBack.transform.localPosition.x, BackpackBehaviour.Instance.saveBack.transform.localPosition.y, 5);
-            var name = MainControl.Instance.playerControl.playerName;
+            BackpackBehaviour.Instance.saveUI.localPosition = new Vector3(BackpackBehaviour.Instance.saveUI.localPosition.x, BackpackBehaviour.Instance.saveUI.localPosition.y, 5);
+            var playerName = MainControl.Instance.playerControl.playerName;
 
-            BackpackBehaviour.Instance.saveUI.text = TextProcessingService.PadStringToLength(name, 10) + "LV" + TextProcessingService.PadStringToLength(MainControl.Instance.playerControl.lv.ToString(), 7) +
+            BackpackBehaviour.Instance.saveText.text = TextProcessingService.PadStringToLength(playerName, 10) + "LV" + TextProcessingService.PadStringToLength(MainControl.Instance.playerControl.lv.ToString(), 7) +
                                                      TextProcessingService.GetRealTime((int)MainControl.Instance.playerControl.gameTime) + "\n" +
                                                      TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, SceneManager.GetActiveScene().name) + "\n<size=1>\n</size>  " +
                                                      TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Save") + "         " + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Back")
                 ;
-            BackpackBehaviour.Instance.saveUIHeart.anchoredPosition = new Vector2(-258, -44);
+            BackpackBehaviour.Instance.saveHeart.anchoredPosition = new Vector2(-258, -44);
         }
 
         /// <summary>
         /// 激活打字。第二个参数别动
         /// </summary>
-        public void TypeText(bool isUp, bool isMusic = true)
+        public void TypeText(bool inputIsUp, bool isMusic = true)
         {
             _isTyping = true;
             MainControl.Instance.playerControl.canMove = false;
@@ -217,7 +217,7 @@ namespace UCT.Overworld
                     TalkUIPositionChanger.Instance.boxDrawer.localPosition.x,
                     TalkUIPositionChanger.Instance.boxDrawer.localPosition.y, BackpackBehaviour.BoxZAxisVisible);
             }
-            TalkUIPositionChanger.Instance.isUp = isUp;
+            TalkUIPositionChanger.Instance.isUp = inputIsUp;
 
             if (_typeWritter == null)
                 _typeWritter = BackpackBehaviour.Instance.typeWritter;
@@ -232,12 +232,12 @@ namespace UCT.Overworld
                 _bgm.DOFade(0, stopTime);
         }
 
-        public void AnimTypeText(bool isUp)
+        public void AnimTypeText(bool inputIsUp)
         {
             MainControl.Instance.playerControl.canMove = false;
             MainControl.Instance.OverworldControl.pause = true;
             mainCamera.isFollow = false;
-            mainCamera.transform.DOLocalMove(animEndPosPlus, animTime).SetEase(animEase).OnKill(() => TypeText(isUp, false));
+            mainCamera.transform.DOLocalMove(animEndPosPlus, animTime).SetEase(animEase).OnKill(() => TypeText(inputIsUp, false));
             DOTween.To(() => mainCamera.followPosition, x => mainCamera.followPosition = x, animEndPosPlus, animTime).SetEase(animEase);
 
             if (stopTime >= 0)

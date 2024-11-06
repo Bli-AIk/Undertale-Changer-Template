@@ -4,6 +4,7 @@ using UCT.Global.Core;
 using UCT.Global.UI;
 using UCT.Service;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace UCT.Overworld
@@ -23,12 +24,12 @@ namespace UCT.Overworld
         public TextMeshProUGUI typeMessage;
         private Image _heart;
         private float _clock;
-        private GameObject _backpackUILeft, _backpackUIRight, _player, _mainCamera;
-        private GameObject _backpackUIRightPoint2, _backpackUIRightPoint3;
+        private BoxDrawer _optionsUI, _overviewUI, _informationUI; 
+        private GameObject _player, _mainCamera;
 
-        public GameObject saveBack;
-        public TextMeshProUGUI saveUI;
-        public RectTransform saveUIHeart;
+        [FormerlySerializedAs("saveBack")] public BoxDrawer saveUI;
+        [FormerlySerializedAs("saveUI")] public TextMeshProUGUI saveText;
+        [FormerlySerializedAs("saveUIHeart")] public RectTransform saveHeart;
 
         public TypeWritter typeWritter;
 
@@ -51,17 +52,14 @@ namespace UCT.Overworld
             _uiTexts = _backpack.Find("UIMessage/UITexts").GetComponent<TextMeshProUGUI>();
             _uiSelect = _backpack.Find("UISelect").GetComponent<TextMeshProUGUI>();
             _heart = _backpack.Find("Heart").GetComponent<Image>();
-            _backpackUILeft = GameObject.Find("Main Camera/BackpackUI/Left2");
-            _backpackUIRight = GameObject.Find("Main Camera/BackpackUI/Right");
-            _backpackUIRightPoint2 = _backpackUIRight.transform.Find("Point2").gameObject;
-            _backpackUIRightPoint3 = _backpackUIRight.transform.Find("Point3").gameObject;
-            _backpackUILeft.transform.parent.localPosition = new Vector3(
-                _backpackUILeft.transform.parent.localPosition.x, _backpackUILeft.transform.parent.localPosition.y,
-                BoxZAxisInvisible);
-            saveBack = GameObject.Find("Main Camera/Save");
-            
-            saveUI = GameObject.Find("BackpackCanvas/RawImage/Talk/UISave").GetComponent<TextMeshProUGUI>();
-            saveUIHeart = GameObject.Find("BackpackCanvas/RawImage/Talk/UISave/Heart").GetComponent<RectTransform>();
+            _optionsUI = GameObject.Find("Main Camera/BackpackUI/OptionsUI").GetComponent<BoxDrawer>();
+            _overviewUI = GameObject.Find("Main Camera/BackpackUI/OverviewUI").GetComponent<BoxDrawer>();
+            _optionsUI.localPosition.z = BoxZAxisInvisible;
+            _overviewUI.localPosition.z = BoxZAxisInvisible;
+            _informationUI = GameObject.Find("Main Camera/BackpackUI/InformationUI").GetComponent<BoxDrawer>();
+            saveUI = GameObject.Find("Main Camera/SaveUI").GetComponent<BoxDrawer>();
+            saveText = GameObject.Find("BackpackCanvas/RawImage/Talk/UISave").GetComponent<TextMeshProUGUI>();
+            saveHeart = GameObject.Find("BackpackCanvas/RawImage/Talk/UISave/Heart").GetComponent<RectTransform>();
             _player = GameObject.Find("Player");
             _mainCamera = GameObject.Find("Main Camera");
             _backpack.gameObject.SetActive(false);
@@ -103,16 +101,7 @@ namespace UCT.Overworld
 
             TalkUIPositionChanger.Instance.isUp = _player.transform.position.y < _mainCamera.transform.position.y - 1.25f;
 
-            if (_player.transform.position.y >= _mainCamera.transform.position.y - 1.25f)
-            {
-                _uiMessage.anchoredPosition = new Vector2(0, 270);
-                _backpackUILeft.transform.localPosition = new Vector3(0, 6.75f, BoxZAxisVisible);
-            }
-            else
-            {
-                _uiMessage.anchoredPosition = Vector2.zero;
-                _backpackUILeft.transform.localPosition = new Vector3(0, 0, BoxZAxisVisible);
-            }
+
             if (_clock > 0)
             {
                 _clock -= Time.deltaTime;
@@ -124,17 +113,12 @@ namespace UCT.Overworld
             if (sonUse != 4)
             {
                 _uiItems.gameObject.SetActive(sonSelect != 0);
-                _backpackUIRight.transform.localPosition = sonSelect != 0
-                    ? new Vector3(_backpackUIRight.transform.localPosition.x,
-                        _backpackUIRight.transform.localPosition.y, BoxZAxisVisible)
-                    : new Vector3(_backpackUIRight.transform.localPosition.x,
-                        _backpackUIRight.transform.localPosition.y, BoxZAxisInvisible);
+                _informationUI.localPosition.z = sonSelect != 0 ? BoxZAxisVisible : BoxZAxisInvisible;
             }
             else
             {
                 _uiItems.gameObject.SetActive(false);
-                _backpackUIRight.transform.localPosition = new Vector3(_backpackUIRight.transform.localPosition.x,
-                    _backpackUIRight.transform.localPosition.y, BoxZAxisInvisible);
+                _informationUI.localPosition.z = BoxZAxisInvisible;
             }
 
             if ((GameUtilityService.KeyArrowToControl(KeyCode.X) || GameUtilityService.KeyArrowToControl(KeyCode.C)) &&
@@ -160,9 +144,21 @@ namespace UCT.Overworld
                         break;
                     }
                     sonUse = 0;
-                    _backpackUILeft.transform.parent.localPosition = new Vector3(
-                        _backpackUILeft.transform.parent.localPosition.x,
-                        _backpackUILeft.transform.parent.localPosition.y, BoxZAxisVisible);
+                    _optionsUI.localPosition.z = BoxZAxisVisible;
+                    
+                    if (_player.transform.position.y >= _mainCamera.transform.position.y - 1.25f)
+                    {
+                        _uiMessage.anchoredPosition = new Vector2(0, 270);
+                        _overviewUI.localPosition.y = 6.75f;
+                    }
+                    else
+                    {
+                        _uiMessage.anchoredPosition = Vector2.zero;
+                        _overviewUI.localPosition.y = 0;
+                    }
+
+                    _overviewUI.localPosition.z = BoxZAxisVisible;
+
                     _clock = 0.01f;
                     select = 1;
                     MainControl.Instance.playerControl.canMove = false;
@@ -379,14 +375,20 @@ namespace UCT.Overworld
                         _heart.rectTransform.anchoredPosition = new Vector2(-255, 35 - (select - 1) * 36);
                     else
                     {
-                        if (select == 2)
-                            _heart.transform.position = Vector2.one * 10000;
-                        else if (select == 1)
+                        switch (select)
                         {
-                            if (sonSelect is < 9 and > 0)
+                            case 1:
                             {
-                                _heart.rectTransform.anchoredPosition = new Vector2(-103, 143 - (sonSelect - 1) * 31);
+                                if (sonSelect is < 9 and > 0)
+                                {
+                                    _heart.rectTransform.anchoredPosition = new Vector2(-103, 143 - (sonSelect - 1) * 31);
+                                }
+
+                                break;
                             }
+                            case 2:
+                                _heart.transform.position = Vector2.one * 10000;
+                                break;
                         }
                     }
 
@@ -416,10 +418,10 @@ namespace UCT.Overworld
 
         private void FlashBackpackUIRightPoint(float y)
         {
-            _backpackUIRightPoint2.transform.localPosition =
-                new Vector3(_backpackUIRightPoint2.transform.localPosition.x, y);
-            _backpackUIRightPoint3.transform.localPosition =
-                new Vector3(_backpackUIRightPoint3.transform.localPosition.x, y);
+            const int vertexPointA = 2;
+            _informationUI.vertexPoints[vertexPointA] = new Vector3(_informationUI.vertexPoints[vertexPointA].x, y);
+            const int vertexPointB = 3;
+            _informationUI.vertexPoints[vertexPointB] = new Vector3(_informationUI.vertexPoints[vertexPointB].x, y);
         }
 
         private void BackpackExit()
@@ -428,13 +430,10 @@ namespace UCT.Overworld
             sonSelect = 0;
             select = 0;
             _backpack.gameObject.SetActive(false);
-            _backpackUILeft.transform.parent.localPosition = new Vector3(
-                _backpackUILeft.transform.parent.localPosition.x, _backpackUILeft.transform.parent.localPosition.y,
-                BoxZAxisInvisible);
+            _optionsUI.localPosition.z = BoxZAxisInvisible;
+            _overviewUI.localPosition.z = BoxZAxisInvisible;
             typeWritter.TypeStop();
-            TalkUIPositionChanger.Instance.boxDrawer.localPosition = new Vector3(
-                TalkUIPositionChanger.Instance.boxDrawer.localPosition.x,
-                TalkUIPositionChanger.Instance.boxDrawer.localPosition.y, BoxZAxisInvisible);
+            TalkUIPositionChanger.Instance.boxDrawer.localPosition.z = BoxZAxisInvisible;
             sonUse = 0;
             sonSelect = 0;
         }
