@@ -10,6 +10,7 @@ namespace UCT.Overworld
     public class TalkUIPositionChanger : MonoBehaviour
     {
         public static TalkUIPositionChanger Instance;
+        private BoxDrawer _boxDrawer;
         public bool isUp;
         public bool haveHead;
 
@@ -20,8 +21,8 @@ namespace UCT.Overworld
 
         private void Start()
         {
-            //gameObject.SetActive(false);
-            transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, -50);
+            _boxDrawer = GetComponent<BoxDrawer>();
+            _boxDrawer.localPosition = new Vector3(_boxDrawer.localPosition.x, _boxDrawer.localPosition.y, BackpackBehaviour.BoxZAxisInvisible);
         }
 
         public void Change(bool updateHeader = true, bool haveHeader = false, bool cleaner = true, TypeWritter typeWritter = null)
@@ -29,7 +30,7 @@ namespace UCT.Overworld
             if (cleaner)
             {
                 BackpackBehaviour.Instance.typeMessage.text = "";
-                if (typeWritter != null)
+                if (typeWritter)
                     typeWritter.endString = "";
             }
 
@@ -39,12 +40,12 @@ namespace UCT.Overworld
 
             if (isUp)
             {
-                transform.localPosition = new Vector3(transform.localPosition.x, 7.77f, transform.localPosition.z);
+                _boxDrawer.localPosition = new Vector3(_boxDrawer.localPosition.x, 7.77f, _boxDrawer.localPosition.z);
                 BackpackBehaviour.Instance.typeMessage.rectTransform.anchoredPosition = new Vector2(10 + 115f * Convert.ToInt32(haveHead), 139);
             }
             else
             {
-                transform.localPosition = new Vector3(transform.localPosition.x, 0, transform.localPosition.z);
+                _boxDrawer.localPosition = new Vector3(_boxDrawer.localPosition.x, 0, _boxDrawer.localPosition.z);
                 BackpackBehaviour.Instance.typeMessage.rectTransform.anchoredPosition = new Vector2(10 + 115f * Convert.ToInt32(haveHead), -170);
             }
         }

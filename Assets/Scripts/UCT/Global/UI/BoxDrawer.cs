@@ -94,6 +94,7 @@ namespace UCT.Global.UI
             
             if (isIndividualBox)
             {
+                transform.localPosition = localPosition;
                 realPoints = isBessel
                     ? GenerateBezierCurve(besselPoints, besselInsertNumber, besselPointsNumber)
                     : vertexPoints;

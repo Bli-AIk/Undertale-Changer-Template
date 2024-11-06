@@ -8,6 +8,9 @@
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/Overworld/Example-Corridor.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Overworld/Example-Corridor.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/UI/BoxDrawer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/UI/BoxDrawer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/BackpackBehaviour.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/BackpackBehaviour.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/TalkUIPositionChanger.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/TalkUIPositionChanger.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,14 +36,13 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5a41d6b7189842eca409fd0b1c3e3dcf17bf78/12/646e0da1/StringBuilder.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5ddb5fa70dfe40d2818192400111b9ec2aa00/1a/4f065b0a/DOTweenComponent.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Obsolete/OldBoxController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UCT/Global/Core/MainControl.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UCT/Global/Scene/MenuController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UCT/Global/Scene/RenameController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UCT/Service/BoxService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UCT/Service/DataHandlerService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UCT/Service/GameUtilityService.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Volume/CRTScreenRendererFeature.cs" root0="FORCE_HIGHLIGHTING" />
@@ -55,6 +57,7 @@
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.searcher@4.9.1/Tests/Editor/SearcherTests.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.searcher@4.9.1/Tests/Editor/SearcherTreeUtilityTests.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@1.0.0/Runtime/EventSystem/UIElements/PanelEventHandler.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Library/PackageCache/com.unity.ugui@1.0.0/Runtime/UI/Core/FontUpdateTracker.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProblemsViewState">
@@ -212,6 +215,9 @@
       <workItem from="1730799646369" duration="628000" />
       <workItem from="1730800882582" duration="310000" />
       <workItem from="1730801510676" duration="607000" />
+      <workItem from="1730812267050" duration="1537000" />
+      <workItem from="1730846629712" duration="1264000" />
+      <workItem from="1730864896686" duration="1499000" />
     </task>
     <servers />
   </component>

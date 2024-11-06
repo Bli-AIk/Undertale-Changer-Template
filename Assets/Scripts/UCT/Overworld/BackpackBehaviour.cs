@@ -32,6 +32,8 @@ namespace UCT.Overworld
 
         public TypeWritter typeWritter;
 
+        private const int BoxZAxisVisible = 5;
+        public const int BoxZAxisInvisible = -5;
         private void Awake()
         {
             Instance = this;
@@ -51,14 +53,17 @@ namespace UCT.Overworld
             _heart = _backpack.Find("Heart").GetComponent<Image>();
             _backpackUILeft = GameObject.Find("Main Camera/BackpackUI/Left2");
             _backpackUIRight = GameObject.Find("Main Camera/BackpackUI/Right");
+            _backpackUIRightPoint2 = _backpackUIRight.transform.Find("Point2").gameObject;
+            _backpackUIRightPoint3 = _backpackUIRight.transform.Find("Point3").gameObject;
+            _backpackUILeft.transform.parent.localPosition = new Vector3(
+                _backpackUILeft.transform.parent.localPosition.x, _backpackUILeft.transform.parent.localPosition.y,
+                BoxZAxisInvisible);
             saveBack = GameObject.Find("Main Camera/Save");
+            
             saveUI = GameObject.Find("BackpackCanvas/RawImage/Talk/UISave").GetComponent<TextMeshProUGUI>();
             saveUIHeart = GameObject.Find("BackpackCanvas/RawImage/Talk/UISave/Heart").GetComponent<RectTransform>();
             _player = GameObject.Find("Player");
             _mainCamera = GameObject.Find("Main Camera");
-            _backpackUIRightPoint2 = _backpackUIRight.transform.Find("Point2").gameObject;
-            _backpackUIRightPoint3 = _backpackUIRight.transform.Find("Point3").gameObject;
-            _backpackUILeft.transform.parent.localPosition = new Vector3(_backpackUILeft.transform.parent.localPosition.x, _backpackUILeft.transform.parent.localPosition.y, -50);
             _backpack.gameObject.SetActive(false);
             MainControl.Instance.playerControl.canMove = true;
 
@@ -101,12 +106,12 @@ namespace UCT.Overworld
             if (_player.transform.position.y >= _mainCamera.transform.position.y - 1.25f)
             {
                 _uiMessage.anchoredPosition = new Vector2(0, 270);
-                _backpackUILeft.transform.localPosition = new Vector3(0, 6.75f, 5);
+                _backpackUILeft.transform.localPosition = new Vector3(0, 6.75f, BoxZAxisVisible);
             }
             else
             {
                 _uiMessage.anchoredPosition = Vector2.zero;
-                _backpackUILeft.transform.localPosition = new Vector3(0, 0, 5);
+                _backpackUILeft.transform.localPosition = new Vector3(0, 0, BoxZAxisVisible);
             }
             if (_clock > 0)
             {
@@ -119,14 +124,21 @@ namespace UCT.Overworld
             if (sonUse != 4)
             {
                 _uiItems.gameObject.SetActive(sonSelect != 0);
-                _backpackUIRight.transform.localPosition = sonSelect != 0 ? new Vector3(_backpackUIRight.transform.localPosition.x, _backpackUIRight.transform.localPosition.y, 5) : new Vector3(_backpackUIRight.transform.localPosition.x, _backpackUIRight.transform.localPosition.y, -50);
+                _backpackUIRight.transform.localPosition = sonSelect != 0
+                    ? new Vector3(_backpackUIRight.transform.localPosition.x,
+                        _backpackUIRight.transform.localPosition.y, BoxZAxisVisible)
+                    : new Vector3(_backpackUIRight.transform.localPosition.x,
+                        _backpackUIRight.transform.localPosition.y, BoxZAxisInvisible);
             }
             else
             {
                 _uiItems.gameObject.SetActive(false);
-                _backpackUIRight.transform.localPosition = new Vector3(_backpackUIRight.transform.localPosition.x, _backpackUIRight.transform.localPosition.y, -50);
+                _backpackUIRight.transform.localPosition = new Vector3(_backpackUIRight.transform.localPosition.x,
+                    _backpackUIRight.transform.localPosition.y, BoxZAxisInvisible);
             }
-            if ((GameUtilityService.KeyArrowToControl(KeyCode.X) || GameUtilityService.KeyArrowToControl(KeyCode.C)) && sonSelect == 0)
+
+            if ((GameUtilityService.KeyArrowToControl(KeyCode.X) || GameUtilityService.KeyArrowToControl(KeyCode.C)) &&
+                sonSelect == 0) 
             {
                 if (_backpack.gameObject.activeSelf)//关闭
                 {
@@ -135,30 +147,33 @@ namespace UCT.Overworld
                 else if (GameUtilityService.KeyArrowToControl(KeyCode.C))//开启
                 {
                     AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
-                    MainControl.Instance.playerControl.myItems = ListManipulationService.MoveZerosToEnd(MainControl.Instance.playerControl.myItems);
+                    MainControl.Instance.playerControl.myItems =
+                        ListManipulationService.MoveZerosToEnd(MainControl.Instance.playerControl.myItems);
                     var uiSelectPlusColor = "";
                     _sonSelectMax = 8;
                     for (var i = 0; i < MainControl.Instance.playerControl.myItems.Count; i++)
                     {
-                        if (MainControl.Instance.playerControl.myItems[i] == 0)
-                        {
-                            if (i == 0)
-                                uiSelectPlusColor = "<color=grey>";
-                            _sonSelectMax = i;
-                            break;
-                        }
+                        if (MainControl.Instance.playerControl.myItems[i] != 0) continue;
+                        if (i == 0)
+                            uiSelectPlusColor = "<color=grey>";
+                        _sonSelectMax = i;
+                        break;
                     }
                     sonUse = 0;
-                    _backpackUILeft.transform.parent.localPosition = new Vector3(_backpackUILeft.transform.parent.localPosition.x, _backpackUILeft.transform.parent.localPosition.y, 5);
+                    _backpackUILeft.transform.parent.localPosition = new Vector3(
+                        _backpackUILeft.transform.parent.localPosition.x,
+                        _backpackUILeft.transform.parent.localPosition.y, BoxZAxisVisible);
                     _clock = 0.01f;
                     select = 1;
                     MainControl.Instance.playerControl.canMove = false;
 
-                    _uiSelect.text = uiSelectPlusColor + MainControl.Instance.ItemControl.itemTextMaxData[0][..(MainControl.Instance.ItemControl.itemTextMaxData[0].Length - 1)];
+                    _uiSelect.text = uiSelectPlusColor +
+                                     MainControl.Instance.ItemControl.itemTextMaxData[0][
+                                         ..(MainControl.Instance.ItemControl.itemTextMaxData[0].Length - 1)];
                     _uiName.text = MainControl.Instance.playerControl.playerName;
                     _uiTexts.text = $"LV {MainControl.Instance.playerControl.lv}\n" +
-                                   $"HP {MainControl.Instance.playerControl.hp}/{MainControl.Instance.playerControl.hpMax}\n" +
-                                   $"G {MainControl.Instance.playerControl.gold}";
+                                    $"HP {MainControl.Instance.playerControl.hp}/{MainControl.Instance.playerControl.hpMax}\n" +
+                                    $"G {MainControl.Instance.playerControl.gold}";
 
                     if (select == 1)
                         FlashBackpackUIRightPoint(-8.55f * 0.5f);
@@ -188,7 +203,8 @@ namespace UCT.Overworld
                                 foreach (var t in MainControl.Instance.playerControl.myItems)
                                 {
                                     if (t != 0)
-                                        _uiItems.text += $" {DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, t, "Auto", 0)}\n";
+                                        _uiItems.text +=
+                                            $" {DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, t, "Auto", 0)}\n";
                                     else _uiItems.text += "\n";
                                 }
 
@@ -223,12 +239,18 @@ namespace UCT.Overworld
                                         goto default;
                                     case 2:
                                         sonUse = 4;
-                                        typeWritter.TypeOpen(MainControl.Instance.ItemControl.itemTextMaxItemSon[(MainControl.Instance.playerControl.myItems[sonSelect - 1] + plusText) * 5 - 2], false, 0, 1, typeMessage);
+                                        typeWritter.TypeOpen(
+                                            MainControl.Instance.ItemControl.itemTextMaxItemSon[
+                                                (MainControl.Instance.playerControl.myItems[sonSelect - 1] + plusText) *
+                                                5 - 2], false, 0, 1, typeMessage);
 
                                         goto default;
                                     case 3:
                                         sonUse = 4;
-                                        typeWritter.TypeOpen(MainControl.Instance.ItemControl.itemTextMaxItemSon[(MainControl.Instance.playerControl.myItems[sonSelect - 1] + plusText) * 5 - 1], false, 0, 1, typeMessage);
+                                        typeWritter.TypeOpen(
+                                            MainControl.Instance.ItemControl.itemTextMaxItemSon[
+                                                (MainControl.Instance.playerControl.myItems[sonSelect - 1] + plusText) *
+                                                5 - 1], false, 0, 1, typeMessage);
 
                                         MainControl.Instance.playerControl.myItems[sonSelect - 1] = 0;
                                         goto default;
@@ -241,7 +263,10 @@ namespace UCT.Overworld
                                         if (TalkUIPositionChanger.Instance.transform.localPosition.z < 0)
                                         {
                                             TalkUIPositionChanger.Instance.Change();
-                                            TalkUIPositionChanger.Instance.transform.localPosition = new Vector3(TalkUIPositionChanger.Instance.transform.localPosition.x, TalkUIPositionChanger.Instance.transform.localPosition.y, 5);
+                                            TalkUIPositionChanger.Instance.transform.localPosition =
+                                                new Vector3(TalkUIPositionChanger.Instance.transform.localPosition.x,
+                                                    TalkUIPositionChanger.Instance.transform.localPosition.y,
+                                                    BoxZAxisVisible);
                                             //Debug.LogWarning(talkUI.transform.localPosition.z);
                                         }
                                         break;
@@ -320,7 +345,9 @@ namespace UCT.Overworld
                         }
                     }
                 }
-                if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow) || GameUtilityService.KeyArrowToControl(KeyCode.DownArrow))
+
+                if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow) ||
+                    GameUtilityService.KeyArrowToControl(KeyCode.DownArrow)) 
                 {
                     if (select == 1)
                         FlashBackpackUIRightPoint(-8.55f * 0.5f);
@@ -390,8 +417,10 @@ namespace UCT.Overworld
 
         private void FlashBackpackUIRightPoint(float y)
         {
-            _backpackUIRightPoint2.transform.localPosition = new Vector3(_backpackUIRightPoint2.transform.localPosition.x, y);
-            _backpackUIRightPoint3.transform.localPosition = new Vector3(_backpackUIRightPoint3.transform.localPosition.x, y);
+            _backpackUIRightPoint2.transform.localPosition =
+                new Vector3(_backpackUIRightPoint2.transform.localPosition.x, y);
+            _backpackUIRightPoint3.transform.localPosition =
+                new Vector3(_backpackUIRightPoint3.transform.localPosition.x, y);
         }
 
         private void BackpackExit()
@@ -400,9 +429,13 @@ namespace UCT.Overworld
             sonSelect = 0;
             select = 0;
             _backpack.gameObject.SetActive(false);
-            _backpackUILeft.transform.parent.localPosition = new Vector3(_backpackUILeft.transform.parent.localPosition.x, _backpackUILeft.transform.parent.localPosition.y, -50);
+            _backpackUILeft.transform.parent.localPosition = new Vector3(
+                _backpackUILeft.transform.parent.localPosition.x, _backpackUILeft.transform.parent.localPosition.y,
+                BoxZAxisInvisible);
             typeWritter.TypeStop();
-            TalkUIPositionChanger.Instance.transform.localPosition = new Vector3(TalkUIPositionChanger.Instance.transform.localPosition.x, TalkUIPositionChanger.Instance.transform.localPosition.y, -50);
+            TalkUIPositionChanger.Instance.transform.localPosition = new Vector3(
+                TalkUIPositionChanger.Instance.transform.localPosition.x,
+                TalkUIPositionChanger.Instance.transform.localPosition.y, BoxZAxisInvisible);
             //Debug.Log(talkUI.transform.localPosition.z);
             sonUse = 0;
             sonSelect = 0;
