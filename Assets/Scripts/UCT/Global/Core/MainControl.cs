@@ -309,10 +309,10 @@ namespace UCT.Global.Core
             if (Input.GetKeyDown(KeyCode.F5))
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             // 无敌模式 Ctrl+i开启
-            if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl) && Input.GetKeyDown(KeyCode.I))
+            if ((Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)) && Input.GetKeyDown(KeyCode.I))
             {
                 playerControl.keepInvincible = !playerControl.keepInvincible;
-                Other.Debug.Log("Debug: 无敌模式已开启！（Crtl+I）", "#FFFF00");
+                Other.Debug.Log($"Debug: 无敌模式已{(playerControl.keepInvincible ? "开启" : "关闭")}！（Crtl+I）", "#FFFF00");
             }
 
             if (playerControl.keepInvincible)

@@ -87,7 +87,6 @@ namespace UCT.Global.UI
 
         }
 
-        //float testTimer;
         public void Update()
         {
             transform.tag = parent ? "Untagged" : "Box";
