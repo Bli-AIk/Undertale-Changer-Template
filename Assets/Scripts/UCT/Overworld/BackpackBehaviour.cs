@@ -24,7 +24,8 @@ namespace UCT.Overworld
         public TextMeshProUGUI typeMessage;
         private Image _heart;
         private float _clock;
-        private BoxDrawer _optionsUI, _overviewUI, _informationUI; 
+        public BoxDrawer _optionsUI;
+        private BoxDrawer _overviewUI, _informationUI;
         private GameObject _player, _mainCamera;
 
         [FormerlySerializedAs("saveBack")] public BoxDrawer saveUI;
@@ -40,11 +41,11 @@ namespace UCT.Overworld
             Instance = this;
             rawImage = GameObject.Find("BackpackCanvas/RawImage").GetComponent<RawImage>();
             typeMessage = GameObject.Find("BackpackCanvas/RawImage/Talk/UITalk").GetComponent<TextMeshProUGUI>();
+            typeWritter = GetComponent<TypeWritter>();
         }
 
         private void Start()
         {
-            typeWritter = GetComponent<TypeWritter>();
             _backpack = transform.Find("RawImage/Backpack").GetComponent<RectTransform>();
             _uiItems = _backpack.Find("UIItems").GetComponent<TextMeshProUGUI>();
             _uiMessage = _backpack.Find("UIMessage").GetComponent<RectTransform>();

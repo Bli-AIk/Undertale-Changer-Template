@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UCT.Service;
 using UnityEngine;
 #if UNITY_EDITOR
@@ -95,6 +96,8 @@ namespace UCT.Global.UI
             if (isIndividualBox)
             {
                 SetIndividualBox();
+                Other.Debug.LogWarning(vertexPoints.Aggregate(gameObject.name + "\n",
+                    (current, VARIABLE) => current + (VARIABLE + "\n")));
                 return;
             }
             

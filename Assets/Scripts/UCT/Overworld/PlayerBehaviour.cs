@@ -14,13 +14,14 @@ namespace UCT.Overworld
     /// </summary>
     public class PlayerBehaviour : MonoBehaviour
     {
+        private static readonly int Speed = Animator.StringToHash("Speed");
+        private static readonly int MoveX = Animator.StringToHash("MoveX");
+        private static readonly int MoveY = Animator.StringToHash("MoveY");
         public Animator animator;
-        private Rigidbody2D _rbody;
+        private Rigidbody2D _rigidbody2D;
         private BoxCollider2D _boxCollider;
-        private TypeWritter _typeWritter;
         public int moveDirectionX, moveDirectionY;
         public int animDirectionX, animDirectionY;
-        public float distance;
         public float speed;//玩家速度 编辑器标准为13 导出为5.5
 
         [Header("音效截取范围 int")]
@@ -35,25 +36,19 @@ namespace UCT.Overworld
         private BoxCollider2D _boxTrigger;
 
         public OverworldObjTrigger saveOwObj;
-        private GameObject _backpackUI;
         private SpriteRenderer _spriteRenderer;
         public float owTimer;//0.1秒，防止调查OW冲突
 
-        private AudioMixerGroup _mixer = null;//需要就弄上 整这个是因为有的项目里做了回音效果
-
-        private void Awake()
-        {
-            _backpackUI = GameObject.Find("Main Camera/BackpackUI");
-        }
+        private readonly AudioMixerGroup _mixer = null;//需要就弄上 整这个是因为有的项目里做了回音效果
 
         private void Start()
         {
             _spriteRenderer = GetComponent<SpriteRenderer>();
             animator = GetComponent<Animator>();
-            _rbody = GetComponent<Rigidbody2D>();
+            _rigidbody2D = GetComponent<Rigidbody2D>();
             _boxTrigger = transform.Find("Trigger").GetComponent<BoxCollider2D>();
             _boxCollider = GetComponent<BoxCollider2D>();
-            _typeWritter = GameObject.Find("BackpackCanvas").GetComponent<TypeWritter>();
+            GameObject.Find("BackpackCanvas").GetComponent<TypeWritter>();
             _boxTrigger.transform.localPosition = _boxCollider.offset;
             //mask = 1 << 6;
 
@@ -67,22 +62,18 @@ namespace UCT.Overworld
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.transform.CompareTag("owObjTrigger"))
-            {
-                var owObj = collision.transform.GetComponent<OverworldObjTrigger>();
-                saveOwObj = owObj;
-            }
+            if (!collision.transform.CompareTag("owObjTrigger")) return;
+            var owObj = collision.transform.GetComponent<OverworldObjTrigger>();
+            saveOwObj = owObj;
         }
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            if (collision.transform.CompareTag("owObjTrigger"))
+            if (!collision.transform.CompareTag("owObjTrigger")) return;
+            var owObj = collision.transform.GetComponent<OverworldObjTrigger>();
+            if (owObj == saveOwObj)
             {
-                var owObj = collision.transform.GetComponent<OverworldObjTrigger>();
-                if (owObj == saveOwObj)
-                {
-                    saveOwObj = null;
-                }
+                saveOwObj = null;
             }
         }
 
@@ -94,17 +85,7 @@ namespace UCT.Overworld
             }
 
             MainControl.Instance.OverworldControl.playerDeadPos = transform.position;
-            if (_typeWritter.isTyping)
-            {
-                distance = 0;
-            }
-            else
-            {
-                if (moveDirectionX != 0 && moveDirectionY == 0)
-                    distance = 1;
-                else if (moveDirectionX == 0 && moveDirectionY != 0)
-                    distance = 2;
-            }
+
 
             if (MainControl.Instance.OverworldControl.isSetting || MainControl.Instance.OverworldControl.pause)
             {
@@ -114,22 +95,29 @@ namespace UCT.Overworld
             {
                 owTimer -= Time.deltaTime;
             }
-            if (saveOwObj != null && _backpackUI.transform.localPosition.z < 0)
+
+            if (saveOwObj && Mathf.Approximately(BackpackBehaviour.Instance._optionsUI.localPosition.z,
+                    BackpackBehaviour.BoxZAxisInvisible))
             {
-                if (saveOwObj.isTriggerMode
-                    || (!saveOwObj.isTriggerMode && GameUtilityService.KeyArrowToControl(KeyCode.Z)
-                                                 && ((saveOwObj.playerDir == Vector2.one) || (saveOwObj.playerDir.x == animDirectionX) || (saveOwObj.playerDir.y == animDirectionY))
-                                                 && BackpackBehaviour.Instance.select == 0))
+                if (saveOwObj.isTriggerMode || (!saveOwObj.isTriggerMode &&
+                                                GameUtilityService.KeyArrowToControl(KeyCode.Z) &&
+                                                (saveOwObj.playerDir == Vector2.one ||
+                                                 Mathf.Approximately(saveOwObj.playerDir.x, animDirectionX) ||
+                                                 Mathf.Approximately(saveOwObj.playerDir.y, animDirectionY)) &&
+                                                BackpackBehaviour.Instance.select == 0)) 
                 {
                     if (owTimer <= 0)
                     {
                         if (saveOwObj.changeScene)
                         {
-                            if ((saveOwObj.onlyDir == 0) || (saveOwObj.onlyDir == -1 && animDirectionX != 0) || (saveOwObj.onlyDir == 1 && animDirectionY != 0))
+                            if (saveOwObj.onlyDir == 0 || (saveOwObj.onlyDir == -1 && animDirectionX != 0) ||
+                                (saveOwObj.onlyDir == 1 && animDirectionY != 0)) 
                             {
                                 MainControl.Instance.OverworldControl.playerScenePos = saveOwObj.newPlayerPos;
-                                MainControl.Instance.OverworldControl.animDirection = new Vector2(animDirectionX, animDirectionY);
-                                GameUtilityService.FadeOutAndSwitchScene(saveOwObj.sceneName, Color.black, saveOwObj.banMusic);
+                                MainControl.Instance.OverworldControl.animDirection =
+                                    new Vector2(animDirectionX, animDirectionY);
+                                GameUtilityService.FadeOutAndSwitchScene(saveOwObj.sceneName, Color.black,
+                                    saveOwObj.banMusic);
                                 saveOwObj.gameObject.SetActive(false);
                                 saveOwObj = null;
                             }
@@ -157,27 +145,6 @@ namespace UCT.Overworld
                 }
             }
 
-            /*
-        Vector2 dirReal = new Vector2(animDirectionX, animDirectionY);
-        Ray2D ray = new Ray2D((Vector2)transform.position + boxCollider.offset, dirReal);
-        Debug.DrawRay(ray.origin, ray.direction, Color.blue);
-        RaycastHit2D info = Physics2D.Raycast(transform.position, dirReal, distance, mask);
-
-        if (info.collider != null && MainControl.instance.KeyArrowToControl(KeyCode.Z))
-        {
-            GameObject obj = info.collider.gameObject;
-            //Debug.Log(obj.transform.tag);
-            if (obj.transform.CompareTag("owObjTrigger")
-            {
-                OverworldObjTrigger owObj = obj.transform.GetComponent<OverworldObjTrigger>();
-                if (!owObj.isTriggerMode)
-                {
-                    owObj.TypeText(true);
-                }
-            }
-        }
-        */
-
             if (MainControl.Instance.OverworldControl.isSetting || MainControl.Instance.OverworldControl.pause)
                 return;
             if (Input.GetKeyDown(KeyCode.B) && MainControl.Instance.playerControl.isDebug)
@@ -186,14 +153,15 @@ namespace UCT.Overworld
 
         public void PlayWalkAudio()//动画器引用
         {
-            AudioController.Instance.GetFx(Random.Range((int)walk.x, (int)walk.y), MainControl.Instance.AudioControl.fxClipWalk, 1, 1, _mixer);
+            AudioController.Instance.GetFx(Random.Range((int)walk.x, (int)walk.y),
+                MainControl.Instance.AudioControl.fxClipWalk, 1, 1, _mixer);
         }
 
-        public void TriggerSpin(int i)
+        private void TriggerSpin(int i)
         {
             _boxTrigger.transform.localRotation = Quaternion.Euler(0, 0, i * 90);
 
-            if (i == 0 || i == 2)
+            if (i is 0 or 2)
             {
                 _boxTrigger.offset = new Vector2(0, -0.165f);
                 _boxTrigger.size = new Vector2(0.5f, 0.4f);
@@ -207,14 +175,15 @@ namespace UCT.Overworld
 
         private void FixedUpdate()
         {
-            float speed;
+            float realSpeed;
             if (GameUtilityService.KeyArrowToControl(KeyCode.X, 1))
-                speed = this.speed * 2;
-            else speed = this.speed;
+                realSpeed = speed * 2;
+            else realSpeed = speed;
 
-            animator.SetFloat("Speed", Convert.ToInt32(GameUtilityService.KeyArrowToControl(KeyCode.X, 1)) + 1);
+            animator.SetFloat(Speed, Convert.ToInt32(GameUtilityService.KeyArrowToControl(KeyCode.X, 1)) + 1);
 
-            if (MainControl.Instance.OverworldControl.isSetting || MainControl.Instance.OverworldControl.pause || BackpackBehaviour.Instance.select > 0)
+            if (MainControl.Instance.OverworldControl.isSetting || MainControl.Instance.OverworldControl.pause ||
+                BackpackBehaviour.Instance.select > 0) 
             {
                 animator.Play("Walk Tree", 0, 0);
                 if (MainControl.Instance.playerControl.canMove)
@@ -232,7 +201,8 @@ namespace UCT.Overworld
                     moveDirectionX = -1;
                 else moveDirectionX = 0;
 
-                if (GameUtilityService.KeyArrowToControl(KeyCode.RightArrow, 1) && GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow, 1))
+                if (GameUtilityService.KeyArrowToControl(KeyCode.RightArrow, 1) &&
+                    GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow, 1)) 
                     moveDirectionX = 0;
 
                 if (moveDirectionX != 0)
@@ -241,69 +211,76 @@ namespace UCT.Overworld
                 if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow, 1))
                 {
                     moveDirectionY = 1;
-                    if (!GameUtilityService.KeyArrowToControl(KeyCode.RightArrow, 1) && !GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow, 1))
+                    if (!GameUtilityService.KeyArrowToControl(KeyCode.RightArrow, 1) &&
+                        !GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow, 1)) 
                         animDirectionX = 0;
                 }
                 else if (GameUtilityService.KeyArrowToControl(KeyCode.DownArrow, 1))
                 {
-                    if (!GameUtilityService.KeyArrowToControl(KeyCode.RightArrow, 1) && !GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow, 1))
+                    if (!GameUtilityService.KeyArrowToControl(KeyCode.RightArrow, 1) &&
+                        !GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow, 1)) 
                         animDirectionX = 0;
                     moveDirectionY = -1;
                 }
                 else moveDirectionY = 0;
 
-                //if (MainControl.instance.KeyArrowToControl(KeyCode.UpArrow, 1) && MainControl.instance.KeyArrowToControl(KeyCode.DownArrow, 1))
-                //moveDirectionX = 0;
-
                 if (moveDirectionX != 0 || moveDirectionY != 0)
                     animDirectionY = moveDirectionY;
 
-                _rbody.MovePosition(new Vector2(transform.position.x + speed * Time.deltaTime * moveDirectionX, transform.position.y + speed * Time.deltaTime * moveDirectionY));
+                _rigidbody2D.MovePosition(new Vector2(
+                    transform.position.x + realSpeed * Time.deltaTime * moveDirectionX,
+                    transform.position.y + realSpeed * Time.deltaTime * moveDirectionY));
 
-                if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow, 1) && GameUtilityService.KeyArrowToControl(KeyCode.DownArrow, 1))//&& !(MainControl.instance.KeyArrowToControl(KeyCode.LeftArrow, 1) || MainControl.instance.KeyArrowToControl(KeyCode.RightArrow, 1)))
+                if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow, 1) &&
+                    GameUtilityService.KeyArrowToControl(KeyCode.DownArrow, 1)) 
                 {
-                    animator.SetFloat("MoveX", Random.Range(-1, 2));
-                    animator.SetFloat("MoveY", Random.Range(-1, 2));
+                    animator.SetFloat(MoveX, Random.Range(-1, 2));
+                    animator.SetFloat(MoveY, Random.Range(-1, 2));
                 }
                 else
                 {
-                    animator.SetFloat("MoveX", animDirectionX);
-                    animator.SetFloat("MoveY", animDirectionY);
+                    animator.SetFloat(MoveX, animDirectionX);
+                    animator.SetFloat(MoveY, animDirectionY);
                 }
 
                 if (moveDirectionY == 0)
                 {
-                    if (moveDirectionX > 0)
+                    switch (moveDirectionX)
                     {
-                        TriggerSpin(1);
-                    }
-                    else if (moveDirectionX < 0)
-                    {
-                        TriggerSpin(3);
+                        case > 0:
+                            TriggerSpin(1);
+                            break;
+                        case < 0:
+                            TriggerSpin(3);
+                            break;
                     }
                 }
                 else
                 {
-                    if (moveDirectionX < 0)
+                    switch (moveDirectionX)
                     {
-                        if (moveDirectionY < 0)
-                            TriggerSpin(0);
-                        else
-                            TriggerSpin(2);
-                    }
-                    else if (moveDirectionX > 0)
-                    {
-                        if (moveDirectionY < 0)
-                            TriggerSpin(0);
-                        else
-                            TriggerSpin(2);
-                    }
-                    else
-                    {
-                        if (moveDirectionY > 0)
-                            TriggerSpin(2);
-                        else if (moveDirectionY < 0)
-                            TriggerSpin(0);
+                        case < 0:
+                            TriggerSpin(moveDirectionY < 0 ? 0 : 2);
+                            break;
+                        case > 0:
+                        {
+                            TriggerSpin(moveDirectionY < 0 ? 0 : 2);
+                            break;
+                        }
+                        default:
+                        {
+                            switch (moveDirectionY)
+                            {
+                                case > 0:
+                                    TriggerSpin(2);
+                                    break;
+                                case < 0:
+                                    TriggerSpin(0);
+                                    break;
+                            }
+
+                            break;
+                        }
                     }
                 }
 
