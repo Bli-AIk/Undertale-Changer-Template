@@ -75,6 +75,7 @@ XX年/XX月/XX日 完成
 - [ ] 对各个场景UI位置、大小进行检查和修复
 - [ ] 使用\<indent\>替换透明字符缩进
 - [ ] 将主摄像机放置在DontDestroyOnLoad，由MainControlSummon生成（类似于MainControl、BGMControl的生成方式）
+- [ ] 将字体进行调整，修复字符重合的问题
 
 
 
