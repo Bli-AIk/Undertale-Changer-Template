@@ -144,7 +144,7 @@ namespace UCT.Overworld
             }
         }
 
-        public void PressZ()
+        private void PressZ()
         {
             if (BackpackBehaviour.Instance.typeMessage.text != "")
             {
@@ -159,7 +159,9 @@ namespace UCT.Overworld
 
             _isTyping = false;
             BackpackBehaviour.Instance.typeMessage.text = "";
-            TalkUIPositionChanger.Instance.transform.localPosition = new Vector3(TalkUIPositionChanger.Instance.transform.localPosition.x, TalkUIPositionChanger.Instance.transform.localPosition.y, -50);
+            TalkUIPositionChanger.Instance.boxDrawer.localPosition = new Vector3(
+                TalkUIPositionChanger.Instance.boxDrawer.localPosition.x,
+                TalkUIPositionChanger.Instance.boxDrawer.localPosition.y, BackpackBehaviour.BoxZAxisInvisible);
             if (isSave && !_saveOpen)
             {
                 Save();
@@ -178,12 +180,12 @@ namespace UCT.Overworld
                 }
                 else
                 {
-                    methodInfo.Invoke(this, new object[0]);
+                    methodInfo.Invoke(this, Array.Empty<object>());
                 }
             }
         }
 
-        public void Save()
+        private void Save()
         {
             _saveOpen = true;
             _saveSelect = 0;
@@ -209,16 +211,20 @@ namespace UCT.Overworld
             MainControl.Instance.OverworldControl.pause = true;
             TalkUIPositionChanger.Instance.Change(true, true);
 
-            if (TalkUIPositionChanger.Instance.transform.localPosition.z < 0)
+            if (TalkUIPositionChanger.Instance.boxDrawer.localPosition.z < 0)
             {
-                TalkUIPositionChanger.Instance.transform.localPosition = new Vector3(TalkUIPositionChanger.Instance.transform.localPosition.x, TalkUIPositionChanger.Instance.transform.localPosition.y, 5);
+                TalkUIPositionChanger.Instance.boxDrawer.localPosition = new Vector3(
+                    TalkUIPositionChanger.Instance.boxDrawer.localPosition.x,
+                    TalkUIPositionChanger.Instance.boxDrawer.localPosition.y, BackpackBehaviour.BoxZAxisVisible);
             }
             TalkUIPositionChanger.Instance.isUp = isUp;
 
             if (_typeWritter == null)
                 _typeWritter = BackpackBehaviour.Instance.typeWritter;
 
-            _typeWritter.TypeOpen(TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, text), false, 0, 1, BackpackBehaviour.Instance.typeMessage);
+            _typeWritter.TypeOpen(
+                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave,
+                    text), false, 0, 1, BackpackBehaviour.Instance.typeMessage);
             if (endInBattle)
                 _typeWritter.EndInBattle();
 

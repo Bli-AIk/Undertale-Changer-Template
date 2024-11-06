@@ -32,8 +32,8 @@ namespace UCT.Overworld
 
         public TypeWritter typeWritter;
 
-        private const int BoxZAxisVisible = 5;
-        public const int BoxZAxisInvisible = -5;
+        public const int BoxZAxisVisible = 5;
+        public const int BoxZAxisInvisible = -50;
         private void Awake()
         {
             Instance = this;
@@ -260,14 +260,13 @@ namespace UCT.Overworld
                                             BackpackExit();
                                             break;
                                         }
-                                        if (TalkUIPositionChanger.Instance.transform.localPosition.z < 0)
+                                        if (TalkUIPositionChanger.Instance.boxDrawer.localPosition.z < 0)
                                         {
                                             TalkUIPositionChanger.Instance.Change();
-                                            TalkUIPositionChanger.Instance.transform.localPosition =
-                                                new Vector3(TalkUIPositionChanger.Instance.transform.localPosition.x,
-                                                    TalkUIPositionChanger.Instance.transform.localPosition.y,
+                                            TalkUIPositionChanger.Instance.boxDrawer.localPosition =
+                                                new Vector3(TalkUIPositionChanger.Instance.boxDrawer.localPosition.x,
+                                                    TalkUIPositionChanger.Instance.boxDrawer.localPosition.y,
                                                     BoxZAxisVisible);
-                                            //Debug.LogWarning(talkUI.transform.localPosition.z);
                                         }
                                         break;
                                 }
@@ -433,10 +432,9 @@ namespace UCT.Overworld
                 _backpackUILeft.transform.parent.localPosition.x, _backpackUILeft.transform.parent.localPosition.y,
                 BoxZAxisInvisible);
             typeWritter.TypeStop();
-            TalkUIPositionChanger.Instance.transform.localPosition = new Vector3(
-                TalkUIPositionChanger.Instance.transform.localPosition.x,
-                TalkUIPositionChanger.Instance.transform.localPosition.y, BoxZAxisInvisible);
-            //Debug.Log(talkUI.transform.localPosition.z);
+            TalkUIPositionChanger.Instance.boxDrawer.localPosition = new Vector3(
+                TalkUIPositionChanger.Instance.boxDrawer.localPosition.x,
+                TalkUIPositionChanger.Instance.boxDrawer.localPosition.y, BoxZAxisInvisible);
             sonUse = 0;
             sonSelect = 0;
         }

@@ -67,10 +67,13 @@ XX年/XX月/XX日 完成
 
 - [ ] 对各个场景UI位置、大小进行检查和修复
 - [ ] 使用\<indent\>替换透明字符缩进
+- [ ] 将主摄像机放置在DontDestroyOnLoad，由MainControlSummon生成（类似于MainControl、BGMControl的生成方式）
 
 
 
 2024/11/4 计划 (1-2)
+
+2024/11/6 计划 (3)
 
 ## v1.0.4 -> v1.0.5 设置页面重构与拓展
 

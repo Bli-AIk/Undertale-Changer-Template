@@ -1,6 +1,7 @@
 using System;
 using UCT.Global.UI;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UCT.Overworld
 {
@@ -10,7 +11,7 @@ namespace UCT.Overworld
     public class TalkUIPositionChanger : MonoBehaviour
     {
         public static TalkUIPositionChanger Instance;
-        private BoxDrawer _boxDrawer;
+        public BoxDrawer boxDrawer;
         public bool isUp;
         public bool haveHead;
 
@@ -21,8 +22,8 @@ namespace UCT.Overworld
 
         private void Start()
         {
-            _boxDrawer = GetComponent<BoxDrawer>();
-            _boxDrawer.localPosition = new Vector3(_boxDrawer.localPosition.x, _boxDrawer.localPosition.y, BackpackBehaviour.BoxZAxisInvisible);
+            boxDrawer = GetComponent<BoxDrawer>();
+            boxDrawer.localPosition = new Vector3(boxDrawer.localPosition.x, boxDrawer.localPosition.y, BackpackBehaviour.BoxZAxisInvisible);
         }
 
         public void Change(bool updateHeader = true, bool haveHeader = false, bool cleaner = true, TypeWritter typeWritter = null)
@@ -38,15 +39,19 @@ namespace UCT.Overworld
                 return;
             haveHead = haveHeader;
 
+            const float boxUpYAxis = 3.85f;
+            const float boxDownYAxis = -3.85f;
             if (isUp)
             {
-                _boxDrawer.localPosition = new Vector3(_boxDrawer.localPosition.x, 7.77f, _boxDrawer.localPosition.z);
-                BackpackBehaviour.Instance.typeMessage.rectTransform.anchoredPosition = new Vector2(10 + 115f * Convert.ToInt32(haveHead), 139);
+                boxDrawer.localPosition = new Vector3(boxDrawer.localPosition.x, boxUpYAxis, boxDrawer.localPosition.z);
+                BackpackBehaviour.Instance.typeMessage.rectTransform.anchoredPosition =
+                    new Vector2(10 + 115f * Convert.ToInt32(haveHead), 139);
             }
             else
             {
-                _boxDrawer.localPosition = new Vector3(_boxDrawer.localPosition.x, 0, _boxDrawer.localPosition.z);
-                BackpackBehaviour.Instance.typeMessage.rectTransform.anchoredPosition = new Vector2(10 + 115f * Convert.ToInt32(haveHead), -170);
+                boxDrawer.localPosition = new Vector3(boxDrawer.localPosition.x, boxDownYAxis, boxDrawer.localPosition.z);
+                BackpackBehaviour.Instance.typeMessage.rectTransform.anchoredPosition =
+                    new Vector2(10 + 115f * Convert.ToInt32(haveHead), -170);
             }
         }
 
