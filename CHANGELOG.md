@@ -69,7 +69,7 @@ XX年/XX月/XX日 完成
 
 附：OW场景UI修复目前仅在长廊场景有效，将在v1.0.4修复。
 
-## v1.0.3 -> v1.0.4 UI显示修复
+## v1.0.3 -> v1.0.4 UI显示修复与命名场景拓展
 
 - [ ] 将OW场景中的框UI轴点均改为正中
 - [ ] 将主摄像机放置在DontDestroyOnLoad，由MainControlSummon生成（类似于MainControl、BGMControl的生成方式）
