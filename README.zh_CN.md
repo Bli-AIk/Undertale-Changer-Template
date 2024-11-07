@@ -28,6 +28,7 @@
 - [简介](#简介)
 - [使用方法](#使用方法)
 - [Wiki](#Wiki)
+- [依赖项](#依赖项)
 - [许可证](#许可证)
 
 
@@ -72,6 +73,16 @@
 [Wiki](https://github.com/Bli-AIk/Undertale-Changer-Template/wiki/Home%E2%80%90zh_CN)
 
 （请注意，此Wiki是根据旧版的UCT而编写的，它可能与当前版本的部分内容存在差异）
+
+## 依赖项
+- [Clipper2](https://github.com/AngusJohnson/Clipper2)
+- [DOTween](https://dotween.demigiant.com/)
+- [LibTessDotNet](https://github.com/speps/LibTessDotNet)
+- [Live2D](https://www.live2d.com/cubism/download/viewer-unity/)
+- [TextMesh Pro](https://docs.unity3d.com/Packages/com.unity.textmeshpro@2.1/manual/index.html)
+- [More Effective Coroutines](http://trinary.tech/category/mec/)
+
+以上库/插件的贡献者们为本项目提供了优秀的工具和技术支持，衷心感谢你们！
 
 ## 许可证
 
