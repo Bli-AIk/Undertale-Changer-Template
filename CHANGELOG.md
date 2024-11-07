@@ -72,16 +72,20 @@ XX年/XX月/XX日 完成
 ## v1.0.3 -> v1.0.4 UI显示修复
 
 - [ ] 将OW场景中的框UI轴点均改为正中
+- [ ] 将主摄像机放置在DontDestroyOnLoad，由MainControlSummon生成（类似于MainControl、BGMControl的生成方式）
 - [ ] 对各个场景UI位置、大小进行检查和修复
 - [ ] 使用\<indent\>替换透明字符缩进
-- [ ] 将主摄像机放置在DontDestroyOnLoad，由MainControlSummon生成（类似于MainControl、BGMControl的生成方式）
-- [ ] 将字体进行调整，修复字符重合的问题
+- [ ] 将英文字体进行调整，修复字符重合的问题
+- [ ] 引进[Fusion](https://github.com/TakWolf/fusion-pixel-font)8px字体
+- [ ] 在起名界面引入拉丁字符、数字与中日韩字符等
 
 
 
 2024/11/4 计划 (1-2)
 
-2024/11/6 计划 (3)
+2024/11/6 计划 (3-4)
+
+2024/11/7 计划 (5-7)
 
 ## v1.0.4 -> v1.0.5 设置页面重构与拓展
 
