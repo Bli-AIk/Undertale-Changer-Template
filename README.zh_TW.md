@@ -28,6 +28,7 @@
 - [簡介](#簡介)
 - [使用方法](#使用方法)
 - [Wiki](#Wiki)
+- [依賴項](#依賴項)
 - [許可證](#許可證)
 
 
@@ -72,6 +73,16 @@
 [Wiki](https://github.com/Bli-AIk/Undertale-Changer-Template/wiki/Home%E2%80%90zh_HK)
 
 （請注意，此Wiki是根據舊版的UCT而編寫的，它可能與目前版本的部分內容有差異）
+
+## 依賴項
+- [Clipper2](https://github.com/AngusJohnson/Clipper2)
+- [DOTween](https://dotween.demigiant.com/)
+- [LibTessDotNet](https://github.com/speps/LibTessDotNet)
+- [Live2D](https://www.live2d.com/cubism/download/viewer-unity/)
+- [TextMesh Pro](https://docs.unity3d.com/Packages/com.unity.textmeshpro@2.1/manual/index.html)
+- [More Effective Coroutines](http://trinary.tech/category/mec/)
+
+以上函式庫/插件的貢獻者們為本計畫提供了優秀的工具和技術支持，衷心感謝你們！
 
 ## 許可證
 
