@@ -17,10 +17,8 @@ namespace UCT.Overworld.Corridor
                 Global.Other.Debug.LogError("未找到主摄像机");
                 return;
             }
-
-            transform.parent = Camera.main.transform;
-            _parentCamera = transform.parent.GetComponent<CameraFollowPlayer>();
-            transform.localPosition = _parentCamera.transform.position * speed;
+            _parentCamera = Camera.main.GetComponent<CameraFollowPlayer>();
+            transform.position = _parentCamera.transform.position + _parentCamera.transform.position * speed;
         }
 
         private void Update()

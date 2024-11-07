@@ -2258,7 +2258,7 @@ PrefabInstance:
     - target: {fileID: 2735931670647202130, guid: 85a3edc090f79fb4780a6e2f72de7957,
         type: 3}
       propertyPath: sceneState
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2735931670647202130, guid: 85a3edc090f79fb4780a6e2f72de7957,
         type: 3}
@@ -5341,7 +5341,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3b5cea9dcecc6b40a08bd4351171480, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  number: 0
+  enemyId: 0
 --- !u!1 &1389938131
 GameObject:
   m_ObjectHideFlags: 0
@@ -7034,7 +7034,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3b5cea9dcecc6b40a08bd4351171480, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  number: 2
+  enemyId: 2
 --- !u!1 &1601239022
 GameObject:
   m_ObjectHideFlags: 0
@@ -7317,7 +7317,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3b5cea9dcecc6b40a08bd4351171480, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  number: 1
+  enemyId: 1
 --- !u!1001 &1642844445
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7743,10 +7743,10 @@ MonoBehaviour:
   - {x: -2.435, y: -4.45}
   - {x: 0.865, y: -4.45}
   - {x: 4.025, y: -4.45}
-  selectUI: 0
-  selectLayer: 0
-  selectSon: 0
-  selectGrandSon: 0
+  selectedButton: 0
+  selectedLayer: 0
+  selectedName: 0
+  selectedOption: 0
   actSave: []
   enemiesControllers: []
   firstIn: 0

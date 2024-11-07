@@ -46,7 +46,7 @@ namespace UCT.Global.UI
         [Header("适配OW框")]
         public bool isOverworld;
 
-        private TalkUIPositionChanger _talkUIPositionChanger;
+        private TalkBoxPositionChanger _talkBoxPositionChanger;
 
         public float pitch = 1;
         public float volume = 0.5f;
@@ -66,7 +66,7 @@ namespace UCT.Global.UI
         private void Start()
         {
             if (isOverworld)
-                _talkUIPositionChanger = TalkUIPositionChanger.Instance;
+                _talkBoxPositionChanger = TalkBoxPositionChanger.Instance;
             spriteChanger = GetComponent<SpriteChanger>();
         }
 
@@ -103,7 +103,7 @@ namespace UCT.Global.UI
             isStop = false;
             this.fx = inputFX;
             if (isOverworld)
-                _talkUIPositionChanger.Change(true, originString[.."<passText>".Length] == "<passText>", true, this);
+                _talkBoxPositionChanger.Change(true, originString[.."<passText>".Length] == "<passText>", true, this);
 
             _tmpText = tmpText;
             Timing.RunCoroutine(_Typing(_tmpText));
@@ -208,7 +208,7 @@ namespace UCT.Global.UI
                             var s = int.Parse(save);
                             if (spriteChanger != null)
                                 spriteChanger.ChangeImage(s);
-                            _talkUIPositionChanger.Change(true, s >= 0, false);
+                            _talkBoxPositionChanger.Change(true, s >= 0, false);
                         }
                         else if (TextProcessingService.IsSameFrontTexts(spText, "<stop...*"))
                         {
@@ -616,7 +616,7 @@ namespace UCT.Global.UI
             passTextString = "";
             if (isOverworld)
             {
-                _talkUIPositionChanger.Change(false, false, true, this);
+                _talkBoxPositionChanger.Change(false, false, true, this);
                 if (originString[.."<passText>".Length] == "<passText>")
                     originString = originString["<passText>".Length..];
             }

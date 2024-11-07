@@ -77,7 +77,7 @@ namespace UCT.Overworld
         private void Start()
         {
             transform.tag = "owObjTrigger";
-            mainCamera = TalkUIPositionChanger.Instance.transform.parent.GetComponent<CameraFollowPlayer>();
+            mainCamera = TalkBoxPositionChanger.Instance.transform.parent.GetComponent<CameraFollowPlayer>();
             _typeWritter = BackpackBehaviour.Instance.typeWritter;
             _bgm = AudioController.Instance.audioSource;
         }
@@ -118,7 +118,7 @@ namespace UCT.Overworld
                             goto default;
                         default:
                             BackpackBehaviour.Instance.saveHeart.anchoredPosition = new Vector2(10000, 10000);
-                            BackpackBehaviour.Instance.saveUI.localPosition = new Vector3(BackpackBehaviour.Instance.saveUI.localPosition.x, BackpackBehaviour.Instance.saveUI.localPosition.y, -50);
+                            BackpackBehaviour.Instance.saveBox.localPosition = new Vector3(BackpackBehaviour.Instance.saveBox.localPosition.x, BackpackBehaviour.Instance.saveBox.localPosition.y, -50);
                             BackpackBehaviour.Instance.saveText.text = "";
                             PressZ();
                             _saveOpen = false;
@@ -131,7 +131,7 @@ namespace UCT.Overworld
                 else if (GameUtilityService.KeyArrowToControl(KeyCode.X))
                 {
                     BackpackBehaviour.Instance.saveHeart.anchoredPosition = new Vector2(10000, 10000);
-                    BackpackBehaviour.Instance.saveUI.localPosition = new Vector3(BackpackBehaviour.Instance.saveUI.localPosition.x, BackpackBehaviour.Instance.saveUI.localPosition.y, -50);
+                    BackpackBehaviour.Instance.saveBox.localPosition = new Vector3(BackpackBehaviour.Instance.saveBox.localPosition.x, BackpackBehaviour.Instance.saveBox.localPosition.y, -50);
                     BackpackBehaviour.Instance.saveText.text = "";
                     PressZ();
                     _saveOpen = false;
@@ -159,9 +159,9 @@ namespace UCT.Overworld
 
             _isTyping = false;
             BackpackBehaviour.Instance.typeMessage.text = "";
-            TalkUIPositionChanger.Instance.boxDrawer.localPosition = new Vector3(
-                TalkUIPositionChanger.Instance.boxDrawer.localPosition.x,
-                TalkUIPositionChanger.Instance.boxDrawer.localPosition.y, BackpackBehaviour.BoxZAxisInvisible);
+            TalkBoxPositionChanger.Instance.boxDrawer.localPosition = new Vector3(
+                TalkBoxPositionChanger.Instance.boxDrawer.localPosition.x,
+                TalkBoxPositionChanger.Instance.boxDrawer.localPosition.y, BackpackBehaviour.BoxZAxisInvisible);
             if (isSave && !_saveOpen)
             {
                 Save();
@@ -190,7 +190,7 @@ namespace UCT.Overworld
             _saveOpen = true;
             _saveSelect = 0;
 
-            BackpackBehaviour.Instance.saveUI.localPosition = new Vector3(BackpackBehaviour.Instance.saveUI.localPosition.x, BackpackBehaviour.Instance.saveUI.localPosition.y, 5);
+            BackpackBehaviour.Instance.saveBox.localPosition = new Vector3(BackpackBehaviour.Instance.saveBox.localPosition.x, BackpackBehaviour.Instance.saveBox.localPosition.y, 5);
             var playerName = MainControl.Instance.playerControl.playerName;
 
             BackpackBehaviour.Instance.saveText.text = TextProcessingService.PadStringToLength(playerName, 10) + "LV" + TextProcessingService.PadStringToLength(MainControl.Instance.playerControl.lv.ToString(), 7) +
@@ -209,15 +209,15 @@ namespace UCT.Overworld
             _isTyping = true;
             MainControl.Instance.playerControl.canMove = false;
             MainControl.Instance.OverworldControl.pause = true;
-            TalkUIPositionChanger.Instance.Change(true, true);
+            TalkBoxPositionChanger.Instance.Change(true, true);
 
-            if (TalkUIPositionChanger.Instance.boxDrawer.localPosition.z < 0)
+            if (TalkBoxPositionChanger.Instance.boxDrawer.localPosition.z < 0)
             {
-                TalkUIPositionChanger.Instance.boxDrawer.localPosition = new Vector3(
-                    TalkUIPositionChanger.Instance.boxDrawer.localPosition.x,
-                    TalkUIPositionChanger.Instance.boxDrawer.localPosition.y, BackpackBehaviour.BoxZAxisVisible);
+                TalkBoxPositionChanger.Instance.boxDrawer.localPosition = new Vector3(
+                    TalkBoxPositionChanger.Instance.boxDrawer.localPosition.x,
+                    TalkBoxPositionChanger.Instance.boxDrawer.localPosition.y, BackpackBehaviour.BoxZAxisVisible);
             }
-            TalkUIPositionChanger.Instance.isUp = inputIsUp;
+            TalkBoxPositionChanger.Instance.isUp = inputIsUp;
 
             if (_typeWritter == null)
                 _typeWritter = BackpackBehaviour.Instance.typeWritter;

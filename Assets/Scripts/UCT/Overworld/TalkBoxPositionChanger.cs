@@ -1,20 +1,20 @@
 using System;
+using TMPro;
 using UCT.Global.UI;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace UCT.Overworld
 {
     /// <summary>
     /// 修改Overworld中对话框的位置
     /// </summary>
-    public class TalkUIPositionChanger : MonoBehaviour
+    public class TalkBoxPositionChanger : MonoBehaviour
     {
-        public static TalkUIPositionChanger Instance;
+        public static TalkBoxPositionChanger Instance;
         public BoxDrawer boxDrawer;
         public bool isUp;
         public bool haveHead;
-
+        private TextMeshProUGUI _typeMessage;
         private void Awake()
         {
             Instance = this;
@@ -23,14 +23,23 @@ namespace UCT.Overworld
         private void Start()
         {
             boxDrawer = GetComponent<BoxDrawer>();
+            _typeMessage = GetTypeMessage();
             boxDrawer.localPosition = new Vector3(boxDrawer.localPosition.x, boxDrawer.localPosition.y, BackpackBehaviour.BoxZAxisInvisible);
         }
 
+        private TextMeshProUGUI GetTypeMessage()
+        {
+            if (!_typeMessage)
+                _typeMessage = GameObject.Find("BackpackCanvas/RawImage/Talk/UITalk").GetComponent<TextMeshProUGUI>();
+
+            return _typeMessage;
+        }
+        
         public void Change(bool updateHeader = true, bool haveHeader = false, bool cleaner = true, TypeWritter typeWritter = null)
         {
             if (cleaner)
             {
-                BackpackBehaviour.Instance.typeMessage.text = "";
+                GetTypeMessage().text = "";
                 if (typeWritter)
                     typeWritter.endString = "";
             }
@@ -44,13 +53,13 @@ namespace UCT.Overworld
             if (isUp)
             {
                 boxDrawer.localPosition = new Vector3(boxDrawer.localPosition.x, boxUpYAxis, boxDrawer.localPosition.z);
-                BackpackBehaviour.Instance.typeMessage.rectTransform.anchoredPosition =
+                GetTypeMessage().rectTransform.anchoredPosition =
                     new Vector2(10 + 115f * Convert.ToInt32(haveHead), 139);
             }
             else
             {
                 boxDrawer.localPosition = new Vector3(boxDrawer.localPosition.x, boxDownYAxis, boxDrawer.localPosition.z);
-                BackpackBehaviour.Instance.typeMessage.rectTransform.anchoredPosition =
+                GetTypeMessage().rectTransform.anchoredPosition =
                     new Vector2(10 + 115f * Convert.ToInt32(haveHead), -170);
             }
         }
@@ -60,14 +69,16 @@ namespace UCT.Overworld
 
         private void OnEnable()
         {
-            if (BackpackBehaviour.Instance.typeMessage != null)
-                BackpackBehaviour.Instance.typeMessage.gameObject.SetActive(true);
+            GetTypeMessage();
+            if (_typeMessage)
+                _typeMessage.gameObject.SetActive(true);
         }
 
         private void OnDisable()
         {
-            if (BackpackBehaviour.Instance.typeMessage != null)
-                BackpackBehaviour.Instance.typeMessage.gameObject.SetActive(false);
+            GetTypeMessage();
+            if (_typeMessage)
+                _typeMessage.gameObject.SetActive(false);
         }
     }
 }

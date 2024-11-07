@@ -1,9 +1,10 @@
-using System.Collections.Generic;
+using System;
 using UCT.Global.Audio;
 using UCT.Global.UI;
+using UCT.Overworld;
 using UCT.Service;
 using UnityEngine;
-using static UCT.Global.Core.MainControl;
+using UnityEngine.Serialization;
 
 namespace UCT.Global.Core
 {
@@ -15,6 +16,11 @@ namespace UCT.Global.Core
     /// </summary>
     public class MainControlSummon : MonoBehaviour
     {
+        [Header("-OWCamera设置-")]
+        public bool isCameraLimit;
+        public bool isCameraFollow;
+        public Vector2 cameraLimitX;//限制摄像机最大XY范围 0则不动
+        public Vector2 cameraLimitY;//限制摄像机最大XY范围 0则不动
         [Header("-Canvas设置-")]
         public RenderMode renderMode;
 
@@ -38,92 +44,119 @@ namespace UCT.Global.Core
         [Header("-MainControl设置-")]
         [Space]
         [Header("黑场状态相关")]
-        public SceneState sceneState;
+        public MainControl.SceneState sceneState;
 
         public bool haveInOutBlack, noInBlack;
         public bool notPauseIn;
 
         private void Awake()
         {
-            if (CanvasController.Instance == null)
-            {
-                var canvas = Instantiate(Resources.Load<GameObject>("Prefabs/Canvas"));
-                canvas.name = "Canvas";
-                CanvasController.Instance.framePic = framePic;
-                CanvasController.Instance.renderMode = renderMode;
-                CanvasController.Instance.openTurn = sceneState == SceneState.InBattle;
-                DontDestroyOnLoad(canvas);
-            }
-            else
-            {
-                CanvasController.Instance.framePic = framePic;
-                CanvasController.Instance.renderMode = renderMode;
-                CanvasController.Instance.openTurn = sceneState == SceneState.InBattle;
-                CanvasController.Instance.Start();
-            }
+            SetupController(Camera.main, ExistingCameraSetup, NonexistentCameraSetup);
+            SetupController(CanvasController.Instance, ExistingCanvasSetup, NonexistentCanvasSetup);
+            SetupController(AudioController.Instance, ExistingAudioSetup, NonexistentAudioSetup);
+            SetupController(MainControl.Instance, ExistingMainControlSetup, NonexistentMainControlSetup);
+        }
 
-            GameObject bgm;
-            if (AudioController.Instance == null)
-            {
-                bgm = Instantiate(Resources.Load<GameObject>("Prefabs/BGM Source"));
-                bgm.name = "BGM Source";
-                DontDestroyOnLoad(bgm);
-            }
+      
+        private static void SetupController<T>(T instance, Action existingSetup, Action nonexistentSetup)
+            where T : class
+        {
+            if (instance != null)
+                existingSetup();
             else
-            {
-                bgm = AudioController.Instance.gameObject;
-            }
+                nonexistentSetup();
+        }
+        private void ExistingCameraSetup()
+        {
+            if (sceneState != MainControl.SceneState.Overworld) return;
+            System.Diagnostics.Debug.Assert(Camera.main != null, "Camera.main != null");
+            var mainCamera = Camera.main.GetComponent<CameraFollowPlayer>();
+            CameraSetup(mainCamera);
+        }
+        private void NonexistentCameraSetup()
+        {
+            if (sceneState != MainControl.SceneState.Overworld) return;
+            var mainCamera = Instantiate(Resources.Load<GameObject>("Prefabs/MainCameraOverworld"))
+                .GetComponent<CameraFollowPlayer>();
+            mainCamera.name = "MainCameraOverworld";
+            CameraSetup(mainCamera);
+            DontDestroyOnLoad(mainCamera);
+        }
+
+        private void CameraSetup(CameraFollowPlayer cameraFollowPlayer)
+        {
+            cameraFollowPlayer.isLimit = isCameraLimit;
+            cameraFollowPlayer.isFollow = isCameraFollow;
+            cameraFollowPlayer.limitX = cameraLimitX;
+            cameraFollowPlayer.limitY = cameraLimitY;
+        }
+        private void ExistingCanvasSetup()
+        {
+            CanvasSetup();
+            CanvasController.Instance.Start();
+        }
+        private void NonexistentCanvasSetup()
+        {
+            var canvas = Instantiate(Resources.Load<GameObject>("Prefabs/Canvas"));
+            canvas.name = "Canvas";
+            CanvasSetup();
+            DontDestroyOnLoad(canvas);
+        }
+        private void CanvasSetup()
+        {
+            CanvasController.Instance.framePic = framePic;
+            CanvasController.Instance.renderMode = renderMode;
+            CanvasController.Instance.openTurn = sceneState == MainControl.SceneState.InBattle;
+        }
+        private void ExistingAudioSetup()
+        {
+            var bgm = AudioController.Instance.gameObject;
+            AudioSetup(bgm);
+        }
+        private void NonexistentAudioSetup()
+        {
+            var bgm = Instantiate(Resources.Load<GameObject>("Prefabs/BGM Source"));
+            bgm.name = "BGM Source";
+            DontDestroyOnLoad(bgm);
+            AudioSetup(bgm);
+        }
+        private void AudioSetup(GameObject bgm)
+        {
             var audioSource = bgm.GetComponent<AudioSource>();
             audioSource.pitch = pitch;
             audioSource.volume = volume;
             audioSource.loop = loop;
-            if (audioSource.clip != bgmClip)
-            {
-                audioSource.clip = bgmClip;
-                audioSource.Play();
-            }
-
-            var gameObjectM = GameObject.Find("MainControl");
-            if (gameObjectM != null && gameObjectM.TryGetComponent(out MainControl mainControl))
-            {
-                ExistingMainControlSetup(mainControl);
-                return;
-            }
-            NonexistentMainControlSetup();
+            if (audioSource.clip == bgmClip) return;
+            audioSource.clip = bgmClip;
+            audioSource.Play();
         }
-        /// <summary>
-        /// 在未生成MainControl的情况下初始化MainControl
-        /// </summary>
+      
+
+        
+        private void ExistingMainControlSetup()
+        {
+            var mainControl = MainControl.Instance;
+            MainControlSetup(mainControl);
+            mainControl.Start();
+        }
         private void NonexistentMainControlSetup()
         {
             DontDestroyOnLoad(transform);
-
             var mainControl = gameObject.AddComponent<MainControl>();
-            mainControl.sceneState = sceneState;
-            mainControl.isSceneSwitchingFadeTransitionEnabled = haveInOutBlack;
-            mainControl.isSceneSwitchingFadeInDisabled = noInBlack;
-            mainControl.isSceneSwitchingFadeInUnpaused = notPauseIn;
-
+            MainControlSetup(mainControl);
             mainControl.gameObject.name = "MainControl";
-            mainControl.InitializationOverworld();
-            mainControl.mainCamera = Camera.main;
-            GameUtilityService.SetResolution(Instance.OverworldControl.resolutionLevel);
         }
-        /// <summary>
-        /// 在已生成MainControl的情况下初始化MainControl
-        /// </summary>
-        private void ExistingMainControlSetup(MainControl mainControl)
+        
+        private void MainControlSetup(MainControl mainControl)
         {
             mainControl.sceneState = sceneState;
-            mainControl.sceneState = sceneState;
             mainControl.isSceneSwitchingFadeTransitionEnabled = haveInOutBlack;
             mainControl.isSceneSwitchingFadeInDisabled = noInBlack;
             mainControl.isSceneSwitchingFadeInUnpaused = notPauseIn;
-
             mainControl.InitializationOverworld();
-            mainControl.Start();
             mainControl.mainCamera = Camera.main;
-            GameUtilityService.SetResolution(Instance.OverworldControl.resolutionLevel);
+            GameUtilityService.SetResolution(mainControl.OverworldControl.resolutionLevel);
         }
+      
     }
 }

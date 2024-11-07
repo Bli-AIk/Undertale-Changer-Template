@@ -274,7 +274,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4615378955608716338}
   m_Layer: 5
-  m_Name: BackpackUI
+  m_Name: BackpackBoxes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -463,7 +463,7 @@ PrefabInstance:
     - target: {fileID: 5344542098403412248, guid: 307f72e3917759d49b7e988253e38bc3,
         type: 3}
       propertyPath: m_Name
-      value: OptionsUI
+      value: OptionsBox
       objectReference: {fileID: 0}
     - target: {fileID: 5344542098403412248, guid: 307f72e3917759d49b7e988253e38bc3,
         type: 3}
@@ -608,7 +608,7 @@ PrefabInstance:
     - target: {fileID: 5344542098403412248, guid: 307f72e3917759d49b7e988253e38bc3,
         type: 3}
       propertyPath: m_Name
-      value: InformationUI
+      value: InformationBox
       objectReference: {fileID: 0}
     - target: {fileID: 5344542098403412248, guid: 307f72e3917759d49b7e988253e38bc3,
         type: 3}
@@ -748,7 +748,7 @@ PrefabInstance:
     - target: {fileID: 5344542098403412248, guid: 307f72e3917759d49b7e988253e38bc3,
         type: 3}
       propertyPath: m_Name
-      value: OverviewUI
+      value: OverviewBox
       objectReference: {fileID: 0}
     - target: {fileID: 5344542098403412248, guid: 307f72e3917759d49b7e988253e38bc3,
         type: 3}
@@ -888,7 +888,7 @@ PrefabInstance:
     - target: {fileID: 5344542098403412248, guid: 307f72e3917759d49b7e988253e38bc3,
         type: 3}
       propertyPath: m_Name
-      value: SaveUI
+      value: SaveBox
       objectReference: {fileID: 0}
     - target: {fileID: 5344542098403412248, guid: 307f72e3917759d49b7e988253e38bc3,
         type: 3}
@@ -1028,7 +1028,7 @@ PrefabInstance:
     - target: {fileID: 5344542098403412248, guid: 307f72e3917759d49b7e988253e38bc3,
         type: 3}
       propertyPath: m_Name
-      value: TalkUI
+      value: TalkBox
       objectReference: {fileID: 0}
     - target: {fileID: 5344542098403412248, guid: 307f72e3917759d49b7e988253e38bc3,
         type: 3}

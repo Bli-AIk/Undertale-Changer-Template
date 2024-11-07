@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UCT.Overworld
 {
@@ -7,17 +8,12 @@ namespace UCT.Overworld
     /// </summary>
     public class CameraFollowPlayer : MonoBehaviour
     {
-        public bool limit = true;
+        [FormerlySerializedAs("limit")] public bool isLimit = true;
+        public bool isFollow;
         public Vector2 limitX;//限制摄像机最大XY范围 0则不动
         public Vector2 limitY;//限制摄像机最大XY范围 0则不动
         public GameObject player;
-        public bool isFollow;
         public Vector3 followPosition;
-
-        private void Start()
-        {
-            player = GameObject.Find("Player");
-        }
 
         private void Update()
         {
@@ -25,9 +21,13 @@ namespace UCT.Overworld
             {
                 return;
             }
+
+            if (!player)
+                player = GameObject.Find("Player");
+            
             followPosition = transform.position;
             //跟随玩家
-            if (limit)
+            if (isLimit)
             {
                 if (player.transform.position.x >= limitX.x || player.transform.position.x <= limitX.y)
                 {

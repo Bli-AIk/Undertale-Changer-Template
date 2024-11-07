@@ -26,6 +26,7 @@ namespace UCT.Global.Core
         public enum SceneState
         {
             Normal,
+            Overworld,
             InBattle,
         }
         [Header("=== 场景状态设置 ===")]

@@ -22,7 +22,7 @@ namespace UCT.Overworld
         private TypeWritter _typeWritter;
         private SpriteRenderer _sprite;
         private Image _spriteImage;
-        private TalkUIPositionChanger _talkUIPositionChanger;
+        private TalkBoxPositionChanger _talkBoxPositionChanger;
         private int _number;
         private float _clock;
         private bool _back;
@@ -31,7 +31,7 @@ namespace UCT.Overworld
         {
             _clock = backFrame / 60f;
             if (inOverWorld)
-                _talkUIPositionChanger = TalkUIPositionChanger.Instance;
+                _talkBoxPositionChanger = TalkBoxPositionChanger.Instance;
             if (haveBack)
                 _typeWritter = GetComponent<TypeWritter>();
 
@@ -79,7 +79,7 @@ namespace UCT.Overworld
 
         public void ChangeImage(int i, bool back = false)
         {
-            _talkUIPositionChanger.haveHead = i >= 0;
+            _talkBoxPositionChanger.haveHead = i >= 0;
             if (i >= 0)
             {
                 Sprite spriter;

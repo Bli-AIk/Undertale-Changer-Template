@@ -72,7 +72,7 @@ XX年/XX月/XX日 完成
 ## v1.0.3 -> v1.0.4 UI显示修复与命名场景拓展
 
 - [x] 将OW场景中的框UI轴点均改为正中
-- [ ] 将主摄像机放置在DontDestroyOnLoad，由MainControlSummon生成（类似于MainControl、BGMControl的生成方式）
+- [x] 将主摄像机放置在DontDestroyOnLoad，由MainControlSummon生成（类似于MainControl、BGMControl的生成方式）
 - [ ] 对各个场景UI位置、大小进行检查和修复
 - [ ] 使用\<indent\>替换透明字符缩进
 - [ ] 将英文字体进行调整，修复字符重合的问题
