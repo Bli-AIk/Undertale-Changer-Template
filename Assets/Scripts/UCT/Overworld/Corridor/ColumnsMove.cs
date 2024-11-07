@@ -12,16 +12,22 @@ namespace UCT.Overworld.Corridor
 
         private void Start()
         {
+            if (Camera.main == null)
+            {
+                Global.Other.Debug.LogError("未找到主摄像机");
+                return;
+            }
+
+            transform.parent = Camera.main.transform;
             _parentCamera = transform.parent.GetComponent<CameraFollowPlayer>();
             transform.localPosition = _parentCamera.transform.position * speed;
         }
 
         private void Update()
         {
-            if (_parentCamera.transform.position.x >= _parentCamera.limitX.x || _parentCamera.transform.position.x <= _parentCamera.limitY.y)
-            {
+            if (_parentCamera.transform.position.x >= _parentCamera.limitX.x ||
+                _parentCamera.transform.position.x <= _parentCamera.limitY.y) 
                 transform.position = _parentCamera.followPosition * speed;
-            }
         }
     }
 }

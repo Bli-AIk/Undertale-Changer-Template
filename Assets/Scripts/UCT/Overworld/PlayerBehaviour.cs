@@ -96,7 +96,7 @@ namespace UCT.Overworld
                 owTimer -= Time.deltaTime;
             }
 
-            if (saveOwObj && Mathf.Approximately(BackpackBehaviour.Instance._optionsUI.localPosition.z,
+            if (saveOwObj && Mathf.Approximately(BackpackBehaviour.Instance.optionsUI.localPosition.z,
                     BackpackBehaviour.BoxZAxisInvisible))
             {
                 if (saveOwObj.isTriggerMode || (!saveOwObj.isTriggerMode &&

@@ -37,7 +37,10 @@ namespace UCT.Service
             if (!MainControl.Instance.cameraMainInBattle)
             {
                 if (!MainControl.Instance.cameraShake)
-                    MainControl.Instance.cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
+                {
+                    var mainCamera = Camera.main;
+                    if (mainCamera) MainControl.Instance.cameraShake = mainCamera.GetComponent<CameraShake>();
+                }
                 else
                     MainControl.Instance.cameraMainInBattle = MainControl.Instance.cameraShake.GetComponent<Camera>();
             }
@@ -55,7 +58,6 @@ namespace UCT.Service
 
             if (!MainControl.Instance.OverworldControl.isUsingHDFrame)
             {
-                //if (MainControl.Instance.mainCamera)
                 MainControl.Instance.mainCamera.rect = new Rect(0, 0, 1, 1);
 
                 if (MainControl.Instance.sceneState == MainControl.SceneState.InBattle)
@@ -69,12 +71,9 @@ namespace UCT.Service
                 CanvasController.Instance.DOKill();
                 CanvasController.Instance.fps.rectTransform.anchoredPosition = new Vector2();
                 CanvasController.Instance.frame.color = new Color(1, 1, 1, 0);
-                //CanvasController.Instance.settingImage.transform.localScale = Vector3.one;
-                //CanvasController.Instance.settingImage.rectTransform.anchoredPosition = new Vector2(0, CanvasController.Instance.settingImage.rectTransform.anchoredPosition.y);
             }
             else
             {
-                //if (MainControl.Instance.mainCamera)
                 MainControl.Instance.mainCamera.rect = new Rect(0, 0.056f, 1, 0.888f);
                 
                 if (MainControl.Instance.sceneState == MainControl.SceneState.InBattle)
@@ -95,8 +94,6 @@ namespace UCT.Service
                     CanvasController.Instance.fps.rectTransform.anchoredPosition = new Vector2();
 
                 CanvasController.Instance.frame.DOColor(new Color(1, 1, 1, 1) * Convert.ToInt32(CanvasController.Instance.framePic >= 0), 1f);
-                //CanvasController.Instance.settingImage.transform.localScale = Vector3.one * 0.89f;
-                //CanvasController.Instance.settingImage.rectTransform.anchoredPosition = new Vector2(142.5f, CanvasController.Instance.settingImage.rectTransform.anchoredPosition.y);
             }
 
             

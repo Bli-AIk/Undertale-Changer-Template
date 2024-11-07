@@ -24,9 +24,10 @@ namespace UCT.Overworld
         public TextMeshProUGUI typeMessage;
         private Image _heart;
         private float _clock;
-        public BoxDrawer _optionsUI;
+        [FormerlySerializedAs("_optionsUI")] public BoxDrawer optionsUI;
         private BoxDrawer _overviewUI, _informationUI;
-        private GameObject _player, _mainCamera;
+        private GameObject _player;
+        private Camera _mainCamera;
 
         [FormerlySerializedAs("saveBack")] public BoxDrawer saveUI;
         [FormerlySerializedAs("saveUI")] public TextMeshProUGUI saveText;
@@ -56,16 +57,21 @@ namespace UCT.Overworld
             _uiTexts = _backpack.Find("UIMessage/UITexts").GetComponent<TextMeshProUGUI>();
             _uiSelect = _backpack.Find("UISelect").GetComponent<TextMeshProUGUI>();
             _heart = _backpack.Find("Heart").GetComponent<Image>();
-            _optionsUI = GameObject.Find("Main Camera/BackpackUI/OptionsUI").GetComponent<BoxDrawer>();
-            _overviewUI = GameObject.Find("Main Camera/BackpackUI/OverviewUI").GetComponent<BoxDrawer>();
-            _optionsUI.localPosition.z = BoxZAxisInvisible;
+            _mainCamera = Camera.main;
+            if (_mainCamera != null)
+            {
+                optionsUI = _mainCamera.transform.Find("BackpackUI/OptionsUI").GetComponent<BoxDrawer>();
+                _overviewUI = _mainCamera.transform.Find("BackpackUI/OverviewUI").GetComponent<BoxDrawer>();
+                _informationUI = _mainCamera.transform.Find("BackpackUI/InformationUI").GetComponent<BoxDrawer>();
+                saveUI = _mainCamera.transform.Find("SaveUI").GetComponent<BoxDrawer>();
+            }
+            else Global.Other.Debug.LogError("主摄像机不存在");
+
+            optionsUI.localPosition.z = BoxZAxisInvisible;
             _overviewUI.localPosition.z = BoxZAxisInvisible;
-            _informationUI = GameObject.Find("Main Camera/BackpackUI/InformationUI").GetComponent<BoxDrawer>();
-            saveUI = GameObject.Find("Main Camera/SaveUI").GetComponent<BoxDrawer>();
             saveText = GameObject.Find("BackpackCanvas/RawImage/Talk/UISave").GetComponent<TextMeshProUGUI>();
             saveHeart = GameObject.Find("BackpackCanvas/RawImage/Talk/UISave/Heart").GetComponent<RectTransform>();
             _player = GameObject.Find("Player");
-            _mainCamera = GameObject.Find("Main Camera");
             _backpack.gameObject.SetActive(false);
             MainControl.Instance.playerControl.canMove = true;
 
@@ -148,7 +154,7 @@ namespace UCT.Overworld
                         break;
                     }
                     sonUse = 0;
-                    _optionsUI.localPosition.z = BoxZAxisVisible;
+                    optionsUI.localPosition.z = BoxZAxisVisible;
                     
                     if (_player.transform.position.y >= _mainCamera.transform.position.y - 1.25f)
                     {
@@ -175,10 +181,7 @@ namespace UCT.Overworld
                                     $"HP {MainControl.Instance.playerControl.hp}/{MainControl.Instance.playerControl.hpMax}\n" +
                                     $"G {MainControl.Instance.playerControl.gold}";
 
-                    if (select == 1)
-                        FlashBackpackUIRightPoint(ItemBoxY);
-                    else
-                        FlashBackpackUIRightPoint(InfoBoxY);
+                    FlashBackpackUIRightPoint(select == 1 ? ItemBoxY : InfoBoxY);
                 }
             }
             if (_backpack.gameObject.activeSelf && !typeWritter.isTyping)
@@ -346,12 +349,9 @@ namespace UCT.Overworld
                 }
 
                 if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow) ||
-                    GameUtilityService.KeyArrowToControl(KeyCode.DownArrow)) 
+                    GameUtilityService.KeyArrowToControl(KeyCode.DownArrow))
                 {
-                    if (select == 1)
-                        FlashBackpackUIRightPoint(ItemBoxY);
-                    else
-                        FlashBackpackUIRightPoint(InfoBoxY);
+                    FlashBackpackUIRightPoint(select == 1 ? ItemBoxY : InfoBoxY);
                 }
 
                 if (sonUse != 0)
@@ -434,7 +434,7 @@ namespace UCT.Overworld
             sonSelect = 0;
             select = 0;
             _backpack.gameObject.SetActive(false);
-            _optionsUI.localPosition.z = BoxZAxisInvisible;
+            optionsUI.localPosition.z = BoxZAxisInvisible;
             _overviewUI.localPosition.z = BoxZAxisInvisible;
             typeWritter.TypeStop();
             TalkUIPositionChanger.Instance.boxDrawer.localPosition.z = BoxZAxisInvisible;

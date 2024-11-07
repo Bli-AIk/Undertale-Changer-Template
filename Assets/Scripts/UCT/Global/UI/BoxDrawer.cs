@@ -96,8 +96,6 @@ namespace UCT.Global.UI
             if (isIndividualBox)
             {
                 SetIndividualBox();
-                Other.Debug.LogWarning(vertexPoints.Aggregate(gameObject.name + "\n",
-                    (current, VARIABLE) => current + (VARIABLE + "\n")));
                 return;
             }
             
