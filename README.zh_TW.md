@@ -81,6 +81,7 @@
 - [Live2D](https://www.live2d.com/cubism/download/viewer-unity/)
 - [TextMesh Pro](https://docs.unity3d.com/Packages/com.unity.textmeshpro@2.1/manual/index.html)
 - [More Effective Coroutines](http://trinary.tech/category/mec/)
+- [Fusion Pixel Font](https://github.com/TakWolf/fusion-pixel-font)
 
 以上函式庫/插件的貢獻者們為本計畫提供了優秀的工具和技術支持，衷心感謝你們！
 

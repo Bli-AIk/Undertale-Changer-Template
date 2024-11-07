@@ -83,6 +83,7 @@ But it is not recommended to use the 2022 version, otherwise the template may ha
 - [Live2D](https://www.live2d.com/cubism/download/viewer-unity/)
 - [TextMesh Pro](https://docs.unity3d.com/Packages/com.unity.textmeshpro@2.1/manual/index.html)
 - [More Effective Coroutines](http://trinary.tech/category/mec/)
+- [Fusion Pixel Font](https://github.com/TakWolf/fusion-pixel-font)
 
 Thank you very much to the contributors of the above libraries/plugins for providing excellent tools and technical support for this project!
 
