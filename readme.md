@@ -28,6 +28,7 @@ An [**UNDERTALE**](https://undertale.com/) fan game template based on [**unity e
 - [Synopsis](#synopsis)
 - [Usage](#usage)
 - [Wiki](#wiki)
+- [Dependencies](#Dependencies)
 - [License](#license)
 
 
@@ -74,6 +75,16 @@ But it is not recommended to use the 2022 version, otherwise the template may ha
 [Wiki](https://github.com/Bli-AIk/Undertale-Changer-Template/wiki)
 
 (Please note that this wiki is written based on an old version of UCT, and it may have some differences with the current version)
+
+## Dependencies
+- [Clipper2](https://github.com/AngusJohnson/Clipper2)
+- [DOTween](https://dotween.demigiant.com/)
+- [LibTessDotNet](https://github.com/speps/LibTessDotNet)
+- [Live2D](https://www.live2d.com/cubism/download/viewer-unity/)
+- [TextMesh Pro](https://docs.unity3d.com/Packages/com.unity.textmeshpro@2.1/manual/index.html)
+- [More Effective Coroutines](http://trinary.tech/category/mec/)
+
+Thank you very much to the contributors of the above libraries/plugins for providing excellent tools and technical support for this project!
 
 ## License
 
