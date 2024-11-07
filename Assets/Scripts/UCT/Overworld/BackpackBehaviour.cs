@@ -36,6 +36,9 @@ namespace UCT.Overworld
 
         public const int BoxZAxisVisible = 5;
         public const int BoxZAxisInvisible = -50;
+        private const float ItemBoxY = -8.9f;
+        private const float InfoBoxY = -10.3f;
+        
         private void Awake()
         {
             Instance = this;
@@ -150,12 +153,12 @@ namespace UCT.Overworld
                     if (_player.transform.position.y >= _mainCamera.transform.position.y - 1.25f)
                     {
                         _uiMessage.anchoredPosition = new Vector2(0, 270);
-                        _overviewUI.localPosition.y = 6.75f;
+                        _overviewUI.localPosition.y = 3.325f;
                     }
                     else
                     {
                         _uiMessage.anchoredPosition = Vector2.zero;
-                        _overviewUI.localPosition.y = 0;
+                        _overviewUI.localPosition.y = -3.425f;
                     }
 
                     _overviewUI.localPosition.z = BoxZAxisVisible;
@@ -173,9 +176,9 @@ namespace UCT.Overworld
                                     $"G {MainControl.Instance.playerControl.gold}";
 
                     if (select == 1)
-                        FlashBackpackUIRightPoint(-8.55f * 0.5f);
+                        FlashBackpackUIRightPoint(ItemBoxY);
                     else
-                        FlashBackpackUIRightPoint(-11.3f * 0.5f);
+                        FlashBackpackUIRightPoint(InfoBoxY);
                 }
             }
             if (_backpack.gameObject.activeSelf && !typeWritter.isTyping)
@@ -346,9 +349,9 @@ namespace UCT.Overworld
                     GameUtilityService.KeyArrowToControl(KeyCode.DownArrow)) 
                 {
                     if (select == 1)
-                        FlashBackpackUIRightPoint(-8.55f * 0.5f);
+                        FlashBackpackUIRightPoint(ItemBoxY);
                     else
-                        FlashBackpackUIRightPoint(-11.3f * 0.5f);
+                        FlashBackpackUIRightPoint(InfoBoxY);
                 }
 
                 if (sonUse != 0)
