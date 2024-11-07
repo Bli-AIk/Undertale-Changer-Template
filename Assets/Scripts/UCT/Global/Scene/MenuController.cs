@@ -17,7 +17,7 @@ namespace UCT.Global.Scene
     /// </summary>
     public class MenuController : MonoBehaviour
     {
-        private readonly OverworldControl _overworldControl = MainControl.Instance.OverworldControl;
+        private OverworldControl _overworldControl;
 
         
         // ReSharper disable once StringLiteralTypo
@@ -33,7 +33,6 @@ namespace UCT.Global.Scene
 
         private void Awake()
         {
-            _overworldControl.playerScenePos = new Vector3(-0.5f, -1);
 
             for (var i = 0; i < transform.childCount; i++)
             {
@@ -45,6 +44,8 @@ namespace UCT.Global.Scene
         {
             _setData = false;
             layer = 0;
+            _overworldControl = MainControl.Instance.OverworldControl;
+            _overworldControl.playerScenePos = new Vector3(-0.5f, -1);
             if (MainControl.Instance.saveDataId < 0)
                 MainControl.Instance.saveDataId = 0;
             MainControl.Instance.playerControl = DataHandlerService.SetPlayerControl(SaveController.LoadData("Data" + MainControl.Instance.saveDataId));
