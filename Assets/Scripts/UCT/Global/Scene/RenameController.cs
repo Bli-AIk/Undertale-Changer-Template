@@ -58,6 +58,7 @@ namespace UCT.Global.Scene
         };
 
         private const int AlphabetNum = 0;
+        private const int MaxCharactersPerLine = 7;
         private void Start()
         {
             StartGetComponent();
@@ -358,18 +359,18 @@ namespace UCT.Global.Scene
             {
                 switch (selectedCharactersId)
                 {
-                    case >= 31 and <= 32:
+                    case >= 31 and <= 32://小写转大写的情况
                     {
-                        selectedCharactersId -= 12;
+                        selectedCharactersId -=
+                            MaxCharactersPerLine * 2 - AlphabetCapital.Count % MaxCharactersPerLine;
                         break;
                     }
-                    case < 26:
-                    case > 32 and < 52:
+                    case < 26: case > 32 and < 52://常规情况
                     {
-                        selectedCharactersId -= 7;
+                        selectedCharactersId -= MaxCharactersPerLine;
                         break;
                     }
-                    case >= 52 and <= 54:
+                    case >= 52 and <= 54://底部三个键的情况
                     {
                         selectedCharactersId = selectedCharactersId switch
                         {
@@ -395,17 +396,17 @@ namespace UCT.Global.Scene
             {
                 switch (selectedCharactersId)
                 {
-                    case >= 19 and <= 20:
+                    case >= 19 and <= 20://大写转小写的情况
                     {
                         selectedCharactersId += 12;
                         break;
                     }
-                    case < 21 or > 25 and < 45:
+                    case < 21 or > 25 and < 45://常规情况
                     {
-                        selectedCharactersId += 7;
+                        selectedCharactersId += MaxCharactersPerLine;
                         break;
                     }
-                    case >= 45:
+                    case >= 45://到下面三个键的情况
                     {
                         selectedCharactersId = selectedCharactersId switch
                         {
@@ -475,10 +476,8 @@ namespace UCT.Global.Scene
         /// </summary>
         private static string GenerateSelectableTextForRename(int selectNumber)
         {
-            
             var alphabet = GenerateCharacterTextFrom(AlphabetCapital[AlphabetNum]) + "\n" +
                            GenerateCharacterTextFrom(AlphabetLowercase[AlphabetNum]);
-            
             var final = "";
             for (var i = 0; i < alphabet.Length; i++)
             {
@@ -504,7 +503,7 @@ namespace UCT.Global.Scene
             for (var i = 0; i < input.Length; i++)
             {
                 formatted.Append(input[i]);
-                if ((i + 1) % 7 == 0 && i != input.Length - 1)
+                if ((i + 1) % MaxCharactersPerLine == 0 && i != input.Length - 1)
                     formatted.Append("\n");
                 else if (i != input.Length - 1)
                     formatted.Append(" ");

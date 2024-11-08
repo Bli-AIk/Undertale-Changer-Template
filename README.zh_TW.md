@@ -88,6 +88,9 @@
 - [More Effective Coroutines](http://trinary.tech/category/mec/)
 - [Fusion Pixel Font](https://github.com/TakWolf/fusion-pixel-font)
 - [RiderFlow](https://www.jetbrains.com/riderflow/)
+- [Pinyin4NET](https://github.com/hyjiacan/Pinyin4NET)
+- [WanaKanaSharp](https://github.com/caguiclajmg/WanaKanaSharp)
+- [TwitterKoreanProcessorCS](https://github.com/modamoda/TwitterKoreanProcessorCS)
 
 以上函式庫/插件的貢獻者們為本計畫提供了優秀的工具和技術支持，衷心感謝你們！
 
