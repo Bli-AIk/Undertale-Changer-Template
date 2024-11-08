@@ -7,7 +7,7 @@
 
 **此版本僅供學習使用，敬請期待 UCT 的後續更新。**
 
-你可以在[CHANGELOG.md](CHANGELOG.md)中查看目前的更新日誌（簡體中文）。
+你可以在[**CHANGELOG.md**](CHANGELOG.md)中查看目前的更新日誌（簡體中文）。
 
 # Undertale-Changer-Template
 一個基於[**Unity引擎**](https://unity.com)的[**UNDERTALE**](https://undertale.com)同人遊戲模板。
