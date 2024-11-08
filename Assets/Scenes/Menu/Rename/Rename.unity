@@ -253,7 +253,7 @@ GameObject:
   - component: {fileID: 777138334}
   - component: {fileID: 777138333}
   m_Layer: 5
-  m_Name: Text Message
+  m_Name: TextMessage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -292,7 +292,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   width: 1
-  Options:
+  options:
   - {x: -0.5, y: 0, z: 0, w: 0}
   - {x: -0.5, y: 0, z: 0, w: 0}
 --- !u!114 &777138334
@@ -481,7 +481,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b5b8076d7b0e2245bde295794d59473, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tmps: []
+  texts: []
   select: 0
   selectMax: 0
   setName: 
@@ -538,7 +538,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   width: 1
-  Options:
+  options:
   - {x: -3.8, y: 122, z: -14, w: 0}
   - {x: 9.5, y: 160, z: -14, w: 0}
 --- !u!114 &903125063
@@ -689,7 +689,7 @@ GameObject:
   - component: {fileID: 1187865712}
   - component: {fileID: 1187865711}
   m_Layer: 0
-  m_Name: NamedText
+  m_Name: CharacterText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -727,7 +727,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 004b7bcff67749046bb833215590b08e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mode: 0
   dynamicMode: 1
 --- !u!114 &1187865712
 MonoBehaviour:
@@ -1051,7 +1050,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   width: 1
-  Options:
+  options:
   - {x: -5.25, y: -22.5, z: 0, w: 0}
   - {x: 7.55, y: -22.5, z: 0, w: 0}
 --- !u!1 &1879787544
@@ -1273,7 +1272,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 004b7bcff67749046bb833215590b08e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mode: -1
   dynamicMode: 0
 --- !u!114 &2040808138
 MonoBehaviour:
@@ -1288,7 +1286,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   width: 1
-  Options:
+  options:
   - {x: -3.8, y: -8.85, z: 0, w: 0}
   - {x: -3.8, y: -8.85, z: 0, w: 0}
 --- !u!114 &2040808139
@@ -1578,7 +1576,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 004b7bcff67749046bb833215590b08e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mode: 1
   dynamicMode: 1
 --- !u!114 &2091772103
 MonoBehaviour:
@@ -1593,7 +1590,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   width: 1
-  Options:
+  options:
   - {x: 0.75, y: -26, z: 5, w: 0}
   - {x: 0.75, y: -8.85, z: 20, w: 0}
 --- !u!114 &2091772104
