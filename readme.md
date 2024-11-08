@@ -10,6 +10,7 @@ Currently, **UCT** remains in a **semi-finished** state, so please do not use th
 You can view the current changelog (in Simplified Chinese) in [**CHANGELOG.md**](CHANGELOG.md).
 
 # Undertale-Changer-Template
+![](Assets/Sprites/Icons/logo.png)
 An [**UNDERTALE**](https://undertale.com/) fan game template based on [**unity engine**](https://unity.com).
 
 [![license](https://img.shields.io/github/license/Bli-AIk/Undertale-Changer-Template
