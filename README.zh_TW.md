@@ -10,6 +10,11 @@
 你可以在[**CHANGELOG.md**](CHANGELOG.md)中查看目前的更新日誌（簡體中文）。
 
 # Undertale-Changer-Template
+
+<p align="center">
+  <img src="Assets/Sprites/Icons/logo.png" style="width: 100%; max-width: 500px; image-rendering: pixelated;">
+</p>
+
 一個基於[**Unity引擎**](https://unity.com)的[**UNDERTALE**](https://undertale.com)同人遊戲模板。
 
 [![license](https://img.shields.io/github/license/Bli-AIk/Undertale-Changer-Template
