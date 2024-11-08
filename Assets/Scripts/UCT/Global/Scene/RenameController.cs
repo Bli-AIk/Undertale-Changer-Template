@@ -48,16 +48,16 @@ namespace UCT.Global.Scene
         private static readonly List<string> AlphabetCapital = new()
         {
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-            "TEST1"
+            "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
         };
 
         private static readonly List<string> AlphabetLowercase = new()
         {
             "abcdefghijklmnopqrstuvwxyz",
-            "test1"
+            "0123456789"
         };
-
-        private const int AlphabetNum = 0;
+        
+        private const int AlphabetNum = 1;
         private const int MaxCharactersPerLine = 7;
         private void Start()
         {
@@ -240,6 +240,14 @@ namespace UCT.Global.Scene
         {
             var alphabetLength = AlphabetCapital[AlphabetNum].Length + AlphabetLowercase[AlphabetNum].Length;
             var breaker = false;
+            var uppercaseRemainder = AlphabetCapital[AlphabetNum].Length % MaxCharactersPerLine;
+            var lowercaseRemainder = AlphabetLowercase[AlphabetNum].Length % MaxCharactersPerLine;
+            var maxUppercaseCharactersPerLine = MaxCharactersPerLine < AlphabetCapital[AlphabetNum].Length
+                ? MaxCharactersPerLine
+                : AlphabetCapital[AlphabetNum].Length;
+            var maxLowercaseCharactersPerLine = MaxCharactersPerLine < AlphabetLowercase[AlphabetNum].Length
+                ? MaxCharactersPerLine
+                : AlphabetLowercase[AlphabetNum].Length;
             if (GameUtilityService.KeyArrowToControl(KeyCode.Z) && setName.Length <= 6)
             {
                 if (selectedCharactersId < alphabetLength)
@@ -357,92 +365,116 @@ namespace UCT.Global.Scene
             if (breaker) return;
             if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow))
             {
-                switch (selectedCharactersId)
+                if (selectedCharactersId < MaxCharactersPerLine)
                 {
-                    case >= 31 and <= 32://小写转大写的情况
+                    selectedCharactersId = selectedCharactersId switch
                     {
-                        selectedCharactersId -=
-                            MaxCharactersPerLine * 2 - AlphabetCapital.Count % MaxCharactersPerLine;
-                        break;
+                        < 2 => alphabetLength,
+                        < 5 => alphabetLength + 1,
+                        _ => alphabetLength + 2
+                    };
+                }
+                else if (selectedCharactersId >= AlphabetCapital[AlphabetNum].Length + uppercaseRemainder &&
+                    selectedCharactersId < AlphabetCapital[AlphabetNum].Length + MaxCharactersPerLine)  //小写转大写的情况
+                {
+                    selectedCharactersId -= maxUppercaseCharactersPerLine + uppercaseRemainder;
+                }
+                else if (selectedCharactersId < AlphabetCapital[AlphabetNum].Length)   //大写常规情况
+                {
+                    selectedCharactersId -= maxUppercaseCharactersPerLine;
+                }
+                else if (selectedCharactersId >= AlphabetCapital[AlphabetNum].Length + MaxCharactersPerLine &&
+                         selectedCharactersId < alphabetLength)   //小写常规情况
+                {
+                    selectedCharactersId -= maxLowercaseCharactersPerLine;
+                }
+                else if (selectedCharactersId >= alphabetLength &&
+                         selectedCharactersId <= alphabetLength + 2) //底部三个键的情况
+                {
+                    if (selectedCharactersId == alphabetLength)
+                    {
+                        selectedCharactersId = alphabetLength - lowercaseRemainder;
                     }
-                    case < 26: case > 32 and < 52://常规情况
+                    else
                     {
-                        selectedCharactersId -= MaxCharactersPerLine;
-                        break;
-                    }
-                    case >= 52 and <= 54://底部三个键的情况
-                    {
-                        selectedCharactersId = selectedCharactersId switch
+                        int possibleCharacterId;
+                        if (selectedCharactersId == alphabetLength + 1)
                         {
-                            52 => 47,
-                            53 => 49,
-                            54 => 45,
-                            _ => selectedCharactersId
-                        };
+                            possibleCharacterId = alphabetLength - lowercaseRemainder + 2;
+                        }
+                        else
+                        {
+                            possibleCharacterId = alphabetLength - lowercaseRemainder + 5;
+                        }
 
-                        break;
-                    }
-                    default:
-                    {
-                        selectedCharactersId -= 5;
-                        break;
+
+                        selectedCharactersId = possibleCharacterId <
+                                               alphabetLength - MaxCharactersPerLine + lowercaseRemainder
+                            ? possibleCharacterId
+                            : possibleCharacterId - MaxCharactersPerLine;
                     }
                 }
 
+                else
+                    selectedCharactersId -= uppercaseRemainder;
+
                 if (selectedCharactersId < 0)
-                    selectedCharactersId = 54;
+                    selectedCharactersId = alphabetLength + 2;
             }
             else if (GameUtilityService.KeyArrowToControl(KeyCode.DownArrow))
             {
-                switch (selectedCharactersId)
+                if (selectedCharactersId >= AlphabetCapital[AlphabetNum].Length - MaxCharactersPerLine &&
+                    selectedCharactersId < AlphabetCapital[AlphabetNum].Length - uppercaseRemainder)  //大写转小写的情况
                 {
-                    case >= 19 and <= 20://大写转小写的情况
+                    selectedCharactersId += maxLowercaseCharactersPerLine + uppercaseRemainder;
+                }
+                else if (selectedCharactersId < alphabetLength - MaxCharactersPerLine)//大写常规情况
+                {
+                    
+                    selectedCharactersId += maxUppercaseCharactersPerLine;
+                }
+                else if (selectedCharactersId < AlphabetCapital[AlphabetNum].Length - uppercaseRemainder ||
+                         selectedCharactersId >= AlphabetCapital[AlphabetNum].Length) //小写常规情况
+                {
+                    selectedCharactersId += maxLowercaseCharactersPerLine;
+                }
+                else if (selectedCharactersId >= alphabetLength - MaxCharactersPerLine) //到下面三个键的情况
+                {
+                    if (selectedCharactersId < alphabetLength - lowercaseRemainder)
+                        selectedCharactersId = alphabetLength + 2;
+                    else if (selectedCharactersId < alphabetLength - lowercaseRemainder + 2)
+                        selectedCharactersId = alphabetLength;
+                    else if (selectedCharactersId < alphabetLength - lowercaseRemainder + 5)
+                        selectedCharactersId = alphabetLength + 1;
+                    else if (selectedCharactersId == alphabetLength)
                     {
-                        selectedCharactersId += 12;
-                        break;
+                        selectedCharactersId = 0;
                     }
-                    case < 21 or > 25 and < 45://常规情况
+                    else if (selectedCharactersId == alphabetLength - lowercaseRemainder + 6)
                     {
-                        selectedCharactersId += MaxCharactersPerLine;
-                        break;
+                        selectedCharactersId = 2;
                     }
-                    case >= 45://到下面三个键的情况
+                    else
                     {
-                        selectedCharactersId = selectedCharactersId switch
-                        {
-                            <= 46 => 54,
-                            <= 48 => 52,
-                            <= 51 => 53,
-                            _ => selectedCharactersId switch
-                            {
-                                52 => 0,
-                                53 => 2,
-                                54 => 5,
-                                _ => selectedCharactersId
-                            }
-                        };
-                        break;
-                    }
-                    default:
-                    {
-                        selectedCharactersId += 5;
-                        break;
+                        selectedCharactersId = 5;
                     }
                 }
+                else
+                    selectedCharactersId += uppercaseRemainder;
 
-                if (selectedCharactersId > 54)
+                if (selectedCharactersId > alphabetLength + 2)
                     selectedCharactersId = 0;
             }
             if (GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow))
             {
                 selectedCharactersId -= 1;
                 if (selectedCharactersId < 0)
-                    selectedCharactersId = 54;
+                    selectedCharactersId = alphabetLength + 2;
             }
             else if (GameUtilityService.KeyArrowToControl(KeyCode.RightArrow))
             {
                 selectedCharactersId += 1;
-                if (selectedCharactersId > 54)
+                if (selectedCharactersId > alphabetLength + 2)
                     selectedCharactersId = 0;
             }
 
@@ -520,7 +552,7 @@ namespace UCT.Global.Scene
         private void HighlightSelectedOptions(int selectNumber)
         {
             var strings = new List<string>();
-            var selectId = selectNumber - 52;
+            var selectId = selectNumber - (AlphabetCapital[AlphabetNum].Length + AlphabetLowercase[AlphabetNum].Length);
             for (var i = 0; i < 3; i++)
             {
                 strings.Add(i == selectId ? "<color=yellow>" : "");
