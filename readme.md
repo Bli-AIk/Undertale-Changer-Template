@@ -11,7 +11,10 @@ You can view the current changelog (in Simplified Chinese) in [**CHANGELOG.md**]
 
 # Undertale-Changer-Template
 
-![](Assets/Sprites/Icons/logo.png)
+<p align="center">
+  <img src="Assets/Sprites/Icons/logo.png">
+</p>
+
 
 An [**UNDERTALE**](https://undertale.com/) fan game template based on [**unity engine**](https://unity.com).
 
