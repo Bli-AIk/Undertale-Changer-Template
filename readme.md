@@ -12,8 +12,9 @@ You can view the current changelog (in Simplified Chinese) in [**CHANGELOG.md**]
 # Undertale-Changer-Template
 
 <p align="center">
-  <img src="Assets/Sprites/Icons/logo.png" style="width: 100%; max-width: 500px;">
+  <img src="Assets/Sprites/Icons/logo.png" style="width: 100%; max-width: 500px; image-rendering: pixelated;">
 </p>
+
 
 
 
