@@ -7,7 +7,7 @@ Currently, **UCT** remains in a **semi-finished** state, so please do not use th
 
 **This version is for learning purposes only. Stay tuned for future updates to UCT.**
 
-You can view the current changelog (in Simplified Chinese) in [CHANGELOG.md](CHANGELOG.md).
+You can view the current changelog (in Simplified Chinese) in [**CHANGELOG.md**](CHANGELOG.md).
 
 # Undertale-Changer-Template
 An [**UNDERTALE**](https://undertale.com/) fan game template based on [**unity engine**](https://unity.com).
