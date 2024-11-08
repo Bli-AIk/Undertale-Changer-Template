@@ -9,6 +9,7 @@ using UCT.Global.Core;
 using UCT.Global.UI;
 using UCT.Service;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace UCT.Global.Scene
@@ -16,8 +17,8 @@ namespace UCT.Global.Scene
     public class RenameController : MonoBehaviour
     {
         private TextMeshPro _titleText, _nameText, _characterText, _selectText, _teachText, _textMessage;
-        public int select;
-        public bool selectMax;
+        public int selectedCharactersId;
+        public bool isSelectedDone;
         public string setName;
 
         public enum SceneState
@@ -129,7 +130,7 @@ namespace UCT.Global.Scene
         {
             if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
             {
-                switch (select)
+                switch (selectedCharactersId)
                 {
                     case 0:
                     {
@@ -154,11 +155,9 @@ namespace UCT.Global.Scene
                         sceneState = SceneState.SwitchScene;
                         MainControl.Instance.playerControl.playerName = setName;
                         AudioController.Instance.transform.GetComponent<AudioSource>().Pause();
-                        //Volume v = GameObject.Find("Global Volume").transform.GetComponent<Volume>();
                         var v2 = GameObject.Find("Global Volume (1)").transform
                             .GetComponent<UnityEngine.Rendering.Volume>();
 
-                        //DOTween.To(() => v.weight, x => v.weight = x, 0, 5.5f).SetEase(Ease.Linear);
                         DOTween.To(() => v2.weight, x => v2.weight = x, 1, 5.5f)
                             .SetEase(Ease.Linear);
 
@@ -193,161 +192,157 @@ namespace UCT.Global.Scene
                     TextProcessingService.GetFirstChildStringByPrefix(
                         MainControl.Instance.OverworldControl.sceneTextsSave, "Rename3");
             }
-            if (selectMax && (GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow) || GameUtilityService.KeyArrowToControl(KeyCode.RightArrow)))
+
+            if (!isSelectedDone || (!GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow) &&
+                               !GameUtilityService.KeyArrowToControl(KeyCode.RightArrow))) return;
+            if (selectedCharactersId == 0)
             {
-                if (select == 0)
-                {
-                    select = 1;
-                    if (MainControl.Instance.OverworldControl.textWidth)
-                        _selectText.text =
-                            "<size=0>wwww</size>" +
-                            TextProcessingService.GetFirstChildStringByPrefix(
-                                MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
-                            "    <color=yellow>" +
-                            TextProcessingService.GetFirstChildStringByPrefix(
-                                MainControl.Instance.OverworldControl.sceneTextsSave, "Yes") + "</color>";
-                    else
-                        _selectText.text = "<color=#00000000><size=2>wwww</size></color>" +
-                                           TextProcessingService.GetFirstChildStringByPrefix(
-                                               MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
-                                           "    <color=#00000000><size=5>wwwwwwwww</size></color><color=yellow>" +
-                                           TextProcessingService.GetFirstChildStringByPrefix(
-                                               MainControl.Instance.OverworldControl.sceneTextsSave, "Yes") +
-                                           "</color>";
-                }
+                selectedCharactersId = 1;
+                if (MainControl.Instance.OverworldControl.textWidth)
+                    _selectText.text =
+                        "<size=0>wwww</size>" +
+                        TextProcessingService.GetFirstChildStringByPrefix(
+                            MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
+                        "    <color=yellow>" +
+                        TextProcessingService.GetFirstChildStringByPrefix(
+                            MainControl.Instance.OverworldControl.sceneTextsSave, "Yes") + "</color>";
                 else
-                {
-                    select = 0;
-                    if (MainControl.Instance.OverworldControl.textWidth)
-                        _selectText.text = "<color=#00000000><size=0>wwww</size><color=yellow>" +
-                                           TextProcessingService.GetFirstChildStringByPrefix(
-                                               MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
-                                           "</color>    <color=white>" +
-                                           TextProcessingService.GetFirstChildStringByPrefix(
-                                               MainControl.Instance.OverworldControl.sceneTextsSave, "Yes");
-                    else
-                        _selectText.text = "<color=#00000000><size=2>wwww</size></color><color=yellow>" +
-                                           TextProcessingService.GetFirstChildStringByPrefix(
-                                               MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
-                                           "</color>    <color=#00000000><size=5>wwwwwwwww</size></color>" +
-                                           TextProcessingService.GetFirstChildStringByPrefix(
-                                               MainControl.Instance.OverworldControl.sceneTextsSave, "Yes");
-                }
+                    _selectText.text = "<color=#00000000><size=2>wwww</size></color>" +
+                                       TextProcessingService.GetFirstChildStringByPrefix(
+                                           MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
+                                       "    <color=#00000000><size=5>wwwwwwwww</size></color><color=yellow>" +
+                                       TextProcessingService.GetFirstChildStringByPrefix(
+                                           MainControl.Instance.OverworldControl.sceneTextsSave, "Yes") +
+                                       "</color>";
             }
-            return;
+            else
+            {
+                selectedCharactersId = 0;
+                if (MainControl.Instance.OverworldControl.textWidth)
+                    _selectText.text = "<color=#00000000><size=0>wwww</size><color=yellow>" +
+                                       TextProcessingService.GetFirstChildStringByPrefix(
+                                           MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
+                                       "</color>    <color=white>" +
+                                       TextProcessingService.GetFirstChildStringByPrefix(
+                                           MainControl.Instance.OverworldControl.sceneTextsSave, "Yes");
+                else
+                    _selectText.text = "<color=#00000000><size=2>wwww</size></color><color=yellow>" +
+                                       TextProcessingService.GetFirstChildStringByPrefix(
+                                           MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
+                                       "</color>    <color=#00000000><size=5>wwwwwwwww</size></color>" +
+                                       TextProcessingService.GetFirstChildStringByPrefix(
+                                           MainControl.Instance.OverworldControl.sceneTextsSave, "Yes");
+            }
         }
 
         private void NamingUpdate()
         {
+            var alphabetLength = AlphabetCapital[AlphabetNum].Length + AlphabetLowercase[AlphabetNum].Length;
             var breaker = false;
             if (GameUtilityService.KeyArrowToControl(KeyCode.Z) && setName.Length <= 6)
             {
-                if (select < 52)
+                if (selectedCharactersId < alphabetLength)
                 {
                     if (setName.Length < 6)
-                        setName += "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"[select];
+                        setName += (AlphabetCapital[AlphabetNum] + AlphabetLowercase[AlphabetNum])[selectedCharactersId];
                 }
-                else
-                    switch (select)
+                else if (selectedCharactersId == alphabetLength)
+                {
+                    if (!string.IsNullOrEmpty(MainControl.Instance.playerControl.playerName))
                     {
-                        case 52:
+                        GameUtilityService.FadeOutAndSwitchScene("Menu", Color.black);
+                        sceneState = SceneState.SwitchScene;
+                    }
+                    else
+                        sceneState = SceneState.Instruction;
+                }
+                else if (selectedCharactersId == alphabetLength + 1)
+                {
+                    if (setName.Length > 0)
+                        setName = setName[..^1];
+                }
+                else if (selectedCharactersId == alphabetLength + 2)
+                {
+                    if (setName != "")
+                    {
+                        selectedCharactersId = 0;
+                        sceneState = SceneState.ConfirmName;
+                        var list = TextProcessingService.GetAllChildStringsByPrefix(
+                            MainControl.Instance.OverworldControl.sceneTextsSave, "RenameSp");
+                        _titleText.text =
+                            TextProcessingService.GetFirstChildStringByPrefix(
+                                MainControl.Instance.OverworldControl.sceneTextsSave, "Rename");
+                        if (MainControl.Instance.OverworldControl.textWidth)
                         {
-                            if (!string.IsNullOrEmpty(MainControl.Instance.playerControl.playerName))
-                            {
-                                GameUtilityService.FadeOutAndSwitchScene("Menu", Color.black);
-                                sceneState = SceneState.SwitchScene;
-                            }
+                            _selectText.text =
+                                "<size=0>wwww</size><color=yellow>" +
+                                TextProcessingService.GetFirstChildStringByPrefix(
+                                    MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
+                                "</color>    " +
+                                TextProcessingService.GetFirstChildStringByPrefix(
+                                    MainControl.Instance.OverworldControl.sceneTextsSave, "Yes");
+                        }
+                        else
+                        {
+                            _selectText.text =
+                                "<size=2><color=#00000000>wwww</color></size><color=yellow>" +
+                                TextProcessingService.GetFirstChildStringByPrefix(
+                                    MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
+                                "</color>    <color=#00000000><size=5>wwwwwwwww</size></color>" +
+                                TextProcessingService.GetFirstChildStringByPrefix(
+                                    MainControl.Instance.OverworldControl.sceneTextsSave, "Yes");
+                        }
+
+                        isSelectedDone = true;
+                        foreach (var item in list)
+                        {
+                            var lister = new List<string>();
+                            TextProcessingService.SplitStringToListWithDelimiter(item + '|', lister, '|');
+                            if ((lister[0] != TextProcessingService.ConvertLettersCase(setName, true) ||
+                                 bool.Parse(lister[2])) &&
+                                (lister[0] != setName || !bool.Parse(lister[2]))) continue;
+                            if (lister[3] == "<gaster>")
+                                Application.Quit();
                             else
-                                sceneState = SceneState.Instruction;
-                            break;
-                        }
-
-                        case 53:
-                        {
-                            if (setName.Length > 0)
-                                setName = setName[..^1];
-                            break;
-                        }
-
-                        case 54:
-                        {
-                            if (setName != "")
+                                _titleText.text = lister[3];
+                            if (!bool.Parse(lister[1]))
                             {
-                                select = 0;
-                                sceneState = SceneState.ConfirmName;
-                                var list = TextProcessingService.GetAllChildStringsByPrefix(
-                                    MainControl.Instance.OverworldControl.sceneTextsSave, "RenameSp");
-                                _titleText.text =
-                                    TextProcessingService.GetFirstChildStringByPrefix(
-                                        MainControl.Instance.OverworldControl.sceneTextsSave, "Rename");
+                                isSelectedDone = false;
                                 if (MainControl.Instance.OverworldControl.textWidth)
-                                    _selectText.text =
-                                        "<size=0>wwww</size><color=yellow>" +
-                                        TextProcessingService.GetFirstChildStringByPrefix(
-                                            MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
-                                        "</color>    " +
-                                        TextProcessingService.GetFirstChildStringByPrefix(
-                                            MainControl.Instance.OverworldControl.sceneTextsSave, "Yes");
+                                    _selectText.text = "<size=0>wwww</size><color=yellow>" +
+                                                       TextProcessingService
+                                                           .GetFirstChildStringByPrefix(
+                                                               MainControl.Instance.OverworldControl
+                                                                   .sceneTextsSave, "GoBack") +
+                                                       "</color>";
                                 else
                                     _selectText.text =
                                         "<size=2><color=#00000000>wwww</color></size><color=yellow>" +
                                         TextProcessingService.GetFirstChildStringByPrefix(
-                                            MainControl.Instance.OverworldControl.sceneTextsSave, "No") +
-                                        "</color>    <color=#00000000><size=5>wwwwwwwww</size></color>" +
-                                        TextProcessingService.GetFirstChildStringByPrefix(
-                                            MainControl.Instance.OverworldControl.sceneTextsSave, "Yes");
-                                selectMax = true;
-                                foreach (var item in list)
-                                {
-                                    var lister = new List<string>();
-                                    TextProcessingService.SplitStringToListWithDelimiter(item + '|', lister, '|');
-                                    if ((lister[0] != TextProcessingService.ConvertLettersCase(setName, true) ||
-                                         bool.Parse(lister[2])) &&
-                                        (lister[0] != setName || !bool.Parse(lister[2]))) continue;
-                                    if (lister[3] == "<gaster>")
-                                        Application.Quit();
-                                    else
-                                        _titleText.text = lister[3];
-                                    if (!bool.Parse(lister[1]))
-                                    {
-                                        selectMax = false;
-                                        if (MainControl.Instance.OverworldControl.textWidth)
-                                            _selectText.text = "<size=0>wwww</size><color=yellow>" +
-                                                               TextProcessingService
-                                                                   .GetFirstChildStringByPrefix(
-                                                                       MainControl.Instance.OverworldControl
-                                                                           .sceneTextsSave, "GoBack") +
-                                                               "</color>";
-                                        else
-                                            _selectText.text =
-                                                "<size=2><color=#00000000>wwww</color></size><color=yellow>" +
-                                                TextProcessingService.GetFirstChildStringByPrefix(
-                                                    MainControl.Instance.OverworldControl.sceneTextsSave,
-                                                    "GoBack") + "</color>";
-                                    }
-
-                                    break;
-                                }
-
-                                _animMove = DOTween.To(() => _nameText.transform.localPosition,
-                                        x => _nameText.transform.localPosition = x, new Vector3(26.95f, -7.85f),
-                                        5)
-                                    .SetEase(Ease.Linear);
-                                _animScale = DOTween.To(() => _nameText.transform.localScale,
-                                        x => _nameText.transform.localScale = x, Vector3.one * 3, 5)
-                                    .SetEase(Ease.Linear);
-                                // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
-                                // 该方法只会在输入完名称确定时执行一次。
-                                _nameText.GetComponent<DynamicTMP>().dynamicMode =
-                                    OverworldControl.DynamicTMP.RandomShakeSingle;
-                                _characterText.text = "";
-                                _teachText.text = "";
-                                _textMessage.text = "";
-                                breaker = true;
+                                            MainControl.Instance.OverworldControl.sceneTextsSave,
+                                            "GoBack") + "</color>";
                             }
+
                             break;
                         }
+
+                        _animMove = DOTween.To(() => _nameText.transform.localPosition,
+                                x => _nameText.transform.localPosition = x, new Vector3(26.95f, -7.85f),
+                                5)
+                            .SetEase(Ease.Linear);
+                        _animScale = DOTween.To(() => _nameText.transform.localScale,
+                                x => _nameText.transform.localScale = x, Vector3.one * 3, 5)
+                            .SetEase(Ease.Linear);
+                        // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
+                        // 该方法只会在输入完名称确定时执行一次。
+                        _nameText.GetComponent<DynamicTMP>().dynamicMode =
+                            OverworldControl.DynamicTMP.RandomShakeSingle;
+                        _characterText.text = "";
+                        _teachText.text = "";
+                        _textMessage.text = "";
+                        breaker = true;
                     }
+                }
             }
             else if (GameUtilityService.KeyArrowToControl(KeyCode.X))
             {
@@ -361,104 +356,103 @@ namespace UCT.Global.Scene
             if (breaker) return;
             if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow))
             {
-                switch (select)
+                switch (selectedCharactersId)
                 {
                     case >= 31 and <= 32:
                     {
-                        select -= 12;
+                        selectedCharactersId -= 12;
                         break;
                     }
                     case < 26:
                     case > 32 and < 52:
                     {
-                        select -= 7;
+                        selectedCharactersId -= 7;
                         break;
                     }
                     case >= 52 and <= 54:
                     {
-                        select = select switch
+                        selectedCharactersId = selectedCharactersId switch
                         {
                             52 => 47,
                             53 => 49,
                             54 => 45,
-                            _ => select
+                            _ => selectedCharactersId
                         };
 
                         break;
                     }
                     default:
                     {
-                        select -= 5;
+                        selectedCharactersId -= 5;
                         break;
                     }
                 }
 
-                if (select < 0)
-                    select = 54;
+                if (selectedCharactersId < 0)
+                    selectedCharactersId = 54;
             }
             else if (GameUtilityService.KeyArrowToControl(KeyCode.DownArrow))
             {
-                switch (select)
+                switch (selectedCharactersId)
                 {
                     case >= 19 and <= 20:
                     {
-                        select += 12;
+                        selectedCharactersId += 12;
                         break;
                     }
                     case < 21 or > 25 and < 45:
                     {
-                        select += 7;
+                        selectedCharactersId += 7;
                         break;
                     }
                     case >= 45:
                     {
-                        select = select switch
+                        selectedCharactersId = selectedCharactersId switch
                         {
                             <= 46 => 54,
                             <= 48 => 52,
                             <= 51 => 53,
-                            _ => select switch
+                            _ => selectedCharactersId switch
                             {
                                 52 => 0,
                                 53 => 2,
                                 54 => 5,
-                                _ => select
+                                _ => selectedCharactersId
                             }
                         };
                         break;
                     }
                     default:
                     {
-                        select += 5;
+                        selectedCharactersId += 5;
                         break;
                     }
                 }
 
-                if (select > 54)
-                    select = 0;
+                if (selectedCharactersId > 54)
+                    selectedCharactersId = 0;
             }
             if (GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow))
             {
-                select -= 1;
-                if (select < 0)
-                    select = 54;
+                selectedCharactersId -= 1;
+                if (selectedCharactersId < 0)
+                    selectedCharactersId = 54;
             }
             else if (GameUtilityService.KeyArrowToControl(KeyCode.RightArrow))
             {
-                select += 1;
-                if (select > 54)
-                    select = 0;
+                selectedCharactersId += 1;
+                if (selectedCharactersId > 54)
+                    selectedCharactersId = 0;
             }
 
             _titleText.text =
                 TextProcessingService.GetFirstChildStringByPrefix(
                     MainControl.Instance.OverworldControl.sceneTextsSave, "Rename0");
             _nameText.text = setName;
-            _characterText.text = GenerateSelectableTextForRename(select);
-            HighlightSelectedOptions(select);
+            _characterText.text = GenerateSelectableTextForRename(selectedCharactersId);
+            HighlightSelectedOptions(selectedCharactersId);
             _teachText.text = "";
             _textMessage.text = "";
-            return;
         }
 
         private void InstructionUpdate()
