@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using DG.Tweening;
 using TMPro;
@@ -9,7 +10,6 @@ using UCT.Global.Core;
 using UCT.Global.UI;
 using UCT.Service;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 // ReSharper disable StringLiteralTypo
 
@@ -17,7 +17,7 @@ namespace UCT.Global.Scene
 {
     public class RenameController : MonoBehaviour
     {
-        private TextMeshPro _titleText, _nameText, _characterText, _selectText, _teachText, _textMessage;
+        private TextMeshPro _titleText, _nameText, _characterText, _selectText, _teachText, _textMessage, _randomNameTip;
         public int selectedCharactersId;
         public bool isSelectedDone;
         public string setName;
@@ -33,6 +33,8 @@ namespace UCT.Global.Scene
         public SceneState sceneState;
         private Tween _animMove, _animScale;
 
+        
+        [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private enum SelectedAlphabet
         {
             Latin,
@@ -43,10 +45,10 @@ namespace UCT.Global.Scene
             Cyrillic1,
             Cyrillic2,
             Greek,
-            ChineseSimplified,
-            ChineseTraditional,
-            Japanese,
-            Korean,
+            //ChineseSimplified,
+            //ChineseTraditional,
+            //Japanese,
+            //Korean,
         }
         private static readonly List<string> AlphabetCapital = new()
         {
@@ -70,14 +72,15 @@ namespace UCT.Global.Scene
             "абвгдеёжзийклмноп",
             "рстуфхцчшщъыьэюя",
             "αβγδεζηθικλμνξοπρστυφχψω"
-            
         };
 
-
+        private float _randomSetNameTime;
+        private const float RandomSetNameTimeMax = 1.5f;
 
         
-        private static int _alphabetNum = 0;
+        private static SelectedAlphabet _alphabetNum;
         private const int MaxCharactersPerLine = 7;
+        private static bool _isSwitchedAlphabetNum;
         private void Start()
         {
             StartGetComponent();
@@ -91,6 +94,9 @@ namespace UCT.Global.Scene
             {
                 sceneState = SceneState.Naming;
             }
+
+            _randomNameTip.text = TextProcessingService.GetFirstChildStringByPrefix(
+                MainControl.Instance.OverworldControl.sceneTextsSave, "RandomNameTip");
         }
 
         private void StartGetComponent()
@@ -101,6 +107,7 @@ namespace UCT.Global.Scene
             _selectText = transform.Find("SelectText").GetComponent<TextMeshPro>();
             _teachText = transform.Find("TeachText").GetComponent<TextMeshPro>();
             _textMessage = transform.Find("TextMessage").GetComponent<TextMeshPro>();
+            _randomNameTip = transform.Find("RandomNameTip").GetComponent<TextMeshPro>();
         }
 
         private static void PlayerControlInitialization()
@@ -120,7 +127,7 @@ namespace UCT.Global.Scene
         private void Update()
         {
             if (MainControl.Instance.OverworldControl.isSetting) return;
-            
+            _randomNameTip.color = new Color(1,1,1,_randomSetNameTime / RandomSetNameTimeMax);
             switch (sceneState)
             {
                 case SceneState.Instruction:
@@ -162,11 +169,11 @@ namespace UCT.Global.Scene
                         _nameText.GetComponent<DynamicTMP>().dynamicMode = 0;
                         _selectText.text =
                             TextProcessingService.GetFirstChildStringByPrefix(
-                                MainControl.Instance.OverworldControl.sceneTextsSave, "Rename1") +
+                                MainControl.Instance.OverworldControl.sceneTextsSave, "Quit") +
                             TextProcessingService.GetFirstChildStringByPrefix(
-                                MainControl.Instance.OverworldControl.sceneTextsSave, "Rename2") +
+                                MainControl.Instance.OverworldControl.sceneTextsSave, "Backspace") +
                             TextProcessingService.GetFirstChildStringByPrefix(
-                                MainControl.Instance.OverworldControl.sceneTextsSave, "Rename3");
+                                MainControl.Instance.OverworldControl.sceneTextsSave, "Done");
                         break;
                     }
 
@@ -206,11 +213,13 @@ namespace UCT.Global.Scene
                 _nameText.GetComponent<DynamicTMP>().dynamicMode = 0;
                 _selectText.text =
                     TextProcessingService.GetFirstChildStringByPrefix(
-                        MainControl.Instance.OverworldControl.sceneTextsSave, "Rename1") +
+                        MainControl.Instance.OverworldControl.sceneTextsSave, "Quit") +
                     TextProcessingService.GetFirstChildStringByPrefix(
-                        MainControl.Instance.OverworldControl.sceneTextsSave, "Rename2") +
+                        MainControl.Instance.OverworldControl.sceneTextsSave, "Backspace") +
                     TextProcessingService.GetFirstChildStringByPrefix(
-                        MainControl.Instance.OverworldControl.sceneTextsSave, "Rename3");
+                        MainControl.Instance.OverworldControl.sceneTextsSave, _alphabetNum.ToString()) +
+                    TextProcessingService.GetFirstChildStringByPrefix(
+                        MainControl.Instance.OverworldControl.sceneTextsSave, "Done");
             }
 
             if (!isSelectedDone || (!GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow) &&
@@ -257,22 +266,30 @@ namespace UCT.Global.Scene
 
         private void NamingUpdate()
         {
-            var alphabetLength = AlphabetCapital[_alphabetNum].Length + AlphabetLowercase[_alphabetNum].Length;
+            var alphabetNum = (int)_alphabetNum;
+            var alphabetLength = AlphabetCapital[alphabetNum].Length + AlphabetLowercase[alphabetNum].Length;
             var breaker = false;
-            var uppercaseRemainder = AlphabetCapital[_alphabetNum].Length % MaxCharactersPerLine;
-            var lowercaseRemainder = AlphabetLowercase[_alphabetNum].Length % MaxCharactersPerLine;
-            var maxUppercaseCharactersPerLine = MaxCharactersPerLine < AlphabetCapital[_alphabetNum].Length
+            var uppercaseRemainder = AlphabetCapital[alphabetNum].Length % MaxCharactersPerLine;
+            var lowercaseRemainder = AlphabetLowercase[alphabetNum].Length % MaxCharactersPerLine;
+            var maxUppercaseCharactersPerLine = MaxCharactersPerLine < AlphabetCapital[alphabetNum].Length
                 ? MaxCharactersPerLine
-                : AlphabetCapital[_alphabetNum].Length;
-            var maxLowercaseCharactersPerLine = MaxCharactersPerLine < AlphabetLowercase[_alphabetNum].Length
+                : AlphabetCapital[alphabetNum].Length;
+            var maxLowercaseCharactersPerLine = MaxCharactersPerLine < AlphabetLowercase[alphabetNum].Length
                 ? MaxCharactersPerLine
-                : AlphabetLowercase[_alphabetNum].Length;
+                : AlphabetLowercase[alphabetNum].Length;
+
+            if (_isSwitchedAlphabetNum)
+            {
+                selectedCharactersId = alphabetLength + 2;
+                _isSwitchedAlphabetNum = false;
+            }
+            
             if (GameUtilityService.KeyArrowToControl(KeyCode.Z) && setName.Length <= 6)
             {
                 if (selectedCharactersId < alphabetLength)
                 {
                     if (setName.Length < 6)
-                        setName += (AlphabetCapital[_alphabetNum] + AlphabetLowercase[_alphabetNum])[selectedCharactersId];
+                        setName += (AlphabetCapital[alphabetNum] + AlphabetLowercase[alphabetNum])[selectedCharactersId];
                 }
                 else if (selectedCharactersId == alphabetLength)
                 {
@@ -291,6 +308,10 @@ namespace UCT.Global.Scene
                 }
                 else if (selectedCharactersId == alphabetLength + 2)
                 {
+                    SwitchAlphabetNum();
+                }
+                else if (selectedCharactersId == alphabetLength + 3)
+                {
                     if (setName != "")
                     {
                         selectedCharactersId = 0;
@@ -299,7 +320,7 @@ namespace UCT.Global.Scene
                             MainControl.Instance.OverworldControl.sceneTextsSave, "RenameSp");
                         _titleText.text =
                             TextProcessingService.GetFirstChildStringByPrefix(
-                                MainControl.Instance.OverworldControl.sceneTextsSave, "Rename");
+                                MainControl.Instance.OverworldControl.sceneTextsSave, "DefaultQuestion");
                         if (MainControl.Instance.OverworldControl.textWidth)
                         {
                             _selectText.text =
@@ -377,11 +398,26 @@ namespace UCT.Global.Scene
                 if (setName.Length > 0)
                     setName = setName[..^1];
             }
-            else if (GameUtilityService.KeyArrowToControl(KeyCode.C, 0))
+            else if (GameUtilityService.KeyArrowToControl(KeyCode.C, 1))
             {
-                //setName = TextProcessingService.RandomString(Random.Range(1, 7));
-                _alphabetNum = _alphabetNum < AlphabetCapital.Count - 1 ? _alphabetNum + 1 : 0;
+                if (_randomSetNameTime < RandomSetNameTimeMax)
+                    _randomSetNameTime += Time.deltaTime;
+                else
+                {
+                    _randomSetNameTime = 0.5f;
+                    setName = TextProcessingService.RandomString(Random.Range(1, 7));
+                    AudioController.Instance.GetFx(2, MainControl.Instance.AudioControl.fxClipBattle);
+                }
             }
+            else if (_randomSetNameTime < 0.5f && GameUtilityService.KeyArrowToControl(KeyCode.C, 2))
+            {
+                SwitchAlphabetNum();
+            }
+            else
+            {
+                _randomSetNameTime = _randomSetNameTime > 0 ? _randomSetNameTime - Time.deltaTime : 0;
+            }
+            
             if (breaker) return;
             if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow))
             {
@@ -391,25 +427,25 @@ namespace UCT.Global.Scene
                     {
                         < 2 => alphabetLength,
                         < 5 => alphabetLength + 1,
-                        _ => alphabetLength + 2
+                        _ => alphabetLength + 3
                     };
                 }
-                else if (selectedCharactersId >= AlphabetCapital[_alphabetNum].Length + uppercaseRemainder &&
-                    selectedCharactersId < AlphabetCapital[_alphabetNum].Length + MaxCharactersPerLine)  //小写转大写的情况
+                else if (selectedCharactersId >= AlphabetCapital[alphabetNum].Length + uppercaseRemainder &&
+                    selectedCharactersId < AlphabetCapital[alphabetNum].Length + MaxCharactersPerLine)  //小写转大写的情况
                 {
                     selectedCharactersId -= maxUppercaseCharactersPerLine + uppercaseRemainder;
                 }
-                else if (selectedCharactersId < AlphabetCapital[_alphabetNum].Length)   //大写常规情况
+                else if (selectedCharactersId < AlphabetCapital[alphabetNum].Length)   //大写常规情况
                 {
                     selectedCharactersId -= maxUppercaseCharactersPerLine;
                 }
-                else if (selectedCharactersId >= AlphabetCapital[_alphabetNum].Length + MaxCharactersPerLine &&
+                else if (selectedCharactersId >= AlphabetCapital[alphabetNum].Length + MaxCharactersPerLine &&
                          selectedCharactersId < alphabetLength)   //小写常规情况
                 {
                     selectedCharactersId -= maxLowercaseCharactersPerLine;
                 }
                 else if (selectedCharactersId >= alphabetLength &&
-                         selectedCharactersId <= alphabetLength + 2) //底部三个键的情况
+                         selectedCharactersId <= alphabetLength + 3) //底部三个键的情况
                 {
                     if (selectedCharactersId == alphabetLength)
                     {
@@ -439,12 +475,12 @@ namespace UCT.Global.Scene
                     selectedCharactersId -= uppercaseRemainder;
 
                 if (selectedCharactersId < 0)
-                    selectedCharactersId = alphabetLength + 2;
+                    selectedCharactersId = alphabetLength + 3;
             }
             else if (GameUtilityService.KeyArrowToControl(KeyCode.DownArrow))
             {
-                if (selectedCharactersId >= AlphabetCapital[_alphabetNum].Length - MaxCharactersPerLine &&
-                    selectedCharactersId < AlphabetCapital[_alphabetNum].Length - uppercaseRemainder)  //大写转小写的情况
+                if (selectedCharactersId >= AlphabetCapital[alphabetNum].Length - MaxCharactersPerLine &&
+                    selectedCharactersId < AlphabetCapital[alphabetNum].Length - uppercaseRemainder)  //大写转小写的情况
                 {
                     selectedCharactersId += maxLowercaseCharactersPerLine + uppercaseRemainder;
                 }
@@ -453,15 +489,15 @@ namespace UCT.Global.Scene
                     
                     selectedCharactersId += maxUppercaseCharactersPerLine;
                 }
-                else if (selectedCharactersId < AlphabetCapital[_alphabetNum].Length - uppercaseRemainder ||
-                         selectedCharactersId >= AlphabetCapital[_alphabetNum].Length) //小写常规情况
+                else if (selectedCharactersId < AlphabetCapital[alphabetNum].Length - uppercaseRemainder ||
+                         selectedCharactersId >= AlphabetCapital[alphabetNum].Length) //小写常规情况
                 {
                     selectedCharactersId += maxLowercaseCharactersPerLine;
                 }
                 else if (selectedCharactersId >= alphabetLength - MaxCharactersPerLine) //到下面三个键的情况
                 {
                     if (selectedCharactersId < alphabetLength - lowercaseRemainder)
-                        selectedCharactersId = alphabetLength + 2;
+                        selectedCharactersId = alphabetLength + 3;
                     else if (selectedCharactersId < alphabetLength - lowercaseRemainder + 2)
                         selectedCharactersId = alphabetLength;
                     else if (selectedCharactersId < alphabetLength - lowercaseRemainder + 5)
@@ -482,30 +518,36 @@ namespace UCT.Global.Scene
                 else
                     selectedCharactersId += uppercaseRemainder;
 
-                if (selectedCharactersId > alphabetLength + 2)
+                if (selectedCharactersId > alphabetLength + 3)
                     selectedCharactersId = 0;
             }
             if (GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow))
             {
                 selectedCharactersId -= 1;
                 if (selectedCharactersId < 0)
-                    selectedCharactersId = alphabetLength + 2;
+                    selectedCharactersId = alphabetLength + 3;
             }
             else if (GameUtilityService.KeyArrowToControl(KeyCode.RightArrow))
             {
                 selectedCharactersId += 1;
-                if (selectedCharactersId > alphabetLength + 2)
+                if (selectedCharactersId > alphabetLength + 3)
                     selectedCharactersId = 0;
             }
 
             _titleText.text =
                 TextProcessingService.GetFirstChildStringByPrefix(
-                    MainControl.Instance.OverworldControl.sceneTextsSave, "Rename0");
+                    MainControl.Instance.OverworldControl.sceneTextsSave, "NameTheHuman");
             _nameText.text = setName;
             _characterText.text = GenerateSelectableTextForRename(selectedCharactersId);
             HighlightSelectedOptions(selectedCharactersId);
             _teachText.text = "";
             _textMessage.text = "";
+        }
+
+        private static void SwitchAlphabetNum()
+        {
+            _alphabetNum = _alphabetNum < (SelectedAlphabet)(AlphabetCapital.Count - 1) ? _alphabetNum + 1 : 0;
+            _isSwitchedAlphabetNum = true;
         }
 
         private void InstructionUpdate()
@@ -528,8 +570,8 @@ namespace UCT.Global.Scene
         /// </summary>
         private static string GenerateSelectableTextForRename(int selectNumber)
         {
-            var alphabet = GenerateCharacterTextFrom(AlphabetCapital[_alphabetNum]) + "\n" +
-                           GenerateCharacterTextFrom(AlphabetLowercase[_alphabetNum]);
+            var alphabet = GenerateCharacterTextFrom(AlphabetCapital[(int)_alphabetNum]) + "\n" +
+                           GenerateCharacterTextFrom(AlphabetLowercase[(int)_alphabetNum]);
             var final = "";
             for (var i = 0; i < alphabet.Length; i++)
             {
@@ -572,21 +614,26 @@ namespace UCT.Global.Scene
         private void HighlightSelectedOptions(int selectNumber)
         {
             var strings = new List<string>();
-            var selectId = selectNumber - (AlphabetCapital[_alphabetNum].Length + AlphabetLowercase[_alphabetNum].Length);
-            for (var i = 0; i < 3; i++)
+            var selectId = selectNumber -
+                           (AlphabetCapital[(int)_alphabetNum].Length + AlphabetLowercase[(int)_alphabetNum].Length);
+            for (var i = 0; i < 4; i++)
             {
                 strings.Add(i == selectId ? "<color=yellow>" : "");
             }
 
             _selectText.text = strings[0] +
                                TextProcessingService.GetFirstChildStringByPrefix(
-                                   MainControl.Instance.OverworldControl.sceneTextsSave, "Rename1") + "</color> " +
+                                   MainControl.Instance.OverworldControl.sceneTextsSave, "Quit") + "</color> " +
                                strings[1] +
                                TextProcessingService.GetFirstChildStringByPrefix(
-                                   MainControl.Instance.OverworldControl.sceneTextsSave, "Rename2") + "</color>  " +
+                                   MainControl.Instance.OverworldControl.sceneTextsSave, "Backspace") + "</color> " +
                                strings[2] +
                                TextProcessingService.GetFirstChildStringByPrefix(
-                                   MainControl.Instance.OverworldControl.sceneTextsSave, "Rename3") + "</color>";
+                                   MainControl.Instance.OverworldControl.sceneTextsSave, _alphabetNum.ToString()) +
+                               "</color> " +
+                               strings[3] +
+                               TextProcessingService.GetFirstChildStringByPrefix(
+                                   MainControl.Instance.OverworldControl.sceneTextsSave, "Done") + "</color>";
         }
 
     }

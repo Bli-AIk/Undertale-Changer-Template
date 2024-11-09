@@ -12,11 +12,11 @@ RenameSp\name|true|true|text;
 <playerName>取得玩家名稱
 */
 
-Rename\是這個名字沒錯嗎？;
-Rename0\為墜落的人類命名。;
-Rename1\退出;
-Rename2\退格;
-Rename3\完成;
+DefaultQuestion\是這個名字沒錯嗎？;
+NameTheHuman\為墜落的人類命名。;
+Quit\退出;
+Backspace\退格;
+Done\完成;
 Yes\是;
 No\<color=#00000000><size=2.5>wwww</size></color>否;
 GoBack\返回;
@@ -24,6 +24,17 @@ Teach\---遊戲教學---<enter><enter>[Z或ENTER]-確認<enter>[X或SHIFT]-取�
 
 PageNext\下一頁;
 PageLast\上一頁;
+
+RandomNameTip\正在產生隨機的名稱...;
+
+Latin\拉丁符號;
+Symbol\數字符號;
+LatinExtended1\拓展符一;
+LatinExtended2\拓展符二;
+LatinExtended3\拓展符三;
+Cyrillic1\西里爾一;
+Cyrillic2\西里爾二;
+Greek\希臘符號;
 
 MenuUnder\Undertale (c) toby fox 2015<enter>undertale changer V;
 

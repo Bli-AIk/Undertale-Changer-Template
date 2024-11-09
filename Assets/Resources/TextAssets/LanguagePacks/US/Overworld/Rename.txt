@@ -20,11 +20,11 @@ In particular, if the text is<gaster>, the game will crash.
 
 
 
-Rename\Is this name correct?;
-Rename0\Name the fallen human.;
-Rename1\<size=0>aaaaaaaaa</size>Quit;
-Rename2\Backspace;
-Rename3\Done;
+DefaultQuestion\Is this name correct?;
+NameTheHuman\Name the fallen human.;
+Quit\<indent=-2.225>Quit;
+Backspace\Backspace;
+Done\Done;
 Yes\Yes;
 No\No;
 GoBack\Go back;
@@ -32,6 +32,17 @@ Teach\---Instruction---<enter><enter>[Z or ENTER]-Confirm<enter>[X or SHIFT]-Can
 
 PageNext\Next page;
 PageLast\Last page;
+
+RandomNameTip\Generate random name...;
+
+Latin\Lat;
+Symbol\Sym;
+LatinExtended1\Ex1;
+LatinExtended2\Ex2;
+LatinExtended3\Ex3;
+Cyrillic1\Cy1;
+Cyrillic2\Cy2;
+Greek\Gre;
 
 MenuUnder\Undertale (c)  toby fox 2015<enter>undertale changer V;
 
