@@ -7,6 +7,7 @@
     <list default="true" id="8f7c2298-d077-422b-9131-f9a839bed961" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Scene/RenameController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Scene/RenameController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,6 +33,11 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
@@ -142,10 +148,10 @@
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
       <method v="2" />
     </configuration>
-    <configuration name="附加到 Unity 编辑器" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="1908">
+    <configuration name="附加到 Unity 编辑器" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="33048">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="1908" />
+      <option name="pid" value="33048" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -257,7 +263,8 @@
       <workItem from="1731069718057" duration="4461000" />
       <workItem from="1731105616421" duration="1831000" />
       <workItem from="1731122562789" duration="5221000" />
-      <workItem from="1731138225978" duration="8303000" />
+      <workItem from="1731138225978" duration="8693000" />
+      <workItem from="1731158038654" duration="2245000" />
     </task>
     <servers />
   </component>
@@ -291,61 +298,74 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/Scripts/UCT/Global/Scene/RenameController.cs</url>
-          <line>467</line>
-          <properties documentPath="D:\Unity Projects\Undertale-Changer-Template\Assets\Scripts\UCT\Global\Scene\RenameController.cs" containingFunctionPresentation="方法 'NamingUpdate'">
-            <startOffsets>
-              <option value="22641" />
-            </startOffsets>
-            <endOffsets>
-              <option value="22703" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="15" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/UCT/Global/Scene/RenameController.cs</url>
           <line>463</line>
           <properties documentPath="D:\Unity Projects\Undertale-Changer-Template\Assets\Scripts\UCT\Global\Scene\RenameController.cs" containingFunctionPresentation="方法 'NamingUpdate'">
             <startOffsets>
-              <option value="22469" />
+              <option value="22519" />
             </startOffsets>
             <endOffsets>
-              <option value="22531" />
+              <option value="22581" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="16" />
+          <option name="timeStamp" value="26" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/Scripts/UCT/Global/Scene/RenameController.cs</url>
           <line>459</line>
           <properties documentPath="D:\Unity Projects\Undertale-Changer-Template\Assets\Scripts\UCT\Global\Scene\RenameController.cs" containingFunctionPresentation="方法 'NamingUpdate'">
             <startOffsets>
-              <option value="22249" />
+              <option value="22299" />
             </startOffsets>
             <endOffsets>
-              <option value="22311" />
+              <option value="22361" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="17" />
+          <option name="timeStamp" value="27" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/Scripts/UCT/Global/Scene/RenameController.cs</url>
-          <line>422</line>
+          <line>467</line>
           <properties documentPath="D:\Unity Projects\Undertale-Changer-Template\Assets\Scripts\UCT\Global\Scene\RenameController.cs" containingFunctionPresentation="方法 'NamingUpdate'">
             <startOffsets>
-              <option value="20394" />
+              <option value="22739" />
             </startOffsets>
             <endOffsets>
-              <option value="20395" />
+              <option value="22801" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="18" />
+          <option name="timeStamp" value="29" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/UCT/Global/Scene/RenameController.cs</url>
+          <line>471</line>
+          <properties documentPath="D:\Unity Projects\Undertale-Changer-Template\Assets\Scripts\UCT\Global\Scene\RenameController.cs" containingFunctionPresentation="方法 'NamingUpdate'">
+            <startOffsets>
+              <option value="22911" />
+            </startOffsets>
+            <endOffsets>
+              <option value="22973" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="30" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/UCT/Global/Scene/RenameController.cs</url>
+          <line>423</line>
+          <properties documentPath="D:\Unity Projects\Undertale-Changer-Template\Assets\Scripts\UCT\Global\Scene\RenameController.cs" containingFunctionPresentation="方法 'NamingUpdate'">
+            <startOffsets>
+              <option value="20412" />
+            </startOffsets>
+            <endOffsets>
+              <option value="20460" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="32" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="UNITY_DEBUG_RUN_CONFIGURATION">
-        <watch expression="AlphabetCapital[alphabetNum].Length - uppercaseRemainder" language="C#" />
+        <watch expression="selectedCharactersId &gt;= alphabetLength &amp;&amp;                          selectedCharactersId &lt;= alphabetLength + 3" language="C#" />
       </configuration>
     </watches-manager>
   </component>

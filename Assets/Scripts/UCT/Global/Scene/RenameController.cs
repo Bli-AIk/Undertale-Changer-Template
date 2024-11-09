@@ -450,7 +450,7 @@ namespace UCT.Global.Scene
                 {
                     if (selectedCharactersId == alphabetLength)
                     {
-                        selectedCharactersId = alphabetLength - lowercaseRemainder;
+                        selectedCharactersId = alphabetLength - (lowercaseRemainder > 0 ? lowercaseRemainder : MaxCharactersPerLine);
                     }
                     else
                     {
@@ -461,20 +461,19 @@ namespace UCT.Global.Scene
                         }
                         else if (selectedCharactersId == alphabetLength + 2)
                         {
-                            possibleCharacterId = alphabetLength - lowercaseRemainder + 3;
+                            possibleCharacterId = alphabetLength - lowercaseRemainder + 4;
                         }
                         else if (selectedCharactersId == alphabetLength + 3)
                         {
-                            possibleCharacterId = alphabetLength - lowercaseRemainder + 4;
+                            possibleCharacterId = alphabetLength - lowercaseRemainder + 5;
                         }
                         else
                         {
                             possibleCharacterId = alphabetLength - lowercaseRemainder + 5;
                         }
 
-
                         selectedCharactersId = possibleCharacterId <
-                                               alphabetLength - MaxCharactersPerLine + lowercaseRemainder
+                                               alphabetLength
                             ? possibleCharacterId
                             : possibleCharacterId - MaxCharactersPerLine;
                     }
