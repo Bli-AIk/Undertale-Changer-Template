@@ -22,7 +22,7 @@ Currently, there is no English version of the update log available. I apologize 
 - [x] 将英文字体进行调整，修复字符重合的问题
 - [x] 引进 [Fusion](https://github.com/TakWolf/fusion-pixel-font) 8px 字体
 - [ ] 将起名界面的字符数量拓展，分为基本字母、数字与符号、拉丁字母、西里尔字母、希腊字母等。
-- [ ] 加入中日韩语言的输入支持。
+- [ ] 引入中日韩语言拼写库，以加入中日韩语言的输入支持。
 
 2024/11/4 计划 (1-2)
 
