@@ -11,6 +11,7 @@ using UCT.Service;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
+// ReSharper disable StringLiteralTypo
 
 namespace UCT.Global.Scene
 {
@@ -36,28 +37,46 @@ namespace UCT.Global.Scene
         {
             Latin,
             Symbol,
-            LatinExtended,
-            Cyrillic,
+            LatinExtended1,
+            LatinExtended2,
+            LatinExtended3,
+            Cyrillic1,
+            Cyrillic2,
             Greek,
             ChineseSimplified,
             ChineseTraditional,
             Japanese,
             Korean,
         }
-        
         private static readonly List<string> AlphabetCapital = new()
         {
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-            "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
+            ",.?!:;#$&\"'<>@[]_`{}~",
+            "ÁÀÂÃÄÅĀĂĄĆĈĊČĎĐĒĔĖĘĚÉÈÊËĜĞĠĢ",
+            "ĤĦĨĪĬĮİĴĶĹĻĽĿŁŃŅŇŊÑŌŎŐŒÞßþ",
+            "ŔŖŘŚŜŞŠŢŤŦŨŪŬŮŰŲŴŶŸÝŶŸŹŻŽ",
+            "АБВГДЕЁЖЗИЙКЛМНОП",
+            "РСТУФХЦЧШЩЪЫЬЭЮЯ",
+            "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ",
         };
 
         private static readonly List<string> AlphabetLowercase = new()
         {
             "abcdefghijklmnopqrstuvwxyz",
-            "0123456789"
+            "0123456789+-*/|\\^=() ",
+            "áàâãäåāăąćĉċďđēĕėęěéèêëĝğġģ",
+            "ĥħĩīĭįıĵķĸĺļľŀłńņňŉŋñōŏőœŧų",
+            "ŕŗřśŝşšţťðùúûüũūŭůűŵýÿŷźżž",
+            "абвгдеёжзийклмноп",
+            "рстуфхцчшщъыьэюя",
+            "αβγδεζηθικλμνξοπρστυφχψω"
+            
         };
+
+
+
         
-        private const int AlphabetNum = 1;
+        private static int _alphabetNum = 0;
         private const int MaxCharactersPerLine = 7;
         private void Start()
         {
@@ -238,22 +257,22 @@ namespace UCT.Global.Scene
 
         private void NamingUpdate()
         {
-            var alphabetLength = AlphabetCapital[AlphabetNum].Length + AlphabetLowercase[AlphabetNum].Length;
+            var alphabetLength = AlphabetCapital[_alphabetNum].Length + AlphabetLowercase[_alphabetNum].Length;
             var breaker = false;
-            var uppercaseRemainder = AlphabetCapital[AlphabetNum].Length % MaxCharactersPerLine;
-            var lowercaseRemainder = AlphabetLowercase[AlphabetNum].Length % MaxCharactersPerLine;
-            var maxUppercaseCharactersPerLine = MaxCharactersPerLine < AlphabetCapital[AlphabetNum].Length
+            var uppercaseRemainder = AlphabetCapital[_alphabetNum].Length % MaxCharactersPerLine;
+            var lowercaseRemainder = AlphabetLowercase[_alphabetNum].Length % MaxCharactersPerLine;
+            var maxUppercaseCharactersPerLine = MaxCharactersPerLine < AlphabetCapital[_alphabetNum].Length
                 ? MaxCharactersPerLine
-                : AlphabetCapital[AlphabetNum].Length;
-            var maxLowercaseCharactersPerLine = MaxCharactersPerLine < AlphabetLowercase[AlphabetNum].Length
+                : AlphabetCapital[_alphabetNum].Length;
+            var maxLowercaseCharactersPerLine = MaxCharactersPerLine < AlphabetLowercase[_alphabetNum].Length
                 ? MaxCharactersPerLine
-                : AlphabetLowercase[AlphabetNum].Length;
+                : AlphabetLowercase[_alphabetNum].Length;
             if (GameUtilityService.KeyArrowToControl(KeyCode.Z) && setName.Length <= 6)
             {
                 if (selectedCharactersId < alphabetLength)
                 {
                     if (setName.Length < 6)
-                        setName += (AlphabetCapital[AlphabetNum] + AlphabetLowercase[AlphabetNum])[selectedCharactersId];
+                        setName += (AlphabetCapital[_alphabetNum] + AlphabetLowercase[_alphabetNum])[selectedCharactersId];
                 }
                 else if (selectedCharactersId == alphabetLength)
                 {
@@ -358,9 +377,10 @@ namespace UCT.Global.Scene
                 if (setName.Length > 0)
                     setName = setName[..^1];
             }
-            else if (GameUtilityService.KeyArrowToControl(KeyCode.C, 1))
+            else if (GameUtilityService.KeyArrowToControl(KeyCode.C, 0))
             {
-                setName = TextProcessingService.RandomString(Random.Range(1, 7));
+                //setName = TextProcessingService.RandomString(Random.Range(1, 7));
+                _alphabetNum = _alphabetNum < AlphabetCapital.Count - 1 ? _alphabetNum + 1 : 0;
             }
             if (breaker) return;
             if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow))
@@ -374,16 +394,16 @@ namespace UCT.Global.Scene
                         _ => alphabetLength + 2
                     };
                 }
-                else if (selectedCharactersId >= AlphabetCapital[AlphabetNum].Length + uppercaseRemainder &&
-                    selectedCharactersId < AlphabetCapital[AlphabetNum].Length + MaxCharactersPerLine)  //小写转大写的情况
+                else if (selectedCharactersId >= AlphabetCapital[_alphabetNum].Length + uppercaseRemainder &&
+                    selectedCharactersId < AlphabetCapital[_alphabetNum].Length + MaxCharactersPerLine)  //小写转大写的情况
                 {
                     selectedCharactersId -= maxUppercaseCharactersPerLine + uppercaseRemainder;
                 }
-                else if (selectedCharactersId < AlphabetCapital[AlphabetNum].Length)   //大写常规情况
+                else if (selectedCharactersId < AlphabetCapital[_alphabetNum].Length)   //大写常规情况
                 {
                     selectedCharactersId -= maxUppercaseCharactersPerLine;
                 }
-                else if (selectedCharactersId >= AlphabetCapital[AlphabetNum].Length + MaxCharactersPerLine &&
+                else if (selectedCharactersId >= AlphabetCapital[_alphabetNum].Length + MaxCharactersPerLine &&
                          selectedCharactersId < alphabetLength)   //小写常规情况
                 {
                     selectedCharactersId -= maxLowercaseCharactersPerLine;
@@ -423,8 +443,8 @@ namespace UCT.Global.Scene
             }
             else if (GameUtilityService.KeyArrowToControl(KeyCode.DownArrow))
             {
-                if (selectedCharactersId >= AlphabetCapital[AlphabetNum].Length - MaxCharactersPerLine &&
-                    selectedCharactersId < AlphabetCapital[AlphabetNum].Length - uppercaseRemainder)  //大写转小写的情况
+                if (selectedCharactersId >= AlphabetCapital[_alphabetNum].Length - MaxCharactersPerLine &&
+                    selectedCharactersId < AlphabetCapital[_alphabetNum].Length - uppercaseRemainder)  //大写转小写的情况
                 {
                     selectedCharactersId += maxLowercaseCharactersPerLine + uppercaseRemainder;
                 }
@@ -433,8 +453,8 @@ namespace UCT.Global.Scene
                     
                     selectedCharactersId += maxUppercaseCharactersPerLine;
                 }
-                else if (selectedCharactersId < AlphabetCapital[AlphabetNum].Length - uppercaseRemainder ||
-                         selectedCharactersId >= AlphabetCapital[AlphabetNum].Length) //小写常规情况
+                else if (selectedCharactersId < AlphabetCapital[_alphabetNum].Length - uppercaseRemainder ||
+                         selectedCharactersId >= AlphabetCapital[_alphabetNum].Length) //小写常规情况
                 {
                     selectedCharactersId += maxLowercaseCharactersPerLine;
                 }
@@ -508,8 +528,8 @@ namespace UCT.Global.Scene
         /// </summary>
         private static string GenerateSelectableTextForRename(int selectNumber)
         {
-            var alphabet = GenerateCharacterTextFrom(AlphabetCapital[AlphabetNum]) + "\n" +
-                           GenerateCharacterTextFrom(AlphabetLowercase[AlphabetNum]);
+            var alphabet = GenerateCharacterTextFrom(AlphabetCapital[_alphabetNum]) + "\n" +
+                           GenerateCharacterTextFrom(AlphabetLowercase[_alphabetNum]);
             var final = "";
             for (var i = 0; i < alphabet.Length; i++)
             {
@@ -552,7 +572,7 @@ namespace UCT.Global.Scene
         private void HighlightSelectedOptions(int selectNumber)
         {
             var strings = new List<string>();
-            var selectId = selectNumber - (AlphabetCapital[AlphabetNum].Length + AlphabetLowercase[AlphabetNum].Length);
+            var selectId = selectNumber - (AlphabetCapital[_alphabetNum].Length + AlphabetLowercase[_alphabetNum].Length);
             for (var i = 0; i < 3; i++)
             {
                 strings.Add(i == selectId ? "<color=yellow>" : "");
