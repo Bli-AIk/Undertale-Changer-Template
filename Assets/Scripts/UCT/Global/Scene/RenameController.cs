@@ -426,7 +426,8 @@ namespace UCT.Global.Scene
                     selectedCharactersId = selectedCharactersId switch
                     {
                         < 2 => alphabetLength,
-                        < 5 => alphabetLength + 1,
+                        < 4 => alphabetLength + 1,
+                        < 5 => alphabetLength + 2,
                         _ => alphabetLength + 3
                     };
                 }
@@ -458,6 +459,14 @@ namespace UCT.Global.Scene
                         {
                             possibleCharacterId = alphabetLength - lowercaseRemainder + 2;
                         }
+                        else if (selectedCharactersId == alphabetLength + 2)
+                        {
+                            possibleCharacterId = alphabetLength - lowercaseRemainder + 3;
+                        }
+                        else if (selectedCharactersId == alphabetLength + 3)
+                        {
+                            possibleCharacterId = alphabetLength - lowercaseRemainder + 4;
+                        }
                         else
                         {
                             possibleCharacterId = alphabetLength - lowercaseRemainder + 5;
@@ -484,13 +493,15 @@ namespace UCT.Global.Scene
                 {
                     selectedCharactersId += maxLowercaseCharactersPerLine + uppercaseRemainder;
                 }
-                else if (selectedCharactersId < alphabetLength - MaxCharactersPerLine)//大写常规情况
+                else if (selectedCharactersId >= AlphabetCapital[alphabetNum].Length &&
+                         selectedCharactersId < alphabetLength - MaxCharactersPerLine) //大写常规情况
                 {
                     
                     selectedCharactersId += maxUppercaseCharactersPerLine;
                 }
                 else if (selectedCharactersId < AlphabetCapital[alphabetNum].Length - uppercaseRemainder ||
-                         selectedCharactersId >= AlphabetCapital[alphabetNum].Length) //小写常规情况
+                         selectedCharactersId >= AlphabetCapital[alphabetNum].Length &&
+                         selectedCharactersId < alphabetLength - MaxCharactersPerLine) //小写常规情况
                 {
                     selectedCharactersId += maxLowercaseCharactersPerLine;
                 }
@@ -500,8 +511,10 @@ namespace UCT.Global.Scene
                         selectedCharactersId = alphabetLength + 3;
                     else if (selectedCharactersId < alphabetLength - lowercaseRemainder + 2)
                         selectedCharactersId = alphabetLength;
-                    else if (selectedCharactersId < alphabetLength - lowercaseRemainder + 5)
+                    else if (selectedCharactersId < alphabetLength - lowercaseRemainder + 4)
                         selectedCharactersId = alphabetLength + 1;
+                    else if (selectedCharactersId < alphabetLength - lowercaseRemainder + 5)
+                        selectedCharactersId = alphabetLength + 2;
                     else if (selectedCharactersId == alphabetLength)
                     {
                         selectedCharactersId = 0;
@@ -509,6 +522,10 @@ namespace UCT.Global.Scene
                     else if (selectedCharactersId == alphabetLength - lowercaseRemainder + 6)
                     {
                         selectedCharactersId = 2;
+                    }
+                    else if (selectedCharactersId == alphabetLength - lowercaseRemainder + 7)
+                    {
+                        selectedCharactersId = 4;
                     }
                     else
                     {
