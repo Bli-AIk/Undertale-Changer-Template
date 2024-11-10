@@ -65,7 +65,7 @@ namespace UCT.Global.Scene
         private static readonly List<string> AlphabetLowercase = new()
         {
             "abcdefghijklmnopqrstuvwxyz",
-            "0123456789+-*/|\\^=() ",
+            "0123456789+-*/|\\^=()▌",//▌符号会被转化为空格
             "áàâãäåāăąćĉċďđēĕėęěéèêëĝğġģ",
             "ĥħĩīĭįıĵķĸĺļľŀłńņňŉŋñōŏőœŧų",
             "ŕŗřśŝşšţťðùúûüũūŭůűŵýÿŷźżž",
@@ -289,7 +289,12 @@ namespace UCT.Global.Scene
                 if (selectedCharactersId < alphabetLength)
                 {
                     if (setName.Length < 6)
-                        setName += (AlphabetCapital[alphabetNum] + AlphabetLowercase[alphabetNum])[selectedCharactersId];
+                    {
+                        var settNameChar =
+                            (AlphabetCapital[alphabetNum] + AlphabetLowercase[alphabetNum])[selectedCharactersId];
+                        
+                        setName += settNameChar != '▌' ? settNameChar : ' ';
+                    }
                 }
                 else if (selectedCharactersId == alphabetLength)
                 {
@@ -506,30 +511,35 @@ namespace UCT.Global.Scene
                 }
                 else if (selectedCharactersId >= alphabetLength - MaxCharactersPerLine) //到下面三个键的情况
                 {
-                    if (selectedCharactersId < alphabetLength - lowercaseRemainder)
-                        selectedCharactersId = alphabetLength + 3;
-                    else if (selectedCharactersId < alphabetLength - lowercaseRemainder + 2)
-                        selectedCharactersId = alphabetLength;
-                    else if (selectedCharactersId < alphabetLength - lowercaseRemainder + 4)
-                        selectedCharactersId = alphabetLength + 1;
-                    else if (selectedCharactersId < alphabetLength - lowercaseRemainder + 5)
-                        selectedCharactersId = alphabetLength + 2;
-                    else if (selectedCharactersId == alphabetLength)
+                    var lowercaseRemainderFix = lowercaseRemainder > 0 ? lowercaseRemainder : MaxCharactersPerLine;
+
+                    if (selectedCharactersId == alphabetLength)
                     {
                         selectedCharactersId = 0;
                     }
-                    else if (selectedCharactersId == alphabetLength - lowercaseRemainder + 6)
+                    else if (selectedCharactersId == alphabetLength + 1)
                     {
                         selectedCharactersId = 2;
                     }
-                    else if (selectedCharactersId == alphabetLength - lowercaseRemainder + 7)
+                    else if (selectedCharactersId == alphabetLength + 2)
                     {
                         selectedCharactersId = 4;
                     }
-                    else
+                    else if (selectedCharactersId == alphabetLength + 3)
                     {
                         selectedCharactersId = 5;
                     }
+                    else if (selectedCharactersId >= alphabetLength - lowercaseRemainderFix &&
+                        selectedCharactersId < alphabetLength - lowercaseRemainderFix + 2) 
+                        selectedCharactersId = alphabetLength;
+                    else if (selectedCharactersId >= alphabetLength - lowercaseRemainderFix + 2 &&
+                             selectedCharactersId < alphabetLength - lowercaseRemainderFix + 4)
+                        selectedCharactersId = alphabetLength + 1;
+                    else if (selectedCharactersId >= alphabetLength - lowercaseRemainderFix + 4 &&
+                             selectedCharactersId < alphabetLength - lowercaseRemainderFix + 5)
+                        selectedCharactersId = alphabetLength + 2;
+                    else if (selectedCharactersId < alphabetLength - lowercaseRemainderFix + 7) 
+                        selectedCharactersId = alphabetLength + 3; 
                 }
                 else
                     selectedCharactersId += uppercaseRemainder;
