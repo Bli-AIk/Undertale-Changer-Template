@@ -44,7 +44,7 @@ namespace UCT.Global.Scene
         {
             _setData = false;
             layer = 0;
-            _overworldControl = MainControl.Instance.OverworldControl;
+            _overworldControl = MainControl.Instance.overworldControl;
             _overworldControl.playerScenePos = new Vector3(-0.5f, -1);
             if (MainControl.Instance.saveDataId < 0)
                 MainControl.Instance.saveDataId = 0;
@@ -71,19 +71,19 @@ namespace UCT.Global.Scene
             if (_overworldControl.isSetting || _overworldControl.pause)
                 return;
 
-            if (GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow))
+            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.LeftArrow))
             {
                 _select--;
             }
-            else if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow))
+            else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.UpArrow))
             {
                 _select -= 2;
             }
-            if (GameUtilityService.KeyArrowToControl(KeyCode.RightArrow))
+            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.RightArrow))
             {
                 _select++;
             }
-            else if (GameUtilityService.KeyArrowToControl(KeyCode.DownArrow))
+            else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.DownArrow))
             {
                 _select += 2;
             }
@@ -107,15 +107,15 @@ namespace UCT.Global.Scene
 
             if (layer != 0) return;
             
-            if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow) || 
-                GameUtilityService.KeyArrowToControl(KeyCode.DownArrow) || 
-                GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow) || 
-                GameUtilityService.KeyArrowToControl(KeyCode.RightArrow))
+            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.UpArrow) || 
+                GameUtilityService.ConvertKeyDownToControl(KeyCode.DownArrow) || 
+                GameUtilityService.ConvertKeyDownToControl(KeyCode.LeftArrow) || 
+                GameUtilityService.ConvertKeyDownToControl(KeyCode.RightArrow))
             {
                 Flash();
             }
             
-            if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
+            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
             {
                 if (!_setData)
                     switch (_select)
@@ -204,7 +204,7 @@ namespace UCT.Global.Scene
                             break;
                     }
             }
-            else if (GameUtilityService.KeyArrowToControl(KeyCode.X) && _setData)
+            else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.X) && _setData)
             {
                 _setData = false;
                 Flash();

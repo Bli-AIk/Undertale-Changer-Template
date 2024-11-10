@@ -52,7 +52,7 @@ namespace UCT.Battle
         {
             if (!_pressZ)
             {
-                if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
+                if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
                 {
                     _pressZ = true;
                     _anim.SetBool("Hit", true);

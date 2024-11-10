@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using TMPro;
 using UCT.Battle;
+using UCT.Control;
 using UCT.Global.Audio;
 using UCT.Global.Core;
 using UCT.Global.UI;
@@ -10,7 +12,6 @@ using UCT.Overworld;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
-using Random = UnityEngine.Random;
 
 namespace UCT.Service
 {
@@ -26,7 +27,7 @@ namespace UCT.Service
         public static void SetCanvasFrameSprite(int framePic = 2)//一般为CanvasController.instance.framePic
         {
             var frame = CanvasController.Instance.frame;
-            frame.sprite = framePic < 0 ? null : MainControl.Instance.OverworldControl.frames[framePic];
+            frame.sprite = framePic < 0 ? null : MainControl.Instance.overworldControl.frames[framePic];
         }
 
         /// <summary>
@@ -45,18 +46,18 @@ namespace UCT.Service
                     MainControl.Instance.cameraMainInBattle = MainControl.Instance.cameraShake.GetComponent<Camera>();
             }
 
-            if (!MainControl.Instance.OverworldControl.isUsingHDFrame)
+            if (!MainControl.Instance.overworldControl.isUsingHDFrame)
             {
-                if (MainControl.Instance.OverworldControl.resolutionLevel > 4)
-                    MainControl.Instance.OverworldControl.resolutionLevel = 0;
+                if (MainControl.Instance.overworldControl.resolutionLevel > 4)
+                    MainControl.Instance.overworldControl.resolutionLevel = 0;
             }
             else
             {
-                if (MainControl.Instance.OverworldControl.resolutionLevel < 5)
-                    MainControl.Instance.OverworldControl.resolutionLevel = 5;
+                if (MainControl.Instance.overworldControl.resolutionLevel < 5)
+                    MainControl.Instance.overworldControl.resolutionLevel = 5;
             }
 
-            if (!MainControl.Instance.OverworldControl.isUsingHDFrame)
+            if (!MainControl.Instance.overworldControl.isUsingHDFrame)
             {
                 MainControl.Instance.mainCamera.rect = new Rect(0, 0, 1, 1);
 
@@ -103,8 +104,8 @@ namespace UCT.Service
             var currentResolutionWidth = resolutionWidths[resolution];
             var currentResolutionHeight = resolutionHeights[resolution];
             
-            Screen.SetResolution(currentResolutionWidth, currentResolutionHeight, MainControl.Instance.OverworldControl.fullScreen);
-            MainControl.Instance.OverworldControl.resolution = new Vector2(currentResolutionWidth, currentResolutionHeight);
+            Screen.SetResolution(currentResolutionWidth, currentResolutionHeight, MainControl.Instance.overworldControl.fullScreen);
+            MainControl.Instance.overworldControl.resolution = new Vector2(currentResolutionWidth, currentResolutionHeight);
         }
 
         public static void SwitchScene(string sceneName, bool async = true)
@@ -116,7 +117,7 @@ namespace UCT.Service
                 SceneManager.LoadSceneAsync(sceneName);
             else SceneManager.LoadScene(sceneName);
 
-            SetResolution(MainControl.Instance.OverworldControl.resolutionLevel);
+            SetResolution(MainControl.Instance.overworldControl.resolutionLevel);
             MainControl.Instance.isSceneSwitching = false;
         }
 
@@ -155,13 +156,13 @@ namespace UCT.Service
                         break;
                 }
             }
-            MainControl.Instance.OverworldControl.pause = true;
+            MainControl.Instance.overworldControl.pause = true;
             switch (fadeTime)
             {
                 case > 0:
                 {
                     MainControl.Instance.sceneSwitchingFadeImage.DOColor(fadeColor, fadeTime).SetEase(Ease.Linear).OnKill(() => GameUtilityService.SwitchScene(scene));
-                    if (!MainControl.Instance.OverworldControl.isUsingHDFrame)
+                    if (!MainControl.Instance.overworldControl.isUsingHDFrame)
                         CanvasController.Instance.frame.color = new Color(1, 1, 1, 0);
                     break;
                 }
@@ -174,7 +175,7 @@ namespace UCT.Service
                     fadeTime = Mathf.Abs(fadeTime);
                     MainControl.Instance.sceneSwitchingFadeImage.color = fadeColor;
                     MainControl.Instance.sceneSwitchingFadeImage.DOColor(fadeColor, fadeTime).SetEase(Ease.Linear).OnKill(() => GameUtilityService.SwitchScene(scene));
-                    if (!MainControl.Instance.OverworldControl.isUsingHDFrame)
+                    if (!MainControl.Instance.overworldControl.isUsingHDFrame)
                         CanvasController.Instance.frame.color = new Color(1, 1, 1, 0);
                     break;
                 }
@@ -313,117 +314,106 @@ namespace UCT.Service
 
         /// <summary>
         /// 传入默认KeyCode并转换为游戏内键位。
-        /// mode:0按下 1持续 2抬起
         /// </summary>
-        public static bool KeyArrowToControl(KeyCode key, int mode = 0)
+        public static bool ConvertKeyDownToControl(KeyCode key)
         {
-            var overworldControl = MainControl.Instance.OverworldControl;
-            return mode switch
+            var keyCodes = MainControl.Instance.overworldControl.KeyCodes;
+            return key switch
             {
-                0 => key switch
-                {
-                    KeyCode.DownArrow => Input.GetKeyDown(overworldControl.keyCodes[0]) || Input.GetKeyDown(overworldControl.keyCodesBack1[0]) || Input.GetKeyDown(overworldControl.keyCodesBack2[0]),
-                    KeyCode.RightArrow => Input.GetKeyDown(overworldControl.keyCodes[1]) || Input.GetKeyDown(overworldControl.keyCodesBack1[1]) || Input.GetKeyDown(overworldControl.keyCodesBack2[1]),
-                    KeyCode.UpArrow => Input.GetKeyDown(overworldControl.keyCodes[2]) || Input.GetKeyDown(overworldControl.keyCodesBack1[2]) || Input.GetKeyDown(overworldControl.keyCodesBack2[2]),
-                    KeyCode.LeftArrow => Input.GetKeyDown(overworldControl.keyCodes[3]) || Input.GetKeyDown(overworldControl.keyCodesBack1[3]) || Input.GetKeyDown(overworldControl.keyCodesBack2[3]),
-                    KeyCode.Z => Input.GetKeyDown(overworldControl.keyCodes[4]) || Input.GetKeyDown(overworldControl.keyCodesBack1[4]) || Input.GetKeyDown(overworldControl.keyCodesBack2[4]),
-                    KeyCode.X => Input.GetKeyDown(overworldControl.keyCodes[5]) || Input.GetKeyDown(overworldControl.keyCodesBack1[5]) || Input.GetKeyDown(overworldControl.keyCodesBack2[5]),
-                    KeyCode.C => Input.GetKeyDown(overworldControl.keyCodes[6]) || Input.GetKeyDown(overworldControl.keyCodesBack1[6]) || Input.GetKeyDown(overworldControl.keyCodesBack2[6]),
-                    KeyCode.V => Input.GetKeyDown(overworldControl.keyCodes[7]) || Input.GetKeyDown(overworldControl.keyCodesBack1[7]) || Input.GetKeyDown(overworldControl.keyCodesBack2[7]),
-                    KeyCode.F4 => Input.GetKeyDown(overworldControl.keyCodes[8]) || Input.GetKeyDown(overworldControl.keyCodesBack1[8]) || Input.GetKeyDown(overworldControl.keyCodesBack2[8]),
-                    KeyCode.Tab => Input.GetKeyDown(overworldControl.keyCodes[9]) || Input.GetKeyDown(overworldControl.keyCodesBack1[9]) || Input.GetKeyDown(overworldControl.keyCodesBack2[9]),
-                    KeyCode.Semicolon => Input.GetKeyDown(overworldControl.keyCodes[10]) || Input.GetKeyDown(overworldControl.keyCodesBack1[10]) || Input.GetKeyDown(overworldControl.keyCodesBack2[10]),
-                    KeyCode.Escape => Input.GetKeyDown(overworldControl.keyCodes[11]) || Input.GetKeyDown(overworldControl.keyCodesBack1[11]) || Input.GetKeyDown(overworldControl.keyCodesBack2[11]),
-                    _ => false,
-                },
-                1 => key switch
-                {
-                    KeyCode.DownArrow => Input.GetKey(overworldControl.keyCodes[0]) || Input.GetKey(overworldControl.keyCodesBack1[0]) || Input.GetKey(overworldControl.keyCodesBack2[0]),
-                    KeyCode.RightArrow => Input.GetKey(overworldControl.keyCodes[1]) || Input.GetKey(overworldControl.keyCodesBack1[1]) || Input.GetKey(overworldControl.keyCodesBack2[1]),
-                    KeyCode.UpArrow => Input.GetKey(overworldControl.keyCodes[2]) || Input.GetKey(overworldControl.keyCodesBack1[2]) || Input.GetKey(overworldControl.keyCodesBack2[2]),
-                    KeyCode.LeftArrow => Input.GetKey(overworldControl.keyCodes[3]) || Input.GetKey(overworldControl.keyCodesBack1[3]) || Input.GetKey(overworldControl.keyCodesBack2[3]),
-                    KeyCode.Z => Input.GetKey(overworldControl.keyCodes[4]) || Input.GetKey(overworldControl.keyCodesBack1[4]) || Input.GetKey(overworldControl.keyCodesBack2[4]),
-                    KeyCode.X => Input.GetKey(overworldControl.keyCodes[5]) || Input.GetKey(overworldControl.keyCodesBack1[5]) || Input.GetKey(overworldControl.keyCodesBack2[5]),
-                    KeyCode.C => Input.GetKey(overworldControl.keyCodes[6]) || Input.GetKey(overworldControl.keyCodesBack1[6]) || Input.GetKey(overworldControl.keyCodesBack2[6]),
-                    KeyCode.V => Input.GetKey(overworldControl.keyCodes[7]) || Input.GetKey(overworldControl.keyCodesBack1[7]) || Input.GetKey(overworldControl.keyCodesBack2[7]),
-                    KeyCode.F4 => Input.GetKey(overworldControl.keyCodes[8]) || Input.GetKey(overworldControl.keyCodesBack1[8]) || Input.GetKey(overworldControl.keyCodesBack2[8]),
-                    KeyCode.Tab => Input.GetKey(overworldControl.keyCodes[9]) || Input.GetKey(overworldControl.keyCodesBack1[9]) || Input.GetKey(overworldControl.keyCodesBack2[9]),
-                    KeyCode.Semicolon => Input.GetKey(overworldControl.keyCodes[10]) || Input.GetKey(overworldControl.keyCodesBack1[10]) || Input.GetKey(overworldControl.keyCodesBack2[10]),
-                    KeyCode.Escape => Input.GetKey(overworldControl.keyCodes[11]) || Input.GetKey(overworldControl.keyCodesBack1[11]) || Input.GetKey(overworldControl.keyCodesBack2[11]),
-                    _ => false,
-                },
-                2 => key switch
-                {
-                    KeyCode.DownArrow => Input.GetKeyUp(overworldControl.keyCodes[0]) || Input.GetKeyUp(overworldControl.keyCodesBack1[0]) || Input.GetKeyUp(overworldControl.keyCodesBack2[0]),
-                    KeyCode.RightArrow => Input.GetKeyUp(overworldControl.keyCodes[1]) || Input.GetKeyUp(overworldControl.keyCodesBack1[1]) || Input.GetKeyUp(overworldControl.keyCodesBack2[1]),
-                    KeyCode.UpArrow => Input.GetKeyUp(overworldControl.keyCodes[2]) || Input.GetKeyUp(overworldControl.keyCodesBack1[2]) || Input.GetKeyUp(overworldControl.keyCodesBack2[2]),
-                    KeyCode.LeftArrow => Input.GetKeyUp(overworldControl.keyCodes[3]) || Input.GetKeyUp(overworldControl.keyCodesBack1[3]) || Input.GetKeyUp(overworldControl.keyCodesBack2[3]),
-                    KeyCode.Z => Input.GetKeyUp(overworldControl.keyCodes[4]) || Input.GetKeyUp(overworldControl.keyCodesBack1[4]) || Input.GetKeyUp(overworldControl.keyCodesBack2[4]),
-                    KeyCode.X => Input.GetKeyUp(overworldControl.keyCodes[5]) || Input.GetKeyUp(overworldControl.keyCodesBack1[5]) || Input.GetKeyUp(overworldControl.keyCodesBack2[5]),
-                    KeyCode.C => Input.GetKeyUp(overworldControl.keyCodes[6]) || Input.GetKeyUp(overworldControl.keyCodesBack1[6]) || Input.GetKeyUp(overworldControl.keyCodesBack2[6]),
-                    KeyCode.V => Input.GetKeyUp(overworldControl.keyCodes[7]) || Input.GetKeyUp(overworldControl.keyCodesBack1[7]) || Input.GetKeyUp(overworldControl.keyCodesBack2[7]),
-                    KeyCode.F4 => Input.GetKeyUp(overworldControl.keyCodes[8]) || Input.GetKeyUp(overworldControl.keyCodesBack1[8]) || Input.GetKeyUp(overworldControl.keyCodesBack2[8]),
-                    KeyCode.Tab => Input.GetKeyUp(overworldControl.keyCodes[9]) || Input.GetKeyUp(overworldControl.keyCodesBack1[9]) || Input.GetKeyUp(overworldControl.keyCodesBack2[9]),
-                    KeyCode.Semicolon => Input.GetKeyUp(overworldControl.keyCodes[10]) || Input.GetKeyUp(overworldControl.keyCodesBack1[10]) || Input.GetKeyUp(overworldControl.keyCodesBack2[10]),
-                    KeyCode.Escape => Input.GetKeyUp(overworldControl.keyCodes[11]) || Input.GetKeyUp(overworldControl.keyCodesBack1[11]) || Input.GetKeyUp(overworldControl.keyCodesBack2[11]),
-                    _ => false,
-                },
+                KeyCode.DownArrow => GetKeyDownFrom(keyCodes, 0),
+                KeyCode.RightArrow => GetKeyDownFrom(keyCodes, 1),
+                KeyCode.UpArrow => GetKeyDownFrom(keyCodes, 2),
+                KeyCode.LeftArrow => GetKeyDownFrom(keyCodes, 3),
+                KeyCode.Z => GetKeyDownFrom(keyCodes, 4),
+                KeyCode.X => GetKeyDownFrom(keyCodes, 5),
+                KeyCode.C => GetKeyDownFrom(keyCodes, 6),
+                KeyCode.V => GetKeyDownFrom(keyCodes, 7),
+                KeyCode.F4 => GetKeyDownFrom(keyCodes, 8),
+                KeyCode.Tab => GetKeyDownFrom(keyCodes, 9),
+                KeyCode.Semicolon => GetKeyDownFrom(keyCodes, 10),
+                KeyCode.Escape => GetKeyDownFrom(keyCodes, 11),
                 _ => false,
             };
         }
 
+        private static bool GetKeyDownFrom(List<KeyCode>[] keyCodes, int index)
+        {
+            return keyCodes.Any(keyCode => Input.GetKeyDown(keyCode[index]));
+        }
+        public static bool ConvertKeyToControl(KeyCode key)
+        {
+            var keyCodes = MainControl.Instance.overworldControl.KeyCodes;
+            return key switch
+            {
+                KeyCode.DownArrow => GetKeyFrom(keyCodes, 0),
+                KeyCode.RightArrow => GetKeyFrom(keyCodes, 1),
+                KeyCode.UpArrow => GetKeyFrom(keyCodes, 2),
+                KeyCode.LeftArrow => GetKeyFrom(keyCodes, 3),
+                KeyCode.Z => GetKeyFrom(keyCodes, 4),
+                KeyCode.X => GetKeyFrom(keyCodes, 5),
+                KeyCode.C => GetKeyFrom(keyCodes, 6),
+                KeyCode.V => GetKeyFrom(keyCodes, 7),
+                KeyCode.F4 => GetKeyFrom(keyCodes, 8),
+                KeyCode.Tab => GetKeyFrom(keyCodes, 9),
+                KeyCode.Semicolon => GetKeyFrom(keyCodes, 10),
+                KeyCode.Escape => GetKeyFrom(keyCodes, 11),
+                _ => false,
+            };
+        }
+        private static bool GetKeyFrom(List<KeyCode>[] keyCodes, int index)
+        {
+            return keyCodes.Any(keyCode => Input.GetKey(keyCode[index]));
+        }
+        public static bool ConvertKeyUpToControl(KeyCode key)
+        {
+            var keyCodes = MainControl.Instance.overworldControl.KeyCodes;
+            return key switch
+            {
+                KeyCode.DownArrow => GetKeyUpFrom(keyCodes, 0),
+                KeyCode.RightArrow => GetKeyUpFrom(keyCodes, 1),
+                KeyCode.UpArrow => GetKeyUpFrom(keyCodes, 2),
+                KeyCode.LeftArrow => GetKeyUpFrom(keyCodes, 3),
+                KeyCode.Z => GetKeyUpFrom(keyCodes, 4),
+                KeyCode.X => GetKeyUpFrom(keyCodes, 5),
+                KeyCode.C => GetKeyUpFrom(keyCodes, 6),
+                KeyCode.V => GetKeyUpFrom(keyCodes, 7),
+                KeyCode.F4 => GetKeyUpFrom(keyCodes, 8),
+                KeyCode.Tab => GetKeyUpFrom(keyCodes, 9),
+                KeyCode.Semicolon => GetKeyUpFrom(keyCodes, 10),
+                KeyCode.Escape => GetKeyUpFrom(keyCodes, 11),
+                _ => false,
+            };
+        }
+        private static bool GetKeyUpFrom(List<KeyCode>[] keyCodes, int index)
+        {
+            return keyCodes.Any(keyCode => Input.GetKeyUp(keyCode[index]));
+        }
         /// <summary>
         /// 应用默认键位
         /// </summary>
-        public static void ApplyDefaultControl()
+        public static List<KeyCode>[] ApplyDefaultControl()
         {
-            var overworldControl = MainControl.Instance.OverworldControl;
-            overworldControl.keyCodes = new List<KeyCode>
+            var keyCodes = new List<KeyCode>[3];
+            keyCodes[0] = new List<KeyCode>
             {
-                KeyCode.DownArrow,
-                KeyCode.RightArrow,
-                KeyCode.UpArrow,
-                KeyCode.LeftArrow,
-                KeyCode.Z,
-                KeyCode.X,
-                KeyCode.C,
-                KeyCode.V,
-                KeyCode.F4,
-                KeyCode.None,
-                KeyCode.None,
-                KeyCode.Escape
+                KeyCode.DownArrow, KeyCode.RightArrow, KeyCode.UpArrow, KeyCode.LeftArrow,
+                KeyCode.Z, KeyCode.X, KeyCode.C, KeyCode.V,
+                KeyCode.F4, KeyCode.None, KeyCode.None, KeyCode.Escape
+            };
+            keyCodes[1] = new List<KeyCode>
+            {
+                KeyCode.S, KeyCode.D, KeyCode.W, KeyCode.A,
+                KeyCode.Return, KeyCode.RightShift, KeyCode.RightControl, KeyCode.None, 
+                KeyCode.None, KeyCode.None, KeyCode.None, KeyCode.None
+            };
+            keyCodes[2] = new List<KeyCode>
+            {
+                KeyCode.None, KeyCode.None, KeyCode.None, KeyCode.None,
+                KeyCode.None, KeyCode.LeftShift, KeyCode.LeftControl, KeyCode.None,
+                KeyCode.None, KeyCode.None, KeyCode.None, KeyCode.None
             };
 
-            overworldControl.keyCodesBack1 = new List<KeyCode>
-            {
-                KeyCode.S,
-                KeyCode.D,
-                KeyCode.W,
-                KeyCode.A,
-                KeyCode.Return,
-                KeyCode.RightShift,
-                KeyCode.RightControl,
-                KeyCode.None,
-                KeyCode.None,
-                KeyCode.None,
-                KeyCode.None,
-                KeyCode.None
-            };
-            overworldControl.keyCodesBack2 = new List<KeyCode>
-            {
-                KeyCode.None,
-                KeyCode.None,
-                KeyCode.None,
-                KeyCode.None,
-                KeyCode.None,
-                KeyCode.LeftShift,
-                KeyCode.LeftControl,
-                KeyCode.None,
-                KeyCode.None,
-                KeyCode.None,
-                KeyCode.None,
-                KeyCode.None
-            };
+            return keyCodes;
         }
 
         public static Color GetRandomColor()

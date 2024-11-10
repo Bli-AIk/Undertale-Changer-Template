@@ -79,7 +79,7 @@ namespace UCT.Battle
         }
         private void Update()
         {
-            if (!MainControl.Instance.OverworldControl.noSfx && hitVolume.weight > 0)
+            if (!MainControl.Instance.overworldControl.noSfx && hitVolume.weight > 0)
                 hitVolume.weight -= Time.deltaTime;
 
             if (MainControl.Instance.playerControl.hp <= 0)
@@ -89,8 +89,8 @@ namespace UCT.Battle
                 if (!(MainControl.Instance.playerControl.isDebug && MainControl.Instance.playerControl.invincible))
                 {
                     _spriteRenderer.color = Color.red;
-                    MainControl.Instance.OverworldControl.playerDeadPos = transform.position - (Vector3)sceneDrift;
-                    MainControl.Instance.OverworldControl.pause = true;
+                    MainControl.Instance.overworldControl.playerDeadPos = transform.position - (Vector3)sceneDrift;
+                    MainControl.Instance.overworldControl.pause = true;
                     TurnController.Instance.KillIEnumerator();
                     GameUtilityService.SwitchScene("Gameover", false);
                 }
@@ -98,7 +98,7 @@ namespace UCT.Battle
                     MainControl.Instance.selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
             }
 
-            if (MainControl.Instance.OverworldControl.isSetting || MainControl.Instance.OverworldControl.pause)
+            if (MainControl.Instance.overworldControl.isSetting || MainControl.Instance.overworldControl.pause)
                 return;
 
             if (MainControl.Instance.playerControl.missTime >= 0)
@@ -143,7 +143,7 @@ namespace UCT.Battle
 
         private void FixedUpdate()
         {
-            if (MainControl.Instance.OverworldControl.isSetting || MainControl.Instance.OverworldControl.pause)
+            if (MainControl.Instance.overworldControl.isSetting || MainControl.Instance.overworldControl.pause)
                 return;
             if (!TurnController.Instance.isMyTurn)
                 Moving();
@@ -181,7 +181,7 @@ namespace UCT.Battle
             switch (playerColor)
             {
                 case BattleControl.PlayerColor.Red:
-                    if (GameUtilityService.KeyArrowToControl(KeyCode.X, 1))
+                    if (GameUtilityService.ConvertKeyToControl(KeyCode.X))
                     {
                         speedWeightX = SpeedWeight;
                         speedWeightY = SpeedWeight;
@@ -191,32 +191,32 @@ namespace UCT.Battle
                         speedWeightX = 1;
                         speedWeightY = 1;
                     }
-                    if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow, 1))
+                    if (GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow))
                     {
                         moving = new Vector3(moving.x, 1);
                     }
-                    else if (GameUtilityService.KeyArrowToControl(KeyCode.DownArrow, 1))
+                    else if (GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow))
                     {
                         moving = new Vector3(moving.x, -1);
                     }
                     else
                         moving = new Vector3(moving.x, 0);
 
-                    if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow, 1) && GameUtilityService.KeyArrowToControl(KeyCode.DownArrow, 1))
+                    if (GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow) && GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow))
                         moving = new Vector3(moving.x, 0);
 
-                    if (GameUtilityService.KeyArrowToControl(KeyCode.RightArrow, 1))
+                    if (GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow))
                     {
                         moving = new Vector3(1, moving.y);
                     }
-                    else if (GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow, 1))
+                    else if (GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow))
                     {
                         moving = new Vector3(-1, moving.y);
                     }
                     else
                         moving = new Vector3(0, moving.y);
 
-                    if (GameUtilityService.KeyArrowToControl(KeyCode.RightArrow, 1) && GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow, 1))
+                    if (GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow) && GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow))
                         moving = new Vector3(0, moving.y);
                     break;
 
@@ -269,7 +269,7 @@ namespace UCT.Battle
                     switch (playerDir)
                     {
                         case PlayerDirEnum.Up:
-                            if (GameUtilityService.KeyArrowToControl(KeyCode.X, 1))
+                            if (GameUtilityService.ConvertKeyToControl(KeyCode.X))
                             {
                                 speedWeightX = SpeedWeight;
                             }
@@ -280,30 +280,30 @@ namespace UCT.Battle
 
                             transform.rotation = Quaternion.Euler(0, 0, 180);
                             Physics2D.gravity = new Vector2(0, 9.8f);
-                            if (GameUtilityService.KeyArrowToControl(KeyCode.RightArrow, 1))
+                            if (GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow))
                             {
                                 moving = new Vector3(1, moving.y);
                             }
-                            else if (GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow, 1))
+                            else if (GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow))
                             {
                                 moving = new Vector3(-1, moving.y);
                             }
                             else
                                 moving = new Vector3(0, moving.y);
 
-                            if (GameUtilityService.KeyArrowToControl(KeyCode.RightArrow, 1) && GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow, 1))
+                            if (GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow) && GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow))
                                 moving = new Vector3(0, moving.y);
-                            if (!GameUtilityService.KeyArrowToControl(KeyCode.DownArrow, 1))
+                            if (!GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow))
                             {
-                                if (!GameUtilityService.KeyArrowToControl(KeyCode.RightArrow, 1) || !GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow, 1))
+                                if (!GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow) || !GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow))
                                     jumpRayDistanceForBoard = 0.2f;
-                                if (GameUtilityService.KeyArrowToControl(KeyCode.RightArrow, 1) || GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow, 1))
+                                if (GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow) || GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow))
                                 {
                                     jumpRayDistanceForBoard = 0;
                                 }
                             }
 
-                            if (GameUtilityService.KeyArrowToControl(KeyCode.DownArrow, 1) && !isJump && moving.y == 0)
+                            if (GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow) && !isJump && moving.y == 0)
                             {
 
 
@@ -312,7 +312,7 @@ namespace UCT.Battle
                                 jumpRayDistance = 0.2f;
                                 jumpRayDistanceForBoard = 0;
                             }
-                            if (isJump && (!GameUtilityService.KeyArrowToControl(KeyCode.DownArrow, 1) || (infoF.collider && infoF.collider.gameObject.CompareTag("Box"))) && moving.y < -0)
+                            if (isJump && (!GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow) || (infoF.collider && infoF.collider.gameObject.CompareTag("Box"))) && moving.y < -0)
                             {
                                 if (infoF.collider && Mathf.Approximately(infoF.transform.position.z, transform.position.z))
                                 {
@@ -342,7 +342,7 @@ namespace UCT.Battle
                             break;
 
                         case PlayerDirEnum.Down:////////////////////////////////////////////////
-                            if (GameUtilityService.KeyArrowToControl(KeyCode.X, 1))
+                            if (GameUtilityService.ConvertKeyToControl(KeyCode.X))
                             {
                                 speedWeightX = SpeedWeight;
                             }
@@ -352,24 +352,24 @@ namespace UCT.Battle
                             }
                             transform.rotation = Quaternion.Euler(0, 0, 0);
                             Physics2D.gravity = new Vector2(0, -9.8f);
-                            if (GameUtilityService.KeyArrowToControl(KeyCode.RightArrow, 1))
+                            if (GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow))
                             {
                                 moving = new Vector3(1, moving.y);
                             }
-                            else if (GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow, 1))
+                            else if (GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow))
                             {
                                 moving = new Vector3(-1, moving.y);
                             }
                             else
                                 moving = new Vector3(0, moving.y);
-                            if (GameUtilityService.KeyArrowToControl(KeyCode.RightArrow, 1) && GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow, 1))
+                            if (GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow) && GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow))
                                 moving = new Vector3(0, moving.y);
 
-                            if (!GameUtilityService.KeyArrowToControl(KeyCode.UpArrow, 1))
+                            if (!GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow))
                             {
-                                if (!GameUtilityService.KeyArrowToControl(KeyCode.RightArrow, 1) || !GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow, 1))
+                                if (!GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow) || !GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow))
                                     jumpRayDistanceForBoard = 0.2f;
-                                if (GameUtilityService.KeyArrowToControl(KeyCode.RightArrow, 1) || GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow, 1))
+                                if (GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow) || GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow))
                                 {
                                     jumpRayDistanceForBoard = 0;
 
@@ -377,14 +377,14 @@ namespace UCT.Battle
                             }
 
 
-                            if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow, 1) && !isJump && moving.y == 0)
+                            if (GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow) && !isJump && moving.y == 0)
                             {
                                 moving = new Vector3(moving.x, 2.15f);
                                 isJump = true;
                                 jumpRayDistance = 0.2f;
                                 jumpRayDistanceForBoard = 0;
                             }
-                            if (isJump && (!GameUtilityService.KeyArrowToControl(KeyCode.UpArrow, 1) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("Box"))) && moving.y > 0)
+                            if (isJump && (!GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow) || (infoF.collider != null && infoF.collider.gameObject.CompareTag("Box"))) && moving.y > 0)
                             {
                                 if (infoF.collider && Mathf.Approximately(infoF.transform.position.z, transform.position.z))
                                 {
@@ -415,7 +415,7 @@ namespace UCT.Battle
                             break;
 
                         case PlayerDirEnum.Left:////////////////////////////////////////////////
-                            if (GameUtilityService.KeyArrowToControl(KeyCode.X, 1))
+                            if (GameUtilityService.ConvertKeyToControl(KeyCode.X))
                             {
                                 speedWeightY = SpeedWeight;
                             }
@@ -425,30 +425,30 @@ namespace UCT.Battle
                             }
                             transform.rotation = Quaternion.Euler(0, 0, 270);
                             Physics2D.gravity = new Vector2(-9.8f, 0);
-                            if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow, 1))
+                            if (GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow))
                             {
                                 moving = new Vector3(moving.x, 1);
                             }
-                            else if (GameUtilityService.KeyArrowToControl(KeyCode.DownArrow, 1))
+                            else if (GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow))
                             {
                                 moving = new Vector3(moving.x, -1);
                             }
                             else
                                 moving = new Vector3(moving.x, 0);
-                            if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow, 1) && GameUtilityService.KeyArrowToControl(KeyCode.DownArrow, 1))
+                            if (GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow) && GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow))
                                 moving = new Vector3(moving.x, 0);
-                            if (!GameUtilityService.KeyArrowToControl(KeyCode.RightArrow, 1))
+                            if (!GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow))
                             {
-                                if (!GameUtilityService.KeyArrowToControl(KeyCode.UpArrow, 1) || !GameUtilityService.KeyArrowToControl(KeyCode.DownArrow, 1))
+                                if (!GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow) || !GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow))
                                     jumpRayDistanceForBoard = 0.2f;
-                                if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow, 1) || GameUtilityService.KeyArrowToControl(KeyCode.DownArrow, 1))
+                                if (GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow) || GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow))
                                 {
                                     jumpRayDistanceForBoard = 0;
 
                                 }
                             }
 
-                            if (GameUtilityService.KeyArrowToControl(KeyCode.RightArrow, 1) && !isJump && moving.x == 0)
+                            if (GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow) && !isJump && moving.x == 0)
                             {
                             
 
@@ -457,7 +457,7 @@ namespace UCT.Battle
                                 jumpRayDistance = 0.2f;
                                 jumpRayDistanceForBoard = 0;
                             }
-                            if (isJump && (!GameUtilityService.KeyArrowToControl(KeyCode.RightArrow, 1) || (infoF.collider && infoF.collider.gameObject.CompareTag("Box"))) && moving.x > 0)
+                            if (isJump && (!GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow) || (infoF.collider && infoF.collider.gameObject.CompareTag("Box"))) && moving.x > 0)
                             {
 
                                 if (infoF.collider && Mathf.Approximately(infoF.transform.position.z, transform.position.z))
@@ -488,7 +488,7 @@ namespace UCT.Battle
                             break;
 
                         case PlayerDirEnum.Right:
-                            if (GameUtilityService.KeyArrowToControl(KeyCode.X, 1))
+                            if (GameUtilityService.ConvertKeyToControl(KeyCode.X))
                             {
                                 speedWeightY = SpeedWeight;
                             }
@@ -498,23 +498,23 @@ namespace UCT.Battle
                             }
                             transform.rotation = Quaternion.Euler(0, 0, 90);
                             Physics2D.gravity = new Vector2(9.8f, 0);
-                            if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow, 1))
+                            if (GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow))
                             {
                                 moving = new Vector3(moving.x, 1);
                             }
-                            else if (GameUtilityService.KeyArrowToControl(KeyCode.DownArrow, 1))
+                            else if (GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow))
                             {
                                 moving = new Vector3(moving.x, -1);
                             }
                             else
                                 moving = new Vector3(moving.x, 0);
-                            if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow, 1) && GameUtilityService.KeyArrowToControl(KeyCode.DownArrow, 1))
+                            if (GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow) && GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow))
                                 moving = new Vector3(moving.x, 0);
-                            if (!GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow, 1))
+                            if (!GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow))
                             {
-                                if (!GameUtilityService.KeyArrowToControl(KeyCode.UpArrow, 1) || !GameUtilityService.KeyArrowToControl(KeyCode.DownArrow, 1))
+                                if (!GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow) || !GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow))
                                     jumpRayDistanceForBoard = 0.2f;
-                                if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow, 1) || GameUtilityService.KeyArrowToControl(KeyCode.DownArrow, 1))
+                                if (GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow) || GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow))
                                 {
                                     jumpRayDistanceForBoard = 0;
 
@@ -522,7 +522,7 @@ namespace UCT.Battle
 
                             }
 
-                            if (GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow, 1) && !isJump && moving.x == 0)
+                            if (GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow) && !isJump && moving.x == 0)
                             {
                             
 
@@ -531,7 +531,7 @@ namespace UCT.Battle
                                 jumpRayDistance = 0.2f;
                                 jumpRayDistanceForBoard = 0;
                             }
-                            if (isJump && (!GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow, 1) || (infoF.collider && infoF.collider.gameObject.CompareTag("Box"))) && moving.x < -0)
+                            if (isJump && (!GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow) || (infoF.collider && infoF.collider.gameObject.CompareTag("Box"))) && moving.x < -0)
                             {
                                 if (infoF.collider && Mathf.Approximately(infoF.transform.position.z, transform.position.z))
                                 {
@@ -577,32 +577,32 @@ namespace UCT.Battle
             Vector2 dirMoveX = new();
             Vector2 dirMoveY = new();
             bool isMoveX = false, isMoveY = false;
-            if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow, 1))
+            if (GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow))
             {
                 dirMoveY = Vector2.up;
                 isMoveY = true;
             }
-            else if (GameUtilityService.KeyArrowToControl(KeyCode.DownArrow, 1))
+            else if (GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow))
             {
                 dirMoveY = Vector2.down;
                 isMoveY = true;
             }
 
-            if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow, 1) && GameUtilityService.KeyArrowToControl(KeyCode.DownArrow, 1))
+            if (GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow) && GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow))
                 isMoveY = false;
 
-            if (GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow, 1))
+            if (GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow))
             {
                 dirMoveX = Vector2.left;
                 isMoveX = true;
             }
-            else if (GameUtilityService.KeyArrowToControl(KeyCode.RightArrow, 1))
+            else if (GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow))
             {
                 dirMoveX = Vector2.right;
                 isMoveX = true;
             }
 
-            if (GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow, 1) && GameUtilityService.KeyArrowToControl(KeyCode.RightArrow, 1))
+            if (GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow) && GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow))
                 isMoveX = false;
 
             Ray2D rayMoveX = new(transform.position, dirMoveX);
@@ -619,9 +619,9 @@ namespace UCT.Battle
             {
                 var x = (isMoveX || isMoveY) && infoMoveX.collider != null && (infoMoveX.collider.gameObject.CompareTag("Box") || infoMoveX.collider.gameObject.CompareTag("board"));
                 var y = (isMoveX || isMoveY) && infoMoveY.collider != null && (infoMoveY.collider.gameObject.CompareTag("Box") || infoMoveY.collider.gameObject.CompareTag("board"));
-                if (x && !y && (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow, 1) || GameUtilityService.KeyArrowToControl(KeyCode.DownArrow, 1)))
+                if (x && !y && (GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow) || GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow)))
                     x = y;
-                if (y && !x && (GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow, 1) || GameUtilityService.KeyArrowToControl(KeyCode.RightArrow, 1)))
+                if (y && !x && (GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow) || GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow)))
                     y = x;
 
                 isMoving = !(x || y);
@@ -965,8 +965,8 @@ namespace UCT.Battle
             if (!(mainControl.playerControl.isDebug && mainControl.playerControl.invincible))
             {
                 //spriteRenderer.color = Color.red;
-                mainControl.OverworldControl.playerDeadPos = transform.position - (Vector3)sceneDrift;
-                mainControl.OverworldControl.pause = true;
+                mainControl.overworldControl.playerDeadPos = transform.position - (Vector3)sceneDrift;
+                mainControl.overworldControl.pause = true;
                 TurnController.Instance.KillIEnumerator();
                 GameUtilityService.SwitchScene("Gameover", false);
             }

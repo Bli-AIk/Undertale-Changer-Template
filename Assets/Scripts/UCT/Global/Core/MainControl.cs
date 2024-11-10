@@ -72,8 +72,11 @@ namespace UCT.Global.Core
 
         [Header("=== 角色与行为控制 ===")]
         public PlayerBehaviour playerBehaviour;
-        [FormerlySerializedAs("PlayerControl")] public PlayerControl playerControl;
-        public OverworldControl OverworldControl { get; private set; }
+        [FormerlySerializedAs("PlayerControl")] 
+        public PlayerControl playerControl;
+
+        [FormerlySerializedAs("OverworldControl")]
+        public OverworldControl overworldControl;
         public ItemControl ItemControl { get; private set; }
         public AudioControl AudioControl { get; private set; }
         public BattleControl BattleControl { get; private set; }
@@ -133,35 +136,37 @@ namespace UCT.Global.Core
         {
             languagePackId = DataHandlerService.LanguagePackDetection(languagePackId);
 
-            if (OverworldControl == null)
+            if (overworldControl == null)
             {
-                OverworldControl = Resources.Load<OverworldControl>("OverworldControl");
+                overworldControl = Resources.Load<OverworldControl>("OverworldControl");
+                overworldControl.KeyCodes = GameUtilityService.ApplyDefaultControl();
             }
 
-            OverworldControl.settingAsset = DataHandlerService.LoadLanguageData("UI\\Setting", languagePackId);
+            
+            overworldControl.settingAsset = DataHandlerService.LoadLanguageData("UI\\Setting", languagePackId);
 
-            DataHandlerService.LoadItemData(OverworldControl.settingSave, OverworldControl.settingAsset);
+            DataHandlerService.LoadItemData(overworldControl.settingSave, overworldControl.settingAsset);
 
             if (sceneState == SceneState.InBattle)
                 return;
             //OverworldControl加载
             //--------------------------------------------------------------------------------
 
-            OverworldControl.sceneTextsAsset = DataHandlerService.LoadLanguageData($"Overworld\\{SceneManager.GetActiveScene().name}", languagePackId);
+            overworldControl.sceneTextsAsset = DataHandlerService.LoadLanguageData($"Overworld\\{SceneManager.GetActiveScene().name}", languagePackId);
 
             if (SceneManager.GetActiveScene().name == "Start")
                 return;
-            DataHandlerService.LoadItemData(OverworldControl.sceneTextsSave, OverworldControl.sceneTextsAsset);
+            DataHandlerService.LoadItemData(overworldControl.sceneTextsSave, overworldControl.sceneTextsAsset);
 
-            OverworldControl.settingSave = DataHandlerService.ChangeItemData(OverworldControl.settingSave, true, new List<string>());
+            overworldControl.settingSave = DataHandlerService.ChangeItemData(overworldControl.settingSave, true, new List<string>());
 
-            OverworldControl.sceneTextsSave = DataHandlerService.ChangeItemData(OverworldControl.sceneTextsSave, true, new List<string>());
-
+            overworldControl.sceneTextsSave = DataHandlerService.ChangeItemData(overworldControl.sceneTextsSave, true, new List<string>());
+            
             //--------------------------------------------------------------------------------
 
-            OverworldControl.isUsingHDFrame = Convert.ToBoolean(PlayerPrefs.GetInt("hdResolution", 0));
-            OverworldControl.noSfx = Convert.ToBoolean(PlayerPrefs.GetInt("noSFX", 0));
-            OverworldControl.vsyncMode = (OverworldControl.VSyncMode)PlayerPrefs.GetInt("vsyncMode", 0);
+            overworldControl.isUsingHDFrame = Convert.ToBoolean(PlayerPrefs.GetInt("hdResolution", 0));
+            overworldControl.noSfx = Convert.ToBoolean(PlayerPrefs.GetInt("noSFX", 0));
+            overworldControl.vsyncMode = (OverworldControl.VSyncMode)PlayerPrefs.GetInt("vsyncMode", 0);
         }
 
         private void InitializationBattle()
@@ -262,11 +267,11 @@ namespace UCT.Global.Core
             {
                 sceneSwitchingFadeImage = GameObject.Find("Canvas/InOutBlack").GetComponent<Image>();
                 sceneSwitchingFadeImage.color = Color.black;
-                OverworldControl.pause = !isSceneSwitchingFadeInUnpaused;
+                overworldControl.pause = !isSceneSwitchingFadeInUnpaused;
                 if (!isSceneSwitchingFadeInDisabled)
                 {
-                    sceneSwitchingFadeImage.DOColor(Color.clear, 0.5f).SetEase(Ease.Linear).OnKill(() => OverworldControl.pause = false);
-                    CanvasController.Instance.frame.color = OverworldControl.isUsingHDFrame ? new Color(1, 1, 1, 1) : new Color(1, 1, 1, 0);
+                    sceneSwitchingFadeImage.DOColor(Color.clear, 0.5f).SetEase(Ease.Linear).OnKill(() => overworldControl.pause = false);
+                    CanvasController.Instance.frame.color = overworldControl.isUsingHDFrame ? new Color(1, 1, 1, 1) : new Color(1, 1, 1, 0);
                 }
                 else
                 {
@@ -276,10 +281,10 @@ namespace UCT.Global.Core
 
             GameUtilityService.SetCanvasFrameSprite(CanvasController.Instance.framePic);
 
-            AudioListener.volume = OverworldControl.mainVolume;
-            OverworldControl.isSetting = false;
+            AudioListener.volume = overworldControl.mainVolume;
+            overworldControl.isSetting = false;
 
-            GameUtilityService.ToggleAllSfx(OverworldControl.noSfx);
+            GameUtilityService.ToggleAllSfx(overworldControl.noSfx);
             
             _debugStringGradient = new DebugStringGradient("Debug");
         }
@@ -295,7 +300,7 @@ namespace UCT.Global.Core
             if (playerControl.hpMax < playerControl.hp)
                 playerControl.hp = playerControl.hpMax;
 
-            if (OverworldControl.isSetting)
+            if (overworldControl.isSetting)
                 return;
             UpdateSettings();
 
@@ -333,22 +338,22 @@ namespace UCT.Global.Core
         /// </summary>
         private void UpdateSettings()
         {
-            if (GameUtilityService.KeyArrowToControl(KeyCode.Tab))
+            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Tab))
             {
-                OverworldControl.resolutionLevel =
-                    GameUtilityService.UpdateResolutionSettings(OverworldControl.isUsingHDFrame,
-                        OverworldControl.resolutionLevel);
+                overworldControl.resolutionLevel =
+                    GameUtilityService.UpdateResolutionSettings(overworldControl.isUsingHDFrame,
+                        overworldControl.resolutionLevel);
             }
-            if (GameUtilityService.KeyArrowToControl(KeyCode.Semicolon))
+            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Semicolon))
             {
-                OverworldControl.noSfx = !OverworldControl.noSfx;
-                GameUtilityService.ToggleAllSfx(OverworldControl.noSfx);
+                overworldControl.noSfx = !overworldControl.noSfx;
+                GameUtilityService.ToggleAllSfx(overworldControl.noSfx);
             }
             // ReSharper disable once InvertIf
-            if (GameUtilityService.KeyArrowToControl(KeyCode.F4))
+            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.F4))
             {
-                OverworldControl.fullScreen = !OverworldControl.fullScreen;
-                GameUtilityService.SetResolution(OverworldControl.resolutionLevel);
+                overworldControl.fullScreen = !overworldControl.fullScreen;
+                GameUtilityService.SetResolution(overworldControl.resolutionLevel);
             }
         }
     }

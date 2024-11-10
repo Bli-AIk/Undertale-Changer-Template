@@ -33,14 +33,14 @@ namespace UCT.Global.Scene
             _tmp = transform.Find("Text").GetComponent<TextMeshPro>();
             mask = transform.Find("Mask").gameObject;
 
-            _typeWritter.TypeOpen(TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "Text"), false, 0, 1, _tmp, TypeWritter.TypeMode.CantZx);
+            _typeWritter.TypeOpen(TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.sceneTextsSave, "Text"), false, 0, 1, _tmp, TypeWritter.TypeMode.CantZx);
         }
 
         private void Update()
         {
-            if (MainControl.Instance.OverworldControl.isSetting || MainControl.Instance.OverworldControl.pause)
+            if (MainControl.Instance.overworldControl.isSetting || MainControl.Instance.overworldControl.pause)
                 return;
-            if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
+            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
             {
                 _typeWritter.TypeStop();
                 _tmp.text = "";

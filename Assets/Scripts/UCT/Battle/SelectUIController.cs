@@ -139,7 +139,7 @@ namespace UCT.Battle
 
         private void Update()
         {
-            if (MainControl.Instance.OverworldControl.isSetting || MainControl.Instance.OverworldControl.pause)
+            if (MainControl.Instance.overworldControl.isSetting || MainControl.Instance.overworldControl.pause)
                 return;
             
             if (MainControl.Instance.playerControl.isDebug)
@@ -151,7 +151,7 @@ namespace UCT.Battle
             _dialog.gameObject.SetActive(isDialog);
 
             if (!isDialog) return;
-            if ((_dialog.typeWritter.isTyping || !GameUtilityService.KeyArrowToControl(KeyCode.Z)) &&
+            if ((_dialog.typeWritter.isTyping || !GameUtilityService.ConvertKeyDownToControl(KeyCode.Z)) &&
                 (selectedButton != SelectedButton.Fight && _textUI.text != "" || numberDialog != 0)) return;
             if (numberDialog < actSave.Count)
                 KeepDialogBubble();
@@ -191,13 +191,13 @@ namespace UCT.Battle
         private void LayerOneSet()
         {
             MainControl.Instance.battlePlayerController.transform.position = new Vector3(-5.175f, -0.96f - selectedName * 0.66f, MainControl.Instance.battlePlayerController.transform.position.z);
-            if (GameUtilityService.KeyArrowToControl(KeyCode.DownArrow) && selectedName < MainControl.Instance.BattleControl.enemies.Count - 1)
+            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.DownArrow) && selectedName < MainControl.Instance.BattleControl.enemies.Count - 1)
             {
                 selectedName++;
                 AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
             }
 
-            if (!GameUtilityService.KeyArrowToControl(KeyCode.UpArrow) || selectedName <= 0) return;
+            if (!GameUtilityService.ConvertKeyDownToControl(KeyCode.UpArrow) || selectedName <= 0) return;
             selectedName--;
             AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
         }
@@ -231,7 +231,7 @@ namespace UCT.Battle
                     MainControl.Instance.battlePlayerController.transform.position =
                         (Vector3)playerUIPos[(int)selectedButton] + new Vector3(0, 0,
                             MainControl.Instance.battlePlayerController.transform.position.z);
-                    if (GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow))
+                    if (GameUtilityService.ConvertKeyDownToControl(KeyCode.LeftArrow))
                     {
                         AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
                         if (selectedButton >= EnumService.GetMinEnumValue<SelectedButton>())
@@ -244,7 +244,7 @@ namespace UCT.Battle
                             SpriteChange();
                         }
                     }
-                    else if (GameUtilityService.KeyArrowToControl(KeyCode.RightArrow))
+                    else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.RightArrow))
                     {
                         AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
                         if (selectedButton <= EnumService.GetMaxEnumValue<SelectedButton>()) 
@@ -257,7 +257,7 @@ namespace UCT.Battle
                             SpriteChange();
                         }
                     }
-                    if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
+                    if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
                     {
                         selectedLayer = SelectedLayer.NameLayer;
                         selectedOption = 0;
@@ -292,7 +292,7 @@ namespace UCT.Battle
                     break;
 
                 case SelectedLayer.NameLayer:
-                    if (GameUtilityService.KeyArrowToControl(KeyCode.X))
+                    if (GameUtilityService.ConvertKeyDownToControl(KeyCode.X))
                     {
                         selectedLayer = SelectedLayer.ButtonLayer;
                         selectedName = 0;
@@ -304,7 +304,7 @@ namespace UCT.Battle
                         break;
                     }
 
-                    if (GameUtilityService.KeyArrowToControl(KeyCode.Z) && selectedButton != SelectedButton.Item)
+                    if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z) && selectedButton != SelectedButton.Item)
                     {
                         if (selectedButton != SelectedButton.Fight)
                             selectedLayer = SelectedLayer.OptionLayer;
@@ -323,7 +323,7 @@ namespace UCT.Battle
                         case SelectedButton.Fight://FIGHT：选择敌人
                             _enemiesHpLine.SetActive(true);
                             LayerOneSet();
-                            if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
+                            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
                             {
                                 _enemiesHpLine.SetActive(false);
                                 _target.gameObject.SetActive(true);
@@ -336,7 +336,7 @@ namespace UCT.Battle
 
                         case SelectedButton.Act://ACT：选择敌人
                             LayerOneSet();
-                            if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
+                            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
                             {
                                 var save = new List<string>();
                                 TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.BattleControl.actSave, save, MainControl.Instance.BattleControl.enemies[selectedName].name + "\\");
@@ -380,7 +380,7 @@ namespace UCT.Battle
 
                         case SelectedButton.Mercy://MERCY：选择敌人
                             LayerOneSet();
-                            if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
+                            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
                             {
                                 var save = new List<string>();
                                 TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.BattleControl.mercySave, save, MainControl.Instance.BattleControl.enemies[selectedName].name + "\\");
@@ -405,22 +405,22 @@ namespace UCT.Battle
                         case SelectedButton.Fight:
                             break;
                         case SelectedButton.Act:
-                            if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow) && selectedOption - 2 >= 0)
+                            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.UpArrow) && selectedOption - 2 >= 0)
                             {
                                 AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
                                 selectedOption -= 2;
                             }
-                            else if (GameUtilityService.KeyArrowToControl(KeyCode.DownArrow) && selectedOption + 2 <= actSave.Count / 2 - 1)
+                            else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.DownArrow) && selectedOption + 2 <= actSave.Count / 2 - 1)
                             {
                                 AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
                                 selectedOption += 2;
                             }
-                            if (GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow) && selectedOption - 1 >= 0)
+                            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.LeftArrow) && selectedOption - 1 >= 0)
                             {
                                 AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
                                 selectedOption--;
                             }
-                            else if (GameUtilityService.KeyArrowToControl(KeyCode.RightArrow) && selectedOption + 1 <= actSave.Count / 2 - 1)
+                            else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.RightArrow) && selectedOption + 1 <= actSave.Count / 2 - 1)
                             {
                                 AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
                                 selectedOption++;
@@ -444,7 +444,7 @@ namespace UCT.Battle
                                 playerPosY = -0.96f - 1 * 0.66f;
                             }
                             MainControl.Instance.battlePlayerController.transform.position = new Vector3(playerPosX, playerPosY, MainControl.Instance.battlePlayerController.transform.position.z);
-                            if (GameUtilityService.KeyArrowToControl(KeyCode.X))
+                            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.X))
                             {
                                 selectedLayer = SelectedLayer.NameLayer;
                                 selectedOption = 0;
@@ -455,7 +455,7 @@ namespace UCT.Battle
                                     _textUI.text += "<color=#00000000>aa*</color>* " + t.name + "\n";
                                 }
                             }
-                            else if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
+                            else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
                             {
                                 switch (selectedName)//在这里写ACT的相关触发代码
                                 {
@@ -537,7 +537,7 @@ namespace UCT.Battle
                             break;
 
                         case SelectedButton.Item:
-                            if (GameUtilityService.KeyArrowToControl(KeyCode.X))
+                            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.X))
                             {
                                 selectedLayer = SelectedLayer.ButtonLayer;
                                 selectedName = 0;
@@ -555,7 +555,7 @@ namespace UCT.Battle
                                 break;
                             }
 
-                            if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
+                            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
                             {
                                 selectedLayer = SelectedLayer.NarratorLayer;
                                 MainControl.Instance.battlePlayerController.transform.position =
@@ -621,7 +621,7 @@ namespace UCT.Battle
                                           textUITextChanger1 + textUITextChanger2;
                             _textUIBack.text = DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectedName - selectedOption], "Auto", true) + "\n" + textUIDataChanger1 + textUIDataChanger2;
 
-                            if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow) && selectedName > 0)
+                            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.UpArrow) && selectedName > 0)
                             {
                                 if (selectedOption > 0)
                                     selectedOption--;
@@ -634,7 +634,7 @@ namespace UCT.Battle
                                 else
                                     UITextUpdate(UITextMode.Food);
                             }
-                            if (GameUtilityService.KeyArrowToControl(KeyCode.DownArrow) && selectedName < myItemMax - 1)
+                            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.DownArrow) && selectedName < myItemMax - 1)
                             {
                                 if (selectedOption < 2)
                                     selectedOption++;
@@ -653,7 +653,7 @@ namespace UCT.Battle
 
                         case SelectedButton.Mercy:
                             MainControl.Instance.battlePlayerController.transform.position = new Vector3(-5.175f, -0.96f - selectedOption * 0.66f, MainControl.Instance.battlePlayerController.transform.position.z);
-                            if (GameUtilityService.KeyArrowToControl(KeyCode.X))
+                            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.X))
                             {
                                 selectedLayer = SelectedLayer.NameLayer;
                                 selectedOption = 0;
@@ -663,7 +663,7 @@ namespace UCT.Battle
                                     _textUI.text += "<color=#00000000>aa*</color>* " + t.name + "\n";
                                 }
                             }
-                            else if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
+                            else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
                             {
                                 selectedLayer = SelectedLayer.NarratorLayer;
                                 MainControl.Instance.battlePlayerController.transform.position = (Vector3)(Vector2.one * 10000) + new Vector3(0, 0, MainControl.Instance.battlePlayerController.transform.position.z);
@@ -679,12 +679,12 @@ namespace UCT.Battle
                                 _itemSelectController.Close();
                             }
 
-                            if (GameUtilityService.KeyArrowToControl(KeyCode.UpArrow) && selectedOption - 1 >= 0)
+                            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.UpArrow) && selectedOption - 1 >= 0)
                             {
                                 AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
                                 selectedOption--;
                             }
-                            else if (GameUtilityService.KeyArrowToControl(KeyCode.DownArrow) && selectedOption + 1 <= actSave.Count / 2 - 1)
+                            else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.DownArrow) && selectedOption + 1 <= actSave.Count / 2 - 1)
                             {
                                 AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
                                 selectedOption++;
@@ -711,7 +711,7 @@ namespace UCT.Battle
                             OpenDialogBubble(MainControl.Instance.BattleControl.turnDialogAsset[TurnController.Instance.turn]);
                         }
                     }
-                    else if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
+                    else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
                     {
                         MainControl.Instance.battlePlayerController.collideCollider.enabled = true;
                         if (!isDialog)
@@ -724,7 +724,7 @@ namespace UCT.Battle
                             }
                             if (selectedButton != SelectedButton.Fight && !_typeWritter.isTyping)
                             {
-                                if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
+                                if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
                                 {
                                     _textUI.text = "";
                                     MainControl.Instance.battlePlayerController.transform.position = (Vector3)MainControl.Instance.battlePlayerController.sceneDrift + new Vector3(0, 0, MainControl.Instance.battlePlayerController.transform.position.z);

@@ -86,13 +86,13 @@ namespace UCT.Overworld
         {
             if (_saveOpen)
             {
-                if (GameUtilityService.KeyArrowToControl(KeyCode.LeftArrow) || GameUtilityService.KeyArrowToControl(KeyCode.RightArrow))
+                if (GameUtilityService.ConvertKeyDownToControl(KeyCode.LeftArrow) || GameUtilityService.ConvertKeyDownToControl(KeyCode.RightArrow))
                 {
                     _saveSelect = Convert.ToInt32(!Convert.ToBoolean(_saveSelect));
 
                     BackpackBehaviour.Instance.saveHeart.anchoredPosition = new Vector2(-258 + _saveSelect * 180, -44);
                 }
-                if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
+                if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
                 {
                     switch (_saveSelect)
                     {
@@ -105,13 +105,13 @@ namespace UCT.Overworld
 
                             BackpackBehaviour.Instance.saveHeart.anchoredPosition = new Vector2(10000, 10000);
 
-                            BackpackBehaviour.Instance.saveText.text = $"<color=yellow>{TextProcessingService.PadStringToLength(playerName, 10)}LV{TextProcessingService.PadStringToLength(MainControl.Instance.playerControl.lv.ToString(), 7)}{TextProcessingService.GetRealTime((int)MainControl.Instance.playerControl.gameTime)}\n{TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, SceneManager.GetActiveScene().name)}\n{TextProcessingService.RichTextWithEnd("size", 1, "\n")}  {TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Saved")}";
+                            BackpackBehaviour.Instance.saveText.text = $"<color=yellow>{TextProcessingService.PadStringToLength(playerName, 10)}LV{TextProcessingService.PadStringToLength(MainControl.Instance.playerControl.lv.ToString(), 7)}{TextProcessingService.GetRealTime((int)MainControl.Instance.playerControl.gameTime)}\n{TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave, SceneManager.GetActiveScene().name)}\n{TextProcessingService.RichTextWithEnd("size", 1, "\n")}  {TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave, "Saved")}";
                             MainControl.Instance.playerControl.saveScene = SceneManager.GetActiveScene().name;
                             PlayerPrefs.SetInt("languagePack", MainControl.Instance.languagePackId);
                             PlayerPrefs.SetInt("dataNumber", MainControl.Instance.saveDataId);
-                            PlayerPrefs.SetInt("hdResolution", Convert.ToInt32(MainControl.Instance.OverworldControl.isUsingHDFrame));
-                            PlayerPrefs.SetInt("noSFX", Convert.ToInt32(MainControl.Instance.OverworldControl.noSfx));
-                            PlayerPrefs.SetInt("vsyncMode", Convert.ToInt32(MainControl.Instance.OverworldControl.vsyncMode));
+                            PlayerPrefs.SetInt("hdResolution", Convert.ToInt32(MainControl.Instance.overworldControl.isUsingHDFrame));
+                            PlayerPrefs.SetInt("noSFX", Convert.ToInt32(MainControl.Instance.overworldControl.noSfx));
+                            PlayerPrefs.SetInt("vsyncMode", Convert.ToInt32(MainControl.Instance.overworldControl.vsyncMode));
                             break;
 
                         case 1:
@@ -128,7 +128,7 @@ namespace UCT.Overworld
                             goto default;
                     }
                 }
-                else if (GameUtilityService.KeyArrowToControl(KeyCode.X))
+                else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.X))
                 {
                     BackpackBehaviour.Instance.saveHeart.anchoredPosition = new Vector2(10000, 10000);
                     BackpackBehaviour.Instance.saveBox.localPosition = new Vector3(BackpackBehaviour.Instance.saveBox.localPosition.x, BackpackBehaviour.Instance.saveBox.localPosition.y, -50);
@@ -138,7 +138,7 @@ namespace UCT.Overworld
                 }
             }
             //检测相关见PlayerBehaviour
-            if (_isTyping && GameUtilityService.KeyArrowToControl(KeyCode.Z) && !_typeWritter.isRunning)
+            if (_isTyping && GameUtilityService.ConvertKeyDownToControl(KeyCode.Z) && !_typeWritter.isRunning)
             {
                 PressZ();
             }
@@ -169,7 +169,7 @@ namespace UCT.Overworld
             }
 
             MainControl.Instance.playerControl.canMove = true;
-            MainControl.Instance.OverworldControl.pause = false;
+            MainControl.Instance.overworldControl.pause = false;
 
             foreach (var item in funNames)
             {
@@ -195,8 +195,8 @@ namespace UCT.Overworld
 
             BackpackBehaviour.Instance.saveText.text = TextProcessingService.PadStringToLength(playerName, 10) + "LV" + TextProcessingService.PadStringToLength(MainControl.Instance.playerControl.lv.ToString(), 7) +
                                                      TextProcessingService.GetRealTime((int)MainControl.Instance.playerControl.gameTime) + "\n" +
-                                                     TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, SceneManager.GetActiveScene().name) + "\n<size=1>\n</size>  " +
-                                                     TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Save") + "         " + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "Back")
+                                                     TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave, SceneManager.GetActiveScene().name) + "\n<size=1>\n</size>  " +
+                                                     TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave, "Save") + "         " + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave, "Back")
                 ;
             BackpackBehaviour.Instance.saveHeart.anchoredPosition = new Vector2(-258, -44);
         }
@@ -208,7 +208,7 @@ namespace UCT.Overworld
         {
             _isTyping = true;
             MainControl.Instance.playerControl.canMove = false;
-            MainControl.Instance.OverworldControl.pause = true;
+            MainControl.Instance.overworldControl.pause = true;
             TalkBoxPositionChanger.Instance.Change(true, true);
 
             if (TalkBoxPositionChanger.Instance.boxDrawer.localPosition.z < 0)
@@ -223,7 +223,7 @@ namespace UCT.Overworld
                 _typeWritter = BackpackBehaviour.Instance.typeWritter;
 
             _typeWritter.TypeOpen(
-                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave,
+                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.sceneTextsSave,
                     text), false, 0, 1, BackpackBehaviour.Instance.typeMessage);
             if (endInBattle)
                 _typeWritter.EndInBattle();
@@ -235,7 +235,7 @@ namespace UCT.Overworld
         public void AnimTypeText(bool inputIsUp)
         {
             MainControl.Instance.playerControl.canMove = false;
-            MainControl.Instance.OverworldControl.pause = true;
+            MainControl.Instance.overworldControl.pause = true;
             mainCamera.isFollow = false;
             mainCamera.transform.DOLocalMove(animEndPosPlus, animTime).SetEase(animEase).OnKill(() => TypeText(inputIsUp, false));
             DOTween.To(() => mainCamera.followPosition, x => mainCamera.followPosition = x, animEndPosPlus, animTime).SetEase(animEase);

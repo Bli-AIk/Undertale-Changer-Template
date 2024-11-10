@@ -237,7 +237,7 @@ namespace UCT.Battle
                     MainControl.Instance.battlePlayerController.KillPlayer(MainControl.Instance);
 
 
-                if (!MainControl.Instance.OverworldControl.noSfx)
+                if (!MainControl.Instance.overworldControl.noSfx)
                     MainControl.Instance.battlePlayerController.hitVolume.weight = 1;
             }
         }

@@ -688,19 +688,19 @@ namespace UCT.Service
         /// </summary>
         public static void InitializationLanguagePackFullWidth()
         {
-            if (MainControl.Instance.OverworldControl.textWidth != bool.Parse(TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "LanguagePackFullWidth")))
+            if (MainControl.Instance.overworldControl.textWidth != bool.Parse(TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave, "LanguagePackFullWidth")))
             {
-                MainControl.Instance.OverworldControl.textWidth = bool.Parse(TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "LanguagePackFullWidth"));
+                MainControl.Instance.overworldControl.textWidth = bool.Parse(TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave, "LanguagePackFullWidth"));
                 foreach (var obj in Resources.FindObjectsOfTypeAll(typeof(TextChanger)))
                 {
                     var textChanger = (TextChanger)obj;
-                    textChanger.width = MainControl.Instance.OverworldControl.textWidth;
+                    textChanger.width = MainControl.Instance.overworldControl.textWidth;
                     textChanger.Set();
                     textChanger.Change();
                 }
             }
 
-            CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture(TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.settingSave, "CultureInfo"));
+            CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture(TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave, "CultureInfo"));
         }
 
         /// <summary>

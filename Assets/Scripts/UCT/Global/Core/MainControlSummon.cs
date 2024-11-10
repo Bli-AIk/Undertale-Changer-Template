@@ -155,7 +155,7 @@ namespace UCT.Global.Core
             mainControl.isSceneSwitchingFadeInUnpaused = notPauseIn;
             mainControl.InitializationOverworld();
             mainControl.mainCamera = Camera.main;
-            GameUtilityService.SetResolution(mainControl.OverworldControl.resolutionLevel);
+            GameUtilityService.SetResolution(mainControl.overworldControl.resolutionLevel);
         }
       
     }

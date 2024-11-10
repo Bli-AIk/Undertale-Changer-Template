@@ -47,7 +47,7 @@ namespace UCT.Control
         public string settingAsset;
         public List<string> settingSave;
         public bool isSetting;
-        public List<KeyCode> keyCodes, keyCodesBack1, keyCodesBack2;//依照设置顺序
+        public List<KeyCode>[] KeyCodes;//依照设置顺序
 
         [Header("玩家相关")]
         public Vector3 playerDeadPos;

@@ -28,7 +28,7 @@ namespace UCT.Global.Scene
             _text.color = Color.clear;
             _textUnder.color = Color.clear;
             AudioController.Instance.GetFx(11, MainControl.Instance.AudioControl.fxClipUI);
-            _text.text = MainControl.Instance.OverworldControl.sceneTextsAsset;
+            _text.text = MainControl.Instance.overworldControl.sceneTextsAsset;
 
             var playerControl = SaveController.LoadData("Data" + MainControl.Instance.saveDataId);
         }
@@ -43,7 +43,7 @@ namespace UCT.Global.Scene
                 _textUnder.DOColor(Color.white, 0.5f).SetEase(Ease.Linear);
             }
 
-            if (GameUtilityService.KeyArrowToControl(KeyCode.Z))
+            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
             {
                 switch (_layer)
                 {

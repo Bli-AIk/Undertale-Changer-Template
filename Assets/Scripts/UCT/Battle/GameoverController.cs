@@ -39,8 +39,8 @@ namespace UCT.Battle
             _foolDay = DateTime.Now.Month == 4 && DateTime.Now.Day == 1;
             _bgm = AudioController.Instance.audioSource;
             _bgm.clip = clips[Convert.ToInt32(_foolDay)];
-            _player.transform.position = MainControl.Instance.OverworldControl.playerDeadPos;
-            _mParticleSystem.transform.position = MainControl.Instance.OverworldControl.playerDeadPos;
+            _player.transform.position = MainControl.Instance.overworldControl.playerDeadPos;
+            _mParticleSystem.transform.position = MainControl.Instance.overworldControl.playerDeadPos;
             _mParticleSystem.Pause();
             _mParticleSystem.gameObject.SetActive(false);
         }
@@ -58,7 +58,7 @@ namespace UCT.Battle
 
         public void StartParticleSystem()
         {
-            _mParticleSystem.transform.position = MainControl.Instance.OverworldControl.playerDeadPos;
+            _mParticleSystem.transform.position = MainControl.Instance.overworldControl.playerDeadPos;
             _mParticleSystem.gameObject.SetActive(true);
             _mParticleSystem.Play();
         }
@@ -67,10 +67,10 @@ namespace UCT.Battle
         {
             var strings = new List<string>
             {
-                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "GameOver1"),
-                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "GameOver2"),
-                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "GameOver3"),
-                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.OverworldControl.sceneTextsSave, "GameOver4")
+                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.sceneTextsSave, "GameOver1"),
+                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.sceneTextsSave, "GameOver2"),
+                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.sceneTextsSave, "GameOver3"),
+                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.sceneTextsSave, "GameOver4")
             };
             _typeWritter.TypeOpen(strings[Random.Range(0, 4)], false, 0, 4, _tmp);
             canChangeSence = true;
@@ -95,14 +95,14 @@ namespace UCT.Battle
 
         private void Update()
         {
-            if (!_typeWritter.isTyping && GameUtilityService.KeyArrowToControl(KeyCode.Z) && canChangeSence)
+            if (!_typeWritter.isTyping && GameUtilityService.ConvertKeyDownToControl(KeyCode.Z) && canChangeSence)
             {
                 _tmp.text = "";
                 GameUtilityService.FadeOutAndSwitchScene("Example-Corridor", Color.black, true, 2);
                 canChangeSence = false;
             }
 
-            if (GameUtilityService.KeyArrowToControl(KeyCode.C) && canChangeSenceForC)
+            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.C) && canChangeSenceForC)
             {
                 GameUtilityService.FadeOutAndSwitchScene("Example-Corridor", Color.black, true);
                 _typeWritter.TypeStop();

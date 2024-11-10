@@ -20,7 +20,7 @@ namespace UCT.Battle
         {
             if (MainControl.Instance.sceneState != MainControl.SceneState.InBattle)
                 return;
-            if (MainControl.Instance.OverworldControl.isSetting || MainControl.Instance.OverworldControl.pause)
+            if (MainControl.Instance.overworldControl.isSetting || MainControl.Instance.overworldControl.pause)
                 return;
         }
     }

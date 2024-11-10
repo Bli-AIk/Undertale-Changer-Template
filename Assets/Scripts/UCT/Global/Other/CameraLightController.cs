@@ -23,7 +23,7 @@ namespace UCT.Global.Other
 
         private void UpdateLightsVisibility()
         {
-            if (MainControl.Instance.OverworldControl.noSfx)
+            if (MainControl.Instance.overworldControl.noSfx)
                 return;
 
             // 获取所有光源组件的引用
