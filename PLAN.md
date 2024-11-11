@@ -1,101 +1,101 @@
-# UCT renewal program
+# UCT Update Plan
 
-This document is written about UCT's long-term update plan.
+This document outlines the long-term update plan for UCT.
 
-Note that these update plans are not in any order and are subject to change, shelving, or deprecation.
+Please note that these update plans are not in any particular order and may be subject to changes, delays, or cancellations.
 
-For specific updates to UCT, please refer to [CHANGELOG.md] (CHANGELOG.md), [CHANGELOG_zh-CN.md] (CHANGELOG_zh-CN.md), or [CHANGELOG_zh-TW.md] (CHANGELOG_zh-TW.md).
+For specific update information about UCT, please refer to [CHANGELOG.md](CHANGELOG.md), [CHANGELOG_zh-CN.md](CHANGELOG_zh-CN.md), or [CHANGELOG_zh-TW.md](CHANGELOG_zh-TW.md).
 
-## Generic class
-### Refinement of existing systems
-- [ x ] Refinement of BGM controller[^1]
-- [ ] Store item data to ScriptableObject
+## General Category
+### Refinement of Existing System
+- [x] Refine BGM controller[^1]
+"Store item data in ScriptableObject."
 
 
-### UI optimization and refinement
-- [ ] Add Pixel Perfection & Zoom Out to 640x480 [^2]
-- [ ] Refine / UI Drill MENU screen and OW archive screen
-- [ ] Refine Settings UI
-- [ ] Redo Settings UI
+### UI Optimization and Refinement
+- [ ] Add pixel perfect and magnification 640x480[^2]
+- [ ] Refine / UI Dr. the MENU interface and OW save interface
+- [ ] Refine the settings interface
+- [ ] Redo the settings interface UI
 
 ### Performance Optimization
-- [ x ] Add DebugLogger scripts[^3]
-- [ ] Call language packs using a concatenation instead of calling them all at the same time
+- [x] Add DebugLogger script[^3]
+Use coroutine to call the language pack, rather than calling all at once.
 
-## OW classes
-### Event system
-- [ ] Rework the OW event system
+## OW Category
+### Event System
+- [ ] Redo the OW event system
 - [ ] Add a Dr. style chase system.
 
-### Plot system
-- [ ] Introduced the [Fungus](https://github.com/snozbot/fungus) library to create a visual dialog editing system
-- [ ] Add OW Plot Controller
+### Plot System
+- [ ] Introduce the [Fungus](https://github.com/snozbot/fungus) library to create a visual dialogue editing system.
+- [ ] Add OW storyline controller
 
 ### Data Storage
-- [ ] Store room data to a ScriptableObject.
+Store room data to ScriptableObject.
 
-## Battle class
-### Data storage
-- [ x ] Stores pop-up data to ScriptableObject
+## Combat Class
+### Data Storage
+- [x] Store barrage data in ScriptableObject
 - [ ] Store round data to ScriptableObject
 
-### Round System Rework
-- [ ] Visualize Round System
-- [ ] Add Path Popup Generator
+### Turn System Redesign
+- [ ] Visualized Round System
+- [ ] Add path bullet screen generator
 
-### Battle System Expansion
-- [ ] Add the ability to insert subtitles / dialog during rounds
-- [ ] Add multiple battles[^4]
+### Combat System Expansion
+Add the feature to insert subtitles/dialogues during the round.
+The translation of the text to English is: "Add more battles."
 
-### Fixes and optimizations
-- [ x] Optimized 3D backgrounds
-- [ x] Fixed blue hearts
+### Fixes and Optimizations
+- [x] Optimize 3D background
+- [x] Repair Blue Heart
 
-### Alien Frame
-- [ ] Fix shaped frames
-- [ ] Rework collision system to fit shaped frames
+### Irregular Frame
+- [ ] Fix the irregular frame
+- [ ] Redo the collision system to accommodate irregular frames.
 
 ### Judgment and Collision
-- [ ] Refine FIGHT related judgments
-- [ ] Add monster death judgment
-- [ ] Completing the seven player soul colors.
+Refine judgments related to FIGHT.
+Add monster death determination
+Complete the seven types of player soul colors.
 
 
-## New Classes
+## New Category
 ### Scene Expansion
-- [ ] Added multi-language expansion to the naming scene.
-- [ ] Add Battle Settlement Scene
-- [ ] Add a BGM playback scene
+- [ ] Add multilingual expansion in the naming scene.
+- [ ] Add battle settlement scene
+- [ ] Add BGM broadcasting scene
 
-### Render Expansion
-- [ x] Add built-in projector frame
-- [ x] Add 3D Renderer
+### Rendering Expansion
+- [x] Add built-in projection frame
+- [x] Add 3D renderer
 
 
-### Functionality Expansion
-- [ ] Add CC captioning system[^5]
+### Function Expansion
+- [ ] Add CC subtitle system[^5]
 - [ ] Add achievement system
-- [ ] Add UI manager
+- [ ] Add UI Manager
 - [ ] Introduce online library
 
 ### Accessibility
-- [ ] Add Narrator
-- [ ] Add color blind filter
+- [ ] Add narrator
+- [ ] Add color blindness filter
 
-## Other classes
-### Project localization
-- [ x ] Merge Chinese and English branches, replace comment text with scripts
+## Other Categories
+### Project Localization
+- [x] Merging Chinese and English branches, replacing comment text through scripts.
 
-### Cleanup and Maintenance
-- [x] Remove redundant original textures
+### Cleaning and Maintenance
+- [x] Remove redundant original artwork textures
 
-### Tutorials
-- [ ] New wiki with video tutorials
+### Tutorial
+- [ ] New wiki and video tutorials
 
----
+Please provide the text you would like me to translate into English.
 
-[^1]: Will mainly add features like counting beats to it.
-[^2]: Will try to add two extra items to the settings options that will allow you to use pixel-perfect filters / zoom to a larger resolution at 640x480 instead of just using a larger resolution to save performance.
-[^3]: This script will wrap all of Unity's Debug related functions into it to be called, and these functions will only be executed within the editor.
-[^4]: i.e. allow multiple battles and multiple fights within the game.
-[^5]: Localizers can provide early localization support to players by releasing a preview version with CC subtitles at a stage when the translation is complete but not yet officially embedded.
+The main addition will be features such as calculating the number of beats.
+[2]: Will attempt to add two additional options in the settings, allowing you to use a pixel-perfect filter / enlarge to a larger resolution at 640x480 instead of directly using a larger resolution, in order to save performance.
+The script will encapsulate all Unity debug-related functions to be called within it, and these functions are only executed in the editor.
+The translation of the text to English is: "That is, allowing for multiple battles and several fights within the game."
+Localization personnel can provide localization support to players in advance by releasing a CC subtitle preview version during the stage when the translation is completed but not yet officially integrated.
