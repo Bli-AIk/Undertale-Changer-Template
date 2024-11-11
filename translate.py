@@ -9,8 +9,8 @@ def translate_text(text, target_lang):
     prompt = f"Translate the following text to {target_lang}: {text}"
 
     try:
-        response = openai.chat.completions.create(
-            model="gpt-4o-mini",
+        response = openai.ChatCompletion.create(
+            model="gpt-4",
             messages=[
                 {"role": "system", "content": "You are a helpful assistant."},
                 {"role": "user", "content": prompt}
@@ -18,7 +18,7 @@ def translate_text(text, target_lang):
         )
         # 获取翻译结果
         translation = response['choices'][0]['message']['content']
-        return translation
+        return translation.strip()  # 移除首尾多余的空格
     except Exception as e:
         print(f"Error during translation: {e}")
         return None
