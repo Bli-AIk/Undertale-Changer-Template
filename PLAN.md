@@ -1,101 +1,101 @@
-# UCT更新计划
+# UCT renewal program
 
-本文档所写的是UCT长期的更新计划。
+This document is written about UCT's long-term update plan.
 
-注意，这些更新计划并没有任何排列顺序，且有可能变动、搁置或废弃。
+Note that these update plans are not in any order and are subject to change, shelving, or deprecation.
 
-具体UCT更新内容，请查阅[更新日志](CHANGELOG.md)。
+For specific updates to UCT, please refer to [CHANGELOG.md] (CHANGELOG.md), [CHANGELOG_zh-CN.md] (CHANGELOG_zh-CN.md), or [CHANGELOG_zh-TW.md] (CHANGELOG_zh-TW.md).
 
-## 通用类
-### 现有系统细化
-- [x] 细化BGM 控制器[^1]
-- [ ] 存储物品数据至ScriptableObject
-
-
-### UI优化与细化
-- [ ] 添加像素完美与放大化640x480[^2]
-- [ ] 细化 / UI Dr 化 MENU 界面与 OW 存档界面
-- [ ] 细化设置界面
-- [ ] 重做设置界面UI
-
-### 性能优化
-- [x] 添加DebugLogger脚本[^3]
-- [ ] 使用协程调用语言包，而非同时全部调用
-
-## OW 类
-### 事件系统
-- [ ] 重做 OW 事件系统
-- [ ] 添加Dr 风格的追逐战系统
-
-### 剧情系统
-- [ ] 引入 [Fungus](https://github.com/snozbot/fungus) 库以制作可视化对话编辑系统
-- [ ] 添加 OW 剧情控制器
-
-### 数据存储
-- [ ] 存储房间数据至 ScriptableObject
-
-## 战斗类
-### 数据存储
-- [x] 存储弹幕数据至 ScriptableObject
-- [ ] 存储回合数据至 ScriptableObject
-
-### 回合系统重做
-- [ ] 可视化回合系统
-- [ ] 添加路径弹幕生成器
-
-### 战斗系统扩展
-- [ ] 添加在回合中插入字幕 / 对话的功能
-- [ ] 添加多战斗[^4]
-
-### 修复与优化
-- [x] 优化3D 背景
-- [x] 修复蓝心
-
-### 异形框
-- [ ] 修复异形框
-- [ ] 重做碰撞系统以适配异形框
-
-### 判定与碰撞
-- [ ] 细化FIGHT 相关判定
-- [ ] 添加怪物死亡判定
-- [ ] 补全七种玩家魂色
+## Generic class
+### Refinement of existing systems
+- [ x ] Refinement of BGM controller[^1]
+- [ ] Store item data to ScriptableObject
 
 
-## 新增类
-### 场景拓展
-- [ ] 添加起名场景中的多语言拓展
-- [ ] 添加战斗结算场景
-- [ ] 添加BGM放送场景
+### UI optimization and refinement
+- [ ] Add Pixel Perfection & Zoom Out to 640x480 [^2]
+- [ ] Refine / UI Drill MENU screen and OW archive screen
+- [ ] Refine Settings UI
+- [ ] Redo Settings UI
 
-### 渲染拓展
-- [x] 添加内置投影框
-- [x] 添加3D 渲染器
+### Performance Optimization
+- [ x ] Add DebugLogger scripts[^3]
+- [ ] Call language packs using a concatenation instead of calling them all at the same time
+
+## OW classes
+### Event system
+- [ ] Rework the OW event system
+- [ ] Add a Dr. style chase system.
+
+### Plot system
+- [ ] Introduced the [Fungus](https://github.com/snozbot/fungus) library to create a visual dialog editing system
+- [ ] Add OW Plot Controller
+
+### Data Storage
+- [ ] Store room data to a ScriptableObject.
+
+## Battle class
+### Data storage
+- [ x ] Stores pop-up data to ScriptableObject
+- [ ] Store round data to ScriptableObject
+
+### Round System Rework
+- [ ] Visualize Round System
+- [ ] Add Path Popup Generator
+
+### Battle System Expansion
+- [ ] Add the ability to insert subtitles / dialog during rounds
+- [ ] Add multiple battles[^4]
+
+### Fixes and optimizations
+- [ x] Optimized 3D backgrounds
+- [ x] Fixed blue hearts
+
+### Alien Frame
+- [ ] Fix shaped frames
+- [ ] Rework collision system to fit shaped frames
+
+### Judgment and Collision
+- [ ] Refine FIGHT related judgments
+- [ ] Add monster death judgment
+- [ ] Completing the seven player soul colors.
 
 
-### 功能扩展
-- [ ] 添加CC字幕系统[^5]
-- [ ] 添加成就系统
-- [ ] 添加UI 管理器
-- [ ] 引入联机库
+## New Classes
+### Scene Expansion
+- [ ] Added multi-language expansion to the naming scene.
+- [ ] Add Battle Settlement Scene
+- [ ] Add a BGM playback scene
 
-### 无障碍
-- [ ] 添加讲述人
-- [ ] 添加色盲滤镜
+### Render Expansion
+- [ x] Add built-in projector frame
+- [ x] Add 3D Renderer
 
-## 其他类
-### 项目本地化
-- [x] 合并中英文分支，通过脚本替换注释文本
 
-### 清理与维护
-- [x] 删除多余的原作贴图
+### Functionality Expansion
+- [ ] Add CC captioning system[^5]
+- [ ] Add achievement system
+- [ ] Add UI manager
+- [ ] Introduce online library
 
-### 教程
-- [ ] 新的wiki与视频教程
+### Accessibility
+- [ ] Add Narrator
+- [ ] Add color blind filter
+
+## Other classes
+### Project localization
+- [ x ] Merge Chinese and English branches, replace comment text with scripts
+
+### Cleanup and Maintenance
+- [x] Remove redundant original textures
+
+### Tutorials
+- [ ] New wiki with video tutorials
 
 ---
 
-[^1]: 主要会为它添加计算节拍数等功能。
-[^2]: 会尝试在设置选项中额外添加两项，允许你使用像素完美滤镜 / 以 640x480 分辨率放大至更大分辨率，而不是直接使用更大的分辨率，以节省性能。
-[^3]: 该脚本会将所有 Unity 的 Debug 相关函数封装至 其中来调用，这些函数仅在编辑器内执行。
-[^4]: 即允许游戏内多次战斗和多个战斗。
-[^5]: 本地化人员可以在翻译完成但未正式嵌入的阶段，通过发布CC字幕预览版本，提前为玩家提供本地化支持。
+[^1]: Will mainly add features like counting beats to it.
+[^2]: Will try to add two extra items to the settings options that will allow you to use pixel-perfect filters / zoom to a larger resolution at 640x480 instead of just using a larger resolution to save performance.
+[^3]: This script will wrap all of Unity's Debug related functions into it to be called, and these functions will only be executed within the editor.
+[^4]: i.e. allow multiple battles and multiple fights within the game.
+[^5]: Localizers can provide early localization support to players by releasing a preview version with CC subtitles at a stage when the translation is complete but not yet officially embedded.

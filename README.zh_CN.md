@@ -7,7 +7,7 @@
 
 **此版本仅供学习使用，敬请期待 UCT 的后续更新。**
 
-你可以在[**CHANGELOG.md**](CHANGELOG.md)中查看目前的更新日志（简体中文）。
+你可以在[**CHANGELOG_zh-CN.md**](CHANGELOG_zh-CN.md)中查看目前的更新日志。
 
 # Undertale-Changer-Template
 
