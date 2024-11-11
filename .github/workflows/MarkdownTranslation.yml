@@ -13,20 +13,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      # 安装必要的依赖
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y jq
-          pip install openai==0.28
-          pip install requests
-
-      - name: Test OpenAI API Key
-        run: |
-          curl https://api.openai.com/v1/models \
-          -H "Authorization: Bearer ${{ secrets.OPENAI_API_KEY }}"
-
-
       # 翻译文件并保存
       - name: Translate files
         env:

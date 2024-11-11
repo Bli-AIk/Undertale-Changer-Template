@@ -9,6 +9,8 @@ api_endpoint = "/v1/chat/completions"
 
 # 翻译函数
 def translate_text(text, target_lang):
+
+    print(f'Bearer {api_key[:10]}')
     conn = http.client.HTTPSConnection(api_host)
     payload = json.dumps({
         "model": "gpt-4o-mini",
