@@ -4,6 +4,8 @@ Currently, there is no English version of the update log available. I apologize 
 
 目前，更新日志暂时没有英文版本，敬请谅解。
 
+UCT长期更新计划，请查阅[更新计划](PLAN.md)。
+
 
 ## v1.0.4 -> v1.0.5 设置页面重构与拓展
 
