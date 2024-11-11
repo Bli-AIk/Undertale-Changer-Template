@@ -21,8 +21,11 @@ jobs:
           pip install openai==0.28
           pip install requests
 
-      - name: Print API Key (for debugging)
-        run: echo ${{ secrets.OPENAI_API_KEY }}
+      - name: Test OpenAI API Key
+        run: |
+          curl https://api.openai.com/v1/models \
+          -H "Authorization: Bearer ${{ secrets.OPENAI_API_KEY }}"
+
 
       # 翻译文件并保存
       - name: Translate files
