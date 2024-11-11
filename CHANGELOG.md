@@ -25,12 +25,16 @@ UCT长期更新计划，请查阅[更新计划](PLAN.md)。
 - [x] 引进 [Fusion](https://github.com/TakWolf/fusion-pixel-font) 8px 字体
 - [x] 将起名界面的字符数量拓展，分为基本字母、数字与符号、拉丁字母、西里尔字母、希腊字母等。
 - [ ] 引入中日韩语言拼写库，以加入中日韩语言的输入支持。
+- [ ] 将[PLAN.md](PLAN.md)与[CHANGELOG.md](CHANGELOG.md)通过Github Actions与DeepL API进行自动翻译。
 
 2024/11/4 计划 (1-2)
 
 2024/11/6 计划 (3-4)
 
 2024/11/7 计划 (5-8)
+
+2024/11/11 计划 (9)
+
 
 ## v1.0.2 -> v1.0.3 BUG修复
 
