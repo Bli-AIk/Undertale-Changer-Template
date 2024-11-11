@@ -1,0 +1,28 @@
+name: Translate MD Files
+
+on:
+  workflow_dispatch:
+
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    steps:
+      # 获取仓库内容
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # 翻译文件并保存
+      - name: Translate files
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}  # 从 GitHub Secrets 获取 API 密钥
+        run: |
+          python translate.py
+
+      # 提交翻译后的文件
+      - name: Commit translated files
+        run: |
+          git config --global user.email "haikun2333@126.com"
+          git config --global user.name "AIk"
+          git add CHANGELOG.md PLAN.md CHANGELOG_zh-TW.md PLAN_zh-TW.md
+          git commit -m "Add translated versions of CHANGELOG and PLAN"
+          git push
