@@ -1,9 +1,7 @@
 name: Translate MD Files
 
 on:
-  push:
-    branches:
-      - develop  # 监听develop分支的提交
+  workflow_dispatch:
 
 jobs:
   translate:
