@@ -1,0 +1,33 @@
+name: Translate MD Files
+
+on:
+  push:
+    branches:
+      - develop  # 监听develop分支的提交
+
+jobs:
+  translate:
+    runs-on: ubuntu-latest
+    steps:
+      # 获取仓库内容
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # 安装必要的依赖
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+          pip install requests
+
+      # 翻译文件并保存
+      - name: Translate files
+        run: |
+          python translate.py
+
+      # 提交翻译后的文件
+      - name: Commit translated files
+        run: |
+          git add CHANGELOG.md PLAN.md CHANGELOG_zh-TW.md PLAN_zh-TW.md
+          git commit -m "Add translated versions of CHANGELOG and PLAN"
+          git push
