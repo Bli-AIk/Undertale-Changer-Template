@@ -20,7 +20,7 @@ def translate_text(text, target_lang):
             },
             {
                 "role": "user",
-                "content": f"Translate the following source text to {target_lang}.\nOutput the translation directly without any additional text.\nSource Text: {text}\nTranslated Text:"
+                "content": "Translate the following source text to " + target_lang + ". Output the translation directly without any additional text.\nSource Text: " + text + "\nTranslated Text:"
             }
         ]
     })
