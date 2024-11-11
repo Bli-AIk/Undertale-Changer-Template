@@ -39,7 +39,7 @@ namespace UCT.Global.Other
 #endif
         }
 
-        public static void LogError(object content, string color = "#FF0000")
+        public static void LogError(object content, string color = "#FF6666")
         {
 #if UNITY_EDITOR
             var text = ("<color=" + color + ">" + content + "</color>");
@@ -47,7 +47,7 @@ namespace UCT.Global.Other
 #endif
         }
 
-        public static void LogError(object content, Object context, string color = "#FF0000")
+        public static void LogError(object content, Object context, string color = "#FF6666")
         {
 #if UNITY_EDITOR
             var text = ("<color=" + color + ">" + content + "</color>");

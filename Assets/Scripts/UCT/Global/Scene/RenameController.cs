@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using DG.Tweening;
+using hyjiacan.py4n;
 using TMPro;
 using UCT.Control;
 using UCT.Global.Audio;
@@ -662,5 +663,9 @@ namespace UCT.Global.Scene
                                    MainControl.Instance.overworldControl.sceneTextsSave, "Done") + "</color>";
         }
 
+        private string[] GetHanZi()
+        {
+            return ChineseCharacterStrokesService.GetCharactersByStrokeCount(Pinyin4Net.GetHanzi(setName, true));
+        }
     }
 }

@@ -1,6 +1,12 @@
 # CHANGELOG 更新日志
 
+本文档所写的是UCT的更新日志，这通常是短期的计划与安排。
+
 关于UCT的长期更新计划，请查阅[PLAN.md](PLAN.md)、[PLAN_zh-CN.md](PLAN_zh-CN.md)或[PLAN_zh-TW.md](PLAN_zh-TW.md)。
+
+关于UCT的具体更新日志，请查阅[CHANGELOG.md](CHANGELOG.md)、[CHANGELOG_zh-CN.md](CHANGELOG_zh-CN.md)或[CHANGELOG_zh-TW.md](CHANGELOG_zh-TW.md)。
+
+简体中文的更新计划/更新日志优先更新，其他语言会在**版本号变更**时使用GPT进行翻译。
 
 
 ## v1.0.4 -> v1.0.5 设置页面重构与拓展
@@ -20,16 +26,17 @@
 - [x] 将英文字体进行调整，修复字符重合的问题
 - [x] 引进 [Fusion](https://github.com/TakWolf/fusion-pixel-font) 8px 字体
 - [x] 将起名界面的字符数量拓展，分为基本字母、数字与符号、拉丁字母、西里尔字母、希腊字母等。
-- [ ] 引入中日韩语言拼写库，以加入中日韩语言的输入支持。
-- [ ] 将[PLAN.md](PLAN.md)与[CHANGELOG.md](CHANGELOG.md)通过Github Actions与DeepL API进行自动翻译。
+- [x] 引入中日韩语言拼写库。
+- [ ] 加入中日韩语言的输入支持。
+- [x] 将[PLAN.md](PLAN.md)与[CHANGELOG.md](CHANGELOG.md)通过Github Actions与DeepL API进行自动翻译。
 
 2024/11/4 计划 (1-2)
 
 2024/11/6 计划 (3-4)
 
-2024/11/7 计划 (5-8)
+2024/11/7 计划 (5-9)
 
-2024/11/11 计划 (9)
+2024/11/11 计划 (10)
 
 
 ## v1.0.2 -> v1.0.3 BUG修复

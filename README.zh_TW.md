@@ -1,5 +1,5 @@
 # 下載前先看看我！！！！
-你正在瀏覽的是**UCT** 的 [**Develop**](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/develop) 分支，該分支目前持續保持更新狀態，且更新頻繁。
+你正在瀏覽的是 **Undertale-Changer-Template (UCT)** 的 [**Develop**](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/develop) 分支，該分支目前持續保持更新狀態，且更新頻繁。
 
 截至 **2024 年 7 月**的內容存檔目前儲存在 [**Main**](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/main) 分支。如果你想使用一個更穩定（存疑）的版本，建議切換到該分支。
 
@@ -7,7 +7,7 @@
 
 **此版本僅供學習使用，敬請期待 UCT 的後續更新。**
 
-你可以在[**CHANGELOG_zh-TW.md**](CHANGELOG_zh-TW.md)中查看目前的更新日誌（簡體中文）。
+你可以透過[**CHANGELOG_zh-TW.md**](CHANGELOG_zh-TW.md)查看UCT目前的更新日誌，也可以查閱**[PLAN_zh-TW.md](PLAN_zh-TW.md)**來了解UCT的更新計劃。
 
 # Undertale-Changer-Template
 
@@ -91,6 +91,8 @@
 - [Pinyin4NET](https://github.com/hyjiacan/Pinyin4NET)
 - [WanaKanaSharp](https://github.com/caguiclajmg/WanaKanaSharp)
 - [TwitterKoreanProcessorCS](https://github.com/modamoda/TwitterKoreanProcessorCS)
+- [NuGetForUnity](https://github.com/GlitchEnzo/NuGetForUnity)
+- [chineseStroke](https://github.com/WTree/chineseStroke)
 
 以上函式庫/插件的貢獻者們為本計畫提供了優秀的工具和技術支持，衷心感謝你們！
 

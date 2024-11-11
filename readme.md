@@ -1,5 +1,5 @@
 # Look at me before downloading!!
-You are currently browsing the **[Develop](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/develop)** branch of **UCT**, which is actively maintained and updated frequently.
+You are currently browsing the **[Develop](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/develop)** branch of **Undertale-Changer-Template (UCT)**, which is actively maintained and updated frequently.
 
 As of **July 2024**, the content archive is stored in the [**Main**](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/main) branch. If you prefer a more stable (perhaps) version, it is recommended to switch to that branch.
 
@@ -7,7 +7,7 @@ Currently, **UCT** remains in a **semi-finished** state, so please do not use th
 
 **This version is for learning purposes only. Stay tuned for future updates to UCT.**
 
-You can view the current changelog in [**CHANGELOG.md**](CHANGELOG.md).
+You can view the current change log of UCT through [**CHANGELOG.md**](CHANGELOG.md), and you can also check **[PLAN.md](PLAN.md)** to understand the update plan of UCT.
 
 # Undertale-Changer-Template
 
@@ -93,6 +93,8 @@ But it is not recommended to use the 2022 version, otherwise the template may ha
 - [Pinyin4NET](https://github.com/hyjiacan/Pinyin4NET)
 - [WanaKanaSharp](https://github.com/caguiclajmg/WanaKanaSharp)
 - [TwitterKoreanProcessorCS](https://github.com/modamoda/TwitterKoreanProcessorCS)
+- [NuGetForUnity](https://github.com/GlitchEnzo/NuGetForUnity)
+- [chineseStroke](https://github.com/WTree/chineseStroke)
 
 Thank you very much to the contributors of the above libraries/plugins for providing excellent tools and technical support for this project!
 

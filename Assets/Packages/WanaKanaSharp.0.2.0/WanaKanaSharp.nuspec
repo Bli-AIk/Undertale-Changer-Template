@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>WanaKanaSharp</id>
+    <version>0.2.0</version>
+    <authors>John Mark Gabriel Caguicla</authors>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <projectUrl>https://github.com/caguiclajmg/WanaKanaSharp</projectUrl>
+    <description>A .NET utility library for checking and converting between Kanji, Hiragana, Katakana and Romaji.
+
+Warning: This package is currently in pre-release state and the API is heavily in flux, expect breakages every minor revision bump.</description>
+    <copyright>Copyright © 2021 John Mark Gabriel Caguicla</copyright>
+    <tags>japanese hiragana katakana kana kanji language</tags>
+    <repository type="git" url="https://github.com/caguiclajmg/WanaKanaSharp" />
+    <dependencies>
+      <group targetFramework=".NETStandard2.0" />
+    </dependencies>
+  </metadata>
+</package>

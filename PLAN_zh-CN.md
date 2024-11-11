@@ -4,7 +4,11 @@
 
 注意，这些更新计划并没有任何排列顺序，且有可能变动、搁置或废弃。
 
+关于UCT的长期更新计划，请查阅[PLAN.md](PLAN.md)、[PLAN_zh-CN.md](PLAN_zh-CN.md)或[PLAN_zh-TW.md](PLAN_zh-TW.md)。
+
 关于UCT的具体更新内容，请查阅[CHANGELOG.md](CHANGELOG.md)、[CHANGELOG_zh-CN.md](CHANGELOG_zh-CN.md)或[CHANGELOG_zh-TW.md](CHANGELOG_zh-TW.md)。
+
+简体中文的更新计划/更新日志优先更新，其他语言会在**版本号变更**时使用GPT进行翻译。
 
 ## 通用类
 ### 现有系统细化
