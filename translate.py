@@ -1,21 +1,38 @@
-import openai
+import http.client
+import json
 import os
 
 # 设置 OpenAI API 密钥
-openai.api_key = os.getenv("OPENAI_API_KEY")
+api_key = os.getenv("OPENAI_API_KEY")
+api_host = "api.baicaigpt.cn"
+api_endpoint = "/v1/chat/completions"
 
 # 翻译函数
 def translate_text(text, target_lang):
-    prompt = f"Translate the following text to {target_lang}: {text}"
-
+    conn = http.client.HTTPSConnection(api_host)
+    payload = json.dumps({
+        "model": "gpt-4o-mini",
+        "messages": [
+            {
+                "role": "system",
+                "content": "You are a professional, authentic machine translation engine."
+            },
+            {
+                "role": "user",
+                "content": f"Translate the following text to {target_lang}: {text}"
+            }
+        ]
+    })
+    headers = {
+        'Authorization': f'Bearer {api_key}',
+        'Content-Type': 'application/json'
+    }
+    
     try:
-        response = openai.ChatCompletion.create(
-            model="gpt-4o-mini",
-            messages=[
-                {"role": "system", "content": "You are a helpful assistant."},
-                {"role": "user", "content": prompt}
-            ]
-        )
+        conn.request("POST", api_endpoint, payload, headers)
+        res = conn.getresponse()
+        data = res.read().decode("utf-8")
+        response = json.loads(data)
         # 获取翻译结果
         translation = response['choices'][0]['message']['content']
         return translation.strip()  # 移除首尾多余的空格
