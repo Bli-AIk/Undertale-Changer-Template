@@ -9,13 +9,14 @@ def translate_text(text, target_lang):
     prompt = f"Translate the following text to {target_lang}: {text}"
 
     try:
-        response = openai.chat.Completion.create(
-            model="gpt-4",  # 使用 GPT-4 模型
+        response = openai.chat.completions.create(
+            model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": "You are a helpful assistant."},
                 {"role": "user", "content": prompt}
             ]
         )
+        # 获取翻译结果
         translation = response['choices'][0]['message']['content']
         return translation
     except Exception as e:
