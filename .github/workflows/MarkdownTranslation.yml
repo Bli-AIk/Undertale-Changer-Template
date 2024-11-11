@@ -1,9 +1,10 @@
 name: Translate MD Files
 
 on:
-  push:
-    branches:
-      - develop
+  workflow_dispatch:
+  #push:
+    #branches:
+      #- develop
 
 jobs:
   translate:
