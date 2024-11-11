@@ -1,7 +1,9 @@
 name: Translate MD Files
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - develop
 
 jobs:
   translate:
@@ -16,7 +18,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y jq
-          pip install openai==0.28 requests  # 安装 openai 和 requests 库
+          pip install openai==0.28
+          pip install requests
 
       # 翻译文件并保存
       - name: Translate files
