@@ -7,7 +7,7 @@
 
 **此版本仅供学习使用，敬请期待 UCT 的后续更新。**
 
-你可以通过[**CHANGELOG_zh-CN.md**](CHANGELOG_zh-CN.md)查看UCT目前的更新日志，也可以查阅**[PLAN_zh-CN.md](PLAN_zh-CN.md)**来了解UCT的更新计划。
+你可以通过[**CHANGELOG_zh-CN.md**](CHANGELOG_zh-CN.md)查看UCT目前的更新日志，也可以查阅[**PLAN_zh-CN.md**](PLAN_zh-CN.md)来了解UCT的更新计划。
 
 # Undertale-Changer-Template
 
