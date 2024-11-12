@@ -43,6 +43,7 @@ LatinExtended3\Ex3;
 Cyrillic1\Cy1;
 Cyrillic2\Cy2;
 Greek\Gre;
+Chinese\Chi;
 
 MenuUnder\Undertale (c)  toby fox 2015<enter>undertale changer V;
 

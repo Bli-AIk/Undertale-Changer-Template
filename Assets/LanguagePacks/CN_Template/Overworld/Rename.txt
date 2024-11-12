@@ -35,6 +35,7 @@ LatinExtended3\拓展符三;
 Cyrillic1\西里尔一;
 Cyrillic2\西里尔二;
 Greek\希腊符号;
+Chinese\中文输入;
 
 MenuUnder\Undertale (c)  toby fox 2015<enter>undertale changer V;
 
