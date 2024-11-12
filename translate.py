@@ -18,9 +18,9 @@ def translate_text(text, target_lang):
                 "content": "You are a professional, authentic machine translation engine."
             },
             {
-                "role": "user",
-                "content": "Translate the following source text to " + target_lang + ". Output the translation directly without any additional text.\nSource Text: " + text + "\nTranslated Text:"
-            }
+        "role": "user",
+        "content": "Translate the following source text to " + target_lang + ". If the target language is Traditional Chinese, use vocabulary and expressions common in Taiwan, China. Output the translation directly without any additional text.\nSource Text: " + text + "\nTranslated Text:"
+}
         ]
     })
     headers = {
