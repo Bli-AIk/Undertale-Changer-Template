@@ -9,7 +9,6 @@ api_endpoint = "/v1/chat/completions"
 
 # 翻译函数
 def translate_text(text, target_lang):
-
     conn = http.client.HTTPSConnection(api_host)
     payload = json.dumps({
         "model": "gpt-4o-mini",
@@ -41,22 +40,14 @@ def translate_text(text, target_lang):
         print(f"Error during translation: {e}")
         return None
 
-# 读取文件并逐行翻译
+# 读取文件并进行全文翻译
 def translate_file(file_name, target_lang):
-    translated_lines = []
-    
     with open(file_name, "r", encoding="utf-8") as file:
-        for line in file:
-            if line.strip():  # 跳过空行
-                translated_line = translate_text(line.strip(), target_lang)
-                if translated_line:
-                    translated_lines.append(translated_line)
-                else:
-                    translated_lines.append(line.strip())  # 如果翻译失败，保留原文
-            else:
-                translated_lines.append("")  # 空行也保留
+        text = file.read()  # 读取整个文件的内容
+
+    translated_text = translate_text(text, target_lang)
     
-    return "\n".join(translated_lines)
+    return translated_text if translated_text else text  # 如果翻译失败，返回原文
 
 # 示例调用
 if __name__ == "__main__":
