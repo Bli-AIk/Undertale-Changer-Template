@@ -4,31 +4,31 @@ This document outlines the long-term update plan for UCT.
 
 Note that these update plans are not in any particular order and may change, be postponed, or discarded.
 
-For the long-term update plans for UCT, please refer to [PLAN.md](PLAN.md), [PLAN_zh-CN.md](PLAN_zh-CN.md), or [PLAN_zh-TW.md](PLAN_zh-TW.md).
+For the long-term update plan regarding UCT, please refer to [PLAN.md](PLAN.md), [PLAN_zh-CN.md](PLAN_zh-CN.md), or [PLAN_zh-TW.md](PLAN_zh-TW.md).
 
-For specific updates about UCT, please refer to [CHANGELOG.md](CHANGELOG.md), [CHANGELOG_zh-CN.md](CHANGELOG_zh-CN.md), or [CHANGELOG_zh-TW.md](CHANGELOG_zh-TW.md).
+For specific update content related to UCT, please refer to [CHANGELOG.md](CHANGELOG.md), [CHANGELOG_zh-CN.md](CHANGELOG_zh-CN.md), or [CHANGELOG_zh-TW.md](CHANGELOG_zh-TW.md).
 
-Updates and changelogs in Simplified Chinese will be prioritized, while other languages will use GPT for translation during **version number changes**.
+Updates in Simplified Chinese will be prioritized, while other languages will use GPT for translation at the **version number change**.
 
 ## General
-### Existing System Refinement
+### Refinement of Existing Systems
 - [x] Refine BGM Controller[^1]
 - [ ] Store item data in ScriptableObject
 
 ### UI Optimization and Refinement
-- [ ] Add pixel-perfect scaling at 640x480[^2]
-- [ ] Refine/UI Dr style MENU interface and OW save interface
+- [ ] Add pixel-perfect and 640x480 scaling[^2]
+- [ ] Refine / UI Dr style MENU interface and OW save interface
 - [ ] Refine settings interface
-- [ ] Redesign settings UI
+- [ ] Redesign settings interface UI
 
 ### Performance Optimization
 - [x] Add DebugLogger script[^3]
-- [ ] Use coroutines to call language packs instead of calling all at once
+- [ ] Use coroutines to call language packs instead of calling all simultaneously
 
-## OW Class
+## OW Category
 ### Event System
 - [ ] Redesign OW event system
-- [ ] Add Dr style chase system
+- [ ] Add Dr style chase battle system
 
 ### Story System
 - [ ] Introduce [Fungus](https://github.com/snozbot/fungus) library for creating a visual dialogue editing system
@@ -37,43 +37,43 @@ Updates and changelogs in Simplified Chinese will be prioritized, while other la
 ### Data Storage
 - [ ] Store room data in ScriptableObject
 
-## Combat Class
+## Battle Category
 ### Data Storage
 - [x] Store bullet data in ScriptableObject
 - [ ] Store turn data in ScriptableObject
 
 ### Turn System Redesign
-- [ ] Visual turn system
+- [ ] Visualize turn system
 - [ ] Add path bullet generator
 
-### Combat System Expansion
-- [ ] Add functionality to insert subtitles/dialogues during turns
-- [ ] Add multiple combats[^4]
+### Battle System Expansion
+- [ ] Add the ability to insert subtitles/dialogues during turns
+- [ ] Add multiple battles[^4]
 
 ### Fixes and Optimization
 - [x] Optimize 3D background
-- [x] Fix blue heart
+- [x] Fix Blue Heart
 
-### Unusual Frames
-- [ ] Fix unusual frames
-- [ ] Redesign collision system to accommodate unusual frames
+### Asymmetrical Frame
+- [ ] Fix asymmetrical frame
+- [ ] Redesign collision system to accommodate asymmetrical frame
 
 ### Judgment and Collision
 - [ ] Refine FIGHT related judgments
-- [ ] Add monster death judgments
-- [ ] Complete seven types of player soul colors
+- [ ] Add monster death judgment
+- [ ] Complete seven player soul colors
 
-## New Class
+## New Category
 ### Scene Expansion
-- [ ] Add multilingual support in naming scene
+- [ ] Add multilingual expansion in the naming scene
 - [ ] Add battle settlement scene
 - [ ] Add BGM broadcasting scene
 
 ### Rendering Expansion
-- [x] Add built-in projection box
+- [x] Add built-in projection frame
 - [x] Add 3D renderer
 
-### Functionality Expansion
+### Function Expansion
 - [ ] Add CC subtitle system[^5]
 - [ ] Add achievement system
 - [ ] Add UI manager
@@ -81,22 +81,22 @@ Updates and changelogs in Simplified Chinese will be prioritized, while other la
 
 ### Accessibility
 - [ ] Add narrator
-- [ ] Add colorblind filter
+- [ ] Add color blindness filter
 
-## Other Class
+## Other Categories
 ### Project Localization
-- [x] Merge Chinese and English branches, replacing comments through scripts
+- [x] Merge Chinese and English branches, replacing comment text via scripts
 
 ### Cleanup and Maintenance
-- [x] Remove redundant original textures
+- [x] Delete unnecessary original textures
 
 ### Tutorials
 - [ ] New wiki and video tutorials
 
 ---
 
-[^1]: Mainly adding features such as calculating beats.
-[^2]: Will attempt to add two additional options in the settings to allow the use of pixel-perfect filters / scaling to a larger resolution from 640x480, rather than directly using a larger resolution to save performance.
-[^3]: This script will encapsulate all Unity's Debug related functions to call them, which will only execute in the editor.
-[^4]: Allowing for multiple battles and multiple combats within the game.
-[^5]: Localization personnel can provide localized support to players in advance by releasing a CC subtitle preview version once the translation is complete but not officially embedded.
+[^1]: Primarily will add functionalities like calculating beats.
+[^2]: Will try to add two options in the settings to allow you to use pixel-perfect filters / scale up to a larger resolution from 640x480 instead of directly using a larger resolution to save performance.
+[^3]: This script will encapsulate all Unity's Debug related functions for use, which are only executed in the editor.
+[^4]: That is, allow multiple battles and multiple engagements within the game.
+[^5]: Localization personnel can preview localized support for players by releasing a CC subtitle preview version before formal embedding, after the translation is completed.
