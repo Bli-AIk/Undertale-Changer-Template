@@ -31,8 +31,8 @@ namespace UCT.Global.Scene
         public int selectedCharactersId;
         public bool isSelectedDone;
         public string setName;
-        private string _pinYin = "";
-
+        private static string _pinYin = "";
+        private static int _pinYinNum;
         public enum SceneState
         {
             Instruction,
@@ -87,15 +87,21 @@ namespace UCT.Global.Scene
         };
 
         private float _randomSetNameTime;
+        private static List<string> _cutHanZiString = new() { "" };
         private const float RandomSetNameTimeMax = 1.5f;
 
         
         private static SelectedAlphabet _alphabetNum;
         private const int MaxCharactersPerLine = 7;
         private static bool _isSwitchedAlphabetNum;
+        
+        private const int MaxSetNameLength = 6;
         private void Start()
         {
             StartGetComponent();
+
+            _alphabetNum = 0;
+            InitializePinyinAndCutHanZiString();
 
             if (string.IsNullOrEmpty(MainControl.Instance.playerControl.playerName))
             {
@@ -172,12 +178,48 @@ namespace UCT.Global.Scene
 
         private void SetPinYin()
         {
-            if (_pinYin == _pinYinText.text) return;
+            if (_pinYinText.text == _pinYin) return;
             _pinYinText.text = _pinYin;
-
+            
+            //以下部分只在_pinYin更新时触发
+            
             if (sceneState != SceneState.Naming) return;
             if (_alphabetNum != SelectedAlphabet.Chinese) return;
-            AlphabetLowercase[(int)_alphabetNum] = GetHanZiString(_pinYinText.text);
+
+            var hanZiString = GetHanZiString(_pinYinText.text); 
+            _cutHanZiString = new List<string> { "" };
+            var cutHanZiListIndex = 0;
+            for (var i = 0; i < hanZiString.Length; i++)
+            {
+                _cutHanZiString[cutHanZiListIndex] += hanZiString[i];
+
+                if ((cutHanZiListIndex != 0 || i == 0 || i % 19 != 0) &&
+                    (cutHanZiListIndex <= 0 || i % 19 != 0)) continue;
+                _cutHanZiString.Add("");
+                cutHanZiListIndex++;
+            }
+
+            SetHanZiToAlphabetLowercaseWith(_pinYinNum);
+        }
+
+        private void SetHanZiToAlphabetLowercaseWith(int pinYinNum)
+        {
+            if (string.IsNullOrEmpty(_pinYin))
+            {
+                SetSpellingRequiredLowercase();
+                return;
+            }
+            
+            if (_cutHanZiString.Count > 0)
+            {
+                var leftArrow = pinYinNum > 0 ? "<" : "";
+                var rightArrow = pinYinNum != _cutHanZiString.Count - 1 && _cutHanZiString.Count > 1 ? ">" : "";
+
+                AlphabetLowercase[(int)_alphabetNum] = leftArrow + _cutHanZiString[pinYinNum] + rightArrow;
+            }
+            else
+                AlphabetLowercase[(int)_alphabetNum] = _cutHanZiString[pinYinNum];
+            
             if (AlphabetLowercase[(int)_alphabetNum].Length <= 0) return;
             TMPDynamicFontController.Instance.SimsunClear(new List<TMP_Text>()
             {
@@ -241,7 +283,7 @@ namespace UCT.Global.Scene
                 sceneState = SceneState.Naming;
                 _animMove.Kill();
                 _animScale.Kill();
-                _nameText.transform.localPosition = new Vector3(8.95f, 0.6f);
+                _nameText.transform.localPosition = new Vector3(0, 0.6f);
                 _nameText.transform.localScale = Vector3.one;
                 _nameText.GetComponent<DynamicTMP>().dynamicMode = 0;
                 _selectText.text =
@@ -324,11 +366,11 @@ namespace UCT.Global.Scene
                 _isSwitchedAlphabetNum = false;
             }
             
-            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z) && setName.Length <= 6)
+            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z) && setName.Length <= MaxSetNameLength)
             {
                 if (selectedCharactersId < alphabetLength)
                 {
-                    if (setName.Length < 6)
+                    if (setName.Length < MaxSetNameLength)
                     {
                         var setNameChar =
                             (alphabetCapital + alphabetLowercase)[selectedCharactersId];
@@ -336,14 +378,39 @@ namespace UCT.Global.Scene
                         if (_alphabetNum != SelectedAlphabet.Chinese ||
                             selectedCharactersId > alphabetCapital.Length - 1)
                         {
-                            setName += nameChar;
-                            if (selectedCharactersId > alphabetCapital.Length - 1)
+                            switch (nameChar)
                             {
-                                selectedCharactersId = 0;
-                                _pinYin = "";
+                                case '<':
+                                {
+                                    _pinYinNum--;
+                                    SetHanZiToAlphabetLowercaseWith(_pinYinNum);
+                                    selectedCharactersId = alphabetLength - 1;
+                                    break;
+                                }
+                                case '>':
+                                {
+                                    _pinYinNum++;
+                                    SetHanZiToAlphabetLowercaseWith(_pinYinNum);
+                                    selectedCharactersId = alphabetCapital.Length;
+                                    break;
+                                }
+                                default:
+                                {
+                                    setName += nameChar;
+                                    if (_alphabetNum == SelectedAlphabet.Chinese)
+                                    {
+                                        if (selectedCharactersId > alphabetCapital.Length - 1)
+                                        {
+                                            selectedCharactersId = 0;
+                                            _pinYin = "";
+                                        }
+                                    }
+
+                                    break;
+                                }
                             }
                         }
-                        else if (_pinYin.Length < 6)
+                        else if (_pinYin.Length < MaxSetNameLength)
                             _pinYin += nameChar;
 
                     }
@@ -357,6 +424,7 @@ namespace UCT.Global.Scene
                     }
                     else
                         sceneState = SceneState.Instruction;
+                    InitializePinyinAndCutHanZiString();
                 }
                 else if (selectedCharactersId == alphabetLength + 1)
                 {
@@ -370,6 +438,7 @@ namespace UCT.Global.Scene
                 {
                     if (setName != "")
                     {
+                        InitializePinyinAndCutHanZiString();
                         selectedCharactersId = 0;
                         sceneState = SceneState.ConfirmName;
                         var list = TextProcessingService.GetAllChildStringsByPrefix(
@@ -432,7 +501,7 @@ namespace UCT.Global.Scene
                         }
 
                         _animMove = DOTween.To(() => _nameText.transform.localPosition,
-                                x => _nameText.transform.localPosition = x, new Vector3(26.95f, -7.85f),
+                                x => _nameText.transform.localPosition = x, new Vector3(0, -7.85f),
                                 5)
                             .SetEase(Ease.Linear);
                         _animScale = DOTween.To(() => _nameText.transform.localScale,
@@ -545,7 +614,7 @@ namespace UCT.Global.Scene
                 if (selectedCharactersId >= alphabetCapital.Length - MaxCharactersPerLine &&
                     selectedCharactersId < alphabetCapital.Length - uppercaseRemainder)  //大写转小写的情况
                 {
-                    selectedCharactersId += (maxLowercaseCharactersPerLine > 0
+                    selectedCharactersId += (maxLowercaseCharactersPerLine > MaxCharactersPerLine
                         ? maxLowercaseCharactersPerLine
                         : MaxCharactersPerLine) + uppercaseRemainder;
                 }
@@ -559,7 +628,7 @@ namespace UCT.Global.Scene
                          selectedCharactersId >= alphabetCapital.Length &&
                          selectedCharactersId < alphabetLength - MaxCharactersPerLine) //小写常规情况
                 {
-                    selectedCharactersId += maxLowercaseCharactersPerLine > 0
+                    selectedCharactersId += maxLowercaseCharactersPerLine > MaxCharactersPerLine
                         ? maxLowercaseCharactersPerLine
                         : MaxCharactersPerLine;
                 }
@@ -633,15 +702,34 @@ namespace UCT.Global.Scene
             }
             else
             {
-                if (_pinYin.Length > 0)
-                    _pinYin = _pinYin[..^1];
+                if (_pinYin.Length <= 0) return;
+                _pinYin = _pinYin[..^1];
+                selectedCharactersId = AlphabetCapital[(int)_alphabetNum].Length - 1;
+                if (_pinYin.Length != 0) return;
+                InitializePinyinAndCutHanZiString();
+                
             }
+
         }
 
         private static void SwitchAlphabetNum()
         {
+            InitializePinyinAndCutHanZiString();
             _alphabetNum = _alphabetNum < (SelectedAlphabet)(AlphabetCapital.Count - 1) ? _alphabetNum + 1 : 0;
             _isSwitchedAlphabetNum = true;
+        }
+
+        private static void SetSpellingRequiredLowercase()
+        {
+            AlphabetLowercase[(int)SelectedAlphabet.Chinese] = "";
+        }
+
+        private static void InitializePinyinAndCutHanZiString()
+        {
+            SetSpellingRequiredLowercase();
+            _cutHanZiString = new List<string> { "" };
+            _pinYinNum = 0;
+            _pinYin = "";
         }
 
         private void InstructionUpdate()
@@ -655,7 +743,7 @@ namespace UCT.Global.Scene
             _textMessage.text =
                 TextProcessingService.GetFirstChildStringByPrefix(
                     MainControl.Instance.overworldControl.sceneTextsSave, "MenuUnder") + Application.version;
-            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z) && setName.Length < 6)
+            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z) && setName.Length < MaxSetNameLength)
                 sceneState = SceneState.Naming;
         }
 
