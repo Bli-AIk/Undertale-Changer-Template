@@ -34,7 +34,6 @@
 }</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5a41d6b7189842eca409fd0b1c3e3dcf17bf78/12/646e0da1/StringBuilder.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/5ddb5fa70dfe40d2818192400111b9ec2aa00/1a/4f065b0a/DOTweenComponent.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/685c48cf8f0b48abb797275c046dda6a158a00/39/10e204b0/Debug.cs" root0="SKIP_HIGHLIGHTING" />
@@ -83,7 +82,7 @@
     <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
-  &quot;associatedIndex&quot;: 3
+  &quot;associatedIndex&quot;: 6
 }</component>
   <component name="ProjectId" id="2nUf1W8AmYDo45zgQlQWFwX8p7q" />
   <component name="ProjectLevelVcsManager">
@@ -133,10 +132,10 @@
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
       <method v="2" />
     </configuration>
-    <configuration name="附加到 Unity 编辑器" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="23780">
+    <configuration name="附加到 Unity 编辑器" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="12568">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="23780" />
+      <option name="pid" value="12568" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -262,7 +261,10 @@
       <workItem from="1731468527384" duration="3303000" />
       <workItem from="1731487534035" duration="3226000" />
       <workItem from="1731493507175" duration="20000" />
-      <workItem from="1731501141175" duration="2118000" />
+      <workItem from="1731501141175" duration="3400000" />
+      <workItem from="1731536761359" duration="2511000" />
+      <workItem from="1731557326083" duration="4002000" />
+      <workItem from="1731574724788" duration="2945000" />
     </task>
     <servers />
   </component>
@@ -296,22 +298,35 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/Scripts/UCT/Global/Scene/RenameController.cs</url>
-          <line>613</line>
+          <line>615</line>
           <properties documentPath="D:\Unity Projects\Undertale-Changer-Template\Assets\Scripts\UCT\Global\Scene\RenameController.cs" containingFunctionPresentation="方法 'NamingUpdate'">
             <startOffsets>
-              <option value="28162" />
+              <option value="28378" />
             </startOffsets>
             <endOffsets>
-              <option value="28326" />
+              <option value="28379" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="1" />
+          <option name="timeStamp" value="20" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/UCT/Global/Scene/RenameController.cs</url>
+          <line>654</line>
+          <properties documentPath="D:\Unity Projects\Undertale-Changer-Template\Assets\Scripts\UCT\Global\Scene\RenameController.cs" containingFunctionPresentation="方法 'NamingUpdate'">
+            <startOffsets>
+              <option value="30539" />
+            </startOffsets>
+            <endOffsets>
+              <option value="30586" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="21" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
     <watches-manager>
       <configuration name="UNITY_DEBUG_RUN_CONFIGURATION">
-        <watch expression="_cutHanZiString[0]" language="C#" />
+        <watch expression="possibleCharacterId -                               (maxLowercaseCharactersPerLine &lt; MaxCharactersPerLine                                   ? maxLowercaseCharactersPerLine                                   : MaxCharactersPerLine)" language="C#" />
         <watch expression="_cutHanZiString[1]" language="C#" />
       </configuration>
     </watches-manager>

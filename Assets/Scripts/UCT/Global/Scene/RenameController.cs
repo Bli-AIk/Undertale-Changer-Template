@@ -48,6 +48,7 @@ namespace UCT.Global.Scene
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private enum SelectedAlphabet
         {
+            Test,
             Latin,
             Symbol,
             LatinExtended1,
@@ -63,6 +64,7 @@ namespace UCT.Global.Scene
         private static readonly List<string> AlphabetCapital = new()
         {
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
             ",.?!:;#$&\"'<>@[]_`{}~",
             "ÁÀÂÃÄÅĀĂĄĆĈĊČĎĐĒĔĖĘĚÉÈÊËĜĞĠĢ",
             "ĤĦĨĪĬĮİĴĶĹĻĽĿŁŃŅŇŊÑŌŎŐŒÞßþ",
@@ -75,6 +77,7 @@ namespace UCT.Global.Scene
 
         private static readonly List<string> AlphabetLowercase = new()
         {
+            "B",
             "abcdefghijklmnopqrstuvwxyz",
             "0123456789+-*/|\\^=()▌",//▌符号会被转化为空格
             "áàâãäåāăąćĉċďđēĕėęěéèêëĝğġģ",
@@ -570,37 +573,37 @@ namespace UCT.Global.Scene
                     selectedCharactersId -= maxLowercaseCharactersPerLine;
                 }
                 else if (selectedCharactersId >= alphabetLength &&
-                         selectedCharactersId <= alphabetLength + 3) //底部三个键的情况
+                         selectedCharactersId <= alphabetLength + 3) //底部键的情况
                 {
+                    var lowercaseRemainderFix = lowercaseRemainder > 0 ? lowercaseRemainder : MaxCharactersPerLine;
+                    int possibleCharacterId;
                     if (selectedCharactersId == alphabetLength)
                     {
-                        selectedCharactersId = alphabetLength - (lowercaseRemainder > 0 ? lowercaseRemainder : MaxCharactersPerLine);
+                        possibleCharacterId = alphabetLength - lowercaseRemainderFix;
+                    }
+                    else if (selectedCharactersId == alphabetLength + 1)
+                    {
+                        possibleCharacterId = alphabetLength - lowercaseRemainderFix + 2;
+                        if (alphabetLowercase.Length < 3)
+                            possibleCharacterId += MaxCharactersPerLine - uppercaseRemainder;
+                    }
+                    else if (selectedCharactersId == alphabetLength + 2)
+                    {
+                        possibleCharacterId = alphabetLength - lowercaseRemainderFix + 4;
+                        if (alphabetLowercase.Length < 5)
+                            possibleCharacterId += MaxCharactersPerLine - uppercaseRemainder;
                     }
                     else
                     {
-                        int possibleCharacterId;
-                        if (selectedCharactersId == alphabetLength + 1)
-                        {
-                            possibleCharacterId = alphabetLength - lowercaseRemainder + 2;
-                        }
-                        else if (selectedCharactersId == alphabetLength + 2)
-                        {
-                            possibleCharacterId = alphabetLength - lowercaseRemainder + 4;
-                        }
-                        else if (selectedCharactersId == alphabetLength + 3)
-                        {
-                            possibleCharacterId = alphabetLength - lowercaseRemainder + 5;
-                        }
-                        else
-                        {
-                            possibleCharacterId = alphabetLength - lowercaseRemainder + 5;
-                        }
-
-                        selectedCharactersId = possibleCharacterId <
-                                               alphabetLength
-                            ? possibleCharacterId
-                            : possibleCharacterId - MaxCharactersPerLine;
+                        possibleCharacterId = alphabetLength - lowercaseRemainderFix + 5;
+                        if (alphabetLowercase.Length < 6)
+                            possibleCharacterId += MaxCharactersPerLine - uppercaseRemainder;
                     }
+
+                    selectedCharactersId = possibleCharacterId < alphabetLength
+                        ? possibleCharacterId
+                        : possibleCharacterId - MaxCharactersPerLine;
+                    
                 }
 
                 else
@@ -611,12 +614,18 @@ namespace UCT.Global.Scene
             }
             else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.DownArrow))
             {
+                var alphabetLowercaseFix = AlphabetLowercase[alphabetNum].Length < MaxCharactersPerLine
+                    ? AlphabetLowercase[alphabetNum].Length
+                    : 0;
+                
                 if (selectedCharactersId >= alphabetCapital.Length - MaxCharactersPerLine &&
-                    selectedCharactersId < alphabetCapital.Length - uppercaseRemainder)  //大写转小写的情况
+                    selectedCharactersId < alphabetCapital.Length - uppercaseRemainder + alphabetLowercaseFix)  //大写转小写的情况
                 {
-                    selectedCharactersId += (maxLowercaseCharactersPerLine > MaxCharactersPerLine
+                    var idAdd = maxLowercaseCharactersPerLine > MaxCharactersPerLine
                         ? maxLowercaseCharactersPerLine
-                        : MaxCharactersPerLine) + uppercaseRemainder;
+                        : MaxCharactersPerLine;
+                    selectedCharactersId += alphabetLowercaseFix == 0 ? idAdd : 0;
+                    selectedCharactersId += uppercaseRemainder;
                 }
                 else if (selectedCharactersId >= alphabetCapital.Length &&
                          selectedCharactersId < alphabetLength - MaxCharactersPerLine) //大写常规情况
@@ -635,6 +644,9 @@ namespace UCT.Global.Scene
                 else if (selectedCharactersId >= alphabetLength - MaxCharactersPerLine) //到下面三个键的情况
                 {
                     var lowercaseRemainderFix = lowercaseRemainder > 0 ? lowercaseRemainder : MaxCharactersPerLine;
+
+                    if (selectedCharactersId < alphabetCapital.Length)
+                        lowercaseRemainderFix += uppercaseRemainder;
 
                     if (selectedCharactersId == alphabetLength)
                     {
