@@ -48,7 +48,6 @@ namespace UCT.Global.Scene
         [SuppressMessage("ReSharper", "UnusedMember.Local")]
         private enum SelectedAlphabet
         {
-            Test,
             Latin,
             Symbol,
             LatinExtended1,
@@ -64,7 +63,6 @@ namespace UCT.Global.Scene
         private static readonly List<string> AlphabetCapital = new()
         {
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
             ",.?!:;#$&\"'<>@[]_`{}~",
             "ÁÀÂÃÄÅĀĂĄĆĈĊČĎĐĒĔĖĘĚÉÈÊËĜĞĠĢ",
             "ĤĦĨĪĬĮİĴĶĹĻĽĿŁŃŅŇŊÑŌŎŐŒÞßþ",
@@ -77,7 +75,6 @@ namespace UCT.Global.Scene
 
         private static readonly List<string> AlphabetLowercase = new()
         {
-            "B",
             "abcdefghijklmnopqrstuvwxyz",
             "0123456789+-*/|\\^=()▌",//▌符号会被转化为空格
             "áàâãäåāăąćĉċďđēĕėęěéèêëĝğġģ",
@@ -617,6 +614,13 @@ namespace UCT.Global.Scene
                 var alphabetLowercaseFix = AlphabetLowercase[alphabetNum].Length < MaxCharactersPerLine
                     ? AlphabetLowercase[alphabetNum].Length
                     : 0;
+                if (selectedCharactersId >= alphabetCapital.Length - MaxCharactersPerLine &&
+                    selectedCharactersId < alphabetCapital.Length - uppercaseRemainder &&
+                    alphabetLowercase.Length < maxUppercaseCharactersPerLine)
+                {
+                    selectedCharactersId += MaxCharactersPerLine * 2 - (MaxCharactersPerLine - uppercaseRemainder);
+                }
+                
                 
                 if (selectedCharactersId >= alphabetCapital.Length - MaxCharactersPerLine &&
                     selectedCharactersId < alphabetCapital.Length - uppercaseRemainder + alphabetLowercaseFix)  //大写转小写的情况
@@ -649,21 +653,13 @@ namespace UCT.Global.Scene
                         lowercaseRemainderFix += uppercaseRemainder;
 
                     if (selectedCharactersId == alphabetLength)
-                    {
                         selectedCharactersId = 0;
-                    }
                     else if (selectedCharactersId == alphabetLength + 1)
-                    {
                         selectedCharactersId = 2;
-                    }
                     else if (selectedCharactersId == alphabetLength + 2)
-                    {
                         selectedCharactersId = 4;
-                    }
                     else if (selectedCharactersId == alphabetLength + 3)
-                    {
                         selectedCharactersId = 5;
-                    }
                     else if (selectedCharactersId >= alphabetLength - lowercaseRemainderFix &&
                         selectedCharactersId < alphabetLength - lowercaseRemainderFix + 2) 
                         selectedCharactersId = alphabetLength;
@@ -716,7 +712,9 @@ namespace UCT.Global.Scene
             {
                 if (_pinYin.Length <= 0) return;
                 _pinYin = _pinYin[..^1];
-                selectedCharactersId = AlphabetCapital[(int)_alphabetNum].Length - 1;
+                selectedCharactersId = selectedCharactersId > AlphabetCapital[(int)_alphabetNum].Length - 1
+                    ? AlphabetCapital[(int)_alphabetNum].Length - 1
+                    : selectedCharactersId;
                 if (_pinYin.Length != 0) return;
                 InitializePinyinAndCutHanZiString();
                 

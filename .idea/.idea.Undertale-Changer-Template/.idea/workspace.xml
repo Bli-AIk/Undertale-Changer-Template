@@ -8,6 +8,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Resources/Fonts/SonFonts/SIMSUN.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Fonts/SonFonts/SIMSUN.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Scene/RenameController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Scene/RenameController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -132,10 +133,10 @@
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
       <method v="2" />
     </configuration>
-    <configuration name="附加到 Unity 编辑器" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="12568">
+    <configuration name="附加到 Unity 编辑器" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="24676">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="12568" />
+      <option name="pid" value="24676" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -264,7 +265,8 @@
       <workItem from="1731501141175" duration="3400000" />
       <workItem from="1731536761359" duration="2511000" />
       <workItem from="1731557326083" duration="4002000" />
-      <workItem from="1731574724788" duration="2945000" />
+      <workItem from="1731574724788" duration="3187000" />
+      <workItem from="1731589700656" duration="1915000" />
     </task>
     <servers />
   </component>
@@ -298,29 +300,16 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/Scripts/UCT/Global/Scene/RenameController.cs</url>
-          <line>615</line>
+          <line>619</line>
           <properties documentPath="D:\Unity Projects\Undertale-Changer-Template\Assets\Scripts\UCT\Global\Scene\RenameController.cs" containingFunctionPresentation="方法 'NamingUpdate'">
             <startOffsets>
-              <option value="28378" />
+              <option value="28769" />
             </startOffsets>
             <endOffsets>
-              <option value="28379" />
+              <option value="28770" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="20" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/UCT/Global/Scene/RenameController.cs</url>
-          <line>654</line>
-          <properties documentPath="D:\Unity Projects\Undertale-Changer-Template\Assets\Scripts\UCT\Global\Scene\RenameController.cs" containingFunctionPresentation="方法 'NamingUpdate'">
-            <startOffsets>
-              <option value="30539" />
-            </startOffsets>
-            <endOffsets>
-              <option value="30586" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="21" />
+          <option name="timeStamp" value="22" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
