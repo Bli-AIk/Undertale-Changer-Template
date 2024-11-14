@@ -89,8 +89,6 @@
 - [Fusion Pixel Font](https://github.com/TakWolf/fusion-pixel-font)
 - [RiderFlow](https://www.jetbrains.com/riderflow/)
 - [Pinyin4NET](https://github.com/hyjiacan/Pinyin4NET)
-- [WanaKanaSharp](https://github.com/caguiclajmg/WanaKanaSharp)
-- [TwitterKoreanProcessorCS](https://github.com/modamoda/TwitterKoreanProcessorCS)
 - [NuGetForUnity](https://github.com/GlitchEnzo/NuGetForUnity)
 - [chineseStroke](https://github.com/WTree/chineseStroke)
 
