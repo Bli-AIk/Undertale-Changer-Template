@@ -93,9 +93,9 @@ namespace UCT.Global.Scene
             "ヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲン",
             "ㇰㇱㇲㇳㇴㇵㇶㇷㇸ",
             
-            "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ",
-            "ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ",
-            "ㄱㄲㄳㄴㄵㄶㄷㄹㄺㄻㄼㄽㄾㄿㅀㅁㅂㅄㅅㅆㅇㅈㅊㅋㅌㅍㅎ",
+            "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ√",
+            "ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ√",
+            "ㄱㄲㄳㄴㄵㄶㄷㄹㄺㄻㄼㄽㄾㄿㅀㅁㅂㅄㅅㅆㅇㅈㅊㅋㅌㅍㅎ√",
         };
 
         private static readonly List<string> AlphabetLowercase = new()
@@ -230,32 +230,21 @@ namespace UCT.Global.Scene
                 _alphabetNum != SelectedAlphabet.Chosung && _alphabetNum != SelectedAlphabet.Jungsung &&
                 _alphabetNum != SelectedAlphabet.Jongsung) return;
 
-            if (_alphabetNum == SelectedAlphabet.Chinese)
+            if (_alphabetNum != SelectedAlphabet.Chinese) return;
+            var hanZiString = GetHanZiString(_pinYinText.text); 
+            _cutHanZiString = new List<string> { "" };
+            var cutHanZiListIndex = 0;
+            for (var i = 0; i < hanZiString.Length; i++)
             {
-                var hanZiString = GetHanZiString(_pinYinText.text); 
-                _cutHanZiString = new List<string> { "" };
-                var cutHanZiListIndex = 0;
-                for (var i = 0; i < hanZiString.Length; i++)
-                {
-                    _cutHanZiString[cutHanZiListIndex] += hanZiString[i];
+                _cutHanZiString[cutHanZiListIndex] += hanZiString[i];
 
-                    if ((cutHanZiListIndex != 0 || i == 0 || i % 19 != 0) &&
-                        (cutHanZiListIndex <= 0 || i % 19 != 0)) continue;
-                    _cutHanZiString.Add("");
-                    cutHanZiListIndex++;
-                }
-
-                SetHanZiToAlphabetLowercaseWith(_pinYinNum);
+                if ((cutHanZiListIndex != 0 || i == 0 || i % 19 != 0) &&
+                    (cutHanZiListIndex <= 0 || i % 19 != 0)) continue;
+                _cutHanZiString.Add("");
+                cutHanZiListIndex++;
             }
 
-            if (_alphabetNum != SelectedAlphabet.Chosung &&
-                _alphabetNum != SelectedAlphabet.Chosung && _alphabetNum != SelectedAlphabet.Jungsung &&
-                _alphabetNum != SelectedAlphabet.Jongsung) return;
-            var koreanChar = ' ';
-            if (_pinYinText.text.Length > 1)
-                 koreanChar = HangulComposerService.ComposeHangul(_pinYinText.text);
-
-            Other.Debug.Log(koreanChar);
+            SetHanZiToAlphabetLowercaseWith(_pinYinNum);
         }
 
         private void SetHanZiToAlphabetLowercaseWith(int pinYinNum)
@@ -478,7 +467,28 @@ namespace UCT.Global.Scene
                             }
                         }
                         else if (_pinYin.Length < MaxSetNameLength)
+                        {
                             _pinYin += nameChar;
+
+                            switch (_alphabetNum)
+                            {
+                                case SelectedAlphabet.Chosung
+                                    or SelectedAlphabet.Jungsung:
+                                {
+                                    if (_alphabetNum == SelectedAlphabet.Jungsung &&
+                                        (_pinYin[0] == '√' || _pinYin[1] == '√') && _pinYin != "√√")  
+                                        ComposeHangul();
+                                    else 
+                                        _alphabetNum += 1;
+                                    break;
+                                }
+                                case SelectedAlphabet.Jongsung:
+                                {
+                                    ComposeHangul();
+                                    break;
+                                }
+                            }
+                        }
 
                     }
                 }
@@ -779,6 +789,15 @@ namespace UCT.Global.Scene
             _textMessage.text = "";
         }
 
+        private void ComposeHangul()
+        {
+            if(_pinYin != "√√√")
+                setName += HangulComposerService.ComposeHangul(_pinYin);
+            _pinYin = ""; 
+            _alphabetNum = SelectedAlphabet.Chosung;
+            selectedCharactersId = 0;
+        }
+
         private void Backspace()
         {
             if ((_alphabetNum != SelectedAlphabet.Chinese && 
@@ -791,6 +810,9 @@ namespace UCT.Global.Scene
             }
             else
             {
+                if (_alphabetNum is SelectedAlphabet.Jungsung or SelectedAlphabet.Jongsung)
+                    _alphabetNum -= 1;
+                
                 if (_pinYin.Length <= 0) return;
                 _pinYin = _pinYin[..^1];
                 selectedCharactersId = selectedCharactersId > AlphabetCapital[(int)_alphabetNum].Length - 1
@@ -798,26 +820,32 @@ namespace UCT.Global.Scene
                     : selectedCharactersId;
                 if (_pinYin.Length != 0) return;
                 InitializePinyinAndCutHanZiString();
-                
+
             }
 
         }
 
         private static void AddAlphabetNum()
         {
-            InitializePinyinAndCutHanZiString(
-                _alphabetNum != SelectedAlphabet.Chosung &&
-                _alphabetNum != SelectedAlphabet.Jungsung);
-            _alphabetNum = _alphabetNum < (SelectedAlphabet)(AlphabetCapital.Count - 1) ? _alphabetNum + 1 : 0;
+            InitializePinyinAndCutHanZiString();
+
+            _alphabetNum = _alphabetNum switch
+            {
+                SelectedAlphabet.Chosung or SelectedAlphabet.Jungsung => 0,
+                _ => _alphabetNum < (SelectedAlphabet)(AlphabetCapital.Count - 1) ? _alphabetNum + 1 : 0
+            };
             _isSwitchedAlphabetNum = true;
         }
         
         private static void SubAlphabetNum()
         {
-            InitializePinyinAndCutHanZiString(
-                _alphabetNum != SelectedAlphabet.Jungsung &&
-                _alphabetNum != SelectedAlphabet.Jongsung);
-            _alphabetNum = _alphabetNum > 0 ? _alphabetNum - 1 : (SelectedAlphabet)(AlphabetCapital.Count - 1);
+            InitializePinyinAndCutHanZiString();
+            _alphabetNum = _alphabetNum switch
+            {
+                SelectedAlphabet.Jungsung or SelectedAlphabet.Jongsung => SelectedAlphabet.Katakana3,
+                SelectedAlphabet.Latin => SelectedAlphabet.Chosung,
+                _ => _alphabetNum > 0 ? _alphabetNum - 1 : (SelectedAlphabet)(AlphabetCapital.Count - 1)
+            };
             _isSwitchedAlphabetNum = true;
         }
 

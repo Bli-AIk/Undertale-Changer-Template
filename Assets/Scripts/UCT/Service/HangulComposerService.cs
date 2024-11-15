@@ -18,6 +18,25 @@ namespace UCT.Service
                 throw new ArgumentException("输入字符串的长度应为 2 或 3");
             }
 
+            if (syllable[0] == '√')
+            {
+                if (syllable[1] != '√')
+                    return syllable[1];
+            }
+
+            if (syllable[1] == '√' && syllable[0] != '√')
+            {
+                return syllable[0];
+            }
+
+            if (syllable[1] == '√' && syllable[0] == '√')
+            {
+                return syllable[2];
+            }
+
+            if (syllable[2] == '√')
+                syllable = syllable[..2];
+
             // 拆解输入的字符串
             var cho = syllable[0].ToString();  // 初声
             var jung = syllable[1].ToString(); // 中声
