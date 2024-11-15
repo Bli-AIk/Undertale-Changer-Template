@@ -44,6 +44,11 @@ Cyrillic1\Cy1;
 Cyrillic2\Cy2;
 Greek\Gre;
 Chinese\Chi;
+Hiragana1\HG1;
+Hiragana2\HG2;
+Katakana1\KT1;
+Katakana2\KT2;
+Katakana3\KT3;
 
 MenuUnder\Undertale (c)  toby fox 2015<enter>undertale changer V;
 

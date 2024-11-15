@@ -57,7 +57,11 @@ namespace UCT.Global.Scene
             Cyrillic2,
             Greek,
             Chinese,
-            //Japanese,
+            Hiragana1,//平假名
+            Hiragana2,//平假名
+            Katakana1,//片假名
+            Katakana2,//片假名
+            Katakana3,
             //Korean,
         }
         private static readonly List<string> AlphabetCapital = new()
@@ -71,6 +75,11 @@ namespace UCT.Global.Scene
             "РСТУФХЦЧШЩЪЫЬЭЮЯ",
             "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ",
             "abcdefghijklmnopqrstuvwxyz",
+            "ぁあぃいぅうぇえぉおかがきぎくぐけげこごさざしじすずせぜ",
+            "べぺほぼぽまみむめもゃやゅゆょよらりるれろゎわゐゑをんゔ",
+            "゠ァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセ",
+            "ヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲン",
+            "ㇰㇱㇲㇳㇴㇵㇶㇷㇸ",
         };
 
         private static readonly List<string> AlphabetLowercase = new()
@@ -83,7 +92,12 @@ namespace UCT.Global.Scene
             "абвгдеёжзийклмноп",
             "рстуфхцчшщъыьэюя",
             "αβγδεζηθικλμνξοπρστυφχψω",
-            ""
+            "",
+            "そぞただちぢっつづてでとどなにぬねのはばぱひびぴふぶぷへ",
+            "ゕゖ゙゚゛゜ゝゞゟっ・ー",
+            "ゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプ",
+            "ヴヵヶヷヸヹヺ・ーヽヾヿッ",
+            "ㇹㇺㇻㇼㇽㇾㇿ",
         };
 
         private float _randomSetNameTime;
@@ -634,7 +648,6 @@ namespace UCT.Global.Scene
                 else if (selectedCharactersId >= alphabetCapital.Length &&
                          selectedCharactersId < alphabetLength - MaxCharactersPerLine) //大写常规情况
                 {
-                    
                     selectedCharactersId += maxUppercaseCharactersPerLine;
                 }
                 else if (selectedCharactersId < alphabetCapital.Length - uppercaseRemainder ||
@@ -783,6 +796,11 @@ namespace UCT.Global.Scene
                 final += alphabet[i];
             }
 
+            if (_alphabetNum is SelectedAlphabet.Hiragana1 or SelectedAlphabet.Hiragana2 or SelectedAlphabet.Katakana1
+                or SelectedAlphabet.Katakana2 or SelectedAlphabet.Katakana3) 
+            {
+                final = "<mspace=3.225>" + final;
+            }
             return final;
         }
         /// <summary>
