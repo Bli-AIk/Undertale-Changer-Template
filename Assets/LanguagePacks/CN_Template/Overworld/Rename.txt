@@ -25,6 +25,7 @@ Teach\---游戏教学---<enter><enter>[Z或ENTER]-确认<enter>[X或SHIFT]-取�
 PageNext\下一页;
 PageLast\上一页;
 
+BackspaceTip\正在退格...;
 RandomNameTip\正在生成随机的名称...;
 
 Latin\拉丁符号;
@@ -41,6 +42,9 @@ Hiragana2\平假名二;
 Katakana1\片假名一;
 Katakana2\片假名二;
 Katakana3\片假名三;
+Chosung\韩语初声;
+Jungsung\韩语中声;
+Jongsung\韩语终声;
 
 MenuUnder\Undertale (c)  toby fox 2015<enter>undertale changer V;
 

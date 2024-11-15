@@ -27,6 +27,7 @@ namespace UCT.Global.Scene
             _selectText,
             _teachText,
             _textMessage,
+            _backspaceTip,
             _randomNameTip;
         public int selectedCharactersId;
         public bool isSelectedDone;
@@ -53,16 +54,23 @@ namespace UCT.Global.Scene
             LatinExtended1,
             LatinExtended2,
             LatinExtended3,
+            
             Cyrillic1,
             Cyrillic2,
+            
             Greek,
+            
             Chinese,
-            Hiragana1,//平假名
-            Hiragana2,//平假名
-            Katakana1,//片假名
-            Katakana2,//片假名
+            
+            Hiragana1,
+            Hiragana2,
+            Katakana1,
+            Katakana2,
             Katakana3,
-            //Korean,
+            
+            Chosung,
+            Jungsung,
+            Jongsung
         }
         private static readonly List<string> AlphabetCapital = new()
         {
@@ -71,15 +79,23 @@ namespace UCT.Global.Scene
             "ÁÀÂÃÄÅĀĂĄĆĈĊČĎĐĒĔĖĘĚÉÈÊËĜĞĠĢ",
             "ĤĦĨĪĬĮİĴĶĹĻĽĿŁŃŅŇŊÑŌŎŐŒÞßþ",
             "ŔŖŘŚŜŞŠŢŤŦŨŪŬŮŰŲŴŶŸÝŶŸŹŻŽ",
+            
             "АБВГДЕЁЖЗИЙКЛМНОП",
             "РСТУФХЦЧШЩЪЫЬЭЮЯ",
+            
             "ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ",
+            
             "abcdefghijklmnopqrstuvwxyz",
+            
             "ぁあぃいぅうぇえぉおかがきぎくぐけげこごさざしじすずせぜ",
             "べぺほぼぽまみむめもゃやゅゆょよらりるれろゎわゐゑをんゔ",
             "゠ァアィイゥウェエォオカガキギクグケゲコゴサザシジスズセ",
             "ヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲン",
             "ㇰㇱㇲㇳㇴㇵㇶㇷㇸ",
+            
+            "ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ",
+            "ㅏㅐㅑㅒㅓㅔㅕㅖㅗㅘㅙㅚㅛㅜㅝㅞㅟㅠㅡㅢㅣ",
+            "ㄱㄲㄳㄴㄵㄶㄷㄹㄺㄻㄼㄽㄾㄿㅀㅁㅂㅄㅅㅆㅇㅈㅊㅋㅌㅍㅎ",
         };
 
         private static readonly List<string> AlphabetLowercase = new()
@@ -89,21 +105,31 @@ namespace UCT.Global.Scene
             "áàâãäåāăąćĉċďđēĕėęěéèêëĝğġģ",
             "ĥħĩīĭįıĵķĸĺļľŀłńņňŉŋñōŏőœŧų",
             "ŕŗřśŝşšţťðùúûüũūŭůűŵýÿŷźżž",
+            
             "абвгдеёжзийклмноп",
             "рстуфхцчшщъыьэюя",
+            
             "αβγδεζηθικλμνξοπρστυφχψω",
+            
             "",
+            
             "そぞただちぢっつづてでとどなにぬねのはばぱひびぴふぶぷへ",
             "ゕゖ゙゚゛゜ゝゞゟっ・ー",
             "ゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプ",
             "ヴヵヶヷヸヹヺ・ーヽヾヿッ",
             "ㇹㇺㇻㇼㇽㇾㇿ",
+            
+            "",
+            "",
+            "",
         };
 
         private float _randomSetNameTime;
-        private static List<string> _cutHanZiString = new() { "" };
         private const float RandomSetNameTimeMax = 1.5f;
+        private static List<string> _cutHanZiString = new() { "" };
 
+        private float _backspaceTime;
+        private const float BackspaceTimeMax = 0.5f;
         
         private static SelectedAlphabet _alphabetNum;
         private const int MaxCharactersPerLine = 7;
@@ -125,8 +151,9 @@ namespace UCT.Global.Scene
             else
             {
                 sceneState = SceneState.Naming;
-            }
-
+            }   
+            _backspaceTip.text = TextProcessingService.GetFirstChildStringByPrefix(
+                MainControl.Instance.overworldControl.sceneTextsSave, "BackspaceTip");
             _randomNameTip.text = TextProcessingService.GetFirstChildStringByPrefix(
                 MainControl.Instance.overworldControl.sceneTextsSave, "RandomNameTip");
         }
@@ -140,6 +167,7 @@ namespace UCT.Global.Scene
             _selectText = transform.Find("SelectText").GetComponent<TextMeshPro>();
             _teachText = transform.Find("TeachText").GetComponent<TextMeshPro>();
             _textMessage = transform.Find("TextMessage").GetComponent<TextMeshPro>();
+            _backspaceTip = transform.Find("BackspaceTip").GetComponent<TextMeshPro>();
             _randomNameTip = transform.Find("RandomNameTip").GetComponent<TextMeshPro>();
         }
 
@@ -161,7 +189,7 @@ namespace UCT.Global.Scene
         {
             if (MainControl.Instance.overworldControl.isSetting) return;
             _randomNameTip.color = new Color(1,1,1,_randomSetNameTime / RandomSetNameTimeMax);
-
+            _backspaceTip.color  = new Color(1,1,1,_backspaceTime / BackspaceTimeMax);
             SetPinYin();
             
             switch (sceneState)
@@ -198,22 +226,36 @@ namespace UCT.Global.Scene
             //以下部分只在_pinYin更新时触发
             
             if (sceneState != SceneState.Naming) return;
-            if (_alphabetNum != SelectedAlphabet.Chinese) return;
+            if (_alphabetNum != SelectedAlphabet.Chinese && _alphabetNum != SelectedAlphabet.Chosung &&
+                _alphabetNum != SelectedAlphabet.Chosung && _alphabetNum != SelectedAlphabet.Jungsung &&
+                _alphabetNum != SelectedAlphabet.Jongsung) return;
 
-            var hanZiString = GetHanZiString(_pinYinText.text); 
-            _cutHanZiString = new List<string> { "" };
-            var cutHanZiListIndex = 0;
-            for (var i = 0; i < hanZiString.Length; i++)
+            if (_alphabetNum == SelectedAlphabet.Chinese)
             {
-                _cutHanZiString[cutHanZiListIndex] += hanZiString[i];
+                var hanZiString = GetHanZiString(_pinYinText.text); 
+                _cutHanZiString = new List<string> { "" };
+                var cutHanZiListIndex = 0;
+                for (var i = 0; i < hanZiString.Length; i++)
+                {
+                    _cutHanZiString[cutHanZiListIndex] += hanZiString[i];
 
-                if ((cutHanZiListIndex != 0 || i == 0 || i % 19 != 0) &&
-                    (cutHanZiListIndex <= 0 || i % 19 != 0)) continue;
-                _cutHanZiString.Add("");
-                cutHanZiListIndex++;
+                    if ((cutHanZiListIndex != 0 || i == 0 || i % 19 != 0) &&
+                        (cutHanZiListIndex <= 0 || i % 19 != 0)) continue;
+                    _cutHanZiString.Add("");
+                    cutHanZiListIndex++;
+                }
+
+                SetHanZiToAlphabetLowercaseWith(_pinYinNum);
             }
 
-            SetHanZiToAlphabetLowercaseWith(_pinYinNum);
+            if (_alphabetNum != SelectedAlphabet.Chosung &&
+                _alphabetNum != SelectedAlphabet.Chosung && _alphabetNum != SelectedAlphabet.Jungsung &&
+                _alphabetNum != SelectedAlphabet.Jongsung) return;
+            var koreanChar = ' ';
+            if (_pinYinText.text.Length > 1)
+                 koreanChar = HangulComposerService.ComposeHangul(_pinYinText.text);
+
+            Other.Debug.Log(koreanChar);
         }
 
         private void SetHanZiToAlphabetLowercaseWith(int pinYinNum)
@@ -237,8 +279,15 @@ namespace UCT.Global.Scene
             if (AlphabetLowercase[(int)_alphabetNum].Length <= 0) return;
             TMPDynamicFontController.Instance.SimsunClear(new List<TMP_Text>()
             {
+                _titleText,
                 _nameText,
-                _characterText
+                _pinYinText,
+                _characterText,
+                _selectText,
+                _teachText,
+                _textMessage,
+                _backspaceTip,
+                _randomNameTip,
             });
         }
 
@@ -389,7 +438,10 @@ namespace UCT.Global.Scene
                         var setNameChar =
                             (alphabetCapital + alphabetLowercase)[selectedCharactersId];
                         var nameChar = setNameChar != '▌' ? setNameChar : ' ';
-                        if (_alphabetNum != SelectedAlphabet.Chinese ||
+                        if ((_alphabetNum != SelectedAlphabet.Chinese && 
+                             _alphabetNum != SelectedAlphabet.Chosung && 
+                             _alphabetNum != SelectedAlphabet.Jungsung && 
+                             _alphabetNum != SelectedAlphabet.Jongsung) ||
                             selectedCharactersId > alphabetCapital.Length - 1)
                         {
                             switch (nameChar)
@@ -411,7 +463,8 @@ namespace UCT.Global.Scene
                                 default:
                                 {
                                     setName += nameChar;
-                                    if (_alphabetNum == SelectedAlphabet.Chinese)
+                                    if (_alphabetNum is SelectedAlphabet.Chinese or SelectedAlphabet.Chosung
+                                        or SelectedAlphabet.Jungsung or SelectedAlphabet.Jongsung) 
                                     {
                                         if (selectedCharactersId > alphabetCapital.Length - 1)
                                         {
@@ -446,7 +499,7 @@ namespace UCT.Global.Scene
                 }
                 else if (selectedCharactersId == alphabetLength + 2)
                 {
-                    SwitchAlphabetNum();
+                    AddAlphabetNum();
                 }
                 else if (selectedCharactersId == alphabetLength + 3)
                 {
@@ -531,10 +584,20 @@ namespace UCT.Global.Scene
                         breaker = true;
                     }
                 }
-            }
-            else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.X))
+            } 
+            else if (GameUtilityService.ConvertKeyToControl(KeyCode.X))
             {
-                Backspace();
+                if (_backspaceTime < BackspaceTimeMax)
+                    _backspaceTime += Time.deltaTime;
+                else
+                {
+                    _backspaceTime = 0.25f;
+                    Backspace();
+                }
+            }
+            else if (_backspaceTime < 0.25f && GameUtilityService.ConvertKeyUpToControl(KeyCode.X))
+            {
+                SubAlphabetNum();
             }
             else if (GameUtilityService.ConvertKeyToControl(KeyCode.C))
             {
@@ -543,17 +606,19 @@ namespace UCT.Global.Scene
                 else
                 {
                     _randomSetNameTime = 0.5f;
-                    setName = TextProcessingService.RandomString(Random.Range(1, 7));
+                    setName = TextProcessingService.RandomString(Random.Range(1, 7),
+                        alphabetCapital + alphabetLowercase);
                     AudioController.Instance.GetFx(2, MainControl.Instance.AudioControl.fxClipBattle);
                 }
             }
             else if (_randomSetNameTime < 0.5f && GameUtilityService.ConvertKeyUpToControl(KeyCode.C))
             {
-                SwitchAlphabetNum();
+                AddAlphabetNum();
             }
             else
             {
                 _randomSetNameTime = _randomSetNameTime > 0 ? _randomSetNameTime - Time.deltaTime : 0;
+                _backspaceTime = _backspaceTime > 0 ? _backspaceTime - Time.deltaTime : 0;
             }
             
             if (breaker) return;
@@ -716,7 +781,10 @@ namespace UCT.Global.Scene
 
         private void Backspace()
         {
-            if (_alphabetNum != SelectedAlphabet.Chinese || _pinYin.Length == 0)
+            if ((_alphabetNum != SelectedAlphabet.Chinese && 
+                 _alphabetNum != SelectedAlphabet.Chosung && 
+                 _alphabetNum != SelectedAlphabet.Jungsung && 
+                 _alphabetNum != SelectedAlphabet.Jongsung)  || _pinYin.Length == 0)
             {
                 if (setName.Length > 0)
                     setName = setName[..^1];
@@ -735,24 +803,39 @@ namespace UCT.Global.Scene
 
         }
 
-        private static void SwitchAlphabetNum()
+        private static void AddAlphabetNum()
         {
-            InitializePinyinAndCutHanZiString();
+            InitializePinyinAndCutHanZiString(
+                _alphabetNum != SelectedAlphabet.Chosung &&
+                _alphabetNum != SelectedAlphabet.Jungsung);
             _alphabetNum = _alphabetNum < (SelectedAlphabet)(AlphabetCapital.Count - 1) ? _alphabetNum + 1 : 0;
+            _isSwitchedAlphabetNum = true;
+        }
+        
+        private static void SubAlphabetNum()
+        {
+            InitializePinyinAndCutHanZiString(
+                _alphabetNum != SelectedAlphabet.Jungsung &&
+                _alphabetNum != SelectedAlphabet.Jongsung);
+            _alphabetNum = _alphabetNum > 0 ? _alphabetNum - 1 : (SelectedAlphabet)(AlphabetCapital.Count - 1);
             _isSwitchedAlphabetNum = true;
         }
 
         private static void SetSpellingRequiredLowercase()
         {
             AlphabetLowercase[(int)SelectedAlphabet.Chinese] = "";
+            AlphabetLowercase[(int)SelectedAlphabet.Chosung] = "";
+            AlphabetLowercase[(int)SelectedAlphabet.Jungsung] = "";
+            AlphabetLowercase[(int)SelectedAlphabet.Jongsung] = "";
         }
 
-        private static void InitializePinyinAndCutHanZiString()
+        private static void InitializePinyinAndCutHanZiString(bool isCleanPinYin = true)
         {
             SetSpellingRequiredLowercase();
             _cutHanZiString = new List<string> { "" };
             _pinYinNum = 0;
-            _pinYin = "";
+            if (isCleanPinYin)
+                _pinYin = "";
         }
 
         private void InstructionUpdate()
@@ -797,7 +880,7 @@ namespace UCT.Global.Scene
             }
 
             if (_alphabetNum is SelectedAlphabet.Hiragana1 or SelectedAlphabet.Hiragana2 or SelectedAlphabet.Katakana1
-                or SelectedAlphabet.Katakana2 or SelectedAlphabet.Katakana3) 
+                or SelectedAlphabet.Katakana2 or SelectedAlphabet.Katakana3 or SelectedAlphabet.Chosung or SelectedAlphabet.Jungsung or SelectedAlphabet.Jongsung) 
             {
                 final = "<mspace=3.225>" + final;
             }
