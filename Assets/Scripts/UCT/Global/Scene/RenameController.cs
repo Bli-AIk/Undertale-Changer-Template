@@ -268,7 +268,7 @@ namespace UCT.Global.Scene
                 AlphabetLowercase[(int)_alphabetNum] = _cutHanZiString[pinYinNum];
             
             if (AlphabetLowercase[(int)_alphabetNum].Length <= 0) return;
-            TMPDynamicFontController.Instance.SimsunClear(new List<TMP_Text>()
+            TMPDynamicFontController.Instance.SimsunClear(new List<TMP_Text>
             {
                 _titleText,
                 _nameText,

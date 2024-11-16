@@ -8,7 +8,6 @@ using UCT.Global.UI;
 using UCT.Service;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 
 namespace UCT.Global.Scene
 {
@@ -19,31 +18,39 @@ namespace UCT.Global.Scene
     {
         private OverworldControl _overworldControl;
 
-        
-        // ReSharper disable once StringLiteralTypo
-        [FormerlySerializedAs("tmps")] [Header("玩家名-LV-时间-位置-具体选项-底部字")]
-        public List<TextMeshPro> texts;
+        private TextMeshPro _textName,
+            _textLv,
+            _textTime,
+            _textPosition,
+            _textOptionsLeft,
+            _textOptionsRight,
+            _textMessage;
 
         private int _select;
         private const int SelectMax = 5;
-        public int layer;
         private bool _setData;
 
         public int saveNumber;
 
         private void Awake()
         {
+            AssignReferences();
+        }
 
-            for (var i = 0; i < transform.childCount; i++)
-            {
-                texts.Add(transform.GetChild(i).GetComponent<TextMeshPro>());
-            }
+        private void AssignReferences()
+        {
+            _textName = transform.Find("TextName").GetComponent<TextMeshPro>();
+            _textLv = transform.Find("TextLV").GetComponent<TextMeshPro>();
+            _textTime = transform.Find("TextTime").GetComponent<TextMeshPro>();
+            _textPosition = transform.Find("TextPosition").GetComponent<TextMeshPro>();
+            _textOptionsLeft = transform.Find("TextOptionsLeft").GetComponent<TextMeshPro>();
+            _textOptionsRight = transform.Find("TextOptionsRight").GetComponent<TextMeshPro>();
+            _textMessage = transform.Find("TextMessage").GetComponent<TextMeshPro>();
         }
 
         private void Start()
         {
             _setData = false;
-            layer = 0;
             _overworldControl = MainControl.Instance.overworldControl;
             _overworldControl.playerScenePos = new Vector3(-0.5f, -1);
             if (MainControl.Instance.saveDataId < 0)
@@ -56,18 +63,21 @@ namespace UCT.Global.Scene
         private void LoadLayer0()
         {
             var playerControl = SaveController.LoadData("Data" + saveNumber);
-            texts[0].text = playerControl.playerName;
-            texts[1].text = "LV " + playerControl.lv;
-            //tmps[2]在update内设置
-            texts[3].text = TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.settingSave, playerControl.saveScene);
-
+            _textName.text = playerControl.playerName;
+            _textLv.text = "LV " + playerControl.lv;
+            _textPosition.text = TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.settingSave, playerControl.saveScene);
             Flash();
-
-            texts[5].text = TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave, "MenuUnder") + Application.version;
+            _textMessage.text = TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave, "MenuUnder") + Application.version;
         }
 
         private void Update()
         {
+            if (!_textOptionsLeft.enabled)
+                _textOptionsLeft.enabled = true;
+            if (!_textOptionsRight.enabled)
+                _textOptionsRight.enabled = true;
+
+            
             if (_overworldControl.isSetting || _overworldControl.pause)
                 return;
 
@@ -100,13 +110,11 @@ namespace UCT.Global.Scene
                     _select = 0 + 2 * Convert.ToInt32(_setData);
                 else _select = 1 + 2 * Convert.ToInt32(_setData);
             }
-            if (_setData && _select == 2 && (saveNumber == 0))
+            if (_setData && _select == 2 && saveNumber == 0)
             {
                 _select = _select % 2 == 0 ? 3 : 4;
             }
 
-            if (layer != 0) return;
-            
             if (GameUtilityService.ConvertKeyDownToControl(KeyCode.UpArrow) || 
                 GameUtilityService.ConvertKeyDownToControl(KeyCode.DownArrow) || 
                 GameUtilityService.ConvertKeyDownToControl(KeyCode.LeftArrow) || 
@@ -138,9 +146,11 @@ namespace UCT.Global.Scene
                         case 4:
                             _setData = true;
                             saveNumber = MainControl.Instance.saveDataId;
-                            if (0 != (SaveController.GetDataNumber() - 1))
+                            if (0 != SaveController.GetDataNumber() - 1)
                                 _select = 5;
                             Flash();
+                            _textOptionsLeft.enabled = false;
+                            _textOptionsRight.enabled = false;
                             AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
                             break;
 
@@ -164,7 +174,7 @@ namespace UCT.Global.Scene
 
                         case 3:
                             AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
-                            if (saveNumber == (SaveController.GetDataNumber() - 1))//新建
+                            if (saveNumber == SaveController.GetDataNumber() - 1)//新建
                             {
                                 saveNumber++;
                                 MainControl.Instance.saveDataId = saveNumber;
@@ -184,7 +194,7 @@ namespace UCT.Global.Scene
                             if (SaveController.GetDataNumber() - 1 <= 0)
                                 goto case 5;
                             SaveController.DeleteData("Data" + saveNumber);
-                            if (saveNumber > (SaveController.GetDataNumber() - 1))
+                            if (saveNumber > SaveController.GetDataNumber() - 1)
                                 saveNumber = SaveController.GetDataNumber() - 1;
                             LoadLayer0();
                             break;
@@ -194,6 +204,8 @@ namespace UCT.Global.Scene
                             {
                                 _setData = false;
                                 Flash();
+                                _textOptionsLeft.enabled = false;
+                                _textOptionsRight.enabled = false;
                                 AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
                                 break;
                             }
@@ -217,32 +229,55 @@ namespace UCT.Global.Scene
             var list = new List<string>();
             for (var i = 0; i < 6; i++)
             {
-                if (_setData && i == 2 && (saveNumber == 0))
+                if (_setData && i == 2 && saveNumber == 0)
                     list.Add("<color=grey>");
                 else if (i != _select)
-                    list.Add("");
+                    list.Add("<color=white>");
                 else
                     list.Add("<color=yellow>");
             }
+
             if (!_setData)
-                texts[4].text = list[0] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave, "Menu0") + "</color> "
-                               + list[1] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave, "Menu1") + "</color>\n"
-                               + list[2] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave, "Menu2") + "</color> "
-                               + list[3] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave, "Menu3") + "</color>\n"
-                               + list[4] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave, "Menu4") + "</color> "
-                               + list[5] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave, "Menu5") + "</color>";
+            {
+                _textOptionsLeft.text =
+                    list[0] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave,
+                        "Menu0") + "</color>\n" +
+                    list[2] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave,
+                        "Menu2") + "</color>\n" +
+                    list[4] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave,
+                        "Menu4") + "</color>";
+
+                _textOptionsRight.text =
+                    list[1] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave,
+                        "Menu1") + "</color>\n" +
+                    list[3] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave,
+                        "Menu3") + "</color>\n" +
+                    list[5] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave,
+                        "Menu5") + "</color>";
+            }
             else
-                texts[4].text = list[0] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave, "Menu12") + "</color> "
-                               + list[1] + "Data" + saveNumber + "</color>\n"
-                               + list[2] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave, "Menu6") + "</color> "
-                               + list[3] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave, saveNumber == (SaveController.GetDataNumber() - 1) ? "Menu10" : "Menu7") + "</color>\n"
-                               + list[4] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave, 0 == (SaveController.GetDataNumber() - 1) ? "Menu8" : "Menu11") + "</color> "
-                               + list[5] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave, "Menu9") + "</color>";
+            {
+                _textOptionsLeft.text =
+                    list[0] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave,
+                        "Menu12") + "</color>\n" +
+                    list[2] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave,
+                        "Menu6") + "</color>\n" +
+                    list[4] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave,
+                        0 == SaveController.GetDataNumber() - 1 ? "Menu8" : "Menu11") + "</color>";
+
+                _textOptionsRight.text =
+                    list[1] + "Data" + saveNumber + "</color>\n" +
+                    list[3] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave,
+                        saveNumber == SaveController.GetDataNumber() - 1 ? "Menu10" : "Menu7") + "</color>\n" +
+                    list[5] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave,
+                        "Menu9") + "</color>";
+            }
+
         }
 
         private void FixedUpdate()
         {
-            texts[2].text = TextProcessingService.GetRealTime((int)MainControl.Instance.playerControl.gameTime);
+            _textTime.text = TextProcessingService.GetRealTime((int)MainControl.Instance.playerControl.gameTime);
         }
     }
 }

@@ -25,6 +25,9 @@ namespace UCT.Global.Other
 
         public void SimsunClear(List<TMP_Text> forceMeshUpdateTexts = null)
         {
+            if(!_simsun)
+                Start();
+            
             _simsun.ClearFontAssetData();
             switch (forceMeshUpdateTexts)
             {

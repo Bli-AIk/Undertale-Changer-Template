@@ -35,7 +35,7 @@
 - [x] 将OW场景中的框UI轴点均改为正中。
 - [x] 将主摄像机放置在DontDestroyOnLoad，由MainControlSummon生成。（类似于MainControl、BGMControl的生成方式）
 - [x] 对Rename场景UI位置、大小进行检查和修复。
-- [ ] 对Menu场景 UI位置、大小进行检查和修复。
+- [x] 对Menu场景 UI位置、大小进行检查和修复。
 - [ ] 对PPT场景 UI位置、大小进行检查和修复。
 - [ ] 对OW场景 UI位置、大小进行检查和修复。
 - [ ] 对Gameover场景 UI位置、大小进行检查和修复。

@@ -4,8 +4,6 @@ using UCT.Global.UI;
 using UCT.Overworld;
 using UCT.Service;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 
 namespace UCT.Global.Core
 {
@@ -72,6 +70,7 @@ namespace UCT.Global.Core
             
             System.Diagnostics.Debug.Assert(Camera.main != null, "Camera.main != null");
             var mainCamera = Camera.main.GetComponent<CameraFollowPlayer>();
+            if (!mainCamera) return;
             if (sceneState != MainControl.SceneState.Overworld)
                 Destroy(mainCamera.gameObject);
             else

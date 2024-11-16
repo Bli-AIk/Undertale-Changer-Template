@@ -7,6 +7,7 @@ using UCT.Global.Core;
 using UCT.Global.UI;
 using UCT.Service;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace UCT.Battle
@@ -16,29 +17,30 @@ namespace UCT.Battle
     /// </summary>
     public class GameoverController : MonoBehaviour
     {
+        public List<AudioClip> clips;
+        public bool canChangeScene;
+        public bool canChangeSceneForC;
         private GameObject _player;
         private ParticleSystem _mParticleSystem;
-        private AudioSource _bgm;
+        private AudioSource _bgmSource;
         private TypeWritter _typeWritter;
-        public List<AudioClip> clips;
-        private TextMeshPro _tmp;
-        public bool canChangeSence, canChangeSenceForC;
+        private TextMeshPro _textOptions;
 
         private bool _foolDay;
 
         private void Start()
         {
-            canChangeSence = false;
-            canChangeSenceForC = true;
+            canChangeScene = false;
+            canChangeSceneForC = true;
             _typeWritter = GetComponent<TypeWritter>();
             _mParticleSystem = transform.Find("Player/Particle System").GetComponent<ParticleSystem>();
-            _tmp = transform.Find("Text Options").GetComponent<TextMeshPro>();
+            _textOptions = transform.Find("Text Options").GetComponent<TextMeshPro>();
             _player = _mParticleSystem.transform.parent.gameObject;
 
             _mParticleSystem.transform.localPosition = new Vector3(0, 0, -5);
             _foolDay = DateTime.Now.Month == 4 && DateTime.Now.Day == 1;
-            _bgm = AudioController.Instance.audioSource;
-            _bgm.clip = clips[Convert.ToInt32(_foolDay)];
+            _bgmSource = AudioController.Instance.audioSource;
+            _bgmSource.clip = clips[Convert.ToInt32(_foolDay)];
             _player.transform.position = MainControl.Instance.overworldControl.playerDeadPos;
             _mParticleSystem.transform.position = MainControl.Instance.overworldControl.playerDeadPos;
             _mParticleSystem.Pause();
@@ -50,7 +52,7 @@ namespace UCT.Battle
         {
             if (i < 0)
             {
-                _bgm.Play();
+                _bgmSource.Play();
             }
             else
                 AudioController.Instance.GetFx(i, MainControl.Instance.AudioControl.fxClipUI);
@@ -72,8 +74,8 @@ namespace UCT.Battle
                 TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.sceneTextsSave, "GameOver3"),
                 TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.sceneTextsSave, "GameOver4")
             };
-            _typeWritter.TypeOpen(strings[Random.Range(0, 4)], false, 0, 4, _tmp);
-            canChangeSence = true;
+            _typeWritter.TypeOpen(strings[Random.Range(0, 4)], false, 0, 4, _textOptions);
+            canChangeScene = true;
         }
 
         public void Follish()
@@ -95,18 +97,18 @@ namespace UCT.Battle
 
         private void Update()
         {
-            if (!_typeWritter.isTyping && GameUtilityService.ConvertKeyDownToControl(KeyCode.Z) && canChangeSence)
+            if (!_typeWritter.isTyping && GameUtilityService.ConvertKeyDownToControl(KeyCode.Z) && canChangeScene)
             {
-                _tmp.text = "";
+                _textOptions.text = "";
                 GameUtilityService.FadeOutAndSwitchScene("Example-Corridor", Color.black, true, 2);
-                canChangeSence = false;
+                canChangeScene = false;
             }
 
-            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.C) && canChangeSenceForC)
+            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.C) && canChangeSceneForC)
             {
                 GameUtilityService.FadeOutAndSwitchScene("Example-Corridor", Color.black, true);
                 _typeWritter.TypeStop();
-                canChangeSenceForC = false;
+                canChangeSceneForC = false;
             }
         }
     }
