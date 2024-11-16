@@ -2,13 +2,13 @@
 
 This document outlines the long-term update plan for UCT.
 
-Note that these update plans are not in any particular order and may change, be postponed, or abandoned.
+Please note that these update plans are not in any specific order and may change, be put on hold, or be abandoned.
 
 For the long-term update plan of UCT, please refer to [PLAN.md](PLAN.md), [PLAN_zh-CN.md](PLAN_zh-CN.md), or [PLAN_zh-TW.md](PLAN_zh-TW.md).
 
-For specific update content about UCT, please refer to [CHANGELOG.md](CHANGELOG.md), [CHANGELOG_zh-CN.md](CHANGELOG_zh-CN.md), or [CHANGELOG_zh-TW.md](CHANGELOG_zh-TW.md).
+For specific updates regarding UCT, please refer to [CHANGELOG.md](CHANGELOG.md), [CHANGELOG_zh-CN.md](CHANGELOG_zh-CN.md), or [CHANGELOG_zh-TW.md](CHANGELOG_zh-TW.md).
 
-Simplified Chinese updates and changelogs will be updated first, while other languages will utilize GPT for translation during **version number changes**.
+Simplified Chinese update plans/changelogs will be prioritized for updates; other languages will be translated using GPT during **version number changes**.
 
 ## General
 ### Refinement of Existing Systems
@@ -16,62 +16,62 @@ Simplified Chinese updates and changelogs will be updated first, while other lan
 - [ ] Store item data in ScriptableObject
 
 ### UI Optimization and Refinement
-- [ ] Add pixel-perfect and magnified 640x480[^2]
-- [ ] Refine/UI Dr design MENU interface and OW save interface
+- [ ] Add pixel-perfect and scale to 640x480[^2]
+- [ ] Refine / UI Dr. style MENU interface and OW save interface
 - [ ] Refine settings interface
-- [ ] Redesign settings UI
+- [ ] Redesign settings interface UI
 
 ### Performance Optimization
 - [x] Add DebugLogger script[^3]
-- [ ] Use coroutines to call language packs instead of calling all at once
+- [ ] Use coroutines to call language packs instead of calling them all at once
 
-## OW Class
+## OW Category
 ### Event System
 - [ ] Redesign OW event system
-- [ ] Add Dr-style chase battle system
+- [ ] Add Dr. style chase battle system
 
-### Story System
-- [ ] Introduce [ink](https://github.com/inkle/ink) scripting language into the story system
-- [ ] Add story system proofreading scene[^4]
-- [ ] Add OW story controller
+### Plot System
+- [ ] Introduce [ink](https://github.com/inkle/ink) scripting language into plot system
+- [ ] Add plot system proofreading scene[^4]
+- [ ] Add OW plot controller
 
 ### Data Storage
 - [ ] Store room data in ScriptableObject
 
-## Combat Class
+## Combat Category
 ### Data Storage
-- [x] Store bullet data in ScriptableObject
-- [ ] Store round data in ScriptableObject
+- [x] Store bullet curtain data in ScriptableObject
+- [ ] Store turn data in ScriptableObject
 
-### Round System Redesign
-- [ ] Visualize round system
+### Turn System Redesign
+- [ ] Visualize turn system
 - [ ] Add path bullet generator
 
 ### Combat System Expansion
-- [ ] Add functionality to insert subtitles/dialogue during rounds
+- [ ] Add functionality to insert subtitles/dialogue during turns
 - [ ] Add multiple battles[^5]
 
-### Fixes and Optimizations
+### Fixes and Optimization
 - [x] Optimize 3D background
-- [x] Fix blue hearts
+- [x] Fix blue heart
 
-### Asymmetrical Frame
-- [ ] Fix asymmetrical frame
-- [ ] Redesign collision system to accommodate asymmetrical frame
+### Irregular Box
+- [ ] Fix irregular box
+- [ ] Redesign collision system to accommodate irregular box
 
-### Judgement and Collision
-- [ ] Refine FIGHT-related judgements
-- [ ] Add monster death judgement
+### Judgment and Collision
+- [ ] Refine FIGHT related judgments
+- [ ] Add monster death judgment
 - [ ] Complete seven player soul colors
 
 ## New Additions
 ### Scene Expansion
-- [ ] Add multilingual extension to the naming scene
-- [ ] Add battle settlement scene
+- [ ] Add multilingual expansion in naming scene
+- [ ] Add battle conclusion scene
 - [ ] Add BGM broadcasting scene
 
 ### Rendering Expansion
-- [x] Add built-in projection frame
+- [x] Add built-in projection box
 - [x] Add 3D renderer
 
 ### Functionality Expansion
@@ -82,23 +82,23 @@ Simplified Chinese updates and changelogs will be updated first, while other lan
 
 ### Accessibility
 - [ ] Add narrator
-- [ ] Add color blind filter
+- [ ] Add colorblind filter
 
-## Others
+## Other Categories
 ### Project Localization
-- [x] Merge Chinese and English branches, replacing annotation text through scripts
+- [x] Merge Chinese and English branches, replace comment texts through scripts
 
 ### Cleanup and Maintenance
-- [x] Remove unnecessary original textures
+- [x] Delete unnecessary original textures
 
 ### Tutorials
 - [ ] New wiki and video tutorials
 
 ---
 
-[^1]: Primarily will add functions such as calculating beats.
-[^2]: Will attempt to add two additional options in settings to allow pixel-perfect filtering / enlarging to higher resolution at 640x480 instead of using a higher resolution directly to save performance.
-[^3]: This script will encapsulate all Unity-related Debug functions within to call, which only execute within the editor.
-[^4]: This scene will list all story content in a way consistent with in-game display for quick proofreading.
-[^5]: Refers to allowing multiple battles within the game.
-[^6]: Localization personnel can provide preliminary localization support to players by releasing a CC subtitles preview version during the stage where translations have been completed but not officially integrated.
+[^1]: Mainly will add functionalities like calculating beat counts.
+[^2]: Will try to add two extra options in the settings to allow using pixel-perfect filter / scaling to larger resolutions from 640x480, rather than directly using higher resolutions to save performance.
+[^3]: This script will encapsulate all Unity's debug-related functions for calling, which will only execute in the editor.
+[^4]: This scene will list all narrative content consistent with in-game display style for quick proofreading.
+[^5]: Allows multiple battles and engagements within the game.
+[^6]: Localization personnel can provide localization support to players ahead of the official embedding phase by releasing a CC subtitle preview version after translation completion.
