@@ -1,24 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-8336938524950401636
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fb60a22f311433c4c962b888d1393f88, type: 3}
-  m_Name: PaniniProjection
-  m_EditorClassIdentifier: 
-  active: 0
-  distance:
-    m_OverrideState: 1
-    m_Value: 0.5
-  cropToFit:
-    m_OverrideState: 0
-    m_Value: 1
 --- !u!114 &-6058264418041624216
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -54,15 +35,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d7fd9488000d3734a9e00ee676215985, type: 3}
-  m_Name: Battle2D Profile
+  m_Name: Retro3DVolume
   m_EditorClassIdentifier: 
   components:
   - {fileID: 8133619234732192967}
-  - {fileID: 3041026883999951130}
-  - {fileID: -6058264418041624216}
-  - {fileID: 8350349414379319508}
-  - {fileID: -8336938524950401636}
---- !u!114 &3041026883999951130
+--- !u!114 &2447156059463330921
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
@@ -71,43 +48,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c01700fd266d6914ababb731e09af2eb, type: 3}
-  m_Name: DepthOfField
-  m_EditorClassIdentifier: 
+  m_Script: {fileID: 0}
+  m_Name: CrtScreenComponent
+  m_EditorClassIdentifier: Assembly-CSharp:Volume:CrtScreenComponent
   active: 1
-  mode:
-    m_OverrideState: 1
-    m_Value: 2
-  gaussianStart:
-    m_OverrideState: 1
-    m_Value: 10
-  gaussianEnd:
-    m_OverrideState: 0
-    m_Value: 30
-  gaussianMaxRadius:
-    m_OverrideState: 0
-    m_Value: 1
-  highQualitySampling:
-    m_OverrideState: 0
-    m_Value: 0
-  focusDistance:
-    m_OverrideState: 1
-    m_Value: 19.12
-  aperture:
-    m_OverrideState: 1
-    m_Value: 5.75
-  focalLength:
-    m_OverrideState: 1
-    m_Value: 150
-  bladeCount:
-    m_OverrideState: 1
-    m_Value: 3
-  bladeCurvature:
+  <displayName>k__BackingField: 
+  isShow:
     m_OverrideState: 1
     m_Value: 1
-  bladeRotation:
+  resolution:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: {x: 50, y: 50}
+  pixelScanlineBrightness:
+    m_OverrideState: 1
+    m_Value: {x: 0.225, y: 0.85, z: 0.05, w: 0.95}
+  speed:
+    m_OverrideState: 1
+    m_Value: 1
 --- !u!114 &8133619234732192967
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -122,14 +79,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   active: 1
   threshold:
-    m_OverrideState: 0
-    m_Value: 0.9
+    m_OverrideState: 1
+    m_Value: 0.8
   intensity:
     m_OverrideState: 1
     m_Value: 2
   scatter:
     m_OverrideState: 1
-    m_Value: 0.6
+    m_Value: 0.7
   clamp:
     m_OverrideState: 0
     m_Value: 65472
@@ -149,43 +106,3 @@ MonoBehaviour:
   dirtIntensity:
     m_OverrideState: 0
     m_Value: 0
---- !u!114 &8350349414379319508
-MonoBehaviour:
-  m_ObjectHideFlags: 3
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c12f8b0d59df2742b1a7f9b2b2a3b53, type: 3}
-  m_Name: GlitchArtComponent
-  m_EditorClassIdentifier: 
-  active: 0
-  isShow:
-    m_OverrideState: 1
-    m_Value: 1
-  analogGlitchMode:
-    m_OverrideState: 1
-    m_Value: 1
-  scanLineJitter:
-    m_OverrideState: 1
-    m_Value: {x: 0.01, y: 0.975}
-  horizontalShakeMode:
-    m_OverrideState: 1
-    m_Value: 1
-  horizontalShake:
-    m_OverrideState: 1
-    m_Value: 0.001
-  colorDriftMode:
-    m_OverrideState: 1
-    m_Value: 1
-  colorDrift:
-    m_OverrideState: 1
-    m_Value: 0.25
-  verticalJumpMode:
-    m_OverrideState: 1
-    m_Value: 1
-  verticalJump:
-    m_OverrideState: 1
-    m_Value: 0.15

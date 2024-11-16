@@ -1,5 +1,6 @@
 using System;
 using TMPro;
+using UCT.Global.Core;
 using UCT.Global.UI;
 using UnityEngine;
 
@@ -29,8 +30,9 @@ namespace UCT.Overworld
 
         private TextMeshProUGUI GetTypeMessage()
         {
-            if (!_typeMessage)
-                _typeMessage = GameObject.Find("BackpackCanvas/RawImage/Talk/UITalk").GetComponent<TextMeshProUGUI>();
+            var uiTalk = GameObject.Find("BackpackCanvas/RawImage/Talk/UITalk");
+;            if (!_typeMessage && uiTalk)
+                _typeMessage = uiTalk.GetComponent<TextMeshProUGUI>();
 
             return _typeMessage;
         }

@@ -4,6 +4,7 @@ using UCT.Global.UI;
 using UCT.Overworld;
 using UCT.Service;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
 namespace UCT.Global.Core
@@ -68,10 +69,13 @@ namespace UCT.Global.Core
         }
         private void ExistingCameraSetup()
         {
-            if (sceneState != MainControl.SceneState.Overworld) return;
+            
             System.Diagnostics.Debug.Assert(Camera.main != null, "Camera.main != null");
             var mainCamera = Camera.main.GetComponent<CameraFollowPlayer>();
-            CameraSetup(mainCamera);
+            if (sceneState != MainControl.SceneState.Overworld)
+                Destroy(mainCamera.gameObject);
+            else
+                CameraSetup(mainCamera);
         }
         private void NonexistentCameraSetup()
         {
