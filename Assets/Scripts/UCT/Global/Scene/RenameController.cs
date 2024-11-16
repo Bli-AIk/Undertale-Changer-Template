@@ -188,8 +188,10 @@ namespace UCT.Global.Scene
         private void Update()
         {
             if (MainControl.Instance.overworldControl.isSetting) return;
-            _randomNameTip.color = new Color(1,1,1,_randomSetNameTime / RandomSetNameTimeMax);
-            _backspaceTip.color  = new Color(1,1,1,_backspaceTime / BackspaceTimeMax);
+            _randomNameTip.color =
+                new Color(1, 1, 1, Mathf.Sin(_randomSetNameTime / RandomSetNameTimeMax * Mathf.PI / 2));
+            _backspaceTip.color = 
+                new Color(1, 1, 1, Mathf.Sin((_backspaceTime - 0.3f) / (BackspaceTimeMax - 0.3f) * Mathf.PI / 2));
             SetPinYin();
             
             switch (sceneState)
@@ -291,7 +293,7 @@ namespace UCT.Global.Scene
                         sceneState = SceneState.Naming;
                         _animMove.Kill();
                         _animScale.Kill();
-                        _nameText.transform.localPosition = new Vector3(8.95f, 0.6f);
+                        _nameText.transform.localPosition = new Vector3(0, 0.6f);
                         _nameText.transform.localScale = Vector3.one;
                         _nameText.GetComponent<DynamicTMP>().dynamicMode = 0;
                         _selectText.text =
@@ -332,6 +334,7 @@ namespace UCT.Global.Scene
             }
             if (GameUtilityService.ConvertKeyDownToControl(KeyCode.X))
             {
+                _backspaceTime = 0.25f;
                 sceneState = SceneState.Naming;
                 _animMove.Kill();
                 _animScale.Kill();
@@ -356,17 +359,15 @@ namespace UCT.Global.Scene
                 selectedCharactersId = 1;
                 if (MainControl.Instance.overworldControl.textWidth)
                     _selectText.text =
-                        "<size=0>wwww</size>" +
                         TextProcessingService.GetFirstChildStringByPrefix(
                             MainControl.Instance.overworldControl.sceneTextsSave, "No") +
                         "    <color=yellow>" +
                         TextProcessingService.GetFirstChildStringByPrefix(
                             MainControl.Instance.overworldControl.sceneTextsSave, "Yes") + "</color>";
                 else
-                    _selectText.text = "<color=#00000000><size=2>wwww</size></color>" +
-                                       TextProcessingService.GetFirstChildStringByPrefix(
+                    _selectText.text = TextProcessingService.GetFirstChildStringByPrefix(
                                            MainControl.Instance.overworldControl.sceneTextsSave, "No") +
-                                       "    <color=#00000000><size=5>wwwwwwwww</size></color><color=yellow>" +
+                                       "    <indent=85><color=yellow>" +
                                        TextProcessingService.GetFirstChildStringByPrefix(
                                            MainControl.Instance.overworldControl.sceneTextsSave, "Yes") +
                                        "</color>";
@@ -375,17 +376,17 @@ namespace UCT.Global.Scene
             {
                 selectedCharactersId = 0;
                 if (MainControl.Instance.overworldControl.textWidth)
-                    _selectText.text = "<color=#00000000><size=0>wwww</size><color=yellow>" +
+                    _selectText.text = "<color=yellow>" +
                                        TextProcessingService.GetFirstChildStringByPrefix(
                                            MainControl.Instance.overworldControl.sceneTextsSave, "No") +
                                        "</color>    <color=white>" +
                                        TextProcessingService.GetFirstChildStringByPrefix(
                                            MainControl.Instance.overworldControl.sceneTextsSave, "Yes");
                 else
-                    _selectText.text = "<color=#00000000><size=2>wwww</size></color><color=yellow>" +
+                    _selectText.text = "<color=yellow>" +
                                        TextProcessingService.GetFirstChildStringByPrefix(
                                            MainControl.Instance.overworldControl.sceneTextsSave, "No") +
-                                       "</color>    <color=#00000000><size=5>wwwwwwwww</size></color>" +
+                                       "</color>    <indent=85>" +
                                        TextProcessingService.GetFirstChildStringByPrefix(
                                            MainControl.Instance.overworldControl.sceneTextsSave, "Yes");
             }
@@ -526,7 +527,7 @@ namespace UCT.Global.Scene
                         if (MainControl.Instance.overworldControl.textWidth)
                         {
                             _selectText.text =
-                                "<size=0>wwww</size><color=yellow>" +
+                                "<color=yellow>" +
                                 TextProcessingService.GetFirstChildStringByPrefix(
                                     MainControl.Instance.overworldControl.sceneTextsSave, "No") +
                                 "</color>    " +
@@ -536,10 +537,10 @@ namespace UCT.Global.Scene
                         else
                         {
                             _selectText.text =
-                                "<size=2><color=#00000000>wwww</color></size><color=yellow>" +
+                                "<color=yellow>" +
                                 TextProcessingService.GetFirstChildStringByPrefix(
                                     MainControl.Instance.overworldControl.sceneTextsSave, "No") +
-                                "</color>    <color=#00000000><size=5>wwwwwwwww</size></color>" +
+                                "</color>    <indent=85>" +
                                 TextProcessingService.GetFirstChildStringByPrefix(
                                     MainControl.Instance.overworldControl.sceneTextsSave, "Yes");
                         }
@@ -559,19 +560,12 @@ namespace UCT.Global.Scene
                             if (!bool.Parse(lister[1]))
                             {
                                 isSelectedDone = false;
-                                if (MainControl.Instance.overworldControl.textWidth)
-                                    _selectText.text = "<size=0>wwww</size><color=yellow>" +
-                                                       TextProcessingService
-                                                           .GetFirstChildStringByPrefix(
-                                                               MainControl.Instance.overworldControl
-                                                                   .sceneTextsSave, "GoBack") +
-                                                       "</color>";
-                                else
-                                    _selectText.text =
-                                        "<size=2><color=#00000000>wwww</color></size><color=yellow>" +
-                                        TextProcessingService.GetFirstChildStringByPrefix(
-                                            MainControl.Instance.overworldControl.sceneTextsSave,
-                                            "GoBack") + "</color>";
+                                _selectText.text = "<color=yellow>" +
+                                                   TextProcessingService
+                                                       .GetFirstChildStringByPrefix(
+                                                           MainControl.Instance.overworldControl
+                                                               .sceneTextsSave, "GoBack") +
+                                                   "</color>";
                             }
 
                             break;
@@ -609,7 +603,7 @@ namespace UCT.Global.Scene
             {
                 SubAlphabetNum();
             }
-            else if (GameUtilityService.ConvertKeyToControl(KeyCode.C))
+            if (GameUtilityService.ConvertKeyToControl(KeyCode.C))
             {
                 if (_randomSetNameTime < RandomSetNameTimeMax)
                     _randomSetNameTime += Time.deltaTime;
@@ -625,11 +619,11 @@ namespace UCT.Global.Scene
             {
                 AddAlphabetNum();
             }
-            else
-            {
-                _randomSetNameTime = _randomSetNameTime > 0 ? _randomSetNameTime - Time.deltaTime : 0;
+            
+            if (!GameUtilityService.ConvertKeyToControl(KeyCode.X))
                 _backspaceTime = _backspaceTime > 0 ? _backspaceTime - Time.deltaTime : 0;
-            }
+            if (!GameUtilityService.ConvertKeyToControl(KeyCode.C))
+                _randomSetNameTime = _randomSetNameTime > 0 ? _randomSetNameTime - Time.deltaTime : 0;
             
             if (breaker) return;
             if (GameUtilityService.ConvertKeyDownToControl(KeyCode.UpArrow))

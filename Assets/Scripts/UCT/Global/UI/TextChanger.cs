@@ -11,7 +11,6 @@ namespace UCT.Global.UI
     /// </summary>
     public class TextChanger : MonoBehaviour
     {
-        //public TMP_FontAsset assetback;
         private TMP_Text _tmp;
 
         public bool width;//若中英混搭 则true就完事了
@@ -19,9 +18,7 @@ namespace UCT.Global.UI
         [FormerlySerializedAs("Options")] [Header("US/CN")]
         public Vector4[] options;
 
-        //public float[] sizes;
-
-        //public bool no = true;
+        public float[] fontSize = new float[2];
         private void Start()
         {
             Set();
@@ -31,33 +28,31 @@ namespace UCT.Global.UI
         public void Set()
         {
             _tmp = GetComponent<TMP_Text>();
-
-            /*
-       while (tmp.font != assetback)
-        {
-            tmp.font = assetback;
-        }
-        */
             width = MainControl.Instance.overworldControl.textWidth;
-            /*
-        if (tmp.font != assetback)
-            tmp.font = assetback;
-        */
+        
         }
 
         public void Change()
         {
-            if (_tmp != null)
+            while (true)
             {
-                _tmp.characterSpacing = options[Convert.ToInt32(width)].x;
-                _tmp.wordSpacing = options[Convert.ToInt32(width)].y;
-                _tmp.lineSpacing = options[Convert.ToInt32(width)].z;
-                _tmp.paragraphSpacing = options[Convert.ToInt32(width)].w;
-            }
-            else
-            {
-                Set();
-                Change();
+                if (_tmp != null)
+                {
+                    _tmp.characterSpacing = options[Convert.ToInt32(width)].x;
+                    _tmp.wordSpacing = options[Convert.ToInt32(width)].y;
+                    _tmp.lineSpacing = options[Convert.ToInt32(width)].z;
+                    _tmp.paragraphSpacing = options[Convert.ToInt32(width)].w;
+
+                    if (fontSize.Length >= 2 && fontSize[0] != 0 && fontSize[1] != 0)
+                        _tmp.fontSize = fontSize[Convert.ToInt32(width)];
+                }
+                else
+                {
+                    Set();
+                    continue;
+                }
+
+                break;
             }
         }
     }

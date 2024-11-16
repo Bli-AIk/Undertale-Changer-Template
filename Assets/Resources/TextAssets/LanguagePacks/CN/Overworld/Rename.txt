@@ -13,14 +13,14 @@ RenameSp\name|true|true|text;
 */
 
 DefaultQuestion\是这个名字没错吗？;
-NameTheHuman\为坠落的人类命名。;
+NameTheHuman\<size=6.15>为坠落的人类命名。;
 Quit\退出;
 Backspace\退格;
 Done\完成;
-Yes\是;
-No\<color=#00000000><size=2.5>wwww</size></color>否;
+Yes\<indent=75>是;
+No\<indent=5.25>否;
 GoBack\返回;
-Teach\---游戏教学---<enter><enter>[Z或ENTER]-确认<enter>[X或SHIFT]-取消<enter>[C或CTRL]-菜单(游戏内)<enter>[V]-设置<enter>[F4]-全屏化<enter>[长按ESC]-退出游戏<enter>当HP为0时，你就输了。;
+Teach\---游戏教学---<line-height=2.5><indent=-1.5><enter></line-height><enter>[Z或ENTER]-确认<enter>[X或SHIFT]-取消<enter>[C或CTRL]-菜单(游戏内)<enter>[V]-设置<enter>[F4]-全屏化<enter>[长按ESC]-退出游戏<enter>当HP为0时，你就输了。;
 
 PageNext\下一页;
 PageLast\上一页;

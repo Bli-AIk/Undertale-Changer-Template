@@ -22,13 +22,13 @@ In particular, if the text is<gaster>, the game will crash.
 
 DefaultQuestion\Is this name correct?;
 NameTheHuman\Name the fallen human.;
-Quit\<indent=-2.225>Quit;
+Quit\Quit;
 Backspace\Backspace;
 Done\Done;
 Yes\Yes;
-No\No;
+No\<indent=6.25>No;
 GoBack\Go back;
-Teach\---Instruction---<enter><enter>[Z or ENTER]-Confirm<enter>[X or SHIFT]-Cancel<enter>[C or CTRL]-Menu(In-Game)<enter>[V]-Settings<enter>[F4]-Fullscreen<enter>[Hold ESC]-Quit<enter>When HP is 0,you lose.;
+Teach\--- Instruction ---<line-height=5><indent=-1.5><enter></line-height><enter>[Z or ENTER] - Confirm<enter>[X or SHIFT] - Cancel<enter>[C or CTRL] - Menu(In-Game)<enter>[V] - Settings<enter>[F4] - Fullscreen<enter>[Hold ESC] - Quit<enter>When HP is 0,you lose.;
 
 PageNext\Next page;
 PageLast\Last page;
