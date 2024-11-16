@@ -661,10 +661,14 @@ namespace UCT.Global.Scene
                 else if (selectedCharactersId >= alphabetLength &&
                          selectedCharactersId <= alphabetLength + 3) //底部键的情况
                 {
-                    var lowercaseRemainderFix = lowercaseRemainder > 0 ? lowercaseRemainder : MaxCharactersPerLine;
+                    var lowercaseRemainderFix = lowercaseRemainder > 0
+                        ? lowercaseRemainder
+                        : MaxCharactersPerLine;
                     int possibleCharacterId;
                     if (selectedCharactersId == alphabetLength)
                     {
+                        if (alphabetLowercase.Length == 0 && lowercaseRemainderFix == MaxCharactersPerLine)
+                            lowercaseRemainderFix = uppercaseRemainder;
                         possibleCharacterId = alphabetLength - lowercaseRemainderFix;
                     }
                     else if (selectedCharactersId == alphabetLength + 1)
@@ -735,10 +739,14 @@ namespace UCT.Global.Scene
                 }
                 else if (selectedCharactersId >= alphabetLength - MaxCharactersPerLine) //到下面三个键的情况
                 {
-                    var lowercaseRemainderFix = lowercaseRemainder > 0 ? lowercaseRemainder : MaxCharactersPerLine;
+                    var lowercaseRemainderFix = lowercaseRemainder;
 
                     if (selectedCharactersId < alphabetCapital.Length)
                         lowercaseRemainderFix += uppercaseRemainder;
+                    if(alphabetLowercase.Length > 0)
+                        if (lowercaseRemainder == 0 ||
+                            selectedCharactersId < alphabetLength - lowercaseRemainder)
+                            lowercaseRemainderFix += MaxCharactersPerLine;
 
                     if (selectedCharactersId == alphabetLength)
                         selectedCharactersId = 0;
