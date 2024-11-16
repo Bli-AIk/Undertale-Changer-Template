@@ -2,71 +2,71 @@
 
 This document outlines the long-term update plan for UCT.
 
-Please note that these update plans are not in any particular order and may change, be put on hold, or be discarded.
+Note that these update plans are not in any particular order and may change, be postponed, or abandoned.
 
-For the long-term update plan for UCT, please refer to [PLAN.md](PLAN.md), [PLAN_zh-CN.md](PLAN_zh-CN.md), or [PLAN_zh-TW.md](PLAN_zh-TW.md).
+For the long-term update plan of UCT, please refer to [PLAN.md](PLAN.md), [PLAN_zh-CN.md](PLAN_zh-CN.md), or [PLAN_zh-TW.md](PLAN_zh-TW.md).
 
-For specific update details regarding UCT, please consult [CHANGELOG.md](CHANGELOG.md), [CHANGELOG_zh-CN.md](CHANGELOG_zh-CN.md), or [CHANGELOG_zh-TW.md](CHANGELOG_zh-TW.md).
+For specific update content about UCT, please refer to [CHANGELOG.md](CHANGELOG.md), [CHANGELOG_zh-CN.md](CHANGELOG_zh-CN.md), or [CHANGELOG_zh-TW.md](CHANGELOG_zh-TW.md).
 
-Simplified Chinese updates and changelogs are prioritized; other languages will use GPT for translation during **version number changes**.
+Simplified Chinese updates and changelogs will be updated first, while other languages will utilize GPT for translation during **version number changes**.
 
-## General 
-### Existing System Refinement
+## General
+### Refinement of Existing Systems
 - [x] Refine BGM controller[^1]
-- [ ] Store item data to ScriptableObject
+- [ ] Store item data in ScriptableObject
 
 ### UI Optimization and Refinement
-- [ ] Add pixel-perfect and upscale to 640x480[^2]
-- [ ] Refine / UI Dr requirements for MENU interface and OW save interface
+- [ ] Add pixel-perfect and magnified 640x480[^2]
+- [ ] Refine/UI Dr design MENU interface and OW save interface
 - [ ] Refine settings interface
-- [ ] Redesign settings interface UI
+- [ ] Redesign settings UI
 
 ### Performance Optimization
 - [x] Add DebugLogger script[^3]
-- [ ] Use coroutines to call language packs instead of calling them all at once
+- [ ] Use coroutines to call language packs instead of calling all at once
 
 ## OW Class
 ### Event System
 - [ ] Redesign OW event system
-- [ ] Add Dr style chasing system
+- [ ] Add Dr-style chase battle system
 
-### Plot System
-- [ ] Introduce [ink](https://github.com/inkle/ink) scripting language into the plot system 
-- [ ] Add proofreading scenes for the plot system[^4]
-- [ ] Add OW plot controller
+### Story System
+- [ ] Introduce [ink](https://github.com/inkle/ink) scripting language into the story system
+- [ ] Add story system proofreading scene[^4]
+- [ ] Add OW story controller
 
 ### Data Storage
-- [ ] Store room data to ScriptableObject
+- [ ] Store room data in ScriptableObject
 
 ## Combat Class
 ### Data Storage
-- [x] Store bullet data to ScriptableObject
-- [ ] Store turn data to ScriptableObject
+- [x] Store bullet data in ScriptableObject
+- [ ] Store round data in ScriptableObject
 
-### Turn System Redesign
-- [ ] Visualize turn system
+### Round System Redesign
+- [ ] Visualize round system
 - [ ] Add path bullet generator
 
 ### Combat System Expansion
-- [ ] Add functionality to insert subtitles/dialogue during turns
-- [ ] Add multiple combat[^5]
+- [ ] Add functionality to insert subtitles/dialogue during rounds
+- [ ] Add multiple battles[^5]
 
-### Fixes and Optimization
+### Fixes and Optimizations
 - [x] Optimize 3D background
-- [x] Fix blue heart
+- [x] Fix blue hearts
 
-### Irregular Frame
-- [ ] Fix irregular frame
-- [ ] Redesign collision system to accommodate irregular frame
+### Asymmetrical Frame
+- [ ] Fix asymmetrical frame
+- [ ] Redesign collision system to accommodate asymmetrical frame
 
-### Judgment and Collision
-- [ ] Refine FIGHT related judgment
-- [ ] Add monster death judgment
-- [ ] Complete the seven colors of player souls
+### Judgement and Collision
+- [ ] Refine FIGHT-related judgements
+- [ ] Add monster death judgement
+- [ ] Complete seven player soul colors
 
-## New Class
+## New Additions
 ### Scene Expansion
-- [ ] Add multilingual expansion in naming scene
+- [ ] Add multilingual extension to the naming scene
 - [ ] Add battle settlement scene
 - [ ] Add BGM broadcasting scene
 
@@ -74,7 +74,7 @@ Simplified Chinese updates and changelogs are prioritized; other languages will 
 - [x] Add built-in projection frame
 - [x] Add 3D renderer
 
-### Functional Expansion
+### Functionality Expansion
 - [ ] Add CC subtitle system[^6]
 - [ ] Add achievement system
 - [ ] Add UI manager
@@ -82,14 +82,14 @@ Simplified Chinese updates and changelogs are prioritized; other languages will 
 
 ### Accessibility
 - [ ] Add narrator
-- [ ] Add colorblind filter
+- [ ] Add color blind filter
 
-## Other Class
+## Others
 ### Project Localization
-- [x] Merge Chinese and English branches, replacing comment text via scripts
+- [x] Merge Chinese and English branches, replacing annotation text through scripts
 
 ### Cleanup and Maintenance
-- [x] Remove redundant original textures
+- [x] Remove unnecessary original textures
 
 ### Tutorials
 - [ ] New wiki and video tutorials
@@ -97,8 +97,8 @@ Simplified Chinese updates and changelogs are prioritized; other languages will 
 ---
 
 [^1]: Primarily will add functions such as calculating beats.
-[^2]: Will attempt to add two additional options in settings to allow you to use pixel-perfect filters / upscale to a higher resolution rather than directly using a larger resolution to save performance.
-[^3]: This script will encapsulate all Unity's Debug related functions for calling, which will be executed only within the editor.
-[^4]: This scene will list all narrative content in a manner consistent with the game's display, facilitating quick proofreading.
-[^5]: Allowing for multiple fights and battles within the game.
-[^6]: Localization personnel can preview CC subtitles during the stage where translations are completed but not formally embedded, to provide localized support to players in advance.
+[^2]: Will attempt to add two additional options in settings to allow pixel-perfect filtering / enlarging to higher resolution at 640x480 instead of using a higher resolution directly to save performance.
+[^3]: This script will encapsulate all Unity-related Debug functions within to call, which only execute within the editor.
+[^4]: This scene will list all story content in a way consistent with in-game display for quick proofreading.
+[^5]: Refers to allowing multiple battles within the game.
+[^6]: Localization personnel can provide preliminary localization support to players by releasing a CC subtitles preview version during the stage where translations have been completed but not officially integrated.
