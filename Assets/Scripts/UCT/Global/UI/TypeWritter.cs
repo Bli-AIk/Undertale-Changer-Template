@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Threading.Tasks;
 using MEC;
 using TMPro;
 using UCT.Control;
@@ -101,7 +103,7 @@ namespace UCT.Global.UI
             clockTime = clock;
             pressX = false;
             isStop = false;
-            this.fx = inputFX;
+            fx = inputFX;
             if (isOverworld)
                 _talkBoxPositionChanger.Change(true, originString[.."<passText>".Length] == "<passText>", true, this);
 
@@ -206,7 +208,7 @@ namespace UCT.Global.UI
                             var save = spText[7..];
                             save = save[..^1];
                             var s = int.Parse(save);
-                            if (spriteChanger != null)
+                            if (spriteChanger)
                                 spriteChanger.ChangeImage(s);
                             _talkBoxPositionChanger.Change(true, s >= 0, false);
                         }
@@ -236,12 +238,11 @@ namespace UCT.Global.UI
                         }
                         else if (TextProcessingService.IsSameFrontTexts(spText, "<passText="))
                         {
-                            var save = spText[10..];
-                            save = save[..^1];
-
-                            Invoke(nameof(PassText), float.Parse(save));
-
+                            var delay = float.Parse(spText[10..^1]);
                             passText = true;
+                            passTextString = passTextString[..^spText.Length];
+                            PassTextWithDelay(spText, delay);
+                            goto PassText;
                         }
                         else if (TextProcessingService.IsSameFrontTexts(spText, "<storyFade"))
                         {
@@ -275,7 +276,7 @@ namespace UCT.Global.UI
                         }
                         else
                         {
-                            if (spText[0] == '<' && spText[2] == '>')
+                            if (spText.Length >= 2 && spText[0] == '<' && spText[2] == '>')
                             {
                                 spText = spText[1].ToString();
                             }
@@ -339,7 +340,6 @@ namespace UCT.Global.UI
                                 case "<passText>":
                                     passText = true;
                                     passTextString = passTextString[..^spText.Length];
-                                    //passTextString += spText.Length * 2 - 5;
                                     goto PassText;
                                 default://富文本
 
@@ -395,7 +395,7 @@ namespace UCT.Global.UI
                 if (!(pressX || _isJumpingText))
                     yield return TypeStopSeconds();
 
-                if (tmpText != null)
+                if (tmpText)
                 {
                     tmpText.text = endString;
 
@@ -424,8 +424,9 @@ namespace UCT.Global.UI
             }
 
             isRunning = false;
-            if (originString.Length > "<passText>".Length)
-                originString = originString["<passText>".Length..];
+            var prefix = ExtractPassTextPrefix(originString);
+            if (originString.Length > prefix.Length)
+                originString = originString[prefix.Length..];
             yield break;
 
             float TypeStopSeconds()
@@ -588,7 +589,7 @@ namespace UCT.Global.UI
             }
             if (passText && GameUtilityService.ConvertKeyDownToControl(KeyCode.Z) && _typeMode != TypeMode.CantZx)
             {
-                PassText();
+                PassText("<passText>");
             }
             else if (!(pressX || _isJumpingText) && !canNotX && GameUtilityService.ConvertKeyDownToControl(KeyCode.X) &&
                      _typeMode != TypeMode.CantZx) //跳字
@@ -604,10 +605,10 @@ namespace UCT.Global.UI
 
         }
 
-        private void PassText()
+        private void PassText(string inputPassText)
         {
             endString = "";
-            if (_tmpText != null)
+            if (_tmpText)
             {
                 _tmpText.text = "";
             }
@@ -617,8 +618,8 @@ namespace UCT.Global.UI
             if (isOverworld)
             {
                 _talkBoxPositionChanger.Change(false, false, true, this);
-                if (originString[.."<passText>".Length] == "<passText>")
-                    originString = originString["<passText>".Length..];
+                if (originString[..inputPassText.Length] == inputPassText)
+                    originString = originString[inputPassText.Length..];
             }
             pressX = false;
             Timing.RunCoroutine(_Typing(_tmpText));
@@ -631,6 +632,32 @@ namespace UCT.Global.UI
         {
             _canvasAnim = CanvasController.Instance.animator;
             _endInBattle = true;
+        }
+
+
+        private async void PassTextWithDelay(string inputText, float delayInSeconds)
+        {
+            var delayInMilliseconds = (int)(delayInSeconds * 1000); 
+            await Task.Delay(delayInMilliseconds); 
+            PassText(inputText); 
+        }
+
+        private string ExtractPassTextPrefix(string input)
+        {
+            if (input.StartsWith("<passText>", StringComparison.Ordinal))
+            {
+                return "<passText>";
+            }
+
+            if (!input.StartsWith("<passText=", StringComparison.Ordinal)) return null;
+            var startIndex = "<passText=".Length;
+            var endIndex = input.IndexOf('>', startIndex);
+
+            if (endIndex <= startIndex) return null;
+            var numberPart = input[startIndex..endIndex];
+            return double.TryParse(numberPart, NumberStyles.Float, CultureInfo.InvariantCulture, out _)
+                ? input[..(endIndex + 1)]
+                : null;
         }
     }
 }

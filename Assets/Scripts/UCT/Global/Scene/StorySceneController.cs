@@ -31,7 +31,7 @@ namespace UCT.Global.Scene
             _typeWritter = GetComponent<TypeWritter>();
             _spriteRenderer = transform.Find("Pic").GetComponent<SpriteRenderer>();
             _tmp = transform.Find("Text").GetComponent<TextMeshPro>();
-            mask = transform.Find("Mask").gameObject;
+            mask = GameObject.Find("MaskCanvas").gameObject;
 
             _typeWritter.TypeOpen(TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.sceneTextsSave, "Text"), false, 0, 1, _tmp, TypeWritter.TypeMode.CantZx);
         }
@@ -40,12 +40,10 @@ namespace UCT.Global.Scene
         {
             if (MainControl.Instance.overworldControl.isSetting || MainControl.Instance.overworldControl.pause)
                 return;
-            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
-            {
-                _typeWritter.TypeStop();
-                _tmp.text = "";
-                GameUtilityService.FadeOutAndSwitchScene("Start", Color.black);
-            }
+            if (!GameUtilityService.ConvertKeyDownToControl(KeyCode.Z)) return;
+            _typeWritter.TypeStop();
+            _tmp.text = "";
+            GameUtilityService.FadeOutAndSwitchScene("Start", Color.black);
         }
 
         public void Fade(int number)

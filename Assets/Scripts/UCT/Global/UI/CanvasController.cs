@@ -756,8 +756,7 @@ namespace UCT.Global.UI
         /// <param name="isOutSide">是否为外部路径</param>
         private static string GetLanguagePacksName(string pathString, string returnString, bool isOutSide)
         {
-            var strings = new List<string>();
-            DataHandlerService.LoadItemData(strings, ReadFile(pathString + "\\LanguagePackInformation", isOutSide));
+            var strings = DataHandlerService.LoadItemData(ReadFile(pathString + "\\LanguagePackInformation", isOutSide));
             strings = DataHandlerService.ChangeItemData(strings, true, new List<string>());
             return TextProcessingService.GetFirstChildStringByPrefix(strings, returnString);
         }

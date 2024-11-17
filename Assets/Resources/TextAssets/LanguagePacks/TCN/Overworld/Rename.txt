@@ -46,7 +46,7 @@ Chosung\韓語初聲;
 Jungsung\韓語中聲;
 Jongsung\韓語終聲;
 
-MenuUnder\Undertale (c) toby fox 2015<enter>undertale changer V;
+MenuUnder\Undertale (c) toby fox 2015<enter>undertale changer template V;
 
 RenameSp\chara|true|false|真正的名字。;
 RenameSp\frisk|true|false|警告：這個名字<enter>你起了也沒用。 <enter>說穿了，咱懶得整困難模式。;

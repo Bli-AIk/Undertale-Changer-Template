@@ -118,8 +118,8 @@ namespace UCT.Global.Core
             //--------------------------------------------------------------------------------
             ItemControl.itemText = DataHandlerService.LoadLanguageData("UI\\ItemText", languagePackId);
 
-            DataHandlerService.LoadItemData(ItemControl.itemMax, ItemControl.itemData);
-            DataHandlerService.LoadItemData(ItemControl.itemTextMax, ItemControl.itemText);
+            ItemControl.itemMax = DataHandlerService.LoadItemData(ItemControl.itemData);
+            ItemControl.itemTextMax = DataHandlerService.LoadItemData(ItemControl.itemText);
 
             TextProcessingService.ClassifyStringsByPrefix(ItemControl.itemTextMax, new[] { "Data", "Item" }, new[] { ItemControl.itemTextMaxData, ItemControl.itemTextMaxItem });
             DataHandlerService.ClassifyItemsData(ItemControl);
@@ -145,7 +145,7 @@ namespace UCT.Global.Core
             
             overworldControl.settingAsset = DataHandlerService.LoadLanguageData("UI\\Setting", languagePackId);
 
-            DataHandlerService.LoadItemData(overworldControl.settingSave, overworldControl.settingAsset);
+            overworldControl.settingSave = DataHandlerService.LoadItemData(overworldControl.settingAsset);
 
             if (sceneState == SceneState.InBattle)
                 return;
@@ -156,7 +156,7 @@ namespace UCT.Global.Core
 
             if (SceneManager.GetActiveScene().name == "Start")
                 return;
-            DataHandlerService.LoadItemData(overworldControl.sceneTextsSave, overworldControl.sceneTextsAsset);
+            overworldControl.sceneTextsSave = DataHandlerService.LoadItemData(overworldControl.sceneTextsAsset);
 
             overworldControl.settingSave = DataHandlerService.ChangeItemData(overworldControl.settingSave, true, new List<string>());
 
@@ -202,7 +202,7 @@ namespace UCT.Global.Core
                     BattleControl.turnDialogAsset.Add(File.ReadAllText(t));
             }
 
-            DataHandlerService.LoadItemData(BattleControl.uiTextSave, BattleControl.uiText);
+            BattleControl.uiTextSave = DataHandlerService.LoadItemData(BattleControl.uiText);
             TextProcessingService.GetFirstChildStringByPrefix(BattleControl.uiTextSave, BattleControl.actSave, "Act\\");
             TextProcessingService.GetFirstChildStringByPrefix(BattleControl.uiTextSave, BattleControl.mercySave, "Mercy\\");
             TextProcessingService.GetFirstChildStringByPrefix(BattleControl.uiTextSave, BattleControl.turnTextSave, "Turn\\");

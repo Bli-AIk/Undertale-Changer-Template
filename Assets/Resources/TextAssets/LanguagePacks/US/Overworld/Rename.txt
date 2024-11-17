@@ -54,7 +54,7 @@ Chosung\Cho;
 Jungsung\Jun;
 Jongsung\Jon;
 
-MenuUnder\Undertale (c)  toby fox 2015<enter>undertale changer V;
+MenuUnder\Undertale (c)  toby fox 2015<enter>undertale changer template V;
 
 RenameSp\chara|true|false|The true name.;
 RenameSp\frisk|true|false|WARNING:This name will<enter>cause nothing to happen.<enter>To put it bluntly, I'm lazy.;

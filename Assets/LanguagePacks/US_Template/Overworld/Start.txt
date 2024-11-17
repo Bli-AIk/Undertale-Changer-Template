@@ -1,4 +1,4 @@
-Undertale:Changer is based 
+Undertale-Changer-Template is based 
 on Unity Engine produced 
 Undertale fan game template.
 It is strongly recommended that 
@@ -15,3 +15,4 @@ and games made based on the template
 in any form.
 Please be sure to use it before read
 the readme.md file in this project.
+[Press Z OR ENTER]

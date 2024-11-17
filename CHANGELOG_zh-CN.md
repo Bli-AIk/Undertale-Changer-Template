@@ -34,13 +34,13 @@
 
 - [x] 将OW场景中的框UI轴点均改为正中。
 - [x] 将主摄像机放置在DontDestroyOnLoad，由MainControlSummon生成。（类似于MainControl、BGMControl的生成方式）
-- [x] 对Rename场景UI位置、大小进行检查和修复。
-- [x] 对Menu场景 UI位置、大小进行检查和修复。
-- [ ] 对PPT场景 UI位置、大小进行检查和修复。
-- [ ] 对OW场景 UI位置、大小进行检查和修复。
-- [ ] 对Gameover场景 UI位置、大小进行检查和修复。
-- [ ] 对Battle场景 UI位置、大小进行检查和修复。
-- [ ] 使用\<indent\>替换透明字符缩进。
+- [x] 对 Rename场景 的UI位置、大小进行检查和修复。
+- [x] 对 Menu场景 的UI位置、大小进行检查和修复。
+- [x] 对 PPT场景 与 Start场景 的UI位置、大小进行检查和修复。
+- [ ] 对 OW场景 的UI位置、大小进行检查和修复。
+- [ ] 对 Gameover场景 的UI位置、大小进行检查和修复。
+- [ ] 对 Battle场景 的UI位置、大小进行检查和修复。
+- [ ] 使用 \<indent\> 替换透明字符缩进。
 - [x] 将英文字体进行调整，修复字符重合的问题。
 - [x] 引进 [Fusion](https://github.com/TakWolf/fusion-pixel-font) 8px 字体。
 - [x] 将起名界面的字符数量拓展，分为基本字母、数字与符号、拉丁字母、西里尔字母、希腊字母等。

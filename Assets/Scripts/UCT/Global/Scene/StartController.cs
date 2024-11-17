@@ -1,3 +1,5 @@
+using System;
+using System.Linq;
 using DG.Tweening;
 using TMPro;
 using UCT.Global.Audio;
@@ -12,7 +14,7 @@ namespace UCT.Global.Scene
     /// </summary>
     public class StartController : MonoBehaviour
     {
-        private TextMeshPro _textUnder, _text;
+        private TextMeshPro _textMessage, _textNotice;
         private bool _textUnderOpen;
         private float _time;
         private GameObject _title;
@@ -23,14 +25,20 @@ namespace UCT.Global.Scene
         private void Start()
         {
             _title = transform.Find("Title").gameObject;
-            _textUnder = transform.Find("Title/Text Message").GetComponent<TextMeshPro>();
-            _text = transform.Find("SafeText").GetComponent<TextMeshPro>();
-            _text.color = Color.clear;
-            _textUnder.color = Color.clear;
+            _textMessage = transform.Find("Title/TextMessage").GetComponent<TextMeshPro>();
+            _textNotice = transform.Find("TextNotice").GetComponent<TextMeshPro>();
+            _textNotice.color = Color.clear;
+            _textMessage.color = Color.clear;
             AudioController.Instance.GetFx(11, MainControl.Instance.AudioControl.fxClipUI);
-            _text.text = MainControl.Instance.overworldControl.sceneTextsAsset;
+            
+            var text = MainControl.Instance.overworldControl.sceneTextsAsset;
+            var lines = text.Split(new[] { '\n' }, StringSplitOptions.None);
+            var messageText = lines.Last(); // 获取最后一行文本
+            var noticeText = string.Join("\n", lines.Take(lines.Length - 1)); // 获取除最后一行外的所有文本
+            _textNotice.text = noticeText;
+            _textMessage.text = messageText;
 
-            var playerControl = SaveController.LoadData("Data" + MainControl.Instance.saveDataId);
+            SaveController.LoadData("Data" + MainControl.Instance.saveDataId);
         }
 
         private void Update()
@@ -40,7 +48,7 @@ namespace UCT.Global.Scene
             else if (!_textUnderOpen)
             {
                 _textUnderOpen = true;
-                _textUnder.DOColor(Color.white, 0.5f).SetEase(Ease.Linear);
+                _textMessage.DOColor(Color.white, 0.5f).SetEase(Ease.Linear);
             }
 
             if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
@@ -54,15 +62,10 @@ namespace UCT.Global.Scene
 
                     case 1:
 
-                        _text.DOColor(Color.clear, 1).SetEase(Ease.Linear);
-                        if (MainControl.Instance.playerControl.playerName == "" || MainControl.Instance.playerControl.playerName == null)
-                        {
-                            GameUtilityService.FadeOutAndSwitchScene("Rename", Color.black, false, 2f);
-                        }
-                        else
-                        {
-                            GameUtilityService.FadeOutAndSwitchScene("Menu", Color.black, false, 2f);
-                        }
+                        _textNotice.DOColor(Color.clear, 1).SetEase(Ease.Linear);
+                        GameUtilityService.FadeOutAndSwitchScene(
+                            string.IsNullOrEmpty(MainControl.Instance.playerControl.playerName) ? "Rename" : "Menu",
+                            Color.black, false, 2f);
                         break;
                 }
             }
@@ -82,7 +85,7 @@ namespace UCT.Global.Scene
 
         private void TextAnim()
         {
-            _text.DOColor(Color.white, 1).SetEase(Ease.Linear).OnKill(() => ChangeLayer(1));
+            _textNotice.DOColor(Color.white, 1).SetEase(Ease.Linear).OnKill(() => ChangeLayer(1));
         }
 
         private void ChangeLayer(int lay)

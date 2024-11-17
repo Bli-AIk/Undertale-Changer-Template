@@ -336,44 +336,15 @@ namespace UCT.Service
             return id;
         }
         
-        /*
-        public static bool ForceJumpLoadTurn;
-        public static IEnumerator _LoadItemDataForTurn(List<string> list, TextAsset inputText)//保存的list 导入的text
-        {
-            list.Clear();
-            var text = "";
-            for (var i = 0; i < inputText.text.Length; i++)
-            {
-                if (inputText.text[i] == '/' && inputText.text[i + 1] == '*')
-                {
-                    i++;
-                    while (!(inputText.text[i] == '/' && inputText.text[i - 1] == '*'))
-                    {
-                        i++;
-                    }
-                    i += 2;
-                }
-
-                if (inputText.text[i] != '\n' && inputText.text[i] != '\r' && inputText.text[i] != ';')
-                    text += inputText.text[i];
-                if (inputText.text[i] == ';')
-                {
-                    list.Add(text + ";");
-                    text = "";
-                }
-                if ((i + 1) % 2 == 0 && !ForceJumpLoadTurn)
-                    yield return 0;
-            }
-        }
-        */
         
         /// <summary>
-        /// 调入数据(传入TextAsset)
+        /// 从 TextAsset 加载并解析数据，返回新列表
         /// </summary>
-        // ReSharper disable once MemberCanBePrivate.Global
-        public static void LoadItemData(List<string> list, TextAsset inputText)//保存的list 导入的text
+        /// <param name="inputText">输入的 TextAsset 数据</param>
+        /// <returns>解析后的列表</returns>
+        public static List<string> LoadItemData(TextAsset inputText)
         {
-            list.Clear();
+            var resultList = new List<string>();
             var text = "";
             for (var i = 0; i < inputText.text.Length; i++)
             {
@@ -390,17 +361,19 @@ namespace UCT.Service
                 if (inputText.text[i] != '\n' && inputText.text[i] != '\r' && inputText.text[i] != ';')
                     text += inputText.text[i];
                 if (inputText.text[i] != ';') continue;
-                list.Add(text + ";");
+                resultList.Add(text + ";");
                 text = "";
             }
+            return resultList;
         }
 
+
         /// <summary>
-        /// 调入数据(传入string)
+        /// 从 string 加载并解析数据，返回新列表
         /// </summary>
-        public static void LoadItemData(List<string> list, string inputText)//保存的list 导入的text
+        public static List<string> LoadItemData(string inputText)
         {
-            list.Clear();
+            var resultList = new List<string>();
             var text = "";
             for (var i = 0; i < inputText.Length; i++)
             {
@@ -416,9 +389,10 @@ namespace UCT.Service
                 if (inputText[i] != '\n' && inputText[i] != '\r' && inputText[i] != ';')
                     text += inputText[i];
                 if (inputText[i] != ';') continue;
-                list.Add(text + ";");
+                resultList.Add(text + ";");
                 text = "";
             }
+            return resultList;
         }
 
         /// <summary>
