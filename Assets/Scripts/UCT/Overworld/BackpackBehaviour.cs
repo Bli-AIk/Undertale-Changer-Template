@@ -179,7 +179,7 @@ namespace UCT.Overworld
                     _uiName.text = MainControl.Instance.playerControl.playerName;
                     _uiTexts.text = $"LV {MainControl.Instance.playerControl.lv}\n" +
                                     $"HP {MainControl.Instance.playerControl.hp}/{MainControl.Instance.playerControl.hpMax}\n" +
-                                    $"G {MainControl.Instance.playerControl.gold}";
+                                    $"G<indent=35.6>{MainControl.Instance.playerControl.gold}";
 
                     FlashBackpackBoxRightPoint(select == 1 ? ItemBoxY : InfoBoxY);
                 }
@@ -237,7 +237,7 @@ namespace UCT.Overworld
                                         GameUtilityService.UseItem(typeWritter, typeMessage, sonSelect, plusText);
                                         _uiTexts.text = $"LV {MainControl.Instance.playerControl.lv}\n" +
                                                        $"HP {MainControl.Instance.playerControl.hp}/{MainControl.Instance.playerControl.hpMax}\n" +
-                                                       $"G {MainControl.Instance.playerControl.gold}";
+                                                       $"G<indent=35.6>{MainControl.Instance.playerControl.gold}";
 
                                         goto default;
                                     case 2:

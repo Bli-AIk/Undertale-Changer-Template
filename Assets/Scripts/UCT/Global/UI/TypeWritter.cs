@@ -425,7 +425,7 @@ namespace UCT.Global.UI
 
             isRunning = false;
             var prefix = ExtractPassTextPrefix(originString);
-            if (originString.Length > prefix.Length)
+            if (!string.IsNullOrEmpty(prefix) && originString.Length > prefix.Length)
                 originString = originString[prefix.Length..];
             yield break;
 

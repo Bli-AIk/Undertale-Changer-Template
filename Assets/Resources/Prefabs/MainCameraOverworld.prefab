@@ -204,11 +204,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fecb11bf8cf3f4b4885f13ad73cc55b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  limit: 1
+  isLimit: 1
+  isFollow: 1
   limitX: {x: 0, y: 54}
   limitY: {x: 0, y: 0}
   player: {fileID: 0}
-  isFollow: 1
   followPosition: {x: 0, y: 0, z: 0}
 --- !u!81 &4615378955106348895
 AudioListener:
@@ -263,7 +263,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2bdcc44a046cbb45b8d52d596fc83c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  viewDistance: 17.5
+  viewDistance: 30
 --- !u!1 &4615378955608716333
 GameObject:
   m_ObjectHideFlags: 0
