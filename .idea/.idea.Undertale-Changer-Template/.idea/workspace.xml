@@ -7,8 +7,7 @@
     <list default="true" id="8f7c2298-d077-422b-9131-f9a839bed961" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/MainCameraOverworld.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/MainCameraOverworld.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/UI/TypeWritter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/UI/TypeWritter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/BackpackBehaviour.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/BackpackBehaviour.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Overworld/Example-Corridor.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Overworld/Example-Corridor.unity" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -291,7 +290,7 @@
       <workItem from="1731760986502" duration="4207000" />
       <workItem from="1731802317316" duration="6764000" />
       <workItem from="1731812848140" duration="6876000" />
-      <workItem from="1731841750800" duration="685000" />
+      <workItem from="1731841750800" duration="1986000" />
     </task>
     <servers />
   </component>
