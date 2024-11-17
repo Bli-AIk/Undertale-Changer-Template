@@ -91,6 +91,7 @@
 - [Pinyin4NET](https://github.com/hyjiacan/Pinyin4NET)
 - [NuGetForUnity](https://github.com/GlitchEnzo/NuGetForUnity)
 - [chineseStroke](https://github.com/WTree/chineseStroke)
+- [Alchemy](https://github.com/AnnulusGames/Alchemy)
 
 以上库/插件的贡献者们为本项目提供了优秀的工具和技术支持，衷心感谢你们！
 

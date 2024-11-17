@@ -93,6 +93,7 @@ But it is not recommended to use the 2022 version, otherwise the template may ha
 - [Pinyin4NET](https://github.com/hyjiacan/Pinyin4NET)
 - [NuGetForUnity](https://github.com/GlitchEnzo/NuGetForUnity)
 - [chineseStroke](https://github.com/WTree/chineseStroke)
+- [Alchemy](https://github.com/AnnulusGames/Alchemy)
 
 Thank you very much to the contributors of the above libraries/plugins for providing excellent tools and technical support for this project!
 

@@ -18,21 +18,27 @@ namespace UCT.Overworld
 
         public int select, sonSelect, sonUse;
         private int _sonSelectMax;
+        [HideInInspector]
         public RawImage rawImage;
         private RectTransform _backpack, _uiMessage;
         private TextMeshProUGUI _uiItems, _uiName, _uiTexts, _uiSelect;
+        [HideInInspector]
         public TextMeshProUGUI typeMessage;
         private Image _heart;
         private float _clock;
-        [FormerlySerializedAs("optionsUI")] public BoxDrawer optionsBox;
+        [HideInInspector]
+        public BoxDrawer optionsBox;
         private BoxDrawer _overviewBox, _informationBox;
         private GameObject _player;
         private Camera _mainCamera;
 
-        [FormerlySerializedAs("saveUI")] public BoxDrawer saveBox;
+        [HideInInspector]
+        public BoxDrawer saveBox;
+        [HideInInspector]
         public TextMeshProUGUI saveText;
+        [HideInInspector]
         public RectTransform saveHeart;
-
+        [HideInInspector]
         public TypeWritter typeWritter;
 
         public const int BoxZAxisVisible = 5;
