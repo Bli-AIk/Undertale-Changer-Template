@@ -10,7 +10,7 @@ Read Name\Text;
 Generally speaking, the read name is fixed.
 Specifically,
 RenameSp\name|true|true|text;
-The format is the setting when trying to name a special name. The first true or false is used to determine whether renaming to this name is allowed, and the second true or false is used to determine whether text in the name is case sensitive when detecting
+The format is the setting when trying to name a special name. The first true or false is used to determine whether renaming to this name is allowed, and the second true or false is used to determine whether text in the name is case-sensitive when detecting
 
 In particular, if the text is<gaster>, the game will crash.
 
