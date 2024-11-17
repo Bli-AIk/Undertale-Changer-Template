@@ -2,79 +2,79 @@
 
 This document outlines the long-term update plan for UCT.
 
-Please note that these update plans are not in any specific order and may change, be put on hold, or be abandoned.
+Please note that these updates are not in any particular order and may change, be postponed, or abandoned.
 
 For the long-term update plan of UCT, please refer to [PLAN.md](PLAN.md), [PLAN_zh-CN.md](PLAN_zh-CN.md), or [PLAN_zh-TW.md](PLAN_zh-TW.md).
 
-For specific updates regarding UCT, please refer to [CHANGELOG.md](CHANGELOG.md), [CHANGELOG_zh-CN.md](CHANGELOG_zh-CN.md), or [CHANGELOG_zh-TW.md](CHANGELOG_zh-TW.md).
+For specific update details about UCT, please refer to [CHANGELOG.md](CHANGELOG.md), [CHANGELOG_zh-CN.md](CHANGELOG_zh-CN.md), or [CHANGELOG_zh-TW.md](CHANGELOG_zh-TW.md).
 
-Simplified Chinese update plans/changelogs will be prioritized for updates; other languages will be translated using GPT during **version number changes**.
+The update plan/change log in Simplified Chinese will be prioritized. Other languages will be translated using GPT during **version number changes**.
 
 ## General
-### Refinement of Existing Systems
-- [x] Refine BGM controller[^1]
+### Existing System Refinement
+- [x] Refine BGM Controller[^1]
 - [ ] Store item data in ScriptableObject
 
 ### UI Optimization and Refinement
-- [ ] Add pixel-perfect and scale to 640x480[^2]
-- [ ] Refine / UI Dr. style MENU interface and OW save interface
+- [ ] Add pixel-perfect and upscale to 640x480[^2]
+- [ ] Refine / UI Dr-style MENU and OW save interface
 - [ ] Refine settings interface
-- [ ] Redesign settings interface UI
+- [ ] Redo settings interface UI
 
 ### Performance Optimization
 - [x] Add DebugLogger script[^3]
-- [ ] Use coroutines to call language packs instead of calling them all at once
+- [ ] Use coroutines to call language packs instead of calling all at once
 
-## OW Category
+## OW Class
 ### Event System
-- [ ] Redesign OW event system
-- [ ] Add Dr. style chase battle system
+- [ ] Redo OW event system
+- [ ] Add Dr-style chase system
 
-### Plot System
-- [ ] Introduce [ink](https://github.com/inkle/ink) scripting language into plot system
-- [ ] Add plot system proofreading scene[^4]
-- [ ] Add OW plot controller
+### Story System
+- [ ] Introduce [ink](https://github.com/inkle/ink) scripting language into the story system
+- [ ] Add story system proofreading scene[^4]
+- [ ] Add OW story controller
 
 ### Data Storage
 - [ ] Store room data in ScriptableObject
 
-## Combat Category
+## Combat Class
 ### Data Storage
-- [x] Store bullet curtain data in ScriptableObject
-- [ ] Store turn data in ScriptableObject
+- [x] Store bullet data in ScriptableObject
+- [ ] Store round data in ScriptableObject
 
-### Turn System Redesign
-- [ ] Visualize turn system
+### Round System Redesign
+- [ ] Visualize round system
 - [ ] Add path bullet generator
 
 ### Combat System Expansion
-- [ ] Add functionality to insert subtitles/dialogue during turns
+- [ ] Add feature to insert subtitles/dialogue during rounds
 - [ ] Add multiple battles[^5]
 
-### Fixes and Optimization
-- [x] Optimize 3D background
+### Fixes and Optimizations
+- [x] Optimize 3D backgrounds
 - [x] Fix blue heart
 
-### Irregular Box
-- [ ] Fix irregular box
-- [ ] Redesign collision system to accommodate irregular box
+### Asymmetric Frame
+- [ ] Fix asymmetric frame
+- [ ] Redo collision system to accommodate asymmetric frame
 
-### Judgment and Collision
-- [ ] Refine FIGHT related judgments
+### Judgement and Collision
+- [ ] Refine FIGHT-related judgments
 - [ ] Add monster death judgment
-- [ ] Complete seven player soul colors
+- [ ] Complete the seven player soul colors
 
 ## New Additions
 ### Scene Expansion
 - [ ] Add multilingual expansion in naming scene
-- [ ] Add battle conclusion scene
-- [ ] Add BGM broadcasting scene
+- [ ] Add battle settlement scene
+- [ ] Add BGM airing scene
 
 ### Rendering Expansion
-- [x] Add built-in projection box
+- [x] Add built-in projection frame
 - [x] Add 3D renderer
 
-### Functionality Expansion
+### Function Expansion
 - [ ] Add CC subtitle system[^6]
 - [ ] Add achievement system
 - [ ] Add UI manager
@@ -84,21 +84,21 @@ Simplified Chinese update plans/changelogs will be prioritized for updates; othe
 - [ ] Add narrator
 - [ ] Add colorblind filter
 
-## Other Categories
+## Other
 ### Project Localization
-- [x] Merge Chinese and English branches, replace comment texts through scripts
+- [x] Merge Chinese and English branches by replacing comment text through scripts
 
 ### Cleanup and Maintenance
-- [x] Delete unnecessary original textures
+- [x] Remove unnecessary original textures
 
 ### Tutorials
 - [ ] New wiki and video tutorials
 
 ---
 
-[^1]: Mainly will add functionalities like calculating beat counts.
-[^2]: Will try to add two extra options in the settings to allow using pixel-perfect filter / scaling to larger resolutions from 640x480, rather than directly using higher resolutions to save performance.
-[^3]: This script will encapsulate all Unity's debug-related functions for calling, which will only execute in the editor.
-[^4]: This scene will list all narrative content consistent with in-game display style for quick proofreading.
-[^5]: Allows multiple battles and engagements within the game.
-[^6]: Localization personnel can provide localization support to players ahead of the official embedding phase by releasing a CC subtitle preview version after translation completion.
+[^1]: Mainly will add features like calculating beats.
+[^2]: Will attempt to add two additional options in the settings, allowing you to use a pixel-perfect filter / upscale to a higher resolution from 640x480, rather than directly using a higher resolution to save performance.
+[^3]: This script will encapsulate all Unity's debug-related functions in order to call them, and these functions will execute only in the editor.
+[^4]: This scene will list all story content in a manner consistent with what is displayed in-game for quick proofreading.
+[^5]: This allows for multiple battles in the game.
+[^6]: Localization personnel can provide pre-localization support to players by releasing a preview version of CC subtitles at the stage when translation is complete but not formally embedded.
