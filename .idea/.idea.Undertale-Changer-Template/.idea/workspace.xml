@@ -6,31 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="8f7c2298-d077-422b-9131-f9a839bed961" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Data/Data0.json" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Data/Data0.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/LanguagePacks/US_Template/UI/ItemText.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/LanguagePacks/US_Template/UI/ItemText.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Render Texture/BackpackUI.renderTexture" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Render Texture/BackpackUI.renderTexture.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Fonts/SonFonts/SIMSUN.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Fonts/SonFonts/SIMSUN.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Fonts/SonFonts/fusion-pixel-8px-proportional-zh_hans.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Fonts/SonFonts/fusion-pixel-8px-proportional-zh_hans.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Fonts/UT-UI.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Fonts/UT-UI.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Fonts/UT-UI.asset.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Fonts/UT-UI.asset.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/MainCameraOverworld.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/MainCameraOverworld.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Sprites/Frame.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/US/UI/ItemText.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/US/UI/ItemText.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Menu/Menu/Menu.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Menu/Menu/Menu.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Menu/Rename/Rename.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Menu/Rename/Rename.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Menu/Start/Start.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Menu/Start/Start.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/Overworld/Example-Corridor.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Overworld/Example-Corridor.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Core/MainControl.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Core/MainControl.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Core/MainControlSummon.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Core/MainControlSummon.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/BackpackBehaviour.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/BackpackBehaviour.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/OverworldObjTrigger.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/OverworldObjTrigger.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/OverworldTalkSelect.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/OverworldTalkSelect.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/PlayerBehaviour.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/PlayerBehaviour.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/SpriteChanger.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/SpriteChanger.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/TalkBoxPositionChanger.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/TalkBoxPositionChanger.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Service/GameUtilityService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Service/GameUtilityService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/ProjectSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Overworld/Example-Ruins.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Overworld/Example-Ruins.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Overworld/Example-Study.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Overworld/Example-Study.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Other/FollowSth.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Other/FollowSth.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -72,6 +51,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/d6232873609549b8a045fa15811a5bd346a800/97/2573fdf5/Array.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/Obsolete/OldBoxController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UCT/Global/Core/MainControl.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Scripts/UCT/Global/Other/SetParent.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UCT/Global/Scene/MenuController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UCT/Global/Scene/RenameController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Scripts/UCT/Service/BoxService.cs" root0="FORCE_HIGHLIGHTING" />
@@ -324,7 +304,7 @@
       <workItem from="1731841750800" duration="1986000" />
       <workItem from="1731890363283" duration="165000" />
       <workItem from="1731890619404" duration="12790000" />
-      <workItem from="1731912527857" duration="3124000" />
+      <workItem from="1731912527857" duration="4431000" />
     </task>
     <servers />
   </component>
