@@ -13,13 +13,11 @@ namespace UCT.Global.Other
 
         private void OnTriggerStay2D(Collider2D collision)
         {
-            if (collision.transform.CompareTag("Player"))
+            if (!collision.transform.CompareTag("Player")) return;
+            var playerBehaviour = MainControl.Instance.playerBehaviour;
+            if (playerBehaviour)
             {
-                var playerBehaviour = MainControl.Instance.playerBehaviour;
-                if (playerBehaviour != null)
-                {
-                    playerBehaviour.walk = range;
-                }
+                playerBehaviour.walk = range;
             }
         }
     }

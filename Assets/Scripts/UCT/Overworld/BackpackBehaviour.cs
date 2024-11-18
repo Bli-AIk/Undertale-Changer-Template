@@ -21,7 +21,6 @@ namespace UCT.Overworld
         private SpriteRenderer _heart;
         private float _clock;
         private BoxDrawer _overviewBox, _informationBox;
-        private GameObject _player;
         private TextMeshPro _informationText, _overviewNameText, _overviewInfoText, _optionsText;
 
         [HideInInspector]
@@ -75,7 +74,6 @@ namespace UCT.Overworld
             saveBox = transform.Find("BackpackCamera/SaveBox").GetComponent<BoxDrawer>();
             saveText = transform.Find("BackpackCamera/SaveBox/SaveText").GetComponent<TextMeshPro>();
             saveHeart = transform.Find("BackpackCamera/SaveBox/Heart");
-            _player = GameObject.Find("Player");
         }
 
         private void Update()
@@ -84,9 +82,11 @@ namespace UCT.Overworld
             {
                 return;
             }
-
-            TalkBoxPositionChanger.Instance.isUp =
-                _player.transform.position.y < transform.position.y - 1.25f;
+            if (TalkBoxPositionChanger.Instance)
+                TalkBoxPositionChanger.Instance.isUp = MainControl.Instance.playerBehaviour.transform.position.y <
+                                                       transform.position.y - 1.25f;
+            else
+               Global.Other.Debug.LogWarning("TalkBoxPositionChanger instance is missing!");
 
 
             if (_clock > 0)
@@ -136,15 +136,13 @@ namespace UCT.Overworld
                     optionsBox.localPosition.z = BoxZAxisVisible;
                     _heart.transform.localPosition = new Vector3(_heart.transform.localPosition.x,
                         _heart.transform.localPosition.y, BoxZAxisVisible);
-                    
-                    if (_player.transform.position.y >= transform.position.y - 1.25f)
+
+                    if (MainControl.Instance.playerBehaviour.transform.position.y >= transform.position.y - 1.25f)
                     {
-                        //_uiMessage.anchoredPosition = new Vector2(0, 270);
                         _overviewBox.localPosition.y = 3.325f;
                     }
                     else
                     {
-                        //_uiMessage.anchoredPosition = Vector2.zero;
                         _overviewBox.localPosition.y = -3.425f;
                     }
 

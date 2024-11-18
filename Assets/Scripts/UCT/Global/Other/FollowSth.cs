@@ -1,4 +1,5 @@
 using System;
+using UCT.Global.Core;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -6,7 +7,7 @@ namespace UCT.Global.Other
 {
     public class FollowSth : MonoBehaviour
     {
-        public string sthName;
+        public bool followMainCamera;
         public GameObject sth;
         public bool followPosition;
         public Vector3 positionAdd;
@@ -17,8 +18,11 @@ namespace UCT.Global.Other
 
         private void Start()
         {
-            if (!sth && !string.IsNullOrEmpty(sthName))
-                sth = GameObject.Find(sthName);
+            if (!followMainCamera) return;
+            if (MainControl.Instance.mainCamera.gameObject)
+                sth = MainControl.Instance.mainCamera.gameObject;
+            else 
+                throw new NullReferenceException();
         }
 
         private void Update()

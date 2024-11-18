@@ -6,10 +6,15 @@
   <component name="ChangeListManager">
     <list default="true" id="8f7c2298-d077-422b-9131-f9a839bed961" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/MainCameraOverworld.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/MainCameraOverworld.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/Overworld/Example-Corridor.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Overworld/Example-Corridor.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/Overworld/Example-Ruins.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Overworld/Example-Ruins.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/Overworld/Example-Study.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Overworld/Example-Study.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Template/Overworld.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Template/Overworld.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Other/ChangeClipWalk.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Other/ChangeClipWalk.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Other/FollowSth.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Other/FollowSth.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/BackpackBehaviour.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/BackpackBehaviour.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/OverworldObjTrigger.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/OverworldObjTrigger.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -157,10 +162,10 @@
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
       <method v="2" />
     </configuration>
-    <configuration name="附加到 Unity 编辑器" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="30684">
+    <configuration name="附加到 Unity 编辑器" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="988">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="30684" />
+      <option name="pid" value="988" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -305,6 +310,7 @@
       <workItem from="1731890363283" duration="165000" />
       <workItem from="1731890619404" duration="12790000" />
       <workItem from="1731912527857" duration="4431000" />
+      <workItem from="1731969368434" duration="2266000" />
     </task>
     <servers />
   </component>
@@ -389,32 +395,6 @@
           <option name="timeStamp" value="51" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/OverworldTalkSelect.cs</url>
-          <line>37</line>
-          <properties documentPath="D:\Unity Projects\Undertale-Changer-Template\Assets\Scripts\UCT\Overworld\OverworldTalkSelect.cs" containingFunctionPresentation="方法 'Start'">
-            <startOffsets>
-              <option value="942" />
-            </startOffsets>
-            <endOffsets>
-              <option value="1026" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="52" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/BackpackBehaviour.cs</url>
-          <line>296</line>
-          <properties documentPath="D:\Unity Projects\Undertale-Changer-Template\Assets\Scripts\UCT\Overworld\BackpackBehaviour.cs" containingFunctionPresentation="方法 'Update'">
-            <startOffsets>
-              <option value="15803" />
-            </startOffsets>
-            <endOffsets>
-              <option value="15804" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="56" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/PlayerBehaviour.cs</url>
           <line>126</line>
           <properties documentPath="D:\Unity Projects\Undertale-Changer-Template\Assets\Scripts\UCT\Overworld\PlayerBehaviour.cs" containingFunctionPresentation="方法 'Update'">
@@ -426,6 +406,19 @@
             </endOffsets>
           </properties>
           <option name="timeStamp" value="57" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DotNet Breakpoints">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/UCT/Global/Other/FollowSth.cs</url>
+          <line>22</line>
+          <properties documentPath="D:\Unity Projects\Undertale-Changer-Template\Assets\Scripts\UCT\Global\Other\FollowSth.cs" containingFunctionPresentation="方法 'Start'">
+            <startOffsets>
+              <option value="616" />
+            </startOffsets>
+            <endOffsets>
+              <option value="665" />
+            </endOffsets>
+          </properties>
+          <option name="timeStamp" value="60" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

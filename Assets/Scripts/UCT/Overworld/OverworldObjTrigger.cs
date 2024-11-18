@@ -77,7 +77,7 @@ namespace UCT.Overworld
         private void Start()
         {
             transform.tag = "owObjTrigger";
-            mainCamera = BackpackBehaviour.Instance.GetComponent<CameraFollowPlayer>();
+            mainCamera = MainControl.Instance.mainCamera.GetComponent<CameraFollowPlayer>();
             _typeWritter = BackpackBehaviour.Instance.typeWritter;
             _bgm = AudioController.Instance.audioSource;
         }

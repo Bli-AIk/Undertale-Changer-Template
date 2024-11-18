@@ -156,7 +156,50 @@ Transform:
   m_Father: {fileID: 1136179839}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!43 &29914614
+--- !u!1 &54010801
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 54010802}
+  m_Layer: 0
+  m_Name: Objs
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &54010802
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 54010801}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 731933814}
+  - {fileID: 1673577616}
+  - {fileID: 543475330}
+  - {fileID: 2059732926}
+  - {fileID: 785852464}
+  - {fileID: 1917212742}
+  - {fileID: 1515382445}
+  - {fileID: 1558313327}
+  - {fileID: 1254195313}
+  - {fileID: 1347642512}
+  - {fileID: 784274325}
+  - {fileID: 967965231}
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!43 &467016711
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -320,49 +363,6 @@ Mesh:
     offset: 0
     size: 0
     path: 
---- !u!1 &54010801
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 54010802}
-  m_Layer: 0
-  m_Name: Objs
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &54010802
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 54010801}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 731933814}
-  - {fileID: 1673577616}
-  - {fileID: 543475330}
-  - {fileID: 2059732926}
-  - {fileID: 785852464}
-  - {fileID: 1917212742}
-  - {fileID: 1515382445}
-  - {fileID: 1558313327}
-  - {fileID: 1254195313}
-  - {fileID: 1347642512}
-  - {fileID: 784274325}
-  - {fileID: 967965231}
-  m_Father: {fileID: 0}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &501411332
 GameObject:
   m_ObjectHideFlags: 0
@@ -7118,8 +7118,8 @@ MonoBehaviour:
   - {x: 0.05, y: 0, z: 0}
   - {x: -0.1, y: 0, z: 0}
   m_ShapePathHash: -96867770
-  m_Mesh: {fileID: 29914614}
-  m_InstanceId: 82054
+  m_Mesh: {fileID: 467016711}
+  m_InstanceId: 69196
 --- !u!1 &1157319661
 GameObject:
   m_ObjectHideFlags: 0
@@ -7466,7 +7466,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1578228f98898b742aa8849753da5013, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sthName: MainCameraOverworld
+  followMainCamera: 1
   sth: {fileID: 0}
   followPosition: 1
   positionAdd: {x: 0, y: 0, z: 0}
