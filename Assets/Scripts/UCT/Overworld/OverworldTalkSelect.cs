@@ -31,12 +31,14 @@ namespace UCT.Overworld
 
         private void Start()
         {
-            _typeWritter = GameObject.Find("BackpackCanvas").GetComponent<TypeWritter>();
-            var heartTrans = BackpackBehaviour.Instance.typeMessage.transform.Find("Heart");
-            GameObject heartObj;
-            if (!heartTrans)
-                heartObj = Instantiate(new GameObject(), BackpackBehaviour.Instance.typeMessage.transform);
-            else heartObj = heartTrans.gameObject;
+            if (Camera.main != null)
+                _typeWritter = Camera.main.GetComponent<TypeWritter>();
+            else
+                throw new NullReferenceException();
+            var heartTrans = BackpackBehaviour.Instance.talkText.transform.parent.Find("Heart");
+            var heartObj = !heartTrans
+                ? Instantiate(new GameObject(), BackpackBehaviour.Instance.talkText.transform)
+                : heartTrans.gameObject;
 
             _heart = heartObj.AddComponent<Image>() ?? heartObj.GetComponent<Image>();
             _heart.rectTransform.sizeDelta = 16 * Vector3.one;
@@ -54,60 +56,48 @@ namespace UCT.Overworld
 
         private void Update()
         {
-            if (_canSelect)
+            if (!_canSelect) return;
+            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.LeftArrow))
             {
-                if (GameUtilityService.ConvertKeyDownToControl(KeyCode.LeftArrow))
-                {
-                    if (select > 0)
-                        select--;
-                    else select = 1;
-                    _heart.rectTransform.anchoredPosition = new Vector2(-143.3f + Convert.ToInt32(select) * 192.5f, -18.8f);
-                    AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
-                }
-                else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.RightArrow))
-                {
-                    if (select < 1)
-                        select++;
-                    else select = 0;
-                    _heart.rectTransform.anchoredPosition = new Vector2(-143.3f + Convert.ToInt32(select) * 192.5f, -18.8f);
-                    AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
-                }
+                if (select > 0)
+                    select--;
+                else select = 1;
+                _heart.rectTransform.anchoredPosition = new Vector2(-143.3f + Convert.ToInt32(select) * 192.5f, -18.8f);
+                AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+            }
+            else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.RightArrow))
+            {
+                if (select < 1)
+                    select++;
+                else select = 0;
+                _heart.rectTransform.anchoredPosition = new Vector2(-143.3f + Convert.ToInt32(select) * 192.5f, -18.8f);
+                AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+            }
 
-                if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
-                {
-                    _typeWritter.TypeStop();
-                    switch (select)
+            if (!GameUtilityService.ConvertKeyDownToControl(KeyCode.Z)) return;
+            _typeWritter.TypeStop();
+            switch (select)
+            {
+                case 0://选择了左侧选项
+                    switch (typeText)
                     {
-                        case 0://选择了左侧选项
-                            switch (typeText)
-                            {
-                                /*
-                            打字机示例
-                            case "XXX":
-
-                        typeWritter.TypeOpen(MainControl.instance.ScreenMaxToOneSon(MainControl.instance.OverworldControl.owTextsSave, texts[0]), false, 0, 1);
-                        break;
-                            */
-
-                                case "BackMenu":
-                                    _typeWritter.forceReturn = true;
-                                    GameUtilityService.FadeOutAndSwitchScene("Menu", Color.black, true, 0f);
-                                    AudioController.Instance.audioSource.volume = 0;
-                                    break;
-
-                                case "Select":
-                                    AudioController.Instance.GetFx(2, MainControl.Instance.AudioControl.fxClipBattle);
-                                    break;
-                            }
+                        case "BackMenu":
+                            _typeWritter.forceReturn = true;
+                            GameUtilityService.FadeOutAndSwitchScene("Menu", Color.black, true, 0f);
+                            AudioController.Instance.audioSource.volume = 0;
                             break;
 
-                        case 1://选择了右侧选项
+                        case "Select":
+                            AudioController.Instance.GetFx(2, MainControl.Instance.AudioControl.fxClipBattle);
                             break;
                     }
-                    _heart.color = Color.clear;
-                    _canSelect = false;
-                }
+                    break;
+
+                case 1://选择了右侧选项
+                    break;
             }
+            _heart.color = Color.clear;
+            _canSelect = false;
         }
     }
 }

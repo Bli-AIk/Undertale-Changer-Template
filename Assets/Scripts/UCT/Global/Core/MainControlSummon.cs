@@ -79,10 +79,9 @@ namespace UCT.Global.Core
         private void NonexistentCameraSetup()
         {
             if (sceneState != MainControl.SceneState.Overworld) return;
-            var mainCamera = Instantiate(Resources.Load<GameObject>("Prefabs/MainCameraOverworld"))
-                .GetComponent<CameraFollowPlayer>();
+            var mainCamera = Instantiate(Resources.Load<GameObject>("Prefabs/MainCameraOverworld"));
             mainCamera.name = "MainCameraOverworld";
-            CameraSetup(mainCamera);
+            CameraSetup(mainCamera.GetComponent<CameraFollowPlayer>());
             DontDestroyOnLoad(mainCamera);
         }
 

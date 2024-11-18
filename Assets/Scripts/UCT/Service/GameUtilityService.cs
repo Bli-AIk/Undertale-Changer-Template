@@ -4,11 +4,9 @@ using System.Linq;
 using DG.Tweening;
 using TMPro;
 using UCT.Battle;
-using UCT.Control;
 using UCT.Global.Audio;
 using UCT.Global.Core;
 using UCT.Global.UI;
-using UCT.Overworld;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
@@ -65,9 +63,6 @@ namespace UCT.Service
                 {
                     if (MainControl.Instance.cameraMainInBattle) MainControl.Instance.cameraMainInBattle.rect = new Rect(0, 0, 1, 1);
                 }
-                
-                if (BackpackBehaviour.Instance)
-                    BackpackBehaviour.Instance.SuitResolution();
 
                 CanvasController.Instance.DOKill();
                 CanvasController.Instance.fps.rectTransform.anchoredPosition = new Vector2();
@@ -80,9 +75,6 @@ namespace UCT.Service
                 if (MainControl.Instance.sceneState == MainControl.SceneState.InBattle)
                     if (MainControl.Instance.cameraMainInBattle)
                         MainControl.Instance.cameraMainInBattle.rect = new Rect(0, 0.056f, 1, 0.888f);
-
-                if (BackpackBehaviour.Instance)
-                    BackpackBehaviour.Instance.SuitResolution();
 
                 CanvasController.Instance.DOKill();
 

@@ -1,6 +1,5 @@
 using System;
 using TMPro;
-using UCT.Global.Core;
 using UCT.Global.UI;
 using UnityEngine;
 
@@ -15,7 +14,7 @@ namespace UCT.Overworld
         public BoxDrawer boxDrawer;
         public bool isUp;
         public bool haveHead;
-        private TextMeshProUGUI _typeMessage;
+        private TextMeshPro _typeMessage;
         private void Awake()
         {
             Instance = this;
@@ -28,11 +27,11 @@ namespace UCT.Overworld
             boxDrawer.localPosition = new Vector3(boxDrawer.localPosition.x, boxDrawer.localPosition.y, BackpackBehaviour.BoxZAxisInvisible);
         }
 
-        private TextMeshProUGUI GetTypeMessage()
+        private TextMeshPro GetTypeMessage()
         {
-            var uiTalk = GameObject.Find("BackpackCanvas/RawImage/Talk/UITalk");
-;            if (!_typeMessage && uiTalk)
-                _typeMessage = uiTalk.GetComponent<TextMeshProUGUI>();
+            var talkText = BackpackBehaviour.Instance.talkText;
+            if (!_typeMessage && talkText)
+                _typeMessage = talkText;
 
             return _typeMessage;
         }
@@ -56,13 +55,13 @@ namespace UCT.Overworld
             {
                 boxDrawer.localPosition = new Vector3(boxDrawer.localPosition.x, boxUpYAxis, boxDrawer.localPosition.z);
                 GetTypeMessage().rectTransform.anchoredPosition =
-                    new Vector2(10 + 115f * Convert.ToInt32(haveHead), 139);
+                    new Vector2(0.25f + 2.9f * Convert.ToInt32(haveHead), -0.535f);
             }
             else
             {
                 boxDrawer.localPosition = new Vector3(boxDrawer.localPosition.x, boxDownYAxis, boxDrawer.localPosition.z);
                 GetTypeMessage().rectTransform.anchoredPosition =
-                    new Vector2(10 + 115f * Convert.ToInt32(haveHead), -170);
+                    new Vector2(0.25f + 2.9f * Convert.ToInt32(haveHead), -0.625f);
             }
         }
 

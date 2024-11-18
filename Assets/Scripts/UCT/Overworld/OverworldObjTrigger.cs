@@ -77,7 +77,7 @@ namespace UCT.Overworld
         private void Start()
         {
             transform.tag = "owObjTrigger";
-            mainCamera = TalkBoxPositionChanger.Instance.transform.parent.GetComponent<CameraFollowPlayer>();
+            mainCamera = BackpackBehaviour.Instance.GetComponent<CameraFollowPlayer>();
             _typeWritter = BackpackBehaviour.Instance.typeWritter;
             _bgm = AudioController.Instance.audioSource;
         }
@@ -90,7 +90,8 @@ namespace UCT.Overworld
                 {
                     _saveSelect = Convert.ToInt32(!Convert.ToBoolean(_saveSelect));
 
-                    BackpackBehaviour.Instance.saveHeart.anchoredPosition = new Vector2(-258 + _saveSelect * 180, -44);
+                    BackpackBehaviour.Instance.saveHeart.localPosition =
+                        new Vector3(-4.225f + _saveSelect * 4.5f, -1.25f, 0);
                 }
                 if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
                 {
@@ -103,7 +104,7 @@ namespace UCT.Overworld
                             AudioController.Instance.GetFx(12, MainControl.Instance.AudioControl.fxClipUI);
                             var playerName = MainControl.Instance.playerControl.playerName;
 
-                            BackpackBehaviour.Instance.saveHeart.anchoredPosition = new Vector2(10000, 10000);
+                            BackpackBehaviour.Instance.saveHeart.position = new Vector2(10000, 10000);
 
                             BackpackBehaviour.Instance.saveText.text = $"<color=yellow>{TextProcessingService.PadStringToLength(playerName, 10)}LV{TextProcessingService.PadStringToLength(MainControl.Instance.playerControl.lv.ToString(), 7)}{TextProcessingService.GetRealTime((int)MainControl.Instance.playerControl.gameTime)}\n{TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave, SceneManager.GetActiveScene().name)}\n{TextProcessingService.RichTextWithEnd("size", 1, "\n")}  {TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave, "Saved")}";
                             MainControl.Instance.playerControl.saveScene = SceneManager.GetActiveScene().name;
@@ -117,7 +118,7 @@ namespace UCT.Overworld
                         case 1:
                             goto default;
                         default:
-                            BackpackBehaviour.Instance.saveHeart.anchoredPosition = new Vector2(10000, 10000);
+                            BackpackBehaviour.Instance.saveHeart.position = new Vector2(10000, 10000);
                             BackpackBehaviour.Instance.saveBox.localPosition = new Vector3(BackpackBehaviour.Instance.saveBox.localPosition.x, BackpackBehaviour.Instance.saveBox.localPosition.y, -50);
                             BackpackBehaviour.Instance.saveText.text = "";
                             PressZ();
@@ -130,7 +131,7 @@ namespace UCT.Overworld
                 }
                 else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.X))
                 {
-                    BackpackBehaviour.Instance.saveHeart.anchoredPosition = new Vector2(10000, 10000);
+                    BackpackBehaviour.Instance.saveHeart.position = new Vector2(10000, 10000);
                     BackpackBehaviour.Instance.saveBox.localPosition = new Vector3(BackpackBehaviour.Instance.saveBox.localPosition.x, BackpackBehaviour.Instance.saveBox.localPosition.y, -50);
                     BackpackBehaviour.Instance.saveText.text = "";
                     PressZ();
@@ -146,7 +147,7 @@ namespace UCT.Overworld
 
         private void PressZ()
         {
-            if (BackpackBehaviour.Instance.typeMessage.text != "")
+            if (BackpackBehaviour.Instance.talkText.text != "")
             {
                 if (endAnim)
                 {
@@ -158,7 +159,7 @@ namespace UCT.Overworld
             }
 
             _isTyping = false;
-            BackpackBehaviour.Instance.typeMessage.text = "";
+            BackpackBehaviour.Instance.talkText.text = "";
             TalkBoxPositionChanger.Instance.boxDrawer.localPosition = new Vector3(
                 TalkBoxPositionChanger.Instance.boxDrawer.localPosition.x,
                 TalkBoxPositionChanger.Instance.boxDrawer.localPosition.y, BackpackBehaviour.BoxZAxisInvisible);
@@ -198,7 +199,7 @@ namespace UCT.Overworld
                                                      TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave, SceneManager.GetActiveScene().name) + "\n<size=1>\n</size>  " +
                                                      TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave, "Save") + "         " + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave, "Back")
                 ;
-            BackpackBehaviour.Instance.saveHeart.anchoredPosition = new Vector2(-258, -44);
+            BackpackBehaviour.Instance.saveHeart.localPosition = new Vector3(-4.225f, -1.25f, 0);
         }
 
         /// <summary>
@@ -224,7 +225,7 @@ namespace UCT.Overworld
 
             _typeWritter.TypeOpen(
                 TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.sceneTextsSave,
-                    text), false, 0, 1, BackpackBehaviour.Instance.typeMessage);
+                    text), false, 0, 1, BackpackBehaviour.Instance.talkText);
             if (endInBattle)
                 _typeWritter.EndInBattle();
 

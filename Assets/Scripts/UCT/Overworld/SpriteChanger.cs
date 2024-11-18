@@ -82,20 +82,16 @@ namespace UCT.Overworld
             _talkBoxPositionChanger.haveHead = i >= 0;
             if (i >= 0)
             {
-                Sprite spriter;
-                if (!back)
-                    spriter = sprites[i];
-                else
-                    spriter = spritesSayBack[i];
+                var sprite = !back ? sprites[i] : spritesSayBack[i];
                 if (!useImage)
                 {
-                    _sprite.sprite = spriter;
+                    _sprite.sprite = sprite;
                     _sprite.color = Color.white;
                 }
                 else
                 {
-                    _spriteImage.sprite = spriter;
-                    _spriteImage.rectTransform.sizeDelta = new Vector2(spriter.texture.width, spriter.texture.height);
+                    _spriteImage.sprite = sprite;
+                    _spriteImage.rectTransform.sizeDelta = new Vector2(sprite.texture.width, sprite.texture.height);
                     _spriteImage.color = Color.white;
                 }
             }

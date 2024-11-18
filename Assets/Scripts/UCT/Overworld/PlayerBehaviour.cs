@@ -48,10 +48,7 @@ namespace UCT.Overworld
             _rigidbody2D = GetComponent<Rigidbody2D>();
             _boxTrigger = transform.Find("Trigger").GetComponent<BoxCollider2D>();
             _boxCollider = GetComponent<BoxCollider2D>();
-            GameObject.Find("BackpackCanvas").GetComponent<TypeWritter>();
             _boxTrigger.transform.localPosition = _boxCollider.offset;
-            //mask = 1 << 6;
-
             transform.position = MainControl.Instance.overworldControl.playerScenePos;
             animDirectionX = (int)MainControl.Instance.overworldControl.animDirection.x;
             animDirectionY = (int)MainControl.Instance.overworldControl.animDirection.y;

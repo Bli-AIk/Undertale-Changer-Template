@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Alchemy.Inspector;
 using Debug;
 using DG.Tweening;
 using UCT.Battle;
@@ -29,12 +30,12 @@ namespace UCT.Global.Core
             Overworld,
             InBattle,
         }
-        [Header("=== 场景状态设置 ===")]
+        [Title("=== 场景状态设置 ===")]
         public SceneState sceneState;
         
         [Space]
         
-        [Header("=== 语言包相关设置 ===")]
+        [Title("=== 语言包相关设置 ===")]
         [Header("语言包ID")]
         [FormerlySerializedAs("languagePack")] public int languagePackId;
         [Header("内置语言包总数")]
@@ -42,13 +43,13 @@ namespace UCT.Global.Core
         
         [Space]
         
-        [Header("=== 存档相关设置 ===")]
+        [Title("=== 存档相关设置 ===")]
         [Header("存档id")]
         [FormerlySerializedAs("dataNumber")] public int saveDataId;
         
         [Space]
         
-        [Header("=== 场景切换相关设置 ===")]
+        [Title("=== 场景切换相关设置 ===")]
         
         [Header("当前场景是否启用渐入渐出")]
         [FormerlySerializedAs("haveInOutBlack")] public bool isSceneSwitchingFadeTransitionEnabled;
@@ -63,14 +64,14 @@ namespace UCT.Global.Core
 
         [Space]
         
-        [Header("=== UI与画面相关 ===")]
+        [Title("=== UI与画面相关 ===")]
         public Camera cameraMainInBattle;
         public Camera mainCamera;
         public BoxDrawer mainBox;
         
         [Space]
 
-        [Header("=== 角色与行为控制 ===")]
+        [Title("=== 角色与行为控制 ===")]
         public PlayerBehaviour playerBehaviour;
         [FormerlySerializedAs("PlayerControl")] 
         public PlayerControl playerControl;
