@@ -5,16 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8f7c2298-d077-422b-9131-f9a839bed961" name="更改" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/MainCameraOverworld.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/MainCameraOverworld.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Overworld/Example-Corridor.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Overworld/Example-Corridor.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Overworld/Example-Ruins.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Overworld/Example-Ruins.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Overworld/Example-Study.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Overworld/Example-Study.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Template/Overworld.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Template/Overworld.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Other/ChangeClipWalk.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Other/ChangeClipWalk.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Other/FollowSth.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Other/FollowSth.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/BackpackBehaviour.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/BackpackBehaviour.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/OverworldObjTrigger.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/OverworldObjTrigger.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/CHANGELOG.lnk" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/CHANGELOG.lnk.meta" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -139,7 +132,7 @@
 }</component>
   <component name="RunManager" selected="附加到 Unity 编辑器.附加到 Unity 编辑器">
     <configuration name="启动 Unity" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="D:\Unity Editor\2021.3.15f1\Editor\Unity.exe" />
+      <option name="EXE_PATH" value="D:\Unity\2021.3.15f1\Editor\Unity.exe" />
       <option name="PROGRAM_PARAMETERS" value="-projectPath &quot;K:\Unity Project\Undertale-Changer-Template&quot; -debugCodeOptimization" />
       <option name="WORKING_DIRECTORY" value="K:\Unity Project\Undertale-Changer-Template" />
       <option name="PASS_PARENT_ENVS" value="1" />
@@ -155,17 +148,17 @@
       <method v="2" />
     </configuration>
     <configuration name="单元测试(批处理模式)" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="D:\Unity Editor\2021.3.15f1\Editor\Unity.exe" />
+      <option name="EXE_PATH" value="D:\Unity\2021.3.15f1\Editor\Unity.exe" />
       <option name="PROGRAM_PARAMETERS" value="-runTests -batchmode -projectPath &quot;K:\Unity Project\Undertale-Changer-Template&quot; -testResults Logs/results.xml -testPlatform EditMode -debugCodeOptimization" />
       <option name="WORKING_DIRECTORY" value="K:\Unity Project\Undertale-Changer-Template" />
       <option name="PASS_PARENT_ENVS" value="1" />
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
       <method v="2" />
     </configuration>
-    <configuration name="附加到 Unity 编辑器" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="988">
+    <configuration name="附加到 Unity 编辑器" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="988" />
+      <option name="pid" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -311,6 +304,7 @@
       <workItem from="1731890619404" duration="12790000" />
       <workItem from="1731912527857" duration="4431000" />
       <workItem from="1731969368434" duration="2266000" />
+      <workItem from="1731982140341" duration="1792000" />
     </task>
     <servers />
   </component>
@@ -343,66 +337,40 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/UCT/Service/HangulComposerService.cs</url>
-          <line>20</line>
-          <properties documentPath="D:\Unity Projects\Undertale-Changer-Template\Assets\Scripts\UCT\Service\HangulComposerService.cs" containingFunctionPresentation="方法 'ComposeHangul'">
-            <startOffsets>
-              <option value="910" />
-            </startOffsets>
-            <endOffsets>
-              <option value="933" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="27" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/Scripts/UCT/Global/Scene/MenuController.cs</url>
-          <line>227</line>
+          <line>241</line>
           <properties documentPath="D:\Unity Projects\Undertale-Changer-Template\Assets\Scripts\UCT\Global\Scene\MenuController.cs" containingFunctionPresentation="方法 'Flash'">
             <startOffsets>
-              <option value="9373" />
+              <option value="9804" />
             </startOffsets>
             <endOffsets>
-              <option value="9374" />
+              <option value="10316" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="32" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/Scripts/UCT/Global/UI/TypeWritter.cs</url>
-          <line>321</line>
+          <line>340</line>
           <properties documentPath="D:\Unity Projects\Undertale-Changer-Template\Assets\Scripts\UCT\Global\UI\TypeWritter.cs" containingFunctionPresentation="方法 '_Typing'">
             <startOffsets>
-              <option value="13012" />
+              <option value="14126" />
             </startOffsets>
             <endOffsets>
-              <option value="13163" />
+              <option value="14142" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="49" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/UCT/Global/UI/TypeWritter.cs</url>
-          <line>415</line>
-          <properties documentPath="D:\Unity Projects\Undertale-Changer-Template\Assets\Scripts\UCT\Global\UI\TypeWritter.cs" containingFunctionPresentation="方法 '_Typing'">
-            <startOffsets>
-              <option value="17105" />
-            </startOffsets>
-            <endOffsets>
-              <option value="17297" />
-            </endOffsets>
-          </properties>
-          <option name="timeStamp" value="51" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="DotNet Breakpoints">
           <url>file://$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/PlayerBehaviour.cs</url>
-          <line>126</line>
+          <line>108</line>
           <properties documentPath="D:\Unity Projects\Undertale-Changer-Template\Assets\Scripts\UCT\Overworld\PlayerBehaviour.cs" containingFunctionPresentation="方法 'Update'">
             <startOffsets>
-              <option value="5197" />
+              <option value="4121" />
             </startOffsets>
             <endOffsets>
-              <option value="5277" />
+              <option value="4122" />
             </endOffsets>
           </properties>
           <option name="timeStamp" value="57" />
