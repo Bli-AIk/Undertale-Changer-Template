@@ -12,8 +12,9 @@
 # Undertale-Changer-Template
 
 <p align="center">
-  <img src="Assets/Sprites/Icons/logo.png" style="width: 100%; max-width: 500px; image-rendering: pixelated;">
+  <img src="logo.png" style="width: 100%; max-width: 500px; image-rendering: pixelated;">
 </p>
+
 
 一個基於[**Unity引擎**](https://unity.com)的[**UNDERTALE**](https://undertale.com)同人遊戲模板。
 
