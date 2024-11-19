@@ -101,8 +101,8 @@ Data\武器:;
 Data\防具:;
 Data\金錢:;
 Data\測試;/*7 寫過程中測試所用文字 無實義 可以不改但別刪*/
-Data\使用<size=55> </size>;
-Data\說明<size=90> </size>;
+Data\使用<indent=27.5>;
+Data\說明<indent=56.5>;
 Data\丟棄;/*編號：10*/
 
 /*

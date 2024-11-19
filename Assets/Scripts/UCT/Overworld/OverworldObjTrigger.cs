@@ -106,7 +106,11 @@ namespace UCT.Overworld
 
                             BackpackBehaviour.Instance.saveHeart.position = new Vector2(10000, 10000);
 
-                            BackpackBehaviour.Instance.saveText.text = $"<color=yellow>{TextProcessingService.PadStringToLength(playerName, 10)}LV{TextProcessingService.PadStringToLength(MainControl.Instance.playerControl.lv.ToString(), 7)}{TextProcessingService.GetRealTime((int)MainControl.Instance.playerControl.gameTime)}\n{TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave, SceneManager.GetActiveScene().name)}\n{TextProcessingService.RichTextWithEnd("size", 1, "\n")}  {TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave, "Saved")}";
+                            BackpackBehaviour.Instance.saveText.text = 
+                                "<color=yellow>" +
+                                SetFirstHalfSaveText(playerName) +
+                                $"<indent=7.5></indent>{TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave, "Saved")}";
+
                             MainControl.Instance.playerControl.saveScene = SceneManager.GetActiveScene().name;
                             PlayerPrefs.SetInt("languagePack", MainControl.Instance.languagePackId);
                             PlayerPrefs.SetInt("dataNumber", MainControl.Instance.saveDataId);
@@ -193,13 +197,21 @@ namespace UCT.Overworld
 
             BackpackBehaviour.Instance.saveBox.localPosition = new Vector3(BackpackBehaviour.Instance.saveBox.localPosition.x, BackpackBehaviour.Instance.saveBox.localPosition.y, 5);
             var playerName = MainControl.Instance.playerControl.playerName;
+            BackpackBehaviour.Instance.saveText.text =
+                SetFirstHalfSaveText(playerName) +
+                $"<indent=7.5></indent>{TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave, "Save")}" +
+                $"<indent=52.5></indent>{TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave, "Back")}";
 
-            BackpackBehaviour.Instance.saveText.text = TextProcessingService.PadStringToLength(playerName, 10) + "LV" + TextProcessingService.PadStringToLength(MainControl.Instance.playerControl.lv.ToString(), 7) +
-                                                     TextProcessingService.GetRealTime((int)MainControl.Instance.playerControl.gameTime) + "\n" +
-                                                     TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave, SceneManager.GetActiveScene().name) + "\n<size=1>\n</size>  " +
-                                                     TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave, "Save") + "         " + TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave, "Back")
-                ;
             BackpackBehaviour.Instance.saveHeart.localPosition = new Vector3(-4.225f, -1.25f, 0);
+        }
+
+        private static string SetFirstHalfSaveText(string playerName)
+        {
+            return $"{playerName}<indent=35></indent>" +
+                   $"LV{MainControl.Instance.playerControl.lv.ToString()}<indent=72></indent>" +
+                   $"{TextProcessingService.GetRealTime((int)MainControl.Instance.playerControl.gameTime)}\n" +
+                   $"{TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave, SceneManager.GetActiveScene().name)}\n" +
+                   "<line-height=1.5>\n</line-height>";
         }
 
         /// <summary>
