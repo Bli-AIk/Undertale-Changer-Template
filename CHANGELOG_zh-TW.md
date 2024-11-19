@@ -1,10 +1,10 @@
-# 更新日志
+# CHANGELOG 更新日志
 
-本文档所写的是UCT的更新日志，这通常是短期的计划与安排。
+本文檔所寫的是UCT的更新日誌，這通常是短期的計畫與安排。
 
-关于UCT的长期更新计划，请查阅[PLAN.md](PLAN.md)、[PLAN_zh-CN.md](PLAN_zh-CN.md)或[PLAN_zh-TW.md](PLAN_zh-TW.md)。
+關於UCT的長期更新計畫，請查閱[PLAN.md](PLAN.md)、[PLAN_zh-CN.md](PLAN_zh-CN.md)或[PLAN_zh-TW.md](PLAN_zh-TW.md)。
 
-关于UCT的具体更新日志，请查阅[CHANGELOG.md](CHANGELOG.md)、[CHANGELOG_zh-CN.md](CHANGELOG_zh-CN.md)或[CHANGELOG_zh-TW.md](CHANGELOG_zh-TW.md)。
+關於UCT的具體更新日誌，請查閱[CHANGELOG.md](CHANGELOG.md)、[CHANGELOG_zh-CN.md](CHANGELOG_zh-CN.md)或[CHANGELOG_zh-TW.md](CHANGELOG_zh-TW.md)。
 
 簡體中文的更新計畫/更新日誌優先更新，其他語言會在**版本號變更**時使用GPT進行翻譯。
 
@@ -13,20 +13,20 @@
 - [ ] 添加像素完美與放大化640x480。（詳見更新計畫）
 - [ ] 分離MENU場景的繪製邏輯與執行邏輯。
 - [ ] 分離OW存檔頁面的繪製邏輯與執行邏輯。
-- [ ] 將現有的UI數據存儲至ScriptableObject。
+- [ ] 將現有的UI數據儲存至ScriptableObject。
 - [ ] 增加UI管理器。
-- [ ] 增加Dr風格的MENU界面。
-- [ ] 增加Dr風格的設置界面。
-- [ ] 添加Dr風格的OW存檔界面。
+- [ ] 增加Dr風格的MENU介面。
+- [ ] 增加Dr風格的設定介面。
+- [ ] 添加Dr風格的OW存檔介面。
 - [ ] 合併此版本至Main。
 
 2024/11/12 計畫 (1-9)
 
-## v1.0.4 -> v1.0.5 設置頁面重構與拓展
+## v1.0.4 -> v1.0.5 設定頁面重構與拓展
 
-- [ ] 分離設置頁面的繪製邏輯與執行邏輯。
-- [ ] 細化設置項：音訊設置、視頻設置等大設置項，以及具體開關後處理/光效等小設置項。
-- [ ] 提升設置頁面的拓展性並加入若干新的設置選項。
+- [ ] 分離設定頁面的繪製邏輯與執行邏輯。
+- [ ] 細化設定項：音訊設定、視頻設定等大設定項，以及具體開關後處理/光效等小設定項。
+- [ ] 提升設定頁面的拓展性並加入若干新的設定選項。
 
 2024/11/4 計畫 (1-3)
 
@@ -37,17 +37,17 @@
 - [x] 對 Rename場景的UI位置、大小進行檢查和修復。
 - [x] 對 Menu場景的UI位置、大小進行檢查和修復。
 - [x] 對 PPT場景與 Start場景的UI位置、大小進行檢查和修復。
-- [ ] 對 OW場景的UI位置、大小進行檢查和修復。
+- [x] 對 OW場景的UI位置、大小進行檢查和修復。
 - [ ] 對 Gameover場景的UI位置、大小進行檢查和修復。
 - [ ] 對 Battle場景的UI位置、大小進行檢查和修復。
 - [ ] 使用 \<indent\> 替換透明字符縮進。
 - [x] 將英文字體進行調整，修復字符重合的問題。
 - [x] 引進 [Fusion](https://github.com/TakWolf/fusion-pixel-font) 8px 字體。
-- [x] 將起名界面的字符數量拓展，分為基本字母、數字與符號、拉丁字母、西里爾字母、希臘字母等。
-- [x] 引入中日韩语言拼写库。
-- [x] 在起名界面加入中文輸入支持。
-- [x] 在起名界面加入日文輸入支持。
-- [x] 在起名界面加入韓文輸入支持。
+- [x] 將起名介面的字符數量拓展，分為基本字母、數字與符號、拉丁字母、西里爾字母、希臘字母等。
+- [x] 引入中韓日語言拼寫庫。
+- [x] 在起名介面加入中文輸入支持。
+- [x] 在起名介面加入日文輸入支持。
+- [x] 在起名介面加入韓文輸入支持。
 - [x] 將[PLAN.md](PLAN.md)與[CHANGELOG.md](CHANGELOG.md)通過Github Actions與ChatGPT API進行自動翻譯。
 - [ ] 合併此版本至Main。
 
