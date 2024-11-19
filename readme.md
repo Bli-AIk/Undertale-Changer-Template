@@ -12,7 +12,7 @@ You can view the current change log of UCT through [**CHANGELOG.md**](CHANGELOG.
 # Undertale-Changer-Template
 
 <p align="center">
-  <img src="logo.png" style="width: 100%; max-width: 500px; image-rendering: pixelated;">
+  <img src="logo.png" style="image-rendering: pixelated;">
 </p>
 
 
