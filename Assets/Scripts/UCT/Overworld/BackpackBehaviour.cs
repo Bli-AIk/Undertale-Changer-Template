@@ -170,6 +170,7 @@ namespace UCT.Overworld
                 if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
                 {
                     MainControl.Instance.playerBehaviour.owTimer = 0.1f;
+                    _informationText.transform.localPosition = new Vector3(0.5f, -5.12f, 0);
 
                     if (select == 1)
                     {
@@ -183,17 +184,17 @@ namespace UCT.Overworld
                             if (sonSelect == 0)
                             {
                                 sonSelect = 1;
-                                _informationText.text = "";
+                                _informationText.text = "<indent=4>";
                                 foreach (var t in MainControl.Instance.playerControl.myItems)
                                 {
                                     if (t != 0)
                                         _informationText.text +=
-                                            $" {DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, t, "Auto", 0)}\n";
+                                            $"{DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, t, "Auto", 0)}\n";
                                     else _informationText.text += "\n";
                                 }
 
                                 _informationText.text +=
-                                    $"\n {MainControl.Instance.ItemControl.itemTextMaxData[8][..^1]}" +
+                                    $"\n{MainControl.Instance.ItemControl.itemTextMaxData[8][..^1]}" +
                                     $"{MainControl.Instance.ItemControl.itemTextMaxData[9][..^1]}" +
                                     $"{MainControl.Instance.ItemControl.itemTextMaxData[10][..^1]}";
 
@@ -269,23 +270,32 @@ namespace UCT.Overworld
                             AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
                         }
 
+                        _informationText.transform.localPosition = new Vector3(0.5f, -5.2f, 0);
                         _informationText.text = "";
                         _informationText.text = $"\"{MainControl.Instance.playerControl.playerName}\"\n\n"
                                                 + $"LV {MainControl.Instance.playerControl.lv}\n"
-                                                + $"HP {MainControl.Instance.playerControl.hp}{TextProcessingService.RichTextWithEnd("size", 12, " ")}/{TextProcessingService.RichTextWithEnd("size", 12, " ")}{MainControl.Instance.playerControl.hpMax}{TextProcessingService.RichTextWithEnd("size", 1, "\n")}\n"
-                                                + $"{MainControl.Instance.ItemControl.itemTextMaxData[1][..^1]}\n"
-                                                + $"{TextProcessingService.RichTextWithEnd("size", 12, " ")}{(MainControl.Instance.playerControl.atk - 10)}{TextProcessingService.RichTextWithEnd("size", 6, " ")}({MainControl.Instance.playerControl.wearAtk}){TextProcessingService.RichTextWithEnd("size", 15, " ")} EXP:{MainControl.Instance.playerControl.exp}\n"
-                                                + $"{MainControl.Instance.ItemControl.itemTextMaxData[2][..^1]}\n"
-                                                + $"{TextProcessingService.RichTextWithEnd("size", 12, " ")}{(MainControl.Instance.playerControl.def - 10)}{TextProcessingService.RichTextWithEnd("size", 6, " ")}({MainControl.Instance.playerControl.wearDef}){TextProcessingService.RichTextWithEnd("size", 15, " ")}\n"
-                                                + $"{MainControl.Instance.ItemControl.itemTextMaxData[3][..^1]}:\n"
-                                                + $"{MainControl.Instance.playerControl.nextExp}\n\n"
-                                                + $"{MainControl.Instance.ItemControl.itemTextMaxData[4][..^1]}\n"
-                                                + $"{DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.wearArm, "Auto", 0)}\n"
-                                                + $"{MainControl.Instance.ItemControl.itemTextMaxData[5][..^1]}\n"
-                                                + $"{DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.wearArmor, "Auto", 0)}\n"
-                                                + $"{TextProcessingService.RichTextWithEnd("size", 13, "\n")}"
-                                                + $"{MainControl.Instance.ItemControl.itemTextMaxData[6][..^1]}\n"
-                                                + $"{MainControl.Instance.playerControl.gold}";
+                                                + $"HP {MainControl.Instance.playerControl.hp}" +
+                                                "<indent=18></indent>/<indent=23></indent>" +
+                                                $"{MainControl.Instance.playerControl.hpMax}\n\n" +
+                                                $"{MainControl.Instance.ItemControl.itemTextMaxData[1][..^1]}"+ 
+                                                "<indent=9.75></indent>" +
+                                                $"{MainControl.Instance.playerControl.atk - 10}" +
+                                                $"({MainControl.Instance.playerControl.wearAtk})" +
+                                                "<indent=41.75></indent>" +
+                                                $"EXP:<indent=55.25></indent>{MainControl.Instance.playerControl.exp}\n"+ 
+                                                $"{MainControl.Instance.ItemControl.itemTextMaxData[2][..^1]}"+ 
+                                                "<indent=9.75></indent>" +
+                                                $"{MainControl.Instance.playerControl.def - 10}" +
+                                                $"({MainControl.Instance.playerControl.wearDef})" +
+                                                "<indent=40></indent>" + 
+                                                $"{MainControl.Instance.ItemControl.itemTextMaxData[3][..^1]}:"+ 
+                                                $"{MainControl.Instance.playerControl.nextExp}\n\n" + 
+                                                $"{MainControl.Instance.ItemControl.itemTextMaxData[4][..^1]}" +
+                                                $"{DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.wearArm, "Auto", 0)}\n" +
+                                                $"{MainControl.Instance.ItemControl.itemTextMaxData[5][..^1]}" +
+                                                $"{DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.wearArmor, "Auto", 0)}<line-height=7.5>\n" +
+                                                $"{MainControl.Instance.ItemControl.itemTextMaxData[6][..^1]}" +
+                                                $"{MainControl.Instance.playerControl.gold}";
 
 
                     }

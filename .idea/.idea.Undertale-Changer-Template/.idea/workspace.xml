@@ -6,8 +6,14 @@
   <component name="ChangeListManager">
     <list default="true" id="8f7c2298-d077-422b-9131-f9a839bed961" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/CHANGELOG.lnk" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/CHANGELOG.lnk.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Audios/Mixer/GlobalAudioMixer.mixer" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Audios/Mixer/GlobalAudioMixer.mixer" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/CHANGELOG.lnk.lnk.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/README.zh_CN.lnk.lnk.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/README.zh_TW.lnk.lnk.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Prefabs/MainCameraOverworld.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Prefabs/MainCameraOverworld.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/BackpackBehaviour.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/BackpackBehaviour.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/readme.lnk.lnk.meta" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -132,7 +138,7 @@
 }</component>
   <component name="RunManager" selected="附加到 Unity 编辑器.附加到 Unity 编辑器">
     <configuration name="启动 Unity" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="D:\Unity\2021.3.15f1\Editor\Unity.exe" />
+      <option name="EXE_PATH" value="D:\Unity Editor\2021.3.15f1\Editor\Unity.exe" />
       <option name="PROGRAM_PARAMETERS" value="-projectPath &quot;K:\Unity Project\Undertale-Changer-Template&quot; -debugCodeOptimization" />
       <option name="WORKING_DIRECTORY" value="K:\Unity Project\Undertale-Changer-Template" />
       <option name="PASS_PARENT_ENVS" value="1" />
@@ -148,7 +154,7 @@
       <method v="2" />
     </configuration>
     <configuration name="单元测试(批处理模式)" type="RunUnityExe" factoryName="Unity Executable">
-      <option name="EXE_PATH" value="D:\Unity\2021.3.15f1\Editor\Unity.exe" />
+      <option name="EXE_PATH" value="D:\Unity Editor\2021.3.15f1\Editor\Unity.exe" />
       <option name="PROGRAM_PARAMETERS" value="-runTests -batchmode -projectPath &quot;K:\Unity Project\Undertale-Changer-Template&quot; -testResults Logs/results.xml -testPlatform EditMode -debugCodeOptimization" />
       <option name="WORKING_DIRECTORY" value="K:\Unity Project\Undertale-Changer-Template" />
       <option name="PASS_PARENT_ENVS" value="1" />
