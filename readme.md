@@ -7,6 +7,8 @@ Currently, **UCT** remains in a **semi-finished** state, so please do not use th
 
 **This version is for learning purposes only. Stay tuned for future updates to UCT.**
 
+You can view the current change log of UCT through [**CHANGELOG.md**](CHANGELOG.md), and you can also check **[PLAN.md](PLAN.md)** to understand the update plan of UCT.
+
 # Undertale-Changer-Template
 
 <p align="center">

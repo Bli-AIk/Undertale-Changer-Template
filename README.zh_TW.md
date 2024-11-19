@@ -1,11 +1,13 @@
 # 下載前先看看我！！！！
-你正在瀏覽的是**UCT** 的[**Main**](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/main)分支，該分支暫時保存了截至**2024年7月**的內容，作為一個臨時穩定（存疑）版本運行。
+你正在瀏覽的是 **UCT** 的 [**Main**](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/main) 分支，該分支暫時保存了截至**2024年7月**的內容，作為一個臨時穩定（存疑）版本運行。
 
 最新的更新內容主要在 **[Develop](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/develop)** 分支發布。如果你需要最新的改動，建議切換到該分支。
 
 目前 **UCT** 仍處於**半成品**階段，因此請勿將此版本用於遊戲製作。
 
 **此版本僅供學習使用，敬請期待 UCT 的後續更新。**
+
+你可以透過[**CHANGELOG_zh-TW.md**](CHANGELOG_zh-TW.md)查看UCT目前的更新日誌，也可以查閱[**PLAN_zh-TW.md**](PLAN_zh-TW.md)來了解UCT的更新計劃。
 
 # Undertale-Changer-Template
 
