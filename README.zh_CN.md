@@ -1,5 +1,5 @@
 # 下载前先看看我！！！！
-你正在浏览的是 **UCT** 的 **[Main](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/main)** 分支，该分支暂时保存了截至 **2024 年 7 月**的内容，作为一个临时稳定（存疑）版本运行。
+你正在浏览的是 **UCT** 的 **[Main](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/main)** 分支，该分支暂时保存了截至 **v1.0.4**  (2024/11/19更新) 的内容，作为一个临时稳定版本运行。
 
 最新的更新内容主要在 **[Develop](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/develop)** 分支发布。如果你需要最新的改动，建议切换到该分支。
 
