@@ -13,12 +13,16 @@ namespace UCT.Global.UI
     {
         private TMP_Text _tmp;
 
-        public bool width;//若中英混搭 则true就完事了
+        [FormerlySerializedAs("width")] 
+        public bool isUseWidth;
 
-        [FormerlySerializedAs("Options")] [Header("US/CN")]
+        [FormerlySerializedAs("Options")] 
+        [Header("US/CN")]
         public Vector4[] options;
 
-        public float[] fontSize = new float[2];
+        [FormerlySerializedAs("fontSize")]
+        public float[] fontSizes = new float[2];
+        public Vector3[] positions = new Vector3[2];
         private void Start()
         {
             Set();
@@ -28,7 +32,7 @@ namespace UCT.Global.UI
         public void Set()
         {
             _tmp = GetComponent<TMP_Text>();
-            width = MainControl.Instance.overworldControl.textWidth;
+            isUseWidth = MainControl.Instance.overworldControl.textWidth;
         
         }
 
@@ -36,15 +40,18 @@ namespace UCT.Global.UI
         {
             while (true)
             {
-                if (_tmp != null)
+                if (_tmp)
                 {
-                    _tmp.characterSpacing = options[Convert.ToInt32(width)].x;
-                    _tmp.wordSpacing = options[Convert.ToInt32(width)].y;
-                    _tmp.lineSpacing = options[Convert.ToInt32(width)].z;
-                    _tmp.paragraphSpacing = options[Convert.ToInt32(width)].w;
+                    _tmp.characterSpacing = options[Convert.ToInt32(isUseWidth)].x;
+                    _tmp.wordSpacing = options[Convert.ToInt32(isUseWidth)].y;
+                    _tmp.lineSpacing = options[Convert.ToInt32(isUseWidth)].z;
+                    _tmp.paragraphSpacing = options[Convert.ToInt32(isUseWidth)].w;
 
-                    if (fontSize.Length >= 2 && fontSize[0] != 0 && fontSize[1] != 0)
-                        _tmp.fontSize = fontSize[Convert.ToInt32(width)];
+                    if (fontSizes.Length >= 2 && fontSizes[0] != 0 && fontSizes[1] != 0)
+                        _tmp.fontSize = fontSizes[Convert.ToInt32(isUseWidth)];
+                    
+                    if (positions.Length >= 2 && !(positions[0] == new Vector3() && positions[1] == new Vector3()))
+                        _tmp.transform.position = positions[Convert.ToInt32(isUseWidth)];
                 }
                 else
                 {

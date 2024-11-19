@@ -668,7 +668,7 @@ namespace UCT.Service
                 foreach (var obj in Resources.FindObjectsOfTypeAll(typeof(TextChanger)))
                 {
                     var textChanger = (TextChanger)obj;
-                    textChanger.width = MainControl.Instance.overworldControl.textWidth;
+                    textChanger.isUseWidth = MainControl.Instance.overworldControl.textWidth;
                     textChanger.Set();
                     textChanger.Change();
                 }
