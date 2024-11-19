@@ -268,7 +268,7 @@ namespace UCT.Battle
                         if (selectedButton != SelectedButton.Item)
                             foreach (var t in MainControl.Instance.BattleControl.enemies)
                             {
-                                _textUI.text += "<color=#00000000>aa*</color>* " + t.name + "\n";
+                                _textUI.text += "<indent=10></indent>* " + t.name + "\n";
                             }
                         else
                         {
@@ -342,12 +342,12 @@ namespace UCT.Battle
                                 TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.BattleControl.actSave, save, MainControl.Instance.BattleControl.enemies[selectedName].name + "\\");
                                 TextProcessingService.SplitStringToListWithDelimiter(save, actSave);
 
-                                _textUI.text = "<color=#00000000>aa</color> * " + actSave[0];
+                                _textUI.text = "<indent=10></indent>* " + actSave[0];
                                 _textUIBack.text = "";
                                 if (actSave.Count > MainControl.Instance.BattleControl.enemies.Count)
                                     _textUIBack.text += "* " + actSave[2];
                                 if (actSave.Count > 2 * MainControl.Instance.BattleControl.enemies.Count)
-                                    _textUI.text += "\n<color=#00000000>aa</color> * " + actSave[4];
+                                    _textUI.text += "\n<indent=10></indent>* " + actSave[4];
                                 if (actSave.Count > 3 * MainControl.Instance.BattleControl.enemies.Count)
                                     _textUIBack.text += "\n* " + actSave[6];
                                 for (var i = 0; i < actSave.Count; i++)
@@ -386,11 +386,11 @@ namespace UCT.Battle
                                 TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.BattleControl.mercySave, save, MainControl.Instance.BattleControl.enemies[selectedName].name + "\\");
                                 TextProcessingService.SplitStringToListWithDelimiter(save, actSave);
 
-                                _textUI.text = "<color=#00000000>aa</color> * " + actSave[0];
+                                _textUI.text = "<indent=10></indent>* " + actSave[0];
                                 if (actSave.Count > MainControl.Instance.BattleControl.enemies.Count)
-                                    _textUI.text += "\n<color=#00000000>aa</color> * " + actSave[2];
+                                    _textUI.text += "\n<indent=10></indent>* " + actSave[2];
                                 if (actSave.Count > 4 * MainControl.Instance.BattleControl.enemies.Count)
-                                    _textUI.text += "\n<color=#00000000>aa</color> * " + actSave[4];
+                                    _textUI.text += "\n<indent=10></indent>* " + actSave[4];
                             }
                             break;
                         default:
@@ -452,7 +452,7 @@ namespace UCT.Battle
                                 _textUIBack.text = "";
                                 foreach (var t in MainControl.Instance.BattleControl.enemies)
                                 {
-                                    _textUI.text += "<color=#00000000>aa*</color>* " + t.name + "\n";
+                                    _textUI.text += "<indent=10></indent>* " + t.name + "\n";
                                 }
                             }
                             else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
@@ -529,7 +529,7 @@ namespace UCT.Battle
                                 _textUIBack.text = "";
                                 selectedLayer = SelectedLayer.NarratorLayer;
                                 MainControl.Instance.battlePlayerController.transform.position = (Vector3)(Vector2.one * 10000) + new Vector3(0, 0, MainControl.Instance.battlePlayerController.transform.position.z);
-                                Type(actSave[2 * selectedOption - 3]);
+                                Type(actSave[2 * (selectedOption + 1) - 1]);
                                 SpriteChange();
                                 _itemSelectController.Close();
                             }
@@ -542,7 +542,7 @@ namespace UCT.Battle
                                 selectedLayer = SelectedLayer.ButtonLayer;
                                 selectedName = 0;
                                 if (!firstIn)
-                                    TurnTextLoad(false,0);
+                                    TurnTextLoad();
                                 else
                                     TurnTextLoad(true, firstInDiy);
                                 _itemSelectController.Close();
@@ -583,12 +583,12 @@ namespace UCT.Battle
 
                             if (myItemMax > 1)
                             {
-                                textUITextChanger1 = "<color=#00000000>aa*</color>* " + DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectedName + 1 - selectedOption], "Auto", 0) + "\n";
+                                textUITextChanger1 = "<indent=10></indent>* " + DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectedName + 1 - selectedOption], "Auto", 0) + "\n";
                                 textUIDataChanger1 = DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectedName + 1 - selectedOption], "Auto", true) + "\n";
                             }
                             if (myItemMax > 2)
                             {
-                                textUITextChanger2 = "<color=#00000000>aa*</color>* " + DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectedName + 2 - selectedOption], "Auto", 0) + "\n";
+                                textUITextChanger2 = "<indent=10></indent>* " + DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectedName + 2 - selectedOption], "Auto", 0) + "\n";
                                 textUIDataChanger2 = DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectedName + 2 - selectedOption], "Auto", true) + "\n";
                             }
                             var number = 8;
@@ -617,7 +617,7 @@ namespace UCT.Battle
                             _itemSelectController.myItemRealSelect = selectedName;
                             MainControl.Instance.battlePlayerController.transform.position = new Vector3(-5.175f, -0.96f - selectedOption * 0.66f, MainControl.Instance.battlePlayerController.transform.position.z);
 
-                            _textUI.text = "<color=#00000000>aa*</color>* " + DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectedName - selectedOption], "Auto", 0) + "\n" +
+                            _textUI.text = "<indent=10></indent>* " + DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectedName - selectedOption], "Auto", 0) + "\n" +
                                           textUITextChanger1 + textUITextChanger2;
                             _textUIBack.text = DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectedName - selectedOption], "Auto", true) + "\n" + textUIDataChanger1 + textUIDataChanger2;
 
@@ -660,7 +660,7 @@ namespace UCT.Battle
                                 _textUI.text = "";
                                 foreach (var t in MainControl.Instance.BattleControl.enemies)
                                 {
-                                    _textUI.text += "<color=#00000000>aa*</color>* " + t.name + "\n";
+                                    _textUI.text += "<indent=10></indent>* " + t.name + "\n";
                                 }
                             }
                             else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
@@ -869,7 +869,9 @@ namespace UCT.Battle
 
         private void NameUIUpdate()
         {
-            _nameUI.text = MainControl.Instance.playerControl.playerName + " lv<size=3><color=#00000000>0</size></color>" + MainControl.Instance.playerControl.lv;
+            _nameUI.text = MainControl.Instance.playerControl.playerName + 
+                           " lv<indent=29.5>" + 
+                           MainControl.Instance.playerControl.lv;
         }
 
         /// <summary>
