@@ -55,7 +55,7 @@
 - [x] 在起名界面加入日文输入支持。
 - [x] 在起名界面加入韩文输入支持。
 - [x] 将[PLAN.md](PLAN.md)与[CHANGELOG.md](CHANGELOG.md)通过Github Actions与ChatGPT API进行自动翻译。
-- [ ] 合并此版本至Main。
+- [x] 合并此版本至Main。
 
 2024/11/4 计划 (1-2)
 
