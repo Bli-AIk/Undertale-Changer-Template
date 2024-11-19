@@ -1,13 +1,11 @@
 # Look at me before downloading!!
-You are currently browsing the **[Develop](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/develop)** branch of **Undertale-Changer-Template (UCT)**, which is actively maintained and updated frequently.
+You are currently viewing the **[Main](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/main)** branch of **UCT**, which temporarily holds the content as of **July 2024** and is intended to serve as a provisional stable version(maybe).
 
-As of **July 2024**, the content archive is stored in the [**Main**](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/main) branch. If you prefer a more stable (perhaps) version, it is recommended to switch to that branch.
+The latest updates are primarily released on the **[Develop](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/develop)** branch. If you need the newest changes, it is recommended to switch to this branch.
 
 Currently, **UCT** remains in a **semi-finished** state, so please do not use this version for game production.
 
 **This version is for learning purposes only. Stay tuned for future updates to UCT.**
-
-You can view the current change log of UCT through [**CHANGELOG.md**](CHANGELOG.md), and you can also check **[PLAN.md](PLAN.md)** to understand the update plan of UCT.
 
 # Undertale-Changer-Template
 
