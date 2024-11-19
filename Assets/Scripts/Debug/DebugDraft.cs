@@ -1,21 +1,26 @@
 using TMPro;
+using UCT.Global.UI;
 using UnityEngine;
 
-public class DebugDraft : MonoBehaviour
+namespace Debug
 {
-    private bool wozhenfule;
-
-    // Start is called before the first frame update
-    private void Start()
+    public class DebugDraft : MonoBehaviour
     {
-    }
+        private bool _wozhenfule;
 
-    private void Update()
-    {
-        if (!wozhenfule)
+        // Start is called before the first frame update
+        private void Start()
         {
-            GetComponent<TypeWritter>().TypeOpen("<color=red>text123</color>", false, 0, 0, GetComponent<TMP_Text>());
-            wozhenfule = true;
+        }
+
+        // Update is called once per frame
+        private void Update()
+        {
+            if (!_wozhenfule)
+            {
+                GetComponent<TypeWritter>().TypeOpen("<color=red>text123</color>", false, 0, 0, GetComponent<TMP_Text>());
+                _wozhenfule = true;
+            }
         }
     }
 }

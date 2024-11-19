@@ -10,7 +10,7 @@ Read Name\Text;
 Generally speaking, the read name is fixed.
 Specifically,
 RenameSp\name|true|true|text;
-The format is the setting when trying to name a special name. The first true or false is used to determine whether renaming to this name is allowed, and the second true or false is used to determine whether text in the name is case sensitive when detecting
+The format is the setting when trying to name a special name. The first true or false is used to determine whether renaming to this name is allowed, and the second true or false is used to determine whether text in the name is case-sensitive when detecting
 
 In particular, if the text is<gaster>, the game will crash.
 
@@ -20,20 +20,41 @@ In particular, if the text is<gaster>, the game will crash.
 
 
 
-Rename\Is this name correct?;
-Rename0\Name the fallen human.;
-Rename1\<size=0>aaaaaaaaa</size>Quit;
-Rename2\Backspace;
-Rename3\Done;
+DefaultQuestion\Is this name correct?;
+NameTheHuman\Name the fallen human.;
+Quit\Quit;
+Backspace\Backspace;
+Done\Done;
 Yes\Yes;
-No\No;
+No\<indent=6.25>No;
 GoBack\Go back;
-Teach\---Instruction---<enter><enter>[Z or ENTER]-Confirm<enter>[X or SHIFT]-Cancel<enter>[C or CTRL]-Menu(In-Game)<enter>[V]-Settings<enter>[F4]-Fullscreen<enter>[Hold ESC]-Quit<enter>When HP is 0,you lose.;
+Teach\--- Instruction ---<line-height=5><indent=-1.5><enter></line-height><enter>[Z or ENTER] - Confirm<enter>[X or SHIFT] - Cancel<enter>[C or CTRL] - Menu(In-Game)<enter>[V] - Settings<enter>[F4] - Fullscreen<enter>[Hold ESC] - Quit<enter>When HP is 0,you lose.;
 
 PageNext\Next page;
 PageLast\Last page;
 
-MenuUnder\Undertale (c)  toby fox 2015<enter>undertale changer V;
+BackspaceTip\Backspacing...;
+RandomNameTip\Generate random name...;
+
+Latin\Lat;
+Symbol\Sym;
+LatinExtended1\Ex1;
+LatinExtended2\Ex2;
+LatinExtended3\Ex3;
+Cyrillic1\Cy1;
+Cyrillic2\Cy2;
+Greek\Gre;
+Chinese\Chi;
+Hiragana1\HG1;
+Hiragana2\HG2;
+Katakana1\KT1;
+Katakana2\KT2;
+Katakana3\KT3;
+Chosung\Cho;
+Jungsung\Jun;
+Jongsung\Jon;
+
+MenuUnder\Undertale (c)  toby fox 2015<enter>undertale changer template V;
 
 RenameSp\chara|true|false|The true name.;
 RenameSp\frisk|true|false|WARNING:This name will<enter>cause nothing to happen.<enter>To put it bluntly, I'm lazy.;

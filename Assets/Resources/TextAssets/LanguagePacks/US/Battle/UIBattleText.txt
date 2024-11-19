@@ -2,9 +2,9 @@
 Battle UI texts.
 Format as follows:
 
-Turn\Turn Number\Text;
+Turn\Turn number\Text;
 Text that will always be displayed before a certain turn.
-If Turn Number is input as 0,
+If Turn number is input as 0,
 it will be randomly displayed before turns with no specific setting.
 
 Act\Monster Name\Display Text\Text After Selection;

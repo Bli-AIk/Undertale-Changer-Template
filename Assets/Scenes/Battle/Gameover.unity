@@ -154,10 +154,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a3ecd31ce8ed72499cbcef45da89694, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 0
-  Options:
+  isUseWidth: 0
+  options:
   - {x: 22, y: 0, z: 57, w: 0}
-  - {x: -6.5, y: 0, z: 45, w: 0}
+  - {x: -10, y: 0, z: 45, w: 0}
+  fontSizes:
+  - 5
+  - 5.25
+  positions:
+  - {x: 6.675, y: -4.35, z: -5.5}
+  - {x: 6.675, y: -4.25, z: -5.5}
 --- !u!114 &59908918
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -789,8 +795,8 @@ MonoBehaviour:
   clips:
   - {fileID: 8300000, guid: 15dbdab057ff92843ba4eea82475f44e, type: 3}
   - {fileID: 8300000, guid: 4457744b78c2fe94bb78d0b6eea42ac4, type: 3}
-  canChangeSence: 0
-  canChangeSenceForC: 0
+  canChangeScene: 0
+  canChangeSceneForC: 0
 --- !u!114 &638144813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -806,6 +812,7 @@ MonoBehaviour:
   originString: 
   endString: 
   passTextString: 0
+  isRunning: 0
   isTyping: 0
   hpIn: 0
   hpSave: 0
@@ -819,13 +826,13 @@ MonoBehaviour:
   speedSlow: 0.15
   clock: 0.01
   passText: 0
-  haveSpriteChanger: 0
   spriteChanger: {fileID: 0}
   isOverworld: 0
   pitch: 1
   volume: 0.5
   audioMixerGroup: {fileID: 0}
   useFont: 0
+  dynamicType: 0
   forceReturn: 0
 --- !u!1 &888686029
 GameObject:

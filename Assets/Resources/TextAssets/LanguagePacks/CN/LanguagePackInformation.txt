@@ -1,7 +1,7 @@
 /*
 配置语言包信息
 */
-LanguagePackName\简体中文<gradient="White to Yellow - UTC">(内置)</gradient>;
+LanguagePackName\简体中文<gradient="White to Yellow - UTC">（内置）</gradient>;
 
 /* 建议在此处标明各人员及职位 如xxx(原始文本),xxx(翻译),xxx(校对)等。 */
 LanguagePackAuthor\作者：AIk(原始文本);

@@ -1,89 +1,93 @@
 using TMPro;
+using UCT.Global.Core;
 using UnityEngine;
 
-/// <summary>
-/// Debug grid positioning for pop-ups and stuff.
-/// </summary>
-public class DebugGrid : ObjectPool
+namespace Debug
 {
-    [Header("Color is given to the top of the 'bar'")]
-    public Color colorX;
-
-    public Color colorY;
-    public Color colorXForText;
-    public Color colorYForText;
-
-    [Header("Split the slices horizontally and vertically (number of cuts - 1) X is horizontal with flat vertical strips Y and vice versa.")]
-    public int divisionX;
-
-    public int divisionY;
-
-    [Header("XY offset If left/right symmetric fill in a positive number as for reference")]
-    public float deviationX;
-
-    public float deviationY;
-
-    [Header("Reference coordinates")]
-    public Vector2 referenceX;
-
-    public Vector2 referenceY;
-
-    private void Start()
+    /// <summary>
+    /// Debug网格定位 用于做弹幕啥的
+    /// </summary>
+    public class DebugGrid : ObjectPool
     {
-        obj = Resources.Load<GameObject>("Template/Grid Template");
-        FillPool();
+        [Header("颜色是给到'条'上面的")]
+        public Color colorX;
 
-        SummonGrid();
-    }
+        public Color colorY;
+        public Color colorXForText;
+        public Color colorYForText;
 
-    private void SummonGrid()
-    {
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            GameObject obj = transform.GetChild(i).gameObject;
-            if (obj.activeSelf)
-                ReturnPool(obj);
-        }
+        [Header("横纵分割几片(刀数-1) X为横着平铺竖条 Y则反之")]
+        public int divisionX;
 
-        //x
-        for (int x = 1; x < divisionX; x++)
-        {
-            float length = Mathf.Abs(referenceX.y - referenceX.x);
-            //DebugLogger.Log(length);
-            GameObject objGrid = GetFromPool();
-            objGrid.transform.localPosition = new Vector3(length / divisionX * x - deviationX, 0, 0);
-            objGrid.GetComponent<SpriteRenderer>().color = colorY;
-            objGrid.transform.localScale = new Vector3(1, 1000, 1);
-            TextMeshPro tmp = objGrid.transform.Find("Text").GetComponent<TextMeshPro>();
-            tmp.text = objGrid.transform.localPosition.x.ToString();
-            tmp.color = colorYForText;
-            tmp.transform.localScale = new Vector3(1, 0.001f, 1);
-            tmp.transform.localPosition = new Vector3(0.25f, 0.00475f, 0);
-            tmp.fontSize = 3;
-        }
-        //x
-        for (int y = 1; y < divisionX; y++)
-        {
-            float length = Mathf.Abs(referenceY.y - referenceY.x);
-            //DebugLogger.Log(length);
-            GameObject objGrid = GetFromPool();
-            objGrid.transform.localPosition = new Vector3(0, length / divisionY * y - deviationY, 0);
-            objGrid.GetComponent<SpriteRenderer>().color = colorX;
-            objGrid.transform.localScale = new Vector3(1000, 1, 1);
-            TextMeshPro tmp = objGrid.transform.Find("Text").GetComponent<TextMeshPro>();
-            tmp.text = objGrid.transform.localPosition.y.ToString();
-            tmp.color = colorXForText;
-            tmp.transform.localScale = new Vector3(0.001f, 1, 1);
-            tmp.transform.localPosition = new Vector3(-0.00625f, 0.25f, 0);
-            tmp.fontSize = 3;
-        }
-    }
+        public int divisionY;
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.G))
+        [Header("XY偏移 如果左右对称就和参考一样填个正的数")]
+        public float deviationX;
+
+        public float deviationY;
+
+        [Header("参考坐标")]
+        public Vector2 referenceX;
+
+        public Vector2 referenceY;
+
+        private void Start()
         {
+            obj = Resources.Load<GameObject>("Template/Grid Template");
+            FillPool();
+
             SummonGrid();
+        }
+
+        private void SummonGrid()
+        {
+            for (var i = 0; i < transform.childCount; i++)
+            {
+                var obj = transform.GetChild(i).gameObject;
+                if (obj.activeSelf)
+                    ReturnPool(obj);
+            }
+
+            //x
+            for (var x = 1; x < divisionX; x++)
+            {
+                var length = Mathf.Abs(referenceX.y - referenceX.x);
+                //Debug.Log(length);
+                var objGrid = GetFromPool();
+                objGrid.transform.localPosition = new Vector3(length / divisionX * x - deviationX, 0, 0);
+                objGrid.GetComponent<SpriteRenderer>().color = colorY;
+                objGrid.transform.localScale = new Vector3(1, 1000, 1);
+                var tmp = objGrid.transform.Find("Text").GetComponent<TextMeshPro>();
+                tmp.text = objGrid.transform.localPosition.x.ToString();
+                tmp.color = colorYForText;
+                tmp.transform.localScale = new Vector3(1, 0.001f, 1);
+                tmp.transform.localPosition = new Vector3(0.25f, 0.00475f, 0);
+                tmp.fontSize = 3;
+            }
+            //x
+            for (var y = 1; y < divisionX; y++)
+            {
+                var length = Mathf.Abs(referenceY.y - referenceY.x);
+                //Debug.Log(length);
+                var objGrid = GetFromPool();
+                objGrid.transform.localPosition = new Vector3(0, length / divisionY * y - deviationY, 0);
+                objGrid.GetComponent<SpriteRenderer>().color = colorX;
+                objGrid.transform.localScale = new Vector3(1000, 1, 1);
+                var tmp = objGrid.transform.Find("Text").GetComponent<TextMeshPro>();
+                tmp.text = objGrid.transform.localPosition.y.ToString();
+                tmp.color = colorXForText;
+                tmp.transform.localScale = new Vector3(0.001f, 1, 1);
+                tmp.transform.localPosition = new Vector3(-0.00625f, 0.25f, 0);
+                tmp.fontSize = 3;
+            }
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.G))
+            {
+                SummonGrid();
+            }
         }
     }
 }

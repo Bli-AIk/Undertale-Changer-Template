@@ -2,29 +2,32 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-/// <summary>
-/// VolumeComponent, shown in the add list
-/// </summary>
-
-[VolumeComponentMenuForRenderPipeline("Custom/Chromatic Aberration", typeof(UniversalRenderPipeline))]
-public class ChromaticAberrationComponent : VolumeComponent, IPostProcessComponent
+namespace Volume
 {
-    public BoolParameter isShow = new BoolParameter(false, true);
+    /// <summary>
+    /// VolumeComponent，显示在添加列表内
+    /// </summary>
 
-    [Header("Settings")]
-    public FloatParameter offset = new FloatParameter(0.02f, true);
-
-    public FloatParameter speed = new FloatParameter(10, true);
-    public FloatParameter height = new FloatParameter(0.15f, true);
-    public BoolParameter onlyOri = new BoolParameter(false, true);
-
-    public bool IsActive()
+    [VolumeComponentMenuForRenderPipeline("Custom/Chromatic Aberration", typeof(UniversalRenderPipeline))]
+    public class ChromaticAberrationComponent : VolumeComponent, IPostProcessComponent
     {
-        return true;
-    }
+        public BoolParameter isShow = new(false, true);
 
-    public bool IsTileCompatible()
-    {
-        return false;
+        [Header("Settings")]
+        public FloatParameter offset = new(0.02f, true);
+
+        public FloatParameter speed = new(10, true);
+        public FloatParameter height = new(0.15f, true);
+        public BoolParameter onlyOri = new(false, true);
+
+        public bool IsActive()
+        {
+            return true;
+        }
+
+        public bool IsTileCompatible()
+        {
+            return false;
+        }
     }
 }

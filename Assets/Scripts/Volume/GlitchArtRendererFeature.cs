@@ -1,99 +1,115 @@
+using System;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
-using Log;
-public class CRTScreenRendererFeature : ScriptableRendererFeature
+
+namespace Volume
 {
-    [System.Serializable]
-    public class Settings
+    public class GlitchArtRendererFeature : ScriptableRendererFeature
     {
-        public RenderPassEvent renderPassEvent = RenderPassEvent.BeforeRenderingPostProcessing;
-        public Shader shader;
-    }
-
-    public Settings settings = new Settings();
-    private CRTScreenPass pass;
-
-    public override void Create()
-    {
-        this.name = "CRTScreenPass";
-        pass = new CRTScreenPass(RenderPassEvent.BeforeRenderingPostProcessing, settings.shader);
-    }
-
-    public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
-    {
-        pass.Setup(renderer.cameraColorTarget);
-        renderer.EnqueuePass(pass);
-    }
-}
-
-[System.Serializable]
-public class CRTScreenPass : ScriptableRenderPass
-{
-    private static readonly string renderTag = "CRTScreen Effects";
-    private static readonly int MainTexId = Shader.PropertyToID("_MainTex");
-    private static readonly int TempTargetId = Shader.PropertyToID("_TempTargetColorTint");
-
-    private CRTScreenComponent CRTScreenVolume;
-    private Material mat;
-    private RenderTargetIdentifier currentTarget;
-
-    public CRTScreenPass(RenderPassEvent passEvent, Shader CRTScreenShader)
-    {
-        renderPassEvent = passEvent;
-        if (CRTScreenShader == null)
+        [Serializable]
+        public class Settings
         {
-            DebugLogger.Log("Shader不存在", DebugLogger.Type.err);
-            return;
+            public Shader shader;
         }
-        mat = CoreUtils.CreateEngineMaterial(CRTScreenShader);
+
+        public Settings settings = new();
+        private GlitchArtPass _pass;
+
+        public override void Create()
+        {
+            name = "GlitchArtPass";
+            _pass = new GlitchArtPass(RenderPassEvent.BeforeRenderingPostProcessing, settings.shader);
+        }
+
+        public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
+        {
+            _pass.Setup(renderer.cameraColorTarget);
+            renderer.EnqueuePass(_pass);
+        }
     }
 
-    public void Setup(in RenderTargetIdentifier currentTarget)
+    [Serializable]
+    public class GlitchArtPass : ScriptableRenderPass
     {
-        this.currentTarget = currentTarget;
-    }
+        private static readonly string RenderTag = "GlitchArt Effects";
+        private static readonly int MainTexId = Shader.PropertyToID("_MainTex");
+        private static readonly int TempTargetId = Shader.PropertyToID("_TempTargetColorTint");
+        private static readonly int AnalogGlitchMode = Shader.PropertyToID("_AnalogGlitchMode");
+        private static readonly int ScanLineJitter = Shader.PropertyToID("_ScanLineJitter");
+        private static readonly int HorizontalShakeMode = Shader.PropertyToID("_HorizontalShakeMode");
+        private static readonly int HorizontalShake = Shader.PropertyToID("_HorizontalShake");
+        private static readonly int ColorDriftMode = Shader.PropertyToID("_ColorDriftMode");
+        private static readonly int ColorDrift = Shader.PropertyToID("_ColorDrift");
+        private static readonly int VerticalJumpMode = Shader.PropertyToID("_VerticalJumpMode");
+        private static readonly int VerticalJump = Shader.PropertyToID("_VerticalJump");
 
-    public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
-    {
-        if (mat == null)
-        {
-            return;
-        }
-        if (!renderingData.cameraData.postProcessEnabled)
-        {
-            return;
-        }
-        VolumeStack stack = VolumeManager.instance.stack;
-        CRTScreenVolume = stack.GetComponent<CRTScreenComponent>();
-        if (CRTScreenVolume == null)
-        {
-            return;
-        }
-        if (CRTScreenVolume.isShow.value == false)
-        {
-            return;
-        }
-        CommandBuffer cmd = CommandBufferPool.Get(renderTag);
-        Render(cmd, ref renderingData);
-        context.ExecuteCommandBuffer(cmd);
-        CommandBufferPool.Release(cmd);
-    }
+        private GlitchArtComponent _glitchArtVolume;
+        private Material _mat;
+        private RenderTargetIdentifier _currentTarget;
 
-    private void Render(CommandBuffer cmd, ref RenderingData renderingData)
-    {
-        ref CameraData cameraData = ref renderingData.cameraData;
-        Camera camera = cameraData.camera;
-        RenderTargetIdentifier source = currentTarget;
-        int destination = TempTargetId;
+        public GlitchArtPass(RenderPassEvent passEvent, Shader glitchArtShader)
+        {
+            renderPassEvent = passEvent;
+            if (glitchArtShader == null)
+            {
+                UCT.Global.Other.Debug.Log("Shader不存在");
+                return;
+            }
+            _mat = CoreUtils.CreateEngineMaterial(glitchArtShader);
+        }
 
-        mat.SetVector("_Resolution", CRTScreenVolume.resolution.value);
-        mat.SetVector("_PixelScanlineBrightness", CRTScreenVolume.pixelScanlineBrightness.value);
-        mat.SetFloat("_Speed", CRTScreenVolume.speed.value);
+        public void Setup(in RenderTargetIdentifier currentTarget)
+        {
+            _currentTarget = currentTarget;
+        }
 
-        cmd.SetGlobalTexture(MainTexId, source);
-        cmd.GetTemporaryRT(destination, cameraData.camera.scaledPixelWidth, cameraData.camera.scaledPixelHeight, 0, FilterMode.Trilinear, RenderTextureFormat.Default);
-        cmd.Blit(source, destination);
-        cmd.Blit(destination, source, mat, 0);
+        public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
+        {
+            if (_mat == null)
+            {
+                return;
+            }
+            if (!renderingData.cameraData.postProcessEnabled)
+            {
+                return;
+            }
+            var stack = VolumeManager.instance.stack;
+            _glitchArtVolume = stack.GetComponent<GlitchArtComponent>();
+            if (_glitchArtVolume == null)
+            {
+                return;
+            }
+            if (_glitchArtVolume.isShow.value == false)
+            {
+                return;
+            }
+            var cmd = CommandBufferPool.Get(RenderTag);
+            Render(cmd, ref renderingData);
+            context.ExecuteCommandBuffer(cmd);
+            CommandBufferPool.Release(cmd);
+        }
+
+        private void Render(CommandBuffer cmd, ref RenderingData renderingData)
+        {
+            ref var cameraData = ref renderingData.cameraData;
+            var camera = cameraData.camera;
+            var source = _currentTarget;
+            var destination = TempTargetId;
+
+            _mat.SetFloat(AnalogGlitchMode, Convert.ToInt32(_glitchArtVolume.analogGlitchMode.value));
+            _mat.SetVector(ScanLineJitter, _glitchArtVolume.scanLineJitter.value);
+            _mat.SetFloat(HorizontalShakeMode, Convert.ToInt32(_glitchArtVolume.horizontalShakeMode.value));
+            _mat.SetFloat(HorizontalShake, _glitchArtVolume.horizontalShake.value);
+            _mat.SetFloat(ColorDriftMode, Convert.ToInt32(_glitchArtVolume.colorDriftMode.value));
+            _mat.SetFloat(ColorDrift, _glitchArtVolume.colorDrift.value);
+            _mat.SetFloat(VerticalJumpMode, Convert.ToInt32(_glitchArtVolume.verticalJumpMode.value));
+            _mat.SetFloat(VerticalJump, _glitchArtVolume.verticalJump.value);
+
+            cmd.SetGlobalTexture(MainTexId, source);
+            cmd.GetTemporaryRT(destination, cameraData.camera.scaledPixelWidth, cameraData.camera.scaledPixelHeight, 0, FilterMode.Trilinear, RenderTextureFormat.Default);
+            cmd.Blit(source, destination);
+            cmd.Blit(destination, source, _mat, 0);
+        }
     }
 }

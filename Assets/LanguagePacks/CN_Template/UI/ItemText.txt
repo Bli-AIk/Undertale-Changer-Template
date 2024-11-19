@@ -18,7 +18,7 @@ Data\显示名称;   用于其余显示
 特殊字符输入：
 
 <data0> 调用data中的文字 其中的 0 为编号，这个编号是从0开始计数而不是从1开始的。
-可更改 (禁止套娃！！！！！！！)
+可更改 (禁止嵌套！！！！！！！)
 
 <autoFoodFull>自动检测玩家血量和该物品回复血量，然后显示 
 * 你吃掉了XX。
@@ -101,8 +101,8 @@ Data\武器:;
 Data\防具:;
 Data\金钱:;
 Data\测试;/*7 编写过程中测试所用文字 无实义 可以不改但别删*/
-Data\使用<size=55> </size>;
-Data\说明<size=90> </size>;
+Data\使用<indent=27.5>;
+Data\说明<indent=56.5>;
 Data\丢弃;/*编号：10*/
 
 /*
@@ -111,7 +111,7 @@ Data\丢弃;/*编号：10*/
 */
 
 Data\* 你吃掉了<itemNameFood>。<stop>;
-Data\* 你回复了<autoFood>HP！<stop>;/*未用到<itemHp>。这一步需要实时检测，故在打字机中单独插入一个检测方法。这里的 <autoFood> 只会用来检测在哪里插入HP数*/
+Data\* 你回复了 <itemHp> HP！<stop>;
 Data\* “<itemNameFood>” - 治愈 <itemHp> HP<stop>;
 Data\* 你装备了<itemNameArm>。<stop>;
 Data\* 你装备了<itemNameArmor>。<stop>;

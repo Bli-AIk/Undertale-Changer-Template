@@ -12,20 +12,41 @@ RenameSp\name|true|true|text;
 <playerName>获取玩家名称
 */
 
-Rename\是这个名字没错吗？;
-Rename0\为坠落的人类命名。;
-Rename1\退出;
-Rename2\退格;
-Rename3\完成;
-Yes\是;
-No\<color=#00000000><size=2.5>wwww</size></color>否;
+DefaultQuestion\是这个名字没错吗？;
+NameTheHuman\<size=6.15>为坠落的人类命名。;
+Quit\退出;
+Backspace\退格;
+Done\完成;
+Yes\<indent=75>是;
+No\<indent=5.25>否;
 GoBack\返回;
-Teach\---游戏教学---<enter><enter>[Z或ENTER]-确认<enter>[X或SHIFT]-取消<enter>[C或CTRL]-菜单(游戏内)<enter>[V]-设置<enter>[F4]-全屏化<enter>[长按ESC]-退出游戏<enter>当HP为0时，你就输了。;
+Teach\---游戏教学---<line-height=2.5><indent=-1.5><enter></line-height><enter>[Z或ENTER]-确认<enter>[X或SHIFT]-取消<enter>[C或CTRL]-菜单(游戏内)<enter>[V]-设置<enter>[F4]-全屏化<enter>[长按ESC]-退出游戏<enter>当HP为0时，你就输了。;
 
 PageNext\下一页;
 PageLast\上一页;
 
-MenuUnder\Undertale (c)  toby fox 2015<enter>undertale changer V;
+BackspaceTip\正在退格...;
+RandomNameTip\正在生成随机的名称...;
+
+Latin\拉丁符号;
+Symbol\数字符号;
+LatinExtended1\拓展符一;
+LatinExtended2\拓展符二;
+LatinExtended3\拓展符三;
+Cyrillic1\西里尔一;
+Cyrillic2\西里尔二;
+Greek\希腊符号;
+Chinese\中文输入;
+Hiragana1\平假名一;
+Hiragana2\平假名二;
+Katakana1\片假名一;
+Katakana2\片假名二;
+Katakana3\片假名三;
+Chosung\韩语初声;
+Jungsung\韩语中声;
+Jongsung\韩语终声;
+
+MenuUnder\Undertale (c)  toby fox 2015<enter>undertale changer template V;
 
 RenameSp\chara|true|false|真正的名字。;
 RenameSp\frisk|true|false|警告：这个名字<enter>你起了也没用。<enter>说白了，咱懒得整困难模式。;

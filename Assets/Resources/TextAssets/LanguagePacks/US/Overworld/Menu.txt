@@ -10,7 +10,7 @@ Read Name\Text;
 Generally speaking, the read name is fixed.
 Specifically,
 RenameSp\name|true|true|text;
-The format is the setting when trying to name a special name. The first true or false is used to determine whether renaming to this name is allowed, and the second true or false is used to determine whether text in the name is case sensitive when detecting
+The format is the setting when trying to name a special name. The first true or false is used to determine whether renaming to this name is allowed, and the second true or false is used to determine whether text in the name is case-sensitive when detecting
 
 In particular, if the text is<gaster>, the game will crash.
 
@@ -26,12 +26,12 @@ Menu2\Settings;
 Menu3\Language;
 Menu4\GameSave;
 Menu5\Exit;
-Menu6\PgUp;
-Menu7\PgDn;
+Menu6\PageUp;
+Menu7\PageDown;
 Menu8\Back;
 Menu9\Enter;
 Menu10\New;
-Menu11\Wipe;
+Menu11\Delete;
 Menu12\Save;
 
-MenuUnder\Undertale (c)  toby fox 2015<enter>undertale changer V;
+MenuUnder\Undertale (c)  toby fox 2015<enter>undertale changer template V;

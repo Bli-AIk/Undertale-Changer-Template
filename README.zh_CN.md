@@ -1,13 +1,20 @@
 # 下载前先看看我！！！！
-你正在浏览的是 **UCT** 的 **[Main](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/main)** 分支，该分支暂时保存了截至 **2024 年 7 月**的内容，作为一个临时稳定（存疑）版本运行。
+你正在浏览的是 **Undertale-Changer-Template (UCT)** 的 **[Develop](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/develop)** 分支，该分支目前持续保持更新状态，且更新频繁。
 
-最新的更新内容主要在 **[Develop](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/develop)** 分支发布。如果你需要最新的改动，建议切换到该分支。
+截至 **2024 年 7 月**的内容存档目前存储在 **[Main](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/main)** 分支。如果你想使用一个更加稳定（存疑）的版本，建议切换到该分支。
 
 当前 **UCT** 仍处于**半成品**阶段，因此请勿将此版本用于游戏制作。
 
 **此版本仅供学习使用，敬请期待 UCT 的后续更新。**
 
+你可以通过[**CHANGELOG_zh-CN.md**](CHANGELOG_zh-CN.md)查看UCT目前的更新日志，也可以查阅[**PLAN_zh-CN.md**](PLAN_zh-CN.md)来了解UCT的更新计划。
+
 # Undertale-Changer-Template
+
+<p align="center">
+  <img src="Assets/Sprites/Icons/logo.png" style="width: 100%; max-width: 500px; image-rendering: pixelated;">
+</p>
+
 一个基于[**Unity引擎**](https://unity.com)的[**UNDERTALE**](https://undertale.com)同人游戏模板。
 
 [![license](https://img.shields.io/github/license/Bli-AIk/Undertale-Changer-Template
@@ -26,6 +33,7 @@
 - [简介](#简介)
 - [使用方法](#使用方法)
 - [Wiki](#Wiki)
+- [依赖项](#依赖项)
 - [许可证](#许可证)
 
 
@@ -70,6 +78,22 @@
 [Wiki](https://github.com/Bli-AIk/Undertale-Changer-Template/wiki/Home%E2%80%90zh_CN)
 
 （请注意，此Wiki是根据旧版的UCT而编写的，它可能与当前版本的部分内容存在差异）
+
+## 依赖项
+- [Clipper2](https://github.com/AngusJohnson/Clipper2)
+- [DOTween](https://dotween.demigiant.com/)
+- [LibTessDotNet](https://github.com/speps/LibTessDotNet)
+- [Live2D](https://www.live2d.com/cubism/download/viewer-unity/)
+- [TextMesh Pro](https://docs.unity3d.com/Packages/com.unity.textmeshpro@2.1/manual/index.html)
+- [More Effective Coroutines](http://trinary.tech/category/mec/)
+- [Fusion Pixel Font](https://github.com/TakWolf/fusion-pixel-font)
+- [RiderFlow](https://www.jetbrains.com/riderflow/)
+- [Pinyin4NET](https://github.com/hyjiacan/Pinyin4NET)
+- [NuGetForUnity](https://github.com/GlitchEnzo/NuGetForUnity)
+- [chineseStroke](https://github.com/WTree/chineseStroke)
+- [Alchemy](https://github.com/AnnulusGames/Alchemy)
+
+以上库/插件的贡献者们为本项目提供了优秀的工具和技术支持，衷心感谢你们！
 
 ## 许可证
 

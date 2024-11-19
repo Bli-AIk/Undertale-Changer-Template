@@ -114,8 +114,8 @@ Data\WEAPON:;
 Data\ARMOR:;
 Data\GOLD:;
 Data\CAO;/*7 This is the text used for testing during the writing process. It has no real meaning. You can leave it unchanged, but do not delete it*/
-Data\USE<size=87.5> </size>;
-Data\INFO<size=100> </size>;
+Data\USE<indent=27.5>;
+Data\INFO<indent=56.5>;
 Data\DROP;/*number:10*/
 
 /*
@@ -124,7 +124,7 @@ item use/info/drop
 */
 
 Data\* You ate <itemNameFood>.<stop>;
-Data\* You recovered <autoFood> HP!<stop>;/*<itemHp>is not used. This step requires real-time detection, so a separate detection method is inserted into the typewriter.The <autoFood> here is only used to detect where the HP value is inserted*/
+Data\* You recovered <itemHp> HP!<stop>;
 Data\* "<itemNameFood>" - Heals <itemHp> HP<stop>;
 Data\* You equipped <itemNameArm>.<stop>;
 Data\* You equipped <itemNameArmor>.<stop>;

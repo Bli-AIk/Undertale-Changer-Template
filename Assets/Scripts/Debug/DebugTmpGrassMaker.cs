@@ -3,29 +3,32 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class DebugTmpGrassMaker : MonoBehaviour
+namespace Debug
 {
-    private TextMeshPro tmp;
-    public List<string> strings;
-    public float time, timeMax;
-    private bool select;
-
-    private void Start()
+    public class DebugTmpGrassMaker : MonoBehaviour
     {
-        strings.Add("²Ý\n²Ý");
-        strings.Add("²Ý *\n²Ý *");
-        tmp = GetComponent<TextMeshPro>();
-        time = timeMax;
-    }
+        private TextMeshPro _tmp;
+        public List<string> strings;
+        public float time, timeMax;
+        private bool _select;
 
-    private void Update()
-    {
-        if (time < 0)
+        private void Start()
         {
+            strings.Add("²Ý\n²Ý");
+            strings.Add("²Ý *\n²Ý *");
+            _tmp = GetComponent<TextMeshPro>();
             time = timeMax;
-            select = !select;
-            tmp.text = strings[Convert.ToInt32(select)];
         }
-        else time -= Time.deltaTime;
+
+        private void Update()
+        {
+            if (time < 0)
+            {
+                time = timeMax;
+                _select = !_select;
+                _tmp.text = strings[Convert.ToInt32(_select)];
+            }
+            else time -= Time.deltaTime;
+        }
     }
 }

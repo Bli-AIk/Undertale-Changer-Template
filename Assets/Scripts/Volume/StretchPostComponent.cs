@@ -2,25 +2,28 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-/// <summary>
-/// VolumeComponent, shown in the add list
-/// </summary>
-
-[VolumeComponentMenuForRenderPipeline("Custom/Stretch Post", typeof(UniversalRenderPipeline))]
-public class StretchPostComponent : VolumeComponent, IPostProcessComponent
+namespace Volume
 {
-    public BoolParameter isShow = new BoolParameter(false, true);
+    /// <summary>
+    /// VolumeComponent，显示在添加列表内
+    /// </summary>
 
-    [Header("Settings")]
-    public Vector2Parameter draw = new Vector2Parameter(new Vector2(), true);
-
-    public bool IsActive()
+    [VolumeComponentMenuForRenderPipeline("Custom/Stretch Post", typeof(UniversalRenderPipeline))]
+    public class StretchPostComponent : VolumeComponent, IPostProcessComponent
     {
-        return true;
-    }
+        public BoolParameter isShow = new(false, true);
 
-    public bool IsTileCompatible()
-    {
-        return false;
+        [Header("Settings")]
+        public Vector2Parameter draw = new(new Vector2(), true);
+
+        public bool IsActive()
+        {
+            return true;
+        }
+
+        public bool IsTileCompatible()
+        {
+            return false;
+        }
     }
 }

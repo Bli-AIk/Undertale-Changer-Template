@@ -1,101 +1,105 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
-/// <summary>
-/// Old combat box drawing script: deprecated.
-/// New: DrawFrame
-/// </summary>
-
-[Obsolete]
-public class CreateQuadChanged : MonoBehaviour
+namespace Obsolete
 {
-    public static CreateQuadChanged instance;
+    /// <summary>
+    /// 旧的战斗框绘制脚本：已废弃
+    /// 新的：DrawFrame
+    /// </summary>
 
-    private void Awake()
+    [Obsolete]
+    public class CreateQuadChanged : MonoBehaviour
     {
-        instance = this;
-    }
+        public static CreateQuadChanged Instance;
 
-    //public float debug;
-    public List<Vector3> vertPoints = new List<Vector3>();
-
-    public List<Vector2> vertUV = new List<Vector2>();
-    public List<Vector3> vertEdge = new List<Vector3>();
-
-    //public bool havePoints;
-    //public List<Vector3> noHavePoints = new List<Vector3>();
-    public float noHavePointsFloat;
-
-    public float width;
-    public bool haveEdgeCollider2D;
-    private EdgeCollider2D edgeCollider2D;
-    public List<GameObject> points = new List<GameObject>();
-    public Color color;
-    [SerializeField] private Material material = null;
-    [SerializeField] private Texture mainTex = null;
-    private VertexHelper vh = new VertexHelper();
-    private MeshFilter meshFilter;
-    private MeshRenderer meshRenderer;
-    private LineRenderer lineRenderer;
-
-    private void Start()
-    {
-        meshFilter = GetComponent<MeshFilter>();
-        meshRenderer = GetComponent<MeshRenderer>();
-        lineRenderer = GetComponent<LineRenderer>();
-        lineRenderer.loop = true;
-        lineRenderer.startWidth = width;
-        lineRenderer.endWidth = width;
-        lineRenderer.positionCount = vertPoints.Count;
-        for (int i = 0; i < vertPoints.Count; i++)
+        private void Awake()
         {
-            points.Add(transform.Find("Point" + i).gameObject);
+            Instance = this;
         }
-        if (haveEdgeCollider2D)
+
+        //public float debug;
+        public List<Vector3> vertPoints = new List<Vector3>();
+
+        public List<Vector2> vertUV = new List<Vector2>();
+        public List<Vector3> vertEdge = new List<Vector3>();
+
+        //public bool havePoints;
+        //public List<Vector3> noHavePoints = new List<Vector3>();
+        public float noHavePointsFloat;
+
+        public float width;
+        public bool haveEdgeCollider2D;
+        private EdgeCollider2D _edgeCollider2D;
+        public List<GameObject> points = new List<GameObject>();
+        public Color color;
+        [SerializeField] private Material material;
+        [SerializeField] private Texture mainTex;
+        private VertexHelper _vh = new VertexHelper();
+        private MeshFilter _meshFilter;
+        private MeshRenderer _meshRenderer;
+        private LineRenderer _lineRenderer;
+
+        private void Start()
         {
-            edgeCollider2D = gameObject.AddComponent<EdgeCollider2D>() ?? gameObject.GetComponent<EdgeCollider2D>();
-        }
-        ReStart();
-    }
-
-    private void Update()
-    {
-        ReStart();
-    }
-
-    private void ReStart()
-    {
-        vh.Clear();
-        for (int i = 0; i < vertPoints.Count; i++)
-        {
-            vertPoints[i] = points[i].transform.localPosition;
-            lineRenderer.SetPosition(i, points[i].transform.position);
-            vh.AddVert(vertPoints[i], color, vertUV[i]);
-        }
-        vh.AddTriangle(0, 2, 1);
-        vh.AddTriangle(0, 3, 2);
-        Mesh mesh = new Mesh();
-        mesh.name = "Quad";
-        vh.FillMesh(mesh);
-        meshFilter.mesh = mesh;
-
-        meshRenderer.material = material;
-        meshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-        meshRenderer.receiveShadows = false;
-        // Setting up the master map
-        meshRenderer.material.mainTexture = mainTex;
-
-        if (haveEdgeCollider2D)
-        {
-            Vector2[] points = new Vector2[5];
-            points[4] = vertPoints[0] + vertEdge[0];
-            for (int i = 0; i < vertPoints.Count; i++)
+            _meshFilter = GetComponent<MeshFilter>();
+            _meshRenderer = GetComponent<MeshRenderer>();
+            _lineRenderer = GetComponent<LineRenderer>();
+            _lineRenderer.loop = true;
+            _lineRenderer.startWidth = width;
+            _lineRenderer.endWidth = width;
+            _lineRenderer.positionCount = vertPoints.Count;
+            for (var i = 0; i < vertPoints.Count; i++)
             {
-                points[i] = vertPoints[i] + vertEdge[i];
+                points.Add(transform.Find("Point" + i).gameObject);
             }
-            edgeCollider2D.points = points;
+            if (haveEdgeCollider2D)
+            {
+                _edgeCollider2D = gameObject.AddComponent<EdgeCollider2D>() ?? gameObject.GetComponent<EdgeCollider2D>();
+            }
+            ReStart();
+        }
+
+        private void Update()
+        {
+            ReStart();
+        }
+
+        private void ReStart()
+        {
+            _vh.Clear();
+            for (var i = 0; i < vertPoints.Count; i++)
+            {
+                vertPoints[i] = points[i].transform.localPosition;
+                _lineRenderer.SetPosition(i, points[i].transform.position);
+                _vh.AddVert(vertPoints[i], color, vertUV[i]);
+            }
+            _vh.AddTriangle(0, 2, 1);
+            _vh.AddTriangle(0, 3, 2);
+            var mesh = new Mesh();
+            mesh.name = "Quad";
+            _vh.FillMesh(mesh);
+            _meshFilter.mesh = mesh;
+
+            _meshRenderer.material = material;
+            _meshRenderer.shadowCastingMode = ShadowCastingMode.Off;
+            _meshRenderer.receiveShadows = false;
+            // 设置主贴图
+            _meshRenderer.material.mainTexture = mainTex;
+
+            if (haveEdgeCollider2D)
+            {
+                var points = new Vector2[5];
+                points[4] = vertPoints[0] + vertEdge[0];
+                for (var i = 0; i < vertPoints.Count; i++)
+                {
+                    points[i] = vertPoints[i] + vertEdge[i];
+                }
+                _edgeCollider2D.points = points;
+            }
         }
     }
 }

@@ -353,7 +353,7 @@ GameObject:
   - component: {fileID: 658997762}
   - component: {fileID: 658997761}
   m_Layer: 0
-  m_Name: SafeText
+  m_Name: TextNotice
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -371,7 +371,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 004b7bcff67749046bb833215590b08e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mode: 1
   dynamicMode: 2
 --- !u!114 &658997762
 MonoBehaviour:
@@ -386,9 +385,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   width: 1
-  Options:
+  options:
   - {x: 0.75, y: -26, z: 5, w: 0}
   - {x: 0.75, y: -8.85, z: 20, w: 0}
+  fontSize:
+  - 0
+  - 0
 --- !u!114 &658997763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -409,12 +411,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Undertale:Changer is based \non Unity Engine produced \nUndertale fan
-    game template.\nIt is strongly recommended that \nyou visit undertale.com to
-    purchase\nand play the original game.\nThis template is open source\non Gamejolt
-    and Github according to\nGNU General Public License v3.0.\nIt is strictly prohibited
-    to sell\nthis template, its modified version\nand games made based on the template\nin
-    any form."
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 3c24208bcb2fde7488b42e2ffe8c922a, type: 2}
   m_sharedMaterial: {fileID: -4624251736400588842, guid: 3c24208bcb2fde7488b42e2ffe8c922a,
@@ -548,8 +545,39 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 20, y: 5}
+  m_SizeDelta: {x: 16, y: 12}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &679671005
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 679671006}
+  m_Layer: 0
+  m_Name: Timing Controller
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &679671006
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 679671005}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &722682247
 GameObject:
   m_ObjectHideFlags: 0
@@ -612,7 +640,7 @@ GameObject:
   - component: {fileID: 915422017}
   - component: {fileID: 915422016}
   m_Layer: 5
-  m_Name: Text Message
+  m_Name: TextMessage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -651,9 +679,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   width: 0
-  Options:
+  options:
   - {x: -0.5, y: 0, z: 0, w: 0}
   - {x: -0.5, y: 0, z: 0, w: 0}
+  fontSize:
+  - 0
+  - 0
 --- !u!114 &915422017
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -674,10 +705,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '[Press Z OR ENTER]'
+  m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: cbf849732f5a1684a936657fac95e700, type: 2}
-  m_sharedMaterial: {fileID: -2193301765901157531, guid: cbf849732f5a1684a936657fac95e700,
+  m_fontAsset: {fileID: 11400000, guid: 7472758648e2a604ca55d80714057495, type: 2}
+  m_sharedMaterial: {fileID: 7373786900426836240, guid: 7472758648e2a604ca55d80714057495,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -768,7 +799,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -2193301765901157531, guid: cbf849732f5a1684a936657fac95e700, type: 2}
+  - {fileID: 7373786900426836240, guid: 7472758648e2a604ca55d80714057495, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8af6835af6fd18e45b8cff33dfa3d893, type: 3}
+  m_Name: CupCake
+  m_EditorClassIdentifier: 
+  objName: DemoBullet
+  typeName: CupCake
+  layer: 40
+  sprite: {fileID: 21300000, guid: a55224a9007c69a4e97f55b16a124d64, type: 3}
+  triggerOffset:
+  - {x: 0, y: 0}
+  triggerSize:
+  - {x: 1, y: 1}
+  triggerHit: 01000000
+  startPosition: {x: 1, y: -1.6, z: 0}
+  startRotation: {x: 0, y: 0, z: 0}
+  startScale: {x: 0, y: 0, z: 0}
+  bulletColor: 0
+  startMask: 0
+  triggerFollowMode: 1

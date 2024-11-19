@@ -1,4 +1,4 @@
-Undertale:Changer是基于Unity Engine
+Undertale-Changer-Template是基于Unity Engine
 所制作的Undertale同人游戏模板。
 强烈建议您在使用此模板前访问
 undertale.com以购买并游玩原作。
@@ -12,4 +12,4 @@ GNU General Public License v3.0开源。
 
 请务必在使用前
 阅读完本项目内的readme.md文件。
-
+[按Z或ENTER继续]

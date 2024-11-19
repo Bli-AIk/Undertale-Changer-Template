@@ -1,9 +1,9 @@
 /*
-配置語言包信息
+配置語言包訊息
 */
-LanguagePackName\繁體中文<gradient="White to Yellow - UTC">(內置)</gradient>;
+LanguagePackName\繁體中文<gradient="White to Yellow - UTC">（內建）</gradient>;
 
-/* 建議在此處標明各人員及職位 如xxx(原始文本),xxx(翻譯),xxx(校對)等。 */
-LanguagePackAuthor\通過Open Chinese Convert轉換，<enter>可能存在語義差異。;
+/* 建議在此標明各人員及職位 如xxx(原文),xxx(翻譯),xxx(校對)等。 */
+LanguagePackAuthor\作者：AIk(原始文本), Google 翻譯;
 
-LanguagePackInformation\已啓用內置繁體中文語言包。;
+LanguagePackInformation\已啟用內建繁體中文語言包。;

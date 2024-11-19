@@ -1,43 +1,47 @@
-using DG.Tweening;
 using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class DebugEasing : MonoBehaviour
+namespace Debug
 {
-    public List<Vector2> vector2s;
-    public float time;
-    public float baseTime;
-    private float timer;
-    public string enumStr;
-    private LineRenderer lineRenderer;
-    private int setNum;
-
-    private void Start()
+    public class DebugEasing : MonoBehaviour
     {
-        lineRenderer = GetComponent<LineRenderer>();
-        transform.localPosition = vector2s[0];
-        transform.DOLocalMoveX(vector2s[1].x, time);
-        transform.DOLocalMoveY(vector2s[1].y, time).SetEase((Ease)Enum.Parse(typeof(Ease), enumStr));
-    }
+        [FormerlySerializedAs("vector2s")] public List<Vector2> vector2S;
+        public float time;
+        public float baseTime;
+        private float _timer;
+        public string enumStr;
+        private LineRenderer _lineRenderer;
+        private int _setNumber;
 
-    private void Update()
-    {
-        if (Time.time < time)
+        private void Start()
         {
-            if (timer <= 0)
-            {
-                timer = baseTime;
+            _lineRenderer = GetComponent<LineRenderer>();
+            transform.localPosition = vector2S[0];
+            transform.DOLocalMoveX(vector2S[1].x, time);
+            transform.DOLocalMoveY(vector2S[1].y, time).SetEase((Ease)Enum.Parse(typeof(Ease), enumStr));
+        }
 
-                if (lineRenderer.positionCount <= setNum)
-                    lineRenderer.positionCount++;
-
-                lineRenderer.SetPosition(setNum, transform.position);
-                setNum++;
-            }
-            else
+        private void Update()
+        {
+            if (Time.time < time)
             {
-                timer -= Time.deltaTime;
+                if (_timer <= 0)
+                {
+                    _timer = baseTime;
+
+                    if (_lineRenderer.positionCount <= _setNumber)
+                        _lineRenderer.positionCount++;
+
+                    _lineRenderer.SetPosition(_setNumber, transform.position);
+                    _setNumber++;
+                }
+                else
+                {
+                    _timer -= Time.deltaTime;
+                }
             }
         }
     }

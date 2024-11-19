@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>hyjiacan.pinyin4net</id>
+    <version>4.1.1</version>
+    <title>Pinyin4NET</title>
+    <authors>hyjiacan</authors>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <projectUrl>https://gitee.com/hyjiacan/Pinyin4Net</projectUrl>
+    <iconUrl>https://www.gravatar.com/avatar/ec64859e4788600d884b9ca223c5e4a1</iconUrl>
+    <description>.NET(core)环境下使用的拼音(包含姓氏拼音)-汉字互转库。</description>
+    <releaseNotes>添加 .NET7.0 支持</releaseNotes>
+    <copyright>Copyright ©hyjiacan(hyjiacan@163.com) 2018-?</copyright>
+    <tags>pinyin Chinese 拼音 中文</tags>
+    <repository type="git" url="https://gitee.com/hyjiacan/Pinyin4Net.git" commit="fec2efd00924c95c2ead887ba8893a5357ade3d9" />
+    <dependencies>
+      <group targetFramework=".NETFramework4.0" />
+      <group targetFramework=".NETFramework4.5" />
+      <group targetFramework=".NETFramework4.5.1" />
+      <group targetFramework=".NETFramework4.5.2" />
+      <group targetFramework=".NETFramework4.6" />
+      <group targetFramework=".NETFramework4.6.1" />
+      <group targetFramework=".NETFramework4.6.2" />
+      <group targetFramework=".NETFramework4.7" />
+      <group targetFramework=".NETStandard1.6">
+        <dependency id="NETStandard.Library" version="1.6.1" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETCoreApp2.0" />
+      <group targetFramework=".NETCoreApp3.0" />
+      <group targetFramework=".NETCoreApp3.1" />
+      <group targetFramework="net5.0" />
+      <group targetFramework="net6.0" />
+      <group targetFramework="net7.0" />
+      <group targetFramework=".NETStandard2.0" />
+      <group targetFramework=".NETStandard2.1" />
+    </dependencies>
+  </metadata>
+</package>

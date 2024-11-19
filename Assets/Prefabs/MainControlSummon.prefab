@@ -48,10 +48,9 @@ MonoBehaviour:
   framePic: 2
   bgmClip: {fileID: 0}
   volume: 0.5
-  pitch: 1
+  pitch: 0.5
   loop: 1
   sceneState: 0
   haveInOutBlack: 0
   noInBlack: 0
   notPauseIn: 0
-  poolCount: 
