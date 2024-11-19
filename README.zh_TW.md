@@ -1,7 +1,7 @@
 # 下載前先看看我！！！！
-你正在瀏覽的是 **UCT** 的 [**Main**](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/main) 分支，該分支暫時保存了截至 **v1.0.4** (2024/11/19更新) 的內容，作為一個臨時穩定版本運行。
+你正在瀏覽的是 **Undertale-Changer-Template (UCT)** 的 [**Develop**](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/develop) 分支，該分支目前持續保持更新狀態，且更新頻繁。
 
-最新的更新內容主要在 **[Develop](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/develop)** 分支發布。如果你需要最新的改動，建議切換到該分支。
+截至 **2024 年 7 月**的內容存檔目前儲存在 [**Main**](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/main) 分支。如果你想使用一個更穩定（存疑）的版本，建議切換到該分支。
 
 目前 **UCT** 仍處於**半成品**階段，因此請勿將此版本用於遊戲製作。
 
@@ -12,8 +12,9 @@
 # Undertale-Changer-Template
 
 <p align="center">
-  <img src="Assets/Sprites/Icons/logo.png" style="width: 100%; max-width: 500px; image-rendering: pixelated;">
+  <img src="logo.png" style="width: 100%; max-width: 500px; image-rendering: pixelated;">
 </p>
+
 
 一個基於[**Unity引擎**](https://unity.com)的[**UNDERTALE**](https://undertale.com)同人遊戲模板。
 

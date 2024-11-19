@@ -1,7 +1,7 @@
 # Look at me before downloading!!
-You are currently viewing the **[Main](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/main)** branch of **UCT**, which temporarily holds the content as of **v1.0.4** (Updated on 2024/11/19) and is intended to serve as a provisional stable version.
+You are currently browsing the **[Develop](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/develop)** branch of **Undertale-Changer-Template (UCT)**, which is actively maintained and updated frequently.
 
-The latest updates are primarily released on the **[Develop](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/develop)** branch. If you need the newest changes, it is recommended to switch to this branch.
+As of **July 2024**, the content archive is stored in the [**Main**](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/main) branch. If you prefer a more stable (perhaps) version, it is recommended to switch to that branch.
 
 Currently, **UCT** remains in a **semi-finished** state, so please do not use this version for game production.
 
@@ -12,8 +12,9 @@ You can view the current change log of UCT through [**CHANGELOG.md**](CHANGELOG.
 # Undertale-Changer-Template
 
 <p align="center">
-  <img src="Assets/Sprites/Icons/logo.png" style="width: 100%; max-width: 500px; image-rendering: pixelated;">
+  <img src="logo.png" style="width: 100%; max-width: 500px; image-rendering: pixelated;">
 </p>
+
 
 An [**UNDERTALE**](https://undertale.com/) fan game template based on [**unity engine**](https://unity.com).
 
