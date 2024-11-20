@@ -1,108 +1,126 @@
 # UCT Update Plan
 
-This document describes the long-term update plan for UCT.
+This document outlines the long-term update plan for UCT.
 
-Note that these update plans are not in any particular order and may change, be postponed, or abandoned.
+Please note that these update plans are not in any specific order and may change, be put on hold, or be abandoned.
 
-For the long-term update plan of UCT, please refer to [PLAN.md](PLAN.md), [PLAN_zh-CN.md](PLAN_zh-CN.md), or [PLAN_zh-TW.md](PLAN_zh-TW.md).
+For UCT's long-term update plan, please refer to [PLAN.md](PLAN.md), [PLAN_zh-CN.md](PLAN_zh-CN.md), or [PLAN_zh-TW.md](PLAN_zh-TW.md).
 
-For specific update content of UCT, please refer to [CHANGELOG.md](CHANGELOG.md), [CHANGELOG_zh-CN.md](CHANGELOG_zh-CN.md), or [CHANGELOG_zh-TW.md](CHANGELOG_zh-TW.md).
+For specific update details regarding UCT, please refer to [CHANGELOG.md](CHANGELOG.md), [CHANGELOG_zh-CN.md](CHANGELOG_zh-CN.md), or [CHANGELOG_zh-TW.md](CHANGELOG_zh-TW.md).
 
-The update plans/changelogs in Simplified Chinese are prioritized, while other languages will be translated using GPT upon **version number changes**.
+The update plans/change logs in Simplified Chinese will be prioritized, while updates in other languages will be translated using GPT at the time of **version number changes**.
+
+## Table of Contents
+
+[General](#General): Includes improvement plans for foundational/general features within templates.
+
+[OW Class](#OW Class): Includes plans for redoing various systems related to the Overworld scene.
+
+[Combat Class](#Combat Class): Includes expansion and restructuring plans for the combat system.
+
+[New Additions](#New Additions): Includes plans for new scenes and features.
+
+[Others](#Others): Includes plans that do not fall into the above four categories.
+
+[On Hold](#On Hold): Includes plans that were initially set but have been put on hold for various reasons.
 
 ## General
-### Refinement of Existing Systems
-- [x] Refine BGM controller[^1]
-- [ ] Store item data in ScriptableObject
+### Existing System Refinement
+- [x] Refine BGM Controller[^1]
+- [ ] Save item data to ScriptableObject
+
 
 ### UI Optimization and Refinement
-- [ ] Add pixel-perfect scaling and enlarging to 640x480[^2]
-- [ ] Refine / UI Dr styled MENU interface and OW save interface
+- [ ] Add magnification to 640x480[^2]
+- [ ] Refine / Dr style MENU interface and OW save interface
 - [ ] Refine settings interface
 - [ ] Redesign settings interface UI
 
 ### Performance Optimization
 - [x] Add DebugLogger script[^3]
-- [ ] Call language packs using coroutines instead of calling all at once
+- [ ] Use coroutines to call language packs instead of calling them all at once
 
-## OW
+## OW Class
 ### Event System
-- [ ] Redesign OW event system
-- [ ] Add Dr style chase system
+- [ ] Redo OW event system
+- [ ] Add Dr-style chase scene system
 
 ### Story System
-- [ ] Introduce [ink](https://github.com/inkle/ink) scripting language to the story system 
-- [ ] Add proofreading scene for the story system[^4]
+- [ ] Integrate [ink](https://github.com/inkle/ink) scripting language into the story system
+- [ ] Add story system proofreading scene[^4]
 - [ ] Add OW story controller
 
 ### Data Storage
-- [ ] Store room data in ScriptableObject
+- [ ] Save room data to ScriptableObject
 
-## Combat
+## Combat Class
 ### Data Storage
-- [x] Store bullet data in ScriptableObject
-- [ ] Store round data in ScriptableObject
+- [x] Save bullet data to ScriptableObject
+- [ ] Save round data to ScriptableObject
 
-### Round System Redesign
+### Round System Redo
 - [ ] Visualize round system
 - [ ] Add path bullet generator
 
 ### Combat System Expansion
-- [ ] Add the ability to insert subtitles/dialogues during rounds
-- [ ] Add multiple combats[^5]
+- [ ] Add functionality for inserting subtitles/dialogue during rounds
+- [ ] Add multi-battle[^5]
 
-### Fixes and Optimization
+### Fixes and Optimizations
 - [x] Optimize 3D background
-- [x] Fix blue heart
+- [x] Fix blue core
 
-### Odd Frame
-- [ ] Fix odd frame
-- [ ] Redesign collision system to accommodate odd frames
+### Irregular Frame
+- [ ] Fix irregular frame
+- [ ] Redo collision system to accommodate irregular frame
 
-### Judgement and Collision
-- [ ] Refine FIGHT related judgements
-- [ ] Add monster death judgement
-- [ ] Complete seven player soul colors
+### Judgment and Collision
+- [ ] Refine FIGHT-related judgments
+- [ ] Add monster death judgment
+- [ ] Complete seven types of player soul colors
 
 ## New Additions
 ### Scene Expansion
-- [ ] Add multilingual expansion in naming scene
+- [ ] Add multilingual expansion in the naming scene
 - [ ] Add battle settlement scene
-- [ ] Add BGM broadcast scene
-- [ ] Add production team list/thank you scene
-- [ ] Add store scene
+- [ ] Add BGM broadcasting scene
+- [ ] Add credits/thanks scene
+- [ ] Add shop scene
 
 ### Rendering Expansion
 - [x] Add built-in projection frame
 - [x] Add 3D renderer
 
-### Function Expansion
+### Functionality Expansion
 - [ ] Add historical text system
 - [ ] Add storage system
 - [ ] Add CC subtitle system[^6]
 - [ ] Add achievement system
 - [ ] Add UI manager
-- [ ] Introduce online library
 
 ### Accessibility
 - [ ] Add narrator
 - [ ] Add colorblind filter
 
-## Other
+## Others
 ### Project Localization
-- [x] Merge Chinese and English branches, replacing comment texts via script
+- [x] Merge Chinese and English branches by replacing comment text with scripts
 
-### Cleaning and Maintenance
-- [x] Remove unnecessary original textures
+### Cleanup and Maintenance
+- [x] Remove redundant original textures
 
-### Tutorial
+### Tutorials
 - [ ] New wiki and video tutorials
+
+## On Hold
+- [ ] Add pixel-perfect post-processing
+- [ ] Introduce online library
 
 ---
 
-[^1]: Primarily will add features such as calculating beat counts.
-[^2]: Will attempt to add two additional options in the settings to allow you to use pixel-perfect filters / enlarge to a larger resolution at 640x480 instead of directly using a larger resolution to save performance.
-[^3]: This script will encapsulate all Unity's Debug related functions for calling, which are executed only within the editor.
-[^4]: This scene will list all story content, consistent with in-game display, for quick proofreading.
-[^5]: Allowing for multiple battles and several combats within the game.
-[^6]: Localization personnel can provide localized support in advance by releasing a CC subtitle preview version after translation is completed but not formally integrated.
+[^1]: Mainly will add features like calculating beats.
+[^2]: Will attempt to add an option in the settings to allow the game screen to be set to low resolution while magnifying the display resolution. This is more friendly for computers with lower performance.
+[^3]: This script will encapsulate all Unity's Debug-related functions to be called, which are only executed in the editor.
+[^4]: This scene will list all story content, consistent with the display method in-game, for quick proofreading.
+[^5]: This allows for multiple battles and several battles within the game.
+[^6]: Localization personnel can provide early localization support for players by releasing a preview version of CC subtitles during the translation phase before formal embedding.
