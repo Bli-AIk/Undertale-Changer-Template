@@ -7,20 +7,20 @@ namespace Debug
     {
         public LineRenderer originalLineRenderer; // 用于绘制原始多边形
         public LineRenderer movedLineRenderer; // 用于绘制移动后的多边形
+
         public float moveDistance = 0.5f; // 向中心移动的距离
+
         // 创建一个简单的多边形顶点列表
-        public  List<Vector2> vertices = new List<Vector2>
+        public List<Vector2> vertices = new()
         {
-            new Vector2(-1, -1),
-            new Vector2(1, -1),
-            new Vector2(1, 1),
-            new Vector2(-1, 1)
+            new(-1, -1),
+            new(1, -1),
+            new(1, 1),
+            new(-1, 1)
         };
 
         private void Update()
         {
-      
-
             // 计算多边形中点并移动顶点
             var movedVertices = MoveVerticesTowardsCenter(vertices, moveDistance);
 
@@ -42,6 +42,7 @@ namespace Debug
                 var movedVertex = vertex + direction * distance; // 向中心点移动固定距离
                 movedVertices.Add(movedVertex);
             }
+
             return movedVertices;
         }
 
@@ -49,10 +50,7 @@ namespace Debug
         private Vector2 CalculatePolygonCenter(List<Vector2> vertices)
         {
             var sum = Vector2.zero;
-            foreach (var vertex in vertices)
-            {
-                sum += vertex;
-            }
+            foreach (var vertex in vertices) sum += vertex;
             return sum / vertices.Count;
         }
 
@@ -60,10 +58,7 @@ namespace Debug
         private void DrawPolygon(LineRenderer lineRenderer, List<Vector2> vertices)
         {
             lineRenderer.positionCount = vertices.Count + 1; // 设置顶点数（+1是为了闭合多边形）
-            for (var i = 0; i < vertices.Count; i++)
-            {
-                lineRenderer.SetPosition(i, vertices[i]);
-            }
+            for (var i = 0; i < vertices.Count; i++) lineRenderer.SetPosition(i, vertices[i]);
             lineRenderer.SetPosition(vertices.Count, vertices[0]); // 闭合多边形
         }
     }

@@ -6,13 +6,22 @@ namespace Debug
     {
         public bool change;
         public bool booooool;
-        private SpriteRenderer _sprite;
         private BoxCollider2D _boxCollider2D;
+        private SpriteRenderer _sprite;
 
         private void Awake()
         {
             _sprite = GetComponent<SpriteRenderer>();
             _boxCollider2D = GetComponent<BoxCollider2D>();
+        }
+
+        private void Update()
+        {
+            if (booooool)
+                _sprite.color = Color.yellow;
+            else _sprite.color = Color.white;
+
+            Changed();
         }
 
         public void Changed()
@@ -29,7 +38,7 @@ namespace Debug
                         1 => Vector2.up,
                         2 => Vector2.down,
                         3 => Vector2.right,
-                        _ => Vector2.zero,
+                        _ => Vector2.zero
                     };
                     var ray = new Ray2D(transform.position, dir);
                     var info = Physics2D.Raycast(ray.origin, ray.direction, 5);
@@ -40,20 +49,10 @@ namespace Debug
                         obj.GetComponent<DebugSudoku>().booooool = !obj.GetComponent<DebugSudoku>().booooool;
                     }
                 }
+
                 change = !change;
                 _boxCollider2D.enabled = true;
             }
-        }
-
-        private void Update()
-        {
-            if (booooool)
-            {
-                _sprite.color = Color.yellow;
-            }
-            else _sprite.color = Color.white;
-
-            Changed();
         }
     }
 }

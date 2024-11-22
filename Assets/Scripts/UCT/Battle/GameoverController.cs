@@ -7,26 +7,25 @@ using UCT.Global.Core;
 using UCT.Global.UI;
 using UCT.Service;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace UCT.Battle
 {
     /// <summary>
-    /// Gameover控制器
+    ///     Gameover控制器
     /// </summary>
     public class GameoverController : MonoBehaviour
     {
         public List<AudioClip> clips;
         public bool canChangeScene;
         public bool canChangeSceneForC;
-        private GameObject _player;
-        private ParticleSystem _mParticleSystem;
         private AudioSource _bgmSource;
-        private TypeWritter _typeWritter;
-        private TextMeshPro _textOptions;
 
         private bool _foolDay;
+        private ParticleSystem _mParticleSystem;
+        private GameObject _player;
+        private TextMeshPro _textOptions;
+        private TypeWritter _typeWritter;
 
         private void Start()
         {
@@ -47,13 +46,28 @@ namespace UCT.Battle
             _mParticleSystem.gameObject.SetActive(false);
         }
 
+        private void Update()
+        {
+            if (!_typeWritter.isTyping && GameUtilityService.ConvertKeyDownToControl(KeyCode.Z) && canChangeScene)
+            {
+                _textOptions.text = "";
+                GameUtilityService.FadeOutAndSwitchScene("Example-Corridor", Color.black, true, 2);
+                canChangeScene = false;
+            }
+
+            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.C) && canChangeSceneForC)
+            {
+                GameUtilityService.FadeOutAndSwitchScene("Example-Corridor", Color.black, true);
+                _typeWritter.TypeStop();
+                canChangeSceneForC = false;
+            }
+        }
+
         //接下来交给Animator表演
         public void PlayFX(int i)
         {
             if (i < 0)
-            {
                 _bgmSource.Play();
-            }
             else
                 AudioController.Instance.GetFx(i, MainControl.Instance.AudioControl.fxClipUI);
         }
@@ -69,10 +83,14 @@ namespace UCT.Battle
         {
             var strings = new List<string>
             {
-                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.sceneTextsSave, "GameOver1"),
-                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.sceneTextsSave, "GameOver2"),
-                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.sceneTextsSave, "GameOver3"),
-                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.sceneTextsSave, "GameOver4")
+                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.sceneTextsSave,
+                    "GameOver1"),
+                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.sceneTextsSave,
+                    "GameOver2"),
+                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.sceneTextsSave,
+                    "GameOver3"),
+                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.sceneTextsSave,
+                    "GameOver4")
             };
             _typeWritter.TypeOpen(strings[Random.Range(0, 4)], false, 0, 4, _textOptions);
             canChangeScene = true;
@@ -90,25 +108,10 @@ namespace UCT.Battle
                 //m_ParticleSystem.transform.position = new Vector3(UnityEngine.Random.Range(-6.85f, 6.85f), UnityEngine.Random.Range(-5.25f, 5.25f));
                 var time = Random.Range(0.5f, 1f);
 
-                _mParticleSystem.transform.DOMoveX(Random.Range(-6.85f, 6.85f), time).SetEase((Ease)Random.Range(1, 35));
-                _mParticleSystem.transform.DOMoveY(Random.Range(-5.25f, 5.25f), time).SetEase((Ease)Random.Range(1, 35)).OnKill(Follish);
-            }
-        }
-
-        private void Update()
-        {
-            if (!_typeWritter.isTyping && GameUtilityService.ConvertKeyDownToControl(KeyCode.Z) && canChangeScene)
-            {
-                _textOptions.text = "";
-                GameUtilityService.FadeOutAndSwitchScene("Example-Corridor", Color.black, true, 2);
-                canChangeScene = false;
-            }
-
-            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.C) && canChangeSceneForC)
-            {
-                GameUtilityService.FadeOutAndSwitchScene("Example-Corridor", Color.black, true);
-                _typeWritter.TypeStop();
-                canChangeSceneForC = false;
+                _mParticleSystem.transform.DOMoveX(Random.Range(-6.85f, 6.85f), time)
+                    .SetEase((Ease)Random.Range(1, 35));
+                _mParticleSystem.transform.DOMoveY(Random.Range(-5.25f, 5.25f), time).SetEase((Ease)Random.Range(1, 35))
+                    .OnKill(Follish);
             }
         }
     }

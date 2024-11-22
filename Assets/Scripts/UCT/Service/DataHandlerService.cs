@@ -10,12 +10,12 @@ using UnityEngine;
 namespace UCT.Service
 {
     /// <summary>
-    /// 数据处理相关函数
+    ///     数据处理相关函数
     /// </summary>
     public static class DataHandlerService
     {
         /// <summary>
-        /// 分配Item数据
+        ///     分配Item数据
         /// </summary>
         public static void ClassifyItemsData(ItemControl itemControl)
         {
@@ -36,17 +36,15 @@ namespace UCT.Service
 
                     if (i != 3 || t != ';') continue;
                     for (var j = 0; j < text.Length; j++)
-                    {
                         if (j != 1)
                             AddItemToClassification(itemControl, text[1], text[j]);
-                    }
                     i = 0;
                 }
             }
         }
 
         /// <summary>
-        /// ItemClassification的一个子void
+        ///     ItemClassification的一个子void
         /// </summary>
         private static void AddItemToClassification(ItemControl itemControl, string i, string origin)
         {
@@ -72,9 +70,9 @@ namespace UCT.Service
         }
 
         /// <summary>
-        /// 通过Id获取Item信息：
-        /// type：Foods Arms Armors Others Auto
-        /// number：0语言包名称
+        ///     通过Id获取Item信息：
+        ///     type：Foods Arms Armors Others Auto
+        ///     number：0语言包名称
         ///     1/2：data1/2.
         ///     请勿多输.
         ///     Arm和Armor只有1
@@ -83,7 +81,7 @@ namespace UCT.Service
         {
             int realId;
             List<string> list;
-            string idName;//获取编号名称
+            string idName; //获取编号名称
             switch (type)
             {
                 case "Foods":
@@ -139,6 +137,7 @@ namespace UCT.Service
                             idName = list[realId];
                             break;
                     }
+
                     break;
 
                 default:
@@ -146,7 +145,7 @@ namespace UCT.Service
             }
 
             var subText = "";
-            if (number == 0)//获取语言包内的名称
+            if (number == 0) //获取语言包内的名称
             {
                 foreach (var t in itemControl.itemTextMaxItem.Where(t => t[..idName.Length] == idName))
                 {
@@ -158,22 +157,23 @@ namespace UCT.Service
             }
             else
             {
-                if (list != null) 
+                if (list != null)
                     subText = list[realId + number];
             }
+
             return subText;
         }
 
         /// <summary>
-        /// 通过Id获取Item的数据（HP，ATK等）：
-        /// type：Foods Arms Armors Others Auto
-        /// justId:勾的话会加上 +xxHP/AT/DF等信息
+        ///     通过Id获取Item的数据（HP，ATK等）：
+        ///     type：Foods Arms Armors Others Auto
+        ///     justId:勾的话会加上 +xxHP/AT/DF等信息
         /// </summary>
         public static string ItemIdGetData(ItemControl itemControl, int id, string type, bool notJustId = false)
         {
             int realId;
             List<string> list;
-            string idData;//获取编号名称
+            string idData; //获取编号名称
             switch (type)
             {
                 case "Foods":
@@ -187,7 +187,10 @@ namespace UCT.Service
                             idData = $"+{idData}";
                     }
                     else
+                    {
                         idData = list[realId];
+                    }
+
                     break;
 
                 case "Arms":
@@ -201,7 +204,10 @@ namespace UCT.Service
                             idData = $"+{idData}";
                     }
                     else
+                    {
                         idData = list[realId];
+                    }
+
                     break;
 
                 case "Armors":
@@ -215,7 +221,10 @@ namespace UCT.Service
                             idData = $"+{idData}";
                     }
                     else
+                    {
                         idData = list[realId];
+                    }
+
                     break;
 
                 case "Others":
@@ -239,7 +248,9 @@ namespace UCT.Service
                                     idData = $"+{idData}";
                             }
                             else
+                            {
                                 idData = list[realId];
+                            }
 
                             break;
                         }
@@ -255,7 +266,9 @@ namespace UCT.Service
                                     idData = $"+{idData}";
                             }
                             else
+                            {
                                 idData = list[realId];
+                            }
 
                             break;
                         }
@@ -271,7 +284,9 @@ namespace UCT.Service
                                     idData = $"+{idData}";
                             }
                             else
+                            {
                                 idData = list[realId];
+                            }
 
                             break;
                         }
@@ -281,17 +296,19 @@ namespace UCT.Service
                             idData = list[realId];
                             break;
                     }
+
                     break;
 
                 default:
                     goto case "Others";
             }
+
             return idData;
         }
 
         /// <summary>
-        /// 通过物品数据名称获取其ID。
-        /// type：Foods Arms Armors Others
+        ///     通过物品数据名称获取其ID。
+        ///     type：Foods Arms Armors Others
         /// </summary>
         public static int ItemNameGetId(ItemControl itemControl, string itemName, string type)
         {
@@ -333,12 +350,13 @@ namespace UCT.Service
                 id += i + 1;
                 break;
             }
+
             return id;
         }
-        
-        
+
+
         /// <summary>
-        /// 从 TextAsset 加载并解析数据，返回新列表
+        ///     从 TextAsset 加载并解析数据，返回新列表
         /// </summary>
         /// <param name="inputText">输入的 TextAsset 数据</param>
         /// <returns>解析后的列表</returns>
@@ -351,10 +369,7 @@ namespace UCT.Service
                 if (inputText.text[i] == '/' && inputText.text[i + 1] == '*')
                 {
                     i++;
-                    while (!(inputText.text[i] == '/' && inputText.text[i - 1] == '*'))
-                    {
-                        i++;
-                    }
+                    while (!(inputText.text[i] == '/' && inputText.text[i - 1] == '*')) i++;
                     i += 2;
                 }
 
@@ -364,12 +379,13 @@ namespace UCT.Service
                 resultList.Add(text + ";");
                 text = "";
             }
+
             return resultList;
         }
 
 
         /// <summary>
-        /// 从 string 加载并解析数据，返回新列表
+        ///     从 string 加载并解析数据，返回新列表
         /// </summary>
         public static List<string> LoadItemData(string inputText)
         {
@@ -380,29 +396,28 @@ namespace UCT.Service
                 if (inputText[i] == '/' && inputText[i + 1] == '*')
                 {
                     i++;
-                    while (!(inputText[i] == '/' && inputText[i - 1] == '*'))
-                    {
-                        i++;
-                    }
+                    while (!(inputText[i] == '/' && inputText[i - 1] == '*')) i++;
                     i += 2;
                 }
+
                 if (inputText[i] != '\n' && inputText[i] != '\r' && inputText[i] != ';')
                     text += inputText[i];
                 if (inputText[i] != ';') continue;
                 resultList.Add(text + ";");
                 text = "";
             }
+
             return resultList;
         }
 
         /// <summary>
-        /// 转换特殊字符
+        ///     转换特殊字符
         /// </summary>
         public static List<string> ChangeItemData(List<string> list, bool isData, List<string> ex)
         {
             var newList = new List<string>();
             var text = "";
-            var isXh = false;//检测是否有多个需要循环调用的特殊字符
+            var isXh = false; //检测是否有多个需要循环调用的特殊字符
 
             foreach (var t in list)
             {
@@ -419,6 +434,7 @@ namespace UCT.Service
                             if (j >= t.Length)
                                 break;
                         }
+
                         j = k;
                         //Debug.Log(list[i] +"/"+ name);
                     }
@@ -430,15 +446,14 @@ namespace UCT.Service
                         {
                             inputText += t[j];
                             j++;
-                            if (j >= t.Length)
-                            {
-                                break;
-                            }
+                            if (j >= t.Length) break;
                             isXh = false;
                         }
+
                         isXh = true;
                         text = ChangeItemDataSwitch(text, inputText, isData, empty, ex);
                     }
+
                     isXh = false;
 
                     if (t[j] == ';')
@@ -452,14 +467,15 @@ namespace UCT.Service
                     }
                 }
             }
+
             return newList;
         }
 
         /// <summary>
-        /// ReSharper disable once InvalidXmlDocComment
-        /// ChangeItemData中检测'<''>'符号的Switch语句
+        ///     ReSharper disable once InvalidXmlDocComment
+        ///     ChangeItemData中检测'<''>'符号的Switch语句
         /// </summary>
-        private static string ChangeItemDataSwitch(string text, string inputText, bool isData, 
+        private static string ChangeItemDataSwitch(string text, string inputText, bool isData,
             string inputName, List<string> ex)
         {
             switch (inputText)
@@ -468,7 +484,7 @@ namespace UCT.Service
                     text += MainControl.Instance.playerControl.playerName;
                     break;
 
-                case "<enter>"://回车
+                case "<enter>": //回车
                     text += "\n";
                     break;
 
@@ -520,7 +536,8 @@ namespace UCT.Service
                 case "<itemHp>":
                     if (inputName != "" && !isData)
                     {
-                        text += ItemIdGetName(MainControl.Instance.ItemControl, ItemNameGetId(MainControl.Instance.ItemControl, inputName, "Foods"), "Auto", 2);
+                        text += ItemIdGetName(MainControl.Instance.ItemControl,
+                            ItemNameGetId(MainControl.Instance.ItemControl, inputName, "Foods"), "Auto", 2);
                         break;
                     }
 
@@ -529,7 +546,8 @@ namespace UCT.Service
                 case "<itemAtk>":
                     if (inputName != "" && !isData)
                     {
-                        text += ItemIdGetName(MainControl.Instance.ItemControl, ItemNameGetId(MainControl.Instance.ItemControl, inputName, "Arms"), "Auto", 1);
+                        text += ItemIdGetName(MainControl.Instance.ItemControl,
+                            ItemNameGetId(MainControl.Instance.ItemControl, inputName, "Arms"), "Auto", 1);
                         break;
                     }
 
@@ -538,7 +556,8 @@ namespace UCT.Service
                 case "<itemDef>":
                     if (inputName != "" && !isData)
                     {
-                        text += ItemIdGetName(MainControl.Instance.ItemControl, ItemNameGetId(MainControl.Instance.ItemControl, inputName, "Armors"), "Auto", 1);
+                        text += ItemIdGetName(MainControl.Instance.ItemControl,
+                            ItemNameGetId(MainControl.Instance.ItemControl, inputName, "Armors"), "Auto", 1);
                         break;
                     }
 
@@ -571,20 +590,30 @@ namespace UCT.Service
 
                 default:
                     if (TextProcessingService.IsSameFrontTexts(inputText, "<data"))
-                    {
-                        text += MainControl.Instance.ItemControl.itemTextMaxData[int.Parse(inputText.Substring(5, inputText.Length - 6))][..(MainControl.Instance.ItemControl.itemTextMaxData[int.Parse(inputText.Substring(5, inputText.Length - 6))].Length - 1)];
-                    }
+                        text +=
+                            MainControl.Instance.ItemControl.itemTextMaxData
+                                [int.Parse(inputText.Substring(5, inputText.Length - 6))][
+                                ..(MainControl.Instance.ItemControl
+                                       .itemTextMaxData[int.Parse(inputText.Substring(5, inputText.Length - 6))]
+                                       .Length -
+                                   1)];
                     else if (inputText.Length > 9)
-                    {
                         switch (inputText[..9])
                         {
                             case "<itemName" when !isData:
                             {
                                 if (inputName != "")
                                 {
-                                    if (ItemNameGetId(MainControl.Instance.ItemControl, inputName, inputText.Substring(9, inputText.Length - 10) + 's') < 10000)
-                                        text += ItemIdGetName(MainControl.Instance.ItemControl, ItemNameGetId(MainControl.Instance.ItemControl, inputName, inputText.Substring(9, inputText.Length - 10) + 's'), inputText.Substring(9, inputText.Length - 10) + 's', 0);
-                                    else text += ItemIdGetName(MainControl.Instance.ItemControl, ItemNameGetId(MainControl.Instance.ItemControl, inputName, inputText.Substring(9, inputText.Length - 10) + 's'), "Auto", 0);
+                                    if (ItemNameGetId(MainControl.Instance.ItemControl, inputName,
+                                            inputText.Substring(9, inputText.Length - 10) + 's') < 10000)
+                                        text += ItemIdGetName(MainControl.Instance.ItemControl,
+                                            ItemNameGetId(MainControl.Instance.ItemControl, inputName,
+                                                inputText.Substring(9, inputText.Length - 10) + 's'),
+                                            inputText.Substring(9, inputText.Length - 10) + 's', 0);
+                                    else
+                                        text += ItemIdGetName(MainControl.Instance.ItemControl,
+                                            ItemNameGetId(MainControl.Instance.ItemControl, inputName,
+                                                inputText.Substring(9, inputText.Length - 10) + 's'), "Auto", 0);
                                 }
 
                                 break;
@@ -614,57 +643,64 @@ namespace UCT.Service
                                 text += inputText;
                                 break;
                         }
-                    }
                     else
-                    {
                         text += inputText;
-                    }
+
                     break;
             }
+
             return text;
         }
 
         /// <summary>
-        /// 获取内置语言包ID
+        ///     获取内置语言包ID
         /// </summary>
-        public static string GetLanguageInsideId(int id) =>
-            id switch
+        public static string GetLanguageInsideId(int id)
+        {
+            return id switch
             {
                 0 => "CN",
                 1 => "TCN",
                 _ => "US"
             };
+        }
 
         /// <summary>
-        /// 检测当前语言包ID是否在有效范围内。如果不在有效范围内，
-        /// 则将语言包ID设置为默认值2。
+        ///     检测当前语言包ID是否在有效范围内。如果不在有效范围内，
+        ///     则将语言包ID设置为默认值2。
         /// </summary>
         /// <param name="id">语言包ID</param>
         public static int LanguagePackDetection(int id)
         {
-            if (id < 0 || id >= Directory.GetDirectories(Application.dataPath + "\\LanguagePacks").Length + MainControl.LanguagePackInsideNumber)
+            if (id < 0 || id >= Directory.GetDirectories(Application.dataPath + "\\LanguagePacks").Length +
+                MainControl.LanguagePackInsideNumber)
                 return 2;
             return id;
         }
 
         /// <summary>
-        /// 加载对应语言包的数据
+        ///     加载对应语言包的数据
         /// </summary>
         public static string LoadLanguageData(string path, int id)
         {
-            return id < MainControl.LanguagePackInsideNumber 
-                ? Resources.Load<TextAsset>($"TextAssets/LanguagePacks/{DataHandlerService.GetLanguageInsideId(id)}/{path}").text 
-                : File.ReadAllText($"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[id - MainControl.LanguagePackInsideNumber]}\\{path}.txt");
+            return id < MainControl.LanguagePackInsideNumber
+                ? Resources.Load<TextAsset>($"TextAssets/LanguagePacks/{GetLanguageInsideId(id)}/{path}").text
+                : File.ReadAllText(
+                    $"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[id - MainControl.LanguagePackInsideNumber]}\\{path}.txt");
         }
 
         /// <summary>
-        /// 检测语言包全半角
+        ///     检测语言包全半角
         /// </summary>
         public static void InitializationLanguagePackFullWidth()
         {
-            if (MainControl.Instance.overworldControl.textWidth != bool.Parse(TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave, "LanguagePackFullWidth")))
+            if (MainControl.Instance.overworldControl.textWidth != bool.Parse(
+                    TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave,
+                        "LanguagePackFullWidth")))
             {
-                MainControl.Instance.overworldControl.textWidth = bool.Parse(TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave, "LanguagePackFullWidth"));
+                MainControl.Instance.overworldControl.textWidth = bool.Parse(
+                    TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave,
+                        "LanguagePackFullWidth"));
                 foreach (var obj in Resources.FindObjectsOfTypeAll(typeof(TextChanger)))
                 {
                     var textChanger = (TextChanger)obj;
@@ -674,11 +710,13 @@ namespace UCT.Service
                 }
             }
 
-            CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture(TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave, "CultureInfo"));
+            CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture(
+                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave,
+                    "CultureInfo"));
         }
 
         /// <summary>
-        /// 设置PlayerControl
+        ///     设置PlayerControl
         /// </summary>
         /// <param name="inputPlayerControl"></param>
         public static PlayerControl SetPlayerControl(PlayerControl inputPlayerControl)

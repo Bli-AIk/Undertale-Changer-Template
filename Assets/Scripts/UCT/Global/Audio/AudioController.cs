@@ -7,7 +7,7 @@ using UnityEngine.Audio;
 namespace UCT.Global.Audio
 {
     /// <summary>
-    /// 基于对象池 控制音频
+    ///     基于对象池 控制音频
     /// </summary>
     public class AudioController : ObjectPool
     {
@@ -30,9 +30,12 @@ namespace UCT.Global.Audio
 
         private void Start()
         {
-            audioSource.outputAudioMixerGroup = MainControl.Instance.AudioControl.globalAudioMixer.FindMatchingGroups("BGM")[0];
+            audioSource.outputAudioMixerGroup =
+                MainControl.Instance.AudioControl.globalAudioMixer.FindMatchingGroups("BGM")[0];
         }
-        public void GetFx(int fxNumber, List<AudioClip> list, float volume = 0.5f, float pitch = 1, AudioMixerGroup audioMixerGroup = default)
+
+        public void GetFx(int fxNumber, List<AudioClip> list, float volume = 0.5f, float pitch = 1,
+            AudioMixerGroup audioMixerGroup = default)
         {
             if (fxNumber < 0)
                 return;
@@ -42,22 +45,16 @@ namespace UCT.Global.Audio
             if (audioMixerGroup == default)
             {
                 if (list == MainControl.Instance.AudioControl.fxClipUI)
-                {
                     audioMixerGroup = MainControl.Instance.AudioControl.globalAudioMixer.FindMatchingGroups("FX/UI")[0];
-                }
                 else if (list == MainControl.Instance.AudioControl.fxClipWalk)
-                {
-                    audioMixerGroup = MainControl.Instance.AudioControl.globalAudioMixer.FindMatchingGroups("FX/Walk")[0];
-
-                }
+                    audioMixerGroup =
+                        MainControl.Instance.AudioControl.globalAudioMixer.FindMatchingGroups("FX/Walk")[0];
                 else if (list == MainControl.Instance.AudioControl.fxClipBattle)
-                {
-                    audioMixerGroup = MainControl.Instance.AudioControl.globalAudioMixer.FindMatchingGroups("FX/Battle")[0];
-                }
+                    audioMixerGroup =
+                        MainControl.Instance.AudioControl.globalAudioMixer.FindMatchingGroups("FX/Battle")[0];
                 else if (list == MainControl.Instance.AudioControl.fxClipType)
-                {
-                    audioMixerGroup = MainControl.Instance.AudioControl.globalAudioMixer.FindMatchingGroups("FX/Type")[0];
-                }
+                    audioMixerGroup =
+                        MainControl.Instance.AudioControl.globalAudioMixer.FindMatchingGroups("FX/Type")[0];
             }
 
             fx.GetComponent<AudioSource>().outputAudioMixerGroup = audioMixerGroup;
@@ -65,7 +62,8 @@ namespace UCT.Global.Audio
             fx.GetComponent<AudioPlayer>().Playing(list[fxNumber]);
         }
 
-        public IEnumerator LayerGetFx(float time, int fxNumber, List<AudioClip> list, float volume = 0.5f, float pitch = 1, AudioMixerGroup audioMixerGroup = null)
+        public IEnumerator LayerGetFx(float time, int fxNumber, List<AudioClip> list, float volume = 0.5f,
+            float pitch = 1, AudioMixerGroup audioMixerGroup = null)
         {
             yield return new WaitForSeconds(time);
             GetFx(fxNumber, list, volume, pitch, audioMixerGroup);

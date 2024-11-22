@@ -8,20 +8,18 @@ using UnityEngine;
 namespace UCT.Global.Core
 {
     /// <summary>
-    /// 存档存储的数据
+    ///     存档存储的数据
     /// </summary>
     public class SaveController : MonoBehaviour
     {
-        public static Dictionary<string, PlayerControl> UsersData = new Dictionary<string, PlayerControl>();
+        public static Dictionary<string, PlayerControl> UsersData = new();
 
         public static void SaveData(PlayerControl data, string dataName)
         {
             //Debug.Log("save");
             if (!Directory.Exists(Application.dataPath + "/Data"))
-            {
                 //Debug.Log("create");
                 Directory.CreateDirectory(Application.dataPath + "/Data");
-            }
             UsersData[data.name] = data;
             // 转换数据
             var jsonData = JsonConvert.SerializeObject(data);
@@ -51,10 +49,7 @@ namespace UCT.Global.Core
 
         public static int GetDataNumber()
         {
-            if (!Directory.Exists(Application.dataPath + "/Data"))
-            {
-                return 0;
-            }
+            if (!Directory.Exists(Application.dataPath + "/Data")) return 0;
 
             var returnNumber = 0;
             for (var i = 0; i < Directory.GetFiles(Application.dataPath + "/Data").Length; i++)
@@ -63,6 +58,7 @@ namespace UCT.Global.Core
                 if (text[^5..] == ".json")
                     returnNumber++;
             }
+
             return returnNumber;
         }
 
@@ -74,10 +70,7 @@ namespace UCT.Global.Core
             if (File.Exists(path))
             {
                 // 从内存中移除存档数据
-                if (UsersData.ContainsKey(dataName))
-                {
-                    UsersData.Remove(dataName);
-                }
+                if (UsersData.ContainsKey(dataName)) UsersData.Remove(dataName);
 
                 // 删除文件
                 File.Delete(path);
@@ -86,6 +79,7 @@ namespace UCT.Global.Core
             {
                 Other.Debug.Log($"存档{dataName}不存在，无法删除。");
             }
+
             SortAndRenameData();
         }
 
@@ -110,9 +104,7 @@ namespace UCT.Global.Core
                 int numberA, numberB;
 
                 if (int.TryParse(fileNameA[4..], out numberA) && int.TryParse(fileNameB[4..], out numberB))
-                {
                     return numberA.CompareTo(numberB);
-                }
 
                 return fileNameA.CompareTo(fileNameB);
             });

@@ -2,54 +2,50 @@ using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
+
 // ReSharper disable HeuristicUnreachableCode
 
 namespace Obsolete
 {
     /// <summary>
-    /// 使用LineRenderer与多边形shader绘制多边形框，用于战斗框、UI等。
+    ///     使用LineRenderer与多边形shader绘制多边形框，用于战斗框、UI等。
     /// </summary>
     [Obsolete]
     public class OldBoxController : MonoBehaviour
     {
-        [Header("线长")]
-        public float width;
+        [Header("线长")] public float width;
 
-        [Header("顶点数")]
-        public int pointsMax = 4;
+        [Header("顶点数")] public int pointsMax = 4;
 
-        [Header("顶点")]
-        public List<Transform> points = new List<Transform>();
+        [Header("顶点")] public List<Transform> points = new();
 
-        [Header("开启碰撞（用于战斗框）")]
-        public bool isCollider;
+        [Header("开启碰撞（用于战斗框）")] public bool isCollider;
 
-        [Header("ID检测：使用_Point (0)")]
-        public bool useBracketId;
+        [Header("ID检测：使用_Point (0)")] public bool useBracketId;
 
-        [Header("使用这个可以让它创建时绘制正多边形")]
-        public bool startDraw;
+        [Header("使用这个可以让它创建时绘制正多边形")] public bool startDraw;
 
-        [Header("关闭自动获取材质")]
-        public bool noAutoMaterial;
+        [Header("关闭自动获取材质")] public bool noAutoMaterial;
 
-        private PolygonCollider2D _polygonCollider2D;
         private EdgeCollider2D _edgeCollider2D;
 
         private LineRenderer _lineRenderer;
         private Material _material;
 
+        private PolygonCollider2D _polygonCollider2D;
+
         private void Start()
         {
             ObsoleteTip();
             return;
-            
+
             points.Clear();
             if (pointsMax < 3)
             {
                 UCT.Global.Other.Debug.Log("pointsMax < 3 , 已更改为3");
                 pointsMax = 3;
             }
+
             for (var i = 0; i < pointsMax; i++)
             {
                 if (!useBracketId)
@@ -79,23 +75,25 @@ namespace Obsolete
                 transform.Find("Back").GetComponent<SpriteRenderer>().material = _material;
             }
             else
+            {
                 _material = transform.Find("Back").GetComponent<SpriteRenderer>().material;
+            }
 
             if (isCollider)
             {
-                _polygonCollider2D = gameObject.AddComponent<PolygonCollider2D>() ?? gameObject.GetComponent<PolygonCollider2D>();
+                _polygonCollider2D = gameObject.AddComponent<PolygonCollider2D>() ??
+                                     gameObject.GetComponent<PolygonCollider2D>();
 
                 _polygonCollider2D.pathCount = 2;
-                _polygonCollider2D.SetPath(0, new Vector2[4] { new Vector2(100, 100), new Vector2(-100, 100), new Vector2(-100, -100), new Vector2(100, -100) });
+                _polygonCollider2D.SetPath(0,
+                    new Vector2[4] { new(100, 100), new(-100, 100), new(-100, -100), new(100, -100) });
 
-                _edgeCollider2D = gameObject.AddComponent<EdgeCollider2D>() ?? gameObject.GetComponent<EdgeCollider2D>();
+                _edgeCollider2D = gameObject.AddComponent<EdgeCollider2D>() ??
+                                  gameObject.GetComponent<EdgeCollider2D>();
                 _edgeCollider2D.edgeRadius = width / 2;
             }
 
-            if (startDraw)
-            {
-                points = Draw(points, 2);
-            }
+            if (startDraw) points = Draw(points, 2);
         }
 
         private void Update()
@@ -112,6 +110,7 @@ namespace Obsolete
                     _material.SetVector("_Point_" + i, points[i].transform.position);
                 localPoss.Add(points[i].transform.localPosition);
             }
+
             if (isCollider)
             {
                 _polygonCollider2D.SetPath(1, localPoss.ToArray());
@@ -123,10 +122,10 @@ namespace Obsolete
             {
                 var rectangleVertices = new List<Vector2>
                 {
-                    new Vector2(-1, 1),  // Top-left
-                    new Vector2(1, 1),   // Top-right
-                    new Vector2(-1, -1), // Bottom-left
-                    new Vector2(1, -1)   // Bottom-right
+                    new(-1, 1), // Top-left
+                    new(1, 1), // Top-right
+                    new(-1, -1), // Bottom-left
+                    new(1, -1) // Bottom-right
                 };
 
                 AnimateToRectangle(points, 1, rectangleVertices);
@@ -137,7 +136,7 @@ namespace Obsolete
         {
             ObsoleteTip();
             return new List<Transform>();
-            var sides = pointList.Count;  // 根据points的数量确定边数
+            var sides = pointList.Count; // 根据points的数量确定边数
             var drawnPoints = new List<Transform>();
 
             for (var i = 0; i < sides; i++)
@@ -175,9 +174,7 @@ namespace Obsolete
 
             // Apply the animations using DOTween
             for (var i = 0; i < pointList.Count; i++)
-            {
                 pointList[i].DOMove(new Vector3(newPositions[i].x, newPositions[i].y, 0), duration);
-            }
         }
 
         private void ObsoleteTip()

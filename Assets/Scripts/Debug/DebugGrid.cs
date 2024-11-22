@@ -5,29 +5,25 @@ using UnityEngine;
 namespace Debug
 {
     /// <summary>
-    /// Debug网格定位 用于做弹幕啥的
+    ///     Debug网格定位 用于做弹幕啥的
     /// </summary>
     public class DebugGrid : ObjectPool
     {
-        [Header("颜色是给到'条'上面的")]
-        public Color colorX;
+        [Header("颜色是给到'条'上面的")] public Color colorX;
 
         public Color colorY;
         public Color colorXForText;
         public Color colorYForText;
 
-        [Header("横纵分割几片(刀数-1) X为横着平铺竖条 Y则反之")]
-        public int divisionX;
+        [Header("横纵分割几片(刀数-1) X为横着平铺竖条 Y则反之")] public int divisionX;
 
         public int divisionY;
 
-        [Header("XY偏移 如果左右对称就和参考一样填个正的数")]
-        public float deviationX;
+        [Header("XY偏移 如果左右对称就和参考一样填个正的数")] public float deviationX;
 
         public float deviationY;
 
-        [Header("参考坐标")]
-        public Vector2 referenceX;
+        [Header("参考坐标")] public Vector2 referenceX;
 
         public Vector2 referenceY;
 
@@ -37,6 +33,11 @@ namespace Debug
             FillPool();
 
             SummonGrid();
+        }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.G)) SummonGrid();
         }
 
         private void SummonGrid()
@@ -64,6 +65,7 @@ namespace Debug
                 tmp.transform.localPosition = new Vector3(0.25f, 0.00475f, 0);
                 tmp.fontSize = 3;
             }
+
             //x
             for (var y = 1; y < divisionX; y++)
             {
@@ -79,14 +81,6 @@ namespace Debug
                 tmp.transform.localScale = new Vector3(0.001f, 1, 1);
                 tmp.transform.localPosition = new Vector3(-0.00625f, 0.25f, 0);
                 tmp.fontSize = 3;
-            }
-        }
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.G))
-            {
-                SummonGrid();
             }
         }
     }

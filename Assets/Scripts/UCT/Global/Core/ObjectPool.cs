@@ -5,15 +5,14 @@ namespace UCT.Global.Core
 {
     public class ObjectPool : MonoBehaviour
     {
-        [Header("填充对象池的对象数量")]
-        public int count = 10;
+        [Header("填充对象池的对象数量")] public int count = 10;
 
         public GameObject obj;
-        private Queue<GameObject> _availableObj = new Queue<GameObject>();
         public Transform parent;
+        private readonly Queue<GameObject> _availableObj = new();
 
         /// <summary>
-        /// 初始化/填充对象池
+        ///     初始化/填充对象池
         /// </summary>
         public virtual void FillPool()
         {
@@ -28,7 +27,7 @@ namespace UCT.Global.Core
         }
 
         /// <summary>
-        /// 返回对象池
+        ///     返回对象池
         /// </summary>
         public virtual void ReturnPool(GameObject gameObject)
         {
@@ -41,7 +40,7 @@ namespace UCT.Global.Core
         }
 
         /// <summary>
-        /// 喜提对象
+        ///     喜提对象
         /// </summary>
         public virtual GameObject GetFromPool()
         {

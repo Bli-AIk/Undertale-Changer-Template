@@ -17,53 +17,64 @@ using Random = UnityEngine.Random;
 namespace UCT.Global.UI
 {
     /// <summary>
-    /// 打字机系统
+    ///     打字机系统
     /// </summary>
     public class TypeWritter : MonoBehaviour
     {
+        public enum TypeMode
+        {
+            Normal, //正常的打字机
+            CantZx //不能按ZX的打字机，使用富文本进行控制。
+        }
+
         private static readonly int Open = Animator.StringToHash("Open");
         public string originString, endString, passTextString;
-        public bool isRunning;//打字机是否在运行
-        public bool isTyping;//是否在 打出字符
+        public bool isRunning; //打字机是否在运行
+        public bool isTyping; //是否在 打出字符
         public int hpIn;
         public int hpSave;
         public bool canNotX;
         public bool pressX;
-        public float clockTime;//实际上计数
+        public float clockTime; //实际上计数
         public bool isStop;
-        public int fx;//音效
+        public int fx; //音效
         public bool fxRandomPitch;
 
-        [Header("打字速度与检测停顿字符后的打字速度")]
-        public float speed = 0.075f, speedSlow = 0.15f;
+        [Header("打字速度与检测停顿字符后的打字速度")] public float speed = 0.075f, speedSlow = 0.15f;
 
-        [Header("打字后多少秒可以按X跳过，0为不能跳")]
-        public float clock = 0.01f;//设置
+        [Header("打字后多少秒可以按X跳过，0为不能跳")] public float clock = 0.01f; //设置
 
         public bool passText;
 
 
         public SpriteChanger spriteChanger;
 
-        [Header("适配OW框")]
-        public bool isOverworld;
-
-        private TalkBoxPositionChanger _talkBoxPositionChanger;
+        [Header("适配OW框")] public bool isOverworld;
 
         public float pitch = 1;
         public float volume = 0.5f;
         public AudioMixerGroup audioMixerGroup;
 
-        [Header("字体")]
-        public int useFont;
+        [Header("字体")] public int useFont;
 
-        [Header("打字动效")]
-        public OverworldControl.DynamicType dynamicType;
+        [Header("打字动效")] public OverworldControl.DynamicType dynamicType;
 
-        [Header("总有那么一些情况需要强硬手段（拔枪")]
-        public bool forceReturn;
+        [Header("总有那么一些情况需要强硬手段（拔枪")] public bool forceReturn;
+
+        private Animator _canvasAnim;
+
+        private List<Vector2> _dynamicPos;
+
+        private bool _endInBattle;
+        private bool _isJumpingText;
+
+        private bool _isUsedFx;
+
+        private TalkBoxPositionChanger _talkBoxPositionChanger;
 
         private TMP_Text _tmpText;
+
+        private TypeMode _typeMode = TypeMode.Normal;
 
         private void Start()
         {
@@ -72,20 +83,37 @@ namespace UCT.Global.UI
             spriteChanger = GetComponent<SpriteChanger>();
         }
 
-        public enum TypeMode
+        private void Update()
         {
-            Normal,//正常的打字机
-            CantZx,//不能按ZX的打字机，使用富文本进行控制。
+            if (MainControl.Instance.overworldControl.isSetting || forceReturn) //pause在OW检测的时候会用
+                return;
+
+            if (clockTime > 0)
+                clockTime -= Time.deltaTime;
+            if (!isRunning && !passText && !isTyping && GameUtilityService.ConvertKeyDownToControl(KeyCode.Z) &&
+                _typeMode != TypeMode.CantZx)
+            {
+                if (spriteChanger != null)
+                    spriteChanger.ChangeImage(-1);
+                if (_endInBattle)
+                    _canvasAnim.SetBool(Open, true);
+            }
+
+            if (passText && GameUtilityService.ConvertKeyDownToControl(KeyCode.Z) && _typeMode != TypeMode.CantZx)
+                PassText("<passText>");
+            else if (!(pressX || _isJumpingText) && !canNotX && GameUtilityService.ConvertKeyDownToControl(KeyCode.X) &&
+                     _typeMode != TypeMode.CantZx) //跳字
+                if (clock != 0 && clockTime <= 0)
+                    pressX = true;
         }
 
-        private TypeMode _typeMode = TypeMode.Normal;
-
         /// <summary>
-        /// 开启打字机。若打字正在进行，可强行终止。
-        /// 一般情况下不需要强行打断对话。
-        /// 若传入的语句中含有autoFood，请输入hp。若输入0，此字符将跳过。
+        ///     开启打字机。若打字正在进行，可强行终止。
+        ///     一般情况下不需要强行打断对话。
+        ///     若传入的语句中含有autoFood，请输入hp。若输入0，此字符将跳过。
         /// </summary>
-        public void TypeOpen(string text, bool force, int hp, int inputFX, TMP_Text tmpText, TypeMode typeMode = TypeMode.Normal)
+        public void TypeOpen(string text, bool force, int hp, int inputFX, TMP_Text tmpText,
+            TypeMode typeMode = TypeMode.Normal)
         {
             isRunning = true;
             _typeMode = typeMode;
@@ -117,28 +145,18 @@ namespace UCT.Global.UI
             Timing.KillCoroutines();
             isTyping = false;
             endString = "";
-            if (_tmpText)
-            {
-                _tmpText.text = "";
-            }
+            if (_tmpText) _tmpText.text = "";
             passTextString = "";
         }
 
         public static void TypePause(bool pause)
         {
             if (pause)
-            {
                 Timing.PauseCoroutines();
-            }
             else
-            {
                 Timing.ResumeCoroutines();
-            }
         }
 
-        private bool _isUsedFx;
-        private bool _isJumpingText;
-        
         private IEnumerator<float> _Typing(TMP_Text tmpText)
         {
             isRunning = true;
@@ -171,8 +189,7 @@ namespace UCT.Global.UI
 
                         passTextString += spText;
 
-                        
-                        
+
                         if (TextProcessingService.IsSameFrontTexts(spText, "<fx="))
                         {
                             var save = spText[4..];
@@ -196,8 +213,10 @@ namespace UCT.Global.UI
                                 {
                                     if (pressX || _isJumpingText)
                                         break;
-                                    yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f * Convert.ToInt32(!MainControl.Instance.overworldControl.textWidth));
+                                    yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f *
+                                        Convert.ToInt32(!MainControl.Instance.overworldControl.textWidth));
                                 }
+
                                 isTyping = false;
                             }
 
@@ -225,14 +244,21 @@ namespace UCT.Global.UI
                                     {
                                         if (pressX || _isJumpingText)
                                             break;
-                                        yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f * Convert.ToInt32(!MainControl.Instance.overworldControl.textWidth));
+                                        yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f *
+                                            Convert.ToInt32(!MainControl.Instance.overworldControl.textWidth));
                                     }
-                                    AudioController.Instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
+
+                                    AudioController.Instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipType,
+                                        volume, pitch, audioMixerGroup);
                                     endString += '.';
                                     tmpText.text = endString;
                                 }
                             }
-                            else endString += "...";
+                            else
+                            {
+                                endString += "...";
+                            }
+
                             isStop = true;
                             tmpText.text = endString;
                         }
@@ -263,24 +289,29 @@ namespace UCT.Global.UI
                                     {
                                         if (pressX || _isJumpingText)
                                             break;
-                                        yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f * Convert.ToInt32(!MainControl.Instance.overworldControl.textWidth));
+                                        yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f *
+                                            Convert.ToInt32(!MainControl.Instance.overworldControl.textWidth));
                                     }
-                                    AudioController.Instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
+
+                                    AudioController.Instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipType,
+                                        volume, pitch, audioMixerGroup);
                                     endString += '.';
                                     tmpText.text = endString;
                                 }
                             }
-                            else endString += "......";
+                            else
+                            {
+                                endString += "......";
+                            }
+
                             isStop = true;
                             tmpText.text = endString;
                         }
                         else
                         {
                             if (spText.Length >= 2 && spText[0] == '<' && spText[2] == '>')
-                            {
                                 spText = spText[1].ToString();
-                            }
-                            
+
                             switch (spText)
                             {
                                 case "<storyMaskT>":
@@ -298,18 +329,17 @@ namespace UCT.Global.UI
 
                                 case "<sprite=0>":
                                     if (!(pressX || _isJumpingText))
-                                        AudioController.Instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
+                                        AudioController.Instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipType,
+                                            volume, pitch, audioMixerGroup);
                                     goto default;
                                 case "<stop>":
                                     if (!(pressX || _isJumpingText))
-                                    {
                                         //单独一个Stop的时候，不设置isTyping，这是因为有的时候这个stop的时间很短，
                                         //所以 isTyping = true 之后，显示起来有点怪。
                                         //如果需要长的Stop，建议还是使用<stop*x>的方式来做。
                                         //isTyping = false;
                                         yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f *
                                             Convert.ToInt32(!MainControl.Instance.overworldControl.textWidth));
-                                    }
                                     isStop = true;
                                     break;
 
@@ -333,7 +363,7 @@ namespace UCT.Global.UI
                                     break;
                                 case "<jumpText>":
                                     _isJumpingText = true;
-                                    break;   
+                                    break;
                                 case "</jumpText>":
                                     _isJumpingText = false;
                                     break;
@@ -341,14 +371,16 @@ namespace UCT.Global.UI
                                     passText = true;
                                     passTextString = passTextString[..^spText.Length];
                                     goto PassText;
-                                default://富文本
+                                default: //富文本
 
                                     if (spText.Length - 2 > 0 && spText[1] == '-' && spText[^2] == '-')
                                     {
                                         spText = spText.Substring(2, spText.Length - 4);
                                         if (!(pressX || _isJumpingText))
                                         {
-                                            AudioController.Instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
+                                            AudioController.Instance.GetFx(fx,
+                                                MainControl.Instance.AudioControl.fxClipType, volume, pitch,
+                                                audioMixerGroup);
                                             _isUsedFx = true;
 
                                             if (spriteChanger != null)
@@ -368,6 +400,7 @@ namespace UCT.Global.UI
                             originString += " ";
                             break;
                         }
+
                         fix0 = true;
                     }
                 }
@@ -376,20 +409,16 @@ namespace UCT.Global.UI
 
                 var cantString = "* \n\r";
                 for (var j = 0; j < cantString.Length; j++)
-                {
                     if (cantString[j] == originString[i])
-                    {
                         cantString = "";
-                    }
-                }
                 if (cantString != "" && !(pressX || _isJumpingText) && !_isUsedFx)
-                    AudioController.Instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipType, volume, pitch, audioMixerGroup);
+                    AudioController.Instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipType, volume, pitch,
+                        audioMixerGroup);
 
                 if (!passText)
                 {
                     endString += originString[i];
                     passTextString += originString[i];
-                
                 }
 
                 if (!(pressX || _isJumpingText))
@@ -400,12 +429,15 @@ namespace UCT.Global.UI
                     tmpText.text = endString;
 
                     Timing.RunCoroutine(_Dynamic(endString.Length - 1, dynamicType));
-                
+
 
                     if (tmpText.font != MainControl.Instance.overworldControl.tmpFonts[useFont])
                         tmpText.font = MainControl.Instance.overworldControl.tmpFonts[useFont];
                 }
-                else Other.Debug.Log("缺失tmp_Text", "#FFFF00");
+                else
+                {
+                    Other.Debug.Log("缺失tmp_Text", "#FFFF00");
+                }
 
                 if (!passText)
                 {
@@ -418,9 +450,10 @@ namespace UCT.Global.UI
                         : originString[passTextString.Length..];
                     break;
                 }
+
                 canNotX = false;
                 isStop = false;
-                PassText:;//这是个标签注意
+                PassText: ; //这是个标签注意
             }
 
             isRunning = false;
@@ -437,11 +470,9 @@ namespace UCT.Global.UI
             }
         }
 
-        private List<Vector2> _dynamicPos;
-
         private IEnumerator<float> _Dynamic(int number, OverworldControl.DynamicType inputDynamicType)
         {
-            if (inputDynamicType != OverworldControl.DynamicType.None)//动效相关
+            if (inputDynamicType != OverworldControl.DynamicType.None) //动效相关
             {
                 var textInfo = _tmpText.textInfo;
 
@@ -480,6 +511,7 @@ namespace UCT.Global.UI
                                 meshInfo.mesh.vertices = meshInfo.vertices;
                                 _tmpText.UpdateGeometry(meshInfo.mesh, k);
                             }
+
                             yield return 0;
                         }
 
@@ -500,32 +532,28 @@ namespace UCT.Global.UI
 
                         // 设置初始颜色为透明
                         for (var j = 0; j < 4; j++)
-                        {
                             colors[charInfo.vertexIndex + j] = new Color32(startColor.r, startColor.g, startColor.b, 0);
-                        }
 
                         _tmpText.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
 
                         var elapsedTime = 0f;
                         while (elapsedTime < fadeDuration)
                         {
-
                             if (pressX || _isJumpingText)
                                 break;
                             elapsedTime += Time.deltaTime;
                             var alpha = Mathf.Clamp01(elapsedTime / fadeDuration);
 
-                            var currentColor = Color32.Lerp(new Color32(startColor.r, startColor.g, startColor.b, 0), endColor, alpha);
+                            var currentColor = Color32.Lerp(new Color32(startColor.r, startColor.g, startColor.b, 0),
+                                endColor, alpha);
 
-                            for (var j = 0; j < 4; j++)
-                            {
-                                colors[charInfo.vertexIndex + j] = currentColor;
-                            }
+                            for (var j = 0; j < 4; j++) colors[charInfo.vertexIndex + j] = currentColor;
 
                             _tmpText.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
 
                             yield return 0;
                         }
+
                         break;
 
                     case OverworldControl.DynamicType.Up:
@@ -561,57 +589,23 @@ namespace UCT.Global.UI
 
                             yield return 0;
                         }
+
                         break;
                     case OverworldControl.DynamicType.None:
                         throw new ArgumentOutOfRangeException(nameof(inputDynamicType), inputDynamicType, null);
                     default:
                         throw new ArgumentOutOfRangeException(nameof(inputDynamicType), inputDynamicType, null);
                 }
-
             }
+
             yield return 0;
             _tmpText.ForceMeshUpdate();
-        }
-        private void Update()
-        {
-            if (MainControl.Instance.overworldControl.isSetting || forceReturn)//pause在OW检测的时候会用
-                return;
-
-            if (clockTime > 0)
-                clockTime -= Time.deltaTime;
-            if (!isRunning && !passText && !isTyping && GameUtilityService.ConvertKeyDownToControl(KeyCode.Z) &&
-                _typeMode != TypeMode.CantZx)
-            {
-                if (spriteChanger != null)
-                    spriteChanger.ChangeImage(-1);
-                if (_endInBattle)
-                    _canvasAnim.SetBool(Open, true);
-            }
-            if (passText && GameUtilityService.ConvertKeyDownToControl(KeyCode.Z) && _typeMode != TypeMode.CantZx)
-            {
-                PassText("<passText>");
-            }
-            else if (!(pressX || _isJumpingText) && !canNotX && GameUtilityService.ConvertKeyDownToControl(KeyCode.X) &&
-                     _typeMode != TypeMode.CantZx) //跳字
-            {
-                if (clock != 0 && clockTime <= 0)
-                {
-                    pressX = true;
-                }
-            }
-
-
-
-
         }
 
         private void PassText(string inputPassText)
         {
             endString = "";
-            if (_tmpText)
-            {
-                _tmpText.text = "";
-            }
+            if (_tmpText) _tmpText.text = "";
             passText = false;
 
             passTextString = "";
@@ -621,12 +615,10 @@ namespace UCT.Global.UI
                 if (originString[..inputPassText.Length] == inputPassText)
                     originString = originString[inputPassText.Length..];
             }
+
             pressX = false;
             Timing.RunCoroutine(_Typing(_tmpText));
         }
-
-        private bool _endInBattle;
-        private Animator _canvasAnim;
 
         public void EndInBattle()
         {
@@ -637,17 +629,14 @@ namespace UCT.Global.UI
 
         private async void PassTextWithDelay(string inputText, float delayInSeconds)
         {
-            var delayInMilliseconds = (int)(delayInSeconds * 1000); 
-            await Task.Delay(delayInMilliseconds); 
-            PassText(inputText); 
+            var delayInMilliseconds = (int)(delayInSeconds * 1000);
+            await Task.Delay(delayInMilliseconds);
+            PassText(inputText);
         }
 
         private string ExtractPassTextPrefix(string input)
         {
-            if (input.StartsWith("<passText>", StringComparison.Ordinal))
-            {
-                return "<passText>";
-            }
+            if (input.StartsWith("<passText>", StringComparison.Ordinal)) return "<passText>";
 
             if (!input.StartsWith("<passText=", StringComparison.Ordinal)) return null;
             var startIndex = "<passText=".Length;

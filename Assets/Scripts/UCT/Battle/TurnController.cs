@@ -9,7 +9,7 @@ using UnityEngine;
 namespace UCT.Battle
 {
     /// <summary>
-    /// 回合控制，同时也是弹幕的对象池
+    ///     回合控制，同时也是弹幕的对象池
     /// </summary>
     public class TurnController : MonoBehaviour
     {
@@ -20,7 +20,7 @@ namespace UCT.Battle
         public List<int> poolCount;
 
         //public List<string> inheritList = new List<string>();
-        public List<ObjectPool> objectPools = new List<ObjectPool>();
+        public List<ObjectPool> objectPools = new();
 
         private void Awake()
         {
@@ -52,7 +52,7 @@ namespace UCT.Battle
         }
 
         /// <summary>
-        /// 进入敌方回合
+        ///     进入敌方回合
         /// </summary>
         public void OutYourTurn()
         {
@@ -61,8 +61,8 @@ namespace UCT.Battle
         }
 
         /// <summary>
-        /// 回合执行系统
-        /// 根据回合编号进行相应的执行
+        ///     回合执行系统
+        ///     根据回合编号进行相应的执行
         /// </summary>
         private IEnumerator<float> _TurnExecute(int turnNumber)
         {
@@ -70,12 +70,14 @@ namespace UCT.Battle
             {
                 case 1:
                     Global.Other.Debug.Log("这是个摆烂回合……也许吧。");
-           
+
                     var obj = objectPools[0].GetFromPool().GetComponent<BulletController>();
-                    obj.SetBullet("CupCake", "CupCake", new Vector3(1, -1.6f), (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
+                    obj.SetBullet("CupCake", "CupCake", new Vector3(1, -1.6f),
+                        (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
 
                     var obj2 = objectPools[0].GetFromPool().GetComponent<BulletController>();
-                    obj2.SetBullet("CupCake", "CupCake", new Vector3(-1, -1.6f), (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
+                    obj2.SetBullet("CupCake", "CupCake", new Vector3(-1, -1.6f),
+                        (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
 
 
                     for (var i = 600; i > 0; i--)
@@ -89,7 +91,7 @@ namespace UCT.Battle
                     objectPools[0].ReturnPool(obj2.gameObject);
                     break;
 
-                case 0://示例回合
+                case 0: //示例回合
                     Global.Other.Debug.Log("这是一个示例回合");
                     yield return Timing.WaitForSeconds(0.5f);
                     Global.Other.Debug.Log("请注意查看控制台发出的Debug文本介绍");
@@ -97,10 +99,22 @@ namespace UCT.Battle
 
                     Global.Other.Debug.Log("战斗框缩放：更改四个点的坐标");
 
-                    DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[0], x => MainControl.Instance.mainBox.vertexPoints[0] = x, new Vector2(1.4f, MainControl.Instance.mainBox.vertexPoints[0].y), 0.5f).SetEase(Ease.InOutSine);
-                    DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[1], x => MainControl.Instance.mainBox.vertexPoints[1] = x, new Vector2(1.4f, MainControl.Instance.mainBox.vertexPoints[1].y), 0.5f).SetEase(Ease.InOutSine);
-                    DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[2], x => MainControl.Instance.mainBox.vertexPoints[2] = x, new Vector2(-1.4f, MainControl.Instance.mainBox.vertexPoints[2].y), 0.5f).SetEase(Ease.InOutSine);
-                    DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[3], x => MainControl.Instance.mainBox.vertexPoints[3] = x, new Vector2(-1.4f, MainControl.Instance.mainBox.vertexPoints[3].y), 0.5f).SetEase(Ease.InOutSine);
+                    DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[0],
+                            x => MainControl.Instance.mainBox.vertexPoints[0] = x,
+                            new Vector2(1.4f, MainControl.Instance.mainBox.vertexPoints[0].y), 0.5f)
+                        .SetEase(Ease.InOutSine);
+                    DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[1],
+                            x => MainControl.Instance.mainBox.vertexPoints[1] = x,
+                            new Vector2(1.4f, MainControl.Instance.mainBox.vertexPoints[1].y), 0.5f)
+                        .SetEase(Ease.InOutSine);
+                    DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[2],
+                            x => MainControl.Instance.mainBox.vertexPoints[2] = x,
+                            new Vector2(-1.4f, MainControl.Instance.mainBox.vertexPoints[2].y), 0.5f)
+                        .SetEase(Ease.InOutSine);
+                    DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[3],
+                            x => MainControl.Instance.mainBox.vertexPoints[3] = x,
+                            new Vector2(-1.4f, MainControl.Instance.mainBox.vertexPoints[3].y), 0.5f)
+                        .SetEase(Ease.InOutSine);
 
 
                     yield return Timing.WaitForSeconds(1);
@@ -108,11 +122,18 @@ namespace UCT.Battle
                     Global.Other.Debug.Log("通过更改点坐标实现的战斗框轴点旋转");
                     for (var i = 0; i < 4; i++)
                     {
-
-                        DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[0], x => MainControl.Instance.mainBox.vertexPoints[0] = x, MainControl.Instance.mainBox.vertexPoints[3], 0.5f).SetEase(Ease.InOutSine);
-                        DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[1], x => MainControl.Instance.mainBox.vertexPoints[1] = x, MainControl.Instance.mainBox.vertexPoints[0], 0.5f).SetEase(Ease.InOutSine);
-                        DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[2], x => MainControl.Instance.mainBox.vertexPoints[2] = x, MainControl.Instance.mainBox.vertexPoints[1], 0.5f).SetEase(Ease.InOutSine);
-                        DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[3], x => MainControl.Instance.mainBox.vertexPoints[3] = x, MainControl.Instance.mainBox.vertexPoints[2], 0.5f).SetEase(Ease.InOutSine);
+                        DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[0],
+                            x => MainControl.Instance.mainBox.vertexPoints[0] = x,
+                            MainControl.Instance.mainBox.vertexPoints[3], 0.5f).SetEase(Ease.InOutSine);
+                        DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[1],
+                            x => MainControl.Instance.mainBox.vertexPoints[1] = x,
+                            MainControl.Instance.mainBox.vertexPoints[0], 0.5f).SetEase(Ease.InOutSine);
+                        DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[2],
+                            x => MainControl.Instance.mainBox.vertexPoints[2] = x,
+                            MainControl.Instance.mainBox.vertexPoints[1], 0.5f).SetEase(Ease.InOutSine);
+                        DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[3],
+                            x => MainControl.Instance.mainBox.vertexPoints[3] = x,
+                            MainControl.Instance.mainBox.vertexPoints[2], 0.5f).SetEase(Ease.InOutSine);
 
                         yield return Timing.WaitForSeconds(0.5f);
                     }
@@ -126,10 +147,22 @@ namespace UCT.Battle
 
                     Global.Other.Debug.Log("战斗框缩放回初始坐标以结束回合");
                     yield return Timing.WaitForSeconds(1f);
-                    DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[0], x => MainControl.Instance.mainBox.vertexPoints[0] = x, new Vector2(5.93f, MainControl.Instance.mainBox.vertexPoints[0].y), 0.5f).SetEase(Ease.InOutSine);
-                    DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[1], x => MainControl.Instance.mainBox.vertexPoints[1] = x, new Vector2(5.93f, MainControl.Instance.mainBox.vertexPoints[1].y), 0.5f).SetEase(Ease.InOutSine);
-                    DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[2], x => MainControl.Instance.mainBox.vertexPoints[2] = x, new Vector2(-5.93f, MainControl.Instance.mainBox.vertexPoints[2].y), 0.5f).SetEase(Ease.InOutSine);
-                    DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[3], x => MainControl.Instance.mainBox.vertexPoints[3] = x, new Vector2(-5.93f, MainControl.Instance.mainBox.vertexPoints[3].y), 0.5f).SetEase(Ease.InOutSine);
+                    DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[0],
+                            x => MainControl.Instance.mainBox.vertexPoints[0] = x,
+                            new Vector2(5.93f, MainControl.Instance.mainBox.vertexPoints[0].y), 0.5f)
+                        .SetEase(Ease.InOutSine);
+                    DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[1],
+                            x => MainControl.Instance.mainBox.vertexPoints[1] = x,
+                            new Vector2(5.93f, MainControl.Instance.mainBox.vertexPoints[1].y), 0.5f)
+                        .SetEase(Ease.InOutSine);
+                    DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[2],
+                            x => MainControl.Instance.mainBox.vertexPoints[2] = x,
+                            new Vector2(-5.93f, MainControl.Instance.mainBox.vertexPoints[2].y), 0.5f)
+                        .SetEase(Ease.InOutSine);
+                    DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[3],
+                            x => MainControl.Instance.mainBox.vertexPoints[3] = x,
+                            new Vector2(-5.93f, MainControl.Instance.mainBox.vertexPoints[3].y), 0.5f)
+                        .SetEase(Ease.InOutSine);
                     yield return Timing.WaitForSeconds(0.5f);
 
                     break;
@@ -141,9 +174,9 @@ namespace UCT.Battle
         }
 
         /// <summary>
-        /// 回合嵌套
-        /// 首先在枚举Nest中定义嵌套名称，然后在此编写嵌套内容
-        /// 用于重复复杂弹幕的嵌套使用
+        ///     回合嵌套
+        ///     首先在枚举Nest中定义嵌套名称，然后在此编写嵌套内容
+        ///     用于重复复杂弹幕的嵌套使用
         /// </summary>
         private IEnumerator<float> _TurnNest(Nest nest)
         {
@@ -152,7 +185,8 @@ namespace UCT.Battle
                 case Nest.SimpleNestBullet:
                     var obj = objectPools[0].GetFromPool().GetComponent<BulletController>();
 
-                    obj.SetBullet("CupCake", "CupCake", new Vector3(0, -3.35f), (BattleControl.BulletColor)Random.Range(0,3), SpriteMaskInteraction.VisibleInsideMask);
+                    obj.SetBullet("CupCake", "CupCake", new Vector3(0, -3.35f),
+                        (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
 
                     obj.transform.localPosition += new Vector3(Random.Range(-0.5f, 0.5f), 0);
 

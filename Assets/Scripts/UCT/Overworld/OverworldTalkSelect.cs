@@ -10,19 +10,19 @@ using UnityEngine.UI;
 namespace UCT.Overworld
 {
     /// <summary>
-    /// 用于在OW插入选项系统，与UT的选项一致，而不同于DR的选项。
-    /// 在含有选项的场景内会添加heart。
-    /// 在文本包内调用
+    ///     用于在OW插入选项系统，与UT的选项一致，而不同于DR的选项。
+    ///     在含有选项的场景内会添加heart。
+    ///     在文本包内调用
     /// </summary>
     public class OverworldTalkSelect : MonoBehaviour
     {
         public static OverworldTalkSelect Instance;
         public int select;
-        private Image _heart;
-        private bool _canSelect;
-        private TypeWritter _typeWritter;
         public List<string> texts;
         public string typeText;
+        private bool _canSelect;
+        private Image _heart;
+        private TypeWritter _typeWritter;
 
         private void Awake()
         {
@@ -44,14 +44,6 @@ namespace UCT.Overworld
             _heart.rectTransform.sizeDelta = 16 * Vector3.one;
             _heart.sprite = Resources.Load<Sprite>("Sprites/Soul");
             _heart.color = Color.clear;
-        }
-
-        public void Open()
-        {
-            select = 0;
-            _heart.rectTransform.anchoredPosition = new Vector2(-143.3f + Convert.ToInt32(select) * 192.5f, -18.8f);
-            _heart.color = Color.red;
-            _canSelect = true;
         }
 
         private void Update()
@@ -78,7 +70,7 @@ namespace UCT.Overworld
             _typeWritter.TypeStop();
             switch (select)
             {
-                case 0://选择了左侧选项
+                case 0: //选择了左侧选项
                     switch (typeText)
                     {
                         case "BackMenu":
@@ -91,13 +83,23 @@ namespace UCT.Overworld
                             AudioController.Instance.GetFx(2, MainControl.Instance.AudioControl.fxClipBattle);
                             break;
                     }
+
                     break;
 
-                case 1://选择了右侧选项
+                case 1: //选择了右侧选项
                     break;
             }
+
             _heart.color = Color.clear;
             _canSelect = false;
+        }
+
+        public void Open()
+        {
+            select = 0;
+            _heart.rectTransform.anchoredPosition = new Vector2(-143.3f + Convert.ToInt32(select) * 192.5f, -18.8f);
+            _heart.color = Color.red;
+            _canSelect = true;
         }
     }
 }

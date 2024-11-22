@@ -10,12 +10,12 @@ namespace Obsolete
         public Vector3[] points;
         public Color[] colors;
         [FormerlySerializedAs("UVs")] public Vector4[] uVs;
-        private MeshFilter _meshFilter;
-        private MeshRenderer _meshRenderer;
-        private VertexHelper _vh = new VertexHelper();
 
         [SerializeField] private Material material;
         [SerializeField] private Texture mainTex;
+        private MeshFilter _meshFilter;
+        private MeshRenderer _meshRenderer;
+        private readonly VertexHelper _vh = new();
 
         private void Start()
         {
@@ -38,10 +38,7 @@ namespace Obsolete
         private void Update()
         {
             _vh.Clear();
-            for (var i = 0; i < points.Length; i++)
-            {
-                _vh.AddVert(points[i], colors[0], uVs[i]);
-            }
+            for (var i = 0; i < points.Length; i++) _vh.AddVert(points[i], colors[0], uVs[i]);
             _vh.AddTriangle(0, 2, 1);
             _vh.AddTriangle(0, 3, 2);
         }

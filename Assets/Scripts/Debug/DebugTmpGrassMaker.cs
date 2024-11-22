@@ -7,10 +7,10 @@ namespace Debug
 {
     public class DebugTmpGrassMaker : MonoBehaviour
     {
-        private TextMeshPro _tmp;
         public List<string> strings;
         public float time, timeMax;
         private bool _select;
+        private TextMeshPro _tmp;
 
         private void Start()
         {
@@ -28,7 +28,10 @@ namespace Debug
                 _select = !_select;
                 _tmp.text = strings[Convert.ToInt32(_select)];
             }
-            else time -= Time.deltaTime;
+            else
+            {
+                time -= Time.deltaTime;
+            }
         }
     }
 }

@@ -10,26 +10,27 @@ using UCT.Global.UI;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
+using Random = System.Random;
 
 namespace UCT.Service
 {
     /// <summary>
-    /// 提供一些较为全局的，与游戏内容相关的函数。
+    ///     提供一些较为全局的，与游戏内容相关的函数。
     /// </summary>
     public static class GameUtilityService
     {
         /// <summary>
-        /// 设置16:9边框的Sprite
+        ///     设置16:9边框的Sprite
         /// </summary>
         /// <param name="framePic"></param>
-        public static void SetCanvasFrameSprite(int framePic = 2)//一般为CanvasController.instance.framePic
+        public static void SetCanvasFrameSprite(int framePic = 2) //一般为CanvasController.instance.framePic
         {
             var frame = CanvasController.Instance.frame;
             frame.sprite = framePic < 0 ? null : MainControl.Instance.overworldControl.frames[framePic];
         }
 
         /// <summary>
-        /// 分辨率设置
+        ///     分辨率设置
         /// </summary>
         public static void SetResolution(int resolution)
         {
@@ -41,7 +42,9 @@ namespace UCT.Service
                     if (mainCamera) MainControl.Instance.cameraShake = mainCamera.GetComponent<CameraShake>();
                 }
                 else
+                {
                     MainControl.Instance.cameraMainInBattle = MainControl.Instance.cameraShake.GetComponent<Camera>();
+                }
             }
 
             if (!MainControl.Instance.overworldControl.isUsingHDFrame)
@@ -60,9 +63,8 @@ namespace UCT.Service
                 MainControl.Instance.mainCamera.rect = new Rect(0, 0, 1, 1);
 
                 if (MainControl.Instance.sceneState == MainControl.SceneState.InBattle)
-                {
-                    if (MainControl.Instance.cameraMainInBattle) MainControl.Instance.cameraMainInBattle.rect = new Rect(0, 0, 1, 1);
-                }
+                    if (MainControl.Instance.cameraMainInBattle)
+                        MainControl.Instance.cameraMainInBattle.rect = new Rect(0, 0, 1, 1);
 
                 CanvasController.Instance.DOKill();
                 CanvasController.Instance.fps.rectTransform.anchoredPosition = new Vector2();
@@ -71,7 +73,7 @@ namespace UCT.Service
             else
             {
                 MainControl.Instance.mainCamera.rect = new Rect(0, 0.056f, 1, 0.888f);
-                
+
                 if (MainControl.Instance.sceneState == MainControl.SceneState.InBattle)
                     if (MainControl.Instance.cameraMainInBattle)
                         MainControl.Instance.cameraMainInBattle.rect = new Rect(0, 0.056f, 1, 0.888f);
@@ -83,27 +85,34 @@ namespace UCT.Service
                     CanvasController.Instance.frame.color = Color.black;
                     CanvasController.Instance.fps.rectTransform.anchoredPosition = new Vector2(0, -30f);
                 }
-                else 
+                else
+                {
                     CanvasController.Instance.fps.rectTransform.anchoredPosition = new Vector2();
+                }
 
-                CanvasController.Instance.frame.DOColor(new Color(1, 1, 1, 1) * Convert.ToInt32(CanvasController.Instance.framePic >= 0), 1f);
+                CanvasController.Instance.frame.DOColor(
+                    new Color(1, 1, 1, 1) * Convert.ToInt32(CanvasController.Instance.framePic >= 0), 1f);
             }
 
-            
+
             var resolutionHeights = new List<int> { 480, 768, 864, 960, 1080, 540, 1080 };
             var resolutionWidths = MathUtilityService.GetResolutionWidthsWithHeights(resolutionHeights, 5);
 
             var currentResolutionWidth = resolutionWidths[resolution];
             var currentResolutionHeight = resolutionHeights[resolution];
-            
-            Screen.SetResolution(currentResolutionWidth, currentResolutionHeight, MainControl.Instance.overworldControl.fullScreen);
-            MainControl.Instance.overworldControl.resolution = new Vector2(currentResolutionWidth, currentResolutionHeight);
+
+            Screen.SetResolution(currentResolutionWidth, currentResolutionHeight,
+                MainControl.Instance.overworldControl.fullScreen);
+            MainControl.Instance.overworldControl.resolution =
+                new Vector2(currentResolutionWidth, currentResolutionHeight);
         }
 
         public static void SwitchScene(string sceneName, bool async = true)
         {
             SetCanvasFrameSprite();
-            if (SceneManager.GetActiveScene().name != "Menu" && SceneManager.GetActiveScene().name != "Rename" && SceneManager.GetActiveScene().name != "Story" && SceneManager.GetActiveScene().name != "Start" && SceneManager.GetActiveScene().name != "Gameover")
+            if (SceneManager.GetActiveScene().name != "Menu" && SceneManager.GetActiveScene().name != "Rename" &&
+                SceneManager.GetActiveScene().name != "Story" && SceneManager.GetActiveScene().name != "Start" &&
+                SceneManager.GetActiveScene().name != "Gameover")
                 MainControl.Instance.playerControl.lastScene = SceneManager.GetActiveScene().name;
             if (async)
                 SceneManager.LoadSceneAsync(sceneName);
@@ -118,18 +127,20 @@ namespace UCT.Service
             MainControl.Instance.isSceneSwitching = true;
             MainControl.Instance.sceneSwitchingFadeImage.color = new Color(1, 1, 1, 0);
             AudioController.Instance.GetFx(6, MainControl.Instance.AudioControl.fxClipUI);
-            MainControl.Instance.sceneSwitchingFadeImage.DOColor(Color.white, 5.5f).SetEase(Ease.Linear).OnKill(() => SwitchScene(scene));
+            MainControl.Instance.sceneSwitchingFadeImage.DOColor(Color.white, 5.5f).SetEase(Ease.Linear)
+                .OnKill(() => SwitchScene(scene));
         }
 
         /// <summary>
-        /// 淡出并切换场景。
+        ///     淡出并切换场景。
         /// </summary>
         /// <param name="scene">要切换到的场景名称</param>
         /// <param name="fadeColor">淡出的颜色</param>
         /// <param name="isBgmMuted">是否静音背景音乐</param>
         /// <param name="fadeTime">淡出时间，默认为0.5秒</param>
         /// <param name="isAsync">是否异步切换场景，默认为true</param>
-        public static void FadeOutAndSwitchScene(string scene, Color fadeColor, bool isBgmMuted = false, float fadeTime = 0.5f, bool isAsync = true)
+        public static void FadeOutAndSwitchScene(string scene, Color fadeColor, bool isBgmMuted = false,
+            float fadeTime = 0.5f, bool isAsync = true)
         {
             MainControl.Instance.isSceneSwitching = true;
             if (isBgmMuted)
@@ -148,25 +159,28 @@ namespace UCT.Service
                         break;
                 }
             }
+
             MainControl.Instance.overworldControl.pause = true;
             switch (fadeTime)
             {
                 case > 0:
                 {
-                    MainControl.Instance.sceneSwitchingFadeImage.DOColor(fadeColor, fadeTime).SetEase(Ease.Linear).OnKill(() => GameUtilityService.SwitchScene(scene));
+                    MainControl.Instance.sceneSwitchingFadeImage.DOColor(fadeColor, fadeTime).SetEase(Ease.Linear)
+                        .OnKill(() => SwitchScene(scene));
                     if (!MainControl.Instance.overworldControl.isUsingHDFrame)
                         CanvasController.Instance.frame.color = new Color(1, 1, 1, 0);
                     break;
                 }
                 case 0:
                     MainControl.Instance.sceneSwitchingFadeImage.color = fadeColor;
-                    GameUtilityService.SwitchScene(scene, isAsync);
+                    SwitchScene(scene, isAsync);
                     break;
                 default:
                 {
                     fadeTime = Mathf.Abs(fadeTime);
                     MainControl.Instance.sceneSwitchingFadeImage.color = fadeColor;
-                    MainControl.Instance.sceneSwitchingFadeImage.DOColor(fadeColor, fadeTime).SetEase(Ease.Linear).OnKill(() => GameUtilityService.SwitchScene(scene));
+                    MainControl.Instance.sceneSwitchingFadeImage.DOColor(fadeColor, fadeTime).SetEase(Ease.Linear)
+                        .OnKill(() => SwitchScene(scene));
                     if (!MainControl.Instance.overworldControl.isUsingHDFrame)
                         CanvasController.Instance.frame.color = new Color(1, 1, 1, 0);
                     break;
@@ -175,7 +189,7 @@ namespace UCT.Service
         }
 
         /// <summary>
-        /// 更新游戏的分辨率并返回更改后的resolutionLevel值。
+        ///     更新游戏的分辨率并返回更改后的resolutionLevel值。
         /// </summary>
         public static int UpdateResolutionSettings(bool isUsingHdFrame, int resolutionLevel)
         {
@@ -200,7 +214,7 @@ namespace UCT.Service
         }
 
         /// <summary>
-        /// 开/关 SFX
+        ///     开/关 SFX
         /// </summary>
         public static void ToggleAllSfx(bool isClose)
         {
@@ -210,44 +224,44 @@ namespace UCT.Service
                 light2D.enabled = !isClose;
             }
 
-            if (MainControl.Instance.mainCamera) 
+            if (MainControl.Instance.mainCamera)
                 MainControl.Instance.mainCamera.GetUniversalAdditionalCameraData().renderPostProcessing = !isClose;
 
             if (MainControl.Instance.sceneState != MainControl.SceneState.InBattle) return;
-            
+
             if (!MainControl.Instance.cameraMainInBattle)
             {
                 if (!MainControl.Instance.cameraShake)
                     MainControl.Instance.cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
                 MainControl.Instance.cameraMainInBattle = MainControl.Instance.cameraShake.GetComponent<Camera>();
             }
-            MainControl.Instance.  cameraMainInBattle.GetUniversalAdditionalCameraData().renderPostProcessing = !isClose;
+
+            MainControl.Instance.cameraMainInBattle.GetUniversalAdditionalCameraData().renderPostProcessing = !isClose;
         }
 
         /// <summary>
-        /// 传入使用背包的哪个物体
-        /// 然后就使用 打true会顺带把背包顺序整理下
-        /// 然后再让打字机打个字
-        /// plusText填0就自己计算
+        ///     传入使用背包的哪个物体
+        ///     然后就使用 打true会顺带把背包顺序整理下
+        ///     然后再让打字机打个字
+        ///     plusText填0就自己计算
         /// </summary>
         public static void UseItem(TypeWritter typeWritter, TMP_Text tmpText, int sonSelect, int plusText = 0)
         {
             if (plusText == 0)
-            {
                 plusText = MainControl.Instance.playerControl.myItems[sonSelect - 1] switch
                 {
-                    >= 20000 => -20000 + MainControl.Instance.ItemControl.itemFoods.Count / 3 + MainControl.Instance.ItemControl.itemArms.Count / 2,
+                    >= 20000 => -20000 + MainControl.Instance.ItemControl.itemFoods.Count / 3 +
+                                MainControl.Instance.ItemControl.itemArms.Count / 2,
                     >= 10000 => -10000 + MainControl.Instance.ItemControl.itemFoods.Count / 3,
                     _ => 0
                 };
-            }
 
             switch (MainControl.Instance.playerControl.myItems[sonSelect - 1])
             {
-                case >= 20000:// 防具
+                case >= 20000: // 防具
                     ProcessArmor(typeWritter, tmpText, sonSelect, plusText);
                     break;
-                case >= 10000:// 武器
+                case >= 10000: // 武器
                     ProcessArm(typeWritter, tmpText, sonSelect, plusText);
                     break;
                 // 食物
@@ -261,7 +275,8 @@ namespace UCT.Service
 
         private static void ProcessFood(TypeWritter typeWritter, TMP_Text tmpText, int sonSelect)
         {
-            var plusHp = int.Parse(DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[sonSelect - 1], "Auto", 2));
+            var plusHp = int.Parse(DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl,
+                MainControl.Instance.playerControl.myItems[sonSelect - 1], "Auto", 2));
             //if (MainControl.Instance.playerControl.wearArm == 10001)
             //    plusHp += 4;
 
@@ -270,42 +285,58 @@ namespace UCT.Service
                     MainControl.Instance.playerControl.myItems[sonSelect - 1] * 5 - 3], false,
                 plusHp, 0, tmpText);
 
-            MainControl.Instance. playerControl.hp += plusHp;
+            MainControl.Instance.playerControl.hp += plusHp;
 
             if (MainControl.Instance.playerControl.hp > MainControl.Instance.playerControl.hpMax)
                 MainControl.Instance.playerControl.hp = MainControl.Instance.playerControl.hpMax;
             for (var i = 0; i < MainControl.Instance.ItemControl.itemFoods.Count; i++)
             {
-                if (MainControl.Instance.ItemControl.itemTextMaxItemSon[MainControl.Instance.playerControl.myItems[sonSelect - 1] * 5 - 5] !=
+                if (MainControl.Instance.ItemControl.itemTextMaxItemSon[
+                        MainControl.Instance.playerControl.myItems[sonSelect - 1] * 5 - 5] !=
                     MainControl.Instance.ItemControl.itemFoods[i]) continue;
                 var text = MainControl.Instance.ItemControl.itemFoods[i + 1];
                 text = text.Substring(1, text.Length - 1);
-                MainControl.Instance. playerControl.myItems[sonSelect - 1] = DataHandlerService.ItemNameGetId(MainControl.Instance.ItemControl, text, "Foods");
+                MainControl.Instance.playerControl.myItems[sonSelect - 1] =
+                    DataHandlerService.ItemNameGetId(MainControl.Instance.ItemControl, text, "Foods");
                 break;
             }
+
             AudioController.Instance.GetFx(2, MainControl.Instance.AudioControl.fxClipUI);
         }
 
         private static void ProcessArm(TypeWritter typeWritter, TMP_Text tmpText, int sonSelect, int plusText)
         {
-            typeWritter.TypeOpen(MainControl.Instance.ItemControl.itemTextMaxItemSon[(MainControl.Instance.playerControl.myItems[sonSelect - 1] + plusText) * 5 - 3], false, 0, 0, tmpText);
-            MainControl.Instance.playerControl.wearAtk = int.Parse(DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[sonSelect - 1], "Auto", 1));
-            (MainControl.Instance.playerControl.wearArm, MainControl.Instance.playerControl.myItems[sonSelect - 1]) = (MainControl.Instance.playerControl.myItems[sonSelect - 1],MainControl.Instance. playerControl.wearArm);
+            typeWritter.TypeOpen(
+                MainControl.Instance.ItemControl.itemTextMaxItemSon[
+                    (MainControl.Instance.playerControl.myItems[sonSelect - 1] + plusText) * 5 - 3], false, 0, 0,
+                tmpText);
+            MainControl.Instance.playerControl.wearAtk = int.Parse(DataHandlerService.ItemIdGetName(
+                MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[sonSelect - 1], "Auto",
+                1));
+            (MainControl.Instance.playerControl.wearArm, MainControl.Instance.playerControl.myItems[sonSelect - 1]) = (
+                MainControl.Instance.playerControl.myItems[sonSelect - 1], MainControl.Instance.playerControl.wearArm);
 
             AudioController.Instance.GetFx(3, MainControl.Instance.AudioControl.fxClipUI);
         }
 
         private static void ProcessArmor(TypeWritter typeWritter, TMP_Text tmpText, int sonSelect, int plusText)
         {
-            typeWritter.TypeOpen(MainControl.Instance.ItemControl.itemTextMaxItemSon[(MainControl.Instance.playerControl.myItems[sonSelect - 1] + plusText) * 5 - 3], false, 0, 0, tmpText);
-            MainControl.Instance.playerControl.wearDef = int.Parse(DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[sonSelect - 1], "Auto", 1));
-            (MainControl.Instance.playerControl.wearArmor, MainControl.Instance.playerControl.myItems[sonSelect - 1]) = (MainControl.Instance.playerControl.myItems[sonSelect - 1], MainControl.Instance.playerControl.wearArmor);
+            typeWritter.TypeOpen(
+                MainControl.Instance.ItemControl.itemTextMaxItemSon[
+                    (MainControl.Instance.playerControl.myItems[sonSelect - 1] + plusText) * 5 - 3], false, 0, 0,
+                tmpText);
+            MainControl.Instance.playerControl.wearDef = int.Parse(DataHandlerService.ItemIdGetName(
+                MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[sonSelect - 1], "Auto",
+                1));
+            (MainControl.Instance.playerControl.wearArmor, MainControl.Instance.playerControl.myItems[sonSelect - 1]) =
+                (MainControl.Instance.playerControl.myItems[sonSelect - 1],
+                    MainControl.Instance.playerControl.wearArmor);
 
             AudioController.Instance.GetFx(3, MainControl.Instance.AudioControl.fxClipUI);
         }
 
         /// <summary>
-        /// 传入默认KeyCode并转换为游戏内键位。
+        ///     传入默认KeyCode并转换为游戏内键位。
         /// </summary>
         public static bool ConvertKeyDownToControl(KeyCode key)
         {
@@ -324,7 +355,7 @@ namespace UCT.Service
                 KeyCode.Tab => GetKeyDownFrom(keyCodes, 9),
                 KeyCode.Semicolon => GetKeyDownFrom(keyCodes, 10),
                 KeyCode.Escape => GetKeyDownFrom(keyCodes, 11),
-                _ => false,
+                _ => false
             };
         }
 
@@ -332,6 +363,7 @@ namespace UCT.Service
         {
             return keyCodes.Any(keyCode => Input.GetKeyDown(keyCode[index]));
         }
+
         public static bool ConvertKeyToControl(KeyCode key)
         {
             var keyCodes = MainControl.Instance.overworldControl.KeyCodes;
@@ -349,13 +381,15 @@ namespace UCT.Service
                 KeyCode.Tab => GetKeyFrom(keyCodes, 9),
                 KeyCode.Semicolon => GetKeyFrom(keyCodes, 10),
                 KeyCode.Escape => GetKeyFrom(keyCodes, 11),
-                _ => false,
+                _ => false
             };
         }
+
         private static bool GetKeyFrom(List<KeyCode>[] keyCodes, int index)
         {
             return keyCodes.Any(keyCode => Input.GetKey(keyCode[index]));
         }
+
         public static bool ConvertKeyUpToControl(KeyCode key)
         {
             var keyCodes = MainControl.Instance.overworldControl.KeyCodes;
@@ -373,15 +407,17 @@ namespace UCT.Service
                 KeyCode.Tab => GetKeyUpFrom(keyCodes, 9),
                 KeyCode.Semicolon => GetKeyUpFrom(keyCodes, 10),
                 KeyCode.Escape => GetKeyUpFrom(keyCodes, 11),
-                _ => false,
+                _ => false
             };
         }
+
         private static bool GetKeyUpFrom(List<KeyCode>[] keyCodes, int index)
         {
             return keyCodes.Any(keyCode => Input.GetKeyUp(keyCode[index]));
         }
+
         /// <summary>
-        /// 应用默认键位
+        ///     应用默认键位
         /// </summary>
         public static List<KeyCode>[] ApplyDefaultControl()
         {
@@ -395,7 +431,7 @@ namespace UCT.Service
             keyCodes[1] = new List<KeyCode>
             {
                 KeyCode.S, KeyCode.D, KeyCode.W, KeyCode.A,
-                KeyCode.Return, KeyCode.RightShift, KeyCode.RightControl, KeyCode.None, 
+                KeyCode.Return, KeyCode.RightShift, KeyCode.RightControl, KeyCode.None,
                 KeyCode.None, KeyCode.None, KeyCode.None, KeyCode.None
             };
             keyCodes[2] = new List<KeyCode>
@@ -410,7 +446,7 @@ namespace UCT.Service
 
         public static Color GetRandomColor()
         {
-            var random = new System.Random();
+            var random = new Random();
             return new Color((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble(), 1);
         }
 
@@ -420,17 +456,17 @@ namespace UCT.Service
             do
             {
                 newColor = GetRandomColor();
-            } 
-            while (newColor == colorToAvoid);
+            } while (newColor == colorToAvoid);
 
             return newColor;
         }
-        
-        public static Color GetSimilarButDifferentColor(Color originalColor, float hueOffset = 0.05f, float saturationOffset = 0.1f, float valueOffset = 0.1f)
+
+        public static Color GetSimilarButDifferentColor(Color originalColor, float hueOffset = 0.05f,
+            float saturationOffset = 0.1f, float valueOffset = 0.1f)
         {
             // 使用可控的随机生成器
-            var random = new System.Random();
-    
+            var random = new Random();
+
             Color.RGBToHSV(originalColor, out var h, out var s, out var v);
 
             h = Mathf.Repeat(h + (float)(random.NextDouble() * 2 - 1) * hueOffset, 1.0f);

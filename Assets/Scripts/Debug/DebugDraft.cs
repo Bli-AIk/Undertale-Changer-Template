@@ -18,7 +18,8 @@ namespace Debug
         {
             if (!_wozhenfule)
             {
-                GetComponent<TypeWritter>().TypeOpen("<color=red>text123</color>", false, 0, 0, GetComponent<TMP_Text>());
+                GetComponent<TypeWritter>()
+                    .TypeOpen("<color=red>text123</color>", false, 0, 0, GetComponent<TMP_Text>());
                 _wozhenfule = true;
             }
         }

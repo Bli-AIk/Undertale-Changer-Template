@@ -4,12 +4,12 @@ using UnityEngine;
 namespace UCT.Battle
 {
     /// <summary>
-    /// SpriteSplitController的子级控制器
+    ///     SpriteSplitController的子级控制器
     /// </summary>
     public class SpriteSplitFly : MonoBehaviour
     {
-        private SpriteRenderer _spriteRenderer;
         private Rigidbody2D _rbody;
+        private SpriteRenderer _spriteRenderer;
 
         private void Awake()
         {

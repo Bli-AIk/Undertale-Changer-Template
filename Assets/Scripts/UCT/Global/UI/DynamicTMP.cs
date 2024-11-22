@@ -5,13 +5,13 @@ using UnityEngine;
 namespace UCT.Global.UI
 {
     /// <summary>
-    /// 给字体添加各种奇奇怪怪的变形/位移/抖动 巴拉巴拉
+    ///     给字体添加各种奇奇怪怪的变形/位移/抖动 巴拉巴拉
     /// </summary>
     public class DynamicTMP : MonoBehaviour
     {
-        private TMP_Text _tmp;
         public OverworldControl.DynamicTMP dynamicMode;
         private float _randomStart;
+        private TMP_Text _tmp;
 
         private void Start()
         {
@@ -29,7 +29,7 @@ namespace UCT.Global.UI
 
             switch (dynamicMode)
             {
-                case OverworldControl.DynamicTMP.RandomShake://帕金森，但是每个抖动都不一样
+                case OverworldControl.DynamicTMP.RandomShake: //帕金森，但是每个抖动都不一样
                     for (var i = 0; i < textInfo.characterCount; i++)
                     {
                         var charInfo = textInfo.characterInfo[i];
@@ -44,9 +44,10 @@ namespace UCT.Global.UI
                             verts[charInfo.vertexIndex + j] = orig + random;
                         }
                     }
+
                     break;
 
-                case OverworldControl.DynamicTMP.RandomShakeSingle://类似于原版战斗内的我方对话抖动：字符随机时间随机一个抖那么一下
+                case OverworldControl.DynamicTMP.RandomShakeSingle: //类似于原版战斗内的我方对话抖动：字符随机时间随机一个抖那么一下
 
                     var randomIs = Random.Range(0, 120);
                     if (randomIs == 0)
@@ -65,9 +66,10 @@ namespace UCT.Global.UI
                             }
                         }
                     }
+
                     break;
 
-                case OverworldControl.DynamicTMP.RandomShakeAll://整齐划一的抖动
+                case OverworldControl.DynamicTMP.RandomShakeAll: //整齐划一的抖动
                     var randomer = new Vector3(Random.Range(-0.05f, 0.05f), Random.Range(-0.05f, 0.05f), 0);
                     for (var i = 0; i < textInfo.characterCount; i++)
                     {
@@ -83,9 +85,10 @@ namespace UCT.Global.UI
                             verts[charInfo.vertexIndex + j] = orig + randomer;
                         }
                     }
+
                     break;
 
-                case OverworldControl.DynamicTMP.CrazyShake://抽搐的抖动
+                case OverworldControl.DynamicTMP.CrazyShake: //抽搐的抖动
                     for (var i = 0; i < textInfo.characterCount; i++)
                     {
                         var charInfo = textInfo.characterInfo[i];
@@ -96,17 +99,20 @@ namespace UCT.Global.UI
                         {
                             var orig = verts[charInfo.vertexIndex + j];
                             //动画
-                            verts[charInfo.vertexIndex + j] = orig + new Vector3(0, 0.025f * Mathf.Sin(Random.Range(1, 2.5f) * Time.time + orig.x * 0.45f), 0);
+                            verts[charInfo.vertexIndex + j] = orig + new Vector3(0,
+                                0.025f * Mathf.Sin(Random.Range(1, 2.5f) * Time.time + orig.x * 0.45f), 0);
 
                             orig = verts[charInfo.vertexIndex + j];
                             if (Random.Range(0, 5) != 0)
                                 continue;
-                            verts[charInfo.vertexIndex + j] = orig + new Vector3(Random.Range(-0.05f, 0.05f), Random.Range(-0.05f, 0.05f), 0);
+                            verts[charInfo.vertexIndex + j] = orig + new Vector3(Random.Range(-0.05f, 0.05f),
+                                Random.Range(-0.05f, 0.05f), 0);
                         }
                     }
+
                     break;
 
-                case OverworldControl.DynamicTMP.NapShake://小幽灵式抽搐的抖动
+                case OverworldControl.DynamicTMP.NapShake: //小幽灵式抽搐的抖动
                     for (var i = 0; i < textInfo.characterCount; i++)
                     {
                         var charInfo = textInfo.characterInfo[i];
@@ -117,14 +123,17 @@ namespace UCT.Global.UI
                         {
                             var orig = verts[charInfo.vertexIndex + j];
                             //动画
-                            verts[charInfo.vertexIndex + j] = orig + new Vector3(0, 0.05f * Mathf.Cos(_randomStart * (Time.time) + orig.x * 0.45f), 0);
+                            verts[charInfo.vertexIndex + j] = orig + new Vector3(0,
+                                0.05f * Mathf.Cos(_randomStart * Time.time + orig.x * 0.45f), 0);
                             orig = verts[charInfo.vertexIndex + j];
-                            verts[charInfo.vertexIndex + j] = orig + new Vector3(Random.Range(-0.01f, 0.01f), Random.Range(-0.01f, 0.01f), 0);
+                            verts[charInfo.vertexIndex + j] = orig + new Vector3(Random.Range(-0.01f, 0.01f),
+                                Random.Range(-0.01f, 0.01f), 0);
                         }
                     }
+
                     break;
 
-                case OverworldControl.DynamicTMP.NapFloat://小幽灵字符漂浮
+                case OverworldControl.DynamicTMP.NapFloat: //小幽灵字符漂浮
                     for (var i = 0; i < textInfo.characterCount; i++)
                     {
                         var charInfo = textInfo.characterInfo[i];
@@ -135,9 +144,11 @@ namespace UCT.Global.UI
                         {
                             var orig = verts[charInfo.vertexIndex + j];
                             //动画
-                            verts[charInfo.vertexIndex + j] = orig + new Vector3(0, 0.05f * Mathf.Sin(_randomStart * (Time.time) + orig.x * 0.45f), 0);
+                            verts[charInfo.vertexIndex + j] = orig + new Vector3(0,
+                                0.05f * Mathf.Sin(_randomStart * Time.time + orig.x * 0.45f), 0);
                         }
                     }
+
                     break;
 
                 case OverworldControl.DynamicTMP.Wave:
@@ -154,6 +165,7 @@ namespace UCT.Global.UI
                             verts[charInfo.vertexIndex + j] = orig + waveOffset;
                         }
                     }
+
                     break;
 
                 case OverworldControl.DynamicTMP.Explode:
@@ -171,6 +183,7 @@ namespace UCT.Global.UI
                             verts[charInfo.vertexIndex + j] = orig + explodeOffset;
                         }
                     }
+
                     break;
 
                 case OverworldControl.DynamicTMP.Bounce:
@@ -187,9 +200,8 @@ namespace UCT.Global.UI
                             verts[charInfo.vertexIndex + j] = orig + bounceOffset;
                         }
                     }
+
                     break;
-
-
             }
 
             for (var i = 0; i < textInfo.meshInfo.Length; i++)
@@ -199,7 +211,5 @@ namespace UCT.Global.UI
                 _tmp.UpdateGeometry(meshInfo.mesh, i);
             }
         }
-
-
     }
 }

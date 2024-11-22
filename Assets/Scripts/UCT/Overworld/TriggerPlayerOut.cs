@@ -4,26 +4,22 @@ using UnityEngine;
 namespace UCT.Overworld
 {
     /// <summary>
-    /// V0.1.1新加
-    /// 用于带动画器的OW，在玩家进入/离开时，执行代码/播放动画。
-    /// 可多方面调整，我猜
+    ///     V0.1.1新加
+    ///     用于带动画器的OW，在玩家进入/离开时，执行代码/播放动画。
+    ///     可多方面调整，我猜
     /// </summary>
     public class TriggerPlayerOut : MonoBehaviour
     {
         public float volume = 1;
         public float pitch = 1;
 
-        [Header("更改动画的布尔值：")]
-        public string changeBool;
+        [Header("更改动画的布尔值：")] public string changeBool;
 
-        [Header("去除进入检测范围执行动画")]
-        public bool banTrigger;
+        [Header("去除进入检测范围执行动画")] public bool banTrigger;
 
-        [Header("在上个场景为指定场景时去除失效")]
-        public string notBanSceneSp;
+        [Header("在上个场景为指定场景时去除失效")] public string notBanSceneSp;
 
-        [Header("设置在离开范围/进入范围时执行")]
-        public bool isEnter;
+        [Header("设置在离开范围/进入范围时执行")] public bool isEnter;
 
         private Animator _animator;
         private bool _triggered;
@@ -40,10 +36,7 @@ namespace UCT.Overworld
         {
             _animator = GetComponent<Animator>();
 
-            if (sceneSp == MainControl.Instance.playerControl.lastScene)
-            {
-                _animator.SetBool(sceneBool, true);
-            }
+            if (sceneSp == MainControl.Instance.playerControl.lastScene) _animator.SetBool(sceneBool, true);
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
@@ -75,14 +68,14 @@ namespace UCT.Overworld
     {
         transform.Find(name).gameObject.SetActive(false);
     }
-	void SetActive(string name)
+    void SetActive(string name)
     {
         transform.Find(name).gameObject.SetActive(true);
     }
-	void ChangePitch(float newPitch)
-	{
-		pitch = newPitch;
-	}
+    void ChangePitch(float newPitch)
+    {
+        pitch = newPitch;
+    }
     void ChangeVolume(float newVolume)
     {
         volume = newVolume;

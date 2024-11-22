@@ -9,48 +9,99 @@ using UnityEngine;
 namespace UCT.Battle
 {
     /// <summary>
-    /// 弹幕控制器
+    ///     弹幕控制器
     /// </summary>
     public class BulletController : MonoBehaviour
     {
-        public string typeName;
-
-        public SpriteRenderer spriteRenderer;
-        public List<BoxCollider2D> boxColliderList = new List<BoxCollider2D>();
-        public List<Vector2> boxColliderSizes = new List<Vector2>();
-        public List<int> boxHitList = new List<int>();
-        public BattleControl.BulletColor bulletColor;//含有属性的颜色 读取BattleControl中的enum BulletColor
-
-        public FollowMode followMode;
-
         //public bool useExtra;
         //public Collider2D extra;
         /// <summary>
-        /// 设置碰撞箱跟随SpriteRenderer缩放的模式。
-        /// CutFollow:切去boxColliderSizes内存储的数据；
-        /// NoFollow:不跟随缩放。
+        ///     设置碰撞箱跟随SpriteRenderer缩放的模式。
+        ///     CutFollow:切去boxColliderSizes内存储的数据；
+        ///     NoFollow:不跟随缩放。
         /// </summary>
         public enum FollowMode
         {
             CutFollow,
-            NoFollow,
+            NoFollow
         }
+
+        public string typeName;
+
+        public SpriteRenderer spriteRenderer;
+        public List<BoxCollider2D> boxColliderList = new();
+        public List<Vector2> boxColliderSizes = new();
+        public List<int> boxHitList = new();
+        public BattleControl.BulletColor bulletColor; //含有属性的颜色 读取BattleControl中的enum BulletColor
+
+        public FollowMode followMode;
 
         private void Awake()
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
         }
 
+        private void Update()
+        {
+            if (followMode != FollowMode.NoFollow)
+                for (var i = 0; i < boxColliderList.Count; i++)
+                    switch (followMode)
+                    {
+                        case FollowMode.CutFollow:
+                            boxColliderList[i].size = boxColliderList[i].transform.GetComponent<SpriteRenderer>().size -
+                                                      boxColliderSizes[i];
+                            break;
+                    }
+        }
+
+        private void OnDisable()
+        {
+            name = "Bullet";
+        }
+
+        private void OnTriggerStay2D(Collider2D collision) //伤害判定
+        {
+            if (collision.transform.CompareTag("Player") && collision.name[.."CheckCollider".Length] == "CheckCollider")
+                //if(!useExtra)
+                for (var i = 0; i < boxColliderList.Count; i++)
+                    if (boxColliderList[i].IsTouching(collision))
+                    {
+                        if (bulletColor == BattleControl.BulletColor.White
+                            || (bulletColor == BattleControl.BulletColor.Orange &&
+                                !MainControl.Instance.battlePlayerController.isMoving)
+                            || (bulletColor == BattleControl.BulletColor.Blue &&
+                                MainControl.Instance.battlePlayerController.isMoving))
+                            HitPlayer(i);
+                        break;
+                    }
+            /*
+            else if (extra.IsTouching(collision))
+            {
+                if (bulletColor == BattleControl.BulletColor.white
+                    || (bulletColor == BattleControl.BulletColor.orange && !MainControl.instance.battlePlayerController.isMoving)
+                    || (bulletColor == BattleControl.BulletColor.blue && MainControl.instance.battlePlayerController.isMoving))
+                {
+                    HitPlayer(0);
+                    if (!MainControl.instance.OverworldControl.noSFX)
+                        MainControl.instance.battlePlayerController.hitVolume.weight = 1;
+                }
+            }
+            */
+        }
+
         public void SetBullet(string bulletPathName, string objName = default,
-            Vector3 startPosition = default, BattleControl.BulletColor bulletColor = default, SpriteMaskInteraction startMask = default, Vector3 startRotation = default, Vector3 startScale = default)
+            Vector3 startPosition = default, BattleControl.BulletColor bulletColor = default,
+            SpriteMaskInteraction startMask = default, Vector3 startRotation = default, Vector3 startScale = default)
         {
             var path = "Assets/Bullets/" + bulletPathName;
 
-            SetBullet((BulletControl)Resources.Load(path), objName, startPosition, bulletColor, startMask, startRotation, startScale);
+            SetBullet((BulletControl)Resources.Load(path), objName, startPosition, bulletColor, startMask,
+                startRotation, startScale);
         }
 
         private void SetBullet(BulletControl bulletControl, string objName = default,
-            Vector3 startPosition = default, BattleControl.BulletColor bulletColor = default, SpriteMaskInteraction startMask = default, Vector3 startRotation = default, Vector3 startScale = default)
+            Vector3 startPosition = default, BattleControl.BulletColor bulletColor = default,
+            SpriteMaskInteraction startMask = default, Vector3 startRotation = default, Vector3 startScale = default)
         {
             //Global.Other.Debug.LogWarning(startPosition);
 
@@ -67,22 +118,23 @@ namespace UCT.Battle
             if (startScale == default)
                 startScale = bulletControl.startScale;
 
-            SetBullet(objName, 
-                bulletControl.typeName, 
-                bulletControl.layer, 
+            SetBullet(objName,
+                bulletControl.typeName,
+                bulletControl.layer,
                 bulletControl.sprite,
-                bulletControl.triggerSize, 
-                bulletControl.triggerHit, 
+                bulletControl.triggerSize,
+                bulletControl.triggerHit,
                 bulletControl.triggerOffset,
-                startPosition, 
-                bulletColor, 
+                startPosition,
+                bulletColor,
                 startMask,
                 startRotation,
                 startScale,
                 bulletControl.triggerFollowMode);
         }
+
         /// <summary>
-        /// 初始化弹幕（循环生成盒状碰撞模式）。
+        ///     初始化弹幕（循环生成盒状碰撞模式）。
         /// </summary>
         /// <param name="objName">设置弹幕的Obj的名称，以便查找。</param>
         /// <param name="typeName">设置弹幕的种类名称，如果种类名称与当前的弹幕一致，则保留原有的碰撞相关参数，反之清空。</param>
@@ -105,11 +157,11 @@ namespace UCT.Battle
             List<Vector2> triggerSizes,
             List<int> triggerHits,
             List<Vector2> triggerOffsets,
-            Vector3 startPosition = new Vector3(),
+            Vector3 startPosition = new(),
             BattleControl.BulletColor bulletColor = BattleControl.BulletColor.White,
             SpriteMaskInteraction startMask = SpriteMaskInteraction.None,
-            Vector3 startRotation = new Vector3(),
-            Vector3 startScale = new Vector3(),
+            Vector3 startRotation = new(),
+            Vector3 startScale = new(),
             FollowMode triggerFollowMode = FollowMode.NoFollow
         )
         {
@@ -159,63 +211,11 @@ namespace UCT.Battle
                 if (followMode == FollowMode.NoFollow)
                     save.size = boxColliderSizes[i];
                 else
-                {
                     save.size = boxColliderList[i].transform.GetComponent<SpriteRenderer>().size - boxColliderSizes[i];
-                }
 
                 save.offset = triggerOffsets[i];
 
                 boxColliderList.Add(save);
-            }
-        }
-
-        private void Update()
-        {
-            if (followMode != FollowMode.NoFollow)
-            {
-                for (var i = 0; i < boxColliderList.Count; i++)
-                {
-                    switch (followMode)
-                    {
-                        case FollowMode.CutFollow:
-                            boxColliderList[i].size = boxColliderList[i].transform.GetComponent<SpriteRenderer>().size - boxColliderSizes[i];
-                            break;
-                    }
-                }
-            }
-        }
-
-        private void OnTriggerStay2D(Collider2D collision)//伤害判定
-        {
-            if (collision.transform.CompareTag("Player") && collision.name[.."CheckCollider".Length] == "CheckCollider")
-            {
-                //if(!useExtra)
-                for (var i = 0; i < boxColliderList.Count; i++)
-                {
-                    if (boxColliderList[i].IsTouching(collision))
-                    {
-                        if (bulletColor == BattleControl.BulletColor.White
-                            || (bulletColor == BattleControl.BulletColor.Orange && !MainControl.Instance.battlePlayerController.isMoving)
-                            || (bulletColor == BattleControl.BulletColor.Blue && MainControl.Instance.battlePlayerController.isMoving))
-                        {
-                            HitPlayer(i);
-                        }
-                        break;
-                    }
-                }
-                /*
-            else if (extra.IsTouching(collision))
-            {
-                if (bulletColor == BattleControl.BulletColor.white
-                    || (bulletColor == BattleControl.BulletColor.orange && !MainControl.instance.battlePlayerController.isMoving)
-                    || (bulletColor == BattleControl.BulletColor.blue && MainControl.instance.battlePlayerController.isMoving))
-                {
-                    HitPlayer(0);
-                    if (!MainControl.instance.OverworldControl.noSFX)
-                        MainControl.instance.battlePlayerController.hitVolume.weight = 1;
-                }
-            }
-            */
             }
         }
 
@@ -230,9 +230,13 @@ namespace UCT.Battle
                 MainControl.Instance.selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
 
                 var r = Random.Range(0, 0.025f);
-                var v3Spin = MathUtilityService.RandomPointOnSphereSurface(2.5f,new Vector3());
-                MainControl.Instance.cameraShake.Shake(new Vector3(r * MathUtilityService.Get1Or_1(), r * MathUtilityService.Get1Or_1(), 0), new Vector3(0, 0, v3Spin.z), 4, 1f / 60f * 4f * 1.5f, "", Ease.OutElastic);
-                MainControl.Instance.cameraShake3D.Shake(new Vector3(r * MathUtilityService.Get1Or_1(), 0, r * MathUtilityService.Get1Or_1()), v3Spin, 4, 1f / 60f * 4f * 1.5f, "3D CameraPoint", Ease.OutElastic);
+                var v3Spin = MathUtilityService.RandomPointOnSphereSurface(2.5f, new Vector3());
+                MainControl.Instance.cameraShake.Shake(
+                    new Vector3(r * MathUtilityService.Get1Or_1(), r * MathUtilityService.Get1Or_1(), 0),
+                    new Vector3(0, 0, v3Spin.z), 4, 1f / 60f * 4f * 1.5f, "", Ease.OutElastic);
+                MainControl.Instance.cameraShake3D.Shake(
+                    new Vector3(r * MathUtilityService.Get1Or_1(), 0, r * MathUtilityService.Get1Or_1()), v3Spin, 4,
+                    1f / 60f * 4f * 1.5f, "3D CameraPoint", Ease.OutElastic);
                 if (MainControl.Instance.playerControl.hp <= 0)
                     MainControl.Instance.battlePlayerController.KillPlayer(MainControl.Instance);
 
@@ -260,11 +264,6 @@ namespace UCT.Battle
                     spriteRenderer.material.SetFloat("_OutSide", 1);
                     break;
             }
-        }
-
-        private void OnDisable()
-        {
-            name = "Bullet";
         }
     }
 }

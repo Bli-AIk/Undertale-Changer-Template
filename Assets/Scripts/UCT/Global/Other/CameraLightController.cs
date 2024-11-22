@@ -34,7 +34,8 @@ namespace UCT.Global.Other
                 if (light.lightType == Light2D.LightType.Global)
                     return;
 
-                light.enabled = Vector3.Distance(light.transform.position, _mainCamera.transform.position) <= viewDistance;
+                light.enabled = Vector3.Distance(light.transform.position, _mainCamera.transform.position) <=
+                                viewDistance;
             }
         }
     }

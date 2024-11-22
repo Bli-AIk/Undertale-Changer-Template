@@ -6,10 +6,10 @@ namespace UCT.Battle
 {
     public class EnemiesHpLineController : MonoBehaviour
     {
-        private SpriteRenderer _greenSprite;
-
         [Header("对应怪物IDª")] [FormerlySerializedAs("number")]
         public int enemyId;
+
+        private SpriteRenderer _greenSprite;
 
         private void Start()
         {
@@ -23,7 +23,9 @@ namespace UCT.Battle
                 MainControl.Instance.selectUIController.selectedLayer !=
                 SelectUIController.SelectedLayer.NameLayer) return;
             if (MainControl.Instance.BattleControl.enemiesHp.Count - 1 < enemyId * 2)
+            {
                 transform.localScale = Vector2.zero;
+            }
             else
             {
                 transform.localScale = new Vector3(42, 7.25f, 1);

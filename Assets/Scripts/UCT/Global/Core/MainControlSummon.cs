@@ -8,41 +8,32 @@ using UnityEngine;
 namespace UCT.Global.Core
 {
     /// <summary>
-    /// 生成总控，并在切换场景时保留已生成的总控。
-    /// 以此只调用一次MainControl的数据加载。
-    ///
-    /// 同时会生成BGMControl
+    ///     生成总控，并在切换场景时保留已生成的总控。
+    ///     以此只调用一次MainControl的数据加载。
+    ///     同时会生成BGMControl
     /// </summary>
     public class MainControlSummon : MonoBehaviour
     {
-        [Header("-OWCamera设置-")]
-        public bool isCameraLimit;
+        [Header("-OWCamera设置-")] public bool isCameraLimit;
+
         public bool isCameraFollow;
-        public Vector2 cameraLimitX;//限制摄像机最大XY范围 0则不动
-        public Vector2 cameraLimitY;//限制摄像机最大XY范围 0则不动
-        [Header("-Canvas设置-")]
-        public RenderMode renderMode;
+        public Vector2 cameraLimitX; //限制摄像机最大XY范围 0则不动
+        public Vector2 cameraLimitY; //限制摄像机最大XY范围 0则不动
+
+        [Header("-Canvas设置-")] public RenderMode renderMode;
 
         public int framePic;
 
-        [Space]
-        [Header("-BGMControl设置-")]
-        [Space]
-        [Header("BGM本体音频 空为无音频")]
+        [Space] [Header("-BGMControl设置-")] [Space] [Header("BGM本体音频 空为无音频")]
         public AudioClip bgmClip;
 
-        [Header("BGM音量")]
-        public float volume = 0.5f;
+        [Header("BGM音量")] public float volume = 0.5f;
 
-        [Header("BGM音调")]
-        public float pitch = 0.5f;
+        [Header("BGM音调")] public float pitch = 0.5f;
 
-        [Header("BGM循环播放初始状态")]
-        public bool loop = true;
+        [Header("BGM循环播放初始状态")] public bool loop = true;
 
-        [Header("-MainControl设置-")]
-        [Space]
-        [Header("黑场状态相关")]
+        [Header("-MainControl设置-")] [Space] [Header("黑场状态相关")]
         public MainControl.SceneState sceneState;
 
         public bool haveInOutBlack, noInBlack;
@@ -56,7 +47,7 @@ namespace UCT.Global.Core
             SetupController(MainControl.Instance, ExistingMainControlSetup, NonexistentMainControlSetup);
         }
 
-      
+
         private static void SetupController<T>(T instance, Action existingSetup, Action nonexistentSetup)
             where T : class
         {
@@ -65,9 +56,9 @@ namespace UCT.Global.Core
             else
                 nonexistentSetup();
         }
+
         private void ExistingCameraSetup()
         {
-            
             System.Diagnostics.Debug.Assert(Camera.main != null, "Camera.main != null");
             var mainCamera = Camera.main.GetComponent<CameraFollowPlayer>();
             if (!mainCamera) return;
@@ -76,6 +67,7 @@ namespace UCT.Global.Core
             else
                 CameraSetup(mainCamera);
         }
+
         private void NonexistentCameraSetup()
         {
             if (sceneState != MainControl.SceneState.Overworld) return;
@@ -92,11 +84,13 @@ namespace UCT.Global.Core
             cameraFollowPlayer.limitX = cameraLimitX;
             cameraFollowPlayer.limitY = cameraLimitY;
         }
+
         private void ExistingCanvasSetup()
         {
             CanvasSetup();
             CanvasController.Instance.Start();
         }
+
         private void NonexistentCanvasSetup()
         {
             var canvas = Instantiate(Resources.Load<GameObject>("Prefabs/Canvas"));
@@ -104,17 +98,20 @@ namespace UCT.Global.Core
             CanvasSetup();
             DontDestroyOnLoad(canvas);
         }
+
         private void CanvasSetup()
         {
             CanvasController.Instance.framePic = framePic;
             CanvasController.Instance.renderMode = renderMode;
             CanvasController.Instance.openTurn = sceneState == MainControl.SceneState.InBattle;
         }
+
         private void ExistingAudioSetup()
         {
             var bgm = AudioController.Instance.gameObject;
             AudioSetup(bgm);
         }
+
         private void NonexistentAudioSetup()
         {
             var bgm = Instantiate(Resources.Load<GameObject>("Prefabs/BGM Source"));
@@ -122,6 +119,7 @@ namespace UCT.Global.Core
             DontDestroyOnLoad(bgm);
             AudioSetup(bgm);
         }
+
         private void AudioSetup(GameObject bgm)
         {
             var audioSource = bgm.GetComponent<AudioSource>();
@@ -132,15 +130,15 @@ namespace UCT.Global.Core
             audioSource.clip = bgmClip;
             audioSource.Play();
         }
-      
 
-        
+
         private void ExistingMainControlSetup()
         {
             var mainControl = MainControl.Instance;
             MainControlSetup(mainControl);
             mainControl.Start();
         }
+
         private void NonexistentMainControlSetup()
         {
             DontDestroyOnLoad(transform);
@@ -148,7 +146,7 @@ namespace UCT.Global.Core
             MainControlSetup(mainControl);
             mainControl.gameObject.name = "MainControl";
         }
-        
+
         private void MainControlSetup(MainControl mainControl)
         {
             mainControl.sceneState = sceneState;
@@ -159,6 +157,5 @@ namespace UCT.Global.Core
             mainControl.mainCamera = Camera.main;
             GameUtilityService.SetResolution(mainControl.overworldControl.resolutionLevel);
         }
-      
     }
 }

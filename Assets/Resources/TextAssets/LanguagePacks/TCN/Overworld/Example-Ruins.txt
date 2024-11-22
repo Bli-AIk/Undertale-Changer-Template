@@ -40,8 +40,10 @@
 </color>去除顏色
 */
 
-Brand\<image=-1><fx=0>* 「按<gradient="White to Yellow - UTC">[Z]</gradient>鍵可以閱讀標示牌！」<stop><stop><stop> <stop><stop><stop><stop><enter>* <size=20><gradient="White to Yellow - UTC">[Enter]</gradient>也行。 </size>
-<passText>* 「這個場景使用了<gradient="White to Yellow - UTC">法線貼圖</gradient>!<enter><- ->「另外，試著到<gradient="White to Red - UTC ">水邊</gradient>看看？ ”;
+Brand\<image=-1><fx=0>* 「按<gradient="White to Yellow - UTC">[Z]</gradient>鍵可以閱讀標示牌！」<stop><stop><stop> <stop><stop><stop><stop><enter>
+<size=5>* “<gradient="White to Yellow - UTC">[Enter]</gradient>也行。”</size>
+<passText>* 「這個場景使用了<gradient="White to Yellow - UTC">法線貼圖</gradient>!」<enter>
+<- ->「另外，試著去<gradient="White to Red - UTC">水邊</gradient>看看？」;
 
 River\<image=-1><fx=0>* 這是你！;
 

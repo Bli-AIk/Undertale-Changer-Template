@@ -7,12 +7,12 @@ using UnityEngine;
 namespace UCT.Service
 {
     /// <summary>
-    /// 战斗框生成相关函数
+    ///     战斗框生成相关函数
     /// </summary>
     public static class BoxService
     {
         /// <summary>
-        /// 生成框
+        ///     生成框
         /// </summary>
         public static void SummonBox(List<Vector2> list, Quaternion rotation, Transform inputTransform,
             float inputWidth = 0.15f, LineRenderer lineRenderer = null, EdgeCollider2D edgeCollider2D = null,
@@ -34,10 +34,7 @@ namespace UCT.Service
             if (!edgeCollider2D)
             {
                 edgeCollider2D = inputTransform.GetComponent<EdgeCollider2D>();
-                if (!edgeCollider2D)
-                {
-                    edgeCollider2D = inputTransform.gameObject.AddComponent<EdgeCollider2D>();
-                }
+                if (!edgeCollider2D) edgeCollider2D = inputTransform.gameObject.AddComponent<EdgeCollider2D>();
             }
 
             if (!meshFilter)
@@ -53,25 +50,19 @@ namespace UCT.Service
                         meshRenderer = inputTransform.gameObject.AddComponent<MeshRenderer>();
                         meshRenderer.material = Resources.Load<Material>("Materials/BoxBack");
                     }
-
                 }
             }
 
             var polygon = new List<Vector2>(list);
             // 将每个点先旋转，然后再加上物体的位置
-            for (var i = 0; i < polygon.Count; i++)
-            {
-                polygon[i] = rotation * polygon[i];
-            }
+            for (var i = 0; i < polygon.Count; i++) polygon[i] = rotation * polygon[i];
 
             polygon = RemoveDuplicates(polygon);
 
             lineRenderer.positionCount = polygon.Count;
 
             for (var i = 0; i < polygon.Count; i++)
-            {
                 lineRenderer.SetPosition(i, (Vector3)polygon[i] + inputTransform.position);
-            }
 
             meshFilter.mesh = GenerateMesh(polygon.ToArray()); // 最核心代码：构建Mesh！！
 
@@ -80,18 +71,16 @@ namespace UCT.Service
         }
 
         /// <summary>
-        /// 计算坐标获取RealPoints
+        ///     计算坐标获取RealPoints
         /// </summary>
-        public static List<Vector2> GetRealPoints(List<Vector2> list, Quaternion rotation, Transform inputTransform, bool isLocal = true)
+        public static List<Vector2> GetRealPoints(List<Vector2> list, Quaternion rotation, Transform inputTransform,
+            bool isLocal = true)
         {
             var local = isLocal ? inputTransform.localPosition : inputTransform.position;
 
             var polygon = new List<Vector2>(list);
             // 将每个点先旋转，然后再加上物体的位置
-            for (var i = 0; i < polygon.Count; i++)
-            {
-                polygon[i] = rotation * polygon[i] + local;
-            }
+            for (var i = 0; i < polygon.Count; i++) polygon[i] = rotation * polygon[i] + local;
 
             polygon = RemoveDuplicates(polygon);
 
@@ -99,17 +88,14 @@ namespace UCT.Service
         }
 
         /// <summary>
-        /// 构造Mesh
+        ///     构造Mesh
         /// </summary>
         private static Mesh GenerateMesh(Vector2[] vertexPoints)
         {
-
             // 将Vector数组转换为LibTessDotNet所需的ContourVertex数组
             var contourVertices = new ContourVertex[vertexPoints.Length];
             for (var i = 0; i < vertexPoints.Length; i++)
-            {
                 contourVertices[i].Position = new Vec3 { X = vertexPoints[i].x, Y = vertexPoints[i].y, Z = 0 };
-            }
 
             // 创建Tess对象并添加轮廓
             var tess = new Tess();
@@ -124,15 +110,10 @@ namespace UCT.Service
             // 将Tess结果转换为Unity Mesh格式
             var vertices = new Vector3[tess.Vertices.Length];
             for (var i = 0; i < tess.Vertices.Length; i++)
-            {
                 vertices[i] = new Vector3(tess.Vertices[i].Position.X, tess.Vertices[i].Position.Y, 0);
-            }
 
             var triangles = new int[tess.Elements.Length];
-            for (var i = 0; i < tess.Elements.Length; i++)
-            {
-                triangles[i] = tess.Elements[i];
-            }
+            for (var i = 0; i < tess.Elements.Length; i++) triangles[i] = tess.Elements[i];
 
             // 应用顶点和三角形到mesh
             mesh.vertices = vertices;
@@ -141,15 +122,9 @@ namespace UCT.Service
             // 为mesh设置UV坐标
             var uvs = new Vector2[vertices.Length];
             for (var i = 0; i < vertices.Length; i++)
-            {
                 // 这里是一个简单的映射，将顶点坐标映射到UV空间
                 // 通常，你需要根据具体情况来调整这部分代码
-
-
                 uvs[i] = new Vector2(vertices[i].x, vertices[i].y);
-
-
-            }
             mesh.uv = uvs;
 
             // 为了更好的渲染效果，可以计算法线和边界
@@ -161,7 +136,7 @@ namespace UCT.Service
         }
 
         /// <summary>
-        /// 剔除重复项
+        ///     剔除重复项
         /// </summary>
         private static List<Vector2> RemoveDuplicates(List<Vector2> originalList)
         {
@@ -171,7 +146,7 @@ namespace UCT.Service
         }
 
         /// <summary>
-        /// 主函数，计算两组线段的所有交点
+        ///     主函数，计算两组线段的所有交点
         /// </summary>
         public static List<Vector2> FindIntersections(List<Vector2> poly1, List<Vector2> poly2)
         {
@@ -189,10 +164,7 @@ namespace UCT.Service
 
                     if (!DoLineSegmentsIntersect(a, b, c, d)) continue;
                     var intersection = CalculateIntersectionPoint(a, b, c, d);
-                    if (intersection != null)
-                    {
-                        intersections.Add(intersection.Value);
-                    }
+                    if (intersection != null) intersections.Add(intersection.Value);
                 }
             }
 
@@ -200,7 +172,7 @@ namespace UCT.Service
         }
 
         /// <summary>
-        ///  计算向量叉乘
+        ///     计算向量叉乘
         /// </summary>
         private static float CrossSave(Vector2 a, Vector2 b, Vector2 c)
         {
@@ -208,7 +180,7 @@ namespace UCT.Service
         }
 
         /// <summary>
-        /// 检查点C是否在AB线段上
+        ///     检查点C是否在AB线段上
         /// </summary>
         private static bool IsPointOnLineSegment(Vector2 a, Vector2 b, Vector2 c)
         {
@@ -216,20 +188,18 @@ namespace UCT.Service
         }
 
         /// <summary>
-        /// 检查线段AB和CD是否相交
+        ///     检查线段AB和CD是否相交
         /// </summary>
         private static bool DoLineSegmentsIntersect(Vector2 a, Vector2 b, Vector2 c, Vector2 d)
         {
-            if (IsPointOnLineSegment(a, b, c) || IsPointOnLineSegment(a, b, d) || IsPointOnLineSegment(c, d, a) || IsPointOnLineSegment(c, d, b))
-            {
-                return true;
-            }
+            if (IsPointOnLineSegment(a, b, c) || IsPointOnLineSegment(a, b, d) || IsPointOnLineSegment(c, d, a) ||
+                IsPointOnLineSegment(c, d, b)) return true;
 
             return CrossSave(a, b, c) * CrossSave(a, b, d) < 0 && CrossSave(c, d, a) * CrossSave(c, d, b) < 0;
         }
 
         /// <summary>
-        /// 计算两线段AB和CD的交点
+        ///     计算两线段AB和CD的交点
         /// </summary>
         private static Vector2? CalculateIntersectionPoint(Vector2 a, Vector2 b, Vector2 c, Vector2 d)
         {
@@ -246,7 +216,7 @@ namespace UCT.Service
         }
 
         /// <summary>
-        /// 计算非重合点
+        ///     计算非重合点
         /// </summary>
         public static List<Vector2> ProcessPolygons(List<Vector2> box1, List<Vector2> box2, List<Vector2> intersection)
         {
@@ -261,7 +231,8 @@ namespace UCT.Service
             return result;
         }
 
-        private static List<Vector2> RemovePointsInsideOtherPolygon(List<Vector2> subjectPolygon, List<Vector2> clippingPolygon)
+        private static List<Vector2> RemovePointsInsideOtherPolygon(List<Vector2> subjectPolygon,
+            List<Vector2> clippingPolygon)
         {
             return subjectPolygon.Where(point => !IsPointInsidePolygon(point, clippingPolygon)).ToList();
         }
@@ -270,20 +241,18 @@ namespace UCT.Service
         {
             var inside = false;
             for (int i = 0, j = polygon.Count - 1; i < polygon.Count; j = i++)
-            {
                 if (polygon[i].y > point.y != polygon[j].y > point.y &&
-                    point.x < (polygon[j].x - polygon[i].x) * (point.y - polygon[i].y) / (polygon[j].y - polygon[i].y) + polygon[i].x)
-                {
+                    point.x < (polygon[j].x - polygon[i].x) * (point.y - polygon[i].y) / (polygon[j].y - polygon[i].y) +
+                    polygon[i].x)
                     inside = !inside;
-                }
-            }
             return inside;
         }
 
         /// <summary>
-        /// 前面两个相加，减去后面两个
+        ///     前面两个相加，减去后面两个
         /// </summary>
-        public static List<Vector2> AddAndSubLists(List<Vector2> list1, List<Vector2> list2, List<Vector2> list3, List<Vector2> list4)
+        public static List<Vector2> AddAndSubLists(List<Vector2> list1, List<Vector2> list2, List<Vector2> list3,
+            List<Vector2> list4)
         {
             var concatenatedList = AddLists(list1, list2);
             var subtractedResult = SubLists(concatenatedList, list3);
@@ -293,7 +262,7 @@ namespace UCT.Service
         }
 
         /// <summary>
-        /// 把List相加
+        ///     把List相加
         /// </summary>
         public static List<T> AddLists<T>(List<T> list1, List<T> list2)
         {
@@ -303,16 +272,13 @@ namespace UCT.Service
         }
 
         /// <summary>
-        /// 把List相减
+        ///     把List相减
         /// </summary>
         private static List<T> SubLists<T>(List<T> sourceList, List<T> subtractedList)
         {
             var result = new List<T>(sourceList);
 
-            foreach (var point in subtractedList)
-            {
-                result.Remove(point);
-            }
+            foreach (var point in subtractedList) result.Remove(point);
 
             return result;
         }
@@ -322,17 +288,15 @@ namespace UCT.Service
             var doubles = new List<double>();
             var j = 0;
             for (var i = 0; i < vector.Count * 2; i++)
-            {
-                if (i % 2 == 0)//X
+                if (i % 2 == 0) //X
                 {
                     doubles.Add(vector[j].x);
                 }
-                else//Y
+                else //Y
                 {
                     doubles.Add(vector[j].y);
                     j++;
                 }
-            }
 
             return new PathsD { Clipper.MakePath(doubles.ToArray()) };
         }
@@ -340,15 +304,12 @@ namespace UCT.Service
         private static List<Vector2> ConvertPathToVector(PathsD path)
         {
             var list = new List<Vector2>();
-            for (var i = 0; i < path[0].Count; i++)
-            {
-                list.Add(new Vector2((float)path[0][i].x, (float)path[0][i].y));
-            }
+            for (var i = 0; i < path[0].Count; i++) list.Add(new Vector2((float)path[0][i].x, (float)path[0][i].y));
             return list;
         }
 
         /// <summary>
-        /// 取交集
+        ///     取交集
         /// </summary>
         public static List<Vector2> GetUnion(List<Vector2> a, List<Vector2> b)
         {

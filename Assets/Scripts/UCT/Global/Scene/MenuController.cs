@@ -12,11 +12,17 @@ using UnityEngine.SceneManagement;
 namespace UCT.Global.Scene
 {
     /// <summary>
-    /// 控制Menu场景
+    ///     控制Menu场景
     /// </summary>
     public class MenuController : MonoBehaviour
     {
+        private const int SelectMax = 5;
+
+        public int saveNumber;
         private OverworldControl _overworldControl;
+
+        private int _select;
+        private bool _setData;
 
         private TextMeshPro _textName,
             _textLv,
@@ -26,26 +32,9 @@ namespace UCT.Global.Scene
             _textOptionsRight,
             _textMessage;
 
-        private int _select;
-        private const int SelectMax = 5;
-        private bool _setData;
-
-        public int saveNumber;
-
         private void Awake()
         {
             AssignReferences();
-        }
-
-        private void AssignReferences()
-        {
-            _textName = transform.Find("TextName").GetComponent<TextMeshPro>();
-            _textLv = transform.Find("TextLV").GetComponent<TextMeshPro>();
-            _textTime = transform.Find("TextTime").GetComponent<TextMeshPro>();
-            _textPosition = transform.Find("TextPosition").GetComponent<TextMeshPro>();
-            _textOptionsLeft = transform.Find("TextOptionsLeft").GetComponent<TextMeshPro>();
-            _textOptionsRight = transform.Find("TextOptionsRight").GetComponent<TextMeshPro>();
-            _textMessage = transform.Find("TextMessage").GetComponent<TextMeshPro>();
         }
 
         private void Start()
@@ -55,19 +44,10 @@ namespace UCT.Global.Scene
             _overworldControl.playerScenePos = new Vector3(-0.5f, -1);
             if (MainControl.Instance.saveDataId < 0)
                 MainControl.Instance.saveDataId = 0;
-            MainControl.Instance.playerControl = DataHandlerService.SetPlayerControl(SaveController.LoadData("Data" + MainControl.Instance.saveDataId));
+            MainControl.Instance.playerControl =
+                DataHandlerService.SetPlayerControl(SaveController.LoadData("Data" + MainControl.Instance.saveDataId));
             saveNumber = MainControl.Instance.saveDataId;
             LoadLayer0();
-        }
-
-        private void LoadLayer0()
-        {
-            var playerControl = SaveController.LoadData("Data" + saveNumber);
-            _textName.text = playerControl.playerName;
-            _textLv.text = "LV " + playerControl.lv;
-            _textPosition.text = TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.settingSave, playerControl.saveScene);
-            Flash();
-            _textMessage.text = TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave, "MenuUnder") + Application.version;
         }
 
         private void Update()
@@ -77,26 +57,16 @@ namespace UCT.Global.Scene
             if (!_textOptionsRight.enabled)
                 _textOptionsRight.enabled = true;
 
-            
+
             if (_overworldControl.isSetting || _overworldControl.pause)
                 return;
 
             if (GameUtilityService.ConvertKeyDownToControl(KeyCode.LeftArrow))
-            {
                 _select--;
-            }
-            else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.UpArrow))
-            {
-                _select -= 2;
-            }
+            else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.UpArrow)) _select -= 2;
             if (GameUtilityService.ConvertKeyDownToControl(KeyCode.RightArrow))
-            {
                 _select++;
-            }
-            else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.DownArrow))
-            {
-                _select += 2;
-            }
+            else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.DownArrow)) _select += 2;
             if (_select < 0 + 2 * Convert.ToInt32(_setData))
             {
                 if (_select % 2 != 0)
@@ -104,32 +74,30 @@ namespace UCT.Global.Scene
                 else
                     _select = SelectMax - 1;
             }
+
             if (_select > SelectMax)
             {
                 if (_select % 2 == 0)
                     _select = 0 + 2 * Convert.ToInt32(_setData);
                 else _select = 1 + 2 * Convert.ToInt32(_setData);
             }
-            if (_setData && _select == 2 && saveNumber == 0)
-            {
-                _select = _select % 2 == 0 ? 3 : 4;
-            }
 
-            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.UpArrow) || 
-                GameUtilityService.ConvertKeyDownToControl(KeyCode.DownArrow) || 
-                GameUtilityService.ConvertKeyDownToControl(KeyCode.LeftArrow) || 
+            if (_setData && _select == 2 && saveNumber == 0) _select = _select % 2 == 0 ? 3 : 4;
+
+            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.UpArrow) ||
+                GameUtilityService.ConvertKeyDownToControl(KeyCode.DownArrow) ||
+                GameUtilityService.ConvertKeyDownToControl(KeyCode.LeftArrow) ||
                 GameUtilityService.ConvertKeyDownToControl(KeyCode.RightArrow))
-            {
                 Flash();
-            }
-            
+
             if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
             {
                 if (!_setData)
                     switch (_select)
                     {
                         case 0:
-                            GameUtilityService.FadeOutAndSwitchScene(MainControl.Instance.playerControl.saveScene, Color.black, true);
+                            GameUtilityService.FadeOutAndSwitchScene(MainControl.Instance.playerControl.saveScene,
+                                Color.black, true);
                             break;
 
                         case 1:
@@ -141,7 +109,8 @@ namespace UCT.Global.Scene
                             break;
 
                         case 3:
-                            CanvasController.Instance.settingsLayer = CanvasController.SettingsLayer.LanguageConfiguration;
+                            CanvasController.Instance.settingsLayer =
+                                CanvasController.SettingsLayer.LanguageConfiguration;
                             goto case 2;
                         case 4:
                             _setData = true;
@@ -174,20 +143,24 @@ namespace UCT.Global.Scene
 
                         case 3:
                             AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
-                            if (saveNumber == SaveController.GetDataNumber() - 1)//新建
+                            if (saveNumber == SaveController.GetDataNumber() - 1) //新建
                             {
                                 saveNumber++;
                                 MainControl.Instance.saveDataId = saveNumber;
-                                SaveController.SaveData(MainControl.Instance.playerControl, "Data" + MainControl.Instance.saveDataId);
-                                MainControl.Instance.playerControl = DataHandlerService.SetPlayerControl(ScriptableObject.CreateInstance<PlayerControl>());
+                                SaveController.SaveData(MainControl.Instance.playerControl,
+                                    "Data" + MainControl.Instance.saveDataId);
+                                MainControl.Instance.playerControl =
+                                    DataHandlerService.SetPlayerControl(
+                                        ScriptableObject.CreateInstance<PlayerControl>());
                                 MainControl.Instance.playerControl.playerName = "";
                                 GameUtilityService.FadeOutAndSwitchScene("Rename", Color.black);
                             }
-                            else//下页
+                            else //下页
                             {
                                 saveNumber++;
                                 LoadLayer0();
                             }
+
                             break;
 
                         case 4:
@@ -224,18 +197,46 @@ namespace UCT.Global.Scene
             }
         }
 
+        private void FixedUpdate()
+        {
+            _textTime.text = TextProcessingService.GetRealTime((int)MainControl.Instance.playerControl.gameTime);
+        }
+
+        private void AssignReferences()
+        {
+            _textName = transform.Find("TextName").GetComponent<TextMeshPro>();
+            _textLv = transform.Find("TextLV").GetComponent<TextMeshPro>();
+            _textTime = transform.Find("TextTime").GetComponent<TextMeshPro>();
+            _textPosition = transform.Find("TextPosition").GetComponent<TextMeshPro>();
+            _textOptionsLeft = transform.Find("TextOptionsLeft").GetComponent<TextMeshPro>();
+            _textOptionsRight = transform.Find("TextOptionsRight").GetComponent<TextMeshPro>();
+            _textMessage = transform.Find("TextMessage").GetComponent<TextMeshPro>();
+        }
+
+        private void LoadLayer0()
+        {
+            var playerControl = SaveController.LoadData("Data" + saveNumber);
+            _textName.text = playerControl.playerName;
+            _textLv.text = "LV " + playerControl.lv;
+            _textPosition.text =
+                TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.settingSave,
+                    playerControl.saveScene);
+            Flash();
+            _textMessage.text =
+                TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave, "MenuUnder") +
+                Application.version;
+        }
+
         private void Flash()
         {
             var list = new List<string>();
             for (var i = 0; i < 6; i++)
-            {
                 if (_setData && i == 2 && saveNumber == 0)
                     list.Add("<color=grey>");
                 else if (i != _select)
                     list.Add("<color=white>");
                 else
                     list.Add("<color=yellow>");
-            }
 
             if (!_setData)
             {
@@ -272,12 +273,6 @@ namespace UCT.Global.Scene
                     list[5] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave,
                         "Menu9") + "</color>";
             }
-
-        }
-
-        private void FixedUpdate()
-        {
-            _textTime.text = TextProcessingService.GetRealTime((int)MainControl.Instance.playerControl.gameTime);
         }
     }
 }

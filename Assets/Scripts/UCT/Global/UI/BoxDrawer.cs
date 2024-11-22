@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UCT.Service;
 using UnityEngine;
 #if UNITY_EDITOR
@@ -9,35 +8,35 @@ using UnityEditor;
 namespace UCT.Global.UI
 {
     /// <summary>
-    /// 单个战斗框绘制
+    ///     单个战斗框绘制
     /// </summary>
     [RequireComponent(typeof(MeshFilter))]
     [RequireComponent(typeof(MeshRenderer))]
     [RequireComponent(typeof(LineRenderer))]
     [RequireComponent(typeof(EdgeCollider2D))]
-
     public class BoxDrawer : MonoBehaviour
     {
         /// <summary>
-        /// 它需要场景内存在BoxController，但它可以不是是它的父级。
-        /// 单独存在的框不可以设为加减框。
+        ///     它需要场景内存在BoxController，但它可以不是是它的父级。
+        ///     单独存在的框不可以设为加减框。
         /// </summary>
-        [Header("是否是单独存在的框（常用于OW）")]
-        public bool isIndividualBox;
-        
+        [Header("是否是单独存在的框（常用于OW）")] public bool isIndividualBox;
+
         public Vector3 localPosition;
-        [Header("使用这个旋转替代Transform的旋转")]
-        public Quaternion rotation; // 获取当前物体的旋转
-        [Header("线宽")]
-        public float width = 0.15f;
+
+        [Header("使用这个旋转替代Transform的旋转")] public Quaternion rotation; // 获取当前物体的旋转
+
+        [Header("线宽")] public float width = 0.15f;
+
         public List<Vector2> vertexPoints;
 
-        [Header("是否启用贝塞尔插值")]
-        public bool isBessel;
+        [Header("是否启用贝塞尔插值")] public bool isBessel;
+
         public List<Vector2> besselPoints;
         public int besselPointsNumber = 16;
-        [Header("真正组框所用的点")]
-        public List<Vector2> realPoints;//真正的曲线插值，插入点数由besselPointsNumber决定
+
+        [Header("真正组框所用的点")] public List<Vector2> realPoints; //真正的曲线插值，插入点数由besselPointsNumber决定
+
         public int besselInsertNumber = 2;
 
         public MeshFilter meshFilter;
@@ -46,30 +45,19 @@ namespace UCT.Global.UI
         public EdgeCollider2D edgeCollider2D;
 
 
-        [Header("设置其是否为特殊框")]
-        public BoxController.BoxType boxType;
+        [Header("设置其是否为特殊框")] public BoxController.BoxType boxType;
 
-        [Header("当该Box为父级时，以此存储子级的相关计算后数据")]
-        [Header("子级realPoints之和")]
+        [Header("当该Box为父级时，以此存储子级的相关计算后数据")] [Header("子级realPoints之和")]
         public List<Vector2> pointsSonSum;
 
-        [Header("交点")]
-        public List<Vector2> pointsCross;
-        [Header("非重合点")]
-        public List<Vector2> pointsOutCross;
-        [Header("重合点")]
-        public List<Vector2> pointsInCross;//交点/非重合点/重合点
+        [Header("交点")] public List<Vector2> pointsCross;
 
-        public BoxDrawer parent;//此框的复合父级
-        public List<BoxDrawer> sonBoxDrawer;//此框的子级
+        [Header("非重合点")] public List<Vector2> pointsOutCross;
 
-#if UNITY_EDITOR
-        [Header("给Editor用的")]
-        public int regularEdge;
-        public float regularAngle;
-        [Header("是否展示Mesh（红线）")]
-        public bool showMesh;
-#endif
+        [Header("重合点")] public List<Vector2> pointsInCross; //交点/非重合点/重合点
+
+        public BoxDrawer parent; //此框的复合父级
+        public List<BoxDrawer> sonBoxDrawer; //此框的子级
 
         private void Start()
         {
@@ -88,7 +76,6 @@ namespace UCT.Global.UI
             meshFilter = GetComponent<MeshFilter>();
             meshRenderer = GetComponent<MeshRenderer>();
             meshRenderer.material = Resources.Load<Material>("Materials/BoxBack");
-
         }
 
         public void Update()
@@ -98,7 +85,7 @@ namespace UCT.Global.UI
                 SetIndividualBox();
                 return;
             }
-            
+
             transform.tag = parent ? "Untagged" : "Box";
 
             if (boxType == BoxController.BoxType.Sub)
@@ -113,16 +100,19 @@ namespace UCT.Global.UI
                         : vertexPoints;
                     break;
                 case 2 when transform.childCount == 2:
-                    if (SetParentBox()) return; break;
+                    if (SetParentBox()) return;
+                    break;
                 default:
                     ExitParent();
                     break;
             }
 
             var boxController = BoxController.Instance.transform;
-            if (transform.parent != boxController) 
+            if (transform.parent != boxController)
+            {
                 transform.localPosition = localPosition - parent.localPosition;
-            else 
+            }
+            else
             {
                 transform.localPosition = localPosition;
 
@@ -130,8 +120,9 @@ namespace UCT.Global.UI
                     SummonBox();
             }
         }
+
         /// <summary>
-        /// 设置作为父级的框
+        ///     设置作为父级的框
         /// </summary>
         private bool SetParentBox()
         {
@@ -154,7 +145,7 @@ namespace UCT.Global.UI
             pointsCross = BoxService.FindIntersections(realPointsBack0, realPointsBack1);
 
             pointsOutCross =
-                BoxService.ProcessPolygons(realPointsBack0, 
+                BoxService.ProcessPolygons(realPointsBack0,
                     realPointsBack1, pointsCross);
 
             pointsInCross = BoxService.AddAndSubLists(realPointsBack0, realPointsBack1, pointsCross,
@@ -175,7 +166,7 @@ namespace UCT.Global.UI
 
                 realPoints = pointsFinal;
             }
-            else//不重合就解散
+            else //不重合就解散
             {
                 ExitParent();
                 return true;
@@ -183,8 +174,9 @@ namespace UCT.Global.UI
 
             return false;
         }
+
         /// <summary>
-        /// 设置单独存在的框
+        ///     设置单独存在的框
         /// </summary>
         private void SetIndividualBox()
         {
@@ -199,14 +191,14 @@ namespace UCT.Global.UI
             boxType = BoxController.BoxType.None;
         }
 
-        private void ExitParent()//离开的那个 的爹 会触发这个
+        private void ExitParent() //离开的那个 的爹 会触发这个
         {
             ClearComponentsData();
 
             BoxController.Instance.ReturnPool(gameObject);
             BoxController.Instance.boxes.Remove(this);
             var boxController = BoxController.Instance.transform;
-            
+
             if (sonBoxDrawer.Count != 0)
             {
                 pointsCross.Clear();
@@ -231,8 +223,6 @@ namespace UCT.Global.UI
 
 
                 sonBoxDrawer.Clear();
-
-
             }
 
             localPosition = Vector3.zero;
@@ -260,21 +250,21 @@ namespace UCT.Global.UI
         }
 
         /// <summary>
-        /// 通过BoxController生成框
+        ///     通过BoxController生成框
         /// </summary>
         private void SummonBox()
         {
             BoxService.SummonBox(realPoints, rotation, transform, width, lineRenderer,
                 edgeCollider2D, meshFilter);
         }
-        
-        public List<Vector2> GetRealPoints(bool isLocal = true) 
+
+        public List<Vector2> GetRealPoints(bool isLocal = true)
         {
             return BoxService.GetRealPoints(realPoints, rotation, transform, isLocal);
         }
-    
+
         /// <summary>
-        /// 开关组件
+        ///     开关组件
         /// </summary>
         public void IsOpenComponentsData(bool isOpen = false)
         {
@@ -282,18 +272,16 @@ namespace UCT.Global.UI
             //lineRenderer.positionCount = 0;
             meshRenderer.enabled = isOpen;
             lineRenderer.enabled = isOpen;
-
         }
 
         private void ClearComponentsData()
         {
             meshFilter.mesh = null;
             lineRenderer.positionCount = 0;
-
         }
 
         /// <summary>
-        /// 获取组件
+        ///     获取组件
         /// </summary>
         public void GetComponents(bool forceBesselFlash = false)
         {
@@ -310,10 +298,10 @@ namespace UCT.Global.UI
                 if (isBessel)
                     besselPoints = InterpolatePoints(vertexPoints, besselInsertNumber);
             }
-
         }
+
         /// <summary>
-        /// 插值函数
+        ///     插值函数
         /// </summary>
         /// <param name="points">原始List</param>
         /// <param name="interpolation">平分点数</param>
@@ -348,11 +336,12 @@ namespace UCT.Global.UI
                 var interpolatedPoint = Vector2.Lerp(points[^1], points[0], t);
                 interpolatedPoints.Add(interpolatedPoint);
             }
+
             return interpolatedPoints;
         }
 
         /// <summary>
-        /// 生成贝塞尔曲线上的点
+        ///     生成贝塞尔曲线上的点
         /// </summary>
         private static List<Vector2> GenerateBezierCurve(List<Vector2> points, int besselInsertNumber, int numberPoints)
         {
@@ -372,10 +361,7 @@ namespace UCT.Global.UI
             var pointList = new List<Vector2>();
             for (var i = 0; i < controlPoints.Count - besselInsertNumber; i += besselInsertNumber + 1)
             {
-                for (var k = 0; k < besselInsertNumber + 2; k++)
-                {
-                    pointList.Add(controlPoints[i + k]);
-                }
+                for (var k = 0; k < besselInsertNumber + 2; k++) pointList.Add(controlPoints[i + k]);
                 // 根据所需点的数量在当前曲线段上生成点
                 for (var j = 0; j <= numberPoints; j++)
                 {
@@ -383,6 +369,7 @@ namespace UCT.Global.UI
                     var point = CalculateNthDegreeBezierPoint(pointList, t); // 调用计算贝塞尔点的函数
                     bezierPoints.Add(point); // 将计算得到的点添加到贝塞尔点列表中
                 }
+
                 pointList.Clear();
             }
 
@@ -405,22 +392,24 @@ namespace UCT.Global.UI
         }
 
         /// <summary>
-        /// 计算组合数 C(n, k)
+        ///     计算组合数 C(n, k)
         /// </summary>
         private static float BinomialCoefficient(int n, int k)
         {
             float result = 1;
 
-            for (var i = 1; i <= k; i++)
-            {
-                result *= (n - i + 1) / (float)i;
-            }
+            for (var i = 1; i <= k; i++) result *= (n - i + 1) / (float)i;
 
             return result;
         }
 
+#if UNITY_EDITOR
+        [Header("给Editor用的")] public int regularEdge;
 
-  
+        public float regularAngle;
+        [Header("是否展示Mesh（红线）")] public bool showMesh;
+#endif
+
 
 #if UNITY_EDITOR
         public enum ShowGizmosPoint
@@ -431,57 +420,52 @@ namespace UCT.Global.UI
             All
         }
 
-        [Header("展示哪些点的坐标")]
-        public ShowGizmosPoint showGizmosPoint;
+        [Header("展示哪些点的坐标")] public ShowGizmosPoint showGizmosPoint;
 
         public void OnDrawGizmos()
         {
             if (vertexPoints == null)
                 return;
-        
+
             if (meshFilter != null && showMesh)
             {
                 Gizmos.color = Color.red;
                 Gizmos.DrawWireMesh(meshFilter.sharedMesh, 0, transform.position);
             }
-        
+
             if (showGizmosPoint == ShowGizmosPoint.All && isBessel)
             {
                 Gizmos.color = Color.yellow;
                 foreach (var point in realPoints)
-                {
                     Gizmos.DrawSphere(transform.TransformPoint(rotation * new Vector3(point.x, point.y, 0)),
                         0.1f / 2);
-                }
             }
 
             if (isBessel)
             {
-
                 for (var i = 0; i < besselPoints.Count; i++)
                 {
                     var point = besselPoints[i];
                     if (i % (besselInsertNumber + 1) != 0)
                     {
-                        if (showGizmosPoint == ShowGizmosPoint.JustVertexBessel || showGizmosPoint == ShowGizmosPoint.All)
+                        if (showGizmosPoint == ShowGizmosPoint.JustVertexBessel ||
+                            showGizmosPoint == ShowGizmosPoint.All)
                             Gizmos.color = Color.cyan;
                         else
                             continue;
-
                     }
                     else
                     {
-
                         if (showGizmosPoint != ShowGizmosPoint.Nope)
                             Gizmos.color = Color.white;
                         else
                             continue;
-
                     }
 
                     Gizmos.DrawSphere(
                         transform.TransformPoint(rotation * new Vector3(point.x, point.y, 0)), 0.1f);
                 }
+
                 return;
             }
 
@@ -491,30 +475,21 @@ namespace UCT.Global.UI
 
             Gizmos.color = Color.blue;
             foreach (var point in pointsCross)
-            {
                 Gizmos.DrawSphere(transform.TransformPoint(new Vector3(point.x, point.y, 0)), 0.15f);
-            }
 
             if (pointsOutCross == null)
                 return;
             Gizmos.color = Color.green;
             foreach (var point in pointsOutCross)
-            {
                 Gizmos.DrawSphere(transform.TransformPoint(new Vector3(point.x, point.y, 0)), 0.15f);
-            }
 
             if (pointsInCross == null)
                 return;
             Gizmos.color = Color.magenta;
             foreach (var point in pointsInCross)
-            {
                 Gizmos.DrawSphere(transform.TransformPoint(new Vector3(point.x, point.y, 0)), 0.15f);
-            }
-
-
         }
 #endif
-
     }
 
 #if UNITY_EDITOR
@@ -523,68 +498,8 @@ namespace UCT.Global.UI
     [CustomEditor(typeof(BoxDrawer))]
     public class SceneExtEditor : Editor
     {
-        public override void OnInspectorGUI()
-        {
-            var example = (BoxDrawer)target;
-
-            base.OnInspectorGUI(); //绘制一次GUI。
-            if (GUILayout.Button("切分(不强制刷新)"))
-            {
-                example.GetComponents();
-                example.Update();
-            }
-            if (GUILayout.Button("切分(强制刷新)"))
-            {
-                example.GetComponents(true);
-                example.Update();
-            }
-
-            if (GUILayout.Button("生成标准战斗框"))
-            {
-                example.vertexPoints = new List<Vector2>
-                {
-                    new(5.93f,1.4f),
-                    new(5.93f,-1.4f),
-                    new(-5.93f,-1.4f),
-                    new(-5.93f,1.4f),
-                };
-                example.GetComponents(true);
-                example.Update();
-            }
-
-            if (GUILayout.Button("生成正方战斗框"))
-            {
-                example.vertexPoints = new List<Vector2>
-                {
-                    new(1.4f,1.4f),
-                    new(1.4f,-1.4f),
-                    new(-1.4f,-1.4f),
-                    new(-1.4f,1.4f),
-                };
-                example.GetComponents(true);
-                example.Update();
-            }
-
-            if (!GUILayout.Button("生成正多边形")) return;
-            example.vertexPoints.Clear();
-            var sides = 3;
-            if (example.regularEdge >= 3)
-                sides = example.regularEdge;
-            else Other.Debug.Log("regularEdge should > 3", "#FF0000");
-            const float radius = 3;
-            for (var i = sides - 1; i >= 0; i--)
-            {
-                var angle = (2 * Mathf.PI * i) / sides - example.regularAngle * Mathf.PI / 180;
-                var x = radius * Mathf.Cos(angle);
-                var y = radius * Mathf.Sin(angle);
-                example.vertexPoints.Add(new Vector2(x, y));
-            }
-            example.GetComponents(true);
-            example.Update();
-        }
-
-
         private bool _isUndoRedoPerformed;
+
         private void OnSceneGUI()
         {
             var example = (BoxDrawer)target;
@@ -609,7 +524,7 @@ namespace UCT.Global.UI
             }
 
             if (Mathf.Approximately(rotation.x, 0) && Mathf.Approximately(rotation.y, 0) &&
-                Mathf.Approximately(rotation.z, 0) && Mathf.Approximately(rotation.w, 0)) 
+                Mathf.Approximately(rotation.z, 0) && Mathf.Approximately(rotation.w, 0))
                 rotation = new Quaternion(0, 0, 0, 1);
 
             for (var i = 0; i < vertices.Count; i++)
@@ -641,9 +556,71 @@ namespace UCT.Global.UI
                 Handles.PositionHandle(example.transform.parent.localPosition + localPosition, rotation) -
                 example.transform.parent.localPosition;
             if (!EditorGUI.EndChangeCheck()) return;
-            if (!example.parent) 
+            if (!example.parent)
                 example.localPosition = gameObjectPos;
             else example.localPosition = gameObjectPos - example.parent.localPosition;
+        }
+
+        public override void OnInspectorGUI()
+        {
+            var example = (BoxDrawer)target;
+
+            base.OnInspectorGUI(); //绘制一次GUI。
+            if (GUILayout.Button("切分(不强制刷新)"))
+            {
+                example.GetComponents();
+                example.Update();
+            }
+
+            if (GUILayout.Button("切分(强制刷新)"))
+            {
+                example.GetComponents(true);
+                example.Update();
+            }
+
+            if (GUILayout.Button("生成标准战斗框"))
+            {
+                example.vertexPoints = new List<Vector2>
+                {
+                    new(5.93f, 1.4f),
+                    new(5.93f, -1.4f),
+                    new(-5.93f, -1.4f),
+                    new(-5.93f, 1.4f)
+                };
+                example.GetComponents(true);
+                example.Update();
+            }
+
+            if (GUILayout.Button("生成正方战斗框"))
+            {
+                example.vertexPoints = new List<Vector2>
+                {
+                    new(1.4f, 1.4f),
+                    new(1.4f, -1.4f),
+                    new(-1.4f, -1.4f),
+                    new(-1.4f, 1.4f)
+                };
+                example.GetComponents(true);
+                example.Update();
+            }
+
+            if (!GUILayout.Button("生成正多边形")) return;
+            example.vertexPoints.Clear();
+            var sides = 3;
+            if (example.regularEdge >= 3)
+                sides = example.regularEdge;
+            else Other.Debug.Log("regularEdge should > 3", "#FF0000");
+            const float radius = 3;
+            for (var i = sides - 1; i >= 0; i--)
+            {
+                var angle = 2 * Mathf.PI * i / sides - example.regularAngle * Mathf.PI / 180;
+                var x = radius * Mathf.Cos(angle);
+                var y = radius * Mathf.Sin(angle);
+                example.vertexPoints.Add(new Vector2(x, y));
+            }
+
+            example.GetComponents(true);
+            example.Update();
         }
     }
 #endif

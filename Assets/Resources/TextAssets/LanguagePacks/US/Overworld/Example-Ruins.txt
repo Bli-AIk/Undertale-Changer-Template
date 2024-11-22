@@ -37,8 +37,10 @@ Rich text input examples:
 </color>Remove color.
 */
 
-Brand\<image=-1><fx=0>* "Press <gradient="White to Yellow - UTC">[Z]</gradient> to read the sign!"<stop><stop><stop><stop><stop><stop><stop><enter>* <size=20><gradient="White to Yellow - UTC">[Enter]</gradient> works too.</size>
-<passText>* "This scene uses <gradient="White to Yellow - UTC">normal maps</gradient>! <enter><-  ->Also, try going to <enter><-  ->the <gradient="White to Red - UTC">riverside</gradient>?" ;
+Brand\<image=-1><fx=0>* "Press <gradient="White to Yellow - UTC">[Z]</gradient> to read the sign!"<stop><stop><stop><stop><stop><stop><stop><enter>
+<size=5>* "<gradient="White to Yellow - UTC">[Enter]</gradient> works too.</size>"
+<passText>* "This scene uses <gradient="White to Yellow - UTC">normal maps</gradient>! <enter>
+<-  ->Also, try going to <enter><-  ->the <gradient="White to Red - UTC">riverside</gradient>?";
 
 River\<image=-1><fx=0>* This is you! ;
 

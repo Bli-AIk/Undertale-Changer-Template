@@ -5,8 +5,8 @@ using UnityEngine;
 namespace UCT.Battle
 {
     /// <summary>
-    /// 怪物控制脚本
-    /// 主要用于动画控制和存储ATKDEF
+    ///     怪物控制脚本
+    ///     主要用于动画控制和存储ATKDEF
     /// </summary>
     public class EnemiesController : MonoBehaviour
     {

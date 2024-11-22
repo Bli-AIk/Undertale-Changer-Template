@@ -1,7 +1,6 @@
 using System;
 using UCT.Global.Audio;
 using UCT.Global.Core;
-using UCT.Global.UI;
 using UCT.Service;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -10,7 +9,7 @@ using Random = UnityEngine.Random;
 namespace UCT.Overworld
 {
     /// <summary>
-    /// Overworld中的玩家控制器
+    ///     Overworld中的玩家控制器
     /// </summary>
     public class PlayerBehaviour : MonoBehaviour
     {
@@ -18,28 +17,26 @@ namespace UCT.Overworld
         private static readonly int MoveX = Animator.StringToHash("MoveX");
         private static readonly int MoveY = Animator.StringToHash("MoveY");
         public Animator animator;
-        private Rigidbody2D _rigidbody2D;
-        private BoxCollider2D _boxCollider;
         public int moveDirectionX, moveDirectionY;
         public int animDirectionX, animDirectionY;
-        public float speed;//玩家速度 编辑器标准为13 导出为5.5
+        public float speed; //玩家速度 编辑器标准为13 导出为5.5
 
-        [Header("音效截取范围 int")]
-        public Vector2 walk;
+        [Header("音效截取范围 int")] public Vector2 walk;
 
-        [Header("开启倒影")]
-        public bool isShadow;
+        [Header("开启倒影")] public bool isShadow;
 
-        private SpriteRenderer _shadowSprite;
+        public OverworldObjTrigger saveOwObj;
+        public float owTimer; //0.1秒，防止调查OW冲突
+
+        private readonly AudioMixerGroup _mixer = null; //需要就弄上 整这个是因为有的项目里做了回音效果
+        private BoxCollider2D _boxCollider;
 
         //public LayerMask mask;
         private BoxCollider2D _boxTrigger;
+        private Rigidbody2D _rigidbody2D;
 
-        public OverworldObjTrigger saveOwObj;
+        private SpriteRenderer _shadowSprite;
         private SpriteRenderer _spriteRenderer;
-        public float owTimer;//0.1秒，防止调查OW冲突
-
-        private readonly AudioMixerGroup _mixer = null;//需要就弄上 整这个是因为有的项目里做了回音效果
 
         private void Start()
         {
@@ -57,58 +54,31 @@ namespace UCT.Overworld
                 _shadowSprite = transform.Find("Dir/Shadow").GetComponent<SpriteRenderer>();
         }
 
-        private void OnTriggerEnter2D(Collider2D collision)
-        {
-            if (!collision.transform.CompareTag("owObjTrigger")) return;
-            var owObj = collision.transform.GetComponent<OverworldObjTrigger>();
-            saveOwObj = owObj;
-        }
-
-        private void OnTriggerExit2D(Collider2D collision)
-        {
-            if (!collision.transform.CompareTag("owObjTrigger")) return;
-            var owObj = collision.transform.GetComponent<OverworldObjTrigger>();
-            if (owObj == saveOwObj)
-            {
-                saveOwObj = null;
-            }
-        }
-
         private void Update()
         {
-            if (isShadow)
-            {
-                _shadowSprite.sprite = _spriteRenderer.sprite;
-            }
+            if (isShadow) _shadowSprite.sprite = _spriteRenderer.sprite;
 
             MainControl.Instance.overworldControl.playerDeadPos = transform.position;
 
 
-            if (MainControl.Instance.overworldControl.isSetting || MainControl.Instance.overworldControl.pause)
-            {
-                return;
-            }
-            if (owTimer > 0)
-            {
-                owTimer -= Time.deltaTime;
-            }
+            if (MainControl.Instance.overworldControl.isSetting || MainControl.Instance.overworldControl.pause) return;
+            if (owTimer > 0) owTimer -= Time.deltaTime;
 
             if (saveOwObj && Mathf.Approximately(BackpackBehaviour.Instance.optionsBox.localPosition.z,
                     BackpackBehaviour.BoxZAxisInvisible))
-            {
                 if (saveOwObj.isTriggerMode || (!saveOwObj.isTriggerMode &&
                                                 GameUtilityService.ConvertKeyDownToControl(KeyCode.Z) &&
                                                 (saveOwObj.playerDir == Vector2.one ||
                                                  Mathf.Approximately(saveOwObj.playerDir.x, animDirectionX) ||
                                                  Mathf.Approximately(saveOwObj.playerDir.y, animDirectionY)) &&
-                                                BackpackBehaviour.Instance.select == 0)) 
+                                                BackpackBehaviour.Instance.select == 0))
                 {
                     if (owTimer <= 0)
                     {
                         if (saveOwObj.changeScene)
                         {
                             if (saveOwObj.onlyDir == 0 || (saveOwObj.onlyDir == -1 && animDirectionX != 0) ||
-                                (saveOwObj.onlyDir == 1 && animDirectionY != 0)) 
+                                (saveOwObj.onlyDir == 1 && animDirectionY != 0))
                             {
                                 MainControl.Instance.overworldControl.playerScenePos = saveOwObj.newPlayerPos;
                                 MainControl.Instance.overworldControl.animDirection =
@@ -138,36 +108,14 @@ namespace UCT.Overworld
                             }
                         }
                     }
+
                     owTimer = 0.1f;
                 }
-            }
 
             if (MainControl.Instance.overworldControl.isSetting || MainControl.Instance.overworldControl.pause)
                 return;
             if (Input.GetKeyDown(KeyCode.B) && MainControl.Instance.playerControl.isDebug)
                 GameUtilityService.FadeOutAndSwitchScene("Battle", Color.black);
-        }
-
-        public void PlayWalkAudio()//动画器引用
-        {
-            AudioController.Instance.GetFx(Random.Range((int)walk.x, (int)walk.y),
-                MainControl.Instance.AudioControl.fxClipWalk, 1, 1, _mixer);
-        }
-
-        private void TriggerSpin(int i)
-        {
-            _boxTrigger.transform.localRotation = Quaternion.Euler(0, 0, i * 90);
-
-            if (i is 0 or 2)
-            {
-                _boxTrigger.offset = new Vector2(0, -0.165f);
-                _boxTrigger.size = new Vector2(0.5f, 0.4f);
-            }
-            else
-            {
-                _boxTrigger.offset = new Vector2(0, -0.255f);
-                _boxTrigger.size = new Vector2(0.5f, 0.575f);
-            }
         }
 
         private void FixedUpdate()
@@ -180,7 +128,7 @@ namespace UCT.Overworld
             animator.SetFloat(Speed, Convert.ToInt32(GameUtilityService.ConvertKeyToControl(KeyCode.X)) + 1);
 
             if (MainControl.Instance.overworldControl.isSetting || MainControl.Instance.overworldControl.pause ||
-                BackpackBehaviour.Instance.select > 0) 
+                BackpackBehaviour.Instance.select > 0)
             {
                 animator.Play("Walk Tree", 0, 0);
                 if (MainControl.Instance.playerControl.canMove)
@@ -199,7 +147,7 @@ namespace UCT.Overworld
                 else moveDirectionX = 0;
 
                 if (GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow) &&
-                    GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow)) 
+                    GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow))
                     moveDirectionX = 0;
 
                 if (moveDirectionX != 0)
@@ -209,17 +157,20 @@ namespace UCT.Overworld
                 {
                     moveDirectionY = 1;
                     if (!GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow) &&
-                        !GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow)) 
+                        !GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow))
                         animDirectionX = 0;
                 }
                 else if (GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow))
                 {
                     if (!GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow) &&
-                        !GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow)) 
+                        !GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow))
                         animDirectionX = 0;
                     moveDirectionY = -1;
                 }
-                else moveDirectionY = 0;
+                else
+                {
+                    moveDirectionY = 0;
+                }
 
                 if (moveDirectionX != 0 || moveDirectionY != 0)
                     animDirectionY = moveDirectionY;
@@ -229,8 +180,10 @@ namespace UCT.Overworld
                     transform.position.y + realSpeed * Time.deltaTime * moveDirectionY));
 
                 if (GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow) &&
-                    GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow)) 
+                    GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow) &&
+                    MainControl.Instance.playerControl.isDebug) 
                 {
+                    //一个让玩家开杀戮光环的彩蛋
                     animator.SetFloat(MoveX, Random.Range(-1, 2));
                     animator.SetFloat(MoveY, Random.Range(-1, 2));
                 }
@@ -241,7 +194,6 @@ namespace UCT.Overworld
                 }
 
                 if (moveDirectionY == 0)
-                {
                     switch (moveDirectionX)
                     {
                         case > 0:
@@ -251,9 +203,7 @@ namespace UCT.Overworld
                             TriggerSpin(3);
                             break;
                     }
-                }
                 else
-                {
                     switch (moveDirectionX)
                     {
                         case < 0:
@@ -279,19 +229,57 @@ namespace UCT.Overworld
                             break;
                         }
                     }
-                }
 
                 if (moveDirectionX == 0 && moveDirectionY == 0)
                 {
                     animator.Play("Walk Tree", 0, 0f);
                     animator.speed = 0;
                 }
-                else animator.speed = 1;
+                else
+                {
+                    animator.speed = 1;
+                }
             }
             else
             {
                 animator.Play("Walk Tree", 0, 0f);
                 animator.speed = 0;
+            }
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (!collision.transform.CompareTag("owObjTrigger")) return;
+            var owObj = collision.transform.GetComponent<OverworldObjTrigger>();
+            saveOwObj = owObj;
+        }
+
+        private void OnTriggerExit2D(Collider2D collision)
+        {
+            if (!collision.transform.CompareTag("owObjTrigger")) return;
+            var owObj = collision.transform.GetComponent<OverworldObjTrigger>();
+            if (owObj == saveOwObj) saveOwObj = null;
+        }
+
+        public void PlayWalkAudio() //动画器引用
+        {
+            AudioController.Instance.GetFx(Random.Range((int)walk.x, (int)walk.y),
+                MainControl.Instance.AudioControl.fxClipWalk, 1, 1, _mixer);
+        }
+
+        private void TriggerSpin(int i)
+        {
+            _boxTrigger.transform.localRotation = Quaternion.Euler(0, 0, i * 90);
+
+            if (i is 0 or 2)
+            {
+                _boxTrigger.offset = new Vector2(0, -0.165f);
+                _boxTrigger.size = new Vector2(0.5f, 0.4f);
+            }
+            else
+            {
+                _boxTrigger.offset = new Vector2(0, -0.255f);
+                _boxTrigger.size = new Vector2(0.5f, 0.575f);
             }
         }
     }

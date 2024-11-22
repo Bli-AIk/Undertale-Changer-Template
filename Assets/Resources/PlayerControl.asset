@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd233730508f81c4e9962afa5c5f5269, type: 3}
   m_Name: PlayerControl
   m_EditorClassIdentifier: 
-  hp: 24
+  hp: 46
   hpMax: 92
   lv: 19
   exp: 0
@@ -20,17 +20,17 @@ MonoBehaviour:
   wearAtk: 1
   wearDef: 123
   nextExp: 0
-  missTime: -0.001783215
+  missTime: -0.0209683
   missTimeMax: 1
   atk: 0
   def: 0
-  playerName: Debug
+  playerName: <color=#8B8650FF>D</color><color=#8B8650FF>e</color><color=#8B8650FF>b</color><color=#8D8851FF>u</color><color=#969253FF>g</color>
   myItems: 0200000002000000020000000200000002000000010000000100000002000000
   wearArm: 10001
   wearArmor: 20001
   canMove: 1
-  gameTime: 5156.3145
-  lastScene: Battle
+  gameTime: 5268.138
+  lastScene: Example-Corridor
   saveScene: Example-Corridor
   isDebug: 1
   invincible: 1

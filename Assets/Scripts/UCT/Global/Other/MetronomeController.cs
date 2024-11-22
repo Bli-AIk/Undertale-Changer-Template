@@ -6,27 +6,26 @@ using UnityEngine;
 namespace UCT.Global.Other
 {
     /// <summary>
-    /// 节拍器控制器
+    ///     节拍器控制器
     /// </summary>
     public class MetronomeController : MonoBehaviour
     {
-        [Header("=== BPM相关设置 ===")]
-        [Header("BGM BPM")]
+        [Header("=== BPM相关设置 ===")] [Header("BGM BPM")]
         public float bpm = 120;
-        private float _bpmBackup = 120;
-        [Header("BGM BPM偏移")]
-        public float bpmDeviation; 
-        private float _bpmDeviationBackup;
-        [Header("每拍所在的秒数列表")]
-        public List<float> beatSeconds;
-        [Space]
-        [Header("=== 节拍器 ===")]
-        [Header("是否播放节拍器")]
+
+        [Header("BGM BPM偏移")] public float bpmDeviation;
+
+        [Header("每拍所在的秒数列表")] public List<float> beatSeconds;
+
+        [Space] [Header("=== 节拍器 ===")] [Header("是否播放节拍器")]
         public bool isPlayMetronome;
-        [Header("当前节拍数")]
-        public int currentBeatIndex; 
-        [Header("下一节拍所在时间")] 
-        public float nextBeatSecond;
+
+        [Header("当前节拍数")] public int currentBeatIndex;
+
+        [Header("下一节拍所在时间")] public float nextBeatSecond;
+
+        private float _bpmBackup = 120;
+        private float _bpmDeviationBackup;
 
         private void Start()
         {
@@ -41,17 +40,17 @@ namespace UCT.Global.Other
                 _bpmDeviationBackup = bpmDeviation;
                 Start();
             }
-            
+
             CalculateAndPlayMetronome(beatSeconds);
         }
 
         /// <summary>
-        /// 计算BGM节拍
+        ///     计算BGM节拍
         /// </summary>
         private static List<float> MusicBpmCount(float inputBpm, float inputBpmDeviation, float musicDuration = 0)
         {
             if (AudioController.Instance.audioSource.clip == null) return new List<float>();
-            
+
             if (musicDuration <= 0)
                 musicDuration = AudioController.Instance.audioSource.clip.length;
 
@@ -69,7 +68,7 @@ namespace UCT.Global.Other
         }
 
         /// <summary>
-        /// 控制节拍器
+        ///     控制节拍器
         /// </summary>
         /// <param name="instanceBeatTimes"></param>
         private void CalculateAndPlayMetronome(List<float> instanceBeatTimes)
@@ -82,17 +81,14 @@ namespace UCT.Global.Other
             {
                 if (!Mathf.Approximately(bpm, _bpmBackup) || !Mathf.Approximately(bpmDeviation, _bpmDeviationBackup))
                     return;
-                
+
                 if (firstIn && isPlayMetronome)
                     AudioController.Instance.GetFx(currentBeatIndex % 4 == 0 ? 13 : 14,
                         MainControl.Instance.AudioControl.fxClipUI);
 
                 currentBeatIndex++;
 
-                if (currentBeatIndex < instanceBeatTimes.Count)
-                {
-                    nextBeatSecond = instanceBeatTimes[currentBeatIndex];
-                }
+                if (currentBeatIndex < instanceBeatTimes.Count) nextBeatSecond = instanceBeatTimes[currentBeatIndex];
 
                 firstIn = false;
             }

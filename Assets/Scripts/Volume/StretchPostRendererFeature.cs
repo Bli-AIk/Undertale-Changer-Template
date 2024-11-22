@@ -7,12 +7,6 @@ namespace Volume
 {
     public class StretchPostRendererFeature : ScriptableRendererFeature
     {
-        [Serializable]
-        public class Settings
-        {
-            public Shader shader;
-        }
-
         public Settings settings = new();
         private StretchPostPass _pass;
 
@@ -27,6 +21,12 @@ namespace Volume
             _pass.Setup(renderer.cameraColorTarget);
             renderer.EnqueuePass(_pass);
         }
+
+        [Serializable]
+        public class Settings
+        {
+            public Shader shader;
+        }
     }
 
     [Serializable]
@@ -36,10 +36,10 @@ namespace Volume
         private static readonly int MainTexId = Shader.PropertyToID("_MainTex");
         private static readonly int TempTargetId = Shader.PropertyToID("_TempTargetColorTint");
         private static readonly int Draw = Shader.PropertyToID("_Draw");
+        private RenderTargetIdentifier _currentTarget;
+        private Material _mat;
 
         private StretchPostComponent _stretchPostVolume;
-        private Material _mat;
-        private RenderTargetIdentifier _currentTarget;
 
         public StretchPostPass(RenderPassEvent passEvent, Shader stretchPostShader)
         {
@@ -49,6 +49,7 @@ namespace Volume
                 UCT.Global.Other.Debug.Log("Shader不存在");
                 return;
             }
+
             _mat = CoreUtils.CreateEngineMaterial(stretchPostShader);
         }
 
@@ -59,24 +60,12 @@ namespace Volume
 
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
-            if (_mat == null)
-            {
-                return;
-            }
-            if (!renderingData.cameraData.postProcessEnabled)
-            {
-                return;
-            }
+            if (_mat == null) return;
+            if (!renderingData.cameraData.postProcessEnabled) return;
             var stack = VolumeManager.instance.stack;
             _stretchPostVolume = stack.GetComponent<StretchPostComponent>();
-            if (_stretchPostVolume == null)
-            {
-                return;
-            }
-            if (_stretchPostVolume.isShow.value == false)
-            {
-                return;
-            }
+            if (_stretchPostVolume == null) return;
+            if (_stretchPostVolume.isShow.value == false) return;
             var cmd = CommandBufferPool.Get(RenderTag);
             Render(cmd, ref renderingData);
             context.ExecuteCommandBuffer(cmd);
@@ -93,7 +82,8 @@ namespace Volume
             _mat.SetVector(Draw, _stretchPostVolume.draw.value);
 
             cmd.SetGlobalTexture(MainTexId, source);
-            cmd.GetTemporaryRT(destination, cameraData.camera.scaledPixelWidth, cameraData.camera.scaledPixelHeight, 0, FilterMode.Trilinear, RenderTextureFormat.Default);
+            cmd.GetTemporaryRT(destination, cameraData.camera.scaledPixelWidth, cameraData.camera.scaledPixelHeight, 0,
+                FilterMode.Trilinear, RenderTextureFormat.Default);
             cmd.Blit(source, destination);
             cmd.Blit(destination, source, _mat, 0);
         }

@@ -11,10 +11,10 @@ namespace Debug
         [FormerlySerializedAs("vector2s")] public List<Vector2> vector2S;
         public float time;
         public float baseTime;
-        private float _timer;
         public string enumStr;
         private LineRenderer _lineRenderer;
         private int _setNumber;
+        private float _timer;
 
         private void Start()
         {

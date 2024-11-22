@@ -6,7 +6,7 @@ using UnityEngine;
 namespace UCT.Overworld
 {
     /// <summary>
-    /// 修改Overworld中对话框的位置
+    ///     修改Overworld中对话框的位置
     /// </summary>
     public class TalkBoxPositionChanger : MonoBehaviour
     {
@@ -15,6 +15,7 @@ namespace UCT.Overworld
         public bool isUp;
         public bool haveHead;
         private TextMeshPro _typeMessage;
+
         private void Awake()
         {
             Instance = this;
@@ -24,7 +25,23 @@ namespace UCT.Overworld
         {
             boxDrawer = GetComponent<BoxDrawer>();
             _typeMessage = GetTypeMessage();
-            boxDrawer.localPosition = new Vector3(boxDrawer.localPosition.x, boxDrawer.localPosition.y, BackpackBehaviour.BoxZAxisInvisible);
+            boxDrawer.localPosition = new Vector3(boxDrawer.localPosition.x, boxDrawer.localPosition.y,
+                BackpackBehaviour.BoxZAxisInvisible);
+        }
+
+
+        private void OnEnable()
+        {
+            GetTypeMessage();
+            if (_typeMessage)
+                _typeMessage.gameObject.SetActive(true);
+        }
+
+        private void OnDisable()
+        {
+            GetTypeMessage();
+            if (_typeMessage)
+                _typeMessage.gameObject.SetActive(false);
         }
 
         private TextMeshPro GetTypeMessage()
@@ -35,8 +52,9 @@ namespace UCT.Overworld
 
             return _typeMessage;
         }
-        
-        public void Change(bool updateHeader = true, bool haveHeader = false, bool cleaner = true, TypeWritter typeWritter = null)
+
+        public void Change(bool updateHeader = true, bool haveHeader = false, bool cleaner = true,
+            TypeWritter typeWritter = null)
         {
             if (cleaner)
             {
@@ -59,27 +77,11 @@ namespace UCT.Overworld
             }
             else
             {
-                boxDrawer.localPosition = new Vector3(boxDrawer.localPosition.x, boxDownYAxis, boxDrawer.localPosition.z);
+                boxDrawer.localPosition =
+                    new Vector3(boxDrawer.localPosition.x, boxDownYAxis, boxDrawer.localPosition.z);
                 GetTypeMessage().rectTransform.anchoredPosition =
                     new Vector2(0.25f + 2.9f * Convert.ToInt32(haveHead), -0.625f);
             }
-        }
-
-   
-
-
-        private void OnEnable()
-        {
-            GetTypeMessage();
-            if (_typeMessage)
-                _typeMessage.gameObject.SetActive(true);
-        }
-
-        private void OnDisable()
-        {
-            GetTypeMessage();
-            if (_typeMessage)
-                _typeMessage.gameObject.SetActive(false);
         }
     }
 }

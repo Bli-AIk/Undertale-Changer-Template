@@ -7,12 +7,6 @@ namespace Volume
 {
     public class ChromaticAberrationRendererFeature : ScriptableRendererFeature
     {
-        [Serializable]
-        public class Settings
-        {
-            public Shader shader;
-        }
-
         public Settings settings = new();
         private ChromaticAberrationPass _pass;
 
@@ -26,6 +20,12 @@ namespace Volume
         {
             _pass.Setup(renderer.cameraColorTarget);
             renderer.EnqueuePass(_pass);
+        }
+
+        [Serializable]
+        public class Settings
+        {
+            public Shader shader;
         }
     }
 
@@ -41,8 +41,8 @@ namespace Volume
         private static readonly int OnlyOri = Shader.PropertyToID("_OnlyOri");
 
         private ChromaticAberrationComponent _chromaticAberrationVolume;
-        private Material _mat;
         private RenderTargetIdentifier _currentTarget;
+        private Material _mat;
 
         public ChromaticAberrationPass(RenderPassEvent passEvent, Shader chromaticAberrationShader)
         {
@@ -52,6 +52,7 @@ namespace Volume
                 UCT.Global.Other.Debug.Log("Shader不存在");
                 return;
             }
+
             _mat = CoreUtils.CreateEngineMaterial(chromaticAberrationShader);
         }
 
@@ -62,24 +63,12 @@ namespace Volume
 
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
-            if (_mat == null)
-            {
-                return;
-            }
-            if (!renderingData.cameraData.postProcessEnabled)
-            {
-                return;
-            }
+            if (_mat == null) return;
+            if (!renderingData.cameraData.postProcessEnabled) return;
             var stack = VolumeManager.instance.stack;
             _chromaticAberrationVolume = stack.GetComponent<ChromaticAberrationComponent>();
-            if (_chromaticAberrationVolume == null)
-            {
-                return;
-            }
-            if (_chromaticAberrationVolume.isShow.value == false)
-            {
-                return;
-            }
+            if (_chromaticAberrationVolume == null) return;
+            if (_chromaticAberrationVolume.isShow.value == false) return;
             var cmd = CommandBufferPool.Get(RenderTag);
             Render(cmd, ref renderingData);
             context.ExecuteCommandBuffer(cmd);
@@ -99,7 +88,8 @@ namespace Volume
             _mat.SetFloat(OnlyOri, Convert.ToInt32(_chromaticAberrationVolume.onlyOri.value));
 
             cmd.SetGlobalTexture(MainTexId, source);
-            cmd.GetTemporaryRT(destination, cameraData.camera.scaledPixelWidth, cameraData.camera.scaledPixelHeight, 0, FilterMode.Trilinear, RenderTextureFormat.Default);
+            cmd.GetTemporaryRT(destination, cameraData.camera.scaledPixelWidth, cameraData.camera.scaledPixelHeight, 0,
+                FilterMode.Trilinear, RenderTextureFormat.Default);
             cmd.Blit(source, destination);
             cmd.Blit(destination, source, _mat, 0);
         }

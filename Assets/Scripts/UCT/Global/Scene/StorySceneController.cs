@@ -9,17 +9,17 @@ using UnityEngine;
 namespace UCT.Global.Scene
 {
     /// <summary>
-    /// ¿ØÖÆ½²¹ÊÊÂ³¡¾°£¨²¥PPT£©
+    ///     ¿ØÖÆ½²¹ÊÊÂ³¡¾°£¨²¥PPT£©
     /// </summary>
     public class StorySceneController : MonoBehaviour
     {
         public static StorySceneController Instance;
         public List<Sprite> pics;
-        private SpriteRenderer _spriteRenderer;
-        private TypeWritter _typeWritter;
-        private TextMeshPro _tmp;
         public GameObject mask;
         private int _picNumber;
+        private SpriteRenderer _spriteRenderer;
+        private TextMeshPro _tmp;
+        private TypeWritter _typeWritter;
 
         private void Awake()
         {
@@ -33,7 +33,9 @@ namespace UCT.Global.Scene
             _tmp = transform.Find("Text").GetComponent<TextMeshPro>();
             mask = GameObject.Find("MaskCanvas").gameObject;
 
-            _typeWritter.TypeOpen(TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.sceneTextsSave, "Text"), false, 0, 1, _tmp, TypeWritter.TypeMode.CantZx);
+            _typeWritter.TypeOpen(
+                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.sceneTextsSave,
+                    "Text"), false, 0, 1, _tmp, TypeWritter.TypeMode.CantZx);
         }
 
         private void Update()

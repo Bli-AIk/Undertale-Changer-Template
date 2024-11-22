@@ -1,7 +1,6 @@
 using System;
 using UCT.Global.Core;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace UCT.Global.Other
 {
@@ -21,7 +20,7 @@ namespace UCT.Global.Other
             if (!followMainCamera) return;
             if (MainControl.Instance.mainCamera.gameObject)
                 sth = MainControl.Instance.mainCamera.gameObject;
-            else 
+            else
                 throw new NullReferenceException();
         }
 
@@ -31,7 +30,6 @@ namespace UCT.Global.Other
             if (followPosition) transform.position = sth.transform.position + positionAdd;
             if (followRotation) transform.rotation = sth.transform.rotation * Quaternion.Euler(rotationAdd);
             if (followLocalScale) transform.localScale = sth.transform.localScale + localScaleAdd;
-
         }
     }
 }

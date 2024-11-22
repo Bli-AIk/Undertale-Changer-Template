@@ -6,7 +6,7 @@ using UnityEngine.UI;
 namespace UCT.Overworld
 {
     /// <summary>
-    /// Overworld对话中更改Sprite
+    ///     Overworld对话中更改Sprite
     /// </summary>
     public class SpriteChanger : MonoBehaviour
     {
@@ -18,14 +18,14 @@ namespace UCT.Overworld
         public bool inOverWorld;
 
         public bool justSaying;
-
-        private TypeWritter _typeWritter;
+        private bool _back;
+        private float _clock;
+        private int _number;
         private SpriteRenderer _sprite;
         private Image _spriteImage;
         private TalkBoxPositionChanger _talkBoxPositionChanger;
-        private int _number;
-        private float _clock;
-        private bool _back;
+
+        private TypeWritter _typeWritter;
 
         private void Start()
         {
@@ -53,10 +53,7 @@ namespace UCT.Overworld
 
         private void Update()
         {
-            if (_clock > 0)
-            {
-                _clock -= Time.deltaTime;
-            }
+            if (_clock > 0) _clock -= Time.deltaTime;
             if (justSaying || (haveBack && _typeWritter.isTyping && !_typeWritter.passText && !_typeWritter.isStop))
             {
                 if (_clock <= 0 && _number >= 0)
@@ -73,6 +70,7 @@ namespace UCT.Overworld
                     _back = false;
                     ChangeImage(_number, _back);
                 }
+
                 _clock = backFrame / 60f;
             }
         }

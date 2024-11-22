@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f7c2298-d077-422b-9131-f9a839bed961" name="更改" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Fonts/SonFonts/SIMSUN.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Fonts/SonFonts/SIMSUN.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Battle/Battle.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Battle/Battle.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Battle/SelectUIController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Battle/SelectUIController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CHANGELOG_zh-CN.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG_zh-CN.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PLAN_zh-CN.md" beforeDir="false" afterPath="$PROJECT_DIR$/PLAN_zh-CN.md" afterDir="false" />
-    </list>
+    <list default="true" id="8f7c2298-d077-422b-9131-f9a839bed961" name="更改" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -158,10 +151,10 @@
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
       <method v="2" />
     </configuration>
-    <configuration name="附加到 Unity 编辑器" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="6588">
+    <configuration name="附加到 Unity 编辑器" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="6588" />
+      <option name="pid" />
       <option name="projectPathOnTarget" />
       <option name="selectedOptions">
         <list />
@@ -310,6 +303,7 @@
       <workItem from="1731982140341" duration="1792000" />
       <workItem from="1732008383004" duration="2459000" />
       <workItem from="1732020792726" duration="1133000" />
+      <workItem from="1732182359421" duration="1047000" />
     </task>
     <servers />
   </component>

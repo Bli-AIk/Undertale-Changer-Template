@@ -10,17 +10,16 @@ using UnityEngine;
 namespace UCT.Global.Scene
 {
     /// <summary>
-    /// 最初始场景（模板信息）的控制器
+    ///     最初始场景（模板信息）的控制器
     /// </summary>
     public class StartController : MonoBehaviour
     {
+        private float _afkTimer = 20;
+        private int _layer;
         private TextMeshPro _textMessage, _textNotice;
         private bool _textUnderOpen;
         private float _time;
         private GameObject _title;
-        private int _layer;
-
-        private float _afkTimer = 20;
 
         private void Start()
         {
@@ -30,7 +29,7 @@ namespace UCT.Global.Scene
             _textNotice.color = Color.clear;
             _textMessage.color = Color.clear;
             AudioController.Instance.GetFx(11, MainControl.Instance.AudioControl.fxClipUI);
-            
+
             var text = MainControl.Instance.overworldControl.sceneTextsAsset;
             var lines = text.Split(new[] { '\n' }, StringSplitOptions.None);
             var messageText = lines.Last(); // 获取最后一行文本
@@ -44,7 +43,9 @@ namespace UCT.Global.Scene
         private void Update()
         {
             if (_time < 5)
+            {
                 _time += Time.deltaTime;
+            }
             else if (!_textUnderOpen)
             {
                 _textUnderOpen = true;
@@ -52,7 +53,6 @@ namespace UCT.Global.Scene
             }
 
             if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
-            {
                 switch (_layer)
                 {
                     case 0:
@@ -68,14 +68,17 @@ namespace UCT.Global.Scene
                             Color.black, false, 2f);
                         break;
                 }
-            }
+
             if (Input.anyKeyDown)
             {
                 _afkTimer = 20;
                 return;
             }
+
             if (_afkTimer > 0)
+            {
                 _afkTimer -= Time.deltaTime;
+            }
             else
             {
                 GameUtilityService.FadeOutAndSwitchScene("Story", Color.black);
