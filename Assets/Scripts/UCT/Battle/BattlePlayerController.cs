@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using UCT.Control;
+using UCT.Extensions;
 using UCT.Global.Audio;
 using UCT.Global.Core;
 using UCT.Global.UI;
@@ -212,7 +213,7 @@ namespace UCT.Battle
             switch (playerColor)
             {
                 case BattleControl.PlayerColor.Red:
-                    if (GameUtilityService.ConvertKeyToControl(KeyCode.X))
+                    if (InputService.GetKey(KeyCode.X))
                     {
                         speedWeightX = SpeedWeight;
                         speedWeightY = SpeedWeight;
@@ -223,26 +224,26 @@ namespace UCT.Battle
                         speedWeightY = 1;
                     }
 
-                    if (GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow))
+                    if (InputService.GetKey(KeyCode.UpArrow))
                         moving = new Vector3(moving.x, 1);
-                    else if (GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow))
+                    else if (InputService.GetKey(KeyCode.DownArrow))
                         moving = new Vector3(moving.x, -1);
                     else
                         moving = new Vector3(moving.x, 0);
 
-                    if (GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow) &&
-                        GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow))
+                    if (InputService.GetKey(KeyCode.UpArrow) &&
+                        InputService.GetKey(KeyCode.DownArrow))
                         moving = new Vector3(moving.x, 0);
 
-                    if (GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow))
+                    if (InputService.GetKey(KeyCode.RightArrow))
                         moving = new Vector3(1, moving.y);
-                    else if (GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow))
+                    else if (InputService.GetKey(KeyCode.LeftArrow))
                         moving = new Vector3(-1, moving.y);
                     else
                         moving = new Vector3(0, moving.y);
 
-                    if (GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow) &&
-                        GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow))
+                    if (InputService.GetKey(KeyCode.RightArrow) &&
+                        InputService.GetKey(KeyCode.LeftArrow))
                         moving = new Vector3(0, moving.y);
                     break;
 
@@ -290,34 +291,34 @@ namespace UCT.Battle
                     switch (playerDir)
                     {
                         case PlayerDirEnum.Up:
-                            if (GameUtilityService.ConvertKeyToControl(KeyCode.X))
+                            if (InputService.GetKey(KeyCode.X))
                                 speedWeightX = SpeedWeight;
                             else
                                 speedWeightX = 1;
 
                             transform.rotation = Quaternion.Euler(0, 0, 180);
                             Physics2D.gravity = new Vector2(0, 9.8f);
-                            if (GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow))
+                            if (InputService.GetKey(KeyCode.RightArrow))
                                 moving = new Vector3(1, moving.y);
-                            else if (GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow))
+                            else if (InputService.GetKey(KeyCode.LeftArrow))
                                 moving = new Vector3(-1, moving.y);
                             else
                                 moving = new Vector3(0, moving.y);
 
-                            if (GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow) &&
-                                GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow))
+                            if (InputService.GetKey(KeyCode.RightArrow) &&
+                                InputService.GetKey(KeyCode.LeftArrow))
                                 moving = new Vector3(0, moving.y);
-                            if (!GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow))
+                            if (!InputService.GetKey(KeyCode.DownArrow))
                             {
-                                if (!GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow) ||
-                                    !GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow))
+                                if (!InputService.GetKey(KeyCode.RightArrow) ||
+                                    !InputService.GetKey(KeyCode.LeftArrow))
                                     jumpRayDistanceForBoard = 0.2f;
-                                if (GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow) ||
-                                    GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow))
+                                if (InputService.GetKey(KeyCode.RightArrow) ||
+                                    InputService.GetKey(KeyCode.LeftArrow))
                                     jumpRayDistanceForBoard = 0;
                             }
 
-                            if (GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow) && !isJump && moving.y == 0)
+                            if (InputService.GetKey(KeyCode.DownArrow) && !isJump && moving.y == 0)
                             {
                                 moving = new Vector3(moving.x, -2.15f);
                                 isJump = true;
@@ -325,7 +326,7 @@ namespace UCT.Battle
                                 jumpRayDistanceForBoard = 0;
                             }
 
-                            if (isJump && (!GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow) ||
+                            if (isJump && (!InputService.GetKey(KeyCode.DownArrow) ||
                                            (infoF.collider && infoF.collider.gameObject.CompareTag("Box"))) &&
                                 moving.y < -0)
                                 if (infoF.collider &&
@@ -356,34 +357,34 @@ namespace UCT.Battle
                             break;
 
                         case PlayerDirEnum.Down: ////////////////////////////////////////////////
-                            if (GameUtilityService.ConvertKeyToControl(KeyCode.X))
+                            if (InputService.GetKey(KeyCode.X))
                                 speedWeightX = SpeedWeight;
                             else
                                 speedWeightX = 1;
                             transform.rotation = Quaternion.Euler(0, 0, 0);
                             Physics2D.gravity = new Vector2(0, -9.8f);
-                            if (GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow))
+                            if (InputService.GetKey(KeyCode.RightArrow))
                                 moving = new Vector3(1, moving.y);
-                            else if (GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow))
+                            else if (InputService.GetKey(KeyCode.LeftArrow))
                                 moving = new Vector3(-1, moving.y);
                             else
                                 moving = new Vector3(0, moving.y);
-                            if (GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow) &&
-                                GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow))
+                            if (InputService.GetKey(KeyCode.RightArrow) &&
+                                InputService.GetKey(KeyCode.LeftArrow))
                                 moving = new Vector3(0, moving.y);
 
-                            if (!GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow))
+                            if (!InputService.GetKey(KeyCode.UpArrow))
                             {
-                                if (!GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow) ||
-                                    !GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow))
+                                if (!InputService.GetKey(KeyCode.RightArrow) ||
+                                    !InputService.GetKey(KeyCode.LeftArrow))
                                     jumpRayDistanceForBoard = 0.2f;
-                                if (GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow) ||
-                                    GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow))
+                                if (InputService.GetKey(KeyCode.RightArrow) ||
+                                    InputService.GetKey(KeyCode.LeftArrow))
                                     jumpRayDistanceForBoard = 0;
                             }
 
 
-                            if (GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow) && !isJump && moving.y == 0)
+                            if (InputService.GetKey(KeyCode.UpArrow) && !isJump && moving.y == 0)
                             {
                                 moving = new Vector3(moving.x, 2.15f);
                                 isJump = true;
@@ -391,7 +392,7 @@ namespace UCT.Battle
                                 jumpRayDistanceForBoard = 0;
                             }
 
-                            if (isJump && (!GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow) ||
+                            if (isJump && (!InputService.GetKey(KeyCode.UpArrow) ||
                                            (infoF.collider != null && infoF.collider.gameObject.CompareTag("Box"))) &&
                                 moving.y > 0)
                                 if (infoF.collider &&
@@ -422,32 +423,32 @@ namespace UCT.Battle
                             break;
 
                         case PlayerDirEnum.Left: ////////////////////////////////////////////////
-                            if (GameUtilityService.ConvertKeyToControl(KeyCode.X))
+                            if (InputService.GetKey(KeyCode.X))
                                 speedWeightY = SpeedWeight;
                             else
                                 speedWeightY = 1;
                             transform.rotation = Quaternion.Euler(0, 0, 270);
                             Physics2D.gravity = new Vector2(-9.8f, 0);
-                            if (GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow))
+                            if (InputService.GetKey(KeyCode.UpArrow))
                                 moving = new Vector3(moving.x, 1);
-                            else if (GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow))
+                            else if (InputService.GetKey(KeyCode.DownArrow))
                                 moving = new Vector3(moving.x, -1);
                             else
                                 moving = new Vector3(moving.x, 0);
-                            if (GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow) &&
-                                GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow))
+                            if (InputService.GetKey(KeyCode.UpArrow) &&
+                                InputService.GetKey(KeyCode.DownArrow))
                                 moving = new Vector3(moving.x, 0);
-                            if (!GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow))
+                            if (!InputService.GetKey(KeyCode.RightArrow))
                             {
-                                if (!GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow) ||
-                                    !GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow))
+                                if (!InputService.GetKey(KeyCode.UpArrow) ||
+                                    !InputService.GetKey(KeyCode.DownArrow))
                                     jumpRayDistanceForBoard = 0.2f;
-                                if (GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow) ||
-                                    GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow))
+                                if (InputService.GetKey(KeyCode.UpArrow) ||
+                                    InputService.GetKey(KeyCode.DownArrow))
                                     jumpRayDistanceForBoard = 0;
                             }
 
-                            if (GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow) && !isJump && moving.x == 0)
+                            if (InputService.GetKey(KeyCode.RightArrow) && !isJump && moving.x == 0)
                             {
                                 moving = new Vector3(2.15f, moving.y);
                                 isJump = true;
@@ -455,7 +456,7 @@ namespace UCT.Battle
                                 jumpRayDistanceForBoard = 0;
                             }
 
-                            if (isJump && (!GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow) ||
+                            if (isJump && (!InputService.GetKey(KeyCode.RightArrow) ||
                                            (infoF.collider && infoF.collider.gameObject.CompareTag("Box"))) &&
                                 moving.x > 0)
                                 if (infoF.collider &&
@@ -486,32 +487,32 @@ namespace UCT.Battle
                             break;
 
                         case PlayerDirEnum.Right:
-                            if (GameUtilityService.ConvertKeyToControl(KeyCode.X))
+                            if (InputService.GetKey(KeyCode.X))
                                 speedWeightY = SpeedWeight;
                             else
                                 speedWeightY = 1;
                             transform.rotation = Quaternion.Euler(0, 0, 90);
                             Physics2D.gravity = new Vector2(9.8f, 0);
-                            if (GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow))
+                            if (InputService.GetKey(KeyCode.UpArrow))
                                 moving = new Vector3(moving.x, 1);
-                            else if (GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow))
+                            else if (InputService.GetKey(KeyCode.DownArrow))
                                 moving = new Vector3(moving.x, -1);
                             else
                                 moving = new Vector3(moving.x, 0);
-                            if (GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow) &&
-                                GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow))
+                            if (InputService.GetKey(KeyCode.UpArrow) &&
+                                InputService.GetKey(KeyCode.DownArrow))
                                 moving = new Vector3(moving.x, 0);
-                            if (!GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow))
+                            if (!InputService.GetKey(KeyCode.LeftArrow))
                             {
-                                if (!GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow) ||
-                                    !GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow))
+                                if (!InputService.GetKey(KeyCode.UpArrow) ||
+                                    !InputService.GetKey(KeyCode.DownArrow))
                                     jumpRayDistanceForBoard = 0.2f;
-                                if (GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow) ||
-                                    GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow))
+                                if (InputService.GetKey(KeyCode.UpArrow) ||
+                                    InputService.GetKey(KeyCode.DownArrow))
                                     jumpRayDistanceForBoard = 0;
                             }
 
-                            if (GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow) && !isJump && moving.x == 0)
+                            if (InputService.GetKey(KeyCode.LeftArrow) && !isJump && moving.x == 0)
                             {
                                 moving = new Vector3(-2.15f, moving.y);
                                 isJump = true;
@@ -519,7 +520,7 @@ namespace UCT.Battle
                                 jumpRayDistanceForBoard = 0;
                             }
 
-                            if (isJump && (!GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow) ||
+                            if (isJump && (!InputService.GetKey(KeyCode.LeftArrow) ||
                                            (infoF.collider && infoF.collider.gameObject.CompareTag("Box"))) &&
                                 moving.x < -0)
                                 if (infoF.collider &&
@@ -567,34 +568,34 @@ namespace UCT.Battle
             Vector2 dirMoveX = new();
             Vector2 dirMoveY = new();
             bool isMoveX = false, isMoveY = false;
-            if (GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow))
+            if (InputService.GetKey(KeyCode.UpArrow))
             {
                 dirMoveY = Vector2.up;
                 isMoveY = true;
             }
-            else if (GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow))
+            else if (InputService.GetKey(KeyCode.DownArrow))
             {
                 dirMoveY = Vector2.down;
                 isMoveY = true;
             }
 
-            if (GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow) &&
-                GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow))
+            if (InputService.GetKey(KeyCode.UpArrow) &&
+                InputService.GetKey(KeyCode.DownArrow))
                 isMoveY = false;
 
-            if (GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow))
+            if (InputService.GetKey(KeyCode.LeftArrow))
             {
                 dirMoveX = Vector2.left;
                 isMoveX = true;
             }
-            else if (GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow))
+            else if (InputService.GetKey(KeyCode.RightArrow))
             {
                 dirMoveX = Vector2.right;
                 isMoveX = true;
             }
 
-            if (GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow) &&
-                GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow))
+            if (InputService.GetKey(KeyCode.LeftArrow) &&
+                InputService.GetKey(KeyCode.RightArrow))
                 isMoveX = false;
 
             Ray2D rayMoveX = new(transform.position, dirMoveX);
@@ -616,11 +617,11 @@ namespace UCT.Battle
                 var y = (isMoveX || isMoveY) && infoMoveY.collider != null &&
                         (infoMoveY.collider.gameObject.CompareTag("Box") ||
                          infoMoveY.collider.gameObject.CompareTag("board"));
-                if (x && !y && (GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow) ||
-                                GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow)))
+                if (x && !y && (InputService.GetKey(KeyCode.UpArrow) ||
+                                InputService.GetKey(KeyCode.DownArrow)))
                     x = y;
-                if (y && !x && (GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow) ||
-                                GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow)))
+                if (y && !x && (InputService.GetKey(KeyCode.LeftArrow) ||
+                                InputService.GetKey(KeyCode.RightArrow)))
                     y = x;
 
                 isMoving = !(x || y);
@@ -705,7 +706,7 @@ namespace UCT.Battle
                     _dingSpriteRenderer.transform.localScale = Vector3.one;
                     _dingSpriteRenderer.color = aimColor;
                     _changeDingColor = _dingSpriteRenderer
-                        .DOColor(_dingSpriteRenderer.color * new Color(1, 1, 1, 0), inputDingTime)
+                        .DOColor(_dingSpriteRenderer.color * ColorEx.WhiteClear, inputDingTime)
                         .SetEase(Ease.InOutSine);
                     _changeDingScale = _dingSpriteRenderer.transform.DOScale(Vector3.one * 2.5f, inputDingTime)
                         .SetEase(Ease.InOutSine);
@@ -722,7 +723,7 @@ namespace UCT.Battle
 
                     _dingSpriteRenderer.transform.localScale = Vector3.one;
                     _dingSpriteRenderer.color += new Color(0, 0, 0, 1);
-                    _changeDingColor = _dingSpriteRenderer.DOColor(aimColor * new Color(1, 1, 1, 0), inputDingTime)
+                    _changeDingColor = _dingSpriteRenderer.DOColor(aimColor * ColorEx.WhiteClear, inputDingTime)
                         .SetEase(Ease.InOutSine);
                     _changeDingScale = _dingSpriteRenderer.transform.DOScale(Vector3.one * 2.5f, inputDingTime)
                         .SetEase(Ease.InOutSine);

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using DG.Tweening;
+using UCT.Extensions;
 using UnityEngine;
 
 namespace UCT.Battle
@@ -17,28 +18,31 @@ namespace UCT.Battle
         public int myItemRealSelect;
         private Tween _tweenSave;
 
-        //SelectUIController selectUIController;
         private void Awake()
         {
-            //selectUIController = transform.parent.GetComponent<SelectUIController>();
             for (var i = 0; i < transform.childCount; i++)
                 sons.Add(transform.GetChild(i).GetComponent<SpriteRenderer>());
         }
 
         private void Update()
         {
-            if (myItemRealSelect > 0 && sons[0].color.a == 0)
-                DOTween.To(() => sons[0].color, x => sons[0].color = x, new Color(1, 1, 1, 1), 0.15f)
-                    .SetEase(Ease.Linear);
-            else if (myItemRealSelect == 0 && sons[0].color.a > 0)
-                DOTween.To(() => sons[0].color, x => sons[0].color = x, new Color(1, 1, 1, 0), 0.1f)
-                    .SetEase(Ease.Linear);
+            switch (myItemRealSelect)
+            {
+                case > 0 when sons[0].color.a == 0:
+                    DOTween.To(() => sons[0].color, x => sons[0].color = x, Color.white, 0.15f)
+                        .SetEase(Ease.Linear);
+                    break;
+                case 0 when sons[0].color.a > 0:
+                    DOTween.To(() => sons[0].color, x => sons[0].color = x, ColorEx.WhiteClear, 0.1f)
+                        .SetEase(Ease.Linear);
+                    break;
+            }
 
             if (myItemRealSelect < myItemMax - 1 && sons[1].color.a == 0)
-                DOTween.To(() => sons[1].color, x => sons[1].color = x, new Color(1, 1, 1, 1), 0.15f)
+                DOTween.To(() => sons[1].color, x => sons[1].color = x, Color.white, 0.15f)
                     .SetEase(Ease.Linear);
             else if (myItemRealSelect == myItemMax - 1 && sons[1].color.a > 0)
-                DOTween.To(() => sons[1].color, x => sons[1].color = x, new Color(1, 1, 1, 0), 0.1f)
+                DOTween.To(() => sons[1].color, x => sons[1].color = x, ColorEx.WhiteClear, 0.1f)
                     .SetEase(Ease.Linear);
         }
 
@@ -83,11 +87,12 @@ namespace UCT.Battle
             transform.DOLocalMoveX(0.65f, 0.25f).SetEase(Ease.InCirc).OnKill(SetNoActive);
         }
 
-        public void SetNoActive()
+        private void SetNoActive()
         {
             sons[0].color = Color.clear;
             sons[1].color = Color.clear;
-            for (var i = 0; i < sons.Count; i++) sons[i].transform.DOKill();
+            foreach (var t in sons)
+                t.transform.DOKill();
         }
     }
 }

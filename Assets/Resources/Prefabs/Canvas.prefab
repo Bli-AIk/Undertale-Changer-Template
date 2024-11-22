@@ -352,20 +352,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   framePic: 0
   openTurn: 0
-  fps: {fileID: 0}
   frame: {fileID: 0}
-  sprites:
-  - {fileID: 21300000, guid: 9821911d94695b6418f909184b6eae0c, type: 3}
-  - {fileID: 21300000, guid: 27d6bffcc25fff040b20aca58d45ab6a, type: 3}
-  - {fileID: 21300000, guid: 9212e80165bd58f4b9b55228ef4800f7, type: 3}
-  sizes:
-  - {x: 82, y: 14}
-  - {x: 86, y: 14}
-  - {x: 90, y: 14}
-  settingImage: {fileID: 0}
   renderMode: 1
-  settingsLayer: 0
-  freeze: 0
+  isPauseCanvas: 0
   animator: {fileID: 0}
 --- !u!95 &3117339777585656322
 Animator:
@@ -398,8 +387,9 @@ GameObject:
   - component: {fileID: 5854373415983368998}
   - component: {fileID: 5854373415983368996}
   - component: {fileID: 5854373415983368999}
+  - component: {fileID: 1055342486571397759}
   m_Layer: 5
-  m_Name: Exit Image
+  m_Name: ExitImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -463,6 +453,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1055342486571397759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5854373415983368993}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 703db35d338249aca43cd7b91a8773a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5854373416075426445
 GameObject:
   m_ObjectHideFlags: 0
@@ -615,10 +617,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a3ecd31ce8ed72499cbcef45da89694, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 0
+  isUseWidth: 0
   options:
   - {x: -3.8, y: 0, z: 43.5, w: 0}
   - {x: -3.8, y: 0, z: 43.5, w: 0}
+  fontSizes:
+  - 0
+  - 0
+  positions:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
 --- !u!1 &5854373416836213926
 GameObject:
   m_ObjectHideFlags: 0
@@ -725,8 +733,8 @@ MonoBehaviour:
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: -3.8
-  m_wordSpacing: -20.25
-  m_lineSpacing: 20
+  m_wordSpacing: 0
+  m_lineSpacing: 43.5
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -768,10 +776,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a3ecd31ce8ed72499cbcef45da89694, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 0
+  isUseWidth: 0
   options:
   - {x: -3.8, y: 0, z: 43.5, w: 0}
   - {x: -3.8, y: 0, z: 43.5, w: 0}
+  fontSizes:
+  - 0
+  - 0
+  positions:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
 --- !u!1 &5854373417061372363
 GameObject:
   m_ObjectHideFlags: 0
@@ -783,7 +797,7 @@ GameObject:
   - component: {fileID: 5854373417061372360}
   - component: {fileID: 5854373417061372367}
   - component: {fileID: 5854373417061372366}
-  - component: {fileID: 5854373417061372361}
+  - component: {fileID: 5204985286738390826}
   m_Layer: 5
   m_Name: FPS Text
   m_TagString: Untagged
@@ -909,7 +923,7 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
---- !u!114 &5854373417061372361
+--- !u!114 &5204985286738390826
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -918,13 +932,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 5854373417061372363}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a3ecd31ce8ed72499cbcef45da89694, type: 3}
+  m_Script: {fileID: 11500000, guid: 681440e372814503b0f7b34629f6794c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 0
-  options:
-  - {x: -3.8, y: -8.85, z: 0, w: 0}
-  - {x: -7.6, y: -8.85, z: 0, w: 0}
 --- !u!1 &5854373417224920764
 GameObject:
   m_ObjectHideFlags: 0
@@ -1108,7 +1118,7 @@ MonoBehaviour:
   m_textAlignment: 65535
   m_characterSpacing: -3.8
   m_wordSpacing: -20.25
-  m_lineSpacing: 0
+  m_lineSpacing: 20
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
@@ -1150,10 +1160,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a3ecd31ce8ed72499cbcef45da89694, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 0
+  isUseWidth: 0
   options:
   - {x: -3.8, y: -20.25, z: 20, w: 0}
   - {x: -3.8, y: -20.25, z: 20, w: 0}
+  fontSizes:
+  - 0
+  - 0
+  positions:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
 --- !u!1 &5854373417445060955
 GameObject:
   m_ObjectHideFlags: 0

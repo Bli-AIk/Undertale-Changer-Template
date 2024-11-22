@@ -1,5 +1,6 @@
 using System;
 using UCT.Global.Audio;
+using UCT.Global.Settings;
 using UCT.Global.UI;
 using UCT.Overworld;
 using UCT.Service;

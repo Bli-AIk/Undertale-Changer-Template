@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
+using UCT.Extensions;
 using UCT.Global.Core;
 using UCT.Global.UI;
 using UCT.Service;
@@ -42,7 +43,7 @@ namespace UCT.Global.Scene
         {
             if (MainControl.Instance.overworldControl.isSetting || MainControl.Instance.overworldControl.pause)
                 return;
-            if (!GameUtilityService.ConvertKeyDownToControl(KeyCode.Z)) return;
+            if (!InputService.GetKeyDown(KeyCode.Z)) return;
             _typeWritter.TypeStop();
             _tmp.text = "";
             GameUtilityService.FadeOutAndSwitchScene("Start", Color.black);
@@ -51,7 +52,7 @@ namespace UCT.Global.Scene
         public void Fade(int number)
         {
             _picNumber = number;
-            _spriteRenderer.DOColor(new Color(1, 1, 1, 0), 0.5f).SetEase(Ease.Linear).SetLoops(2, LoopType.Yoyo);
+            _spriteRenderer.DOColor(ColorEx.WhiteClear, 0.5f).SetEase(Ease.Linear).SetLoops(2, LoopType.Yoyo);
             Invoke(nameof(ChangePic), 0.5f);
         }
 

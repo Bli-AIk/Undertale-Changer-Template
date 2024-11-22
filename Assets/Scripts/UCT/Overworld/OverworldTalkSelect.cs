@@ -49,7 +49,7 @@ namespace UCT.Overworld
         private void Update()
         {
             if (!_canSelect) return;
-            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.LeftArrow))
+            if (InputService.GetKeyDown(KeyCode.LeftArrow))
             {
                 if (select > 0)
                     select--;
@@ -57,7 +57,7 @@ namespace UCT.Overworld
                 _heart.rectTransform.anchoredPosition = new Vector2(-143.3f + Convert.ToInt32(select) * 192.5f, -18.8f);
                 AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
             }
-            else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.RightArrow))
+            else if (InputService.GetKeyDown(KeyCode.RightArrow))
             {
                 if (select < 1)
                     select++;
@@ -66,7 +66,7 @@ namespace UCT.Overworld
                 AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
             }
 
-            if (!GameUtilityService.ConvertKeyDownToControl(KeyCode.Z)) return;
+            if (!InputService.GetKeyDown(KeyCode.Z)) return;
             _typeWritter.TypeStop();
             switch (select)
             {

@@ -264,7 +264,7 @@ namespace UCT.Global.Scene
 
         private void ConfirmNameUpdate()
         {
-            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
+            if (InputService.GetKeyDown(KeyCode.Z))
                 switch (selectedCharactersId)
                 {
                     case 0:
@@ -311,7 +311,7 @@ namespace UCT.Global.Scene
                     }
                 }
 
-            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.X))
+            if (InputService.GetKeyDown(KeyCode.X))
             {
                 _backspaceTime = 0.25f;
                 sceneState = SceneState.Naming;
@@ -331,8 +331,8 @@ namespace UCT.Global.Scene
                         MainControl.Instance.overworldControl.sceneTextsSave, "Done");
             }
 
-            if (!isSelectedDone || (!GameUtilityService.ConvertKeyDownToControl(KeyCode.LeftArrow) &&
-                                    !GameUtilityService.ConvertKeyDownToControl(KeyCode.RightArrow))) return;
+            if (!isSelectedDone || (!InputService.GetKeyDown(KeyCode.LeftArrow) &&
+                                    !InputService.GetKeyDown(KeyCode.RightArrow))) return;
             if (selectedCharactersId == 0)
             {
                 selectedCharactersId = 1;
@@ -396,7 +396,7 @@ namespace UCT.Global.Scene
                 _isSwitchedAlphabetNum = false;
             }
 
-            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z) && setName.Length <= MaxSetNameLength)
+            if (InputService.GetKeyDown(KeyCode.Z) && setName.Length <= MaxSetNameLength)
             {
                 if (selectedCharactersId < alphabetLength)
                 {
@@ -562,7 +562,7 @@ namespace UCT.Global.Scene
                     }
                 }
             }
-            else if (GameUtilityService.ConvertKeyToControl(KeyCode.X))
+            else if (InputService.GetKey(KeyCode.X))
             {
                 if (_backspaceTime < BackspaceTimeMax)
                 {
@@ -574,12 +574,12 @@ namespace UCT.Global.Scene
                     Backspace();
                 }
             }
-            else if (_backspaceTime < 0.25f && GameUtilityService.ConvertKeyUpToControl(KeyCode.X))
+            else if (_backspaceTime < 0.25f && InputService.GetKeyUp(KeyCode.X))
             {
                 SubAlphabetNum();
             }
 
-            if (GameUtilityService.ConvertKeyToControl(KeyCode.C))
+            if (InputService.GetKey(KeyCode.C))
             {
                 if (_randomSetNameTime < RandomSetNameTimeMax)
                 {
@@ -593,18 +593,18 @@ namespace UCT.Global.Scene
                     AudioController.Instance.GetFx(2, MainControl.Instance.AudioControl.fxClipBattle);
                 }
             }
-            else if (_randomSetNameTime < 0.5f && GameUtilityService.ConvertKeyUpToControl(KeyCode.C))
+            else if (_randomSetNameTime < 0.5f && InputService.GetKeyUp(KeyCode.C))
             {
                 AddAlphabetNum();
             }
 
-            if (!GameUtilityService.ConvertKeyToControl(KeyCode.X))
+            if (!InputService.GetKey(KeyCode.X))
                 _backspaceTime = _backspaceTime > 0 ? _backspaceTime - Time.deltaTime : 0;
-            if (!GameUtilityService.ConvertKeyToControl(KeyCode.C))
+            if (!InputService.GetKey(KeyCode.C))
                 _randomSetNameTime = _randomSetNameTime > 0 ? _randomSetNameTime - Time.deltaTime : 0;
 
             if (breaker) return;
-            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.UpArrow))
+            if (InputService.GetKeyDown(KeyCode.UpArrow))
             {
                 if (selectedCharactersId < MaxCharactersPerLine)
                 {
@@ -675,7 +675,7 @@ namespace UCT.Global.Scene
                 if (selectedCharactersId < 0)
                     selectedCharactersId = alphabetLength + 3;
             }
-            else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.DownArrow))
+            else if (InputService.GetKeyDown(KeyCode.DownArrow))
             {
                 var alphabetLowercaseFix = AlphabetLowercase[alphabetNum].Length < MaxCharactersPerLine
                     ? AlphabetLowercase[alphabetNum].Length
@@ -749,13 +749,13 @@ namespace UCT.Global.Scene
                     selectedCharactersId = 0;
             }
 
-            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.LeftArrow))
+            if (InputService.GetKeyDown(KeyCode.LeftArrow))
             {
                 selectedCharactersId -= 1;
                 if (selectedCharactersId < 0)
                     selectedCharactersId = alphabetLength + 3;
             }
-            else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.RightArrow))
+            else if (InputService.GetKeyDown(KeyCode.RightArrow))
             {
                 selectedCharactersId += 1;
                 if (selectedCharactersId > alphabetLength + 3)
@@ -860,7 +860,7 @@ namespace UCT.Global.Scene
             _textMessage.text =
                 TextProcessingService.GetFirstChildStringByPrefix(
                     MainControl.Instance.overworldControl.sceneTextsSave, "MenuUnder") + Application.version;
-            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z) && setName.Length < MaxSetNameLength)
+            if (InputService.GetKeyDown(KeyCode.Z) && setName.Length < MaxSetNameLength)
                 sceneState = SceneState.Naming;
         }
 

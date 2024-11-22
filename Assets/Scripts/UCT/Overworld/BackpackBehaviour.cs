@@ -79,15 +79,15 @@ namespace UCT.Overworld
                 _informationBox.localPosition.z = BoxZAxisInvisible;
             }
 
-            if ((GameUtilityService.ConvertKeyDownToControl(KeyCode.X) ||
-                 GameUtilityService.ConvertKeyDownToControl(KeyCode.C)) &&
+            if ((InputService.GetKeyDown(KeyCode.X) ||
+                 InputService.GetKeyDown(KeyCode.C)) &&
                 sonSelect == 0)
             {
                 if (_isOpenBackPack) //关闭
                 {
                     BackpackExit();
                 }
-                else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.C)) //开启
+                else if (InputService.GetKeyDown(KeyCode.C)) //开启
                 {
                     AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
                     MainControl.Instance.playerControl.myItems =
@@ -134,7 +134,7 @@ namespace UCT.Overworld
 
             if (_isOpenBackPack && !typeWritter.isTyping)
             {
-                if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
+                if (InputService.GetKeyDown(KeyCode.Z))
                 {
                     MainControl.Instance.playerBehaviour.owTimer = 0.1f;
                     _informationText.transform.localPosition = new Vector3(0.5f, -5.12f, 0);
@@ -261,7 +261,7 @@ namespace UCT.Overworld
                     }
                 }
 
-                if (GameUtilityService.ConvertKeyDownToControl(KeyCode.X) && sonUse != 4)
+                if (InputService.GetKeyDown(KeyCode.X) && sonUse != 4)
                 {
                     if (select == 2 || (select == 1 && sonUse == 0))
                     {
@@ -277,7 +277,7 @@ namespace UCT.Overworld
 
                 if (sonUse != 4)
                 {
-                    if (GameUtilityService.ConvertKeyDownToControl(KeyCode.UpArrow))
+                    if (InputService.GetKeyDown(KeyCode.UpArrow))
                     {
                         if (select > 1 && sonSelect == 0)
                         {
@@ -291,7 +291,7 @@ namespace UCT.Overworld
                             sonSelect -= 1;
                         }
                     }
-                    else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.DownArrow))
+                    else if (InputService.GetKeyDown(KeyCode.DownArrow))
                     {
                         if (select < 2 && sonSelect == 0)
                         {
@@ -307,19 +307,19 @@ namespace UCT.Overworld
                     }
                 }
 
-                if (GameUtilityService.ConvertKeyDownToControl(KeyCode.UpArrow) ||
-                    GameUtilityService.ConvertKeyDownToControl(KeyCode.DownArrow))
+                if (InputService.GetKeyDown(KeyCode.UpArrow) ||
+                    InputService.GetKeyDown(KeyCode.DownArrow))
                     FlashBackpackBoxRightPoint(select == 1 ? ItemBoxY : InfoBoxY);
 
                 if (sonUse != 0)
                 {
-                    if (GameUtilityService.ConvertKeyDownToControl(KeyCode.LeftArrow) && sonUse is > 1 and < 4)
+                    if (InputService.GetKeyDown(KeyCode.LeftArrow) && sonUse is > 1 and < 4)
                     {
                         sonUse -= 1;
 
                         AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
                     }
-                    else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.RightArrow) && sonUse < 3)
+                    else if (InputService.GetKeyDown(KeyCode.RightArrow) && sonUse < 3)
                     {
                         sonUse += 1;
 

@@ -76,8 +76,8 @@ namespace UCT.Overworld
         {
             if (_saveOpen)
             {
-                if (GameUtilityService.ConvertKeyDownToControl(KeyCode.LeftArrow) ||
-                    GameUtilityService.ConvertKeyDownToControl(KeyCode.RightArrow))
+                if (InputService.GetKeyDown(KeyCode.LeftArrow) ||
+                    InputService.GetKeyDown(KeyCode.RightArrow))
                 {
                     _saveSelect = Convert.ToInt32(!Convert.ToBoolean(_saveSelect));
 
@@ -85,7 +85,7 @@ namespace UCT.Overworld
                         new Vector3(-4.225f + _saveSelect * 4.5f, -1.25f, 0);
                 }
 
-                if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
+                if (InputService.GetKeyDown(KeyCode.Z))
                 {
                     switch (_saveSelect)
                     {
@@ -130,7 +130,7 @@ namespace UCT.Overworld
                             goto default;
                     }
                 }
-                else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.X))
+                else if (InputService.GetKeyDown(KeyCode.X))
                 {
                     BackpackBehaviour.Instance.saveHeart.position = new Vector2(10000, 10000);
                     BackpackBehaviour.Instance.saveBox.localPosition = new Vector3(
@@ -143,7 +143,7 @@ namespace UCT.Overworld
             }
 
             //检测相关见PlayerBehaviour
-            if (_isTyping && GameUtilityService.ConvertKeyDownToControl(KeyCode.Z) && !_typeWritter.isRunning) PressZ();
+            if (_isTyping && InputService.GetKeyDown(KeyCode.Z) && !_typeWritter.isRunning) PressZ();
         }
 
         private void PressZ()

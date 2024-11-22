@@ -38,7 +38,7 @@ namespace UCT.Battle
         private void Update()
         {
             if (!_pressZ)
-                if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
+                if (InputService.GetKeyDown(KeyCode.Z))
                 {
                     _pressZ = true;
                     _anim.SetBool("Hit", true);

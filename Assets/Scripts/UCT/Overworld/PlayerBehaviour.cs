@@ -67,7 +67,7 @@ namespace UCT.Overworld
             if (saveOwObj && Mathf.Approximately(BackpackBehaviour.Instance.optionsBox.localPosition.z,
                     BackpackBehaviour.BoxZAxisInvisible))
                 if (saveOwObj.isTriggerMode || (!saveOwObj.isTriggerMode &&
-                                                GameUtilityService.ConvertKeyDownToControl(KeyCode.Z) &&
+                                                InputService.GetKeyDown(KeyCode.Z) &&
                                                 (saveOwObj.playerDir == Vector2.one ||
                                                  Mathf.Approximately(saveOwObj.playerDir.x, animDirectionX) ||
                                                  Mathf.Approximately(saveOwObj.playerDir.y, animDirectionY)) &&
@@ -121,11 +121,11 @@ namespace UCT.Overworld
         private void FixedUpdate()
         {
             float realSpeed;
-            if (GameUtilityService.ConvertKeyToControl(KeyCode.X))
+            if (InputService.GetKey(KeyCode.X))
                 realSpeed = speed * 2;
             else realSpeed = speed;
 
-            animator.SetFloat(Speed, Convert.ToInt32(GameUtilityService.ConvertKeyToControl(KeyCode.X)) + 1);
+            animator.SetFloat(Speed, Convert.ToInt32(InputService.GetKey(KeyCode.X)) + 1);
 
             if (MainControl.Instance.overworldControl.isSetting || MainControl.Instance.overworldControl.pause ||
                 BackpackBehaviour.Instance.select > 0)
@@ -140,30 +140,30 @@ namespace UCT.Overworld
 
             if (MainControl.Instance.playerControl.canMove)
             {
-                if (GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow))
+                if (InputService.GetKey(KeyCode.RightArrow))
                     moveDirectionX = 1;
-                else if (GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow))
+                else if (InputService.GetKey(KeyCode.LeftArrow))
                     moveDirectionX = -1;
                 else moveDirectionX = 0;
 
-                if (GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow) &&
-                    GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow))
+                if (InputService.GetKey(KeyCode.RightArrow) &&
+                    InputService.GetKey(KeyCode.LeftArrow))
                     moveDirectionX = 0;
 
                 if (moveDirectionX != 0)
                     animDirectionX = moveDirectionX;
 
-                if (GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow))
+                if (InputService.GetKey(KeyCode.UpArrow))
                 {
                     moveDirectionY = 1;
-                    if (!GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow) &&
-                        !GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow))
+                    if (!InputService.GetKey(KeyCode.RightArrow) &&
+                        !InputService.GetKey(KeyCode.LeftArrow))
                         animDirectionX = 0;
                 }
-                else if (GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow))
+                else if (InputService.GetKey(KeyCode.DownArrow))
                 {
-                    if (!GameUtilityService.ConvertKeyToControl(KeyCode.RightArrow) &&
-                        !GameUtilityService.ConvertKeyToControl(KeyCode.LeftArrow))
+                    if (!InputService.GetKey(KeyCode.RightArrow) &&
+                        !InputService.GetKey(KeyCode.LeftArrow))
                         animDirectionX = 0;
                     moveDirectionY = -1;
                 }
@@ -179,8 +179,8 @@ namespace UCT.Overworld
                     transform.position.x + realSpeed * Time.deltaTime * moveDirectionX,
                     transform.position.y + realSpeed * Time.deltaTime * moveDirectionY));
 
-                if (GameUtilityService.ConvertKeyToControl(KeyCode.UpArrow) &&
-                    GameUtilityService.ConvertKeyToControl(KeyCode.DownArrow) &&
+                if (InputService.GetKey(KeyCode.UpArrow) &&
+                    InputService.GetKey(KeyCode.DownArrow) &&
                     MainControl.Instance.playerControl.isDebug) 
                 {
                     //一个让玩家开杀戮光环的彩蛋

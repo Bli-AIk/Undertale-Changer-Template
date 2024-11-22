@@ -4,6 +4,7 @@ using TMPro;
 using UCT.Control;
 using UCT.Global.Audio;
 using UCT.Global.Core;
+using UCT.Global.Settings;
 using UCT.Global.UI;
 using UCT.Service;
 using UnityEngine;
@@ -61,12 +62,12 @@ namespace UCT.Global.Scene
             if (_overworldControl.isSetting || _overworldControl.pause)
                 return;
 
-            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.LeftArrow))
+            if (InputService.GetKeyDown(KeyCode.LeftArrow))
                 _select--;
-            else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.UpArrow)) _select -= 2;
-            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.RightArrow))
+            else if (InputService.GetKeyDown(KeyCode.UpArrow)) _select -= 2;
+            if (InputService.GetKeyDown(KeyCode.RightArrow))
                 _select++;
-            else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.DownArrow)) _select += 2;
+            else if (InputService.GetKeyDown(KeyCode.DownArrow)) _select += 2;
             if (_select < 0 + 2 * Convert.ToInt32(_setData))
             {
                 if (_select % 2 != 0)
@@ -84,13 +85,13 @@ namespace UCT.Global.Scene
 
             if (_setData && _select == 2 && saveNumber == 0) _select = _select % 2 == 0 ? 3 : 4;
 
-            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.UpArrow) ||
-                GameUtilityService.ConvertKeyDownToControl(KeyCode.DownArrow) ||
-                GameUtilityService.ConvertKeyDownToControl(KeyCode.LeftArrow) ||
-                GameUtilityService.ConvertKeyDownToControl(KeyCode.RightArrow))
+            if (InputService.GetKeyDown(KeyCode.UpArrow) ||
+                InputService.GetKeyDown(KeyCode.DownArrow) ||
+                InputService.GetKeyDown(KeyCode.LeftArrow) ||
+                InputService.GetKeyDown(KeyCode.RightArrow))
                 Flash();
 
-            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
+            if (InputService.GetKeyDown(KeyCode.Z))
             {
                 if (!_setData)
                     switch (_select)
@@ -109,8 +110,8 @@ namespace UCT.Global.Scene
                             break;
 
                         case 3:
-                            CanvasController.Instance.settingsLayer =
-                                CanvasController.SettingsLayer.LanguageConfiguration;
+                            CanvasController.Instance.SetSettingsLayer(CanvasController.SettingsLayer
+                                .LanguageConfiguration);
                             goto case 2;
                         case 4:
                             _setData = true;
@@ -189,7 +190,7 @@ namespace UCT.Global.Scene
                             break;
                     }
             }
-            else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.X) && _setData)
+            else if (InputService.GetKeyDown(KeyCode.X) && _setData)
             {
                 _setData = false;
                 Flash();

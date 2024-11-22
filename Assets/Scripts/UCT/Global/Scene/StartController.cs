@@ -52,7 +52,7 @@ namespace UCT.Global.Scene
                 _textMessage.DOColor(Color.white, 0.5f).SetEase(Ease.Linear);
             }
 
-            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
+            if (InputService.GetKeyDown(KeyCode.Z))
                 switch (_layer)
                 {
                     case 0:

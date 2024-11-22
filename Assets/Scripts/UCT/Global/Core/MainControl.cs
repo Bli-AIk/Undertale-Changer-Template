@@ -6,6 +6,8 @@ using Debug;
 using DG.Tweening;
 using UCT.Battle;
 using UCT.Control;
+using UCT.Extensions;
+using UCT.Global.Settings;
 using UCT.Global.UI;
 using UCT.Overworld;
 using UCT.Service;
@@ -131,8 +133,8 @@ namespace UCT.Global.Core
                     sceneSwitchingFadeImage.DOColor(Color.clear, 0.5f).SetEase(Ease.Linear)
                         .OnKill(() => overworldControl.pause = false);
                     CanvasController.Instance.frame.color = overworldControl.isUsingHDFrame
-                        ? new Color(1, 1, 1, 1)
-                        : new Color(1, 1, 1, 0);
+                        ? Color.white
+                        : ColorEx.WhiteClear;
                 }
                 else
                 {
@@ -218,7 +220,7 @@ namespace UCT.Global.Core
             if (overworldControl == null)
             {
                 overworldControl = Resources.Load<OverworldControl>("OverworldControl");
-                overworldControl.KeyCodes = GameUtilityService.ApplyDefaultControl();
+                overworldControl.KeyCodes = InputService.ApplyDefaultControl();
             }
 
 
@@ -337,18 +339,18 @@ namespace UCT.Global.Core
         /// </summary>
         private void UpdateSettings()
         {
-            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Tab))
+            if (InputService.GetKeyDown(KeyCode.Tab))
                 overworldControl.resolutionLevel =
                     GameUtilityService.UpdateResolutionSettings(overworldControl.isUsingHDFrame,
                         overworldControl.resolutionLevel);
-            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Semicolon))
+            if (InputService.GetKeyDown(KeyCode.Semicolon))
             {
                 overworldControl.noSfx = !overworldControl.noSfx;
                 GameUtilityService.ToggleAllSfx(overworldControl.noSfx);
             }
 
             // ReSharper disable once InvertIf
-            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.F4))
+            if (InputService.GetKeyDown(KeyCode.F4))
             {
                 overworldControl.fullScreen = !overworldControl.fullScreen;
                 GameUtilityService.SetResolution(overworldControl.resolutionLevel);

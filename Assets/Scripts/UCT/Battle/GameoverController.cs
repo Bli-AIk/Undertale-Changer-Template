@@ -48,14 +48,14 @@ namespace UCT.Battle
 
         private void Update()
         {
-            if (!_typeWritter.isTyping && GameUtilityService.ConvertKeyDownToControl(KeyCode.Z) && canChangeScene)
+            if (!_typeWritter.isTyping && InputService.GetKeyDown(KeyCode.Z) && canChangeScene)
             {
                 _textOptions.text = "";
                 GameUtilityService.FadeOutAndSwitchScene("Example-Corridor", Color.black, true, 2);
                 canChangeScene = false;
             }
 
-            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.C) && canChangeSceneForC)
+            if (InputService.GetKeyDown(KeyCode.C) && canChangeSceneForC)
             {
                 GameUtilityService.FadeOutAndSwitchScene("Example-Corridor", Color.black, true);
                 _typeWritter.TypeStop();

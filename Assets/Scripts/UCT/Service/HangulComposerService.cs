@@ -2,6 +2,9 @@
 
 namespace UCT.Service
 {
+    /// <summary>
+    ///     韩语拼写相关函数
+    /// </summary>
     public static class HangulComposerService
     {
         // 定义韩语的初声、中声、终声字母表

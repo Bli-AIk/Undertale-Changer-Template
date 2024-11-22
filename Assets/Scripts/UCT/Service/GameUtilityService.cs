@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using DG.Tweening;
 using TMPro;
 using UCT.Battle;
+using UCT.Extensions;
 using UCT.Global.Audio;
 using UCT.Global.Core;
+using UCT.Global.Settings;
 using UCT.Global.UI;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
@@ -67,8 +68,8 @@ namespace UCT.Service
                         MainControl.Instance.cameraMainInBattle.rect = new Rect(0, 0, 1, 1);
 
                 CanvasController.Instance.DOKill();
-                CanvasController.Instance.fps.rectTransform.anchoredPosition = new Vector2();
-                CanvasController.Instance.frame.color = new Color(1, 1, 1, 0);
+                //CanvasController.Instance.fps.rectTransform.anchoredPosition = new Vector2();
+                CanvasController.Instance.frame.color = ColorEx.WhiteClear;
             }
             else
             {
@@ -83,15 +84,16 @@ namespace UCT.Service
                 if (CanvasController.Instance.framePic < 0)
                 {
                     CanvasController.Instance.frame.color = Color.black;
-                    CanvasController.Instance.fps.rectTransform.anchoredPosition = new Vector2(0, -30f);
+                    //CanvasController.Instance.fps.rectTransform.anchoredPosition = new Vector2(0, -30f);
                 }
+                /*
                 else
                 {
-                    CanvasController.Instance.fps.rectTransform.anchoredPosition = new Vector2();
+                    //CanvasController.Instance.fps.rectTransform.anchoredPosition = new Vector2();
                 }
-
+                */
                 CanvasController.Instance.frame.DOColor(
-                    new Color(1, 1, 1, 1) * Convert.ToInt32(CanvasController.Instance.framePic >= 0), 1f);
+                    Color.white * Convert.ToInt32(CanvasController.Instance.framePic >= 0), 1f);
             }
 
 
@@ -125,7 +127,7 @@ namespace UCT.Service
         public static void FadeOutToWhiteAndSwitchScene(string scene)
         {
             MainControl.Instance.isSceneSwitching = true;
-            MainControl.Instance.sceneSwitchingFadeImage.color = new Color(1, 1, 1, 0);
+            MainControl.Instance.sceneSwitchingFadeImage.color = ColorEx.WhiteClear;
             AudioController.Instance.GetFx(6, MainControl.Instance.AudioControl.fxClipUI);
             MainControl.Instance.sceneSwitchingFadeImage.DOColor(Color.white, 5.5f).SetEase(Ease.Linear)
                 .OnKill(() => SwitchScene(scene));
@@ -168,7 +170,7 @@ namespace UCT.Service
                     MainControl.Instance.sceneSwitchingFadeImage.DOColor(fadeColor, fadeTime).SetEase(Ease.Linear)
                         .OnKill(() => SwitchScene(scene));
                     if (!MainControl.Instance.overworldControl.isUsingHDFrame)
-                        CanvasController.Instance.frame.color = new Color(1, 1, 1, 0);
+                        CanvasController.Instance.frame.color = ColorEx.WhiteClear;
                     break;
                 }
                 case 0:
@@ -182,7 +184,7 @@ namespace UCT.Service
                     MainControl.Instance.sceneSwitchingFadeImage.DOColor(fadeColor, fadeTime).SetEase(Ease.Linear)
                         .OnKill(() => SwitchScene(scene));
                     if (!MainControl.Instance.overworldControl.isUsingHDFrame)
-                        CanvasController.Instance.frame.color = new Color(1, 1, 1, 0);
+                        CanvasController.Instance.frame.color = ColorEx.WhiteClear;
                     break;
                 }
             }
@@ -333,115 +335,6 @@ namespace UCT.Service
                     MainControl.Instance.playerControl.wearArmor);
 
             AudioController.Instance.GetFx(3, MainControl.Instance.AudioControl.fxClipUI);
-        }
-
-        /// <summary>
-        ///     传入默认KeyCode并转换为游戏内键位。
-        /// </summary>
-        public static bool ConvertKeyDownToControl(KeyCode key)
-        {
-            var keyCodes = MainControl.Instance.overworldControl.KeyCodes;
-            return key switch
-            {
-                KeyCode.DownArrow => GetKeyDownFrom(keyCodes, 0),
-                KeyCode.RightArrow => GetKeyDownFrom(keyCodes, 1),
-                KeyCode.UpArrow => GetKeyDownFrom(keyCodes, 2),
-                KeyCode.LeftArrow => GetKeyDownFrom(keyCodes, 3),
-                KeyCode.Z => GetKeyDownFrom(keyCodes, 4),
-                KeyCode.X => GetKeyDownFrom(keyCodes, 5),
-                KeyCode.C => GetKeyDownFrom(keyCodes, 6),
-                KeyCode.V => GetKeyDownFrom(keyCodes, 7),
-                KeyCode.F4 => GetKeyDownFrom(keyCodes, 8),
-                KeyCode.Tab => GetKeyDownFrom(keyCodes, 9),
-                KeyCode.Semicolon => GetKeyDownFrom(keyCodes, 10),
-                KeyCode.Escape => GetKeyDownFrom(keyCodes, 11),
-                _ => false
-            };
-        }
-
-        private static bool GetKeyDownFrom(List<KeyCode>[] keyCodes, int index)
-        {
-            return keyCodes.Any(keyCode => Input.GetKeyDown(keyCode[index]));
-        }
-
-        public static bool ConvertKeyToControl(KeyCode key)
-        {
-            var keyCodes = MainControl.Instance.overworldControl.KeyCodes;
-            return key switch
-            {
-                KeyCode.DownArrow => GetKeyFrom(keyCodes, 0),
-                KeyCode.RightArrow => GetKeyFrom(keyCodes, 1),
-                KeyCode.UpArrow => GetKeyFrom(keyCodes, 2),
-                KeyCode.LeftArrow => GetKeyFrom(keyCodes, 3),
-                KeyCode.Z => GetKeyFrom(keyCodes, 4),
-                KeyCode.X => GetKeyFrom(keyCodes, 5),
-                KeyCode.C => GetKeyFrom(keyCodes, 6),
-                KeyCode.V => GetKeyFrom(keyCodes, 7),
-                KeyCode.F4 => GetKeyFrom(keyCodes, 8),
-                KeyCode.Tab => GetKeyFrom(keyCodes, 9),
-                KeyCode.Semicolon => GetKeyFrom(keyCodes, 10),
-                KeyCode.Escape => GetKeyFrom(keyCodes, 11),
-                _ => false
-            };
-        }
-
-        private static bool GetKeyFrom(List<KeyCode>[] keyCodes, int index)
-        {
-            return keyCodes.Any(keyCode => Input.GetKey(keyCode[index]));
-        }
-
-        public static bool ConvertKeyUpToControl(KeyCode key)
-        {
-            var keyCodes = MainControl.Instance.overworldControl.KeyCodes;
-            return key switch
-            {
-                KeyCode.DownArrow => GetKeyUpFrom(keyCodes, 0),
-                KeyCode.RightArrow => GetKeyUpFrom(keyCodes, 1),
-                KeyCode.UpArrow => GetKeyUpFrom(keyCodes, 2),
-                KeyCode.LeftArrow => GetKeyUpFrom(keyCodes, 3),
-                KeyCode.Z => GetKeyUpFrom(keyCodes, 4),
-                KeyCode.X => GetKeyUpFrom(keyCodes, 5),
-                KeyCode.C => GetKeyUpFrom(keyCodes, 6),
-                KeyCode.V => GetKeyUpFrom(keyCodes, 7),
-                KeyCode.F4 => GetKeyUpFrom(keyCodes, 8),
-                KeyCode.Tab => GetKeyUpFrom(keyCodes, 9),
-                KeyCode.Semicolon => GetKeyUpFrom(keyCodes, 10),
-                KeyCode.Escape => GetKeyUpFrom(keyCodes, 11),
-                _ => false
-            };
-        }
-
-        private static bool GetKeyUpFrom(List<KeyCode>[] keyCodes, int index)
-        {
-            return keyCodes.Any(keyCode => Input.GetKeyUp(keyCode[index]));
-        }
-
-        /// <summary>
-        ///     应用默认键位
-        /// </summary>
-        public static List<KeyCode>[] ApplyDefaultControl()
-        {
-            var keyCodes = new List<KeyCode>[3];
-            keyCodes[0] = new List<KeyCode>
-            {
-                KeyCode.DownArrow, KeyCode.RightArrow, KeyCode.UpArrow, KeyCode.LeftArrow,
-                KeyCode.Z, KeyCode.X, KeyCode.C, KeyCode.V,
-                KeyCode.F4, KeyCode.None, KeyCode.None, KeyCode.Escape
-            };
-            keyCodes[1] = new List<KeyCode>
-            {
-                KeyCode.S, KeyCode.D, KeyCode.W, KeyCode.A,
-                KeyCode.Return, KeyCode.RightShift, KeyCode.RightControl, KeyCode.None,
-                KeyCode.None, KeyCode.None, KeyCode.None, KeyCode.None
-            };
-            keyCodes[2] = new List<KeyCode>
-            {
-                KeyCode.None, KeyCode.None, KeyCode.None, KeyCode.None,
-                KeyCode.None, KeyCode.LeftShift, KeyCode.LeftControl, KeyCode.None,
-                KeyCode.None, KeyCode.None, KeyCode.None, KeyCode.None
-            };
-
-            return keyCodes;
         }
 
         public static Color GetRandomColor()

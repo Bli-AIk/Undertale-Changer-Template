@@ -8,6 +8,7 @@ using UCT.Control;
 using UCT.Global.Audio;
 using UCT.Global.Core;
 using UCT.Global.Scene;
+using UCT.Global.Settings;
 using UCT.Overworld;
 using UCT.Service;
 using UnityEngine;
@@ -90,7 +91,7 @@ namespace UCT.Global.UI
 
             if (clockTime > 0)
                 clockTime -= Time.deltaTime;
-            if (!isRunning && !passText && !isTyping && GameUtilityService.ConvertKeyDownToControl(KeyCode.Z) &&
+            if (!isRunning && !passText && !isTyping && InputService.GetKeyDown(KeyCode.Z) &&
                 _typeMode != TypeMode.CantZx)
             {
                 if (spriteChanger != null)
@@ -99,9 +100,9 @@ namespace UCT.Global.UI
                     _canvasAnim.SetBool(Open, true);
             }
 
-            if (passText && GameUtilityService.ConvertKeyDownToControl(KeyCode.Z) && _typeMode != TypeMode.CantZx)
+            if (passText && InputService.GetKeyDown(KeyCode.Z) && _typeMode != TypeMode.CantZx)
                 PassText("<passText>");
-            else if (!(pressX || _isJumpingText) && !canNotX && GameUtilityService.ConvertKeyDownToControl(KeyCode.X) &&
+            else if (!(pressX || _isJumpingText) && !canNotX && InputService.GetKeyDown(KeyCode.X) &&
                      _typeMode != TypeMode.CantZx) //跳字
                 if (clock != 0 && clockTime <= 0)
                     pressX = true;
