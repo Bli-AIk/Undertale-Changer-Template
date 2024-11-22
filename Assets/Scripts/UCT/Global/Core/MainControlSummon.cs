@@ -1,10 +1,12 @@
 using System;
+using Alchemy.Inspector;
 using UCT.Global.Audio;
 using UCT.Global.Settings;
 using UCT.Global.UI;
 using UCT.Overworld;
 using UCT.Service;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UCT.Global.Core
 {
@@ -15,29 +17,39 @@ namespace UCT.Global.Core
     /// </summary>
     public class MainControlSummon : MonoBehaviour
     {
-        [Header("-OWCamera设置-")] public bool isCameraLimit;
-
+        [TabGroup("MainControlSummon","OWCamera")]
+        public bool isCameraLimit;
+        [TabGroup("MainControlSummon","OWCamera")]
         public bool isCameraFollow;
+        [TabGroup("MainControlSummon","OWCamera")]
         public Vector2 cameraLimitX; //限制摄像机最大XY范围 0则不动
+        [TabGroup("MainControlSummon","OWCamera")]
         public Vector2 cameraLimitY; //限制摄像机最大XY范围 0则不动
 
-        [Header("-Canvas设置-")] public RenderMode renderMode;
-
-        public int framePic;
-
-        [Space] [Header("-BGMControl设置-")] [Space] [Header("BGM本体音频 空为无音频")]
+        [TabGroup("MainControlSummon","Canvas")]
+        public RenderMode renderMode;
+        [TabGroup("MainControlSummon","Canvas")]
+        [FormerlySerializedAs("framePic")] 
+        public int frameSpriteIndex;
+      
+        [TabGroup("MainControlSummon","BGMControl")]
+        [Title("BGM本体音频 空为无音频")]
         public AudioClip bgmClip;
+        [TabGroup("MainControlSummon","BGMControl")]
+        [Title("BGM音量")] public float volume = 0.5f;
+        [TabGroup("MainControlSummon","BGMControl")]
+        [Title("BGM音调")] public float pitch = 0.5f;
+        [TabGroup("MainControlSummon","BGMControl")]
+        [Title("BGM循环播放初始状态")] public bool loop = true;
 
-        [Header("BGM音量")] public float volume = 0.5f;
-
-        [Header("BGM音调")] public float pitch = 0.5f;
-
-        [Header("BGM循环播放初始状态")] public bool loop = true;
-
-        [Header("-MainControl设置-")] [Space] [Header("黑场状态相关")]
+        [TabGroup("MainControlSummon","MainControl")]
+        [Title("黑场状态相关")]
         public MainControl.SceneState sceneState;
-
-        public bool haveInOutBlack, noInBlack;
+        [TabGroup("MainControlSummon","MainControl")]
+        public bool haveInOutBlack;
+        [TabGroup("MainControlSummon","MainControl")]
+        public bool noInBlack;
+        [TabGroup("MainControlSummon","MainControl")]
         public bool notPauseIn;
 
         private void Awake()
@@ -102,9 +114,8 @@ namespace UCT.Global.Core
 
         private void CanvasSetup()
         {
-            CanvasController.Instance.framePic = framePic;
+            CanvasController.Instance.frameSpriteIndex = frameSpriteIndex;
             CanvasController.Instance.renderMode = renderMode;
-            CanvasController.Instance.openTurn = sceneState == MainControl.SceneState.InBattle;
         }
 
         private void ExistingAudioSetup()

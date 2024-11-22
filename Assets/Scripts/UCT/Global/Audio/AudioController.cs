@@ -18,13 +18,13 @@ namespace UCT.Global.Audio
         {
             Instance = this;
 
-            obj = new GameObject();
-            var audioPlayer = obj.AddComponent<AudioPlayer>();
-            audioPlayer.audioSource = obj.AddComponent<AudioSource>();
+            poolObject = new GameObject();
+            var audioPlayer = poolObject.AddComponent<AudioPlayer>();
+            audioPlayer.audioSource = poolObject.AddComponent<AudioSource>();
 
-            obj.gameObject.name = "FX Source";
-            obj.SetActive(false);
-            FillPool();
+            poolObject.gameObject.name = "FX Source";
+            poolObject.SetActive(false);
+            FillPool<AudioPlayer>();
             audioSource = GetComponent<AudioSource>();
         }
 
@@ -39,9 +39,10 @@ namespace UCT.Global.Audio
         {
             if (fxNumber < 0)
                 return;
-            var fx = GetFromPool();
-            fx.GetComponent<AudioSource>().volume = volume;
-            fx.GetComponent<AudioSource>().pitch = pitch;
+            var fxAudioPlayer = GetFromPool<AudioPlayer>();
+            var fxAudioSource = fxAudioPlayer.audioSource;
+            fxAudioSource.volume = volume;
+            fxAudioSource.pitch = pitch;
             if (audioMixerGroup == default)
             {
                 if (list == MainControl.Instance.AudioControl.fxClipUI)
@@ -57,9 +58,8 @@ namespace UCT.Global.Audio
                         MainControl.Instance.AudioControl.globalAudioMixer.FindMatchingGroups("FX/Type")[0];
             }
 
-            fx.GetComponent<AudioSource>().outputAudioMixerGroup = audioMixerGroup;
-            //AudioPlayer是字类！！不是unity自带的
-            fx.GetComponent<AudioPlayer>().Playing(list[fxNumber]);
+            fxAudioSource.outputAudioMixerGroup = audioMixerGroup;
+            fxAudioPlayer.Playing(list[fxNumber]);
         }
 
         public IEnumerator LayerGetFx(float time, int fxNumber, List<AudioClip> list, float volume = 0.5f,

@@ -81,7 +81,7 @@ ControlSemicolon\VFX;
 ControlEsc\Exit game;
 ControlDefault\Reset to default;
 
-ControlEggshell\~Dudu Dudu Dudu~;
+ControlBottomText\~I'm setttttttttting!~;
 
 ControlUnder0\In the main key position setting, press C to set the auxiliary key position.;
 ControlUnder1\Auxiliary key 1 is being set. Press C to set auxiliary key 2.;

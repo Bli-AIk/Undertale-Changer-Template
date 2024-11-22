@@ -195,7 +195,7 @@ namespace UCT.Global.UI
         {
             ClearComponentsData();
 
-            BoxController.Instance.ReturnPool(gameObject);
+            BoxController.Instance.ReturnPool(gameObject, this);
             BoxController.Instance.boxes.Remove(this);
             var boxController = BoxController.Instance.transform;
 

@@ -15,6 +15,7 @@ using UCT.Global.UI;
 using UCT.Service;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace UCT.Global.Settings
@@ -26,7 +27,7 @@ namespace UCT.Global.Settings
     public class CanvasController : MonoBehaviour
     {
         public static CanvasController Instance;
-        
+
         public enum SettingsLayer
         {
             Home, //主层级
@@ -35,52 +36,44 @@ namespace UCT.Global.Settings
         }
 
         private const int SettingSelectMax = 7;
-
         private const float AnimSpeed = 0.25f;
-
-
         private static readonly int Open = Animator.StringToHash("Open");
-        public int framePic;
-        public bool openTurn; //敌人回合不能开
-        public Image frame;
-        private Canvas _canvas;
 
+        [FormerlySerializedAs("framePic")]
+        public int frameSpriteIndex;
 
-        private Image _settingPageBackground;
         [ReadOnly]
         public RenderMode renderMode;
+        [ShowInInspector][ReadOnly] 
+        private bool _isPauseCanvas; //防止切场景时整事儿
+        public Image Frame { get; private set; }
+        public Animator Animator { get; private set; }
 
+        private static OverworldControl _overworldControl;
+        private Canvas _canvas;
+        private Image _settingPageBackground;
         private SettingsLayer _settingsLayer;
-
-        [HideInInspector] 
-        public bool isPauseCanvas; //防止切场景时整事儿
-        [HideInInspector]
-        public Animator animator;
-
         private bool _isSettingKey;
         private bool _isSettingName; //是否选中
-
         private KeyMapping _keyMapping;
-
-        private int _settingKeyPage; 
+        private int _settingKeyPage;
         private int _languagePackSelectMax; //目前 Max仅用于配置语言包
-        
         private float _saveVolume;
         private int _settingSelect;
         private Image _settingSoul;
-        private TextMeshProUGUI _settingTmp, _settingTmpSon, _settingTmpUnder;
+        private TextMeshProUGUI _settingTmp, _settingTmpSon, _settingTmpBottom;
 
         private void Awake()
         {
             Instance = this;
-            animator = GetComponent<Animator>();
+            Animator = GetComponent<Animator>();
             _canvas = GetComponent<Canvas>();
             _settingPageBackground = transform.Find("Setting").GetComponent<Image>();
             _settingTmp = transform.Find("Setting/Setting Text").GetComponent<TextMeshProUGUI>();
             _settingTmpSon = _settingTmp.transform.Find("Setting Son").GetComponent<TextMeshProUGUI>();
             _settingSoul = _settingTmp.transform.Find("Soul").GetComponent<Image>();
-            _settingTmpUnder = _settingTmp.transform.Find("Setting Under").GetComponent<TextMeshProUGUI>();
-            frame = transform.Find("Frame").GetComponent<Image>();
+            _settingTmpBottom = _settingTmp.transform.Find("Setting Under").GetComponent<TextMeshProUGUI>();
+            Frame = transform.Find("Frame").GetComponent<Image>();
         }
 
         public void Start()
@@ -89,346 +82,138 @@ namespace UCT.Global.Settings
             _settingPageBackground.color = Color.clear;
             _settingTmp.color = ColorEx.WhiteClear;
             _settingTmpSon.color = ColorEx.WhiteClear;
-            _settingTmpUnder.color = ColorEx.WhiteClear;
-            _settingSoul.color = new Color(1, 0, 0, 0);
-            isPauseCanvas = false;
+            _settingTmpBottom.color = ColorEx.WhiteClear;
+            _settingSoul.color = ColorEx.RedClear;
+            _isPauseCanvas = false;
 
             _canvas.renderMode = renderMode;
 
             if (_canvas.renderMode == RenderMode.ScreenSpaceCamera)
                 _canvas.worldCamera = Camera.main;
-
+            if (!_overworldControl)
+                _overworldControl = MainControl.Instance.overworldControl;
 
             UpdateSettingDisplay();
         }
 
         private void Update()
         {
-            if (isPauseCanvas) return;
-
+            if (_isPauseCanvas) return;
+            if (IsSettingKey()) return;
+            if (IsInBattleAndNotMyTurn()) return;
+            if (IsInScene("Story")) return;
+            
             // 设置菜单
-            if (_isSettingKey)
+            if (InputService.GetKeyDown(KeyCode.V) &&
+                !_overworldControl.isSetting && !MainControl.Instance.isSceneSwitching)
             {
-                UpdateSettingKey();
-                return;
+                TypeWritter.TypePause(true);
+                OpenSetting();
             }
 
-            if ((openTurn && TurnController.Instance && TurnController.Instance.isMyTurn) || !openTurn)
-                if (SceneManager.GetActiveScene().name != "Story" &&
-                    InputService.GetKeyDown(KeyCode.V) &&
-                    !MainControl.Instance.overworldControl.isSetting &&
-                    !MainControl.Instance.isSceneSwitching)
-                {
-                    TypeWritter.TypePause(true);
-                    OpenSetting();
-                }
-
-            if (!MainControl.Instance.overworldControl.isSetting) return;
-
+            if (!_overworldControl.isSetting) return;
             _settingSoul.rectTransform.anchoredPosition = new Vector2(-225f, 147.5f + _settingSelect * -37.5f);
-
             if (!(_settingPageBackground.color.a > 0.7)) return;
+
             switch (_settingsLayer)
             {
                 case SettingsLayer.Home:
-                {
-                    if (!_isSettingName)
-                    {
-                        if (InputService.GetKeyDown(KeyCode.DownArrow))
-                        {
-                            AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
-                            _settingSelect++;
-                            if (_settingSelect > SettingSelectMax)
-                                _settingSelect = 0;
-                        }
-                        else if (InputService.GetKeyDown(KeyCode.UpArrow))
-                        {
-                            AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
-                            _settingSelect--;
-                            if (_settingSelect < 0)
-                                _settingSelect = SettingSelectMax;
-                        }
-                    }
-                    else
-                    {
-                        if (InputService.GetKey(KeyCode.LeftArrow) ||
-                            InputService.GetKeyDown(KeyCode.DownArrow))
-                        {
-                            if (MainControl.Instance.overworldControl.mainVolume > 0)
-                            {
-                                AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
-                                MainControl.Instance.overworldControl.mainVolume -= 0.01f;
-                                AudioListener.volume = MainControl.Instance.overworldControl.mainVolume;
-                            }
-
-                            UpdateSettingDisplay(false, true);
-                        }
-                        else if (InputService.GetKey(KeyCode.RightArrow) ||
-                                 InputService.GetKeyDown(KeyCode.UpArrow))
-                        {
-                            if (MainControl.Instance.overworldControl.mainVolume < 1)
-                            {
-                                AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
-                                MainControl.Instance.overworldControl.mainVolume += 0.01f;
-                                AudioListener.volume = MainControl.Instance.overworldControl.mainVolume;
-                            }
-
-                            UpdateSettingDisplay(false, true);
-                        }
-                    }
-
-                    if (InputService.GetKeyDown(KeyCode.Z))
-                    {
-                        AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
-                        if (!_isSettingName)
-                        {
-                            switch (_settingSelect)
-                            {
-                                case 0:
-                                    _saveVolume = MainControl.Instance.overworldControl.mainVolume;
-                                    _isSettingName = true;
-                                    UpdateSettingDisplay(false, true);
-                                    break;
-
-                                case 1:
-                                    _settingsLayer = SettingsLayer.KeyConfiguration;
-                                    UpdateSettingDisplay();
-                                    _settingSelect = 0;
-                                    break;
-
-                                case 2:
-                                    MainControl.Instance.overworldControl.fullScreen =
-                                        !MainControl.Instance.overworldControl.fullScreen;
-                                    GameUtilityService.SetResolution(MainControl.Instance.overworldControl
-                                        .resolutionLevel);
-
-                                    goto default;
-                                case 3:
-                                    MainControl.Instance.overworldControl.resolutionLevel =
-                                        GameUtilityService.UpdateResolutionSettings(
-                                            MainControl.Instance.overworldControl.isUsingHDFrame,
-                                            MainControl.Instance.overworldControl.resolutionLevel);
-                                    goto default;
-                                case 4:
-                                    MainControl.Instance.overworldControl.noSfx =
-                                        !MainControl.Instance.overworldControl.noSfx;
-                                    GameUtilityService.ToggleAllSfx(MainControl.Instance.overworldControl.noSfx);
-                                    PlayerPrefs.SetInt("noSFX",
-                                        Convert.ToInt32(MainControl.Instance.overworldControl.noSfx));
-                                    goto default;
-                                case 5:
-                                    MainControl.Instance.overworldControl.openFPS =
-                                        !MainControl.Instance.overworldControl.openFPS;
-                                    goto default;
-                                case 6:
-                                    if (SceneManager.GetActiveScene().name == "Rename")
-                                        return;
-                                    if (SceneManager.GetActiveScene().name == "Menu")
-                                        goto case 7;
-                                    GameUtilityService.FadeOutAndSwitchScene("Menu", Color.black, true, AnimSpeed);
-                                    MainControl.Instance.overworldControl.isSetting = false;
-                                    TypeWritter.TypePause(false);
-                                    isPauseCanvas = true;
-                                    break;
-                                case 7:
-                                    ExitSetting();
-                                    break;
-
-                                default:
-                                    UpdateSettingDisplay();
-                                    break;
-                            }
-                        }
-                        else
-                        {
-                            UpdateSettingDisplay();
-                            _isSettingName = false;
-                        }
-                    }
-                    else if (SceneManager.GetActiveScene().name != "Story" &&
-                             (InputService.GetKeyDown(KeyCode.X) ||
-                              InputService.GetKeyDown(KeyCode.V)))
-                    {
-                        if (!_isSettingName)
-                        {
-                            ExitSetting();
-                        }
-                        else
-                        {
-                            MainControl.Instance.overworldControl.mainVolume = _saveVolume;
-                            AudioListener.volume = MainControl.Instance.overworldControl.mainVolume;
-                            UpdateSettingDisplay();
-                            _isSettingName = false;
-                        }
-                    }
-                    else if (InputService.GetKeyDown(KeyCode.C))
-                    {
-                        if (!_isSettingName)
-                            switch (_settingSelect)
-                            {
-                                case 2:
-                                {
-                                    AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
-                                    if ((int)MainControl.Instance.overworldControl.vsyncMode < 2)
-                                        MainControl.Instance.overworldControl.vsyncMode++;
-                                    else
-                                        MainControl.Instance.overworldControl.vsyncMode =
-                                            OverworldControl.VSyncMode.DonNotSync;
-
-                                    PlayerPrefs.SetInt("vsyncMode",
-                                        Convert.ToInt32(MainControl.Instance.overworldControl.vsyncMode));
-                                    break;
-                                }
-                                case 3:
-                                    AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
-                                    MainControl.Instance.overworldControl.isUsingHDFrame =
-                                        !MainControl.Instance.overworldControl.isUsingHDFrame;
-                                    MainControl.Instance.overworldControl.resolutionLevel =
-                                        GameUtilityService.UpdateResolutionSettings(
-                                            MainControl.Instance.overworldControl.isUsingHDFrame,
-                                            MainControl.Instance.overworldControl.resolutionLevel);
-                                    UpdateSettingDisplay();
-                                    PlayerPrefs.SetInt("hdResolution",
-                                        Convert.ToInt32(MainControl.Instance.overworldControl.isUsingHDFrame));
-                                    break;
-                            }
-                    }
-
-                    var textForUnder = "";
-                    switch (_settingSelect)
-                    {
-                        case 0:
-                            textForUnder = TextProcessingService.GetFirstChildStringByPrefix(
-                                MainControl.Instance.overworldControl.settingSave, "SettingMainVolumeTip");
-                            break;
-
-                        case 1:
-                            textForUnder =
-                                TextProcessingService.GetFirstChildStringByPrefix(
-                                    MainControl.Instance.overworldControl.settingSave, "SettingControlTip");
-                            break;
-
-                        case 2:
-                            string vsyncModeAdd;
-                            switch (MainControl.Instance.overworldControl.vsyncMode)
-                            {
-                                case OverworldControl.VSyncMode.DonNotSync:
-                                    vsyncModeAdd =
-                                        TextProcessingService.GetFirstChildStringByPrefix(
-                                            MainControl.Instance.overworldControl.settingSave, "VSyncNone");
-                                    break;
-
-                                case OverworldControl.VSyncMode.SyncToRefreshRate:
-                                    vsyncModeAdd =
-                                        TextProcessingService.GetFirstChildStringByPrefix(
-                                            MainControl.Instance.overworldControl.settingSave, "VSyncFull");
-                                    break;
-
-                                case OverworldControl.VSyncMode.HalfSync:
-                                    vsyncModeAdd =
-                                        TextProcessingService.GetFirstChildStringByPrefix(
-                                            MainControl.Instance.overworldControl.settingSave, "VSyncHalf");
-                                    break;
-
-                                default:
-                                    goto case OverworldControl.VSyncMode.DonNotSync;
-                            }
-
-                            if (!MainControl.Instance.overworldControl.fullScreen)
-                                textForUnder =
-                                    TextProcessingService.GetFirstChildStringByPrefix(
-                                        MainControl.Instance.overworldControl.settingSave, "SettingFullScreenTipOpen") +
-                                    "\n" + vsyncModeAdd;
-                            else
-                                textForUnder =
-                                    TextProcessingService.GetFirstChildStringByPrefix(
-                                        MainControl.Instance.overworldControl.settingSave,
-                                        "SettingFullScreenTipClose") + "\n" + vsyncModeAdd;
-                            break;
-
-                        case 3:
-                            textForUnder = TextProcessingService.GetFirstChildStringByPrefix(
-                                MainControl.Instance.overworldControl.settingSave,
-                                !MainControl.Instance.overworldControl.isUsingHDFrame
-                                    ? "SettingResolvingTip"
-                                    : "SettingResolvingTipHD");
-
-                            break;
-
-                        case 4:
-                            textForUnder =
-                                TextProcessingService.GetFirstChildStringByPrefix(
-                                    MainControl.Instance.overworldControl.settingSave, "SettingSFXTip");
-                            break;
-
-                        case 5:
-                            textForUnder =
-                                TextProcessingService.GetFirstChildStringByPrefix(
-                                    MainControl.Instance.overworldControl.settingSave, "SettingFPSTip");
-                            break;
-
-                        case 6:
-                            textForUnder = TextProcessingService.GetFirstChildStringByPrefix(
-                                MainControl.Instance.overworldControl.settingSave, "SettingBackMenuTip");
-                            break;
-
-                        case 7:
-                            textForUnder = TextProcessingService.GetFirstChildStringByPrefix(
-                                MainControl.Instance.overworldControl.settingSave, "SettingBackGameTip");
-                            break;
-                    }
-
-                    _settingTmpUnder.text = textForUnder;
+                    HomeLayer();
                     break;
-                }
-
                 case SettingsLayer.KeyConfiguration:
-                    if (InputService.GetKeyDown(KeyCode.DownArrow))
-                    {
-                        AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
-                        _settingSelect++;
-                        if (_settingSelect > 8)
-                            _settingSelect = 0;
-                    }
-                    else if (InputService.GetKeyDown(KeyCode.UpArrow))
-                    {
-                        AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
-                        _settingSelect--;
-                        if (_settingSelect < 0)
-                            _settingSelect = 8;
-                    }
+                    KeyConfigurationLayer();
+                    break;
+                case SettingsLayer.LanguageConfiguration:
+                    LanguageConfigurationLayer();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
 
-                    if (InputService.GetKeyDown(KeyCode.Z))
+        private void LanguageConfigurationLayer()
+        {
+            if (InputService.GetKeyDown(KeyCode.DownArrow))
+            {
+                AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                _settingSelect++;
+                if (_settingSelect > _languagePackSelectMax)
+                    _settingSelect = 0;
+            }
+            else if (InputService.GetKeyDown(KeyCode.UpArrow))
+            {
+                AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                _settingSelect--;
+                if (_settingSelect < 0)
+                    _settingSelect = _languagePackSelectMax;
+            }
+
+            if (InputService.GetKeyDown(KeyCode.Z))
+            {
+                if (_settingSelect != _languagePackSelectMax)
+                {
+                    AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                    UpdateSettingDisplay(false, true);
+                    MainControl.Instance.languagePackId = _settingSelect;
+                }
+                else
+                {
+                    ExitSetting(true);
+                }
+            }
+            else if (SceneManager.GetActiveScene().name != "Story" &&
+                     (InputService.GetKeyDown(KeyCode.X) ||
+                      InputService.GetKeyDown(KeyCode.V)))
+            {
+                ExitSetting(true);
+            }
+
+        }
+
+        private void KeyConfigurationLayer()
+        {
+            if (InputService.GetKeyDown(KeyCode.DownArrow))
+            {
+                AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                _settingSelect++;
+                if (_settingSelect > 8)
+                    _settingSelect = 0;
+            }
+            else if (InputService.GetKeyDown(KeyCode.UpArrow))
+            {
+                AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                _settingSelect--;
+                if (_settingSelect < 0)
+                    _settingSelect = 8;
+            }
+
+            if (InputService.GetKeyDown(KeyCode.Z))
+            {
+                AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                switch (_settingSelect)
+                {
+                    case < 6:
                     {
-                        AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
-                        switch (_settingSelect)
+                        _isSettingKey = true;
+                        break;
+                    }
+                    case 6:
+                    {
+                        _settingKeyPage = _settingKeyPage switch
                         {
-                            case < 6:
-                                _isSettingKey = true;
-                                break;
-                            case 6:
-                                _settingKeyPage = _settingKeyPage switch
-                                {
-                                    0 => 1,
-                                    1 => 0,
-                                    _ => _settingKeyPage
-                                };
-                                break;
-                            case 7:
-                                MainControl.Instance.overworldControl.KeyCodes =
-                                    InputService.ApplyDefaultControl();
-                                break;
-                            default:
-                                _settingsLayer = 0;
-                                _settingSelect = 0;
-
-                                UpdateSettingDisplay();
-                                return;
-                        }
-
-                        UpdateSettingDisplay(false, true);
+                            0 => 1,
+                            1 => 0,
+                            _ => _settingKeyPage
+                        };
+                        break;
                     }
-                    else if (InputService.GetKeyDown(KeyCode.X))
+                    case 7:
+                    {
+                        _overworldControl.KeyCodes =
+                            InputService.ApplyDefaultControl();
+                        break;
+                    }
+                    default:
                     {
                         _settingsLayer = 0;
                         _settingSelect = 0;
@@ -436,70 +221,334 @@ namespace UCT.Global.Settings
                         UpdateSettingDisplay();
                         return;
                     }
-                    else if (InputService.GetKeyDown(KeyCode.C))
-                    {
-                        AudioController.Instance.GetFx(3, MainControl.Instance.AudioControl.fxClipUI);
-                        if ((int)_keyMapping < 2)
-                            _keyMapping++;
-                        else
-                            _keyMapping = 0;
+                }
 
-                        UpdateSettingDisplay();
-                    }
+                UpdateSettingDisplay(false, true);
+            }
+            else if (InputService.GetKeyDown(KeyCode.X))
+            {
+                _settingsLayer = 0;
+                _settingSelect = 0;
 
-                    _settingTmpUnder.text = TextProcessingService.GetFirstChildStringByPrefix(
-                        MainControl.Instance.overworldControl.settingSave, "ControlUnder" + (int)_keyMapping);
+                UpdateSettingDisplay();
+                return;
+            }
+            else if (InputService.GetKeyDown(KeyCode.C))
+            {
+                AudioController.Instance.GetFx(3, MainControl.Instance.AudioControl.fxClipUI);
+                if ((int)_keyMapping < 2)
+                    _keyMapping++;
+                else
+                    _keyMapping = 0;
 
-                    break;
+                UpdateSettingDisplay();
+            }
 
-                case SettingsLayer.LanguageConfiguration:
-                    if (InputService.GetKeyDown(KeyCode.DownArrow))
+            _settingTmpBottom.text = TextProcessingService.GetFirstChildStringByPrefix(
+                _overworldControl.settingSave, "ControlUnder" + (int)_keyMapping);
+
+        }
+
+        private void HomeLayer()
+        {
+            if (!_isSettingName)
+            {
+                if (InputService.GetKeyDown(KeyCode.DownArrow))
+                {
+                    AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                    _settingSelect++;
+                    if (_settingSelect > SettingSelectMax)
+                        _settingSelect = 0;
+                }
+                else if (InputService.GetKeyDown(KeyCode.UpArrow))
+                {
+                    AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                    _settingSelect--;
+                    if (_settingSelect < 0)
+                        _settingSelect = SettingSelectMax;
+                }
+            }
+            else
+            {
+                if (InputService.GetKey(KeyCode.LeftArrow) ||
+                    InputService.GetKeyDown(KeyCode.DownArrow))
+                {
+                    if (_overworldControl.mainVolume > 0)
                     {
                         AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
-                        _settingSelect++;
-                        if (_settingSelect > _languagePackSelectMax)
+                        _overworldControl.mainVolume -= 0.01f;
+                        AudioListener.volume = _overworldControl.mainVolume;
+                    }
+
+                    UpdateSettingDisplay(false, true);
+                }
+                else if (InputService.GetKey(KeyCode.RightArrow) ||
+                         InputService.GetKeyDown(KeyCode.UpArrow))
+                {
+                    if (_overworldControl.mainVolume < 1)
+                    {
+                        AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                        _overworldControl.mainVolume += 0.01f;
+                        AudioListener.volume = _overworldControl.mainVolume;
+                    }
+
+                    UpdateSettingDisplay(false, true);
+                }
+            }
+
+            if (InputService.GetKeyDown(KeyCode.Z))
+            {
+                AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                if (!_isSettingName)
+                {
+                    switch (_settingSelect)
+                    {
+                        case 0:
+                        {
+                            _saveVolume = _overworldControl.mainVolume;
+                            _isSettingName = true;
+                            UpdateSettingDisplay(false, true);
+                            break;
+                        }
+
+                        case 1:
+                        {
+                            _settingsLayer = SettingsLayer.KeyConfiguration;
+                            UpdateSettingDisplay();
                             _settingSelect = 0;
-                    }
-                    else if (InputService.GetKeyDown(KeyCode.UpArrow))
-                    {
-                        AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
-                        _settingSelect--;
-                        if (_settingSelect < 0)
-                            _settingSelect = _languagePackSelectMax;
-                    }
+                            break;
+                        }
 
-                    if (InputService.GetKeyDown(KeyCode.Z))
+                        case 2:
+                        {
+                            _overworldControl.fullScreen =
+                                !_overworldControl.fullScreen;
+                            GameUtilityService.SetResolution(_overworldControl
+                                .resolutionLevel);
+
+                            goto default;
+                        }
+                        case 3:
+                        {
+                            _overworldControl.resolutionLevel =
+                                GameUtilityService.UpdateResolutionSettings(
+                                    _overworldControl.isUsingHDFrame,
+                                    _overworldControl.resolutionLevel);
+                            goto default;
+                        }
+                        case 4:
+                        {
+                            _overworldControl.noSfx =
+                                !_overworldControl.noSfx;
+                            GameUtilityService.ToggleAllSfx(_overworldControl.noSfx);
+                            PlayerPrefs.SetInt("noSFX",
+                                Convert.ToInt32(_overworldControl.noSfx));
+                            goto default;
+                        }
+                        case 5:
+                        {
+                            _overworldControl.openFPS =
+                                !_overworldControl.openFPS;
+                            goto default;
+                        }
+                        case 6:
+                        {
+                            if (SceneManager.GetActiveScene().name == "Rename")
+                                return;
+                            if (SceneManager.GetActiveScene().name == "Menu")
+                                goto case 7;
+                            GameUtilityService.FadeOutAndSwitchScene("Menu", Color.black, true, AnimSpeed);
+                            _overworldControl.isSetting = false;
+                            TypeWritter.TypePause(false);
+                            _isPauseCanvas = true;
+                            break;
+                        }
+                        case 7:
+                        {
+                            ExitSetting();
+                            break;
+                        }
+
+                        default:
+                        {
+                            UpdateSettingDisplay();
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    UpdateSettingDisplay();
+                    _isSettingName = false;
+                }
+            }
+            else if (SceneManager.GetActiveScene().name != "Story" &&
+                     (InputService.GetKeyDown(KeyCode.X) ||
+                      InputService.GetKeyDown(KeyCode.V)))
+            {
+                if (!_isSettingName)
+                {
+                    ExitSetting();
+                }
+                else
+                {
+                    _overworldControl.mainVolume = _saveVolume;
+                    AudioListener.volume = _overworldControl.mainVolume;
+                    UpdateSettingDisplay();
+                    _isSettingName = false;
+                }
+            }
+            else if (InputService.GetKeyDown(KeyCode.C))
+            {
+                if (!_isSettingName)
+                    switch (_settingSelect)
                     {
-                        if (_settingSelect != _languagePackSelectMax)
+                        case 2:
                         {
                             AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
-                            UpdateSettingDisplay(false, true);
-                            MainControl.Instance.languagePackId = _settingSelect;
+                            if ((int)_overworldControl.vsyncMode < 2)
+                                _overworldControl.vsyncMode++;
+                            else
+                                _overworldControl.vsyncMode =
+                                    OverworldControl.VSyncMode.DonNotSync;
+
+                            PlayerPrefs.SetInt("vsyncMode",
+                                Convert.ToInt32(_overworldControl.vsyncMode));
+                            break;
                         }
-                        else
+                        case 3:
                         {
-                            ExitSetting(true);
+                            AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                            _overworldControl.isUsingHDFrame =
+                                !_overworldControl.isUsingHDFrame;
+                            _overworldControl.resolutionLevel =
+                                GameUtilityService.UpdateResolutionSettings(
+                                    _overworldControl.isUsingHDFrame,
+                                    _overworldControl.resolutionLevel);
+                            UpdateSettingDisplay();
+                            PlayerPrefs.SetInt("hdResolution",
+                                Convert.ToInt32(_overworldControl.isUsingHDFrame));
+                            break;
                         }
                     }
-                    else if (SceneManager.GetActiveScene().name != "Story" &&
-                             (InputService.GetKeyDown(KeyCode.X) ||
-                              InputService.GetKeyDown(KeyCode.V)))
+            }
+
+            var textForUnder = "";
+            switch (_settingSelect)
+            {
+                case 0:
+                {
+                    textForUnder = TextProcessingService.GetFirstChildStringByPrefix(
+                        _overworldControl.settingSave, "SettingMainVolumeTip");
+                    break;
+                }
+
+                case 1:
+                {
+                    textForUnder =
+                        TextProcessingService.GetFirstChildStringByPrefix(
+                            _overworldControl.settingSave, "SettingControlTip");
+                    break;
+                }
+
+                case 2:
+                {
+                    string vsyncModeAdd;
+                    switch (_overworldControl.vsyncMode)
                     {
-                        ExitSetting(true);
+                        case OverworldControl.VSyncMode.DonNotSync:
+                        {
+                            vsyncModeAdd =
+                                TextProcessingService.GetFirstChildStringByPrefix(
+                                    _overworldControl.settingSave, "VSyncNone");
+                            break;
+                        }
+
+                        case OverworldControl.VSyncMode.SyncToRefreshRate:
+                        {
+                            vsyncModeAdd =
+                                TextProcessingService.GetFirstChildStringByPrefix(
+                                    _overworldControl.settingSave, "VSyncFull");
+                            break;
+                        }
+
+                        case OverworldControl.VSyncMode.HalfSync:
+                        {
+                            vsyncModeAdd =
+                                TextProcessingService.GetFirstChildStringByPrefix(
+                                    _overworldControl.settingSave, "VSyncHalf");
+                            break;
+                        }
+
+                        default:
+                        {
+                            goto case OverworldControl.VSyncMode.DonNotSync;
+                        }
                     }
 
+                    if (!_overworldControl.fullScreen)
+                        textForUnder =
+                            TextProcessingService.GetFirstChildStringByPrefix(
+                                _overworldControl.settingSave, "SettingFullScreenTipOpen") +
+                            "\n" + vsyncModeAdd;
+                    else
+                        textForUnder =
+                            TextProcessingService.GetFirstChildStringByPrefix(
+                                _overworldControl.settingSave,
+                                "SettingFullScreenTipClose") + "\n" + vsyncModeAdd;
                     break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                }
+
+                case 3:
+                {
+                    textForUnder = TextProcessingService.GetFirstChildStringByPrefix(
+                        _overworldControl.settingSave,
+                        !_overworldControl.isUsingHDFrame
+                            ? "SettingResolvingTip"
+                            : "SettingResolvingTipHD");
+
+                    break;
+                }
+
+                case 4:
+                {
+                    textForUnder =
+                        TextProcessingService.GetFirstChildStringByPrefix(
+                            _overworldControl.settingSave, "SettingSFXTip");
+                    break;
+                }
+
+                case 5:
+                {
+                    textForUnder =
+                        TextProcessingService.GetFirstChildStringByPrefix(
+                            _overworldControl.settingSave, "SettingFPSTip");
+                    break;
+                }
+
+                case 6:
+                {
+                    textForUnder = TextProcessingService.GetFirstChildStringByPrefix(
+                        _overworldControl.settingSave, "SettingBackMenuTip");
+                    break;
+                }
+
+                case 7:
+                {
+                    textForUnder = TextProcessingService.GetFirstChildStringByPrefix(
+                        _overworldControl.settingSave, "SettingBackGameTip");
+                    break;
+                }
             }
-        }  
-        /// <summary>
-        /// 设置键位
-        /// </summary>
-        private void UpdateSettingKey()
+
+            _settingTmpBottom.text = textForUnder;
+        }
+
+        private bool IsSettingKey()
         {
+            if (!_isSettingKey) return false;
             UpdateSettingDisplay(false, true);
-            if (GetSettingControlKey() == KeyCode.None) return;
+            if (GetSettingControlKey() == KeyCode.None) return true;
             var j = 0;
             switch (_settingKeyPage)
             {
@@ -521,22 +570,22 @@ namespace UCT.Global.Settings
                     {
                         case KeyMapping.MainKeyMap:
                         {
-                            origin = MainControl.Instance.overworldControl.KeyCodes[0][_settingSelect + j];
-                            MainControl.Instance.overworldControl.KeyCodes[0][_settingSelect + j] =
+                            origin = _overworldControl.KeyCodes[0][_settingSelect + j];
+                            _overworldControl.KeyCodes[0][_settingSelect + j] =
                                 GetSettingControlKey();
                             goto default;
                         }
                         case KeyMapping.SecondaryKeyMap1:
                         {
-                            origin = MainControl.Instance.overworldControl.KeyCodes[1][_settingSelect + j];
-                            MainControl.Instance.overworldControl.KeyCodes[1][_settingSelect + j] =
+                            origin = _overworldControl.KeyCodes[1][_settingSelect + j];
+                            _overworldControl.KeyCodes[1][_settingSelect + j] =
                                 GetSettingControlKey();
                             goto default;
                         }
                         case KeyMapping.SecondaryKeyMap2:
                         {
-                            origin = MainControl.Instance.overworldControl.KeyCodes[2][_settingSelect + j];
-                            MainControl.Instance.overworldControl.KeyCodes[2][_settingSelect + j] =
+                            origin = _overworldControl.KeyCodes[2][_settingSelect + j];
+                            _overworldControl.KeyCodes[2][_settingSelect + j] =
                                 GetSettingControlKey();
                             goto default;
                         }
@@ -544,32 +593,32 @@ namespace UCT.Global.Settings
                         {
                             var keyCodes = new List<KeyCode>
                             {
-                                MainControl.Instance.overworldControl.KeyCodes[0][_settingSelect + j],
-                                MainControl.Instance.overworldControl.KeyCodes[1][_settingSelect + j],
-                                MainControl.Instance.overworldControl.KeyCodes[2][_settingSelect + j]
+                                _overworldControl.KeyCodes[0][_settingSelect + j],
+                                _overworldControl.KeyCodes[1][_settingSelect + j],
+                                _overworldControl.KeyCodes[2][_settingSelect + j]
                             };
-                            for (var i = 0; i < MainControl.Instance.overworldControl.KeyCodes[0].Count; i++)
+                            for (var i = 0; i < _overworldControl.KeyCodes[0].Count; i++)
                             {
-                                if (MainControl.Instance.overworldControl.KeyCodes[0][i] !=
+                                if (_overworldControl.KeyCodes[0][i] !=
                                     keyCodes[(int)_keyMapping] ||
                                     i == _settingSelect + j) continue;
-                                MainControl.Instance.overworldControl.KeyCodes[0][i] = origin;
+                                _overworldControl.KeyCodes[0][i] = origin;
                                 break;
                             }
 
-                            for (var i = 0; i < MainControl.Instance.overworldControl.KeyCodes[1].Count; i++)
+                            for (var i = 0; i < _overworldControl.KeyCodes[1].Count; i++)
                             {
-                                if (MainControl.Instance.overworldControl.KeyCodes[1][i] !=
+                                if (_overworldControl.KeyCodes[1][i] !=
                                     keyCodes[(int)_keyMapping] || i == _settingSelect + j) continue;
-                                MainControl.Instance.overworldControl.KeyCodes[1][i] = origin;
+                                _overworldControl.KeyCodes[1][i] = origin;
                                 break;
                             }
 
-                            for (var i = 0; i < MainControl.Instance.overworldControl.KeyCodes[2].Count; i++)
+                            for (var i = 0; i < _overworldControl.KeyCodes[2].Count; i++)
                             {
-                                if (MainControl.Instance.overworldControl.KeyCodes[2][i] !=
+                                if (_overworldControl.KeyCodes[2][i] !=
                                     keyCodes[(int)_keyMapping] || i == _settingSelect + j) continue;
-                                MainControl.Instance.overworldControl.KeyCodes[2][i] = origin;
+                                _overworldControl.KeyCodes[2][i] = origin;
                                 break;
                             }
 
@@ -581,9 +630,24 @@ namespace UCT.Global.Settings
                     break;
                 }
             }
+
             _isSettingKey = false;
+
+            return true;
+
         }
 
+        private static bool IsInScene(string sceneName)
+        {
+            return SceneManager.GetActiveScene().name == sceneName;
+        }
+
+        private static bool IsInBattleAndNotMyTurn()
+        {
+            var isInBattle = MainControl.Instance.sceneState == MainControl.SceneState.InBattle;
+            var isInMyTurn = TurnController.Instance && TurnController.Instance.isMyTurn;
+            return isInBattle && !isInMyTurn;
+        }
 
 
         /// <summary>
@@ -628,7 +692,7 @@ namespace UCT.Global.Settings
 
                 var settingsText = settingsOptions.Select(key =>
                     TextProcessingService.GetFirstChildStringByPrefix(
-                        MainControl.Instance.overworldControl.settingSave, key)).ToList();
+                        _overworldControl.settingSave, key)).ToList();
 
                 if (isSetting)
                     settingsText[1] = $"<color=yellow>{settingsText[1]}</color>"; // 为 SettingMainVolume 添加颜色
@@ -638,20 +702,20 @@ namespace UCT.Global.Settings
 
             if (!isSetting)
                 _settingTmpSon.text = "\n" +
-                                      (int)(MainControl.Instance.overworldControl.mainVolume * 100) + "%\n\n" +
-                                      GetOpenOrCloseString(MainControl.Instance.overworldControl.fullScreen) + '\n' +
-                                      MainControl.Instance.overworldControl.resolution.x + '×' +
-                                      MainControl.Instance.overworldControl.resolution.y + '\n' +
-                                      GetOpenOrCloseString(MainControl.Instance.overworldControl.noSfx) + '\n' +
-                                      GetOpenOrCloseString(MainControl.Instance.overworldControl.openFPS) + '\n';
+                                      (int)(_overworldControl.mainVolume * 100) + "%\n\n" +
+                                      GetOpenOrCloseString(_overworldControl.fullScreen) + '\n' +
+                                      _overworldControl.resolution.x + '×' +
+                                      _overworldControl.resolution.y + '\n' +
+                                      GetOpenOrCloseString(_overworldControl.noSfx) + '\n' +
+                                      GetOpenOrCloseString(_overworldControl.openFPS) + '\n';
             else
                 _settingTmpSon.text = "\n" + "<color=yellow>" +
-                                      (int)(MainControl.Instance.overworldControl.mainVolume * 100) + "%</color>\n\n" +
-                                      GetOpenOrCloseString(MainControl.Instance.overworldControl.fullScreen) + '\n' +
-                                      MainControl.Instance.overworldControl.resolution.x + '×' +
-                                      MainControl.Instance.overworldControl.resolution.y + '\n' +
-                                      GetOpenOrCloseString(MainControl.Instance.overworldControl.noSfx) + '\n' +
-                                      GetOpenOrCloseString(MainControl.Instance.overworldControl.openFPS) + '\n';
+                                      (int)(_overworldControl.mainVolume * 100) + "%</color>\n\n" +
+                                      GetOpenOrCloseString(_overworldControl.fullScreen) + '\n' +
+                                      _overworldControl.resolution.x + '×' +
+                                      _overworldControl.resolution.y + '\n' +
+                                      GetOpenOrCloseString(_overworldControl.noSfx) + '\n' +
+                                      GetOpenOrCloseString(_overworldControl.openFPS) + '\n';
         }
 
         /// <summary>
@@ -687,7 +751,7 @@ namespace UCT.Global.Settings
                             result.Append(strings[i - 1]);
                         result.Append(
                             TextProcessingService.GetFirstChildStringByPrefix(
-                                MainControl.Instance.overworldControl.settingSave, prefixes[i]));
+                                _overworldControl.settingSave, prefixes[i]));
                         if (i < prefixes.Count - 1)
                             result.Append("</color>\n");
                     }
@@ -701,11 +765,11 @@ namespace UCT.Global.Settings
 
                         _settingTmpSon.text += _keyMapping switch
                         {
-                            KeyMapping.MainKeyMap => MainControl.Instance.overworldControl.KeyCodes[0][i] +
+                            KeyMapping.MainKeyMap => _overworldControl.KeyCodes[0][i] +
                                                      "</color>\n",
-                            KeyMapping.SecondaryKeyMap1 => MainControl.Instance.overworldControl.KeyCodes[1]
+                            KeyMapping.SecondaryKeyMap1 => _overworldControl.KeyCodes[1]
                                 [i] + "</color>\n",
-                            KeyMapping.SecondaryKeyMap2 => MainControl.Instance.overworldControl.KeyCodes[2]
+                            KeyMapping.SecondaryKeyMap2 => _overworldControl.KeyCodes[2]
                                 [i] + "</color>\n",
                             _ => throw new ArgumentOutOfRangeException()
                         };
@@ -727,7 +791,7 @@ namespace UCT.Global.Settings
                             result.Append(strings[i - 1]);
                         result.Append(
                             TextProcessingService.GetFirstChildStringByPrefix(
-                                MainControl.Instance.overworldControl.settingSave, prefixes[i]));
+                                _overworldControl.settingSave, prefixes[i]));
                         if (i < prefixes.Count - 3)
                             result.Append("</color>\n");
                         else if (i < prefixes.Count - 1)
@@ -743,11 +807,11 @@ namespace UCT.Global.Settings
 
                         _settingTmpSon.text += _keyMapping switch
                         {
-                            KeyMapping.MainKeyMap => MainControl.Instance.overworldControl.KeyCodes[0][i] +
+                            KeyMapping.MainKeyMap => _overworldControl.KeyCodes[0][i] +
                                                      "</color>\n",
-                            KeyMapping.SecondaryKeyMap1 => MainControl.Instance.overworldControl.KeyCodes[1]
+                            KeyMapping.SecondaryKeyMap1 => _overworldControl.KeyCodes[1]
                                 [i] + "</color>\n",
-                            KeyMapping.SecondaryKeyMap2 => MainControl.Instance.overworldControl.KeyCodes[2]
+                            KeyMapping.SecondaryKeyMap2 => _overworldControl.KeyCodes[2]
                                 [i] + "</color>\n",
                             _ => throw new ArgumentOutOfRangeException()
                         };
@@ -769,7 +833,7 @@ namespace UCT.Global.Settings
 
             if (!onlySetSon)
                 _settingTmp.text =
-                    TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave,
+                    TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.settingSave,
                         "LanguagePack") + '\n';
             _settingTmpSon.text = "";
             _languagePackSelectMax = 0;
@@ -799,10 +863,10 @@ namespace UCT.Global.Settings
 
             if (!onlySetSon)
                 _settingTmp.text +=
-                    TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave,
+                    TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.settingSave,
                         "Back");
 
-            _settingTmpUnder.text =
+            _settingTmpBottom.text =
                 GetLanguagePacksName(pathStringSaver, "LanguagePackInformation",
                     _settingSelect >= MainControl.LanguagePackInsideNumber) + '\n' + GetLanguagePacksName(
                     pathStringSaver, "LanguagePackAuthor", _settingSelect >= MainControl.LanguagePackInsideNumber);
@@ -835,7 +899,7 @@ namespace UCT.Global.Settings
         private static string GetOpenOrCloseString(bool inputBool)
         {
             return TextProcessingService.GetFirstChildStringByPrefix
-                (MainControl.Instance.overworldControl.settingSave, inputBool ? "Open" : "Close");
+                (_overworldControl.settingSave, inputBool ? "Open" : "Close");
         }
 
         /// <summary>
@@ -859,18 +923,19 @@ namespace UCT.Global.Settings
         /// </summary>
         public void OpenSetting()
         {
-            MainControl.Instance.overworldControl.isSetting = true;
+            _overworldControl.isSetting = true;
             _settingPageBackground.DOColor(new Color(0, 0, 0, 0.75f), AnimSpeed);
             _settingTmp.DOColor(Color.white, AnimSpeed).SetEase(Ease.Linear);
             _settingTmpSon.DOColor(Color.white, AnimSpeed).SetEase(Ease.Linear);
-            _settingTmpUnder.DOColor(Color.white, AnimSpeed).SetEase(Ease.Linear);
+            _settingTmpBottom.DOColor(Color.white, AnimSpeed).SetEase(Ease.Linear);
             _settingSoul.DOColor(Color.red, AnimSpeed).SetEase(Ease.Linear);
             _settingSelect = 0;
-            _settingTmpUnder.text =
-                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave,
-                    "ControlEggshell");
-            UpdateSettingDisplay();
-            if (_settingsLayer == SettingsLayer.LanguageConfiguration)
+            _settingTmpBottom.text =
+                TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.settingSave,
+                    "ControlBottomText");
+            if (_settingsLayer != SettingsLayer.LanguageConfiguration)
+                UpdateSettingDisplay();
+            else
                 UpdateSettingDisplay(true);
         }
 
@@ -883,26 +948,26 @@ namespace UCT.Global.Settings
             _settingPageBackground.DOColor(Color.clear, AnimSpeed);
             _settingTmp.DOColor(ColorEx.WhiteClear, AnimSpeed).SetEase(Ease.Linear).OnKill(() =>
             {
-                MainControl.Instance.overworldControl.isSetting = false;
+                _overworldControl.isSetting = false;
                 TypeWritter.TypePause(false);
 
                 if (isLan)
                     SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             });
             _settingTmpSon.DOColor(ColorEx.WhiteClear, AnimSpeed).SetEase(Ease.Linear);
-            _settingTmpUnder.DOColor(ColorEx.WhiteClear, AnimSpeed).SetEase(Ease.Linear);
-            _settingSoul.DOColor(new Color(1, 0, 0, 0), AnimSpeed).SetEase(Ease.Linear);
-            _settingTmpUnder.text =
-                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave,
-                    "ControlEggshell");
+            _settingTmpBottom.DOColor(ColorEx.WhiteClear, AnimSpeed).SetEase(Ease.Linear);
+            _settingSoul.DOColor(ColorEx.RedClear, AnimSpeed).SetEase(Ease.Linear);
+            _settingTmpBottom.text =
+                TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.settingSave,
+                    "ControlBottomText");
         }
 
      
 
-        // 以下函数供Animator使用
+        // 供Animator使用
         public void AnimSetHeartPos()
         {
-            var uiPos = WorldPositionToUGUI(MainControl.Instance.overworldControl.playerDeadPos);
+            var uiPos = WorldPositionToUGUI(_overworldControl.playerDeadPos);
             transform.Find("Heart").GetComponent<RectTransform>().anchoredPosition = uiPos;
         }
 
@@ -920,19 +985,21 @@ namespace UCT.Global.Settings
                 return position;
             }
 
-            Vector2 screenPoint = Camera.main.WorldToScreenPoint(position); //世界坐标转换为屏幕坐标
+            Vector2 screenPoint = Camera.main.WorldToScreenPoint(position); 
             var screenSize = new Vector2(Screen.width, Screen.height);
-            screenPoint -= screenSize / 2; //将屏幕坐标变换为以屏幕中心为原点
-            var anchorPos = screenPoint / screenSize * canvasRectTransform.sizeDelta; //缩放得到UGUI坐标
+            screenPoint -= screenSize / 2; 
+            var anchorPos = screenPoint / screenSize * canvasRectTransform.sizeDelta; 
             return anchorPos;
         }
 
 
+        // 供Animator使用
         public void AnimSetHeartRed(int isRed)
         {
             transform.Find("Heart").GetComponent<Image>().color = Convert.ToBoolean(isRed) ? Color.red : ColorEx.WhiteClear;
         }
 
+        // 供Animator使用
         public void AnimHeartGo()
         {
             var i = transform.Find("Heart").GetComponent<RectTransform>();
@@ -941,11 +1008,12 @@ namespace UCT.Global.Settings
             DOTween.To(() => i.anchoredPosition, x => i.anchoredPosition = x, new Vector2(-330, -250), 1.5f)
                 .SetEase(Ease.OutCirc).OnKill(() =>
                 {
-                    animator.SetBool(Open, false);
+                    Animator.SetBool(Open, false);
                     GameUtilityService.FadeOutAndSwitchScene("Battle", Color.black, false, -0.5f);
                 });
         }
 
+        // 供Animator使用
         public void AnimPlayFX(int i)
         {
             AudioController.Instance.GetFx(i, MainControl.Instance.AudioControl.fxClipUI);

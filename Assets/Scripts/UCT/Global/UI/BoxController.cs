@@ -36,13 +36,13 @@ namespace UCT.Global.UI
         {
             Instance = this;
 
-            obj = new GameObject
+            poolObject = new GameObject
             {
                 name = "Box"
             };
-            obj.AddComponent<BoxDrawer>();
-            obj.SetActive(false);
-            FillPool();
+            poolObject.AddComponent<BoxDrawer>();
+            poolObject.SetActive(false);
+            FillPool<BoxDrawer>();
         }
 
         private void Start()
@@ -139,7 +139,7 @@ namespace UCT.Global.UI
                 new(-5.93f, 1.4f)
             };
 
-            var newBoxDrawer = GetFromPool().GetComponent<BoxDrawer>();
+            var newBoxDrawer = GetFromPool<BoxDrawer>();
             newBoxDrawer.vertexPoints = points;
             boxes.Add(newBoxDrawer);
             _number++;

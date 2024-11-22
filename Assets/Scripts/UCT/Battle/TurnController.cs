@@ -35,15 +35,15 @@ namespace UCT.Battle
             objectPools.Add(gameObject.AddComponent<ObjectPool>());
             objectPools[^1].parent = saveBullet.transform;
             objectPools[^1].count = poolCount[0];
-            objectPools[^1].obj = Resources.Load<GameObject>("Template/Bullet Template");
-            objectPools[^1].FillPool();
+            objectPools[^1].poolObject = Resources.Load<GameObject>("Template/Bullet Template");
+            objectPools[^1].FillPool<BulletController>();
 
             //挡板
             objectPools.Add(gameObject.AddComponent<ObjectPool>());
             objectPools[^1].parent = saveBullet.transform;
             objectPools[^1].count = poolCount[1];
-            objectPools[^1].obj = Resources.Load<GameObject>("Template/Board Template");
-            objectPools[^1].FillPool();
+            objectPools[^1].poolObject = Resources.Load<GameObject>("Template/Board Template");
+            objectPools[^1].FillPool<BoardController>();
         }
 
         public void KillIEnumerator()
@@ -71,11 +71,11 @@ namespace UCT.Battle
                 case 1:
                     Global.Other.Debug.Log("这是个摆烂回合……也许吧。");
 
-                    var obj = objectPools[0].GetFromPool().GetComponent<BulletController>();
+                    var obj = objectPools[0].GetFromPool<BulletController>();
                     obj.SetBullet("CupCake", "CupCake", new Vector3(1, -1.6f),
                         (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
 
-                    var obj2 = objectPools[0].GetFromPool().GetComponent<BulletController>();
+                    var obj2 = objectPools[0].GetFromPool<BulletController>();
                     obj2.SetBullet("CupCake", "CupCake", new Vector3(-1, -1.6f),
                         (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
 
@@ -86,9 +86,9 @@ namespace UCT.Battle
                         yield return Timing.WaitForSeconds(1f);
                     }
 
-                    objectPools[0].ReturnPool(obj.gameObject);
+                    objectPools[0].ReturnPool(obj.gameObject, obj);
 
-                    objectPools[0].ReturnPool(obj2.gameObject);
+                    objectPools[0].ReturnPool(obj2.gameObject, obj2);
                     break;
 
                 case 0: //示例回合
@@ -183,7 +183,7 @@ namespace UCT.Battle
             switch (nest)
             {
                 case Nest.SimpleNestBullet:
-                    var obj = objectPools[0].GetFromPool().GetComponent<BulletController>();
+                    var obj = objectPools[0].GetFromPool<BulletController>();
 
                     obj.SetBullet("CupCake", "CupCake", new Vector3(0, -3.35f),
                         (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
@@ -205,7 +205,7 @@ namespace UCT.Battle
 
                     yield return Timing.WaitForSeconds(1f);
 
-                    objectPools[0].ReturnPool(obj.gameObject);
+                    objectPools[0].ReturnPool(obj.gameObject, obj);
 
                     break;
             }

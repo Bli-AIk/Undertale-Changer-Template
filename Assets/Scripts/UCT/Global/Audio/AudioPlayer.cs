@@ -10,11 +10,10 @@ namespace UCT.Global.Audio
 
         private void Update()
         {
-            if (_isPlay)
-            {
-                _clock += Time.deltaTime;
-                if (_clock >= audioSource.clip.length) AudioController.Instance.ReturnPool(gameObject);
-            }
+            if (!_isPlay) return;
+            _clock += Time.deltaTime;
+            if (_clock >= audioSource.clip.length)
+                AudioController.Instance.ReturnPool(gameObject, this);
         }
 
         private void OnEnable()
@@ -25,12 +24,10 @@ namespace UCT.Global.Audio
 
         public void Playing(AudioClip clip)
         {
-            if (!_isPlay)
-            {
-                audioSource.clip = clip;
-                audioSource.Play();
-                _isPlay = true;
-            }
+            if (_isPlay) return;
+            audioSource.clip = clip;
+            audioSource.Play();
+            _isPlay = true;
         }
     }
 }

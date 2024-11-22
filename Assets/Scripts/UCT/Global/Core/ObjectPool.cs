@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UCT.Global.Core
 {
@@ -7,50 +8,66 @@ namespace UCT.Global.Core
     {
         [Header("填充对象池的对象数量")] public int count = 10;
 
-        public GameObject obj;
+        [FormerlySerializedAs("obj")] public GameObject poolObject;
         public Transform parent;
-        private readonly Queue<GameObject> _availableObj = new();
+
+        // 存储对象和其对应的脚本
+        private readonly Queue<(GameObject gameObject, Component component)> _availableObj = new();
 
         /// <summary>
-        ///     初始化/填充对象池
+        /// 初始化/填充对象池
         /// </summary>
-        public virtual void FillPool()
+        public void FillPool<T>() where T : Component
         {
-            if (parent == null)
+            if (!parent)
                 parent = transform;
 
             for (var i = 0; i < count; i++)
             {
-                var newObj = Instantiate(obj, parent);
-                ReturnPool(newObj);
+                var newObj = Instantiate(poolObject, parent);
+
+                Component script = transform;
+                if (typeof(T) != typeof(Transform))
+                {
+                    script = newObj.GetComponent<T>();
+                    if (!script)
+                        script = newObj.AddComponent<T>(); // 如果没有组件，自动添加
+                }
+
+                ReturnPool(newObj, script);
             }
         }
 
         /// <summary>
-        ///     返回对象池
+        /// 返回对象池
         /// </summary>
-        public virtual void ReturnPool(GameObject gameObject)
+        public void ReturnPool<T>(GameObject inputGameObject, T script) where T : Component
         {
-            if (parent == null)
+            if (!parent)
                 parent = transform;
 
-            gameObject.SetActive(false);
-            gameObject.transform.SetParent(parent);
-            _availableObj.Enqueue(gameObject);
+            inputGameObject.SetActive(false);
+            inputGameObject.transform.SetParent(parent);
+
+            _availableObj.Enqueue((inputGameObject, script));
         }
 
         /// <summary>
-        ///     喜提对象
+        /// 获取对象池中的物体或脚本
         /// </summary>
-        public virtual GameObject GetFromPool()
+        public T GetFromPool<T>() where T : Component
         {
             if (_availableObj.Count == 0)
-                FillPool();
+                FillPool<T>();
 
-            var obj = _availableObj.Dequeue();
+            var (availableObj, component) = _availableObj.Dequeue();
 
-            obj.SetActive(true);
-            return obj;
+            availableObj.SetActive(true);
+
+            if (typeof(T) == typeof(Transform))
+                return availableObj.transform as T;
+
+            return component as T;
         }
     }
 }

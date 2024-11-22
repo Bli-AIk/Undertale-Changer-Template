@@ -623,7 +623,7 @@ namespace UCT.Global.UI
 
         public void EndInBattle()
         {
-            _canvasAnim = CanvasController.Instance.animator;
+            _canvasAnim = CanvasController.Instance.Animator;
             _endInBattle = true;
         }
 

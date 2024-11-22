@@ -8,5 +8,6 @@ namespace UCT.Extensions
     public static class ColorEx
     {
         public static Color WhiteClear => new(1, 1, 1, 0);
+        public static Color RedClear => new(1, 0, 0, 0);
     }
 }

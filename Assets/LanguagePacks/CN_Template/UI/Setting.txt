@@ -70,7 +70,7 @@ ControlSemicolon\更改视觉效果;
 ControlEsc\退出游戏;
 ControlDefault\恢复默认设置;
 
-ControlEggshell\~大家好啊，我是设置~;
+ControlBottomText\~大家好啊，我是设置~;
 
 ControlUnder0\主键位设置中。按C设置辅助键位。;
 ControlUnder1\辅助键位1设置中。按C设置辅助键位2。;

@@ -26,7 +26,7 @@ namespace UCT.Service
         /// <param name="framePic"></param>
         public static void SetCanvasFrameSprite(int framePic = 2) //一般为CanvasController.instance.framePic
         {
-            var frame = CanvasController.Instance.frame;
+            var frame = CanvasController.Instance.Frame;
             frame.sprite = framePic < 0 ? null : MainControl.Instance.overworldControl.frames[framePic];
         }
 
@@ -69,7 +69,7 @@ namespace UCT.Service
 
                 CanvasController.Instance.DOKill();
                 //CanvasController.Instance.fps.rectTransform.anchoredPosition = new Vector2();
-                CanvasController.Instance.frame.color = ColorEx.WhiteClear;
+                CanvasController.Instance.Frame.color = ColorEx.WhiteClear;
             }
             else
             {
@@ -81,9 +81,9 @@ namespace UCT.Service
 
                 CanvasController.Instance.DOKill();
 
-                if (CanvasController.Instance.framePic < 0)
+                if (CanvasController.Instance.frameSpriteIndex < 0)
                 {
-                    CanvasController.Instance.frame.color = Color.black;
+                    CanvasController.Instance.Frame.color = Color.black;
                     //CanvasController.Instance.fps.rectTransform.anchoredPosition = new Vector2(0, -30f);
                 }
                 /*
@@ -92,8 +92,8 @@ namespace UCT.Service
                     //CanvasController.Instance.fps.rectTransform.anchoredPosition = new Vector2();
                 }
                 */
-                CanvasController.Instance.frame.DOColor(
-                    Color.white * Convert.ToInt32(CanvasController.Instance.framePic >= 0), 1f);
+                CanvasController.Instance.Frame.DOColor(
+                    Color.white * Convert.ToInt32(CanvasController.Instance.frameSpriteIndex >= 0), 1f);
             }
 
 
@@ -170,7 +170,7 @@ namespace UCT.Service
                     MainControl.Instance.sceneSwitchingFadeImage.DOColor(fadeColor, fadeTime).SetEase(Ease.Linear)
                         .OnKill(() => SwitchScene(scene));
                     if (!MainControl.Instance.overworldControl.isUsingHDFrame)
-                        CanvasController.Instance.frame.color = ColorEx.WhiteClear;
+                        CanvasController.Instance.Frame.color = ColorEx.WhiteClear;
                     break;
                 }
                 case 0:
@@ -184,7 +184,7 @@ namespace UCT.Service
                     MainControl.Instance.sceneSwitchingFadeImage.DOColor(fadeColor, fadeTime).SetEase(Ease.Linear)
                         .OnKill(() => SwitchScene(scene));
                     if (!MainControl.Instance.overworldControl.isUsingHDFrame)
-                        CanvasController.Instance.frame.color = ColorEx.WhiteClear;
+                        CanvasController.Instance.Frame.color = ColorEx.WhiteClear;
                     break;
                 }
             }

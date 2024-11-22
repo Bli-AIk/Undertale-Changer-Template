@@ -722,7 +722,7 @@ namespace UCT.Battle
                     _changeDingScale.Kill(true);
 
                     _dingSpriteRenderer.transform.localScale = Vector3.one;
-                    _dingSpriteRenderer.color += new Color(0, 0, 0, 1);
+                    _dingSpriteRenderer.color += Color.black;
                     _changeDingColor = _dingSpriteRenderer.DOColor(aimColor * ColorEx.WhiteClear, inputDingTime)
                         .SetEase(Ease.InOutSine);
                     _changeDingScale = _dingSpriteRenderer.transform.DOScale(Vector3.one * 2.5f, inputDingTime)

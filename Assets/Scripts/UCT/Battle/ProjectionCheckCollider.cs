@@ -21,11 +21,12 @@ namespace UCT.Battle
         {
             _canvasBoxProjectionSet = GameObject.Find("CanvasBoxProjectionSet");
 
-            obj = (GameObject)Resources.Load("Prefabs/CheckCollider");
+            poolObject = (GameObject)Resources.Load("Prefabs/CheckCollider");
             for (var i = 0; i < _canvasBoxProjectionSet.transform.childCount; i++)
             {
                 _sets.Add(_canvasBoxProjectionSet.transform.GetChild(i).gameObject);
-                _checkColliders.Add(GetFromPool());
+                var obj = GetFromPool<Transform>();
+                _checkColliders.Add(obj.gameObject);
             }
         }
 

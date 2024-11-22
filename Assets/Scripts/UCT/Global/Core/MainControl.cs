@@ -132,7 +132,7 @@ namespace UCT.Global.Core
                 {
                     sceneSwitchingFadeImage.DOColor(Color.clear, 0.5f).SetEase(Ease.Linear)
                         .OnKill(() => overworldControl.pause = false);
-                    CanvasController.Instance.frame.color = overworldControl.isUsingHDFrame
+                    CanvasController.Instance.Frame.color = overworldControl.isUsingHDFrame
                         ? Color.white
                         : ColorEx.WhiteClear;
                 }
@@ -142,7 +142,7 @@ namespace UCT.Global.Core
                 }
             }
 
-            GameUtilityService.SetCanvasFrameSprite(CanvasController.Instance.framePic);
+            GameUtilityService.SetCanvasFrameSprite(CanvasController.Instance.frameSpriteIndex);
 
             AudioListener.volume = overworldControl.mainVolume;
             overworldControl.isSetting = false;
