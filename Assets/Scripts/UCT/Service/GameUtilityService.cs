@@ -26,7 +26,7 @@ namespace UCT.Service
         /// <param name="framePic"></param>
         public static void SetCanvasFrameSprite(int framePic = 2) //一般为CanvasController.instance.framePic
         {
-            var frame = CanvasController.Instance.Frame;
+            var frame = SettingsController.Instance.Frame;
             frame.sprite = framePic < 0 ? null : MainControl.Instance.overworldControl.frames[framePic];
         }
 
@@ -67,9 +67,8 @@ namespace UCT.Service
                     if (MainControl.Instance.cameraMainInBattle)
                         MainControl.Instance.cameraMainInBattle.rect = new Rect(0, 0, 1, 1);
 
-                CanvasController.Instance.DOKill();
-                //CanvasController.Instance.fps.rectTransform.anchoredPosition = new Vector2();
-                CanvasController.Instance.Frame.color = ColorEx.WhiteClear;
+                SettingsController.Instance.DOKill();
+                SettingsController.Instance.Frame.color = ColorEx.WhiteClear;
             }
             else
             {
@@ -79,21 +78,14 @@ namespace UCT.Service
                     if (MainControl.Instance.cameraMainInBattle)
                         MainControl.Instance.cameraMainInBattle.rect = new Rect(0, 0.056f, 1, 0.888f);
 
-                CanvasController.Instance.DOKill();
+                SettingsController.Instance.DOKill();
 
-                if (CanvasController.Instance.frameSpriteIndex < 0)
+                if (SettingsController.Instance.frameSpriteIndex < 0)
                 {
-                    CanvasController.Instance.Frame.color = Color.black;
-                    //CanvasController.Instance.fps.rectTransform.anchoredPosition = new Vector2(0, -30f);
+                    SettingsController.Instance.Frame.color = Color.black;
                 }
-                /*
-                else
-                {
-                    //CanvasController.Instance.fps.rectTransform.anchoredPosition = new Vector2();
-                }
-                */
-                CanvasController.Instance.Frame.DOColor(
-                    Color.white * Convert.ToInt32(CanvasController.Instance.frameSpriteIndex >= 0), 1f);
+                SettingsController.Instance.Frame.DOColor(
+                    Color.white * Convert.ToInt32(SettingsController.Instance.frameSpriteIndex >= 0), 1f);
             }
 
 
@@ -147,7 +139,7 @@ namespace UCT.Service
             MainControl.Instance.isSceneSwitching = true;
             if (isBgmMuted)
             {
-                var bgm = AudioController.Instance.transform.GetComponent<AudioSource>();
+                var bgm = AudioController.Instance.audioSource;
                 switch (fadeTime)
                 {
                     case > 0:
@@ -170,7 +162,7 @@ namespace UCT.Service
                     MainControl.Instance.sceneSwitchingFadeImage.DOColor(fadeColor, fadeTime).SetEase(Ease.Linear)
                         .OnKill(() => SwitchScene(scene));
                     if (!MainControl.Instance.overworldControl.isUsingHDFrame)
-                        CanvasController.Instance.Frame.color = ColorEx.WhiteClear;
+                        SettingsController.Instance.Frame.color = ColorEx.WhiteClear;
                     break;
                 }
                 case 0:
@@ -184,7 +176,7 @@ namespace UCT.Service
                     MainControl.Instance.sceneSwitchingFadeImage.DOColor(fadeColor, fadeTime).SetEase(Ease.Linear)
                         .OnKill(() => SwitchScene(scene));
                     if (!MainControl.Instance.overworldControl.isUsingHDFrame)
-                        CanvasController.Instance.Frame.color = ColorEx.WhiteClear;
+                        SettingsController.Instance.Frame.color = ColorEx.WhiteClear;
                     break;
                 }
             }

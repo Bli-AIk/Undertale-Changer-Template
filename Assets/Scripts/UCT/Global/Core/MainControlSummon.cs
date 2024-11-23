@@ -22,8 +22,10 @@ namespace UCT.Global.Core
         [TabGroup("MainControlSummon","OWCamera")]
         public bool isCameraFollow;
         [TabGroup("MainControlSummon","OWCamera")]
+        [EnableIf("isCameraFollow")][Indent] 
         public Vector2 cameraLimitX; //限制摄像机最大XY范围 0则不动
         [TabGroup("MainControlSummon","OWCamera")]
+        [EnableIf("isCameraFollow")][Indent] 
         public Vector2 cameraLimitY; //限制摄像机最大XY范围 0则不动
 
         [TabGroup("MainControlSummon","Canvas")]
@@ -45,17 +47,19 @@ namespace UCT.Global.Core
         [TabGroup("MainControlSummon","MainControl")]
         [Title("黑场状态相关")]
         public MainControl.SceneState sceneState;
-        [TabGroup("MainControlSummon","MainControl")]
-        public bool haveInOutBlack;
-        [TabGroup("MainControlSummon","MainControl")]
-        public bool noInBlack;
-        [TabGroup("MainControlSummon","MainControl")]
-        public bool notPauseIn;
+        [FormerlySerializedAs("haveInOutBlack")] [TabGroup("MainControlSummon","MainControl")]
+        public bool isFadeTransitionEnabled;
+        [FormerlySerializedAs("noInBlack")] [TabGroup("MainControlSummon","MainControl")]
+        [EnableIf("isFadeTransitionEnabled")][Indent]
+        public bool isFadeInDisabled;
+        [FormerlySerializedAs("notPauseIn")] [TabGroup("MainControlSummon","MainControl")]
+        [EnableIf("isFadeTransitionEnabled")][Indent]
+        public bool isFadeInUnpaused;
 
         private void Awake()
         {
             SetupController(Camera.main, ExistingCameraSetup, NonexistentCameraSetup);
-            SetupController(CanvasController.Instance, ExistingCanvasSetup, NonexistentCanvasSetup);
+            SetupController(SettingsController.Instance, ExistingCanvasSetup, NonexistentCanvasSetup);
             SetupController(AudioController.Instance, ExistingAudioSetup, NonexistentAudioSetup);
             SetupController(MainControl.Instance, ExistingMainControlSetup, NonexistentMainControlSetup);
         }
@@ -101,7 +105,7 @@ namespace UCT.Global.Core
         private void ExistingCanvasSetup()
         {
             CanvasSetup();
-            CanvasController.Instance.Start();
+            SettingsController.Instance.Start();
         }
 
         private void NonexistentCanvasSetup()
@@ -114,8 +118,8 @@ namespace UCT.Global.Core
 
         private void CanvasSetup()
         {
-            CanvasController.Instance.frameSpriteIndex = frameSpriteIndex;
-            CanvasController.Instance.renderMode = renderMode;
+            SettingsController.Instance.frameSpriteIndex = frameSpriteIndex;
+            SettingsController.Instance.renderMode = renderMode;
         }
 
         private void ExistingAudioSetup()
@@ -162,9 +166,9 @@ namespace UCT.Global.Core
         private void MainControlSetup(MainControl mainControl)
         {
             mainControl.sceneState = sceneState;
-            mainControl.isSceneSwitchingFadeTransitionEnabled = haveInOutBlack;
-            mainControl.isSceneSwitchingFadeInDisabled = noInBlack;
-            mainControl.isSceneSwitchingFadeInUnpaused = notPauseIn;
+            mainControl.isFadeTransitionEnabled = isFadeTransitionEnabled;
+            mainControl.isFadeInDisabled = isFadeInDisabled;
+            mainControl.isFadeInUnpaused = isFadeInUnpaused;
             mainControl.InitializationOverworld();
             mainControl.mainCamera = Camera.main;
             GameUtilityService.SetResolution(mainControl.overworldControl.resolutionLevel);

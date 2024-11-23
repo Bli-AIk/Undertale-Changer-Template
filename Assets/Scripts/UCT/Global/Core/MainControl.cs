@@ -42,14 +42,14 @@ namespace UCT.Global.Core
         [Space] [Title("=== 存档相关设置 ===")] [Header("存档id")] [FormerlySerializedAs("dataNumber")]
         public int saveDataId;
 
-        [Space] [Title("=== 场景切换相关设置 ===")] [Header("当前场景是否启用渐入渐出")] [FormerlySerializedAs("haveInOutBlack")]
-        public bool isSceneSwitchingFadeTransitionEnabled;
+        [FormerlySerializedAs("isSceneSwitchingFadeTransitionEnabled")] [Space] [Title("=== 场景切换相关设置 ===")] [Header("当前场景是否启用渐入渐出")] [FormerlySerializedAs("haveInOutBlack")]
+        public bool isFadeTransitionEnabled;
 
-        [Header("当前场景是否关闭渐入")] [FormerlySerializedAs("noInBlack")]
-        public bool isSceneSwitchingFadeInDisabled;
+        [FormerlySerializedAs("isSceneSwitchingFadeInDisabled")] [Header("当前场景是否关闭渐入")] [FormerlySerializedAs("noInBlack")]
+        public bool isFadeInDisabled;
 
-        [Header("当前场景是否在渐入时不暂停")] [FormerlySerializedAs("notPauseIn")]
-        public bool isSceneSwitchingFadeInUnpaused;
+        [FormerlySerializedAs("isSceneSwitchingFadeInUnpaused")] [Header("当前场景是否在渐入时不暂停")] [FormerlySerializedAs("notPauseIn")]
+        public bool isFadeInUnpaused;
 
         [Header("场景切换使用的Image")] [FormerlySerializedAs("_inOutBlack")]
         public Image sceneSwitchingFadeImage;
@@ -123,16 +123,16 @@ namespace UCT.Global.Core
                     playerBehaviour = playerOw.GetComponent<PlayerBehaviour>();
             }
 
-            if (isSceneSwitchingFadeTransitionEnabled)
+            if (isFadeTransitionEnabled)
             {
                 sceneSwitchingFadeImage = GameObject.Find("Canvas/InOutBlack").GetComponent<Image>();
                 sceneSwitchingFadeImage.color = Color.black;
-                overworldControl.pause = !isSceneSwitchingFadeInUnpaused;
-                if (!isSceneSwitchingFadeInDisabled)
+                overworldControl.pause = !isFadeInUnpaused;
+                if (!isFadeInDisabled)
                 {
                     sceneSwitchingFadeImage.DOColor(Color.clear, 0.5f).SetEase(Ease.Linear)
                         .OnKill(() => overworldControl.pause = false);
-                    CanvasController.Instance.Frame.color = overworldControl.isUsingHDFrame
+                    SettingsController.Instance.Frame.color = overworldControl.isUsingHDFrame
                         ? Color.white
                         : ColorEx.WhiteClear;
                 }
@@ -142,7 +142,7 @@ namespace UCT.Global.Core
                 }
             }
 
-            GameUtilityService.SetCanvasFrameSprite(CanvasController.Instance.frameSpriteIndex);
+            GameUtilityService.SetCanvasFrameSprite(SettingsController.Instance.frameSpriteIndex);
 
             AudioListener.volume = overworldControl.mainVolume;
             overworldControl.isSetting = false;

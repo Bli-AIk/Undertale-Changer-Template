@@ -48,7 +48,7 @@ DemoBox1\<image=-1><fx=0>* This is a <gradient="White to Yellow - UTC">broken bo
 Plot\<image=-1><fx=0>* <stop...><stop...>
 <passText>* Ah<stop><stop...>Is there nobody here?<stop>?
 <passText><image=0><fx=2>* Hello.
-<passText><image=-1><fx=0>* Ah?<stop>Flowey!<stop><enter>* Where have you been hiding,<enter><-  ->you scoundrel?
+<passText><image=-1><fx=0>* Ah? <stop>Flowey!<stop><enter>* Where have you been hiding,<enter><-  ->you scoundrel?
 <passText><image=2><fx=2>* None of your business.<stop><stop><stop><stop><stop><image=1><enter>* It's time for a battle<enter><-  ->now!;
 
 

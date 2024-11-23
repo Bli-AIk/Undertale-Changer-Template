@@ -34,6 +34,7 @@ namespace UCT.Global.Audio
                 MainControl.Instance.AudioControl.globalAudioMixer.FindMatchingGroups("BGM")[0];
         }
 
+        // ReSharper disable Unity.PerformanceAnalysis
         public void GetFx(int fxNumber, List<AudioClip> list, float volume = 0.5f, float pitch = 1,
             AudioMixerGroup audioMixerGroup = default)
         {

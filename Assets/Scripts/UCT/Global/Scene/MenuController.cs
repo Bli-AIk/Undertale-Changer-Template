@@ -106,12 +106,12 @@ namespace UCT.Global.Scene
                             break;
 
                         case 2:
-                            CanvasController.Instance.OpenSetting();
+                            SettingsController.Instance.OpenSetting();
                             break;
 
                         case 3:
-                            CanvasController.Instance.SetSettingsLayer(CanvasController.SettingsLayer
-                                .LanguageConfiguration);
+                            SettingsController.Instance.SetSettingsLayer(SettingsLayer
+                                .LanguagePacksConfigLayer);
                             goto case 2;
                         case 4:
                             _setData = true;
