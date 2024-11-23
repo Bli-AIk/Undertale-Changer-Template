@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UCT.Global.Core;
 using UCT.Global.UI;
 using UnityEngine;
 using UnityEngine.UI;
@@ -53,15 +54,15 @@ namespace UCT.Overworld
 
         private void Update()
         {
+            if (MainControl.Instance.overworldControl.isSetting) return;
+            
             if (_clock > 0) _clock -= Time.deltaTime;
             if (justSaying || (haveBack && _typeWritter.isTyping && !_typeWritter.passText && !_typeWritter.isStop))
             {
-                if (_clock <= 0 && _number >= 0)
-                {
-                    _back = !_back;
-                    ChangeImage(_number, _back);
-                    _clock = backFrame / 60f;
-                }
+                if (!(_clock <= 0) || _number < 0) return;
+                _back = !_back;
+                ChangeImage(_number, _back);
+                _clock = backFrame / 60f;
             }
             else if (_clock <= 0)
             {

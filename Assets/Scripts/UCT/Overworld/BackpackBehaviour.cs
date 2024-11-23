@@ -56,8 +56,9 @@ namespace UCT.Overworld
         }
 
         private void Update()
-        {
+        {            
             if (MainControl.Instance.overworldControl.isSetting || MainControl.Instance.overworldControl.pause) return;
+
             if (TalkBoxPositionChanger.Instance)
                 TalkBoxPositionChanger.Instance.isUp = MainControl.Instance.playerBehaviour.transform.position.y <
                                                        transform.position.y - 1.25f;
@@ -153,7 +154,8 @@ namespace UCT.Overworld
                                 foreach (var t in MainControl.Instance.playerControl.myItems)
                                     if (t != 0)
                                         _informationText.text +=
-                                            $"{DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, t, "Auto", 0)}\n";
+                                            DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, t,
+                                                "Auto", 0) + "\n";
                                     else _informationText.text += "\n";
 
                                 _informationText.text +=
