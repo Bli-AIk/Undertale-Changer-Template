@@ -48,8 +48,7 @@ SettingFullScreenTipClose\在全屏状态下，建议将分辨率调高。;
 VSyncNone\(垂直同步未开启，按C设置);
 VSyncFull\(垂直同步：全部，按C设置);
 VSyncHalf\(垂直同步：一半，按C设置);
-SettingResolvingTip\设置游戏窗口大小。(按C切换为16:9);
-SettingResolvingTipHD\设置游戏窗口大小。(按C切换为4:3);
+SettingResolvingTip\设置游戏窗口大小。;
 SettingSFXTip\设置游戏内的光效与特效是否开启。;
 SettingFPSTip\设置帧率是否显示。;
 SettingBackMenuTip\未保存的数据将会丢失。;
@@ -70,7 +69,7 @@ ControlSemicolon\更改视觉效果;
 ControlEsc\退出游戏;
 ControlDefault\恢复默认设置;
 
-ControlBottomText\~大家好啊，我是设置~;
+ControlCommonDescriptionText\~大家好啊，我是设置~;
 
 ControlUnder0\主键位设置中。按C设置辅助键位。;
 ControlUnder1\辅助键位1设置中。按C设置辅助键位2。;

@@ -24,7 +24,7 @@ namespace UCT.Global.Settings
 
         private void Update()
         {
-            if (_fps) _fps.text = MainControl.Instance.overworldControl.openFPS ? UpdateFPS(_fps.text) : "";
+            if (_fps) _fps.text = MainControl.Instance.overworldControl.isDisplayFPS ? UpdateFPS(_fps.text) : "";
         }
         
         /// <summary>

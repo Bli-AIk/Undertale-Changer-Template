@@ -53,10 +53,10 @@ namespace UCT.Control
 
         [Header("全局音量")] public float mainVolume; //全局音量
 
-        [FormerlySerializedAs("noSFX")] [Header("简化特效")]
-        public bool noSfx; //光效 后处理特效显示
+        [FormerlySerializedAs("noSfx")] [FormerlySerializedAs("noSFX")] [Header("简化特效")]
+        public bool isSimplifySfx; //光效 后处理特效显示
 
-        [Header("显示FPS")] public bool openFPS; //显示FPS
+        [FormerlySerializedAs("openFPS")] [Header("显示FPS")] public bool isDisplayFPS; //显示FPS
 
         [Header("分辨率（显示用）")] public Vector2 resolution; //分辨率
 
@@ -74,8 +74,8 @@ namespace UCT.Control
 
         public Vector2 animDirection;
 
-        [Header("HD边框")] [FormerlySerializedAs("hdResolution")]
-        public bool isUsingHDFrame;
+        [FormerlySerializedAs("isUsingHDFrame")] [Header("HD边框")] [FormerlySerializedAs("hdResolution")]
+        public bool isUsingHdFrame;
 
         public List<Sprite> frames;
 

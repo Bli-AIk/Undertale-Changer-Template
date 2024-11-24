@@ -110,7 +110,7 @@ namespace UCT.Global.Scene
                             break;
 
                         case 3:
-                            SettingsController.Instance.SetSettingsLayer(SettingsLayer
+                            SettingsController.Instance.SetSettingsLayer(SettingsLayerEnum
                                 .LanguagePacksConfigLayer);
                             goto case 2;
                         case 4:

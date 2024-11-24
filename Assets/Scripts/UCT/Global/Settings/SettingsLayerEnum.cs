@@ -1,6 +1,6 @@
 ﻿namespace UCT.Global.Settings
 {
-    public enum SettingsLayer
+    public enum SettingsLayerEnum
     {
         HomeLayer, //主层级
         KeyConfigLayer, //按键设置层级

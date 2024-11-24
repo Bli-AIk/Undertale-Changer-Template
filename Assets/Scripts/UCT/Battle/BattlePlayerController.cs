@@ -81,7 +81,7 @@ namespace UCT.Battle
 
         private void Update()
         {
-            if (!MainControl.Instance.overworldControl.noSfx && hitVolume.weight > 0)
+            if (!MainControl.Instance.overworldControl.isSimplifySfx && hitVolume.weight > 0)
                 hitVolume.weight -= Time.deltaTime;
 
             if (MainControl.Instance.playerControl.hp <= 0)

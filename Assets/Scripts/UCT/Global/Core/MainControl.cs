@@ -132,7 +132,7 @@ namespace UCT.Global.Core
                 {
                     sceneSwitchingFadeImage.DOColor(Color.clear, 0.5f).SetEase(Ease.Linear)
                         .OnKill(() => overworldControl.pause = false);
-                    SettingsController.Instance.Frame.color = overworldControl.isUsingHDFrame
+                    SettingsController.Instance.Frame.color = overworldControl.isUsingHdFrame
                         ? Color.white
                         : ColorEx.WhiteClear;
                 }
@@ -147,7 +147,7 @@ namespace UCT.Global.Core
             AudioListener.volume = overworldControl.mainVolume;
             overworldControl.isSetting = false;
 
-            GameUtilityService.ToggleAllSfx(overworldControl.noSfx);
+            GameUtilityService.ToggleAllSfx(overworldControl.isSimplifySfx);
 
             _debugStringGradient = new DebugStringGradient("Debug");
         }
@@ -248,8 +248,8 @@ namespace UCT.Global.Core
 
             //--------------------------------------------------------------------------------
 
-            overworldControl.isUsingHDFrame = Convert.ToBoolean(PlayerPrefs.GetInt("hdResolution", 0));
-            overworldControl.noSfx = Convert.ToBoolean(PlayerPrefs.GetInt("noSFX", 0));
+            overworldControl.isUsingHdFrame = Convert.ToBoolean(PlayerPrefs.GetInt("hdResolution", 0));
+            overworldControl.isSimplifySfx = Convert.ToBoolean(PlayerPrefs.GetInt("noSFX", 0));
             overworldControl.vsyncMode = (OverworldControl.VSyncMode)PlayerPrefs.GetInt("vsyncMode", 0);
         }
 
@@ -341,12 +341,12 @@ namespace UCT.Global.Core
         {
             if (InputService.GetKeyDown(KeyCode.Tab))
                 overworldControl.resolutionLevel =
-                    GameUtilityService.UpdateResolutionSettings(overworldControl.isUsingHDFrame,
+                    GameUtilityService.UpdateResolutionSettings(overworldControl.isUsingHdFrame,
                         overworldControl.resolutionLevel);
             if (InputService.GetKeyDown(KeyCode.Semicolon))
             {
-                overworldControl.noSfx = !overworldControl.noSfx;
-                GameUtilityService.ToggleAllSfx(overworldControl.noSfx);
+                overworldControl.isSimplifySfx = !overworldControl.isSimplifySfx;
+                GameUtilityService.ToggleAllSfx(overworldControl.isSimplifySfx);
             }
 
             // ReSharper disable once InvertIf

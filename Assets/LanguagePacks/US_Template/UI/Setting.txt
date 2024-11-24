@@ -59,8 +59,7 @@ SettingFullScreenTipClose\When Full screen is enabled, it is recommended to incr
 VSyncNone\(vertical synchronization not enabled, press C to set);
 VSyncFull\(vertical synchronization: all, press C to set);
 VSyncHalf\(vertical synchronization: half, press C to set);
-SettingResolvingTip\Set game window size.(Press C to switch to 16:9);
-SettingResolvingTipHD\Set game window size.(Press C to switch to 4:3);
+SettingResolvingTip\Set game window size.;
 SettingSFXTip\Set whether the light effects and special effects in the game are enabled.;
 SettingFPSTip\Set whether FPS is displayed.;
 SettingBackMenuTip\Unsaved data will be lost.;
@@ -81,7 +80,7 @@ ControlSemicolon\VFX;
 ControlEsc\Exit game;
 ControlDefault\Reset to default;
 
-ControlBottomText\~I'm setttttttttting!~;
+ControlCommonDescriptionText\~I'm setttttttttting!~;
 
 ControlUnder0\In the main key position setting, press C to set the auxiliary key position.;
 ControlUnder1\Auxiliary key 1 is being set. Press C to set auxiliary key 2.;

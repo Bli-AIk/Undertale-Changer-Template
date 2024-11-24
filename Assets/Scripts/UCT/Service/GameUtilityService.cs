@@ -48,7 +48,7 @@ namespace UCT.Service
                 }
             }
 
-            if (!MainControl.Instance.overworldControl.isUsingHDFrame)
+            if (!MainControl.Instance.overworldControl.isUsingHdFrame)
             {
                 if (MainControl.Instance.overworldControl.resolutionLevel > 4)
                     MainControl.Instance.overworldControl.resolutionLevel = 0;
@@ -59,7 +59,7 @@ namespace UCT.Service
                     MainControl.Instance.overworldControl.resolutionLevel = 5;
             }
 
-            if (!MainControl.Instance.overworldControl.isUsingHDFrame)
+            if (!MainControl.Instance.overworldControl.isUsingHdFrame)
             {
                 MainControl.Instance.mainCamera.rect = new Rect(0, 0, 1, 1);
 
@@ -161,7 +161,7 @@ namespace UCT.Service
                 {
                     MainControl.Instance.sceneSwitchingFadeImage.DOColor(fadeColor, fadeTime).SetEase(Ease.Linear)
                         .OnKill(() => SwitchScene(scene));
-                    if (!MainControl.Instance.overworldControl.isUsingHDFrame)
+                    if (!MainControl.Instance.overworldControl.isUsingHdFrame)
                         SettingsController.Instance.Frame.color = ColorEx.WhiteClear;
                     break;
                 }
@@ -175,7 +175,7 @@ namespace UCT.Service
                     MainControl.Instance.sceneSwitchingFadeImage.color = fadeColor;
                     MainControl.Instance.sceneSwitchingFadeImage.DOColor(fadeColor, fadeTime).SetEase(Ease.Linear)
                         .OnKill(() => SwitchScene(scene));
-                    if (!MainControl.Instance.overworldControl.isUsingHDFrame)
+                    if (!MainControl.Instance.overworldControl.isUsingHdFrame)
                         SettingsController.Instance.Frame.color = ColorEx.WhiteClear;
                     break;
                 }

@@ -301,8 +301,8 @@ namespace UCT.Global.Scene
                         PlayerPrefs.SetInt("languagePack", MainControl.Instance.languagePackId);
                         PlayerPrefs.SetInt("dataNumber", MainControl.Instance.saveDataId);
                         PlayerPrefs.SetInt("hdResolution",
-                            Convert.ToInt32(MainControl.Instance.overworldControl.isUsingHDFrame));
-                        PlayerPrefs.SetInt("noSFX", Convert.ToInt32(MainControl.Instance.overworldControl.noSfx));
+                            Convert.ToInt32(MainControl.Instance.overworldControl.isUsingHdFrame));
+                        PlayerPrefs.SetInt("noSFX", Convert.ToInt32(MainControl.Instance.overworldControl.isSimplifySfx));
                         PlayerPrefs.SetInt("vsyncMode",
                             Convert.ToInt32(MainControl.Instance.overworldControl.vsyncMode));
 
