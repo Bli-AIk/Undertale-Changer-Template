@@ -98,6 +98,8 @@ But it is not recommended to use the 2022 version, otherwise the template may ha
 
 Thank you very much to the contributors of the above libraries/plugins for providing excellent tools and technical support for this project!
 
+*Another note: Since the project development took a long time and dependencies were not recorded from the beginning, there may be omissions. No infringement is intended. If there are any omissions, please inform us through Issue, thank you!*
+
 ## License
 
 [GNU General Public License v3.0](../main/LICENSE)
