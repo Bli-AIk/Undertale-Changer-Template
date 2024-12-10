@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using UCT.Global.Core;
+using UCT.Global.Settings;
 using UnityEngine;
 
 namespace UCT.Service
@@ -12,7 +13,8 @@ namespace UCT.Service
     {
         public static bool GetKeyDown(KeyCode key)
         {
-            var keyCodes = MainControl.Instance.overworldControl.KeyCodes;
+            var keyCodes = KeyBindings.GetDictionary();
+            // ReSharper disable once SwitchExpressionHandlesSomeKnownEnumValuesWithExceptionInDefault
             return key switch
             {
                 KeyCode.DownArrow => GetKeyDownFrom(keyCodes, 0),
@@ -27,18 +29,24 @@ namespace UCT.Service
                 KeyCode.Tab => GetKeyDownFrom(keyCodes, 9),
                 KeyCode.Semicolon => GetKeyDownFrom(keyCodes, 10),
                 KeyCode.Escape => GetKeyDownFrom(keyCodes, 11),
-                _ => false
+                _ => throw new NullReferenceException()
             };
         }
 
-        private static bool GetKeyDownFrom(List<KeyCode>[] keyCodes, int index)
+        private static bool GetKeyDownFrom(Dictionary<KeyBindingType, Dictionary<string, KeyCode>> keyCodes, int index)
         {
-            return keyCodes.Any(keyCode => Input.GetKeyDown(keyCode[index]));
+            var result = keyCodes.Any(keyBinding 
+                => KeyBindings.GetInputEveryKeyCodeAtIndex(index, keyBinding, Input.GetKeyDown));
+            if(result)
+            {}
+            
+            return result;
         }
 
         public static bool GetKey(KeyCode key)
         {
-            var keyCodes = MainControl.Instance.overworldControl.KeyCodes;
+            var keyCodes = KeyBindings.GetDictionary();
+            // ReSharper disable once SwitchExpressionHandlesSomeKnownEnumValuesWithExceptionInDefault
             return key switch
             {
                 KeyCode.DownArrow => GetKeyFrom(keyCodes, 0),
@@ -53,18 +61,21 @@ namespace UCT.Service
                 KeyCode.Tab => GetKeyFrom(keyCodes, 9),
                 KeyCode.Semicolon => GetKeyFrom(keyCodes, 10),
                 KeyCode.Escape => GetKeyFrom(keyCodes, 11),
-                _ => false
+                _ => throw new NullReferenceException()
             };
         }
 
-        private static bool GetKeyFrom(List<KeyCode>[] keyCodes, int index)
+        private static bool GetKeyFrom(Dictionary<KeyBindingType, Dictionary<string, KeyCode>> keyCodes, int index)
         {
-            return keyCodes.Any(keyCode => Input.GetKey(keyCode[index]));
+            var result = keyCodes.Any(keyBinding 
+                => KeyBindings.GetInputEveryKeyCodeAtIndex(index, keyBinding, Input.GetKey));
+            return result;
         }
 
         public static bool GetKeyUp(KeyCode key)
         {
-            var keyCodes = MainControl.Instance.overworldControl.KeyCodes;
+            var keyCodes = KeyBindings.GetDictionary();
+            // ReSharper disable once SwitchExpressionHandlesSomeKnownEnumValuesWithExceptionInDefault
             return key switch
             {
                 KeyCode.DownArrow => GetKeyUpFrom(keyCodes, 0),
@@ -79,41 +90,15 @@ namespace UCT.Service
                 KeyCode.Tab => GetKeyUpFrom(keyCodes, 9),
                 KeyCode.Semicolon => GetKeyUpFrom(keyCodes, 10),
                 KeyCode.Escape => GetKeyUpFrom(keyCodes, 11),
-                _ => false
+                _ => throw new NullReferenceException()
             };
         }
 
-        private static bool GetKeyUpFrom(List<KeyCode>[] keyCodes, int index)
+        private static bool GetKeyUpFrom(Dictionary<KeyBindingType, Dictionary<string, KeyCode>> keyCodes, int index)
         {
-            return keyCodes.Any(keyCode => Input.GetKeyUp(keyCode[index]));
-        }
-
-        /// <summary>
-        ///     应用默认键位
-        /// </summary>
-        public static List<KeyCode>[] ApplyDefaultControl()
-        {
-            var keyCodes = new List<KeyCode>[3];
-            keyCodes[0] = new List<KeyCode>
-            {
-                KeyCode.DownArrow, KeyCode.RightArrow, KeyCode.UpArrow, KeyCode.LeftArrow,
-                KeyCode.Z, KeyCode.X, KeyCode.C, KeyCode.V,
-                KeyCode.F4, KeyCode.None, KeyCode.None, KeyCode.Escape
-            };
-            keyCodes[1] = new List<KeyCode>
-            {
-                KeyCode.S, KeyCode.D, KeyCode.W, KeyCode.A,
-                KeyCode.Return, KeyCode.RightShift, KeyCode.RightControl, KeyCode.None,
-                KeyCode.None, KeyCode.None, KeyCode.None, KeyCode.None
-            };
-            keyCodes[2] = new List<KeyCode>
-            {
-                KeyCode.None, KeyCode.None, KeyCode.None, KeyCode.None,
-                KeyCode.None, KeyCode.LeftShift, KeyCode.LeftControl, KeyCode.None,
-                KeyCode.None, KeyCode.None, KeyCode.None, KeyCode.None
-            };
-
-            return keyCodes;
+            var result = keyCodes.Any(keyBinding 
+                => KeyBindings.GetInputEveryKeyCodeAtIndex(index, keyBinding, Input.GetKeyUp));
+            return result;
         }
     }
 }

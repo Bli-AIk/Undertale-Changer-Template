@@ -171,7 +171,7 @@ namespace UCT.Global.Core
             mainControl.isFadeInUnpaused = isFadeInUnpaused;
             mainControl.InitializationOverworld();
             mainControl.mainCamera = Camera.main;
-            GameUtilityService.SetResolution(mainControl.overworldControl.resolutionLevel);
+            GameUtilityService.SetResolution(SettingsStorage.resolutionLevel);
         }
     }
 }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace UCT.Global.Other
+namespace UCT.Other
 {
     /// <summary>
     ///     Debug控制器

@@ -2,7 +2,7 @@ using System;
 using UCT.Global.Core;
 using UnityEngine;
 
-namespace UCT.Global.Other
+namespace UCT.Other
 {
     public class FollowSth : MonoBehaviour
     {

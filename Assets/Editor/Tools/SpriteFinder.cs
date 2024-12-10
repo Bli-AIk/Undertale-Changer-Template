@@ -65,10 +65,10 @@ public class TextureFinder : MonoBehaviour
 
         foreach (KeyValuePair<Texture, List<(GameObject obj, string usageType)>> entry in textureUsageMap)
         {
-            UCT.Global.Other.Debug.LogWarning($"�ó�����ʹ����<b> {entry.Value[0].usageType}</b>: <b>{entry.Key.name}</b>", entry.Key);
+            UCT.Other.Debug.LogWarning($"�ó�����ʹ����<b> {entry.Value[0].usageType}</b>: <b>{entry.Key.name}</b>", entry.Key);
             foreach (var (obj, usageType) in entry.Value)
             {
-                UCT.Global.Other.Debug.Log($"  - ʹ�ø� <b>{usageType}</b> �Ķ���: <b>{obj.name}</b>)", obj);
+                UCT.Other.Debug.Log($"  - ʹ�ø� <b>{usageType}</b> �Ķ���: <b>{obj.name}</b>)", obj);
             }
         }
     }

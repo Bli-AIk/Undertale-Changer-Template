@@ -6,4 +6,4 @@ LanguagePackName\简体中文<gradient="White to Yellow - UTC">（内置）</gra
 /* 建议在此处标明各人员及职位 如xxx(原始文本),xxx(翻译),xxx(校对)等。 */
 LanguagePackAuthor\作者：AIk(原始文本);
 
-LanguagePackInformation\已启用内置简体中文语言包。;
+LanguagePackInformation\内置简体中文语言包。;

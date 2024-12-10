@@ -69,7 +69,7 @@ namespace UCT.Battle
             switch (turnNumber)
             {
                 case 1:
-                    Global.Other.Debug.Log("这是个摆烂回合……也许吧。");
+                    Other.Debug.Log("这是个摆烂回合……也许吧。");
 
                     var obj = objectPools[0].GetFromPool<BulletController>();
                     obj.SetBullet("CupCake", "CupCake", new Vector3(1, -1.6f),
@@ -82,7 +82,7 @@ namespace UCT.Battle
 
                     for (var i = 600; i > 0; i--)
                     {
-                        Global.Other.Debug.Log($"你先别急，先摆{TextProcessingService.RandomStringColor(i.ToString())}秒");
+                        Other.Debug.Log($"你先别急，先摆{TextProcessingService.RandomStringColor(i.ToString())}秒");
                         yield return Timing.WaitForSeconds(1f);
                     }
 
@@ -92,12 +92,12 @@ namespace UCT.Battle
                     break;
 
                 case 0: //示例回合
-                    Global.Other.Debug.Log("这是一个示例回合");
+                    Other.Debug.Log("这是一个示例回合");
                     yield return Timing.WaitForSeconds(0.5f);
-                    Global.Other.Debug.Log("请注意查看控制台发出的Debug文本介绍");
+                    Other.Debug.Log("请注意查看控制台发出的Debug文本介绍");
                     yield return Timing.WaitForSeconds(1.5f);
 
-                    Global.Other.Debug.Log("战斗框缩放：更改四个点的坐标");
+                    Other.Debug.Log("战斗框缩放：更改四个点的坐标");
 
                     DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[0],
                             x => MainControl.Instance.mainBox.vertexPoints[0] = x,
@@ -119,7 +119,7 @@ namespace UCT.Battle
 
                     yield return Timing.WaitForSeconds(1);
 
-                    Global.Other.Debug.Log("通过更改点坐标实现的战斗框轴点旋转");
+                    Other.Debug.Log("通过更改点坐标实现的战斗框轴点旋转");
                     for (var i = 0; i < 4; i++)
                     {
                         DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[0],
@@ -138,14 +138,14 @@ namespace UCT.Battle
                         yield return Timing.WaitForSeconds(0.5f);
                     }
 
-                    Global.Other.Debug.Log("简单嵌套弹幕编写示例");
+                    Other.Debug.Log("简单嵌套弹幕编写示例");
                     for (var i = 0; i < 5 * 20; i++)
                     {
                         Timing.RunCoroutine(_TurnNest(Nest.SimpleNestBullet));
                         yield return Timing.WaitForSeconds(0.2f);
                     }
 
-                    Global.Other.Debug.Log("战斗框缩放回初始坐标以结束回合");
+                    Other.Debug.Log("战斗框缩放回初始坐标以结束回合");
                     yield return Timing.WaitForSeconds(1f);
                     DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[0],
                             x => MainControl.Instance.mainBox.vertexPoints[0] = x,

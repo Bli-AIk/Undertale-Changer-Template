@@ -30,9 +30,11 @@ namespace UCT.Global.Core
             InBattle
         }
 
-        [Header("内置语言包总数")] public const int LanguagePackInsideNumber = 3;
+        [ReadOnly] [Header("内置语言包总数")] public const int LanguagePackageInternalNumber = 3;
 
         public static MainControl Instance;
+
+        [ReadOnly] [Header("外置语言包总数")] public static int LanguagePackageExternalNumber;
 
         [Title("=== 场景状态设置 ===")] public SceneState sceneState;
 
@@ -42,13 +44,21 @@ namespace UCT.Global.Core
         [Space] [Title("=== 存档相关设置 ===")] [Header("存档id")] [FormerlySerializedAs("dataNumber")]
         public int saveDataId;
 
-        [FormerlySerializedAs("isSceneSwitchingFadeTransitionEnabled")] [Space] [Title("=== 场景切换相关设置 ===")] [Header("当前场景是否启用渐入渐出")] [FormerlySerializedAs("haveInOutBlack")]
+        [FormerlySerializedAs("isSceneSwitchingFadeTransitionEnabled")]
+        [Space]
+        [Title("=== 场景切换相关设置 ===")]
+        [Header("当前场景是否启用渐入渐出")]
+        [FormerlySerializedAs("haveInOutBlack")]
         public bool isFadeTransitionEnabled;
 
-        [FormerlySerializedAs("isSceneSwitchingFadeInDisabled")] [Header("当前场景是否关闭渐入")] [FormerlySerializedAs("noInBlack")]
+        [FormerlySerializedAs("isSceneSwitchingFadeInDisabled")]
+        [Header("当前场景是否关闭渐入")]
+        [FormerlySerializedAs("noInBlack")]
         public bool isFadeInDisabled;
 
-        [FormerlySerializedAs("isSceneSwitchingFadeInUnpaused")] [Header("当前场景是否在渐入时不暂停")] [FormerlySerializedAs("notPauseIn")]
+        [FormerlySerializedAs("isSceneSwitchingFadeInUnpaused")]
+        [Header("当前场景是否在渐入时不暂停")]
+        [FormerlySerializedAs("notPauseIn")]
         public bool isFadeInUnpaused;
 
         [Header("场景切换使用的Image")] [FormerlySerializedAs("_inOutBlack")]
@@ -127,12 +137,12 @@ namespace UCT.Global.Core
             {
                 sceneSwitchingFadeImage = GameObject.Find("Canvas/InOutBlack").GetComponent<Image>();
                 sceneSwitchingFadeImage.color = Color.black;
-                overworldControl.pause = !isFadeInUnpaused;
+                SettingsStorage.pause = !isFadeInUnpaused;
                 if (!isFadeInDisabled)
                 {
                     sceneSwitchingFadeImage.DOColor(Color.clear, 0.5f).SetEase(Ease.Linear)
-                        .OnKill(() => overworldControl.pause = false);
-                    SettingsController.Instance.Frame.color = overworldControl.isUsingHdFrame
+                        .OnKill(() => SettingsStorage.pause = false);
+                    SettingsController.Instance.Frame.color = SettingsStorage.isUsingHdFrame
                         ? Color.white
                         : ColorEx.WhiteClear;
                 }
@@ -144,10 +154,10 @@ namespace UCT.Global.Core
 
             GameUtilityService.SetCanvasFrameSprite(SettingsController.Instance.frameSpriteIndex);
 
-            AudioListener.volume = overworldControl.mainVolume;
+            AudioListener.volume = SettingsStorage.mainVolume;
             overworldControl.isSetting = false;
 
-            GameUtilityService.ToggleAllSfx(overworldControl.isSimplifySfx);
+            GameUtilityService.ToggleAllSfx(SettingsStorage.isSimplifySfx);
 
             _debugStringGradient = new DebugStringGradient("Debug");
         }
@@ -162,7 +172,7 @@ namespace UCT.Global.Core
 
             if (overworldControl.isSetting)
                 return;
-            UpdateSettings();
+            SettingsShortcuts();
         }
 
 
@@ -220,7 +230,7 @@ namespace UCT.Global.Core
             if (overworldControl == null)
             {
                 overworldControl = Resources.Load<OverworldControl>("OverworldControl");
-                overworldControl.KeyCodes = InputService.ApplyDefaultControl();
+                KeyBindings.ResetDictionary();
             }
 
 
@@ -248,9 +258,9 @@ namespace UCT.Global.Core
 
             //--------------------------------------------------------------------------------
 
-            overworldControl.isUsingHdFrame = Convert.ToBoolean(PlayerPrefs.GetInt("hdResolution", 0));
-            overworldControl.isSimplifySfx = Convert.ToBoolean(PlayerPrefs.GetInt("noSFX", 0));
-            overworldControl.vsyncMode = (OverworldControl.VSyncMode)PlayerPrefs.GetInt("vsyncMode", 0);
+            SettingsStorage.isUsingHdFrame = Convert.ToBoolean(PlayerPrefs.GetInt("hdResolution", 0));
+            SettingsStorage.isSimplifySfx = Convert.ToBoolean(PlayerPrefs.GetInt("noSFX", 0));
+            SettingsStorage.vsyncMode = (VSyncMode)PlayerPrefs.GetInt("vsyncMode", 0);
         }
 
         private void InitializationBattle()
@@ -265,7 +275,7 @@ namespace UCT.Global.Core
             BattleControl.uiText = DataHandlerService.LoadLanguageData("Battle\\UIBattleText", languagePackId);
 
             string[] turnSave;
-            if (languagePackId < LanguagePackInsideNumber)
+            if (languagePackId < LanguagePackageInternalNumber)
             {
                 var textAssets = Resources.LoadAll<TextAsset>(
                     $"TextAssets/LanguagePacks/{DataHandlerService.GetLanguageInsideId(languagePackId)}/Battle/Turn");
@@ -276,11 +286,11 @@ namespace UCT.Global.Core
             else
             {
                 turnSave = Directory.GetFiles(
-                    $"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[languagePackId - LanguagePackInsideNumber]}\\Battle\\Turn");
+                    $"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[languagePackId - LanguagePackageInternalNumber]}\\Battle\\Turn");
             }
 
             foreach (var t in turnSave)
-                if (languagePackId < LanguagePackInsideNumber)
+                if (languagePackId < LanguagePackageInternalNumber)
                     BattleControl.turnDialogAsset.Add(t);
                 else if (t[^3..] == "txt")
                     BattleControl.turnDialogAsset.Add(File.ReadAllText(t));
@@ -311,14 +321,13 @@ namespace UCT.Global.Core
         private void DebugUpdate()
         {
             // F5刷新场景
-            if (Input.GetKeyDown(KeyCode.F5))
-                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            if (Input.GetKeyDown(KeyCode.F5)) GameUtilityService.RefreshTheScene();
             // 无敌模式 Ctrl+i开启
             if ((Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)) &&
                 Input.GetKeyDown(KeyCode.I))
             {
                 playerControl.keepInvincible = !playerControl.keepInvincible;
-                Other.Debug.Log($"Debug: 无敌模式已{(playerControl.keepInvincible ? "开启" : "关闭")}！（Crtl+I）", "#FFFF00");
+                Other.Debug.Log($"Debug: 无敌模式已{(playerControl.keepInvincible ? "开启" : "关闭")}！（Ctrl+I）", "#FFFF00");
             }
 
             if (playerControl.keepInvincible)
@@ -335,25 +344,25 @@ namespace UCT.Global.Core
         }
 
         /// <summary>
-        ///     控制按键设置分辨率、切换音效和全屏模式。
+        ///     通过快捷键设置分辨率、切换音效和全屏模式。
         /// </summary>
-        private void UpdateSettings()
+        private static void SettingsShortcuts()
         {
             if (InputService.GetKeyDown(KeyCode.Tab))
-                overworldControl.resolutionLevel =
-                    GameUtilityService.UpdateResolutionSettings(overworldControl.isUsingHdFrame,
-                        overworldControl.resolutionLevel);
+                SettingsStorage.resolutionLevel =
+                    GameUtilityService.UpdateResolutionSettings(SettingsStorage.isUsingHdFrame,
+                        SettingsStorage.resolutionLevel);
             if (InputService.GetKeyDown(KeyCode.Semicolon))
             {
-                overworldControl.isSimplifySfx = !overworldControl.isSimplifySfx;
-                GameUtilityService.ToggleAllSfx(overworldControl.isSimplifySfx);
+                SettingsStorage.isSimplifySfx = !SettingsStorage.isSimplifySfx;
+                GameUtilityService.ToggleAllSfx(SettingsStorage.isSimplifySfx);
             }
 
             // ReSharper disable once InvertIf
             if (InputService.GetKeyDown(KeyCode.F4))
             {
-                overworldControl.fullScreen = !overworldControl.fullScreen;
-                GameUtilityService.SetResolution(overworldControl.resolutionLevel);
+                SettingsStorage.fullScreen = !SettingsStorage.fullScreen;
+                GameUtilityService.SetResolution(SettingsStorage.resolutionLevel);
             }
         }
     }

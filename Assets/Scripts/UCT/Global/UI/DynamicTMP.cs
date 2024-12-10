@@ -9,7 +9,7 @@ namespace UCT.Global.UI
     /// </summary>
     public class DynamicTMP : MonoBehaviour
     {
-        public OverworldControl.DynamicTMP dynamicMode;
+        public DynamicTMPType dynamicMode;
         private float _randomStart;
         private TMP_Text _tmp;
 
@@ -21,7 +21,7 @@ namespace UCT.Global.UI
 
         private void FixedUpdate()
         {
-            if (dynamicMode == OverworldControl.DynamicTMP.None) return;
+            if (dynamicMode == DynamicTMPType.None) return;
 
             _tmp.ForceMeshUpdate();
 
@@ -29,7 +29,7 @@ namespace UCT.Global.UI
 
             switch (dynamicMode)
             {
-                case OverworldControl.DynamicTMP.RandomShake: //帕金森，但是每个抖动都不一样
+                case DynamicTMPType.RandomShake: //帕金森，但是每个抖动都不一样
                     for (var i = 0; i < textInfo.characterCount; i++)
                     {
                         var charInfo = textInfo.characterInfo[i];
@@ -47,7 +47,7 @@ namespace UCT.Global.UI
 
                     break;
 
-                case OverworldControl.DynamicTMP.RandomShakeSingle: //类似于原版战斗内的我方对话抖动：字符随机时间随机一个抖那么一下
+                case DynamicTMPType.RandomShakeSingle: //类似于原版战斗内的我方对话抖动：字符随机时间随机一个抖那么一下
 
                     var randomIs = Random.Range(0, 120);
                     if (randomIs == 0)
@@ -69,7 +69,7 @@ namespace UCT.Global.UI
 
                     break;
 
-                case OverworldControl.DynamicTMP.RandomShakeAll: //整齐划一的抖动
+                case DynamicTMPType.RandomShakeAll: //整齐划一的抖动
                     var randomer = new Vector3(Random.Range(-0.05f, 0.05f), Random.Range(-0.05f, 0.05f), 0);
                     for (var i = 0; i < textInfo.characterCount; i++)
                     {
@@ -88,7 +88,7 @@ namespace UCT.Global.UI
 
                     break;
 
-                case OverworldControl.DynamicTMP.CrazyShake: //抽搐的抖动
+                case DynamicTMPType.CrazyShake: //抽搐的抖动
                     for (var i = 0; i < textInfo.characterCount; i++)
                     {
                         var charInfo = textInfo.characterInfo[i];
@@ -112,7 +112,7 @@ namespace UCT.Global.UI
 
                     break;
 
-                case OverworldControl.DynamicTMP.NapShake: //小幽灵式抽搐的抖动
+                case DynamicTMPType.NapShake: //小幽灵式抽搐的抖动
                     for (var i = 0; i < textInfo.characterCount; i++)
                     {
                         var charInfo = textInfo.characterInfo[i];
@@ -133,7 +133,7 @@ namespace UCT.Global.UI
 
                     break;
 
-                case OverworldControl.DynamicTMP.NapFloat: //小幽灵字符漂浮
+                case DynamicTMPType.NapFloat: //小幽灵字符漂浮
                     for (var i = 0; i < textInfo.characterCount; i++)
                     {
                         var charInfo = textInfo.characterInfo[i];
@@ -151,7 +151,7 @@ namespace UCT.Global.UI
 
                     break;
 
-                case OverworldControl.DynamicTMP.Wave:
+                case DynamicTMPType.Wave:
                     for (var i = 0; i < textInfo.characterCount; i++)
                     {
                         var charInfo = textInfo.characterInfo[i];
@@ -168,7 +168,7 @@ namespace UCT.Global.UI
 
                     break;
 
-                case OverworldControl.DynamicTMP.Explode:
+                case DynamicTMPType.Explode:
                     var center = new Vector3(0, 0, 0);
                     for (var i = 0; i < textInfo.characterCount; i++)
                     {
@@ -186,7 +186,7 @@ namespace UCT.Global.UI
 
                     break;
 
-                case OverworldControl.DynamicTMP.Bounce:
+                case DynamicTMPType.Bounce:
                     for (var i = 0; i < textInfo.characterCount; i++)
                     {
                         var charInfo = textInfo.characterInfo[i];

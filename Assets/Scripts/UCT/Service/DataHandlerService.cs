@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using UCT.Control;
 using UCT.Global.Core;
+using UCT.Global.Settings;
 using UCT.Global.UI;
 using UnityEngine;
 
@@ -673,7 +674,7 @@ namespace UCT.Service
         public static int LanguagePackDetection(int id)
         {
             if (id < 0 || id >= Directory.GetDirectories(Application.dataPath + "\\LanguagePacks").Length +
-                MainControl.LanguagePackInsideNumber)
+                MainControl.LanguagePackageInternalNumber)
                 return 2;
             return id;
         }
@@ -683,10 +684,10 @@ namespace UCT.Service
         /// </summary>
         public static string LoadLanguageData(string path, int id)
         {
-            return id < MainControl.LanguagePackInsideNumber
+            return id < MainControl.LanguagePackageInternalNumber
                 ? Resources.Load<TextAsset>($"TextAssets/LanguagePacks/{GetLanguageInsideId(id)}/{path}").text
                 : File.ReadAllText(
-                    $"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[id - MainControl.LanguagePackInsideNumber]}\\{path}.txt");
+                    $"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[id - MainControl.LanguagePackageInternalNumber]}\\{path}.txt");
         }
 
         /// <summary>
@@ -694,17 +695,17 @@ namespace UCT.Service
         /// </summary>
         public static void InitializationLanguagePackFullWidth()
         {
-            if (MainControl.Instance.overworldControl.textWidth != bool.Parse(
+            if (SettingsStorage.textWidth != bool.Parse(
                     TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave,
                         "LanguagePackFullWidth")))
             {
-                MainControl.Instance.overworldControl.textWidth = bool.Parse(
+                SettingsStorage.textWidth = bool.Parse(
                     TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave,
                         "LanguagePackFullWidth"));
                 foreach (var obj in Resources.FindObjectsOfTypeAll(typeof(TextChanger)))
                 {
                     var textChanger = (TextChanger)obj;
-                    textChanger.isUseWidth = MainControl.Instance.overworldControl.textWidth;
+                    textChanger.isUseWidth = SettingsStorage.textWidth;
                     textChanger.Set();
                     textChanger.Change();
                 }

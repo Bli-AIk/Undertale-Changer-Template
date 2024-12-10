@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using UCT.Global.Core;
+using UCT.Global.Settings;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -30,7 +31,7 @@ namespace UCT.Global.UI
         public void Set()
         {
             _tmp = GetComponent<TMP_Text>();
-            isUseWidth = MainControl.Instance.overworldControl.textWidth;
+            isUseWidth = SettingsStorage.textWidth;
         }
 
         public void Change()

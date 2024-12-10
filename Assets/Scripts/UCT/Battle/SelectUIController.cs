@@ -5,6 +5,7 @@ using DG.Tweening;
 using TMPro;
 using UCT.Global.Audio;
 using UCT.Global.Core;
+using UCT.Global.Settings;
 using UCT.Global.UI;
 using UCT.Service;
 using UnityEngine;
@@ -142,7 +143,7 @@ namespace UCT.Battle
 
         private void Update()
         {
-            if (MainControl.Instance.overworldControl.isSetting || MainControl.Instance.overworldControl.pause)
+            if (MainControl.Instance.overworldControl.isSetting || SettingsStorage.pause)
                 return;
 
             if (MainControl.Instance.playerControl.isDebug)
@@ -490,7 +491,7 @@ namespace UCT.Battle
 
                                             case 1:
 
-                                                Global.Other.Debug.Log(1);
+                                                Other.Debug.Log(1);
                                                 AudioController.Instance.GetFx(3,
                                                     MainControl.Instance.AudioControl.fxClipBattle);
 

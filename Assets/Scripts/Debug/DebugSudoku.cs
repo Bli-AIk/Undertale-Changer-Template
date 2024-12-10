@@ -42,7 +42,7 @@ namespace Debug
                     };
                     var ray = new Ray2D(transform.position, dir);
                     var info = Physics2D.Raycast(ray.origin, ray.direction, 5);
-                    UCT.Global.Other.Debug.DrawRay(ray.origin, ray.direction);
+                    UCT.Other.Debug.DrawRay(ray.origin, ray.direction);
                     if (info.collider != null && info.collider.transform != transform)
                     {
                         var obj = info.collider.gameObject;

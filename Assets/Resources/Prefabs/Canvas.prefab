@@ -243,6 +243,7 @@ GameObject:
   - component: {fileID: 5854373415557430568}
   - component: {fileID: 5854373415557430572}
   - component: {fileID: 3117339777585656322}
+  - component: {fileID: 7654193621140464326}
   m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
@@ -350,12 +351,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec60ec486c40ef14cab558f1ee6487a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  framePic: 0
-  openTurn: 0
-  frame: {fileID: 0}
+  overworldControl: {fileID: 0}
+  frameSpriteIndex: 0
+  settingsLayer: HomeSettingsLayer
   renderMode: 1
-  isPauseCanvas: 0
-  animator: {fileID: 0}
 --- !u!95 &3117339777585656322
 Animator:
   serializedVersion: 4
@@ -376,6 +375,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &7654193621140464326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5854373415557430571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21a5fc5674184f42bf56d4e22dc1022a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5854373415983368993
 GameObject:
   m_ObjectHideFlags: 0
@@ -478,7 +489,7 @@ GameObject:
   - component: {fileID: 5854373416075426432}
   - component: {fileID: 5854373416075426435}
   m_Layer: 5
-  m_Name: Setting Text
+  m_Name: OptionKeyText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -640,7 +651,7 @@ GameObject:
   - component: {fileID: 5854373416836213925}
   - component: {fileID: 5854373416836213924}
   m_Layer: 5
-  m_Name: Setting Son
+  m_Name: OptionValueText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1024,7 +1035,7 @@ GameObject:
   - component: {fileID: 5854373417326028133}
   - component: {fileID: 5854373417326028132}
   m_Layer: 5
-  m_Name: Setting Under
+  m_Name: OptionTipText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1047,8 +1058,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: -10}
-  m_SizeDelta: {x: 600, y: 50}
+  m_AnchoredPosition: {x: 0, y: -25}
+  m_SizeDelta: {x: 635, y: 50}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!222 &5854373417326028186
 CanvasRenderer:

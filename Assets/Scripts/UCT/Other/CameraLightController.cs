@@ -1,8 +1,8 @@
-using UCT.Global.Core;
+using UCT.Global.Settings;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-namespace UCT.Global.Other
+namespace UCT.Other
 {
     public class CameraLightController : MonoBehaviour
     {
@@ -23,7 +23,7 @@ namespace UCT.Global.Other
 
         private void UpdateLightsVisibility()
         {
-            if (MainControl.Instance.overworldControl.isSimplifySfx)
+            if (SettingsStorage.isSimplifySfx)
                 return;
 
             // 获取所有光源组件的引用

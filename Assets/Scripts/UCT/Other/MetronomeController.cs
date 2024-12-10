@@ -3,7 +3,7 @@ using UCT.Global.Audio;
 using UCT.Global.Core;
 using UnityEngine;
 
-namespace UCT.Global.Other
+namespace UCT.Other
 {
     /// <summary>
     ///     节拍器控制器

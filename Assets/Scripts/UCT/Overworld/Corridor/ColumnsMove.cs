@@ -14,7 +14,7 @@ namespace UCT.Overworld.Corridor
         {
             if (Camera.main == null)
             {
-                Global.Other.Debug.LogError("未找到主摄像机");
+                Other.Debug.LogError("未找到主摄像机");
                 return;
             }
 

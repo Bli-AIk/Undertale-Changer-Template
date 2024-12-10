@@ -46,7 +46,7 @@ namespace Volume
             renderPassEvent = passEvent;
             if (stretchPostShader == null)
             {
-                UCT.Global.Other.Debug.Log("Shader不存在");
+                UCT.Other.Debug.Log("Shader不存在");
                 return;
             }
 

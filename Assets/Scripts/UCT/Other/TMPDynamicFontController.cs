@@ -2,7 +2,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace UCT.Global.Other
+namespace UCT.Other
 {
     /// <summary>
     ///     用于TMP动态类型字体的控制

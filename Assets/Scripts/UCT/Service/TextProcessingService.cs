@@ -101,8 +101,9 @@ namespace UCT.Service
                      select t[(screen.Length + 1)..]
                      into str
                      select str[..^1]) return result;
-
-            return "null";
+            var nullText = $"<color=yellow><color=#FF6666>{screen}</color> is null!</color>";
+            Other.Debug.LogError(nullText);
+            return nullText;
         }
 
         /// <summary>
@@ -219,7 +220,7 @@ namespace UCT.Service
         {
             if (startIndex < 0 || endIndex >= inputString.Length || startIndex > endIndex)
             {
-                Global.Other.Debug.Log("无效的起始和结束位置");
+                Other.Debug.Log("无效的起始和结束位置");
                 return inputString;
             }
 

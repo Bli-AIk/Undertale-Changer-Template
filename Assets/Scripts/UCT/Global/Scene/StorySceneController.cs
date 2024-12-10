@@ -3,6 +3,7 @@ using DG.Tweening;
 using TMPro;
 using UCT.Extensions;
 using UCT.Global.Core;
+using UCT.Global.Settings;
 using UCT.Global.UI;
 using UCT.Service;
 using UnityEngine;
@@ -41,7 +42,7 @@ namespace UCT.Global.Scene
 
         private void Update()
         {
-            if (MainControl.Instance.overworldControl.isSetting || MainControl.Instance.overworldControl.pause)
+            if (MainControl.Instance.overworldControl.isSetting || SettingsStorage.pause)
                 return;
             if (!InputService.GetKeyDown(KeyCode.Z)) return;
             _typeWritter.TypeStop();

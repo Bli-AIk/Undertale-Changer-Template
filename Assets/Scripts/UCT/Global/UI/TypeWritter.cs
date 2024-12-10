@@ -215,7 +215,7 @@ namespace UCT.Global.UI
                                     if (pressX || _isJumpingText)
                                         break;
                                     yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f *
-                                        Convert.ToInt32(!MainControl.Instance.overworldControl.textWidth));
+                                        Convert.ToInt32(!SettingsStorage.textWidth));
                                 }
 
                                 isTyping = false;
@@ -246,7 +246,7 @@ namespace UCT.Global.UI
                                         if (pressX || _isJumpingText)
                                             break;
                                         yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f *
-                                            Convert.ToInt32(!MainControl.Instance.overworldControl.textWidth));
+                                            Convert.ToInt32(!SettingsStorage.textWidth));
                                     }
 
                                     AudioController.Instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipType,
@@ -291,7 +291,7 @@ namespace UCT.Global.UI
                                         if (pressX || _isJumpingText)
                                             break;
                                         yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f *
-                                            Convert.ToInt32(!MainControl.Instance.overworldControl.textWidth));
+                                            Convert.ToInt32(!SettingsStorage.textWidth));
                                     }
 
                                     AudioController.Instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipType,
@@ -340,7 +340,7 @@ namespace UCT.Global.UI
                                         //如果需要长的Stop，建议还是使用<stop*x>的方式来做。
                                         //isTyping = false;
                                         yield return Timing.WaitForSeconds(speedSlow - speedSlow * 0.25f *
-                                            Convert.ToInt32(!MainControl.Instance.overworldControl.textWidth));
+                                            Convert.ToInt32(!SettingsStorage.textWidth));
                                     isStop = true;
                                     break;
 
@@ -466,8 +466,7 @@ namespace UCT.Global.UI
             float TypeStopSeconds()
             {
                 return Timing.WaitForSeconds(speed -
-                                             speed * 0.25f * Convert.ToInt32(!MainControl.Instance
-                                                 .overworldControl.textWidth));
+                                             speed * 0.25f * Convert.ToInt32(!SettingsStorage.textWidth));
             }
         }
 

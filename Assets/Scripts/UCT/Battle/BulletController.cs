@@ -3,6 +3,7 @@ using DG.Tweening;
 using UCT.Control;
 using UCT.Global.Audio;
 using UCT.Global.Core;
+using UCT.Global.Settings;
 using UCT.Service;
 using UnityEngine;
 
@@ -241,7 +242,7 @@ namespace UCT.Battle
                     MainControl.Instance.battlePlayerController.KillPlayer(MainControl.Instance);
 
 
-                if (!MainControl.Instance.overworldControl.isSimplifySfx)
+                if (!SettingsStorage.isSimplifySfx)
                     MainControl.Instance.battlePlayerController.hitVolume.weight = 1;
             }
         }

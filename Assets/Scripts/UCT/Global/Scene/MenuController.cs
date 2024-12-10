@@ -5,7 +5,6 @@ using UCT.Control;
 using UCT.Global.Audio;
 using UCT.Global.Core;
 using UCT.Global.Settings;
-using UCT.Global.UI;
 using UCT.Service;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -59,7 +58,7 @@ namespace UCT.Global.Scene
                 _textOptionsRight.enabled = true;
 
 
-            if (_overworldControl.isSetting || _overworldControl.pause)
+            if (_overworldControl.isSetting || SettingsStorage.pause)
                 return;
 
             if (InputService.GetKeyDown(KeyCode.LeftArrow))
@@ -110,9 +109,8 @@ namespace UCT.Global.Scene
                             break;
 
                         case 3:
-                            SettingsController.Instance.SetSettingsLayer(SettingsLayerEnum
-                                .LanguagePacksConfigLayer);
-                            goto case 2;
+                            SettingsController.Instance.OpenSetting("SettingLanguagePackageLayer");
+                            break;
                         case 4:
                             _setData = true;
                             saveNumber = MainControl.Instance.saveDataId;

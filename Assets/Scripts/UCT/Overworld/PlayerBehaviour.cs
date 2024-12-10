@@ -1,6 +1,7 @@
 using System;
 using UCT.Global.Audio;
 using UCT.Global.Core;
+using UCT.Global.Settings;
 using UCT.Service;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -61,7 +62,7 @@ namespace UCT.Overworld
             MainControl.Instance.overworldControl.playerDeadPos = transform.position;
 
 
-            if (MainControl.Instance.overworldControl.isSetting || MainControl.Instance.overworldControl.pause) return;
+            if (MainControl.Instance.overworldControl.isSetting || SettingsStorage.pause) return;
             if (owTimer > 0) owTimer -= Time.deltaTime;
 
             if (saveOwObj && Mathf.Approximately(BackpackBehaviour.Instance.optionsBox.localPosition.z,
@@ -112,7 +113,7 @@ namespace UCT.Overworld
                     owTimer = 0.1f;
                 }
 
-            if (MainControl.Instance.overworldControl.isSetting || MainControl.Instance.overworldControl.pause)
+            if (MainControl.Instance.overworldControl.isSetting || SettingsStorage.pause)
                 return;
             if (Input.GetKeyDown(KeyCode.B) && MainControl.Instance.playerControl.isDebug)
                 GameUtilityService.FadeOutAndSwitchScene("Battle", Color.black);
@@ -127,7 +128,7 @@ namespace UCT.Overworld
 
             animator.SetFloat(Speed, Convert.ToInt32(InputService.GetKey(KeyCode.X)) + 1);
 
-            if (MainControl.Instance.overworldControl.isSetting || MainControl.Instance.overworldControl.pause ||
+            if (MainControl.Instance.overworldControl.isSetting || SettingsStorage.pause ||
                 BackpackBehaviour.Instance.select > 0)
             {
                 animator.Play("Walk Tree", 0, 0);

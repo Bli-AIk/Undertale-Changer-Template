@@ -6,6 +6,7 @@ using UCT.Control;
 using UCT.Extensions;
 using UCT.Global.Audio;
 using UCT.Global.Core;
+using UCT.Global.Settings;
 using UCT.Global.UI;
 using UCT.Service;
 using UnityEngine;
@@ -81,7 +82,7 @@ namespace UCT.Battle
 
         private void Update()
         {
-            if (!MainControl.Instance.overworldControl.isSimplifySfx && hitVolume.weight > 0)
+            if (!SettingsStorage.isSimplifySfx && hitVolume.weight > 0)
                 hitVolume.weight -= Time.deltaTime;
 
             if (MainControl.Instance.playerControl.hp <= 0)
@@ -92,7 +93,7 @@ namespace UCT.Battle
                 {
                     _spriteRenderer.color = Color.red;
                     MainControl.Instance.overworldControl.playerDeadPos = transform.position - (Vector3)sceneDrift;
-                    MainControl.Instance.overworldControl.pause = true;
+                    SettingsStorage.pause = true;
                     TurnController.Instance.KillIEnumerator();
                     GameUtilityService.SwitchScene("Gameover", false);
                 }
@@ -102,7 +103,7 @@ namespace UCT.Battle
                 }
             }
 
-            if (MainControl.Instance.overworldControl.isSetting || MainControl.Instance.overworldControl.pause)
+            if (MainControl.Instance.overworldControl.isSetting || SettingsStorage.pause)
                 return;
 
             if (MainControl.Instance.playerControl.missTime >= 0)
@@ -155,7 +156,7 @@ namespace UCT.Battle
 
         private void FixedUpdate()
         {
-            if (MainControl.Instance.overworldControl.isSetting || MainControl.Instance.overworldControl.pause)
+            if (MainControl.Instance.overworldControl.isSetting || SettingsStorage.pause)
                 return;
             if (!TurnController.Instance.isMyTurn)
                 Moving();
@@ -202,11 +203,11 @@ namespace UCT.Battle
             }
 
             Ray2D ray = new(transform.position, dirReal);
-            Global.Other.Debug.DrawRay(ray.origin, ray.direction, Color.blue);
+            Other.Debug.DrawRay(ray.origin, ray.direction, Color.blue);
             var info = Physics2D.Raycast(transform.position, dirReal, jumpRayDistance);
 
             Ray2D rayF = new(transform.position, dirReal * -1);
-            Global.Other.Debug.DrawRay(rayF.origin, rayF.direction, Color.red);
+            Other.Debug.DrawRay(rayF.origin, rayF.direction, Color.red);
             var infoF = Physics2D.Raycast(transform.position, dirReal * -1, jumpRayDistance); //反向检测(顶头)
 
             //------------------------移动------------------------
@@ -599,10 +600,10 @@ namespace UCT.Battle
                 isMoveX = false;
 
             Ray2D rayMoveX = new(transform.position, dirMoveX);
-            Global.Other.Debug.DrawRay(rayMoveX.origin, rayMoveX.direction, Color.green);
+            Other.Debug.DrawRay(rayMoveX.origin, rayMoveX.direction, Color.green);
             var infoMoveX = Physics2D.Raycast(transform.position, dirMoveX, 0.2f);
             Ray2D rayMoveY = new(transform.position, dirMoveY);
-            Global.Other.Debug.DrawRay(rayMoveY.origin, rayMoveY.direction, new Color(0, 0.5f, 0, 1));
+            Other.Debug.DrawRay(rayMoveY.origin, rayMoveY.direction, new Color(0, 0.5f, 0, 1));
             var infoMoveY = Physics2D.Raycast(transform.position, dirMoveY, 0.2f);
 
             if (isMoveX && infoMoveX.collider && (infoMoveX.collider.gameObject.CompareTag("Box") ||
@@ -944,14 +945,14 @@ namespace UCT.Battle
             {
                 //spriteRenderer.color = Color.red;
                 mainControl.overworldControl.playerDeadPos = transform.position - (Vector3)sceneDrift;
-                mainControl.overworldControl.pause = true;
+                SettingsStorage.pause = true;
                 TurnController.Instance.KillIEnumerator();
                 GameUtilityService.SwitchScene("Gameover", false);
             }
             else
             {
                 mainControl.selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
-                Global.Other.Debug.Log("Debug无敌模式已将您的血量恢复", "#FF0000");
+                Other.Debug.Log("Debug无敌模式已将您的血量恢复", "#FF0000");
             }
         }
     }

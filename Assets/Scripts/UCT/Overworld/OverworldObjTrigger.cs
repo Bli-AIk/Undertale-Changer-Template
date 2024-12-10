@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UCT.Global.Audio;
 using UCT.Global.Core;
+using UCT.Global.Settings;
 using UCT.Global.UI;
 using UCT.Service;
 using UnityEngine;
@@ -108,10 +109,10 @@ namespace UCT.Overworld
                             PlayerPrefs.SetInt("languagePack", MainControl.Instance.languagePackId);
                             PlayerPrefs.SetInt("dataNumber", MainControl.Instance.saveDataId);
                             PlayerPrefs.SetInt("hdResolution",
-                                Convert.ToInt32(MainControl.Instance.overworldControl.isUsingHdFrame));
-                            PlayerPrefs.SetInt("noSFX", Convert.ToInt32(MainControl.Instance.overworldControl.isSimplifySfx));
+                                Convert.ToInt32(SettingsStorage.isUsingHdFrame));
+                            PlayerPrefs.SetInt("noSFX", Convert.ToInt32(SettingsStorage.isSimplifySfx));
                             PlayerPrefs.SetInt("vsyncMode",
-                                Convert.ToInt32(MainControl.Instance.overworldControl.vsyncMode));
+                                Convert.ToInt32(SettingsStorage.vsyncMode));
                             break;
 
                         case 1:
@@ -168,13 +169,13 @@ namespace UCT.Overworld
             }
 
             MainControl.Instance.playerControl.canMove = true;
-            MainControl.Instance.overworldControl.pause = false;
+            SettingsStorage.pause = false;
 
             foreach (var item in funNames)
             {
                 var methodInfo = typeof(OverworldObjTrigger).GetMethod(item);
                 if (methodInfo == null)
-                    Global.Other.Debug.Log(item + "检测失败", gameObject);
+                    Other.Debug.Log(item + "检测失败", gameObject);
                 else
                     methodInfo.Invoke(this, Array.Empty<object>());
             }
@@ -213,7 +214,7 @@ namespace UCT.Overworld
         {
             _isTyping = true;
             MainControl.Instance.playerControl.canMove = false;
-            MainControl.Instance.overworldControl.pause = true;
+            SettingsStorage.pause = true;
             TalkBoxPositionChanger.Instance.Change(true, true);
 
             if (TalkBoxPositionChanger.Instance.boxDrawer.localPosition.z < 0)
@@ -238,7 +239,7 @@ namespace UCT.Overworld
         public void AnimTypeText(bool inputIsUp)
         {
             MainControl.Instance.playerControl.canMove = false;
-            MainControl.Instance.overworldControl.pause = true;
+            SettingsStorage.pause = true;
             mainCamera.isFollow = false;
             mainCamera.transform.DOLocalMove(animEndPosPlus, animTime).SetEase(animEase)
                 .OnKill(() => TypeText(inputIsUp, false));

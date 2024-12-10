@@ -9,8 +9,9 @@ using TMPro;
 using UCT.Control;
 using UCT.Global.Audio;
 using UCT.Global.Core;
-using UCT.Global.Other;
+using UCT.Global.Settings;
 using UCT.Global.UI;
+using UCT.Other;
 using UCT.Service;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -301,10 +302,10 @@ namespace UCT.Global.Scene
                         PlayerPrefs.SetInt("languagePack", MainControl.Instance.languagePackId);
                         PlayerPrefs.SetInt("dataNumber", MainControl.Instance.saveDataId);
                         PlayerPrefs.SetInt("hdResolution",
-                            Convert.ToInt32(MainControl.Instance.overworldControl.isUsingHdFrame));
-                        PlayerPrefs.SetInt("noSFX", Convert.ToInt32(MainControl.Instance.overworldControl.isSimplifySfx));
+                            Convert.ToInt32(SettingsStorage.isUsingHdFrame));
+                        PlayerPrefs.SetInt("noSFX", Convert.ToInt32(SettingsStorage.isSimplifySfx));
                         PlayerPrefs.SetInt("vsyncMode",
-                            Convert.ToInt32(MainControl.Instance.overworldControl.vsyncMode));
+                            Convert.ToInt32(SettingsStorage.vsyncMode));
 
                         GameUtilityService.FadeOutToWhiteAndSwitchScene("Menu");
                         break;
@@ -336,7 +337,7 @@ namespace UCT.Global.Scene
             if (selectedCharactersId == 0)
             {
                 selectedCharactersId = 1;
-                if (MainControl.Instance.overworldControl.textWidth)
+                if (SettingsStorage.textWidth)
                     _selectText.text =
                         TextProcessingService.GetFirstChildStringByPrefix(
                             MainControl.Instance.overworldControl.sceneTextsSave, "No") +
@@ -354,7 +355,7 @@ namespace UCT.Global.Scene
             else
             {
                 selectedCharactersId = 0;
-                if (MainControl.Instance.overworldControl.textWidth)
+                if (SettingsStorage.textWidth)
                     _selectText.text = "<color=yellow>" +
                                        TextProcessingService.GetFirstChildStringByPrefix(
                                            MainControl.Instance.overworldControl.sceneTextsSave, "No") +
@@ -501,7 +502,7 @@ namespace UCT.Global.Scene
                         _titleText.text =
                             TextProcessingService.GetFirstChildStringByPrefix(
                                 MainControl.Instance.overworldControl.sceneTextsSave, "DefaultQuestion");
-                        if (MainControl.Instance.overworldControl.textWidth)
+                        if (SettingsStorage.textWidth)
                             _selectText.text =
                                 "<color=yellow>" +
                                 TextProcessingService.GetFirstChildStringByPrefix(
@@ -554,7 +555,7 @@ namespace UCT.Global.Scene
                         // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
                         // 该方法只会在输入完名称确定时执行一次。
                         _nameText.GetComponent<DynamicTMP>().dynamicMode =
-                            OverworldControl.DynamicTMP.RandomShakeAll;
+                            DynamicTMPType.RandomShakeAll;
                         _characterText.text = "";
                         _teachText.text = "";
                         _textMessage.text = "";

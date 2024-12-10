@@ -34,17 +34,17 @@ public class TurnVisualEditor : EditorWindow
 
         if (bulletsContainer == null)
         {
-            UCT.Global.Other.Debug.LogError("No element with name 'Bullets' found in the root.");
+            UCT.Other.Debug.LogError("No element with name 'Bullets' found in the root.");
             return;
         }
 
 
         List<BulletControl> bullets = Resources.LoadAll<BulletControl>("Assets/Bullets/").ToList();
-        UCT.Global.Other.Debug.Log(bullets.Count);
+        UCT.Other.Debug.Log(bullets.Count);
 
         foreach (var bullet in bullets)
         {
-            UCT.Global.Other.Debug.Log(bullet.name);
+            UCT.Other.Debug.Log(bullet.name);
 
             VisualElement bulletRoot = new VisualElement();
 

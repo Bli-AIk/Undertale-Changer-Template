@@ -2,6 +2,7 @@ using Alchemy.Inspector;
 using TMPro;
 using UCT.Global.Audio;
 using UCT.Global.Core;
+using UCT.Global.Settings;
 using UCT.Global.UI;
 using UCT.Service;
 using UnityEngine;
@@ -57,13 +58,13 @@ namespace UCT.Overworld
 
         private void Update()
         {            
-            if (MainControl.Instance.overworldControl.isSetting || MainControl.Instance.overworldControl.pause) return;
+            if (MainControl.Instance.overworldControl.isSetting || SettingsStorage.pause) return;
 
             if (TalkBoxPositionChanger.Instance)
                 TalkBoxPositionChanger.Instance.isUp = MainControl.Instance.playerBehaviour.transform.position.y <
                                                        transform.position.y - 1.25f;
             else
-                Global.Other.Debug.LogWarning("TalkBoxPositionChanger instance is missing!");
+                Other.Debug.LogWarning("TalkBoxPositionChanger instance is missing!");
 
 
             if (_clock > 0)

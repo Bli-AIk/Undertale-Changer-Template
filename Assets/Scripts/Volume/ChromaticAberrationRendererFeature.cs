@@ -49,7 +49,7 @@ namespace Volume
             renderPassEvent = passEvent;
             if (chromaticAberrationShader == null)
             {
-                UCT.Global.Other.Debug.Log("Shader不存在");
+                UCT.Other.Debug.Log("Shader不存在");
                 return;
             }
 

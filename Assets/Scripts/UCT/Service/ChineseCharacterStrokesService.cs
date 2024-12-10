@@ -32,7 +32,7 @@ namespace UCT.Service
             }
             catch (Exception ex)
             {
-                Global.Other.Debug.LogError($"Error processing data: {ex.Message}");
+                Other.Debug.LogError($"Error processing data: {ex.Message}");
             }
         }
 

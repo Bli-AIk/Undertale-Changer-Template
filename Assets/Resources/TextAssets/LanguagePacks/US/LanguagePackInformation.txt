@@ -6,4 +6,4 @@ LanguagePackName\English<gradient="White to Yellow - UTC"> (built-in)</gradient>
 /* It is suggested to indicate personnel and positions here, such as xxx (original text), xxx (translation), xxx (proofreading), etc. */
 LanguagePackAuthor\Author:Google translation & ChatGPT(translation);
 
-LanguagePackInformation\The built-in English language pack is enabled.;
+LanguagePackInformation\The built-in English language pack.;

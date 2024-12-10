@@ -1,4 +1,5 @@
 using UCT.Global.Core;
+using UCT.Global.Settings;
 using UnityEngine;
 
 namespace UCT.Battle
@@ -21,7 +22,7 @@ namespace UCT.Battle
         {
             if (MainControl.Instance.sceneState != MainControl.SceneState.InBattle)
                 return;
-            if (MainControl.Instance.overworldControl.isSetting || MainControl.Instance.overworldControl.pause)
+            if (MainControl.Instance.overworldControl.isSetting || SettingsStorage.pause)
                 return;
         }
     }

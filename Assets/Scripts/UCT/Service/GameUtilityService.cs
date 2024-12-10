@@ -48,18 +48,18 @@ namespace UCT.Service
                 }
             }
 
-            if (!MainControl.Instance.overworldControl.isUsingHdFrame)
+            if (!SettingsStorage.isUsingHdFrame)
             {
-                if (MainControl.Instance.overworldControl.resolutionLevel > 4)
-                    MainControl.Instance.overworldControl.resolutionLevel = 0;
+                if (SettingsStorage.resolutionLevel > 4)
+                    SettingsStorage.resolutionLevel = 0;
             }
             else
             {
-                if (MainControl.Instance.overworldControl.resolutionLevel < 5)
-                    MainControl.Instance.overworldControl.resolutionLevel = 5;
+                if (SettingsStorage.resolutionLevel < 5)
+                    SettingsStorage.resolutionLevel = 5;
             }
 
-            if (!MainControl.Instance.overworldControl.isUsingHdFrame)
+            if (!SettingsStorage.isUsingHdFrame)
             {
                 MainControl.Instance.mainCamera.rect = new Rect(0, 0, 1, 1);
 
@@ -96,8 +96,8 @@ namespace UCT.Service
             var currentResolutionHeight = resolutionHeights[resolution];
 
             Screen.SetResolution(currentResolutionWidth, currentResolutionHeight,
-                MainControl.Instance.overworldControl.fullScreen);
-            MainControl.Instance.overworldControl.resolution =
+                SettingsStorage.fullScreen);
+            SettingsStorage.resolution =
                 new Vector2(currentResolutionWidth, currentResolutionHeight);
         }
 
@@ -112,7 +112,7 @@ namespace UCT.Service
                 SceneManager.LoadSceneAsync(sceneName);
             else SceneManager.LoadScene(sceneName);
 
-            SetResolution(MainControl.Instance.overworldControl.resolutionLevel);
+            SetResolution(SettingsStorage.resolutionLevel);
             MainControl.Instance.isSceneSwitching = false;
         }
 
@@ -154,14 +154,14 @@ namespace UCT.Service
                 }
             }
 
-            MainControl.Instance.overworldControl.pause = true;
+            SettingsStorage.pause = true;
             switch (fadeTime)
             {
                 case > 0:
                 {
                     MainControl.Instance.sceneSwitchingFadeImage.DOColor(fadeColor, fadeTime).SetEase(Ease.Linear)
                         .OnKill(() => SwitchScene(scene));
-                    if (!MainControl.Instance.overworldControl.isUsingHdFrame)
+                    if (!SettingsStorage.isUsingHdFrame)
                         SettingsController.Instance.Frame.color = ColorEx.WhiteClear;
                     break;
                 }
@@ -175,7 +175,7 @@ namespace UCT.Service
                     MainControl.Instance.sceneSwitchingFadeImage.color = fadeColor;
                     MainControl.Instance.sceneSwitchingFadeImage.DOColor(fadeColor, fadeTime).SetEase(Ease.Linear)
                         .OnKill(() => SwitchScene(scene));
-                    if (!MainControl.Instance.overworldControl.isUsingHdFrame)
+                    if (!SettingsStorage.isUsingHdFrame)
                         SettingsController.Instance.Frame.color = ColorEx.WhiteClear;
                     break;
                 }
@@ -359,6 +359,11 @@ namespace UCT.Service
             v = Mathf.Clamp01(v + (float)(random.NextDouble() * 2 - 1) * valueOffset);
 
             return Color.HSVToRGB(h, s, v);
+        }
+
+        public static void RefreshTheScene()
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 }
