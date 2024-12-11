@@ -1,77 +1,77 @@
 # UCT Update Plan
 
-This document outlines the long-term update plans for UCT.
+This document outlines the long-term update plan for UCT.
 
-Note that these update plans are not in any particular order and may change, be shelved, or abandoned.
+Please note that these update plans are not in any specific order and may change, be shelved, or abandoned.
 
-For more information on UCT's long-term update plans, please refer to [PLAN.md](PLAN.md), [PLAN_zh-CN.md](PLAN_zh-CN.md), or [PLAN_zh-TW.md](PLAN_zh-TW.md).
+For the long-term update plan of UCT, please refer to [PLAN.md](PLAN.md), [PLAN_zh-CN.md](PLAN_zh-CN.md), or [PLAN_zh-TW.md](PLAN_zh-TW.md).
 
-For specifics on UCT's update contents, please check [CHANGELOG.md](CHANGELOG.md), [CHANGELOG_zh-CN.md](CHANGELOG_zh-CN.md), or [CHANGELOG_zh-TW.md](CHANGELOG_zh-TW.md).
+For specific updates regarding UCT, please check [CHANGELOG.md](CHANGELOG.md), [CHANGELOG_zh-CN.md](CHANGELOG_zh-CN.md), or [CHANGELOG_zh-TW.md](CHANGELOG_zh-TW.md).
 
-The Simplified Chinese update plan/change log will be prioritized, while other languages will be translated using GPT during **version changes**.
+The update plans/change logs in Simplified Chinese will be prioritized, while other languages will use GPT for translation during **version changes**.
 
-## Directory
+## Table of Contents
 
-[General](#General): Contains improvement plans for basic/general functionalities within the template.
+[General](#General): Contains improvement plans for basic/general functions within templates.
 
-[OW Class](#OW-Class): Contains plans for the redesign of various systems involved in the Overworld scenes.
+[OW Class](#OW Class): Contains redo plans for systems involved in the Overworld scenes.
 
-[Combat Class](#Combat-Class): Includes plans for the expansion and reconstruction of the combat system.
+[Combat Class](#Combat Class): Contains expansion and restructuring plans for the combat system.
 
-[New Additions](#New-Additions): Contains plans for new scenes and features.
+[New Additions](#New Additions): Contains plans for new scenes and functions.
 
-[Other](#Other): Contains plans outside the above four categories.
+[Others](#Others): Contains plans that fall outside the above four categories.
 
-[On Hold](#On-Hold): Contains some plans that were once in consideration but are currently shelved for various reasons.
+[On Hold](#On Hold): Contains some previously planned items that are currently shelved for various reasons.
 
 ## General
 ### Refinement of Existing Systems
-- [x] Refine BGM Controller[^1]
-- [ ] Store item data in ScriptableObject
+- [x] Refine BGM controller[^1]
+- [ ] Store item data to ScriptableObject
 
 ### UI Optimization and Refinement
-- [ ] Add magnification for 640x480[^2]
-- [ ] Refine UI Dr to MENU interface and OW save interface
+- [ ] Add zoom feature for 640x480[^2]
+- [ ] Refine / rework UI Dr MENU interface and OW save interface
 - [ ] Refine settings interface
-- [ ] Redo settings interface UI
+- [ ] Redesign settings interface UI
 
 ### Performance Optimization
 - [x] Add DebugLogger script[^3]
-- [ ] Use coroutine to call language packs instead of calling them all at once
+- [ ] Call language packs using coroutines instead of calling all at once
 
 ## OW Class
 ### Event System
-- [ ] Redesign OW event system
-- [ ] Add Dr style chase battle system
+- [ ] Redo OW event system
+- [ ] Add Dr-style chase battle system
 
 ### Story System
 - [ ] Introduce a visual story editor
-- [ ] Add proofreading scenes for the story system[^4]
+- [ ] Add story system proofreading scene[^4]
 - [ ] Add OW story controller
 
 ### Data Storage
-- [ ] Store room data in ScriptableObject
+- [ ] Store room data to ScriptableObject
 
 ## Combat Class
 ### Data Storage
-- [x] Store bullet data in ScriptableObject
-- [ ] Store round data in ScriptableObject
+- [x] Store bullet data to ScriptableObject
+- [ ] Store turn data to ScriptableObject
 
 ### Turn System Redesign
-- [ ] Add a visual turn system editor
+- [ ] Add visual turn system editor
 - [ ] Add path bullet generator
 
-### Expansion of Combat System
+### Combat System Expansion
 - [ ] Add functionality to insert subtitles/dialogue during turns
 - [ ] Add multiple battles[^5]
 
-### Fixes and Optimization
-- [x] Optimize 3D backgrounds
+### Bugs and Optimization
+- [x] Optimize 3D background
 - [x] Fix blue heart
 
-### Irregular Frames
-- [ ] Fix irregular frames
-- [ ] Redesign collision system to adapt to irregular frames
+### Monster Frame
+- [ ] Fix monster frame
+- [ ] Redo collision system to adapt to monster frame
 
 ### Judgment and Collision
 - [ ] Refine FIGHT related judgments
@@ -80,14 +80,14 @@ The Simplified Chinese update plan/change log will be prioritized, while other l
 
 ## New Additions
 ### Scene Expansion
-- [ ] Add multilingual expansion in naming scene
+- [x] Add multilingual expansion in naming scene
 - [ ] Add battle settlement scene
 - [ ] Add BGM broadcasting scene
-- [ ] Add credits/thanks scene
+- [ ] Add staff credits/thanks scene
 - [ ] Add shop scene
 
 ### Rendering Expansion
-- [x] Add built-in projection frame
+- [x] Add built-in projection box
 - [x] Add 3D renderer
 
 ### Functionality Expansion
@@ -97,18 +97,18 @@ The Simplified Chinese update plan/change log will be prioritized, while other l
 - [ ] Add CC subtitle system[^6]
 - [ ] Add achievement system
 - [ ] Add UI manager
-- [ ] Add customization support for weapons/armor
+- [ ] Add custom expansion support for weapons/armor
 
 ### Accessibility
 - [ ] Add narrator
-- [ ] Add colorblind filter
+- [ ] Add color blind filter
 
-## Other
+## Others
 ### Project Localization
-- [x] Merge Chinese and English branches, replacing commented texts with scripts
+- [x] Merge Chinese and English branches, replacing comment texts through scripts
 
 ### Cleanup and Maintenance
-- [x] Remove redundant original artwork
+- [x] Remove unnecessary original textures
 
 ### Tutorials
 - [ ] New wiki and video tutorials
@@ -120,9 +120,9 @@ The Simplified Chinese update plan/change log will be prioritized, while other l
 
 ---
 
-[^1]: It will mainly add features such as calculating beats.
-[^2]: An additional option will be attempted in settings, allowing the game screen to be set to a low resolution while magnifying the display resolution. This is more friendly to computers with lower performance.
-[^3]: This script will encapsulate all Unity's Debug-related functions for calling within it, and these functions will only execute in the editor.
-[^4]: This scene will list all story contents, consistent with the in-game display method, facilitating quick proofreading.
-[^5]: This allows for multiple battles and several battles within the game.
-[^6]: Localizers can provide preliminary localized support to players by releasing a preview version of CC subtitles during the phase when translation is complete but not yet officially embedded.
+[^1]: Mainly will add functions such as calculating beats.
+[^2]: Will attempt to add an option in settings that allows the game to set a low resolution while magnifying the display resolution. This is more friendly for lower performance computers.
+[^3]: This script will encapsulate all of Unity’s Debug-related functions for calling, which only execute within the editor.
+[^4]: This scene will list all story content, consistent with the game's display method, making proofreading easier.
+[^5]: Allowing multiple battles and battles within the game.
+[^6]: Localization personnel can provide players localization support in advance by releasing a preview version of CC subtitles during the phase of completed but not officially embedded translations.
