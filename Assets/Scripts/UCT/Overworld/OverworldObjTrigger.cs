@@ -75,76 +75,79 @@ namespace UCT.Overworld
 
         private void Update()
         {
-            if (_saveOpen)
+            if (_saveOpen) UpdateSave();
+
+            //  检测相关见PlayerBehaviour
+            if (_isTyping && InputService.GetKeyDown(KeyCode.Z) && !_typeWritter.isRunning) PressZ();
+        }
+
+        private void UpdateSave()
+        {
+            if (InputService.GetKeyDown(KeyCode.LeftArrow) ||
+                InputService.GetKeyDown(KeyCode.RightArrow))
             {
-                if (InputService.GetKeyDown(KeyCode.LeftArrow) ||
-                    InputService.GetKeyDown(KeyCode.RightArrow))
-                {
-                    _saveSelect = Convert.ToInt32(!Convert.ToBoolean(_saveSelect));
+                _saveSelect = Convert.ToInt32(!Convert.ToBoolean(_saveSelect));
 
-                    BackpackBehaviour.Instance.saveHeart.localPosition =
-                        new Vector3(-4.225f + _saveSelect * 4.5f, -1.25f, 0);
-                }
-
-                if (InputService.GetKeyDown(KeyCode.Z))
-                {
-                    switch (_saveSelect)
-                    {
-                        case 0:
-
-                            SaveController.SaveData(MainControl.Instance.playerControl,
-                                "Data" + MainControl.Instance.saveDataId);
-                            _saveSelect = 2;
-                            AudioController.Instance.GetFx(12, MainControl.Instance.AudioControl.fxClipUI);
-                            var playerName = MainControl.Instance.playerControl.playerName;
-
-                            BackpackBehaviour.Instance.saveHeart.position = new Vector2(10000, 10000);
-
-                            BackpackBehaviour.Instance.saveText.text =
-                                "<color=yellow>" +
-                                SetFirstHalfSaveText(playerName) +
-                                $"<indent=7.5></indent>{TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave, "Saved")}";
-
-                            MainControl.Instance.playerControl.saveScene = SceneManager.GetActiveScene().name;
-                            PlayerPrefs.SetInt("languagePack", MainControl.Instance.languagePackId);
-                            PlayerPrefs.SetInt("dataNumber", MainControl.Instance.saveDataId);
-                            PlayerPrefs.SetInt("hdResolution",
-                                Convert.ToInt32(SettingsStorage.isUsingHdFrame));
-                            PlayerPrefs.SetInt("noSFX", Convert.ToInt32(SettingsStorage.isSimplifySfx));
-                            PlayerPrefs.SetInt("vsyncMode",
-                                Convert.ToInt32(SettingsStorage.vsyncMode));
-                            break;
-
-                        case 1:
-                            goto default;
-                        default:
-                            BackpackBehaviour.Instance.saveHeart.position = new Vector2(10000, 10000);
-                            BackpackBehaviour.Instance.saveBox.localPosition = new Vector3(
-                                BackpackBehaviour.Instance.saveBox.localPosition.x,
-                                BackpackBehaviour.Instance.saveBox.localPosition.y, -50);
-                            BackpackBehaviour.Instance.saveText.text = "";
-                            PressZ();
-                            _saveOpen = false;
-                            break;
-
-                        case 2:
-                            goto default;
-                    }
-                }
-                else if (InputService.GetKeyDown(KeyCode.X))
-                {
-                    BackpackBehaviour.Instance.saveHeart.position = new Vector2(10000, 10000);
-                    BackpackBehaviour.Instance.saveBox.localPosition = new Vector3(
-                        BackpackBehaviour.Instance.saveBox.localPosition.x,
-                        BackpackBehaviour.Instance.saveBox.localPosition.y, -50);
-                    BackpackBehaviour.Instance.saveText.text = "";
-                    PressZ();
-                    _saveOpen = false;
-                }
+                BackpackBehaviour.Instance.saveHeart.localPosition =
+                    new Vector3(-4.225f + _saveSelect * 4.5f, -1.25f, 0);
             }
 
-            //检测相关见PlayerBehaviour
-            if (_isTyping && InputService.GetKeyDown(KeyCode.Z) && !_typeWritter.isRunning) PressZ();
+            if (InputService.GetKeyDown(KeyCode.Z))
+            {
+                switch (_saveSelect)
+                {
+                    case 0:
+                        SaveController.SaveData(MainControl.Instance.playerControl,
+                            "Data" + MainControl.Instance.saveDataId);
+                        _saveSelect = 2;
+                        AudioController.Instance.GetFx(12, MainControl.Instance.AudioControl.fxClipUI);
+                        var playerName = MainControl.Instance.playerControl.playerName;
+
+                        BackpackBehaviour.Instance.saveHeart.position = new Vector2(10000, 10000);
+
+                        BackpackBehaviour.Instance.saveText.text =
+                            "<color=yellow>" +
+                            SetFirstHalfSaveText(playerName) +
+                            "<indent=7.5></indent>" +
+                            TextProcessingService.GetFirstChildStringByPrefix(
+                                MainControl.Instance.overworldControl.settingSave, "Saved");
+
+                        MainControl.Instance.playerControl.saveScene = SceneManager.GetActiveScene().name;
+                        PlayerPrefs.SetInt("languagePack", MainControl.Instance.languagePackId);
+                        PlayerPrefs.SetInt("dataNumber", MainControl.Instance.saveDataId);
+                        PlayerPrefs.SetInt("hdResolution",
+                            Convert.ToInt32(SettingsStorage.isUsingHdFrame));
+                        PlayerPrefs.SetInt("noSFX", Convert.ToInt32(SettingsStorage.isSimplifySfx));
+                        PlayerPrefs.SetInt("vsyncMode",
+                            Convert.ToInt32(SettingsStorage.vsyncMode));
+                        break;
+
+                    case 1:
+                        goto default;
+                    default:
+                        BackpackBehaviour.Instance.saveHeart.position = new Vector2(10000, 10000);
+                        BackpackBehaviour.Instance.saveBox.localPosition = new Vector3(
+                            BackpackBehaviour.Instance.saveBox.localPosition.x,
+                            BackpackBehaviour.Instance.saveBox.localPosition.y, -50);
+                        BackpackBehaviour.Instance.saveText.text = "";
+                        PressZ();
+                        _saveOpen = false;
+                        break;
+
+                    case 2:
+                        goto default;
+                }
+            }
+            else if (InputService.GetKeyDown(KeyCode.X))
+            {
+                BackpackBehaviour.Instance.saveHeart.position = new Vector2(10000, 10000);
+                BackpackBehaviour.Instance.saveBox.localPosition = new Vector3(
+                    BackpackBehaviour.Instance.saveBox.localPosition.x,
+                    BackpackBehaviour.Instance.saveBox.localPosition.y, -50);
+                BackpackBehaviour.Instance.saveText.text = "";
+                PressZ();
+                _saveOpen = false;
+            }
         }
 
         private void PressZ()
@@ -192,18 +195,26 @@ namespace UCT.Overworld
             var playerName = MainControl.Instance.playerControl.playerName;
             BackpackBehaviour.Instance.saveText.text =
                 SetFirstHalfSaveText(playerName) +
-                $"<indent=7.5></indent>{TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave, "Save")}" +
-                $"<indent=52.5></indent>{TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave, "Back")}";
+                "<indent=7.5></indent>" +
+                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave,
+                    "Save") +
+                "<indent=52.5></indent>" +
+                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave,
+                    "Back");
 
             BackpackBehaviour.Instance.saveHeart.localPosition = new Vector3(-4.225f, -1.25f, 0);
         }
 
         private static string SetFirstHalfSaveText(string playerName)
         {
-            return $"{playerName}<indent=35></indent>" +
-                   $"LV{MainControl.Instance.playerControl.lv.ToString()}<indent=72></indent>" +
-                   $"{TextProcessingService.GetRealTime((int)MainControl.Instance.playerControl.gameTime)}\n" +
-                   $"{TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave, SceneManager.GetActiveScene().name)}\n" +
+            return playerName +
+                   "<indent=35></indent>" +
+                   "LV" +
+                   MainControl.Instance.playerControl.lv +
+                   "<indent=72></indent>" +
+                   TextProcessingService.GetRealTime((int)MainControl.Instance.playerControl.gameTime) + "\n" +
+                   TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave,
+                       SceneManager.GetActiveScene().name) + "\n" +
                    "<line-height=1.5>\n</line-height>";
         }
 
@@ -243,8 +254,8 @@ namespace UCT.Overworld
             mainCamera.isFollow = false;
             mainCamera.transform.DOLocalMove(animEndPosPlus, animTime).SetEase(animEase)
                 .OnKill(() => TypeText(inputIsUp, false));
-            DOTween.To(() => mainCamera.followPosition, x => mainCamera.followPosition = x, animEndPosPlus, animTime)
-                .SetEase(animEase);
+            DOTween.To(() => mainCamera.followPosition, x => mainCamera.followPosition = x, 
+                    animEndPosPlus, animTime).SetEase(animEase);
 
             if (stopTime >= 0)
                 _bgm.DOFade(0, stopTime);

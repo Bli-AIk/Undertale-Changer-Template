@@ -48,7 +48,7 @@ However, I was unsatisfied with the results of the old template. As a result, I 
 This marks the first step of the long journey for this project.
 
 ## Synopsis
-### Undetale Changer Template made by Bli_AIk.
+### Undertale Changer Template made by Bli_AIk.
 
 The project has used URP.
 

@@ -6,10 +6,10 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using static UCT.Battle.BulletController;
 
-namespace Editor
+namespace Editor.Inspector
 {
     [CustomEditor(typeof(BulletControl))]
-    public class BulletControlEditor : UnityEditor.Editor
+    public class BulletControlInspector : UnityEditor.Editor
     {
         public override Texture2D RenderStaticPreview(string assetPath, Object[] subAssets, int width, int height)
         {
@@ -48,7 +48,6 @@ namespace Editor
             var spr = new Image
             {
                 image = bullet.sprite.texture,
-                //scaleMode = ScaleMode.ScaleToFit,
                 style =
                 {
                     width = 150,

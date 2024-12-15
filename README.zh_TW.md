@@ -49,7 +49,7 @@
 這標誌着它千里之行的第一步。
 
 ## 簡介
-### Undetale Changer Template由Bli_AIk製作。
+### Undertale Changer Template由Bli_AIk製作。
 
 該專案使用了通用渲染管線（URP）。
 

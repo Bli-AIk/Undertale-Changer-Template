@@ -3,18 +3,25 @@ using UCT.Control;
 using UnityEditor;
 using UnityEngine;
 
-namespace Editor
+namespace Editor.Default
 {
     [CustomEditor(typeof(ScriptableObject), true)]
-    public class GenericScriptableObjectEditor : UnityEditor.Editor
+    public class ScriptableObjectIconSetter : UnityEditor.Editor
     {
+        private const string IconDefaultPath = "Assets/Sprites/icons";
+
+        private static string GetIconPath(string iconName)
+        {
+            return $"{IconDefaultPath}/{iconName}.png";
+        }
+
         private static readonly Dictionary<System.Type, string> IconPaths = new()
         {
-            { typeof(AudioControl), "Assets/Sprites/icons/AudioIcon.png" },
-            { typeof(BattleControl),"Assets/Sprites/icons/BattleIcon.png" },
-            { typeof(OverworldControl), "Assets/Sprites/icons/OverworldIcon.png" },
-            { typeof(PlayerControl), "Assets/Sprites/icons/PlayerIcon.png" },
-            { typeof(ItemControl), "Assets/Sprites/icons/ItemIcon.png" },
+            { typeof(AudioControl), GetIconPath("AudioIcon") },
+            { typeof(BattleControl), GetIconPath("BattleIcon") },
+            { typeof(OverworldControl), GetIconPath("OverworldIcon") },
+            { typeof(PlayerControl), GetIconPath("PlayerIcon") },
+            { typeof(ItemControl), GetIconPath("ItemIcon") },
         };
 
         public override Texture2D RenderStaticPreview(string assetPath, Object[] subAssets, int width, int height)
