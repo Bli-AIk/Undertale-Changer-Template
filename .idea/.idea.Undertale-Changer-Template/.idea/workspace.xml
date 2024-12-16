@@ -9,8 +9,9 @@
   <component name="ChangeListManager">
     <list default="true" id="8f7c2298-d077-422b-9131-f9a839bed961" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/OverworldObjTrigger.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/OverworldObjTrigger.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/PlayerBehaviour.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/PlayerBehaviour.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/Inspector/EventSystem/ReorderableListInspector.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/Inspector/EventSystem/ReorderableListInspector.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/EventSystem/FactTest.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/EventSystem/FactTest.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CHANGELOG_zh-CN.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG_zh-CN.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,8 +38,12 @@
 }</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/43b8187fb18447918f21fa5a5862732e12b800/41/b0379e9d/Clickable.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/63965ae56af7489797f355b7c1211ab281aa00/22/83569908/ReorderableList.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/63965ae56af7489797f355b7c1211ab281aa00/3a/522b52c6/EditorStyles.cs" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/63965ae56af7489797f355b7c1211ab281aa00/e3/01411d29/SerializedProperty.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/6f110e0513ea412292373f50e2069aee7400/b7/c81fb40e/Input.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/d6232873609549b8a045fa15811a5bd346a800/ca/5d904b90/File.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/3ea01e77be99618395f448b16bd7cc2bd4248bd9e5d8474964b2d97f39c5d74/System.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/SourcesCache/d44b17e136d09081da1e8fd0e8c83fde60e11818b9f2442d7ed8cb733fae895e/System.Collections.Generic.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Editor/Default/ScriptableObjectIconSetter.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Editor/Inspector/BulletControlInspector.cs" root0="FORCE_HIGHLIGHTING" />
@@ -145,7 +150,7 @@
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;cn.yiiguxing.plugin.translate&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
     &quot;独立播放器.Start Unity.executor&quot;: &quot;Debug&quot;,
     &quot;附加到 Unity 编辑器.附加到 Unity 编辑器.executor&quot;: &quot;Debug&quot;
@@ -403,7 +408,25 @@
       <workItem from="1734245378122" duration="754000" />
       <workItem from="1734246594780" duration="9265000" />
       <workItem from="1734264379568" duration="3391000" />
-      <workItem from="1734318114917" duration="3231000" />
+      <workItem from="1734318114917" duration="12397000" />
+      <workItem from="1734353517680" duration="2511000" />
+      <workItem from="1734387975911" duration="1229000" />
+      <workItem from="1734401102503" duration="623000" />
+      <workItem from="1734410772942" duration="682000" />
+      <workItem from="1734440125601" duration="3682000" />
+      <workItem from="1734480726491" duration="10000" />
+      <workItem from="1734480771432" duration="3564000" />
+      <workItem from="1734528867529" duration="2359000" />
+      <workItem from="1734568304266" duration="3081000" />
+      <workItem from="1734581142854" duration="6055000" />
+      <workItem from="1734673649654" duration="15128000" />
+      <workItem from="1734695440551" duration="979000" />
+      <workItem from="1734746588729" duration="151000" />
+      <workItem from="1734755800065" duration="3914000" />
+      <workItem from="1734783924709" duration="9959000" />
+      <workItem from="1734830670725" duration="196000" />
+      <workItem from="1734830958609" duration="1748000" />
+      <workItem from="1734838645043" duration="8803000" />
     </task>
     <servers />
   </component>
@@ -436,16 +459,9 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/OverworldObjTrigger.cs</url>
+          <url>file://$PROJECT_DIR$/Assets/Scripts/UCT/Overworld/OldOverworldObjTrigger.cs</url>
           <line>153</line>
-          <properties documentPath="D:\Unity Projects\Undertale-Changer-Template\Assets\Scripts\UCT\Overworld\OverworldObjTrigger.cs" containingFunctionPresentation="方法 'PressZ'">
-            <startOffsets>
-              <option value="5680" />
-            </startOffsets>
-            <endOffsets>
-              <option value="5681" />
-            </endOffsets>
-          </properties>
+          <properties documentPath="D:\Unity Projects\Undertale-Changer-Template\Assets\Scripts\UCT\Overworld\OverworldObjTrigger.cs" containingFunctionPresentation="方法 'PressZ'" />
           <option name="timeStamp" value="1" />
         </line-breakpoint>
       </breakpoints>

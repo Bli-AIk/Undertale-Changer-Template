@@ -455,5 +455,12 @@ namespace UCT.Service
 
             return realVector4;
         }
+
+        public static string ToFirstLetterUpperCase(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input)) return input;
+
+            return char.ToUpper(input[0]) + input[1..];
+        }
     }
 }

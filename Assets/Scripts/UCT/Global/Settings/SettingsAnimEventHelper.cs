@@ -47,7 +47,7 @@ namespace UCT.Global.Settings
         // 供Animator使用
         public void AnimSetHeartPos()
         {
-            var uiPos = _settingsController.WorldPositionToUGUI(_settingsController.overworldControl.playerDeadPos);
+            var uiPos = _settingsController.WorldPositionToUGUI(_settingsController.overworldControl.playerLastPos);
             transform.Find("Heart").GetComponent<RectTransform>().anchoredPosition = uiPos;
         }
 

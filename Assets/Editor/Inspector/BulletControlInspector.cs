@@ -24,7 +24,6 @@ namespace Editor.Inspector
 
         public override VisualElement CreateInspectorGUI()
         {
-
             var bullet = (BulletControl)target;
 
             var root = new VisualElement();

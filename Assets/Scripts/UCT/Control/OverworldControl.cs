@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UCT.Control
 {
@@ -30,7 +31,7 @@ namespace UCT.Control
         public List<string> settingSave;
         public bool isSetting;
 
-        [Header("玩家相关")] public Vector3 playerDeadPos;
+        [Header("玩家相关")] public Vector3 playerLastPos;
 
         [Header("场景衔接存储")] public Vector3 playerScenePos;
 

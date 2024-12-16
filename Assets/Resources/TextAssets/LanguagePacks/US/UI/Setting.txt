@@ -41,7 +41,7 @@ SettingMainVolume\Master Volume;
 SettingKeyControlLayer\Key Controls;
 SettingFullScreen\Fullscreen;
 SettingResolving\Resolution;
-SettingSFX\Simplify Visual Effects;
+SettingSFX\Simplify SFX;
 SettingFPS\Display FPS;
 SettingBackMenu\Return to Menu;
 SettingBack\Back;

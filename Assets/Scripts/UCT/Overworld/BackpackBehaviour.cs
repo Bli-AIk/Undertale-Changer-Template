@@ -61,7 +61,7 @@ namespace UCT.Overworld
             if (MainControl.Instance.overworldControl.isSetting || SettingsStorage.pause) return;
 
             if (TalkBoxPositionChanger.Instance)
-                TalkBoxPositionChanger.Instance.isUp = MainControl.Instance.playerBehaviour.transform.position.y <
+                TalkBoxPositionChanger.Instance.isUp = MainControl.Instance.overworldPlayerBehaviour.transform.position.y <
                                                        transform.position.y - 1.25f;
             else
                 Other.Debug.LogWarning("TalkBoxPositionChanger instance is missing!");
@@ -110,7 +110,7 @@ namespace UCT.Overworld
                     _heart.transform.localPosition = new Vector3(_heart.transform.localPosition.x,
                         _heart.transform.localPosition.y, BoxZAxisVisible);
 
-                    if (MainControl.Instance.playerBehaviour.transform.position.y >= transform.position.y - 1.25f)
+                    if (MainControl.Instance.overworldPlayerBehaviour.transform.position.y >= transform.position.y - 1.25f)
                         _overviewBox.localPosition.y = 3.325f;
                     else
                         _overviewBox.localPosition.y = -3.425f;
@@ -138,7 +138,7 @@ namespace UCT.Overworld
             {
                 if (InputService.GetKeyDown(KeyCode.Z))
                 {
-                    MainControl.Instance.playerBehaviour.owTimer = 0.1f;
+                    MainControl.Instance.overworldPlayerBehaviour.owTimer = 0.1f;
                     _informationText.transform.localPosition = new Vector3(0.5f, -5.12f, 0);
 
                     if (select == 1)

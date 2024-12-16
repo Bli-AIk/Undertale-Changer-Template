@@ -72,7 +72,8 @@ namespace UCT.Global.Core
         public Camera mainCamera;
         public BoxDrawer mainBox;
 
-        [Space] [Title("=== 角色与行为控制 ===")] public PlayerBehaviour playerBehaviour;
+        [Space] [Title("=== 角色与行为控制 ===")] 
+        public OverworldPlayerBehaviour overworldPlayerBehaviour;
 
         [FormerlySerializedAs("PlayerControl")]
         public PlayerControl playerControl;
@@ -122,15 +123,22 @@ namespace UCT.Global.Core
 
             DataHandlerService.InitializationLanguagePackFullWidth();
 
-            if (sceneState == SceneState.InBattle)
+            switch (sceneState)
             {
-                InitializationBattle();
-            }
-            else
-            {
-                var playerOw = GameObject.Find("Player");
-                if (playerOw)
-                    playerBehaviour = playerOw.GetComponent<PlayerBehaviour>();
+                case SceneState.Normal:
+                    break;
+                case SceneState.Overworld:
+                {
+                    var owPlayer = GameObject.Find("Player");
+                    if (owPlayer)
+                        overworldPlayerBehaviour = owPlayer.GetComponent<OverworldPlayerBehaviour>();
+                    break;
+                }
+                case SceneState.InBattle:
+                    InitializationBattle();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             if (isFadeTransitionEnabled)

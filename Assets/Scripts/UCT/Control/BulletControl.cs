@@ -8,7 +8,7 @@ namespace UCT.Control
     /// <summary>
     ///     ��Ļ�ļ�
     /// </summary>
-    [CreateAssetMenu(fileName = "BulletControl", menuName = "UCT-BulletControl")]
+    [CreateAssetMenu(fileName = "BulletControl", menuName = "UCT/BulletControl")]
     public class BulletControl : ScriptableObject
     {
         [Header("��Ļ����������")] public string typeName;
