@@ -183,7 +183,7 @@ AudioMixerSnapshotController:
   m_FloatValues:
     c0fcc95225d4e5949937a80561289a77: 0.371
     f5e10ac32eba35f418efbd332fef9028: 0
-    639d0944bc24fb04ab2140db3688cdde: 0
+    639d0944bc24fb04ab2140db3688cdde: 0.04171297
     64bbbc05a0557fa4b907a3fe5974cbd7: 2283
     1a20b437ed6de7f43ad4cdd57c5f734f: 12.2
     2ba8e12a7ba93e34f9aacc88d7fff19e: 0
@@ -223,7 +223,7 @@ AudioMixerGroupController:
   - {fileID: 1372468559754705384}
   m_UserColorIndex: 0
   m_Mute: 0
-  m_Solo: 0
+  m_Solo: 1
   m_BypassEffects: 0
 --- !u!244 &2203777793560332277
 AudioMixerEffectController:

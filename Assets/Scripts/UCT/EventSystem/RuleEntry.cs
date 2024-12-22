@@ -14,8 +14,8 @@ namespace UCT.EventSystem
         public string name;
         public EventEntry triggeredBy;
         public EventEntry triggers;
-        public Action Execute;
         public RulePriority rulePriority;
+        public Action Execute;
 
         public List<RuleCriterion> criteria;
         public List<Func<FactEntry, int>> Modifications; //TODO: 修改Fact

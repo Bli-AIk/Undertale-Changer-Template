@@ -12,6 +12,7 @@ namespace Editor.Inspector.EventSystem
 {
     public abstract class ReorderableListInspector<T> : UnityEditor.Editor where T : class, new()
     {
+        public float elementHeight;
         private ReorderableList _reorderableList;
 
         protected abstract string PropertyName { get; }
@@ -45,7 +46,7 @@ namespace Editor.Inspector.EventSystem
         {
             var listProperty = serializedObject.FindProperty(PropertyName);
 
-            _reorderableList = new ReorderableList(serializedObject, listProperty, true, 
+            _reorderableList = new ReorderableList(serializedObject, listProperty, true,
                 true, true, true)
             {
                 drawHeaderCallback = DrawHeader,
@@ -69,7 +70,8 @@ namespace Editor.Inspector.EventSystem
                     serializedObject.Update();
                     OnRemoveElement(listProperty, list.index);
                     serializedObject.ApplyModifiedProperties();
-                }
+                },
+                elementHeightCallback = _ => elementHeight == 0 ? EditorGUIUtility.singleLineHeight : elementHeight
             };
         }
 
@@ -156,7 +158,7 @@ namespace Editor.Inspector.EventSystem
                 nameProperty.stringValue = "Fact" + (index + 1);
             if (EditorGUI.EndChangeCheck())
                 RenameDetection(element);
-            
+
             EditorGUI.BeginChangeCheck();
             EditorGUI.PropertyField(scopeRect, element.FindPropertyRelative("scope"), GUIContent.none);
             var scopeProperty = element.FindPropertyRelative("scope");
@@ -202,9 +204,10 @@ namespace Editor.Inspector.EventSystem
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
             if (EditorGUI.EndChangeCheck())
                 RenameDetection(element);
-            
+
             EditorGUI.PropertyField(valueRect, element.FindPropertyRelative("value"), GUIContent.none);
         }
 
@@ -222,7 +225,7 @@ namespace Editor.Inspector.EventSystem
             EditorGUI.LabelField(
                 new Rect(rectX + 3 * fieldWidth, rect.y, fieldWidth, EditorGUIUtility.singleLineHeight), "Value");
         }
-        
+
         private void RenameDetection(SerializedProperty element)
         {
             var nameProperty = element.FindPropertyRelative("name");
@@ -242,10 +245,10 @@ namespace Editor.Inspector.EventSystem
             listProperty.arraySize++;
             var element = listProperty.GetArrayElementAtIndex(listProperty.arraySize - 1);
             element.FindPropertyRelative("name").stringValue = "Fact" + listProperty.arraySize;
-            element.FindPropertyRelative("scope").enumValueIndex = 0; 
+            element.FindPropertyRelative("scope").enumValueIndex = 0;
             RenameDetection(element);
         }
-        
+
         protected override void OnRemoveElement(SerializedProperty listProperty, int index)
         {
             listProperty.DeleteArrayElementAtIndex(index);
@@ -257,7 +260,6 @@ namespace Editor.Inspector.EventSystem
             serializedObject.ApplyModifiedProperties();
             EntrySaver.facts = EntrySaver.GetAllFactEntry();
         }
-        
     }
 
 
@@ -273,17 +275,14 @@ namespace Editor.Inspector.EventSystem
             var nameRect = new Rect(rect.x, rect.y, fieldWidth, EditorGUIUtility.singleLineHeight);
             var isTriggeringRect =
                 new Rect(rect.x + fieldWidth + 5, rect.y, fieldWidth, EditorGUIUtility.singleLineHeight);
-            
+
             var nameProperty = element.FindPropertyRelative("name");
             EditorGUI.BeginChangeCheck();
             EditorGUI.PropertyField(nameRect, nameProperty, GUIContent.none);
             if (string.IsNullOrEmpty(nameProperty.stringValue))
                 nameProperty.stringValue = "Event" + (index + 1);
-            if (EditorGUI.EndChangeCheck())
-            {
-                RenameDetection(nameProperty);
-            }
-            
+            if (EditorGUI.EndChangeCheck()) RenameDetection(nameProperty);
+
             GUI.enabled = false;
             EditorGUI.PropertyField(isTriggeringRect, element.FindPropertyRelative("isTriggering"), GUIContent.none);
             GUI.enabled = true;
@@ -308,8 +307,8 @@ namespace Editor.Inspector.EventSystem
             EditorGUI.LabelField(new Rect(rectX + fieldWidth, rect.y, fieldWidth, EditorGUIUtility.singleLineHeight),
                 "isTriggering");
         }
-        
-        
+
+
         protected override void OnAddElement(SerializedProperty listProperty)
         {
             listProperty.arraySize++;
@@ -318,7 +317,7 @@ namespace Editor.Inspector.EventSystem
             nameProperty.stringValue = "Event" + listProperty.arraySize;
             RenameDetection(nameProperty);
         }
-        
+
         protected override void OnRemoveElement(SerializedProperty listProperty, int index)
         {
             listProperty.DeleteArrayElementAtIndex(index);
@@ -340,16 +339,17 @@ namespace Editor.Inspector.EventSystem
 
         protected override void DrawElement(Rect rect, SerializedProperty element, int index)
         {
+            elementHeight = (EditorGUIUtility.singleLineHeight + 2.5f) * 2;
             EntrySaver.events ??= EntrySaver.GetAllEventEntry();
-            
-            rect.height *= 2;
-            
             var fieldWidth = rect.width / 3 - 10;
             var nameRect = new Rect(rect.x, rect.y, fieldWidth, EditorGUIUtility.singleLineHeight);
             var triggeredByRect =
                 new Rect(rect.x + fieldWidth + 5, rect.y, fieldWidth, EditorGUIUtility.singleLineHeight);
             var triggersRect =
                 new Rect(rect.x + 2 * (fieldWidth + 5), rect.y, fieldWidth, EditorGUIUtility.singleLineHeight);
+            var rulePriorityRect =
+                new Rect(rect.x, rect.y + rect.height / 2, (fieldWidth + 10) * 3,
+                    EditorGUIUtility.singleLineHeight);
 
             var nameProperty = element.FindPropertyRelative("name");
             EditorGUI.BeginChangeCheck();
@@ -361,6 +361,37 @@ namespace Editor.Inspector.EventSystem
 
             EventEntryField(element, triggeredByRect, "triggeredBy");
             EventEntryField(element, triggersRect, "triggers");
+
+
+            var rulePriorityProperty = element.FindPropertyRelative("rulePriority");
+            var rulePriority = (RulePriority)rulePriorityProperty.enumValueIndex;
+            var defaultColor = GUI.color;
+
+            GUI.color = rulePriority switch
+            {
+                RulePriority.Low => Color.green,
+                RulePriority.Medium => Color.yellow,
+                RulePriority.High => Color.red,
+                _ => throw new ArgumentOutOfRangeException()
+            };
+
+            var rulePriorityStyle = new GUIStyle(EditorStyles.popup)
+            {
+                fontStyle = FontStyle.Bold,
+                alignment = TextAnchor.MiddleCenter,
+            };
+
+            var rulePriorityOptions = Enum.GetNames(typeof(RulePriority));
+
+            rulePriorityProperty.enumValueIndex = EditorGUI.Popup(
+                rulePriorityRect, 
+                rulePriorityProperty.enumValueIndex, 
+                rulePriorityOptions, 
+                rulePriorityStyle
+            );
+
+            GUI.color = defaultColor;
+
         }
 
         private void RenameDetection(SerializedProperty nameProperty)
@@ -372,8 +403,9 @@ namespace Editor.Inspector.EventSystem
             nameProperty.stringValue = nameP;
             SetAllRuleEntry();
         }
-        
-        private static void EventEntryField(SerializedProperty element, Rect triggeredByRect, string relativePropertyPath)
+
+        private static void EventEntryField(SerializedProperty element, Rect triggeredByRect,
+            string relativePropertyPath)
         {
             if (EntrySaver.events.Length <= 0)
             {
@@ -395,15 +427,13 @@ namespace Editor.Inspector.EventSystem
 
             triggeredByProperty.FindPropertyRelative("name").stringValue = EntrySaver.events[popup].name;
         }
-        
+
         protected override void DrawHeader(Rect rect)
         {
             var rectX = rect.x + 15;
-            var fieldWidth = rect.width / 2 - 10;
+            var fieldWidth = rect.width - 10;
 
-            EditorGUI.LabelField(new Rect(rectX, rect.y, fieldWidth, EditorGUIUtility.singleLineHeight), "Name");
-            EditorGUI.LabelField(new Rect(rectX + fieldWidth, rect.y, fieldWidth, EditorGUIUtility.singleLineHeight),
-                "TriggeredBy");
+            EditorGUI.LabelField(new Rect(rectX, rect.y, fieldWidth, EditorGUIUtility.singleLineHeight), "Rules");
         }
 
         protected override void OnAddElement(SerializedProperty listProperty)
@@ -414,7 +444,7 @@ namespace Editor.Inspector.EventSystem
             nameProperty.stringValue = "Rule" + listProperty.arraySize;
             RenameDetection(nameProperty);
         }
-        
+
         protected override void OnRemoveElement(SerializedProperty listProperty, int index)
         {
             listProperty.DeleteArrayElementAtIndex(index);
@@ -449,6 +479,7 @@ namespace Editor.Inspector.EventSystem
                 .Where(eventTable => eventTable && eventTable.events != null)
                 .SelectMany(eventTable => eventTable.events).ToArray();
         }
+
         public static RuleEntry[] GetAllRuleEntry()
         {
             var guids = AssetDatabase.FindAssets("t:RuleTable");

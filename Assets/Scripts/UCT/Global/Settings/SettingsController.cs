@@ -545,8 +545,8 @@ namespace UCT.Global.Settings
         {
             var gotValue = option.SelectionBasedChangedValueGetter?.Invoke();
 
-            if (gotValue is int intValue && option.GetSpDataWithIndex != null &&
-                option.GetSpDataWithIndex.TryGetValue(intValue, out var value1))
+            if (gotValue is int intValue && option.GetSpDataNameWithIndex != null &&
+                option.GetSpDataNameWithIndex.TryGetValue(intValue, out var value1))
                 gotValue = TextProcessingService.GetFirstChildStringByPrefix(
                     MainControl.Instance.overworldControl.settingSave, value1);
 

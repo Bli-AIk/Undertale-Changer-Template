@@ -18,25 +18,25 @@ MonoBehaviour:
       name: Event4
       isTriggering: 0
     triggers:
-      name: Event3
+      name: Event4
       isTriggering: 0
-    rulePriority: 0
+    rulePriority: 1
     criteria: []
   - name: Rule3
     triggeredBy:
       name: Event4
       isTriggering: 0
     triggers:
-      name: Event3
+      name: Event4
       isTriggering: 0
-    rulePriority: 0
+    rulePriority: 2
     criteria: []
   - name: Rule3_b_b
     triggeredBy:
       name: Event4
       isTriggering: 0
     triggers:
-      name: Event3
+      name: Event4
       isTriggering: 0
     rulePriority: 0
     criteria: []

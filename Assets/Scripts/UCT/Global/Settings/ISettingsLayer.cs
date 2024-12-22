@@ -33,7 +33,6 @@ namespace UCT.Global.Settings
         /// </summary>
         void Clear();
     }
-    //TODO: 自动给每个层进行分级（到达指定长度时，在选项下方插入“上一页 下一页 退出”
     public abstract class SettingsLayerBase : ISettingsLayer
     {
         public List<SettingsOption> AllSettingsOptions { get; private set; } = new();
@@ -260,7 +259,7 @@ namespace UCT.Global.Settings
                 SelectionBasedChangedUnitWhenGetC = 1,
                 SelectionBasedChangedMax = 1000,
                 SelectionBasedChangedMin = 0,
-                GetSpDataWithIndex = new Dictionary<int, string>
+                GetSpDataNameWithIndex = new Dictionary<int, string>
                 {
                     { 0, "UnlimitedFrameRate" }
                 }
@@ -288,7 +287,7 @@ namespace UCT.Global.Settings
                     PlayerPrefs.SetInt("vsyncMode",
                         Convert.ToInt32(SettingsStorage.vsyncMode));
                 },
-                GetSpDataWithIndex = new Dictionary<int, string>
+                GetSpDataNameWithIndex = new Dictionary<int, string>
                 {
                     { 0, "NoSync" },
                     { 1, "Sync" },
