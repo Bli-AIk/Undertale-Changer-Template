@@ -328,12 +328,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 100
-  m_Sprite: {fileID: 21300000, guid: d9006ddabe0fb3243898c8c4db6ee9ca, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 74f1016e8e9ea1c4ea134126364b5c43, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 18.3, y: 4.3}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -384,13 +384,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a3ecd31ce8ed72499cbcef45da89694, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 1
+  isUseWidth: 1
   options:
   - {x: 0.75, y: -26, z: 5, w: 0}
   - {x: 0.75, y: -8.85, z: 20, w: 0}
-  fontSize:
+  fontSizes:
   - 0
   - 0
+  positions:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
 --- !u!114 &658997763
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -678,13 +681,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a3ecd31ce8ed72499cbcef45da89694, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 0
+  isUseWidth: 0
   options:
   - {x: -0.5, y: 0, z: 0, w: 0}
   - {x: -0.5, y: 0, z: 0, w: 0}
-  fontSize:
+  fontSizes:
   - 0
   - 0
+  positions:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
 --- !u!114 &915422017
 MonoBehaviour:
   m_ObjectHideFlags: 0
