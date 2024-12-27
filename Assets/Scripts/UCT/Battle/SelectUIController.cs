@@ -143,7 +143,7 @@ namespace UCT.Battle
 
         private void Update()
         {
-            if (MainControl.Instance.overworldControl.isSetting || SettingsStorage.pause)
+            if (GameUtilityService.IsGamePausedOrSetting())
                 return;
 
             if (MainControl.Instance.playerControl.isDebug)

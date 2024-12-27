@@ -8,6 +8,7 @@ TagManager:
   - board
   - owObjTrigger
   - Box
+  - PlayerTrigger
   layers:
   - Default
   - TransparentFX
@@ -16,8 +17,8 @@ TagManager:
   - Water
   - UI
   - BulletInside
-  - 
-  - 
+  - Player
+  - NPC
   - 
   - 
   - 

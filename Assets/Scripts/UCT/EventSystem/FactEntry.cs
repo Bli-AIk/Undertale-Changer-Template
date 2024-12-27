@@ -11,7 +11,7 @@ namespace UCT.EventSystem
     public struct FactEntry
     {
         public string name;
-        public Scope scope;
+        public Scope scope;//TODO: 通过不同的ScriptableObject来区分Scope
         public int value;
         
         // 仅当 Scope 为 Area 时有效

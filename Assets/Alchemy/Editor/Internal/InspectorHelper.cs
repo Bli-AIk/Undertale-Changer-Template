@@ -266,7 +266,6 @@ namespace Alchemy.Editor
                             }
                         }
 
-                        // TODO: Supports editing of multiple objects
                         if (element != null && serializedObject.targetObjects.Length > 1)
                         {
                             element.SetEnabled(false);

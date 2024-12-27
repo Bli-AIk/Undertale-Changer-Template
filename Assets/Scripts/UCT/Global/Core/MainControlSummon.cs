@@ -17,42 +17,48 @@ namespace UCT.Global.Core
     /// </summary>
     public class MainControlSummon : MonoBehaviour
     {
-        [TabGroup("MainControlSummon","OWCamera")]
+        [TabGroup("Layer1","OWCamera")]
         public bool isCameraLimit;
-        [TabGroup("MainControlSummon","OWCamera")]
+        [TabGroup("Layer1","OWCamera")]
         public bool isCameraFollow;
-        [TabGroup("MainControlSummon","OWCamera")]
+        [TabGroup("Layer1","OWCamera")]
         [EnableIf("isCameraFollow")][Indent] 
         public Vector2 cameraLimitX; //限制摄像机最大XY范围 0则不动
-        [TabGroup("MainControlSummon","OWCamera")]
+        [TabGroup("Layer1","OWCamera")]
         [EnableIf("isCameraFollow")][Indent] 
         public Vector2 cameraLimitY; //限制摄像机最大XY范围 0则不动
+        
+        // ---------------------------------------------------
 
-        [TabGroup("MainControlSummon","Canvas")]
+        [TabGroup("Layer1","Canvas")]
         public RenderMode renderMode;
-        [TabGroup("MainControlSummon","Canvas")]
+        [TabGroup("Layer1","Canvas")]
         [FormerlySerializedAs("framePic")] 
         public int frameSpriteIndex;
+        
+        // ---------------------------------------------------
       
-        [TabGroup("MainControlSummon","BGMControl")]
+        [TabGroup("Layer1","BGMControl")]
         [Title("BGM本体音频 空为无音频")]
         public AudioClip bgmClip;
-        [TabGroup("MainControlSummon","BGMControl")]
+        [TabGroup("Layer1","BGMControl")]
         [Title("BGM音量")] public float volume = 0.5f;
-        [TabGroup("MainControlSummon","BGMControl")]
+        [TabGroup("Layer1","BGMControl")]
         [Title("BGM音调")] public float pitch = 0.5f;
-        [TabGroup("MainControlSummon","BGMControl")]
+        [TabGroup("Layer1","BGMControl")]
         [Title("BGM循环播放初始状态")] public bool loop = true;
+        
+        // ---------------------------------------------------
 
-        [TabGroup("MainControlSummon","MainControl")]
+        [TabGroup("Layer1","MainControl")]
         [Title("黑场状态相关")]
         public MainControl.SceneState sceneState;
-        [FormerlySerializedAs("haveInOutBlack")] [TabGroup("MainControlSummon","MainControl")]
+        [FormerlySerializedAs("haveInOutBlack")] [TabGroup("Layer1","MainControl")]
         public bool isFadeTransitionEnabled;
-        [FormerlySerializedAs("noInBlack")] [TabGroup("MainControlSummon","MainControl")]
+        [FormerlySerializedAs("noInBlack")] [TabGroup("Layer1","MainControl")]
         [EnableIf("isFadeTransitionEnabled")][Indent]
         public bool isFadeInDisabled;
-        [FormerlySerializedAs("notPauseIn")] [TabGroup("MainControlSummon","MainControl")]
+        [FormerlySerializedAs("notPauseIn")] [TabGroup("Layer1","MainControl")]
         [EnableIf("isFadeTransitionEnabled")][Indent]
         public bool isFadeInUnpaused;
 

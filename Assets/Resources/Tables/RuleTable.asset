@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faa34550e4fc4146a12aaf0b1183b1f6, type: 3}
+  m_Name: RuleTable
+  m_EditorClassIdentifier: 
+  rules:
+  - name: TestRule
+    triggeredBy:
+      name: TestEvent
+      isTriggering: 0
+    triggers:
+      name: TestEvent
+      isTriggering: 0
+    rulePriority: 0
+    methodNames:
+    - StartOverworldTypeWritter
+    methodStrings:
+    - DemoBox1
+    ruleCriterion:
+      isResultReversed: 0
+      fact:
+        name: 
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 0
+      detection: 0
+      operation: 1
+      criteria:
+      - isResultReversed: 0
+        fact:
+          name: TestFact
+          scope: 0
+          value: 0
+          area: 0
+          scene: 
+        compare: 2
+        detection: 0
+        operation: 0
+        criteria: []
+    isCriteriaPassed: 1
+    factModifications:
+    - fact:
+        name: TestFact
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      operation: 0
+      number: 1

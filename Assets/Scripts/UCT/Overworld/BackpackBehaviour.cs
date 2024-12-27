@@ -58,7 +58,7 @@ namespace UCT.Overworld
 
         private void Update()
         {            
-            if (MainControl.Instance.overworldControl.isSetting || SettingsStorage.pause) return;
+            if (GameUtilityService.IsGamePausedOrSetting()) return;
 
             if (TalkBoxPositionChanger.Instance)
                 TalkBoxPositionChanger.Instance.isUp = MainControl.Instance.overworldPlayerBehaviour.transform.position.y <

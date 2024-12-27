@@ -12,8 +12,6 @@ namespace UCT.Overworld
     [RequireComponent(typeof(OverworldPlayerAnimEventHelper))]
     public class OverworldPlayerBehaviour : FiniteStateMachine.FiniteStateMachine
     {
-        
-        
         public float owTimer; 
         public Vector2 walkFxRange = new(0, 9);
         
@@ -33,8 +31,7 @@ namespace UCT.Overworld
             if (owTimer > 0) 
                 owTimer -= Time.deltaTime;
             
-            if (MainControl.Instance.overworldControl.isSetting || SettingsStorage.pause ||
-                BackpackBehaviour.Instance.select > 0)
+            if (GameUtilityService.IsGamePausedOrSetting() || BackpackBehaviour.Instance.select > 0)
             {
                 TransitionToStateIfNeeded(States[DefaultStateType.Idle]);
                 return;
@@ -106,7 +103,11 @@ namespace UCT.Overworld
         private void UpdateAnimationDirection()
         {
             if (data.direction != Vector3.zero)
-                data.directionForAnim = data.direction;
+                data.directionWithoutZero = data.direction;
+
+            data.directionPlayer = Mathf.Abs(data.directionWithoutZero.x) > Mathf.Abs(data.directionWithoutZero.y)
+                ? new Vector3(Mathf.Sign(data.directionWithoutZero.x), 0, 0)
+                : new Vector3(0, Mathf.Sign(data.directionWithoutZero.y), 0);
         }
 
         private void UpdatePlayerState(bool isGetKey)

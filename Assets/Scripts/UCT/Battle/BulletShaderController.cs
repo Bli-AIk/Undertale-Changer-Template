@@ -1,5 +1,6 @@
 using UCT.Global.Core;
 using UCT.Global.Settings;
+using UCT.Service;
 using UnityEngine;
 
 namespace UCT.Battle
@@ -16,14 +17,6 @@ namespace UCT.Battle
             _material = Instantiate(Resources.Load<Material>("Materials/Bullet"));
 
             GetComponent<SpriteRenderer>().material = _material;
-        }
-
-        private void Update()
-        {
-            if (MainControl.Instance.sceneState != MainControl.SceneState.InBattle)
-                return;
-            if (MainControl.Instance.overworldControl.isSetting || SettingsStorage.pause)
-                return;
         }
     }
 }

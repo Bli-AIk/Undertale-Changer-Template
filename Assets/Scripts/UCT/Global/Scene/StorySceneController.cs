@@ -42,7 +42,7 @@ namespace UCT.Global.Scene
 
         private void Update()
         {
-            if (MainControl.Instance.overworldControl.isSetting || SettingsStorage.pause)
+            if (GameUtilityService.IsGamePausedOrSetting())
                 return;
             if (!InputService.GetKeyDown(KeyCode.Z)) return;
             _typeWritter.TypeStop();

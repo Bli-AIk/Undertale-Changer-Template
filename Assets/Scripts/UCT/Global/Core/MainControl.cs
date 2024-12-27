@@ -6,6 +6,7 @@ using Debug;
 using DG.Tweening;
 using UCT.Battle;
 using UCT.Control;
+using UCT.EventSystem;
 using UCT.Extensions;
 using UCT.Global.Settings;
 using UCT.Global.UI;
@@ -92,6 +93,9 @@ namespace UCT.Global.Core
         public AudioControl AudioControl { get; private set; }
         public BattleControl BattleControl { get; private set; }
 
+
+        public EventController eventController;
+        
         private void Awake()
         {
             languagePackId = PlayerPrefs.GetInt("languagePack", 2);
@@ -129,9 +133,14 @@ namespace UCT.Global.Core
                     break;
                 case SceneState.Overworld:
                 {
+                    if (!eventController)
+                        eventController = GetComponent<EventController>();
+                    
                     var owPlayer = GameObject.Find("Player");
+                    
                     if (owPlayer)
                         overworldPlayerBehaviour = owPlayer.GetComponent<OverworldPlayerBehaviour>();
+                    
                     break;
                 }
                 case SceneState.InBattle:
@@ -186,13 +195,12 @@ namespace UCT.Global.Core
 
         private void InitializationLoad()
         {
-            //调用ScriptableObject
-            //--------------------------------------------------------------------------------
             playerControl = Resources.Load<PlayerControl>("PlayerControl");
             AudioControl = Resources.Load<AudioControl>("AudioControl");
             //InitializationOverworld内调用OverworldControl
             //Initialization内调用ItemControl
-            //--------------------------------------------------------------------------------
+
+
         }
 
         /// <summary>

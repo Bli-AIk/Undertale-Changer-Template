@@ -1475,7 +1475,7 @@ Camera:
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 31
+    m_Bits: 415
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -1604,16 +1604,16 @@ MonoBehaviour:
   pressX: 0
   clockTime: 0
   isStop: 0
+  passText: 0
+  spriteChanger: {fileID: 0}
   fx: 0
   fxRandomPitch: 0
+  pitch: 1
+  volume: 0.5
   speed: 0.075
   speedSlow: 0.15
   clock: 0.01
-  passText: 0
-  spriteChanger: {fileID: 0}
   isOverworld: 1
-  pitch: 1
-  volume: 0.5
   audioMixerGroup: {fileID: 0}
   useFont: 0
   dynamicType: 0
