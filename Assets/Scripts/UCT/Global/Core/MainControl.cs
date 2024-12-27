@@ -12,6 +12,7 @@ using UCT.Global.UI;
 using UCT.Overworld;
 using UCT.Service;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -90,7 +91,7 @@ namespace UCT.Global.Core
         private DebugStringGradient _debugStringGradient = new("Debug");
         public ItemControl ItemControl { get; private set; }
         public AudioControl AudioControl { get; private set; }
-        public BattleControl BattleControl { get; private set; }
+        public BattleControl BattleControl { get; private set; } 
 
         private void Awake()
         {
