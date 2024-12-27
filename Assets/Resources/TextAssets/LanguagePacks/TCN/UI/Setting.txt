@@ -27,7 +27,8 @@ Example-Corridor\最後的長廊;
 
 Setting\<align=center>設定</align>;
 SettingMainVolume\主音量;
-SettingBGMVolume\BGM音量;
+SettingBgmVolume\音樂音量;
+SettingFxVolume\音效音量;
 SettingKeyControlLayer\控制;
 SettingFullScreen\全螢幕;
 SettingResolving\解析度設定;
@@ -54,7 +55,8 @@ SettingLanguagePackageLayer\語言設定;
 SettingVSync\垂直同步;
 
 SettingMainVolumeTip\調整全域音量大小。 ;
-SettingBGMVolumeTip\調整BGM音量大小。;
+SettingBgmVolumeTip\調整音樂音量大小。;
+SettingFxVolumeTip\調整音效音量大小。;
 SettingKeyControlLayerTip\按鍵設定。 ;
 SettingFullScreenTipOpen\開啟全螢幕模式。 ;
 SettingFullScreenTipClose\在全螢幕狀態下，建議將解析度調高。 ;

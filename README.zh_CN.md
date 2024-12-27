@@ -34,6 +34,7 @@
 - [使用方法](#使用方法)
 - [Wiki](#Wiki)
 - [依赖项](#依赖项)
+- [贡献者](#贡献者)
 - [许可证](#许可证)
 
 
@@ -96,6 +97,15 @@
 以上库/插件的贡献者们为本项目提供了优秀的工具和技术支持，衷心感谢你们！
 
 *另注：由于项目开发时间较长且未从一开始记录依赖项，可能存在遗漏，无意侵权。若有遗漏，请通过Issue告知，谢谢！*
+
+## 贡献者
+以下人员为本项目做出了贡献。
+
+<a href = "https://github.com/Bli-AIk/Undertale-Changer-Template/Python/graphs/contributors">
+<img src = "https://contrib.rocks/image?repo=Bli-AIk/Undertale-Changer-Template"/>
+</a>
+
+**衷心感谢你们每一个人！🎔**
 
 ## 许可证
 

@@ -36,6 +36,7 @@
 - [使用方法](#使用方法)
 - [Wiki](#Wiki)
 - [依賴項](#依賴項)
+- [貢獻者](#貢獻者)
 - [許可證](#許可證)
 
 
@@ -98,6 +99,15 @@
 以上函式庫/插件的貢獻者們為本計畫提供了優秀的工具和技術支持，衷心感謝你們！
 
 *另註：由於專案開發時間較長且未從一開始記錄依賴項，可能有遺漏，無意侵權。若有遺漏，請透過Issue告知，謝謝！*
+
+## 貢獻者
+以下人員為本專案做出了貢獻。
+
+<a href = "https://github.com/Bli-AIk/Undertale-Changer-Template/Python/graphs/contributors">
+<img src = "https://contrib.rocks/image?repo=Bli-AIk/Undertale-Changer-Template"/>
+</a>
+
+**衷心感謝你們每一個人！ 🎔**
 
 ## 許可證
 

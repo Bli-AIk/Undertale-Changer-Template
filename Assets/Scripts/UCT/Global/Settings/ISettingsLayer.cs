@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Live2D.Cubism.Framework.Json;
 using UCT.Global.Core;
 using UCT.Service;
 using UnityEngine;
-using UnityEngine.Audio;
 
 namespace UCT.Global.Settings
 {
@@ -13,7 +13,7 @@ namespace UCT.Global.Settings
     public interface ISettingsLayer
     {
         List<SettingsOption> AllSettingsOptions { get; }
-        List<SettingsOption> DisplayedSettingsOptions { get; set; } 
+        List<SettingsOption> DisplayedSettingsOptions { get; set; }
 
         /// <summary>
         ///     添加退出层级/设置页面的选项
@@ -21,7 +21,8 @@ namespace UCT.Global.Settings
         /// <param name="layerName">层级名称</param>
         /// <param name="dataName">选项本身的数据名称</param>
         /// <param name="descriptionDataName">描述文本的数据名称</param>
-        void AddBackOptionForDisplay(string layerName, string dataName = "SettingBack", string descriptionDataName = "SettingBackTip");
+        void AddBackOptionForDisplay(string layerName, string dataName = "SettingBack",
+            string descriptionDataName = "SettingBackTip");
 
         void AddSwitchPageOptionForDisplay(string dataName = "PageUp", string changedValue = "PageDown");
 
@@ -31,14 +32,67 @@ namespace UCT.Global.Settings
         void AddLanguagePackageOption();
 
         /// <summary>
-        /// 清除所有设置项
+        ///     清除所有设置项
         /// </summary>
         void Clear();
     }
+
     public abstract class SettingsLayerBase : ISettingsLayer
     {
         public List<SettingsOption> AllSettingsOptions { get; private set; } = new();
         public List<SettingsOption> DisplayedSettingsOptions { get; set; } = new();
+
+
+        //  添加给DisplayedSettingsOptions
+
+        /// <summary>
+        ///     添加退出层级/设置页面的选项
+        /// </summary>
+        /// <param name="layerName">层级名称</param>
+        /// <param name="dataName">选项本身的数据名称</param>
+        /// <param name="descriptionDataName">描述文本的数据名称</param>
+        public void AddBackOptionForDisplay(string layerName, string dataName = "SettingBack",
+            string descriptionDataName = "SettingBackTip")
+        {
+            DisplayedSettingsOptions.Add(new SettingsOption(layerName)
+            {
+                DataName = dataName,
+                DescriptionDataName = new[] { descriptionDataName },
+                Type = OptionType.Back
+            });
+        }
+
+        public void AddSwitchPageOptionForDisplay(string dataName = "PageUp", string changedValue = "PageDown")
+        {
+            DisplayedSettingsOptions.Add(new SettingsOption(false)
+            {
+                DataName = dataName,
+                Type = OptionType.SwitchPage,
+                SelectionBasedChangedValueGetter = () => changedValue,
+                OptionDisplayMode = OptionDisplayMode.DataName
+            });
+        }
+
+        /// <summary>
+        ///     添加语言包配置的选项。
+        ///     特别地，它是加给AllSettingsOptions的。
+        /// </summary>
+        public void AddLanguagePackageOption()
+        {
+            AllSettingsOptions.Add(new SettingsOption(null)
+            {
+                Type = OptionType.LanguagePackage
+            });
+        }
+
+        /// <summary>
+        ///     清除所有设置项
+        /// </summary>
+        public void Clear()
+        {
+            AllSettingsOptions = new List<SettingsOption>();
+            DisplayedSettingsOptions = new List<SettingsOption>();
+        }
 
         /// <summary>
         ///     添加进入层级的选项
@@ -91,7 +145,7 @@ namespace UCT.Global.Settings
                     KeyBindings.SetKeyCode(SettingsStorage.KeyBindingType, dataName, (KeyCode)value)
             });
         }
-        
+
         /// <summary>
         ///     添加重置初始按键设置的选项
         /// </summary>
@@ -104,56 +158,6 @@ namespace UCT.Global.Settings
                 DescriptionDataName = new[] { dataName },
                 Type = OptionType.KeyBindingsReset
             });
-        }
-        
-        
-        //  添加给DisplayedSettingsOptions
-        
-        /// <summary>
-        ///     添加退出层级/设置页面的选项
-        /// </summary>
-        /// <param name="layerName">层级名称</param>
-        /// <param name="dataName">选项本身的数据名称</param>
-        /// <param name="descriptionDataName">描述文本的数据名称</param>
-        public void AddBackOptionForDisplay(string layerName, string dataName = "SettingBack", string descriptionDataName = "SettingBackTip")
-        {
-            DisplayedSettingsOptions.Add(new SettingsOption(layerName)
-            {
-                DataName = dataName,
-                DescriptionDataName = new[] { descriptionDataName },
-                Type = OptionType.Back
-            });
-        }
-
-        public void AddSwitchPageOptionForDisplay(string dataName = "PageUp", string changedValue = "PageDown")
-        {
-            DisplayedSettingsOptions.Add(new SettingsOption(false)
-            {
-                DataName = dataName,
-                Type = OptionType.SwitchPage,
-                SelectionBasedChangedValueGetter = () => changedValue,
-                OptionDisplayMode = OptionDisplayMode.DataName
-            });
-        }
-        
-        /// <summary>
-        ///     添加语言包配置的选项。
-        ///     特别地，它是加给AllSettingsOptions的。
-        /// </summary>
-        public void AddLanguagePackageOption()
-        {
-            AllSettingsOptions.Add(new SettingsOption(null)
-            {
-                Type = OptionType.LanguagePackage
-            });
-        }
-        /// <summary>
-        /// 清除所有设置项
-        /// </summary>
-        public void Clear()
-        {
-            AllSettingsOptions = new List<SettingsOption>();
-            DisplayedSettingsOptions = new List<SettingsOption>();
         }
     }
 
@@ -169,7 +173,7 @@ namespace UCT.Global.Settings
             AddEnterLayerOption("InputSettingsLayer", "InputSettingsLayer", new[] { "InputSettingsLayerTip" });
             AddEnterLayerOption("SettingLanguagePackageLayer", "SettingLanguagePackageLayer",
                 new[] { "SettingLanguagePackageLayerTip" });
-            
+
             AddEnterSceneOption("Menu", "SettingBackMenu", "SettingBackMenuTip");
         }
     }
@@ -221,9 +225,9 @@ namespace UCT.Global.Settings
             #endregion
 
             AddEnterLayerOption("GraphicSettingsLayer", "GraphicSettingsLayer", new[] { "GraphicSettingsLayerTip" });
-            
+
             //TODO: 设置分辨率16:9
-            
+
             //TODO: 像素完美
 
             //TODO: 亮度
@@ -330,20 +334,52 @@ namespace UCT.Global.Settings
             });
 
             #endregion
-            
-            #region SettingBGMVolume
 
-            AllSettingsOptions.Add(new SettingsOption(SettingsStorage.BGMVolume)    //New
+            #region SettingBgmVolume
+
+            AllSettingsOptions.Add(new SettingsOption(SettingsStorage.bgmVolume)
             {
-                DataName = "SettingBGMVolume",
-                DescriptionDataName = new[] { "SettingBGMVolumeTip" },
+                DataName = "SettingBgmVolume",
+                DescriptionDataName = new[] { "SettingBgmVolumeTip" },
                 Type = OptionType.SelectionBasedFalse,
                 OptionDisplayMode = OptionDisplayMode.Percentage,
-                SelectionBasedChangedValueGetter = () => (MainControl.Instance.AudioControl.SetBGMVolume()+80)/100,  
+                SelectionBasedChangedValueGetter = () =>
+                {
+                    MainControl.Instance.AudioControl.globalAudioMixer.GetFloat("BgmVolume", out var value);
+                    return MathUtilityService.DbToNormalizedValue(value);
+                },
                 SelectionBasedChangedValueSetter = value =>
                 {
-                    MainControl.Instance.AudioControl.globalAudioMixer.SetFloat("BGMVolume",(float)value*100-80);
-                    SettingsStorage.BGMVolume = (float)value;
+                    var bgmVolume = MathUtilityService.NormalizedValueToDb((float)value);
+                    MainControl.Instance.AudioControl.globalAudioMixer.SetFloat("BgmVolume", bgmVolume);
+                    SettingsStorage.bgmVolume = (float)value;
+                },
+                SelectionBasedChangedUnit = 0.01f,
+                SelectionBasedChangedUnitWhenGetC = 0.1f,
+                SelectionBasedChangedMax = 1,
+                SelectionBasedChangedMin = 0
+            });
+
+            #endregion
+            
+            #region SettingFxVolume
+
+            AllSettingsOptions.Add(new SettingsOption(SettingsStorage.bgmVolume)
+            {
+                DataName = "SettingFxVolume",
+                DescriptionDataName = new[] { "SettingFxVolumeTip" },
+                Type = OptionType.SelectionBasedFalse,
+                OptionDisplayMode = OptionDisplayMode.Percentage,
+                SelectionBasedChangedValueGetter = () =>
+                {
+                    MainControl.Instance.AudioControl.globalAudioMixer.GetFloat("FxVolume", out var value);
+                    return MathUtilityService.DbToNormalizedValue(value);
+                },
+                SelectionBasedChangedValueSetter = value =>
+                {
+                    var bgmVolume = MathUtilityService.NormalizedValueToDb((float)value);
+                    MainControl.Instance.AudioControl.globalAudioMixer.SetFloat("FxVolume", bgmVolume);
+                    SettingsStorage.bgmVolume = (float)value;
                 },
                 SelectionBasedChangedUnit = 0.01f,
                 SelectionBasedChangedUnitWhenGetC = 0.1f,
@@ -422,16 +458,11 @@ namespace UCT.Global.Settings
     }
 
     #endregion
+
     #region SettingKeyControlLayer
 
     public class SettingLanguagePackageLayer : SettingsLayerBase
     {
-        public SettingLanguagePackageLayer()
-        {
-            //  语言包由SettingsController动态生成
-            //  TODO: 强制使用Unicode
-            //  TODO: 强制使用全角排版
-        }
     }
 
     #endregion

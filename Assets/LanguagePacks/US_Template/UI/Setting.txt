@@ -38,7 +38,8 @@ CultureInfo\en-US;
 
 Setting\<align=center>Settings</align>;
 SettingMainVolume\Master Volume;
-SettingBGMVolume\BGM Volume;
+SettingBgmVolume\BGM Volume;
+SettingFxVolume\FX Volume;
 SettingKeyControlLayer\Key Controls;
 SettingFullScreen\Fullscreen;
 SettingResolving\Resolution;
@@ -63,7 +64,8 @@ InputSettingsLayer\Input Settings;
 SettingLanguagePackageLayer\Language Settings;
 
 SettingMainVolumeTip\Adjust the global volume level.;
-SettingBGMVolumeTip\Adjust the BGM volume level.;
+SettingBgmVolumeTip\Adjust the BGM volume level.;
+SettingFxVolumeTip\Adjust the FX volume level.;
 SettingKeyControlLayerTip\Set up key bindings.;
 SettingFullScreenTipOpen\Enable fullscreen mode.;
 SettingFullScreenTipClose\When fullscreen mode is enabled, <enter>it’s recommended to increase the resolution.;

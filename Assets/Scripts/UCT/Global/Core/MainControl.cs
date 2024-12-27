@@ -163,12 +163,24 @@ namespace UCT.Global.Core
 
             GameUtilityService.SetCanvasFrameSprite(SettingsController.Instance.frameSpriteIndex);
 
-            AudioListener.volume = SettingsStorage.mainVolume;
+            InitializeVolume();
             overworldControl.isSetting = false;
 
             GameUtilityService.ToggleAllSfx(SettingsStorage.isSimplifySfx);
 
             _debugStringGradient = new DebugStringGradient("Debug");
+        }
+
+        private void InitializeVolume()
+        {
+            AudioListener.volume = SettingsStorage.mainVolume;
+            
+            var bgmVolume = MathUtilityService.NormalizedValueToDb(SettingsStorage.bgmVolume);
+            AudioControl.globalAudioMixer.SetFloat("BgmVolume", bgmVolume);
+            
+            
+            var fxVolume = MathUtilityService.NormalizedValueToDb(SettingsStorage.fxVolume);
+            AudioControl.globalAudioMixer.SetFloat("FxVolume", fxVolume);
         }
 
         private void Update()
