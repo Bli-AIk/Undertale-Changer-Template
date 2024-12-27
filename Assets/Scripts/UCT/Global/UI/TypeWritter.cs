@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
+using Alchemy.Inspector;
 using MEC;
 using TMPro;
 using UCT.Control;
@@ -29,38 +30,62 @@ namespace UCT.Global.UI
         }
 
         private static readonly int Open = Animator.StringToHash("Open");
+
+        [TabGroup("TypeWritter", "Basic(ReadOnly)")] [ReadOnly]
         public string originString, endString, passTextString;
+
+        [TabGroup("TypeWritter", "Basic(ReadOnly)")] [ReadOnly]
         public bool isRunning; //打字机是否在运行
+
+        [TabGroup("TypeWritter", "Basic(ReadOnly)")] [ReadOnly]
         public bool isTyping; //是否在 打出字符
-        public int hpIn;
-        public int hpSave;
-        public bool canNotX;
-        public bool pressX;
-        public float clockTime; //实际上计数
-        public bool isStop;
+
+        [HideInInspector] public int hpIn;
+        [HideInInspector] public int hpSave;
+        [HideInInspector] public bool canNotX;
+        [HideInInspector] public bool pressX;
+        [HideInInspector] public float clockTime; //实际上计数
+        [HideInInspector] public bool isStop;
+        [HideInInspector] public bool passText;
+        [HideInInspector] public SpriteChanger spriteChanger;
+
+        [Title("FX data")] [TabGroup("TypeWritter", "Data")]
         public int fx; //音效
+
+        [TabGroup("TypeWritter", "Data")]
         public bool fxRandomPitch;
 
-        [Header("打字速度与检测停顿字符后的打字速度")] public float speed = 0.075f, speedSlow = 0.15f;
+        [TabGroup("TypeWritter", "Data")] public float pitch = 1;
 
-        [Header("打字后多少秒可以按X跳过，0为不能跳")] public float clock = 0.01f; //设置
+        [TabGroup("TypeWritter", "Data")] public float volume = 0.5f;
 
-        public bool passText;
+        [Title("TypeWritter data")] [TabGroup("TypeWritter", "Data")]
+        //  打字速度与检测停顿字符后的打字速度
+        public float speed = 0.075f;
 
+        [TabGroup("TypeWritter", "Data")] [Indent]
+        public float speedSlow = 0.15f;
 
-        public SpriteChanger spriteChanger;
+        [TabGroup("TypeWritter", "Data")] [Indent]
+        //  打字后多少秒可以按X跳过，0为不能跳
+        public float clock = 0.01f; //设置
 
-        [Header("适配OW框")] public bool isOverworld;
+        //  适配OW框
+        public bool isOverworld;
 
-        public float pitch = 1;
-        public float volume = 0.5f;
-        public AudioMixerGroup audioMixerGroup;
+        [TabGroup("TypeWritter", "Data")] public AudioMixerGroup audioMixerGroup;
 
-        [Header("字体")] public int useFont;
+        [TabGroup("TypeWritter", "Data")]
+        //  字体
+        public int useFont;
 
-        [Header("打字动效")] public OverworldControl.DynamicType dynamicType;
+        [TabGroup("TypeWritter", "Data")]
+        //  打字动效
+        public OverworldControl.DynamicType dynamicType;
 
-        [Header("总有那么一些情况需要强硬手段（拔枪")] public bool forceReturn;
+        [TabGroup("TypeWritter", "Data")]
+        //  总有那么一些情况需要强硬手段（拔枪
+        public bool forceReturn;
 
         private Animator _canvasAnim;
 
