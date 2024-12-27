@@ -17,5 +17,11 @@ namespace UCT.Control
         [Header("用于战斗音效")] public List<AudioClip> fxClipBattle;
 
         [Header("用于走路脚步音效")] public List<AudioClip> fxClipWalk;
+
+        public float SetBGMVolume()     //new
+        {
+            globalAudioMixer.GetFloat("BGMVolume", out float v);
+            return v;
+        }
     }
 }

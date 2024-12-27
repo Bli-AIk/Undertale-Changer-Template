@@ -10,11 +10,18 @@
     <list default="true" id="8f7c2298-d077-422b-9131-f9a839bed961" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Audios/Mixer/GlobalAudioMixer.mixer" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Audios/Mixer/GlobalAudioMixer.mixer" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Editor/Inspector/EventSystem/ReorderableListInspector.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/Inspector/EventSystem/ReorderableListInspector.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/EventSystem/FactTest.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/EventSystem/FactTest.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/LanguagePacks/CN_Template/UI/Setting.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/LanguagePacks/CN_Template/UI/Setting.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/UI/Setting.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/LanguagePacks/TCN_Template/UI/Setting.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/LanguagePacks/US_Template/UI/Setting.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/LanguagePacks/US_Template/UI/Setting.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Pipeline/2D Pipeline.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Pipeline/2D Pipeline.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Fonts/SonFonts/SIMSUN.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Fonts/SonFonts/SIMSUN.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/CN/UI/Setting.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/CN/UI/Setting.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/UI/Setting.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/TCN/UI/Setting.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/US/UI/Setting.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/TextAssets/LanguagePacks/US/UI/Setting.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Control/AudioControl.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Control/AudioControl.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Core/MainControl.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Core/MainControl.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Settings/ISettingsLayer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Settings/ISettingsLayer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Settings/SettingsController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Settings/SettingsController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Settings/SettingsOption.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Settings/SettingsOption.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Settings/SettingsStorage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Global/Settings/SettingsStorage.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -147,7 +154,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;XThreadsFramesViewSplitterKey&quot;: &quot;0.18181819&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;feat-BGMSettingsLayer&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -435,6 +442,10 @@
       <workItem from="1734915222560" duration="767000" />
       <workItem from="1734926036300" duration="156000" />
       <workItem from="1735119365666" duration="1747000" />
+      <workItem from="1735189604188" duration="7244000" />
+      <workItem from="1735207827929" duration="12000" />
+      <workItem from="1735208593423" duration="21000" />
+      <workItem from="1735260930365" duration="17188000" />
     </task>
     <servers />
   </component>

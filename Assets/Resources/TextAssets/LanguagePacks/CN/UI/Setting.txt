@@ -27,6 +27,7 @@ Example-Corridor\最后的长廊;
 
 Setting\<align=center>设置</align>;
 SettingMainVolume\主音量;
+SettingBGMVolume\BGM音量;
 SettingKeyControlLayer\控制;
 SettingFullScreen\全屏;
 SettingResolving\分辨率设置;
@@ -53,6 +54,7 @@ SettingLanguagePackageLayer\语言设置;
 SettingVSync\垂直同步;
 
 SettingMainVolumeTip\调节全局音量大小。;
+SettingBGMVolumeTip\调节BGM音量大小。;
 SettingKeyControlLayerTip\按键设置。;
 SettingFullScreenTipOpen\开启全屏模式。;
 SettingFullScreenTipClose\在全屏状态下，建议将分辨率调高。;

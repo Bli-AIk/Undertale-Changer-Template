@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using UCT.Global.Core;
 using UCT.Service;
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace UCT.Global.Settings
 {
@@ -320,6 +322,28 @@ namespace UCT.Global.Settings
                 {
                     AudioListener.volume = (float)value;
                     SettingsStorage.mainVolume = (float)value;
+                },
+                SelectionBasedChangedUnit = 0.01f,
+                SelectionBasedChangedUnitWhenGetC = 0.1f,
+                SelectionBasedChangedMax = 1,
+                SelectionBasedChangedMin = 0
+            });
+
+            #endregion
+            
+            #region SettingBGMVolume
+
+            AllSettingsOptions.Add(new SettingsOption(SettingsStorage.BGMVolume)    //New
+            {
+                DataName = "SettingBGMVolume",
+                DescriptionDataName = new[] { "SettingBGMVolumeTip" },
+                Type = OptionType.SelectionBasedFalse,
+                OptionDisplayMode = OptionDisplayMode.Percentage,
+                SelectionBasedChangedValueGetter = () => (MainControl.Instance.AudioControl.SetBGMVolume()+80)/100,  
+                SelectionBasedChangedValueSetter = value =>
+                {
+                    MainControl.Instance.AudioControl.globalAudioMixer.SetFloat("BGMVolume",(float)value*100-80);
+                    SettingsStorage.BGMVolume = (float)value;
                 },
                 SelectionBasedChangedUnit = 0.01f,
                 SelectionBasedChangedUnitWhenGetC = 0.1f,

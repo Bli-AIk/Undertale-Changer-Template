@@ -22,6 +22,7 @@ namespace UCT.Global.Settings
         public static int frameRate;
         public static bool fullScreen;
         public static float mainVolume = 0.5f;
+        public static float BGMVolume = 0.5f;       //New
         public static bool isSimplifySfx;
         public static bool isDisplayFPS;
         public static Vector2 resolution;
