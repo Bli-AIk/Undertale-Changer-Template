@@ -18,11 +18,20 @@ You can view the current change log of UCT through [**CHANGELOG.md**](CHANGELOG.
 
 An [**UNDERTALE**](https://undertale.com/) fan game template based on [**unity engine**](https://unity.com).
 
+![](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=csharp&logoColor=white)
+![](https://img.shields.io/badge/Rider-000000?style=for-the-badge&logo=Rider&logoColor=white)
+![](https://img.shields.io/badge/Unity-100000?style=for-the-badge&logo=unity&logoColor=white)
+
 [![license](https://img.shields.io/github/license/Bli-AIk/Undertale-Changer-Template
 )](LICENSE)
 <img src="https://img.shields.io/github/repo-size/Bli-AIk/Undertale-Changer-Template.svg"/>
 <img src="https://img.shields.io/github/last-commit/Bli-AIk/Undertale-Changer-Template.svg"/>
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
+
+[![](https://img.shields.io/badge/Tencent_QQ-EB1923?style=for-the-badge&logo=TencentQQ&logoColor=white)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=wK7VVbI0VU8mPpG94nDLsHaLRbky5cMT&authKey=LQfQsHtXTqbrRdmhSgUtxesNz9UmiETjymrhJF%2BFT1pAiEy0HUxSfM%2Fx%2FsTdOUC%2F&noverify=0&group_code=289694657)
+[![](https://dcbadge.limes.pink/api/server/xvYKa2pSN6)](https://discord.gg/xvYKa2pSN6)
+[![](https://img.shields.io/badge/Game%20Jolt-CCFF00?style=for-the-badge&logo=Game%20Jolt&logoColor=black)](https://gamejolt.com/games/undertale_changer_template/771575)
+
 
 | English | [简体中文](README_zh-CN.md) | [繁體中文](README_zh-TW.md) |
 |:---------------------:|:---------------------------:|:---------------------------:|
