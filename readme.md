@@ -24,9 +24,10 @@ An [**UNDERTALE**](https://undertale.com/) fan game template based on [**unity e
 <img src="https://img.shields.io/github/last-commit/Bli-AIk/Undertale-Changer-Template.svg"/>
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
-- en [English](readme.md)
-- zh_CN [简体中文](README.zh_CN.md)
-- zh_TW [繁體中文](README.zh_TW.md)
+| English | [简体中文](README_zh-CN.md) | [繁體中文](README_zh-TW.md) |
+|:---------------------:|:---------------------------:|:---------------------------:|
+
+
 
 ## Table of Contents
 
@@ -109,6 +110,8 @@ The following individuals have contributed to this project.
 </a>
 
 **A huge, heartfelt thank you to each and every one of you! 🎔**
+
+If you find a bug, want to fix an issue, or want to improve the project, please read **[the Contributing Guide](CONTRIBUTING.md)**.
 
 ## License
 

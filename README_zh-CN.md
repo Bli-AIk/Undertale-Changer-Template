@@ -23,9 +23,8 @@
 <img src="https://img.shields.io/github/last-commit/Bli-AIk/Undertale-Changer-Template.svg"/>
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
-- en [English](readme.md)
-- zh_CN [简体中文](README.zh_CN.md)
-- zh_TW [繁體中文](README.zh_TW.md)
+| [English](readme.md) | 简体中文 | [繁體中文](README_zh-TW.md) |
+|:---------------------:|:---------------------------:|:---------------------------:|
 
 ## 内容目录
 
@@ -106,6 +105,8 @@
 </a>
 
 **衷心感谢你们每一个人！🎔**
+
+如果你发现Bug、想要修复问题或者改进此项目，请阅读 **[贡献指南](CONTRIBUTING_zh-CN)**。
 
 ## 许可证
 

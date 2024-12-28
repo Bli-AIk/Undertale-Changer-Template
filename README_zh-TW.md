@@ -25,9 +25,8 @@
 <img src="https://img.shields.io/github/last-commit/Bli-AIk/Undertale-Changer-Template.svg"/>
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
-- en [English](readme.md)
-- zh_CN [简体中文](README.zh_CN.md)
-- zh_TW [繁體中文](README.zh_TW.md)
+| [English](readme.md) | [简体中文](README_zh-CN.md) | 繁體中文 |
+|:---------------------:|:---------------------------:|:---------------------------:|
 
 ## 內容目錄
 
@@ -108,6 +107,8 @@
 </a>
 
 **衷心感謝你們每一個人！ 🎔**
+
+如果你發現Bug、想要修復問題或改進此項目，請閱讀 **[貢獻指南](CONTRIBUTING_zh-TW)**。
 
 ## 許可證
 
