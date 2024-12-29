@@ -1,12 +1,12 @@
-# CHANGELOG 更新日志
+# CHANGELOG 更新日誌
 
-本文檔所寫的是UCT的更新日志，這通常是短期的計劃與安排。
+本文檔所寫的是UCT的更新日誌，這通常是短期的計劃與安排。
 
 關於UCT的長期更新計劃，請查閱[PLAN.md](PLAN.md)、[PLAN_zh-CN.md](PLAN_zh-CN.md)或[PLAN_zh-TW.md](PLAN_zh-TW.md)。
 
-關於UCT的具體更新日志，請查閱[CHANGELOG.md](CHANGELOG.md)、[CHANGELOG_zh-CN.md](CHANGELOG_zh-CN.md)或[CHANGELOG_zh-TW.md](CHANGELOG_zh-TW.md)。
+關於UCT的具體更新日誌，請查閱[CHANGELOG.md](CHANGELOG.md)、[CHANGELOG_zh-CN.md](CHANGELOG_zh-CN.md)或[CHANGELOG_zh-TW.md](CHANGELOG_zh-TW.md)。
 
-**簡體中文**的更新計劃/更新日志**優先更新**，其他語言會在**版本號變更**時使用GPT進行翻譯。
+**繁體中文**的更新計劃/更新日誌**優先更新**，其他語言會在**版本號變更**時使用GPT進行翻譯。
 
 ## 關於版本號變更
 
@@ -37,12 +37,13 @@ UTR 的版本號格式為：
 
 ## v1.0.4 -> v1.0.5f Overworld初步重構
 
-- [x] 添加一個“歡迎使用UCT”編輯器窗口
+- [x] 添加一個「歡迎使用UCT」編輯器窗口
 - [x] 加入FSM系統
 - [x] 加入事件系統的Fact、Rule、Entry結構體
 - [ ] 為Fact、Rule、Entry結構體列表重寫檢查器視圖
 - [ ] 重做OverworldObjTrigger
 - [ ] 添加可視化場景切換窗口
+- [x] 為TypeWritter添加檢查器界面
 
 2024/12/12 計劃 (6)
 
@@ -52,25 +53,27 @@ UTR 的版本號格式為：
 
 2024/12/22 計劃 (2-4)
 
+2024/12/25 計劃 (7)
+
 ## v1.0.3 -> v1.0.4 UI顯示修復與命名場景拓展
 
 - [x] 將OW場景中的框UI軸點均改為正中。
 - [x] 將主攝像機放置在DontDestroyOnLoad，由MainControlSummon生成。（類似於MainControl、BGMControl的生成方式）
-- [x] 對 Rename場景 的UI位置、大小進行檢查和修復。
-- [x] 對 Menu場景 的UI位置、大小進行檢查和修復。
-- [x] 對 PPT場景 與 Start場景 的UI位置、大小進行檢查和修復。
-- [x] 對 OW場景 的UI位置、大小進行檢查和修復。
-- [x] 對 Gameover場景 的UI位置、大小進行檢查和修復。
-- [x] 對 Battle場景 的UI位置、大小進行檢查和修復。
+- [x] 對 Rename場景的UI位置、大小進行檢查和修復。
+- [x] 對 Menu場景的UI位置、大小進行檢查和修復。
+- [x] 對 PPT場景與 Start場景的UI位置、大小進行檢查和修復。
+- [x] 對 OW場景的UI位置、大小進行檢查和修復。
+- [x] 對 Gameover場景的UI位置、大小進行檢查和修復。
+- [x] 對 Battle場景的UI位置、大小進行檢查和修復。
 - [x] 使用 \<indent\> 替換透明字符縮進。
 - [x] 將英文字體進行調整，修復字符重合的問題。
 - [x] 引進 [Fusion](https://github.com/TakWolf/fusion-pixel-font) 8px 字體。
 - [x] 將起名界面的字符數量拓展，分為基本字母、數字與符號、拉丁字母、西里爾字母、希臘字母等。
-- [x] 引入中日韩语言拼写库。
+- [x] 引入中日韩語言拼寫庫。
 - [x] 在起名界面加入中文輸入支持。
 - [x] 在起名界面加入日文輸入支持。
 - [x] 在起名界面加入韓文輸入支持。
-- [x] 將[PLAN.md](PLAN.md)與[CHANGELOG.md](CHANGELOG.md)通過Github Actions與ChatGPT API進行自動翻譯。
+- [x] 將[PLAN.md](PLAN.md)與[CHANGELOG.md](CHANGELOG.md)透過Github Actions與ChatGPT API進行自動翻譯。
 - [x] 合併此版本至Main。
 
 2024/11/4 計劃 (1-2)
@@ -167,17 +170,13 @@ XX年/XX月/XX日 完成
 （原計劃：v1.0.4 -> v1.0.5） 
 
 - [ ] 分離設置頁面的繪製邏輯與執行邏輯。 
-
 - [x] 細化設置項：視頻設置、音頻設置、輸入設置。 
-
+- [ ] 添加音頻設置：全局音量、音樂音量、音效音量
 - [ ] 添加文本設置：歷史文本、打字速度、CC字幕。 
-
 - [ ] 添加成就系統、成就頁面與成就設置。 
-
 - [ ] 拓展語言設置：強制unicode、強制全角。 
-
 - [ ] 添加無障礙設置：講述人、色盲模式。 
 
-2024/11/4 計劃 (1-2) 
+2024/11/4 計劃 (1-3) 
 
-2024/11/29 計劃 (3-6)
+2024/11/29 計劃 (4-6)
