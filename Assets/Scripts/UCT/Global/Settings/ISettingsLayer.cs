@@ -364,7 +364,7 @@ namespace UCT.Global.Settings
             
             #region SettingFxVolume
 
-            AllSettingsOptions.Add(new SettingsOption(SettingsStorage.bgmVolume)
+            AllSettingsOptions.Add(new SettingsOption(SettingsStorage.fxVolume)
             {
                 DataName = "SettingFxVolume",
                 DescriptionDataName = new[] { "SettingFxVolumeTip" },
@@ -379,7 +379,7 @@ namespace UCT.Global.Settings
                 {
                     var bgmVolume = MathUtilityService.NormalizedValueToDb((float)value);
                     MainControl.Instance.AudioControl.globalAudioMixer.SetFloat("FxVolume", bgmVolume);
-                    SettingsStorage.bgmVolume = (float)value;
+                    SettingsStorage.fxVolume = (float)value;
                 },
                 SelectionBasedChangedUnit = 0.01f,
                 SelectionBasedChangedUnitWhenGetC = 0.1f,
