@@ -34,6 +34,7 @@ SettingFullScreen\全屏;
 SettingResolving\分辨率设置;
 SettingSFX\简化视觉效果;
 SettingFPS\显示FPS;
+SettingTypingspeed\打字机速度;
 SettingBackMenu\返回菜单界面;
 SettingBack\返回;
 Open\开;
@@ -51,6 +52,7 @@ LockFrameRate\最大帧率;
 GraphicSettingsLayer\图形设置;
 InputSettingsLayer\输入设置;
 SettingLanguagePackageLayer\语言设置;
+SubtitleSettingsLayer\字幕设置;
 
 SettingVSync\垂直同步;
 
@@ -63,6 +65,7 @@ SettingFullScreenTipClose\在全屏状态下，建议将分辨率调高。;
 SettingResolvingTip\设置游戏窗口大小。;
 SettingSFXTip\设置游戏内的光效与特效是否开启。;
 SettingFPSTip\设置帧率是否显示。;
+SettingTypingspeedTip\调整游戏内文本显示速度。;
 SettingBackMenuTip\未保存的数据将会丢失。;
 SettingBackTip\返回并继续游戏。;
 
@@ -76,6 +79,10 @@ HalfSync\一半;
 GraphicSettingsLayerTip\调整图形设置。;
 InputSettingsLayerTip\调整输入设置。;
 SettingLanguagePackageLayerTip\调整语言设置。;
+SubtitleSettingsLayerTip\调整字幕设置。;
+Slow\慢;
+Medium\正常;
+Fast\快;
 
 UnlimitedFrameRate\无限制;
 
