@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Threading.Tasks;
 using Alchemy.Inspector;
@@ -62,6 +63,8 @@ namespace UCT.Global.UI
         [Title("TypeWritter data")] [TabGroup("TypeWritter", "Data")]
         //  打字速度与检测停顿字符后的打字速度
         public float speed = 0.075f;
+
+        public float currentSpeed;
 
         [TabGroup("TypeWritter", "Data")] [Indent]
         public float speedSlow = 0.15f;
@@ -143,6 +146,7 @@ namespace UCT.Global.UI
         {
             isRunning = true;
             _typeMode = typeMode;
+            speedMode();
 
             if (!force && isTyping)
                 return;
@@ -397,6 +401,12 @@ namespace UCT.Global.UI
                                     passText = true;
                                     passTextString = passTextString[..^spText.Length];
                                     goto PassText;
+                                case "<FixedSpeed>":
+                                    currentSpeed = speed;
+                                    break;
+                                case "</FixedSpeed>":
+                                    speedMode();
+                                    break;
                                 default: //富文本
 
                                     if (spText.Length - 2 > 0 && spText[1] == '-' && spText[^2] == '-')
@@ -490,9 +500,10 @@ namespace UCT.Global.UI
 
             float TypeStopSeconds()
             {
-                return Timing.WaitForSeconds(speed -
-                                             speed * 0.25f * Convert.ToInt32(!SettingsStorage.textWidth));
+                return Timing.WaitForSeconds(currentSpeed -
+                                             currentSpeed * 0.25f * Convert.ToInt32(!SettingsStorage.textWidth));
             }
+            
         }
 
         private IEnumerator<float> _Dynamic(int number, OverworldControl.DynamicType inputDynamicType)
@@ -672,6 +683,22 @@ namespace UCT.Global.UI
             return double.TryParse(numberPart, NumberStyles.Float, CultureInfo.InvariantCulture, out _)
                 ? input[..(endIndex + 1)]
                 : null;
+        }
+
+        public void speedMode()
+        {
+            switch (SettingsStorage.typingSpeed)
+            {
+                case TypingSpeed.Slow:
+                    currentSpeed = speed+0.075f;
+                    break;
+                case TypingSpeed.Medium:
+                    currentSpeed = speed;
+                    break;
+                case TypingSpeed.Fast:
+                    currentSpeed = speed-0.075f;
+                    break;
+            }
         }
     }
 }

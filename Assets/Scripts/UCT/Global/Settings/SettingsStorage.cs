@@ -13,6 +13,7 @@ namespace UCT.Global.Settings
             { "GraphicSettingsLayer", new GraphicSettingsLayer() },
             { "InputSettingsLayer", new InputSettingsLayer() },
             { "SettingKeyControlLayer", new SettingKeyControlLayer() },
+            { "SubtitleSettingsLayer",new SubtitleSettingsLayer()},
             { "SettingLanguagePackageLayer", new SettingLanguagePackageLayer() },
         };
 
@@ -30,6 +31,7 @@ namespace UCT.Global.Settings
         public static VSyncMode vsyncMode = VSyncMode.DonNotSync;
         public static bool isUsingHdFrame;
         public static KeyBindingType KeyBindingType = KeyBindingType.Primary;
+        public static TypingSpeed typingSpeed = TypingSpeed.Medium;
     }
 
     public enum VSyncMode
@@ -37,5 +39,12 @@ namespace UCT.Global.Settings
         DonNotSync,
         Sync,
         HalfSync
+    }
+
+    public enum TypingSpeed
+    {
+        Slow,
+        Medium,
+        Fast
     }
 }

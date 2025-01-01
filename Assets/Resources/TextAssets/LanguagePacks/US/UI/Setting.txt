@@ -45,6 +45,7 @@ SettingFullScreen\Fullscreen;
 SettingResolving\Resolution;
 SettingSFX\Simplify SFX;
 SettingFPS\Display FPS;
+SettingTypingspeed\Typewriter speed;
 SettingBackMenu\Return to Menu;
 SettingBack\Back;
 LanguageBack\Exiting this interface will reload the scene if the language has changed.<enter>Please remember to save your game.;
@@ -62,6 +63,7 @@ LockFrameRate\FPS Limit;
 GraphicSettingsLayer\Graphics Settings;
 InputSettingsLayer\Input Settings;
 SettingLanguagePackageLayer\Language Settings;
+SubtitleSettingsLayer\Subtitle settings;
 
 SettingMainVolumeTip\Adjust the global volume level.;
 SettingBgmVolumeTip\Adjust the BGM volume level.;
@@ -72,6 +74,7 @@ SettingFullScreenTipClose\When fullscreen mode is enabled, <enter>it’s recomme
 SettingResolvingTip\Set the game window size.;
 SettingSFXTip\Enable or disable in-game lighting and visual effects.;
 SettingFPSTip\Choose whether to display the FPS counter.;
+SettingTypingspeedTip\Adjust the speed at which in-game text is displayed.;
 SettingBackMenuTip\Unsaved changes will be lost.;
 SettingBackTip\Return to the previous screen.;
 
@@ -85,6 +88,10 @@ HalfSync\Half Sync;
 GraphicSettingsLayerTip\Adjust graphics-related settings.;
 InputSettingsLayerTip\Adjust input-related settings.;
 SettingLanguagePackageLayerTip\Manage language settings.;
+SubtitleSettingsLayerTip\Adjust subtitle settings;
+Slow\Slow;
+Medium\Medium;
+Fast\Fast;
 
 UnlimitedFrameRate\Unlimited;
 

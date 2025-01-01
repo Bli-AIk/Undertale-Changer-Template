@@ -173,7 +173,7 @@ namespace UCT.Global.Settings
             AddEnterLayerOption("InputSettingsLayer", "InputSettingsLayer", new[] { "InputSettingsLayerTip" });
             AddEnterLayerOption("SettingLanguagePackageLayer", "SettingLanguagePackageLayer",
                 new[] { "SettingLanguagePackageLayerTip" });
-
+            AddEnterLayerOption("SubtitleSettingsLayer","SubtitleSettingsLayer",new[] {"SubtitleSettingsLayerTip"});
             AddEnterSceneOption("Menu", "SettingBackMenu", "SettingBackMenuTip");
         }
     }
@@ -465,5 +465,44 @@ namespace UCT.Global.Settings
     {
     }
 
+    #endregion
+    
+    #region SubtitleSettingsLayer
+    public class SubtitleSettingsLayer : SettingsLayerBase
+    {
+        public SubtitleSettingsLayer()
+        {
+            #region SettingTypingspeed
+            
+            AllSettingsOptions.Add(new SettingsOption(SettingsStorage.typingSpeed)
+            {
+                DataName = "SettingTypingspeed",
+                DescriptionDataName = new[] { "SettingTypingspeedTip" },
+                Type = OptionType.SelectionToggle,
+                OptionDisplayMode = OptionDisplayMode.Default,
+                SelectionBasedChangedValueGetter = () => (int)SettingsStorage.typingSpeed,
+                SelectionBasedChangedValueSetter = value => SettingsStorage.typingSpeed = (TypingSpeed)value,
+                OnSelected = () =>
+                {
+                    QualitySettings.vSyncCount = (int)SettingsStorage.typingSpeed;
+                    if ((int)SettingsStorage.typingSpeed < 2)
+                        SettingsStorage.typingSpeed++;
+                    else
+                        SettingsStorage.typingSpeed = TypingSpeed.Slow;
+                    PlayerPrefs.SetInt("typingSpeed",
+                        Convert.ToInt32(SettingsStorage.typingSpeed));
+                },
+                GetSpDataNameWithIndex = new Dictionary<int, string>
+                {
+                    { 0, "Slow" },
+                    { 1, "Medium" },
+                    { 2, "Fast" }
+                }
+            });
+            
+            #endregion
+        }    
+    }
+    
     #endregion
 }
