@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Live2D.Cubism.Framework.Json;
 using UCT.Global.Core;
 using UCT.Service;
 using UnityEngine;
@@ -173,7 +172,7 @@ namespace UCT.Global.Settings
             AddEnterLayerOption("InputSettingsLayer", "InputSettingsLayer", new[] { "InputSettingsLayerTip" });
             AddEnterLayerOption("SettingLanguagePackageLayer", "SettingLanguagePackageLayer",
                 new[] { "SettingLanguagePackageLayerTip" });
-            AddEnterLayerOption("SubtitleSettingsLayer","SubtitleSettingsLayer",new[] {"SubtitleSettingsLayerTip"});
+            AddEnterLayerOption("SubtitleSettingsLayer", "SubtitleSettingsLayer", new[] { "SubtitleSettingsLayerTip" });
             AddEnterSceneOption("Menu", "SettingBackMenu", "SettingBackMenuTip");
         }
     }
@@ -361,7 +360,7 @@ namespace UCT.Global.Settings
             });
 
             #endregion
-            
+
             #region SettingFxVolume
 
             AllSettingsOptions.Add(new SettingsOption(SettingsStorage.fxVolume)
@@ -466,14 +465,15 @@ namespace UCT.Global.Settings
     }
 
     #endregion
-    
+
     #region SubtitleSettingsLayer
+
     public class SubtitleSettingsLayer : SettingsLayerBase
     {
         public SubtitleSettingsLayer()
         {
             #region SettingTypingspeed
-            
+
             AllSettingsOptions.Add(new SettingsOption(SettingsStorage.typingSpeed)
             {
                 DataName = "SettingTypingspeed",
@@ -499,10 +499,10 @@ namespace UCT.Global.Settings
                     { 2, "Fast" }
                 }
             });
-            
+
             #endregion
-        }    
+        }
     }
-    
+
     #endregion
 }

@@ -5,18 +5,6 @@ namespace UCT.Global.Settings
 {
     public static class SettingsStorage
     {
-        public static Dictionary<string, SettingsLayerBase> CubismSettingsLayers { get; private set; } = new()
-        {
-            { "HomeSettingsLayer", new HomeSettingsLayer() },
-            { "VideoSettingsLayer", new VideoSettingsLayer() },
-            { "AudioSettingsLayer", new AudioSettingsLayer() },
-            { "GraphicSettingsLayer", new GraphicSettingsLayer() },
-            { "InputSettingsLayer", new InputSettingsLayer() },
-            { "SettingKeyControlLayer", new SettingKeyControlLayer() },
-            { "SubtitleSettingsLayer",new SubtitleSettingsLayer()},
-            { "SettingLanguagePackageLayer", new SettingLanguagePackageLayer() },
-        };
-
         public static bool pause;
         public static bool textWidth;
         public static int resolutionLevel;
@@ -32,6 +20,18 @@ namespace UCT.Global.Settings
         public static bool isUsingHdFrame;
         public static KeyBindingType KeyBindingType = KeyBindingType.Primary;
         public static TypingSpeed typingSpeed = TypingSpeed.Medium;
+
+        public static Dictionary<string, SettingsLayerBase> CubismSettingsLayers { get; private set; } = new()
+        {
+            { "HomeSettingsLayer", new HomeSettingsLayer() },
+            { "VideoSettingsLayer", new VideoSettingsLayer() },
+            { "AudioSettingsLayer", new AudioSettingsLayer() },
+            { "GraphicSettingsLayer", new GraphicSettingsLayer() },
+            { "InputSettingsLayer", new InputSettingsLayer() },
+            { "SettingKeyControlLayer", new SettingKeyControlLayer() },
+            { "SubtitleSettingsLayer", new SubtitleSettingsLayer() },
+            { "SettingLanguagePackageLayer", new SettingLanguagePackageLayer() }
+        };
     }
 
     public enum VSyncMode

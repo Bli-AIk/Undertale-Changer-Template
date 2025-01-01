@@ -63,7 +63,7 @@ LockFrameRate\FPS Limit;
 GraphicSettingsLayer\Graphics Settings;
 InputSettingsLayer\Input Settings;
 SettingLanguagePackageLayer\Language Settings;
-SubtitleSettingsLayer\Subtitle settings;
+SubtitleSettingsLayer\Subtitle Settings;
 
 SettingMainVolumeTip\Adjust the global volume level.;
 SettingBgmVolumeTip\Adjust the BGM volume level.;

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.Threading.Tasks;
 using Alchemy.Inspector;
@@ -53,8 +52,7 @@ namespace UCT.Global.UI
         [Title("FX data")] [TabGroup("TypeWritter", "Data")]
         public int fx; //音效
 
-        [TabGroup("TypeWritter", "Data")]
-        public bool fxRandomPitch;
+        [TabGroup("TypeWritter", "Data")] public bool fxRandomPitch;
 
         [TabGroup("TypeWritter", "Data")] public float pitch = 1;
 
@@ -146,7 +144,7 @@ namespace UCT.Global.UI
         {
             isRunning = true;
             _typeMode = typeMode;
-            speedMode();
+            SetSpeedMode();
 
             if (!force && isTyping)
                 return;
@@ -405,7 +403,7 @@ namespace UCT.Global.UI
                                     currentSpeed = speed;
                                     break;
                                 case "</FixedSpeed>":
-                                    speedMode();
+                                    SetSpeedMode();
                                     break;
                                 default: //富文本
 
@@ -503,7 +501,6 @@ namespace UCT.Global.UI
                 return Timing.WaitForSeconds(currentSpeed -
                                              currentSpeed * 0.25f * Convert.ToInt32(!SettingsStorage.textWidth));
             }
-            
         }
 
         private IEnumerator<float> _Dynamic(int number, OverworldControl.DynamicType inputDynamicType)
@@ -663,6 +660,7 @@ namespace UCT.Global.UI
         }
 
 
+        // ReSharper disable once AsyncVoidMethod
         private async void PassTextWithDelay(string inputText, float delayInSeconds)
         {
             var delayInMilliseconds = (int)(delayInSeconds * 1000);
@@ -685,20 +683,15 @@ namespace UCT.Global.UI
                 : null;
         }
 
-        public void speedMode()
+        private void SetSpeedMode()
         {
-            switch (SettingsStorage.typingSpeed)
+            currentSpeed = SettingsStorage.typingSpeed switch
             {
-                case TypingSpeed.Slow:
-                    currentSpeed = speed+0.075f;
-                    break;
-                case TypingSpeed.Medium:
-                    currentSpeed = speed;
-                    break;
-                case TypingSpeed.Fast:
-                    currentSpeed = speed-0.075f;
-                    break;
-            }
+                TypingSpeed.Slow => speed + 0.025f,
+                TypingSpeed.Medium => speed,
+                TypingSpeed.Fast => speed - 0.025f,
+                _ => currentSpeed
+            };
         }
     }
 }
