@@ -365,5 +365,10 @@ namespace UCT.Service
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
+
+        public static bool IsGamePausedOrSetting()
+        {
+            return MainControl.Instance.overworldControl.isSetting || SettingsStorage.pause;
+        }
     }
 }

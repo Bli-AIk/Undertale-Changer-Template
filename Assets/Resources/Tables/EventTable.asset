@@ -9,17 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1239fea13ad34eb0a61c47517a34739e, type: 3}
-  m_Name: FactTest
+  m_Script: {fileID: 11500000, guid: 1e02eb7d1c514222a02f09beb27f5c90, type: 3}
+  m_Name: EventTable
   m_EditorClassIdentifier: 
-  facts:
-  - name: Fact1
-    scope: 0
-    value: 0
-    area: 0
-    scene: 
-  - name: Fact2
-    scope: 0
-    value: 0
-    area: 0
-    scene: 
+  events:
+  - name: TestEvent
+    isTriggering: 0

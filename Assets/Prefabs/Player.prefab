@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1235076163104025849}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BottomAxis
   m_TagString: Untagged
   m_Icon: {fileID: 7866945982896999795, guid: 0000000000000000d000000000000000, type: 0}
@@ -48,7 +48,9 @@ GameObject:
   - component: {fileID: 1235076164231593181}
   - component: {fileID: 1235076164231593179}
   - component: {fileID: 1235076164231593177}
-  m_Layer: 0
+  - component: {fileID: 1446864346}
+  - component: {fileID: 4581185708071440011}
+  m_Layer: 7
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -234,7 +236,7 @@ MonoBehaviour:
   - {x: -0.1, y: 0, z: 0}
   m_ShapePathHash: -96867770
   m_Mesh: {fileID: 0}
-  m_InstanceId: 42616
+  m_InstanceId: -54394
 --- !u!114 &1235076164231593177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -247,6 +249,70 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c874b82927554b098ca143afea793c82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1446864346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1235076164231592995}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed34bdbc4ab5f594e886b4ca3373bf48, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  segments: 30
+  fsm: {fileID: 1235076164231593176}
+  directionList:
+  - {x: 1, y: 0}
+  - {x: -1, y: 0}
+  - {x: 0, y: 1}
+  - {x: 0, y: -1}
+  offsetList:
+  - {x: 0.25, y: 0.225}
+  - {x: -0.3, y: 0.225}
+  - {x: -0.05, y: 0.225}
+  - {x: -0.05, y: 0.225}
+  rayAngleRange: {x: -45, y: 45}
+  gizmosDistance: 5
+--- !u!114 &4581185708071440011
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1235076164231592995}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49ee99ff00dd4a4ca8ee0aae79f01f2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fsm: {fileID: 0}
+  specifiedDirectionsList:
+  - {x: 0, y: -1}
+  - {x: 1, y: 0}
+  - {x: 0, y: 1}
+  - {x: -1, y: 0}
+  colliderOffsetsList:
+  - {x: 0, y: -0.165}
+  - {x: 0, y: -0.255}
+  - {x: 0, y: -0.165}
+  - {x: 0, y: -0.255}
+  colliderSizesList:
+  - {x: 0.5, y: 0.4}
+  - {x: 0.5, y: 0.575}
+  - {x: 0.5, y: 0.4}
+  - {x: 0.5, y: 0.575}
+  localPositionsList:
+  - {x: -0.025, y: -0.45, z: 0}
+  - {x: -0.025, y: -0.45, z: 0}
+  - {x: -0.025, y: -0.45, z: 0}
+  - {x: -0.025, y: -0.45, z: 0}
+  localRotationsList:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 90}
+  - {x: 0, y: 0, z: 180}
+  - {x: 0, y: 0, z: 270}
 --- !u!1 &1235076164573053479
 GameObject:
   m_ObjectHideFlags: 0
@@ -257,9 +323,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1235076164573053476}
   - component: {fileID: 1235076164573053477}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Trigger
-  m_TagString: Untagged
+  m_TagString: PlayerTrigger
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -315,7 +381,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1235076165150894335}
   - component: {fileID: 1235076165150894332}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}

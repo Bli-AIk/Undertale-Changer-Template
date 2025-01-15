@@ -18,7 +18,6 @@ namespace UCT.Overworld.FiniteStateMachine
         public FiniteStateMachineData data;
         public string dataRoute;
         protected readonly Dictionary<DefaultStateType, IState> States = new();
-
         private void Awake()
         {
             InitializeData();

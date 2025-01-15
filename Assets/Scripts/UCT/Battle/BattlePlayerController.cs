@@ -103,8 +103,7 @@ namespace UCT.Battle
                 }
             }
 
-            if (MainControl.Instance.overworldControl.isSetting || SettingsStorage.pause)
-                return;
+            if (GameUtilityService.IsGamePausedOrSetting()) return;
 
             if (MainControl.Instance.playerControl.missTime >= 0)
             {
@@ -156,7 +155,7 @@ namespace UCT.Battle
 
         private void FixedUpdate()
         {
-            if (MainControl.Instance.overworldControl.isSetting || SettingsStorage.pause)
+            if (GameUtilityService.IsGamePausedOrSetting())
                 return;
             if (!TurnController.Instance.isMyTurn)
                 Moving();

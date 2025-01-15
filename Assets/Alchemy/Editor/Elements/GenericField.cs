@@ -47,7 +47,6 @@ namespace Alchemy.Editor.Elements
                     }
                 });
 
-                // TODO: support polymorphism
                 if (type == typeof(string))
                 {
                     nullLabelElement.Add(new Button(() =>

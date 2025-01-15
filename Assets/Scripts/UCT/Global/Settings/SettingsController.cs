@@ -641,7 +641,6 @@ namespace UCT.Global.Settings
             _languagePackSelectedOptionMax = 0;
 
 
-            //TODO: 换页后得用换页的index
             _languagePackageKeyTexts.Clear();
             pathStringSaver = TraversingInternalLanguagePackagesFrom(pathStringSaver);
             pathStringSaver = TraversingExternalLanguagePackagesFrom(pathStringSaver);

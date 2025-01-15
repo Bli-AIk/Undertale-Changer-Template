@@ -103,6 +103,18 @@ namespace UCT.Global.UI
 
         private TypeMode _typeMode = TypeMode.Normal;
 
+        /// <summary>
+        /// 打字机启用时调用
+        /// </summary>
+        public Action OnOpen;
+        
+        /// <summary>
+        /// 打字机关闭时调用
+        /// </summary>
+        public Action OnClose;
+
+        public bool canClose;
+
         private void Start()
         {
             if (isOverworld)
@@ -112,15 +124,21 @@ namespace UCT.Global.UI
 
         private void Update()
         {
-            if (MainControl.Instance.overworldControl.isSetting || forceReturn) //pause在OW检测的时候会用
+            if (MainControl.Instance.overworldControl.isSetting || forceReturn)
                 return;
+
+            if (canClose && InputService.GetKeyDown(KeyCode.Z))
+            {
+                OnClose?.Invoke();
+                canClose = false;
+            }
 
             if (clockTime > 0)
                 clockTime -= Time.deltaTime;
             if (!isRunning && !passText && !isTyping && InputService.GetKeyDown(KeyCode.Z) &&
                 _typeMode != TypeMode.CantZx)
             {
-                if (spriteChanger != null)
+                if (spriteChanger)
                     spriteChanger.ChangeImage(-1);
                 if (_endInBattle)
                     _canvasAnim.SetBool(Open, true);
@@ -187,6 +205,9 @@ namespace UCT.Global.UI
 
         private IEnumerator<float> _Typing(TMP_Text tmpText)
         {
+            canClose = false;
+            OnOpen?.Invoke();
+
             isRunning = true;
             for (var i = 0; i < originString.Length; i++)
             {
@@ -490,6 +511,9 @@ namespace UCT.Global.UI
                 PassText: ; //这是个标签注意
             }
 
+            if (!passText) 
+                canClose = true;
+
             isRunning = false;
             var prefix = ExtractPassTextPrefix(originString);
             if (!string.IsNullOrEmpty(prefix) && originString.Length > prefix.Length)
@@ -501,6 +525,7 @@ namespace UCT.Global.UI
                 return Timing.WaitForSeconds(currentSpeed -
                                              currentSpeed * 0.25f * Convert.ToInt32(!SettingsStorage.textWidth));
             }
+
         }
 
         private IEnumerator<float> _Dynamic(int number, OverworldControl.DynamicType inputDynamicType)

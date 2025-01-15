@@ -1,89 +1,203 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine.Events;
 using UnityEngine.Serialization;
 
 namespace UCT.EventSystem
 {
     /// <summary>
-    /// 事件系统的Rult条目，被其他Event调用，同时可以触发其他Event与执行具体方法。
+    ///     事件系统的Rule条目，被其他Event调用，同时可以触发其他Event与执行具体方法。
     /// </summary>
     [Serializable]
     public struct RuleEntry
     {
+        /// <summary>
+        ///     该Rule的名称
+        /// </summary>
         public string name;
-        public EventEntry triggeredBy;
-        public EventEntry triggers;
-        public RulePriority rulePriority;
-        public Action Execute;
+
+        /// <summary>
+        ///     触发该Rule的Event
+        /// </summary>
+        public EventEntry triggeredBy;//TODO:改为可空的数组
+
+        /// <summary>
+        ///     该Rule触发的Event
+        /// </summary>
+        public EventEntry triggers;//TODO:改为可空的数组
+
+        /// <summary>
+        ///     该Rule的优先级
+        /// </summary>
+        public RulePriority rulePriority;//TODO:实装优先级
+
+        /// <summary>
+        ///     该Rule执行的方法名
+        /// </summary>
+        public List<string> methodNames;
+        
+        /// <summary>
+        ///     该Rule执行的方法传入的字符串
+        /// </summary>
+        public List<string> methodStrings;
+
+        /// <summary>
+        ///     该Rule的Fact判断组
+        /// </summary>
+        public RuleCriterion ruleCriterion;
+
+        /// <summary>
+        ///     该Rule是否通过Fact判断，即是否允许执行
+        /// </summary>
+        public bool isCriteriaPassed;
+
+        /// <summary>
+        ///     该Rule修改的Fact值
+        /// </summary>
+        public List<FactModification> factModifications;
+    }
+
+    /// <summary>
+    ///     用于传递修改Fact值参数的结构体。
+    /// </summary>
+    [Serializable]
+    public struct FactModification
+    {
+        public FactEntry fact;
+        public Operation operation;
+        public int number;
+
+        public enum Operation
+        {
+            Change,
+            Add,
+            Subtract,
+            Multiply,
+            Divide
+        }
+    }
+
+    /// <summary>
+    ///     Rule的规则，用于判断fact和数值之间的关系。
+    ///     请特别注意：倘若criteria包含值，那么会忽略除了criteria和result之外的所有值。
+    /// </summary>
+    [Serializable]
+    public struct RuleCriterion
+    {
+        public bool isResultReversed;
+        public FactEntry fact;
+        public CriteriaCompare compare;
+        public int detection;
+
+        public RuleLogicalOperation operation;
 
         public List<RuleCriterion> criteria;
-        public List<Func<FactEntry, int>> Modifications; //TODO: 修改Fact
-       
-        //TODO: 检测与或非和括号
-        public bool GetCriteria(RuleCriterion ruleCriterion)
+
+        public bool GetResult()
         {
-            var detection = ruleCriterion.detection;
-            var compare = ruleCriterion.compare;
-            var value = ruleCriterion.fact.value;
-            return compare switch
+            return GetResult(isResultReversed, fact, compare, detection, criteria);
+        }
+
+        /// <summary>
+        ///     封装，为Editor调用
+        /// </summary>
+        public static bool GetResult(bool isResultReversed, FactEntry fact,
+            CriteriaCompare compare, int detection, List<RuleCriterion> criteria)
+        {
+            if (criteria.Count == 0)
             {
-                CriteriaCompare.GreaterThan => value > detection,
-                CriteriaCompare.GreaterThanOrEqual => value >= detection,
-                CriteriaCompare.Equal => value == detection,
-                CriteriaCompare.LessThanOrEqual => value <= detection,
-                CriteriaCompare.LessThan => value < detection,
-                _ => throw new ArgumentOutOfRangeException(nameof(compare), compare, null)
-            };
-        }
+                var result = compare switch
+                {
+                    CriteriaCompare.GreaterThan => fact.value > detection,
+                    CriteriaCompare.GreaterThanOrEqual => fact.value >= detection,
+                    CriteriaCompare.Equal => fact.value == detection,
+                    CriteriaCompare.NotEqual => fact.value != detection,
+                    CriteriaCompare.LessThanOrEqual => fact.value <= detection,
+                    CriteriaCompare.LessThan => fact.value < detection,
+                    _ => throw new ArgumentOutOfRangeException()
+                };
 
-        public void ChangeFact(FactEntry fact, int newValue)
-        {
-            fact.value = newValue;
-        }
-        
-        public void AddFact(FactEntry fact, int valueToAdd)
-        {
-            fact.value += valueToAdd;
-        }
-
-        public void SubtractFact(FactEntry fact, int valueToSubtract)
-        {
-            fact.value -= valueToSubtract;
-        }
-
-        public void MultiplyFact(FactEntry fact, int valueToMultiply)
-        {
-            fact.value *= valueToMultiply;
-        }
-
-        public void DivideFact(FactEntry fact, int valueToDivide)
-        {
-            if (valueToDivide != 0)
-            {
-                fact.value /= valueToDivide;
+                return isResultReversed ? !result : result;
             }
-            else
+
+            List<bool> results = new();
+            List<RuleLogicalOperation> operations = new();
+            foreach (var criterion in criteria)
             {
-                throw new DivideByZeroException("Fact cannot divide by zero.");
+                results.Add(criterion.GetResult());
+                operations.Add(criterion.operation);
             }
+
+            var finalResult = results[0];
+            for (var i = 1; i < results.Count; i++)
+            {
+                switch (operations[i - 1])
+                {
+                    case RuleLogicalOperation.And:
+                    {
+                        finalResult = finalResult && results[i];
+                        break;
+                    }
+                    case RuleLogicalOperation.Or:
+                    {
+                        finalResult = finalResult || results[i];
+                        break;
+                    }
+                    case RuleLogicalOperation.None: break;
+                    default: throw new ArgumentOutOfRangeException();
+                }
+
+                if (operations[i - 1] == RuleLogicalOperation.None) InvalidOperationLogError(i, "None");
+                switch (operations[^1])
+                {
+                    case RuleLogicalOperation.And:
+                    {
+                        InvalidOperationLogError(i, "And");
+                        break;
+                    }
+                    case RuleLogicalOperation.Or:
+                    {
+                        InvalidOperationLogError(i, "Or");
+                        break;
+                    }
+                    case RuleLogicalOperation.None: break;
+                    default: throw new ArgumentOutOfRangeException();
+                }
+            }
+
+            return isResultReversed ? !finalResult : finalResult;
         }
 
+        private static void InvalidOperationLogError(int i, string name)
+        {
+            Other.Debug.LogWarning(
+                $"Invalid operation '{name}' at index {i - 1}. This will cause calculation anomalies.");
+        }
     }
 
-    public enum RulePriority
-    {
-        Low,
-        Medium,
-        High
-    }
-
+    [Serializable]
     public enum CriteriaCompare
     {
         GreaterThan,
         GreaterThanOrEqual,
         Equal,
+        NotEqual,
         LessThanOrEqual,
         LessThan
+    }
+
+    [Serializable]
+    public enum RuleLogicalOperation
+    {
+        None,
+        And,
+        Or
+    }
+
+    [Serializable]
+    public enum RulePriority
+    {
+        Low,
+        Medium,
+        High
     }
 }

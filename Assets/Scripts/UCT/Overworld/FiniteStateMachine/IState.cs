@@ -47,7 +47,7 @@ namespace UCT.Overworld.FiniteStateMachine
         private static readonly int MoveX = Animator.StringToHash("MoveX");
         private static readonly int MoveY = Animator.StringToHash("MoveY");
 
-        private FiniteStateMachineData _data;
+        private readonly FiniteStateMachineData _data;
         private FiniteStateMachine _fsm;
 
         public WalkState(FiniteStateMachine fsm, FiniteStateMachineData data)
@@ -73,8 +73,8 @@ namespace UCT.Overworld.FiniteStateMachine
             var pos = _data.rigidbody2D.transform.position;
             _data.rigidbody2D.MovePosition(pos + _data.direction * step);
             
-            _data.animator.SetFloat(MoveX, _data.directionForAnim.x);
-            _data.animator.SetFloat(MoveY, _data.directionForAnim.y);
+            _data.animator.SetFloat(MoveX, _data.directionWithoutZero.x);
+            _data.animator.SetFloat(MoveY, _data.directionWithoutZero.y);
         }
 
         public void OnExit()
@@ -115,8 +115,8 @@ namespace UCT.Overworld.FiniteStateMachine
             var pos = _data.rigidbody2D.transform.position;
             _data.rigidbody2D.MovePosition(pos + _data.direction * step);
             
-            _data.animator.SetFloat(MoveX, _data.directionForAnim.x);
-            _data.animator.SetFloat(MoveY, _data.directionForAnim.y);
+            _data.animator.SetFloat(MoveX, _data.directionWithoutZero.x);
+            _data.animator.SetFloat(MoveY, _data.directionWithoutZero.y);
         }
 
         public void OnExit()
