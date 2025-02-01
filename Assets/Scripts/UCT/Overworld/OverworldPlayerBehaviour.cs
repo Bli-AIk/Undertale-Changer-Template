@@ -27,7 +27,8 @@ namespace UCT.Overworld
         }
         private void Update()
         {
-            MainControl.Instance.overworldControl.playerLastPos = transform.position;
+            if (!MainControl.Instance.isSceneSwitching)
+                MainControl.Instance.playerControl.playerLastPos = transform.position;
             if (owTimer > 0) 
                 owTimer -= Time.deltaTime;
             
@@ -54,10 +55,18 @@ namespace UCT.Overworld
         private void InputPlayerMove()
         {
             data.direction = Vector3.zero;
+            if (!MainControl.Instance.playerControl.canMove)
+            {
+                UpdateAnimationDirection();
+                UpdatePlayerState(false);
+                return;
+            }
+
             var isGetKey = ProcessInputDirection();
             UpdateAnimationDirection();
             UpdatePlayerState(isGetKey);
         }
+
 
         private bool ProcessInputDirection()
         {

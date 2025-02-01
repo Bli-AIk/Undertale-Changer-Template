@@ -161,9 +161,6 @@ Transform:
   - {fileID: 1515382445}
   - {fileID: 1558313327}
   - {fileID: 1254195313}
-  - {fileID: 1347642512}
-  - {fileID: 784274325}
-  - {fileID: 967965231}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -233,7 +230,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &543475328
 GameObject:
@@ -246,7 +243,7 @@ GameObject:
   - component: {fileID: 543475330}
   - component: {fileID: 543475329}
   - component: {fileID: 543475332}
-  - component: {fileID: 543475331}
+  - component: {fileID: 543475333}
   m_Layer: 0
   m_Name: spr_faceswitch_0 (2)
   m_TagString: Untagged
@@ -321,42 +318,6 @@ Transform:
   m_Father: {fileID: 54010802}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &543475331
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 543475328}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7acd31d5cb78124ca4d941793434e25, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isTriggerMode: 0
-  setIsUp: 0
-  isUp: 0
-  text: TextAlex
-  playerDir: {x: 0, y: 0}
-  isSave: 0
-  saveFullHp: 0
-  openAnim: 0
-  animEndPosPlus: {x: 0, y: 0, z: 0}
-  animTime: 0
-  animEase: 0
-  mainCamera: {fileID: 0}
-  endInBattle: 0
-  stopTime: -1
-  changeScene: 0
-  banMusic: 0
-  sceneName: 
-  newPlayerPos: {x: 0, y: 0, z: 0}
-  onlyDir: 0
-  endAnim: 0
-  animRoute: 
-  animBoolName: 
-  endSelf: 0
-  funNames: []
 --- !u!61 &543475332
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -383,6 +344,84 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.35, y: 1.7}
   m_EdgeRadius: 0
+--- !u!114 &543475333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 543475328}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9d16ceb9f1b41529c26420f051f1438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fsmObjectName: 
+  fsmObject: {fileID: 0}
+  tags: []
+  eventTriggerModes: 00000000
+  eventNames:
+  - TestEvent
+  useSimpleRules: 1
+  simpleRules:
+  - name: Rule1
+    triggeredBy: []
+    triggers: []
+    rulePriority: 0
+    methodNames:
+    - string:StartOverworldTypeWritter
+    firstStringParams:
+    - TextAlex
+    secondStringParams:
+    - 0
+    - 0
+    - 0
+    - 0
+    thirdStringParams:
+    - 0
+    - 0
+    - 0
+    - 0
+    useMethodEvents: 00000000
+    methodEvents:
+    - SaveGame
+    - SaveGame
+    - SaveGame
+    - SaveGame
+    useRuleCriterion: 0
+    ruleCriterion:
+      isResultReversed: 0
+      fact:
+        name: 
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 0
+      detection: 0
+      operation: 0
+      criteria:
+      - isResultReversed: 0
+        fact:
+          name: TestFact
+          scope: 0
+          value: 0
+          area: 0
+          scene: 
+        compare: 0
+        detection: 0
+        operation: 0
+        criteria: []
+    factModifications:
+    - fact:
+        name: TestFact
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      operation: 0
+      number: 0
+  clarity: 0.5
 --- !u!1 &552216032
 GameObject:
   m_ObjectHideFlags: 0
@@ -426,7 +465,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &569186880
 GameObject:
@@ -471,7 +510,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &606190335
 GameObject:
@@ -558,7 +597,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &641930278
 GameObject:
@@ -3293,12 +3332,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 784274322}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5, y: -2, z: 0}
+  m_LocalPosition: {x: -6, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 54010802}
-  m_RootOrder: 10
+  m_Father: {fileID: 1254195313}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &784274326
 BoxCollider2D:
@@ -3531,7 +3570,7 @@ GameObject:
   - component: {fileID: 859706649}
   - component: {fileID: 859706650}
   - component: {fileID: 859706652}
-  - component: {fileID: 859706651}
+  - component: {fileID: 859706653}
   m_Layer: 0
   m_Name: spr_tornote_0
   m_TagString: Untagged
@@ -3606,42 +3645,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &859706651
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 859706648}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7acd31d5cb78124ca4d941793434e25, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isTriggerMode: 0
-  setIsUp: 0
-  isUp: 0
-  text: Text2
-  playerDir: {x: 0, y: 0}
-  isSave: 0
-  saveFullHp: 0
-  openAnim: 0
-  animEndPosPlus: {x: 0, y: 0, z: 0}
-  animTime: 0
-  animEase: 0
-  mainCamera: {fileID: 0}
-  endInBattle: 0
-  stopTime: -1
-  changeScene: 0
-  banMusic: 0
-  sceneName: 
-  newPlayerPos: {x: 0, y: 0, z: 0}
-  onlyDir: 0
-  endAnim: 0
-  animRoute: 
-  animBoolName: 
-  endSelf: 0
-  funNames: []
 --- !u!61 &859706652
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3668,6 +3671,84 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.7, y: 0.9}
   m_EdgeRadius: 0
+--- !u!114 &859706653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 859706648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9d16ceb9f1b41529c26420f051f1438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fsmObjectName: 
+  fsmObject: {fileID: 0}
+  tags: []
+  eventTriggerModes: 00000000
+  eventNames:
+  - TestEvent
+  useSimpleRules: 1
+  simpleRules:
+  - name: Rule1
+    triggeredBy: []
+    triggers: []
+    rulePriority: 0
+    methodNames:
+    - string:StartOverworldTypeWritter
+    firstStringParams:
+    - Text2
+    secondStringParams:
+    - 0
+    - 0
+    - 0
+    - 0
+    thirdStringParams:
+    - 0
+    - 0
+    - 0
+    - 0
+    useMethodEvents: 00000000
+    methodEvents:
+    - SaveGame
+    - SaveGame
+    - SaveGame
+    - SaveGame
+    useRuleCriterion: 0
+    ruleCriterion:
+      isResultReversed: 0
+      fact:
+        name: 
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 0
+      detection: 0
+      operation: 0
+      criteria:
+      - isResultReversed: 0
+        fact:
+          name: TestFact
+          scope: 0
+          value: 0
+          area: 0
+          scene: 
+        compare: 0
+        detection: 0
+        operation: 0
+        criteria: []
+    factModifications:
+    - fact:
+        name: TestFact
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      operation: 0
+      number: 0
+  clarity: 0.5
 --- !u!1 &892929037
 GameObject:
   m_ObjectHideFlags: 0
@@ -6520,12 +6601,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 967965228}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -1, y: 4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 54010802}
-  m_RootOrder: 11
+  m_Father: {fileID: 1254195313}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &967965232
 BoxCollider2D:
@@ -6715,7 +6796,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1109945116
 MonoBehaviour:
@@ -6730,19 +6811,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   followMainCamera: 0
-  sth: {fileID: 1136179837}
+  sth: {fileID: 0}
   followPosition: 1
   positionAdd: {x: 0, y: 0.08, z: 0}
   followRotation: 0
   rotationAdd: {x: 0, y: 0, z: 0}
   followLocalScale: 0
   localScaleAdd: {x: 0, y: 0, z: 0}
---- !u!1 &1136179837 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1235076164231592995, guid: b12f3b0920d83604485d545ff54c3943,
-    type: 3}
-  m_PrefabInstance: {fileID: 1235076163100722782}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1157319661
 GameObject:
   m_ObjectHideFlags: 0
@@ -6754,7 +6829,7 @@ GameObject:
   - component: {fileID: 1157319662}
   - component: {fileID: 1157319663}
   - component: {fileID: 1157319665}
-  - component: {fileID: 1157319664}
+  - component: {fileID: 1157319666}
   m_Layer: 0
   m_Name: spr_tornote_0
   m_TagString: Untagged
@@ -6829,42 +6904,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &1157319664
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1157319661}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7acd31d5cb78124ca4d941793434e25, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isTriggerMode: 0
-  setIsUp: 0
-  isUp: 0
-  text: Text1
-  playerDir: {x: 0, y: 0}
-  isSave: 0
-  saveFullHp: 0
-  openAnim: 0
-  animEndPosPlus: {x: 0, y: 0, z: 0}
-  animTime: 0
-  animEase: 0
-  mainCamera: {fileID: 0}
-  endInBattle: 0
-  stopTime: -1
-  changeScene: 0
-  banMusic: 0
-  sceneName: 
-  newPlayerPos: {x: 0, y: 0, z: 0}
-  onlyDir: 0
-  endAnim: 0
-  animRoute: 
-  animBoolName: 
-  endSelf: 0
-  funNames: []
 --- !u!61 &1157319665
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -6891,6 +6930,84 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.7, y: 0.9}
   m_EdgeRadius: 0
+--- !u!114 &1157319666
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1157319661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9d16ceb9f1b41529c26420f051f1438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fsmObjectName: 
+  fsmObject: {fileID: 0}
+  tags: []
+  eventTriggerModes: 00000000
+  eventNames:
+  - TestEvent
+  useSimpleRules: 1
+  simpleRules:
+  - name: Rule1
+    triggeredBy: []
+    triggers: []
+    rulePriority: 0
+    methodNames:
+    - string:StartOverworldTypeWritter
+    firstStringParams:
+    - Text1
+    secondStringParams:
+    - 0
+    - 0
+    - 0
+    - 0
+    thirdStringParams:
+    - 0
+    - 0
+    - 0
+    - 0
+    useMethodEvents: 00000000
+    methodEvents:
+    - SaveGame
+    - SaveGame
+    - SaveGame
+    - SaveGame
+    useRuleCriterion: 0
+    ruleCriterion:
+      isResultReversed: 0
+      fact:
+        name: 
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 0
+      detection: 0
+      operation: 0
+      criteria:
+      - isResultReversed: 0
+        fact:
+          name: TestFact
+          scope: 0
+          value: 0
+          area: 0
+          scene: 
+        compare: 0
+        detection: 0
+        operation: 0
+        criteria: []
+    factModifications:
+    - fact:
+        name: TestFact
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      operation: 0
+      number: 0
+  clarity: 0.5
 --- !u!1 &1254195312
 GameObject:
   m_ObjectHideFlags: 0
@@ -6900,9 +7017,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1254195313}
-  - component: {fileID: 1254195316}
   - component: {fileID: 1254195315}
   - component: {fileID: 1254195314}
+  - component: {fileID: 1254195316}
   m_Layer: 0
   m_Name: River
   m_TagString: Untagged
@@ -6921,7 +7038,10 @@ Transform:
   m_LocalPosition: {x: 1, y: -4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1347642512}
+  - {fileID: 784274325}
+  - {fileID: 967965231}
   m_Father: {fileID: 54010802}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -6986,33 +7106,75 @@ MonoBehaviour:
   m_GameObject: {fileID: 1254195312}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7acd31d5cb78124ca4d941793434e25, type: 3}
+  m_Script: {fileID: 11500000, guid: e9d16ceb9f1b41529c26420f051f1438, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isTriggerMode: 0
-  setIsUp: 0
-  isUp: 0
-  text: River
-  playerDir: {x: 0, y: -1}
-  isSave: 0
-  saveFullHp: 0
-  openAnim: 0
-  animEndPosPlus: {x: 0, y: 0, z: 0}
-  animTime: 0
-  animEase: 0
-  mainCamera: {fileID: 0}
-  endInBattle: 0
-  stopTime: -1
-  changeScene: 0
-  banMusic: 0
-  sceneName: 
-  newPlayerPos: {x: 0, y: 0, z: 0}
-  onlyDir: 0
-  endAnim: 0
-  animRoute: 
-  animBoolName: 
-  endSelf: 0
-  funNames: []
+  fsmObjectName: 
+  fsmObject: {fileID: 0}
+  tags: []
+  eventTriggerModes: 00000000
+  eventNames:
+  - TestEvent
+  useSimpleRules: 1
+  simpleRules:
+  - name: Rule1
+    triggeredBy: []
+    triggers: []
+    rulePriority: 0
+    methodNames:
+    - string:StartOverworldTypeWritter
+    firstStringParams:
+    - River
+    secondStringParams:
+    - 0
+    - 0
+    - 0
+    - 0
+    thirdStringParams:
+    - 0
+    - 0
+    - 0
+    - 0
+    useMethodEvents: 00000000
+    methodEvents:
+    - SaveGame
+    - SaveGame
+    - SaveGame
+    - SaveGame
+    useRuleCriterion: 0
+    ruleCriterion:
+      isResultReversed: 0
+      fact:
+        name: 
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 0
+      detection: 0
+      operation: 0
+      criteria:
+      - isResultReversed: 0
+        fact:
+          name: TestFact
+          scope: 0
+          value: 0
+          area: 0
+          scene: 
+        compare: 0
+        detection: 0
+        operation: 0
+        criteria: []
+    factModifications:
+    - fact:
+        name: TestFact
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      operation: 0
+      number: 0
+  clarity: 0.5
 --- !u!1 &1305892150
 GameObject:
   m_ObjectHideFlags: 0
@@ -7062,7 +7224,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &1305892153
 BoxCollider:
@@ -7121,7 +7283,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1347642511}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -1, y: 4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7129,8 +7291,8 @@ Transform:
   - {fileID: 1411931567}
   - {fileID: 1634860325}
   - {fileID: 1899323230}
-  m_Father: {fileID: 54010802}
-  m_RootOrder: 9
+  m_Father: {fileID: 1254195313}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1411931566
 GameObject:
@@ -7225,7 +7387,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1515382445}
   - component: {fileID: 1515382447}
-  - component: {fileID: 1515382446}
+  - component: {fileID: 1515382448}
   m_Layer: 0
   m_Name: Back
   m_TagString: owObjTrigger
@@ -7248,42 +7410,6 @@ Transform:
   m_Father: {fileID: 54010802}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1515382446
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1515382444}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7acd31d5cb78124ca4d941793434e25, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isTriggerMode: 1
-  setIsUp: 0
-  isUp: 0
-  text: 
-  playerDir: {x: 0, y: 0}
-  isSave: 0
-  saveFullHp: 0
-  openAnim: 0
-  animEndPosPlus: {x: 0, y: 0, z: 0}
-  animTime: 0
-  animEase: 0
-  mainCamera: {fileID: 0}
-  endInBattle: 0
-  stopTime: -1
-  changeScene: 1
-  banMusic: 1
-  sceneName: Example-Corridor
-  newPlayerPos: {x: 0, y: 0, z: 0}
-  onlyDir: 0
-  endAnim: 0
-  animRoute: 
-  animBoolName: 
-  endSelf: 0
-  funNames: []
 --- !u!61 &1515382447
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -7310,6 +7436,85 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &1515382448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1515382444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9d16ceb9f1b41529c26420f051f1438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fsmObjectName: 
+  fsmObject: {fileID: 0}
+  tags:
+  - PlayerTrigger
+  eventTriggerModes: 03000000
+  eventNames:
+  - TestEvent
+  useSimpleRules: 1
+  simpleRules:
+  - name: Rule1
+    triggeredBy: []
+    triggers: []
+    rulePriority: 0
+    methodNames:
+    - string:SwitchSceneWithBgm
+    firstStringParams:
+    - Example-Corridor
+    secondStringParams:
+    - 0
+    - 0
+    - 0
+    - 0
+    thirdStringParams:
+    - 0
+    - 0
+    - 0
+    - 0
+    useMethodEvents: 01000000
+    methodEvents:
+    - RuinsToCorridor
+    - SaveGame
+    - SaveGame
+    - SaveGame
+    useRuleCriterion: 0
+    ruleCriterion:
+      isResultReversed: 0
+      fact:
+        name: 
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 0
+      detection: 0
+      operation: 0
+      criteria:
+      - isResultReversed: 0
+        fact:
+          name: TestFact
+          scope: 0
+          value: 0
+          area: 0
+          scene: 
+        compare: 0
+        detection: 0
+        operation: 0
+        criteria: []
+    factModifications:
+    - fact:
+        name: TestFact
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      operation: 0
+      number: 0
+  clarity: 0.5
 --- !u!1 &1558313326
 GameObject:
   m_ObjectHideFlags: 0
@@ -7320,7 +7525,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1558313327}
   - component: {fileID: 1558313329}
-  - component: {fileID: 1558313328}
+  - component: {fileID: 1558313330}
   m_Layer: 0
   m_Name: WallBrand
   m_TagString: Untagged
@@ -7343,42 +7548,6 @@ Transform:
   m_Father: {fileID: 54010802}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1558313328
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1558313326}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7acd31d5cb78124ca4d941793434e25, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isTriggerMode: 0
-  setIsUp: 0
-  isUp: 0
-  text: WallBrand
-  playerDir: {x: 0, y: 0}
-  isSave: 0
-  saveFullHp: 0
-  openAnim: 0
-  animEndPosPlus: {x: 0, y: 0, z: 0}
-  animTime: 0
-  animEase: 0
-  mainCamera: {fileID: 0}
-  endInBattle: 0
-  stopTime: -1
-  changeScene: 0
-  banMusic: 0
-  sceneName: 
-  newPlayerPos: {x: 0, y: 0, z: 0}
-  onlyDir: 0
-  endAnim: 0
-  animRoute: 
-  animBoolName: 
-  endSelf: 0
-  funNames: []
 --- !u!61 &1558313329
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -7405,6 +7574,84 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1.95}
   m_EdgeRadius: 0
+--- !u!114 &1558313330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1558313326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9d16ceb9f1b41529c26420f051f1438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fsmObjectName: 
+  fsmObject: {fileID: 0}
+  tags: []
+  eventTriggerModes: 00000000
+  eventNames:
+  - TestEvent
+  useSimpleRules: 1
+  simpleRules:
+  - name: Rule1
+    triggeredBy: []
+    triggers: []
+    rulePriority: 0
+    methodNames:
+    - string:StartOverworldTypeWritter
+    firstStringParams:
+    - WallBrand
+    secondStringParams:
+    - 0
+    - 0
+    - 0
+    - 0
+    thirdStringParams:
+    - 0
+    - 0
+    - 0
+    - 0
+    useMethodEvents: 00000000
+    methodEvents:
+    - SaveGame
+    - SaveGame
+    - SaveGame
+    - SaveGame
+    useRuleCriterion: 0
+    ruleCriterion:
+      isResultReversed: 0
+      fact:
+        name: 
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 0
+      detection: 0
+      operation: 0
+      criteria:
+      - isResultReversed: 0
+        fact:
+          name: TestFact
+          scope: 0
+          value: 0
+          area: 0
+          scene: 
+        compare: 0
+        detection: 0
+        operation: 0
+        criteria: []
+    factModifications:
+    - fact:
+        name: TestFact
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      operation: 0
+      number: 0
+  clarity: 0.5
 --- !u!1 &1634860324
 GameObject:
   m_ObjectHideFlags: 0
@@ -7573,170 +7820,6 @@ Transform:
   m_Father: {fileID: 54010802}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!43 &1780845531
-Mesh:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  serializedVersion: 10
-  m_SubMeshes:
-  - serializedVersion: 2
-    firstByte: 0
-    indexCount: 42
-    topology: 0
-    baseVertex: 0
-    firstVertex: 0
-    vertexCount: 16
-    localAABB:
-      m_Center: {x: -0.024999999, y: -0.25, z: 0}
-      m_Extent: {x: 0.17500001, y: 0.25, z: 0}
-  m_Shapes:
-    vertices: []
-    shapes: []
-    channels: []
-    fullWeights: []
-  m_BindPose: []
-  m_BoneNameHashes: 
-  m_RootBoneNameHash: 0
-  m_BonesAABB: []
-  m_VariableBoneCountWeights:
-    m_Data: 
-  m_MeshCompression: 0
-  m_IsReadable: 1
-  m_KeepVertices: 1
-  m_KeepIndices: 1
-  m_IndexFormat: 0
-  m_IndexBuffer: 00000100020003000100000004000100030005000100040006000100050001000600070002000800000000000900030001000a00020007000b00010003000c00040004000d00050005000e00060006000f000700
-  m_VertexData:
-    serializedVersion: 3
-    m_VertexCount: 16
-    m_Channels:
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 3
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 12
-      format: 0
-      dimension: 4
-    - stream: 0
-      offset: 28
-      format: 0
-      dimension: 4
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    m_DataSize: 704
-    _typelessdata: cdcccc3d000080be0000000056077bbfacd248be00000000000000809a99193e000000bfcdcc4c3d00000000ccccccbc000000bf00000000000000800000803f0000008000000080cdcc4cbe000000bf9a99193e000000bf9a99193e000000bf00000000000000800000803f00000080000000809a99193e000000bf9a99193e000000bfcdcc4c3d000000000000000056077bbfacd248be0000000000000080cdcc4c3d00000000cdcc4c3d00000000cdccccbc000000000000000000000080000080bf0000000000000080cdcc4c3d00000000cdccccbd00000000cdccccbd000000000000000000000080000080bf0000000000000080cdccccbd00000000cdccccbd000000009a9919be000080be0000000056077b3facd248be0000008000000080cdccccbd00000000cdcc4cbe000000bfcdcc4cbe000000bf0000000056077b3fabd248be0000008000000080cdcc4cbe000000bfcdcc4cbe000000bf9a99193e000000bf0000000056077bbfacd248be00000000000000809a99193e000000bf9a99193e000000bfcdcccc3d000080be0000000056077bbfacd248be00000000000000809a99193e000000bfcdcc4c3d00000000ccccccbc000000bf00000000000000800000803f0000008000000080cdcc4cbe000000bf9a99193e000000bfcdcc4cbe000000bf00000000000000800000803f0000008000000080cdcc4cbe000000bfcdcc4cbe000000bfcdcc4c3d000000000000000000000080000080bf0000000000000080cdcc4c3d00000000cdcc4c3d00000000cdccccbc000000000000000000000080000080bf0000000000000080cdcc4c3d00000000cdccccbd00000000cdccccbd000000000000000056077b3facd248be0000008000000080cdccccbd00000000cdccccbd000000009a9919be000080be0000000056077b3fabd248be0000008000000080cdccccbd00000000cdcc4cbe000000bf
-  m_CompressedMesh:
-    m_Vertices:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UV:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Normals:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Tangents:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Weights:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_NormalSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_TangentSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_FloatColors:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_BoneIndices:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Triangles:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UVInfo: 0
-  m_LocalAABB:
-    m_Center: {x: -0.024999999, y: -0.25, z: 0}
-    m_Extent: {x: 0.17500001, y: 0.25, z: 0}
-  m_MeshUsageFlags: 0
-  m_BakedConvexCollisionMesh: 
-  m_BakedTriangleCollisionMesh: 
-  m_MeshMetrics[0]: 1
-  m_MeshMetrics[1]: 1
-  m_MeshOptimizationFlags: 1
-  m_StreamData:
-    serializedVersion: 2
-    offset: 0
-    size: 0
-    path: 
 --- !u!1 &1815970481
 GameObject:
   m_ObjectHideFlags: 0
@@ -7969,7 +8052,7 @@ GameObject:
   - component: {fileID: 1917212743}
   - component: {fileID: 1917212744}
   m_Layer: 0
-  m_Name: brand
+  m_Name: Brand
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -8077,33 +8160,75 @@ MonoBehaviour:
   m_GameObject: {fileID: 1917212740}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7acd31d5cb78124ca4d941793434e25, type: 3}
+  m_Script: {fileID: 11500000, guid: e9d16ceb9f1b41529c26420f051f1438, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isTriggerMode: 0
-  setIsUp: 0
-  isUp: 0
-  text: Brand
-  playerDir: {x: 0, y: 0}
-  isSave: 0
-  saveFullHp: 0
-  openAnim: 0
-  animEndPosPlus: {x: 0, y: 0, z: 0}
-  animTime: 0
-  animEase: 0
-  mainCamera: {fileID: 0}
-  endInBattle: 0
-  stopTime: -1
-  changeScene: 0
-  banMusic: 0
-  sceneName: 
-  newPlayerPos: {x: 0, y: 0, z: 0}
-  onlyDir: 0
-  endAnim: 0
-  animRoute: 
-  animBoolName: 
-  endSelf: 0
-  funNames: []
+  fsmObjectName: 
+  fsmObject: {fileID: 0}
+  tags: []
+  eventTriggerModes: 00000000
+  eventNames:
+  - TestEvent
+  useSimpleRules: 1
+  simpleRules:
+  - name: Rule1
+    triggeredBy: []
+    triggers: []
+    rulePriority: 0
+    methodNames:
+    - string:StartOverworldTypeWritter
+    firstStringParams:
+    - Brand
+    secondStringParams:
+    - 0
+    - 0
+    - 0
+    - 0
+    thirdStringParams:
+    - 0
+    - 0
+    - 0
+    - 0
+    useMethodEvents: 00000000
+    methodEvents:
+    - SaveGame
+    - SaveGame
+    - SaveGame
+    - SaveGame
+    useRuleCriterion: 0
+    ruleCriterion:
+      isResultReversed: 0
+      fact:
+        name: 
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 0
+      detection: 0
+      operation: 0
+      criteria:
+      - isResultReversed: 0
+        fact:
+          name: TestFact
+          scope: 0
+          value: 0
+          area: 0
+          scene: 
+        compare: 0
+        detection: 0
+        operation: 0
+        criteria: []
+    factModifications:
+    - fact:
+        name: TestFact
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      operation: 0
+      number: 0
+  clarity: 0.5
 --- !u!1 &2059732924
 GameObject:
   m_ObjectHideFlags: 0
@@ -8225,7 +8350,7 @@ PrefabInstance:
     - target: {fileID: 833677141888568880, guid: 85a3edc090f79fb4780a6e2f72de7957,
         type: 3}
       propertyPath: m_RootOrder
-      value: 9
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 833677141888568880, guid: 85a3edc090f79fb4780a6e2f72de7957,
         type: 3}
@@ -8329,6 +8454,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2735931670647202130, guid: 85a3edc090f79fb4780a6e2f72de7957,
         type: 3}
+      propertyPath: isShadow
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2735931670647202130, guid: 85a3edc090f79fb4780a6e2f72de7957,
+        type: 3}
       propertyPath: notPauseIn
       value: 1
       objectReference: {fileID: 0}
@@ -8362,80 +8492,21 @@ PrefabInstance:
       propertyPath: isCameraFollow
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2735931670647202130, guid: 85a3edc090f79fb4780a6e2f72de7957,
+        type: 3}
+      propertyPath: frameSpriteIndex
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2735931670647202130, guid: 85a3edc090f79fb4780a6e2f72de7957,
+        type: 3}
+      propertyPath: isFadeInUnpaused
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2735931670647202130, guid: 85a3edc090f79fb4780a6e2f72de7957,
+        type: 3}
+      propertyPath: isFadeTransitionEnabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 833677141888568883, guid: 85a3edc090f79fb4780a6e2f72de7957, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 85a3edc090f79fb4780a6e2f72de7957, type: 3}
---- !u!1001 &1235076163100722782
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 1235076164231592993, guid: b12f3b0920d83604485d545ff54c3943,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1235076164231592993, guid: b12f3b0920d83604485d545ff54c3943,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1235076164231592993, guid: b12f3b0920d83604485d545ff54c3943,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -2.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1235076164231592993, guid: b12f3b0920d83604485d545ff54c3943,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1235076164231592993, guid: b12f3b0920d83604485d545ff54c3943,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1235076164231592993, guid: b12f3b0920d83604485d545ff54c3943,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1235076164231592993, guid: b12f3b0920d83604485d545ff54c3943,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1235076164231592993, guid: b12f3b0920d83604485d545ff54c3943,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1235076164231592993, guid: b12f3b0920d83604485d545ff54c3943,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1235076164231592993, guid: b12f3b0920d83604485d545ff54c3943,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1235076164231592993, guid: b12f3b0920d83604485d545ff54c3943,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1235076164231592995, guid: b12f3b0920d83604485d545ff54c3943,
-        type: 3}
-      propertyPath: m_Name
-      value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 1235076164231593179, guid: b12f3b0920d83604485d545ff54c3943,
-        type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 1780845531}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: b12f3b0920d83604485d545ff54c3943, type: 3}

@@ -34,7 +34,7 @@ SettingFullScreen\全螢幕;
 SettingResolving\解析度設定;
 SettingSFX\簡化視覺效果;
 SettingFPS\顯示FPS;
-SettingTypingspeed\打字機速度;
+SettingTypingSpeed\打字機速度;
 SettingBackMenu\返回選單介面;
 SettingBack\回傳;
 Open\開;
@@ -65,7 +65,7 @@ SettingFullScreenTipClose\在全螢幕狀態下，建議將解析度調高。 ;
 SettingResolvingTip\設定遊戲視窗大小。 ;
 SettingSFXTip\設定遊戲內的光效與特效是否開啟。 ;
 SettingFPSTip\設定幀率是否顯示。 ;
-SettingTypingspeedTip\調整遊戲內文字顯示速度。;
+SettingTypingSpeedTip\調整遊戲內文字顯示速度。;
 SettingBackMenuTip\未儲存的資料將會遺失。 ;
 SettingBackTip\返回並繼續遊戲。 ;
 

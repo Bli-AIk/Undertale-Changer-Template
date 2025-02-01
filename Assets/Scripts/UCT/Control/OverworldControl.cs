@@ -31,10 +31,6 @@ namespace UCT.Control
         public List<string> settingSave;
         public bool isSetting;
 
-        [Header("玩家相关")] public Vector3 playerLastPos;
-
-        [Header("场景衔接存储")] public Vector3 playerScenePos;
-
         public Vector2 animDirection;
 
         public List<Sprite> frames;

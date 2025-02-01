@@ -24,6 +24,9 @@ namespace UCT.Control
 
         public float gameTime;
 
+
+        [Header("玩家相关")] public Vector3 playerLastPos;
+        [Header("玩家相关")] public Vector3 playerLastDir;
         [Header("场景衔接存储")] public string lastScene;
 
         public string saveScene;

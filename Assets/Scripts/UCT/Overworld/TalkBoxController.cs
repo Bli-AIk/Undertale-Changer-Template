@@ -8,9 +8,9 @@ namespace UCT.Overworld
     /// <summary>
     ///     修改Overworld中对话框的位置
     /// </summary>
-    public class TalkBoxPositionChanger : MonoBehaviour
+    public class TalkBoxController : MonoBehaviour
     {
-        public static TalkBoxPositionChanger Instance;
+        public static TalkBoxController Instance;
         public BoxDrawer boxDrawer;
         public bool isUp;
         public bool haveHead;

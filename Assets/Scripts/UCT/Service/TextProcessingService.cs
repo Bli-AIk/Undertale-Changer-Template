@@ -384,6 +384,28 @@ namespace UCT.Service
 
         /// <summary>
         ///     输入形如(x,y)的字符串向量，返回Vector2
+        /// </summary>
+        public static Vector2 StringVector2ToRealVector2(string stringVector2)
+        {
+            stringVector2 = stringVector2.Trim('(', ')');
+
+            var components = stringVector2.Split(',');
+
+            if (components.Length == 2 && float.TryParse(components[0], out var x) &&
+                float.TryParse(components[1], out var y)) return new Vector2(x, y);
+            
+            Other.Debug.LogError($"输入的字符串 \"{stringVector2}\" 格式不正确，应形如 (x,y)。");
+            return new Vector2();
+        }
+        /// <summary>
+        ///     将 Vector2 转换为形如 (x,y) 的字符串表示
+        /// </summary>
+        public static string RealVector2ToStringVector2(Vector2 vector2)
+        {
+            return $"({vector2.x},{vector2.y})";
+        }
+        /// <summary>
+        ///     输入形如(x,y)的字符串向量，返回Vector2
         ///     使用ParseFloatWithSpecialCharacters进行转换。
         /// </summary>
         public static Vector2 StringVector2ToRealVector2(string stringVector2, Vector3 origin)

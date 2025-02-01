@@ -53,4 +53,4 @@ Text1\<image=-1><fx=0><*><- -><別><按><。 >;
 
 Text2\<image=-1><fx=0><*><- -><也><別><按><。 >;
 
-TextAlex\<image=-1><fx=0>* 你打字機沒壞你被耍了111;
+TextAlex\<image=-1><fx=0>* 我必須學會新的賣弄啊.<stop>.<stop>.;

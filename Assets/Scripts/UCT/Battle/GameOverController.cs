@@ -14,7 +14,7 @@ namespace UCT.Battle
     /// <summary>
     ///     Gameover控制器
     /// </summary>
-    public class GameoverController : MonoBehaviour
+    public class GameOverController : MonoBehaviour
     {
         public List<AudioClip> clips;
         public bool canChangeScene;
@@ -40,8 +40,8 @@ namespace UCT.Battle
             _foolDay = DateTime.Now.Month == 4 && DateTime.Now.Day == 1;
             _bgmSource = AudioController.Instance.audioSource;
             _bgmSource.clip = clips[Convert.ToInt32(_foolDay)];
-            _player.transform.position = MainControl.Instance.overworldControl.playerLastPos;
-            _mParticleSystem.transform.position = MainControl.Instance.overworldControl.playerLastPos;
+            _player.transform.position = MainControl.Instance.playerControl.playerLastPos;
+            _mParticleSystem.transform.position = MainControl.Instance.playerControl.playerLastPos;
             _mParticleSystem.Pause();
             _mParticleSystem.gameObject.SetActive(false);
         }
@@ -51,13 +51,13 @@ namespace UCT.Battle
             if (!_typeWritter.isTyping && InputService.GetKeyDown(KeyCode.Z) && canChangeScene)
             {
                 _textOptions.text = "";
-                GameUtilityService.FadeOutAndSwitchScene("Example-Corridor", Color.black, true, 2);
+                GameUtilityService.FadeOutAndSwitchScene("Example-Corridor", Color.black, null, true, 2);
                 canChangeScene = false;
             }
 
             if (InputService.GetKeyDown(KeyCode.C) && canChangeSceneForC)
             {
-                GameUtilityService.FadeOutAndSwitchScene("Example-Corridor", Color.black, true);
+                GameUtilityService.FadeOutAndSwitchScene("Example-Corridor", Color.black, null, true);
                 _typeWritter.TypeStop();
                 canChangeSceneForC = false;
             }
@@ -74,7 +74,7 @@ namespace UCT.Battle
 
         public void StartParticleSystem()
         {
-            _mParticleSystem.transform.position = MainControl.Instance.overworldControl.playerLastPos;
+            _mParticleSystem.transform.position = MainControl.Instance.playerControl.playerLastPos;
             _mParticleSystem.gameObject.SetActive(true);
             _mParticleSystem.Play();
         }

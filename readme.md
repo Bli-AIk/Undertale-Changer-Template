@@ -106,6 +106,7 @@ But it is not recommended to use the 2022 version, otherwise the template may ha
 - [NuGetForUnity](https://github.com/GlitchEnzo/NuGetForUnity)
 - [chineseStroke](https://github.com/WTree/chineseStroke)
 - [Alchemy](https://github.com/AnnulusGames/Alchemy)
+- [UnityTimer](https://github.com/akbiggs/UnityTimer)
 
 Thank you very much to the contributors of the above libraries/plugins for providing excellent tools and technical support for this project!
 

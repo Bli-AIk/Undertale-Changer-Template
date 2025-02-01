@@ -50,6 +50,6 @@ Text1\<image=-1><fx=0><*><- -><D><o><n><'><t><- -><p><r><e><s><s><.>;
 
 Text2\<image=-1><fx=0><*><- -><D><o><n><'><t><- -><p><r><e><s><s><,><t><o><o><.>;
 
-TextAlex\<image=-1><fx=0>* Your typewriter isn't broken<enter><-  ->lololololol<enter>* you're just being pranked 111.;
+TextAlex\<image=-1><fx=0>* That’s the only way you’ll keep on digging it.<stop>.<stop>.;
 
 

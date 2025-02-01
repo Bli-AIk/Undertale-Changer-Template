@@ -472,7 +472,7 @@ namespace UCT.Global.Scene
                 {
                     if (!string.IsNullOrEmpty(MainControl.Instance.playerControl.playerName))
                     {
-                        GameUtilityService.FadeOutAndSwitchScene("Menu", Color.black);
+                        GameUtilityService.FadeOutAndSwitchScene("Menu", Color.black, null);
                         sceneState = SceneState.SwitchScene;
                     }
                     else

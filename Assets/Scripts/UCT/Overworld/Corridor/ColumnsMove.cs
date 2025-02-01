@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace UCT.Overworld.Corridor
@@ -7,18 +8,22 @@ namespace UCT.Overworld.Corridor
     /// </summary>
     public class ColumnsMove : MonoBehaviour
     {
-        public float speed; //包括方向(正负)
+        public float speed = -1.381f; //包括方向(正负)
         private CameraFollowPlayer _parentCamera;
+        
+        private void Awake()
+        {
+            _parentCamera = CameraFollowPlayer.Instance;
+        }
 
         private void Start()
         {
-            if (Camera.main == null)
+            if (!_parentCamera)
             {
                 Other.Debug.LogError("未找到主摄像机");
                 return;
             }
 
-            _parentCamera = Camera.main.GetComponent<CameraFollowPlayer>();
             transform.position = _parentCamera.transform.position + _parentCamera.transform.position * speed;
         }
 
@@ -26,7 +31,7 @@ namespace UCT.Overworld.Corridor
         {
             if (_parentCamera.transform.position.x >= _parentCamera.limitX.x ||
                 _parentCamera.transform.position.x <= _parentCamera.limitY.y)
-                transform.position = _parentCamera.followPosition * speed;
+                transform.position = _parentCamera.transform.position * speed;
         }
     }
 }

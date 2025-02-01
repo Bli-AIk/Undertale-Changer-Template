@@ -223,13 +223,17 @@ namespace UCT.Global.Settings
 
             #endregion
 
+            #region GraphicSettingsLayer
+
             AddEnterLayerOption("GraphicSettingsLayer", "GraphicSettingsLayer", new[] { "GraphicSettingsLayerTip" });
 
-            //TODO: 设置分辨率16:9
+            #endregion
 
-            //TODO: 像素完美
+            //TODO: 切换16:9分辨率
 
-            //TODO: 亮度
+            //TODO: 启用像素完美滤镜
+
+            //TODO: 启用低分辨率高显
 
             #region SettingFPS
 
@@ -387,6 +391,10 @@ namespace UCT.Global.Settings
             });
 
             #endregion
+
+            //TODO: 语音音量
+
+            //TODO: 音频设备管理
         }
     }
 
@@ -398,6 +406,8 @@ namespace UCT.Global.Settings
     {
         public GraphicSettingsLayer()
         {
+            //TODO: 图形质量
+
             #region SettingSFX
 
             AllSettingsOptions.Add(new SettingsOption(false)
@@ -417,6 +427,8 @@ namespace UCT.Global.Settings
             });
 
             #endregion
+
+            //TODO: 拆解 SettingSFX 为 光效开关 和 后处理开关
         }
     }
 
@@ -428,6 +440,8 @@ namespace UCT.Global.Settings
     {
         public InputSettingsLayer()
         {
+            //TODO: 控制器管理
+
             AddEnterLayerOption("SettingKeyControlLayer", "SettingKeyControlLayer", new[]
                 { "SettingKeyControlLayerTip" });
         }
@@ -458,10 +472,15 @@ namespace UCT.Global.Settings
 
     #endregion
 
-    #region SettingKeyControlLayer
+    #region SettingLanguagePackageLayer
 
     public class SettingLanguagePackageLayer : SettingsLayerBase
     {
+        //  Implement in code
+
+        //TODO: 强制使用Unicode字体
+
+        //TODO: 强制使用全角
     }
 
     #endregion
@@ -472,12 +491,12 @@ namespace UCT.Global.Settings
     {
         public SubtitleSettingsLayer()
         {
-            #region SettingTypingspeed
+            #region SettingTypingSpeed
 
             AllSettingsOptions.Add(new SettingsOption(SettingsStorage.typingSpeed)
             {
-                DataName = "SettingTypingspeed",
-                DescriptionDataName = new[] { "SettingTypingspeedTip" },
+                DataName = "SettingTypingSpeed",
+                DescriptionDataName = new[] { "SettingTypingSpeedTip" },
                 Type = OptionType.SelectionToggle,
                 OptionDisplayMode = OptionDisplayMode.Default,
                 SelectionBasedChangedValueGetter = () => (int)SettingsStorage.typingSpeed,
@@ -502,7 +521,19 @@ namespace UCT.Global.Settings
 
             #endregion
         }
+
+        //TODO: CC字幕
     }
 
     #endregion
+
+    //TODO: 无障碍Layer
+    //  TODO: 讲述人
+    //  TODO: 色盲模式
+    
+    
+
+    //TODO: 成就Layer
+    //  TODO: 成就页面
+    //  TODO: 成就页面设置
 }

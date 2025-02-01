@@ -13,18 +13,25 @@ MonoBehaviour:
   m_Name: RuleTable
   m_EditorClassIdentifier: 
   rules:
-  - name: TestRule
+  - name: SaveGame
     triggeredBy:
-      name: TestEvent
-      isTriggering: 0
-    triggers:
-      name: TestEvent
-      isTriggering: 0
+    - SaveGame
+    triggers: []
     rulePriority: 0
     methodNames:
-    - StartOverworldTypeWritter
-    methodStrings:
-    - DemoBox1
+    - null:OpenSaveBox
+    firstStringParams:
+    - (0,0)
+    secondStringParams:
+    - 
+    thirdStringParams:
+    - 
+    useMethodEvents: 000101
+    methodEvents:
+    - SaveGame
+    - TestEvent
+    - TestEvent
+    useRuleCriterion: 0
     ruleCriterion:
       isResultReversed: 0
       fact:
@@ -48,13 +55,176 @@ MonoBehaviour:
         detection: 0
         operation: 0
         criteria: []
-    isCriteriaPassed: 1
-    factModifications:
-    - fact:
-        name: TestFact
+    factModifications: []
+  - name: CorridorToRuins
+    triggeredBy:
+    - CorridorToRuins
+    triggers: []
+    rulePriority: 0
+    methodNames:
+    - Vector2:TeleportPlayer
+    firstStringParams:
+    - (-11,-5)
+    secondStringParams:
+    - 
+    thirdStringParams:
+    - 
+    useMethodEvents: 000101
+    methodEvents:
+    - SaveGame
+    - TestEvent
+    - TestEvent
+    useRuleCriterion: 0
+    ruleCriterion:
+      isResultReversed: 0
+      fact:
+        name: 
         scope: 0
         value: 0
         area: 0
         scene: 
-      operation: 0
-      number: 1
+      compare: 0
+      detection: 0
+      operation: 1
+      criteria:
+      - isResultReversed: 0
+        fact:
+          name: TestFact
+          scope: 0
+          value: 0
+          area: 0
+          scene: 
+        compare: 2
+        detection: 0
+        operation: 0
+        criteria: []
+    factModifications: []
+  - name: Plot
+    triggeredBy:
+    - Plot
+    triggers: []
+    rulePriority: 0
+    methodNames:
+    - string:StartOverworldTypeWritter
+    firstStringParams:
+    - Plot
+    secondStringParams:
+    - 
+    thirdStringParams:
+    - 
+    useMethodEvents: 010101
+    methodEvents:
+    - InBattle
+    - TestEvent
+    - TestEvent
+    useRuleCriterion: 0
+    ruleCriterion:
+      isResultReversed: 0
+      fact:
+        name: 
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 0
+      detection: 0
+      operation: 1
+      criteria:
+      - isResultReversed: 0
+        fact:
+          name: TestFact
+          scope: 0
+          value: 0
+          area: 0
+          scene: 
+        compare: 2
+        detection: 0
+        operation: 0
+        criteria: []
+    factModifications: []
+  - name: InBattle
+    triggeredBy:
+    - InBattle
+    triggers: []
+    rulePriority: 0
+    methodNames:
+    - null:EnterBattleScene
+    firstStringParams:
+    - Plot
+    secondStringParams:
+    - 
+    thirdStringParams:
+    - 
+    useMethodEvents: 000101
+    methodEvents:
+    - InBattle
+    - TestEvent
+    - TestEvent
+    useRuleCriterion: 0
+    ruleCriterion:
+      isResultReversed: 0
+      fact:
+        name: 
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 0
+      detection: 0
+      operation: 1
+      criteria:
+      - isResultReversed: 0
+        fact:
+          name: TestFact
+          scope: 0
+          value: 0
+          area: 0
+          scene: 
+        compare: 2
+        detection: 0
+        operation: 0
+        criteria: []
+    factModifications: []
+  - name: RuinsToCorridor
+    triggeredBy:
+    - RuinsToCorridor
+    triggers: []
+    rulePriority: 0
+    methodNames:
+    - Vector2:TeleportPlayer
+    firstStringParams:
+    - (0,0)
+    secondStringParams:
+    - 
+    thirdStringParams:
+    - 
+    useMethodEvents: 000101
+    methodEvents:
+    - InBattle
+    - TestEvent
+    - TestEvent
+    useRuleCriterion: 0
+    ruleCriterion:
+      isResultReversed: 0
+      fact:
+        name: 
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 0
+      detection: 0
+      operation: 1
+      criteria:
+      - isResultReversed: 0
+        fact:
+          name: TestFact
+          scope: 0
+          value: 0
+          area: 0
+          scene: 
+        compare: 2
+        detection: 0
+        operation: 0
+        criteria: []
+    factModifications: []

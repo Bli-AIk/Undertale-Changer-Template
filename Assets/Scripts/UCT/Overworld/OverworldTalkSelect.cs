@@ -75,7 +75,7 @@ namespace UCT.Overworld
                     {
                         case "BackMenu":
                             _typeWritter.forceReturn = true;
-                            GameUtilityService.FadeOutAndSwitchScene("Menu", Color.black, true, 0f);
+                            GameUtilityService.FadeOutAndSwitchScene("Menu", Color.black, null, true, 0f);
                             AudioController.Instance.audioSource.volume = 0;
                             break;
 

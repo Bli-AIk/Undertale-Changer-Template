@@ -103,6 +103,7 @@
 - [NuGetForUnity](https://github.com/GlitchEnzo/NuGetForUnity)
 - [chineseStroke](https://github.com/WTree/chineseStroke)
 - [Alchemy](https://github.com/AnnulusGames/Alchemy)
+- [UnityTimer](https://github.com/akbiggs/UnityTimer)
 
 以上函式庫/插件的貢獻者們為本計畫提供了優秀的工具和技術支持，衷心感謝你們！
 

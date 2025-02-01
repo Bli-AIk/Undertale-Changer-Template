@@ -92,10 +92,10 @@ namespace UCT.Battle
                 if (!(MainControl.Instance.playerControl.isDebug && MainControl.Instance.playerControl.invincible))
                 {
                     _spriteRenderer.color = Color.red;
-                    MainControl.Instance.overworldControl.playerLastPos = transform.position - (Vector3)sceneDrift;
+                    MainControl.Instance.playerControl.playerLastPos = transform.position - (Vector3)sceneDrift;
                     SettingsStorage.pause = true;
                     TurnController.Instance.KillIEnumerator();
-                    GameUtilityService.SwitchScene("Gameover", false);
+                    GameUtilityService.SwitchScene("GameOver", false);
                 }
                 else
                 {
@@ -943,10 +943,10 @@ namespace UCT.Battle
             if (!(mainControl.playerControl.isDebug && mainControl.playerControl.invincible))
             {
                 //spriteRenderer.color = Color.red;
-                mainControl.overworldControl.playerLastPos = transform.position - (Vector3)sceneDrift;
+                mainControl.playerControl.playerLastPos = transform.position - (Vector3)sceneDrift;
                 SettingsStorage.pause = true;
                 TurnController.Instance.KillIEnumerator();
-                GameUtilityService.SwitchScene("Gameover", false);
+                GameUtilityService.SwitchScene("GameOver", false);
             }
             else
             {

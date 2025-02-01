@@ -6,7 +6,7 @@ namespace UCT.Overworld.FiniteStateMachine
 {
     public class TriggerObjectComponent : MonoBehaviour
     {
-        // Todo: 写一个新的函数，让部分物品状态与Fact绑定
+        // Todo: 写一个新的函数，让部分物体状态与Fact绑定，来实现解密元素等
 
         [ReadOnly] public FiniteStateMachine fsm;
 

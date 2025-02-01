@@ -234,7 +234,7 @@ GameObject:
   - component: {fileID: 8002663440811122530}
   - component: {fileID: 8002663440811122528}
   - component: {fileID: 8002663440811122535}
-  - component: {fileID: 8002663440811122534}
+  - component: {fileID: 3592293418815541735}
   m_Layer: 0
   m_Name: Save
   m_TagString: Untagged
@@ -347,7 +347,7 @@ CircleCollider2D:
   m_Offset: {x: 0.024999991, y: 0.025000006}
   serializedVersion: 2
   m_Radius: 0.35
---- !u!114 &8002663440811122534
+--- !u!114 &3592293418815541735
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -356,30 +356,62 @@ MonoBehaviour:
   m_GameObject: {fileID: 8002663440811122531}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7acd31d5cb78124ca4d941793434e25, type: 3}
+  m_Script: {fileID: 11500000, guid: e9d16ceb9f1b41529c26420f051f1438, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isTriggerMode: 0
-  setIsUp: 0
-  isUp: 0
-  text: Save
-  playerDir: {x: 0, y: 0}
-  isSave: 1
-  saveFullHp: 1
-  openAnim: 0
-  animEndPosPlus: {x: 0, y: 0, z: 0}
-  animTime: 0
-  animEase: 0
-  mainCamera: {fileID: 0}
-  endInBattle: 0
-  stopTime: -1
-  changeScene: 0
-  banMusic: 0
-  sceneName: 
-  newPlayerPos: {x: 0, y: 0, z: 0}
-  onlyDir: 0
-  endAnim: 0
-  animRoute: 
-  animBoolName: 
-  endSelf: 0
-  funNames: []
+  fsmObjectName: 
+  fsmObject: {fileID: 0}
+  tags: []
+  eventTriggerModes: 00000000
+  eventNames:
+  - TestEvent
+  useSimpleRules: 1
+  simpleRules:
+  - name: Rule1
+    triggeredBy: []
+    triggers:
+    - EnterCorridor
+    rulePriority: 0
+    methodNames:
+    - Vector2:TeleportPlayer
+    methodStrings:
+    - (0,0)
+    useMethodEvents: 00
+    methodEvents:
+    - EnterCorridor
+    - TestEvent
+    - TestEvent
+    useRuleCriterion: 0
+    ruleCriterion:
+      isResultReversed: 0
+      fact:
+        name: 
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 0
+      detection: 0
+      operation: 0
+      criteria:
+      - isResultReversed: 0
+        fact:
+          name: TestFact
+          scope: 0
+          value: 0
+          area: 0
+          scene: 
+        compare: 0
+        detection: 0
+        operation: 0
+        criteria: []
+    factModifications:
+    - fact:
+        name: TestFact
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      operation: 0
+      number: 0
+  clarity: 0.5

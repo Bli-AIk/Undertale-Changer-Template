@@ -560,7 +560,7 @@ namespace UCT.Global.Settings
 
         private void ReturnToScene(string sceneName)
         {
-            GameUtilityService.FadeOutAndSwitchScene(sceneName, Color.black, true, AnimSpeed);
+            GameUtilityService.FadeOutAndSwitchScene(sceneName, Color.black, null, true, AnimSpeed);
             overworldControl.isSetting = false;
             TypeWritter.TypePause(false);
             _isPauseCanvas = true;

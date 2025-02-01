@@ -17,54 +17,63 @@ namespace UCT.Global.Core
     /// </summary>
     public class MainControlSummon : MonoBehaviour
     {
-        [TabGroup("Layer1","OWCamera")]
+        [Title("OverWorld")]
+        [TabGroup("OWLayer","OWCamera")]
         public bool isCameraLimit;
-        [TabGroup("Layer1","OWCamera")]
+        [TabGroup("OWLayer","OWCamera")]
         public bool isCameraFollow;
-        [TabGroup("Layer1","OWCamera")]
+        [TabGroup("OWLayer","OWCamera")]
         [EnableIf("isCameraFollow")][Indent] 
         public Vector2 cameraLimitX; //限制摄像机最大XY范围 0则不动
-        [TabGroup("Layer1","OWCamera")]
+        [TabGroup("OWLayer","OWCamera")]
         [EnableIf("isCameraFollow")][Indent] 
         public Vector2 cameraLimitY; //限制摄像机最大XY范围 0则不动
         
         // ---------------------------------------------------
-
-        [TabGroup("Layer1","Canvas")]
+        
+        [TabGroup("OWLayer", "OWPlayer")] 
+        public Vector2 walkFxRange = new(0, 9);
+        [TabGroup("OWLayer","OWPlayer")]
+        public bool isShadow;
+        
+        // ---------------------------------------------------
+        [Title("Other")]
+        [TabGroup("OtherLayer","Canvas")]
         public RenderMode renderMode;
-        [TabGroup("Layer1","Canvas")]
+        [TabGroup("OtherLayer","Canvas")]
         [FormerlySerializedAs("framePic")] 
         public int frameSpriteIndex;
         
         // ---------------------------------------------------
       
-        [TabGroup("Layer1","BGMControl")]
+        [TabGroup("OtherLayer","BGMControl")]
         [Title("BGM本体音频 空为无音频")]
         public AudioClip bgmClip;
-        [TabGroup("Layer1","BGMControl")]
+        [TabGroup("OtherLayer","BGMControl")]
         [Title("BGM音量")] public float volume = 0.5f;
-        [TabGroup("Layer1","BGMControl")]
+        [TabGroup("OtherLayer","BGMControl")]
         [Title("BGM音调")] public float pitch = 0.5f;
-        [TabGroup("Layer1","BGMControl")]
+        [TabGroup("OtherLayer","BGMControl")]
         [Title("BGM循环播放初始状态")] public bool loop = true;
         
         // ---------------------------------------------------
 
-        [TabGroup("Layer1","MainControl")]
+        [TabGroup("OtherLayer","MainControl")]
         [Title("黑场状态相关")]
         public MainControl.SceneState sceneState;
-        [FormerlySerializedAs("haveInOutBlack")] [TabGroup("Layer1","MainControl")]
+        [FormerlySerializedAs("haveInOutBlack")] [TabGroup("OtherLayer","MainControl")]
         public bool isFadeTransitionEnabled;
-        [FormerlySerializedAs("noInBlack")] [TabGroup("Layer1","MainControl")]
+        [FormerlySerializedAs("noInBlack")] [TabGroup("OtherLayer","MainControl")]
         [EnableIf("isFadeTransitionEnabled")][Indent]
         public bool isFadeInDisabled;
-        [FormerlySerializedAs("notPauseIn")] [TabGroup("Layer1","MainControl")]
+        [FormerlySerializedAs("notPauseIn")] [TabGroup("OtherLayer","MainControl")]
         [EnableIf("isFadeTransitionEnabled")][Indent]
         public bool isFadeInUnpaused;
 
         private void Awake()
         {
             SetupController(Camera.main, ExistingCameraSetup, NonexistentCameraSetup);
+            SetupController(MainControl.overworldPlayerBehaviour, ExistingPlayerSetup, NonexistentPlayerSetup);
             SetupController(SettingsController.Instance, ExistingCanvasSetup, NonexistentCanvasSetup);
             SetupController(AudioController.Instance, ExistingAudioSetup, NonexistentAudioSetup);
             SetupController(MainControl.Instance, ExistingMainControlSetup, NonexistentMainControlSetup);
@@ -83,7 +92,7 @@ namespace UCT.Global.Core
         private void ExistingCameraSetup()
         {
             System.Diagnostics.Debug.Assert(Camera.main != null, "Camera.main != null");
-            var mainCamera = Camera.main.GetComponent<CameraFollowPlayer>();
+            var mainCamera = CameraFollowPlayer.Instance;
             if (!mainCamera) return;
             if (sceneState != MainControl.SceneState.Overworld)
                 Destroy(mainCamera.gameObject);
@@ -96,7 +105,7 @@ namespace UCT.Global.Core
             if (sceneState != MainControl.SceneState.Overworld) return;
             var mainCamera = Instantiate(Resources.Load<GameObject>("Prefabs/MainCameraOverworld"));
             mainCamera.name = "MainCameraOverworld";
-            CameraSetup(mainCamera.GetComponent<CameraFollowPlayer>());
+            CameraSetup(CameraFollowPlayer.Instance);
             DontDestroyOnLoad(mainCamera);
         }
 
@@ -107,6 +116,27 @@ namespace UCT.Global.Core
             cameraFollowPlayer.limitX = cameraLimitX;
             cameraFollowPlayer.limitY = cameraLimitY;
         }
+        
+        private void ExistingPlayerSetup()
+        {
+            PlayerSetup();
+        }
+
+        private void NonexistentPlayerSetup()
+        {
+            var player = Instantiate(Resources.Load<GameObject>("Prefabs/Player"));
+            player.name = "Player";
+            MainControl.GetOverworldPlayerBehaviour();
+            PlayerSetup();
+            DontDestroyOnLoad(player);
+        }
+
+        private void PlayerSetup()
+        {
+            MainControl.overworldPlayerBehaviour.walkFxRange = walkFxRange;
+            MainControl.overworldPlayerBehaviour.isShadow = isShadow;
+        }
+
 
         private void ExistingCanvasSetup()
         {

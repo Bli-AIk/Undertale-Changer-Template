@@ -49,6 +49,8 @@ MonoBehaviour:
   isCameraFollow: 0
   cameraLimitX: {x: 0, y: 0}
   cameraLimitY: {x: 0, y: 0}
+  walkFxRange: {x: 0, y: 9}
+  isShadow: 0
   renderMode: 0
   frameSpriteIndex: 2
   bgmClip: {fileID: 0}

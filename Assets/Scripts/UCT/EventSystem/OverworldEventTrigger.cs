@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using UCT.Global.Audio;
+using Plugins.Timer.Source;
 using UCT.Global.Core;
 using UCT.Overworld.FiniteStateMachine;
 using UCT.Service;
@@ -17,19 +17,21 @@ namespace UCT.EventSystem
 
         public List<string> tags;
         
-        public List<EventTriggerMode> eventTriggerModes;//TODO: 添加选项来选择只使用一个简单的无条件Rule
+        public List<EventTriggerMode> eventTriggerModes;
 
         [FormerlySerializedAs("events")] 
         public List<string> eventNames;
 
+        [FormerlySerializedAs("useSimpleRule")] public bool useSimpleRules;
+        
+        public List<RuleEntry> simpleRules;
+        
         /// <summary>
         /// 能见度，取值范围为0-1。
         /// 用于视线检测。
         /// </summary>
         public float clarity = 0.5f;
         
-        public object Target;
-
         private void Start()
         {
             GetFsmObject();
@@ -78,10 +80,9 @@ namespace UCT.EventSystem
                 _hasTriggeredInteract = false;
 
             if (!IsEventTriggerModeActive(EventTriggerMode.Interact) || !other.CompareTag("PlayerTrigger") ||
-                !InputService.GetKeyDown(KeyCode.Z) || _hasTriggeredInteract) return;
+                !InputService.GetKey(KeyCode.Z) || _hasTriggeredInteract) return;
             TriggerEvent();
             _hasTriggeredInteract = true;
-
         }
 
         private void OnTriggerExit2D(Collider2D other)
@@ -97,7 +98,7 @@ namespace UCT.EventSystem
         private void GetFsmObject()
         {
             if (!fsmObject && string.IsNullOrEmpty(fsmObjectName))
-                fsmObject = MainControl.Instance.overworldPlayerBehaviour;
+                fsmObject = MainControl.overworldPlayerBehaviour;
             else if (!fsmObject || fsmObjectName != fsmObject.name)
                 fsmObject = GameObject.Find(fsmObjectName).GetComponent<FiniteStateMachine>();
         }
@@ -109,21 +110,46 @@ namespace UCT.EventSystem
         {
             if (GameUtilityService.IsGamePausedOrSetting()) return;
 
-            for (var i = 0; i < eventNames.Count; i++) 
+            if (!useSimpleRules)
             {
-                var localName = eventNames[i];
-                // ReSharper disable once ForCanBeConvertedToForeach
-                for (var j = 0; j < MainControl.Instance.eventController.eventTable.events.Count; j++)
+                for (var i = 0; i < eventNames.Count; i++) 
                 {
-                    var eventEntry = MainControl.Instance.eventController.eventTable.events[j];
-                    if (eventEntry.name != localName) continue;
-                    eventEntry.isTriggering = true;
-                    eventNames[i] = localName;
-                    MainControl.Instance.eventController.eventTable.events[j] = eventEntry;
-                }
-                
-            }
+                    var localName = eventNames[i];
+                    // ReSharper disable once ForCanBeConvertedToForeach
+                    for (var j = 0; j < EventController.eventTable.events.Count; j++)
+                    {
+                        var eventEntry = EventController.eventTable.events[j];
 
+                        if (eventEntry.name != localName) continue;
+
+                        if (eventEntry.closeTime >= 0)
+                        {
+                            var index = j;
+                            Timer.Register(eventEntry.closeTime, () =>
+                            {
+                                if (!EventController.eventTable.events[index].isTriggering)
+                                    return;
+                                var falseEntry = eventEntry;
+                        
+                                eventEntry.isTriggering = false;
+                                eventNames[index] = localName;
+                                EventController.eventTable.events[index] = falseEntry;
+                            });
+                        }
+
+                        eventEntry.isTriggering = true;
+                        eventNames[i] = localName;
+                        EventController.eventTable.events[j] = eventEntry;
+                    }
+                }
+            }
+            else
+            {
+                foreach (var rule in simpleRules)
+                {
+                    EventController.DetectionRule(new EventEntry(), rule, true);
+                }
+            }
         }
     }
 
@@ -138,12 +164,12 @@ namespace UCT.EventSystem
         Interact,
 
         /// <summary>
-        ///     碰撞器触发型：进入碰撞范围后触发。
+        ///     碰撞器触发型：开始碰撞后触发。
         /// </summary>
         ColliderEnter,
 
         /// <summary>
-        ///     碰撞器离开型：离开碰撞范围后触发。
+        ///     碰撞器离开型：结束碰撞后触发。
         /// </summary>
         ColliderExit,
 
@@ -165,14 +191,7 @@ namespace UCT.EventSystem
         /// <summary>
         ///     视线离开型：离开视野（射线范围）时触发。
         /// </summary>
-        LineOfSightExit,
-
-        /*
-        /// <summary>
-        ///     定时型：到达指定时间后触发。
-        /// </summary>
-        Timer //  TODO: 计时器系统
-        */
+        LineOfSightExit
         
     }
     

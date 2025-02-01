@@ -81,9 +81,7 @@ namespace UCT.Service
                 SettingsController.Instance.DOKill();
 
                 if (SettingsController.Instance.frameSpriteIndex < 0)
-                {
                     SettingsController.Instance.Frame.color = Color.black;
-                }
                 SettingsController.Instance.Frame.DOColor(
                     Color.white * Convert.ToInt32(SettingsController.Instance.frameSpriteIndex >= 0), 1f);
             }
@@ -101,12 +99,16 @@ namespace UCT.Service
                 new Vector2(currentResolutionWidth, currentResolutionHeight);
         }
 
+        /// <summary>
+        /// 切换场景。
+        /// 优先在此项目中使用这个封装后的方法进行场景切换操作。
+        /// </summary>
         public static void SwitchScene(string sceneName, bool async = true)
         {
             SetCanvasFrameSprite();
             if (SceneManager.GetActiveScene().name != "Menu" && SceneManager.GetActiveScene().name != "Rename" &&
                 SceneManager.GetActiveScene().name != "Story" && SceneManager.GetActiveScene().name != "Start" &&
-                SceneManager.GetActiveScene().name != "Gameover")
+                SceneManager.GetActiveScene().name != "GameOver")
                 MainControl.Instance.playerControl.lastScene = SceneManager.GetActiveScene().name;
             if (async)
                 SceneManager.LoadSceneAsync(sceneName);
@@ -130,12 +132,15 @@ namespace UCT.Service
         /// </summary>
         /// <param name="scene">要切换到的场景名称</param>
         /// <param name="fadeColor">淡出的颜色</param>
+        /// <param name="action"></param>
         /// <param name="isBgmMuted">是否静音背景音乐</param>
         /// <param name="fadeTime">淡出时间，默认为0.5秒</param>
         /// <param name="isAsync">是否异步切换场景，默认为true</param>
-        public static void FadeOutAndSwitchScene(string scene, Color fadeColor, bool isBgmMuted = false,
+        public static void FadeOutAndSwitchScene(string scene, Color fadeColor, Action action = null,
+            bool isBgmMuted = false,
             float fadeTime = 0.5f, bool isAsync = true)
         {
+            action += () => SwitchScene(scene);
             MainControl.Instance.isSceneSwitching = true;
             if (isBgmMuted)
             {
@@ -160,21 +165,21 @@ namespace UCT.Service
                 case > 0:
                 {
                     MainControl.Instance.sceneSwitchingFadeImage.DOColor(fadeColor, fadeTime).SetEase(Ease.Linear)
-                        .OnKill(() => SwitchScene(scene));
+                        .OnKill(() => action.Invoke());
                     if (!SettingsStorage.isUsingHdFrame)
                         SettingsController.Instance.Frame.color = ColorEx.WhiteClear;
                     break;
                 }
                 case 0:
                     MainControl.Instance.sceneSwitchingFadeImage.color = fadeColor;
-                    SwitchScene(scene, isAsync);
+                    action.Invoke();
                     break;
                 default:
                 {
                     fadeTime = Mathf.Abs(fadeTime);
                     MainControl.Instance.sceneSwitchingFadeImage.color = fadeColor;
                     MainControl.Instance.sceneSwitchingFadeImage.DOColor(fadeColor, fadeTime).SetEase(Ease.Linear)
-                        .OnKill(() => SwitchScene(scene));
+                        .OnKill(() => action.Invoke());
                     if (!SettingsStorage.isUsingHdFrame)
                         SettingsController.Instance.Frame.color = ColorEx.WhiteClear;
                     break;

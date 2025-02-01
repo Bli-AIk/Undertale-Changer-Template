@@ -87,17 +87,14 @@ namespace UCT.Global.UI
         [TabGroup("TypeWritter", "Data")]
         //  总有那么一些情况需要强硬手段（拔枪
         public bool forceReturn;
-
-        private Animator _canvasAnim;
-
+        
         private List<Vector2> _dynamicPos;
 
-        private bool _endInBattle;
         private bool _isJumpingText;
 
         private bool _isUsedFx;
 
-        private TalkBoxPositionChanger _talkBoxPositionChanger;
+        private TalkBoxController _talkBoxController;
 
         private TMP_Text _tmpText;
 
@@ -118,7 +115,7 @@ namespace UCT.Global.UI
         private void Start()
         {
             if (isOverworld)
-                _talkBoxPositionChanger = TalkBoxPositionChanger.Instance;
+                _talkBoxController = TalkBoxController.Instance;
             spriteChanger = GetComponent<SpriteChanger>();
         }
 
@@ -140,8 +137,6 @@ namespace UCT.Global.UI
             {
                 if (spriteChanger)
                     spriteChanger.ChangeImage(-1);
-                if (_endInBattle)
-                    _canvasAnim.SetBool(Open, true);
             }
 
             if (passText && InputService.GetKeyDown(KeyCode.Z) && _typeMode != TypeMode.CantZx)
@@ -179,7 +174,7 @@ namespace UCT.Global.UI
             isStop = false;
             fx = inputFX;
             if (isOverworld)
-                _talkBoxPositionChanger.Change(true, originString[.."<passText>".Length] == "<passText>", true, this);
+                _talkBoxController.Change(true, originString[.."<passText>".Length] == "<passText>", true, this);
 
             _tmpText = tmpText;
             Timing.RunCoroutine(_Typing(_tmpText));
@@ -278,7 +273,7 @@ namespace UCT.Global.UI
                             var s = int.Parse(save);
                             if (spriteChanger)
                                 spriteChanger.ChangeImage(s);
-                            _talkBoxPositionChanger.Change(true, s >= 0, false);
+                            _talkBoxController.Change(true, s >= 0, false);
                         }
                         else if (TextProcessingService.IsSameFrontTexts(spText, "<stop...*"))
                         {
@@ -373,7 +368,7 @@ namespace UCT.Global.UI
 
                                 case "<storyExit>":
                                     TypeStop();
-                                    GameUtilityService.FadeOutAndSwitchScene("Start", Color.black, true);
+                                    GameUtilityService.FadeOutAndSwitchScene("Start", Color.black, null, true);
                                     break;
 
                                 case "<sprite=0>":
@@ -669,19 +664,13 @@ namespace UCT.Global.UI
             passTextString = "";
             if (isOverworld)
             {
-                _talkBoxPositionChanger.Change(false, false, true, this);
+                _talkBoxController.Change(false, false, true, this);
                 if (originString[..inputPassText.Length] == inputPassText)
                     originString = originString[inputPassText.Length..];
             }
 
             pressX = false;
             Timing.RunCoroutine(_Typing(_tmpText));
-        }
-
-        public void EndInBattle()
-        {
-            _canvasAnim = SettingsController.Instance.Animator;
-            _endInBattle = true;
         }
 
 

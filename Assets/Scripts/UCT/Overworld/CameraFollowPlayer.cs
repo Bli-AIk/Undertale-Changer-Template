@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -8,6 +9,12 @@ namespace UCT.Overworld
     /// </summary>
     public class CameraFollowPlayer : MonoBehaviour
     {
+        public static CameraFollowPlayer Instance;
+        private void Awake()
+        {
+            Instance = this;
+        }
+
         [FormerlySerializedAs("limit")] public bool isLimit = true;
         public bool isFollow;
         public Vector2 limitX; //限制摄像机最大XY范围 0则不动

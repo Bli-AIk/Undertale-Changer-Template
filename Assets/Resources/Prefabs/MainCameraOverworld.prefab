@@ -1611,6 +1611,7 @@ MonoBehaviour:
   pitch: 1
   volume: 0.5
   speed: 0.075
+  currentSpeed: 0
   speedSlow: 0.15
   clock: 0.01
   isOverworld: 1
@@ -1618,6 +1619,7 @@ MonoBehaviour:
   useFont: 0
   dynamicType: 0
   forceReturn: 0
+  canClose: 0
 --- !u!114 &2311692479830489560
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2292,6 +2294,24 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 307f72e3917759d49b7e988253e38bc3, type: 3}
+--- !u!1 &731480948768855252 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5344542098403412248, guid: 307f72e3917759d49b7e988253e38bc3,
+    type: 3}
+  m_PrefabInstance: {fileID: 4615378955076214220}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8741930562606072948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 731480948768855252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47ce3d0046da4006a71f97aa45907c26, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &9201635547207087542 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4593628136842930298, guid: 307f72e3917759d49b7e988253e38bc3,

@@ -16,19 +16,20 @@ namespace UCT.EventSystem
         public string name;
 
         /// <summary>
-        ///     触发该Rule的Event
+        ///     触发该Rule的Event名称
         /// </summary>
-        public EventEntry triggeredBy;//TODO:改为可空的数组
+        public List<string> triggeredBy;
 
         /// <summary>
-        ///     该Rule触发的Event
+        ///     该Rule触发的Event名称
         /// </summary>
-        public EventEntry triggers;//TODO:改为可空的数组
+        public List<string> triggers;
 
         /// <summary>
         ///     该Rule的优先级
         /// </summary>
-        public RulePriority rulePriority;//TODO:实装优先级
+        public RulePriority rulePriority;
+        //TODO:实装优先级
 
         /// <summary>
         ///     该Rule执行的方法名
@@ -36,20 +37,40 @@ namespace UCT.EventSystem
         public List<string> methodNames;
         
         /// <summary>
-        ///     该Rule执行的方法传入的字符串
+        ///     该Rule执行的方法传入的第一个字符串形参
         /// </summary>
-        public List<string> methodStrings;
+        public List<string> firstStringParams;
 
+        /// <summary>
+        ///     该Rule执行的方法传入的第二个字符串形参
+        /// </summary>
+        public List<string> secondStringParams;
+        
+        /// <summary>
+        ///     该Rule执行的方法传入的第三个字符串形参
+        /// </summary>
+        public List<string> thirdStringParams;
+        
+        /// <summary>
+        ///     是否使用该Rule执行的方法联动触发的Event
+        /// </summary>
+        public List<bool> useMethodEvents;
+        
+        /// <summary>
+        ///     该Rule执行的方法联动触发的Event
+        /// </summary>
+        public List<string> methodEvents;
+
+        /// <summary>
+        ///     是否使用该Rule的Fact判断组
+        /// </summary>
+        public bool useRuleCriterion;
+        
         /// <summary>
         ///     该Rule的Fact判断组
         /// </summary>
         public RuleCriterion ruleCriterion;
-
-        /// <summary>
-        ///     该Rule是否通过Fact判断，即是否允许执行
-        /// </summary>
-        public bool isCriteriaPassed;
-
+        
         /// <summary>
         ///     该Rule修改的Fact值
         /// </summary>

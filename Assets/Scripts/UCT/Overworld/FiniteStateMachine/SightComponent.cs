@@ -146,7 +146,6 @@ namespace UCT.Overworld.FiniteStateMachine
 
             if (_processedColliders.Contains(hit.collider) ||
                 !trigger.IsEventTriggerModeActive(EventTriggerMode.LineOfSightEnter)) return;
-
             trigger.TriggerEvent();
             _processedColliders.Add(hit.collider);
         }

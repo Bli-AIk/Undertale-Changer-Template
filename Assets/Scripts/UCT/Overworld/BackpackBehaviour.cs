@@ -60,8 +60,8 @@ namespace UCT.Overworld
         {            
             if (GameUtilityService.IsGamePausedOrSetting()) return;
 
-            if (TalkBoxPositionChanger.Instance)
-                TalkBoxPositionChanger.Instance.isUp = MainControl.Instance.overworldPlayerBehaviour.transform.position.y <
+            if (TalkBoxController.Instance)
+                TalkBoxController.Instance.isUp = MainControl.overworldPlayerBehaviour.transform.position.y <
                                                        transform.position.y - 1.25f;
             else
                 Other.Debug.LogWarning("TalkBoxPositionChanger instance is missing!");
@@ -110,7 +110,7 @@ namespace UCT.Overworld
                     _heart.transform.localPosition = new Vector3(_heart.transform.localPosition.x,
                         _heart.transform.localPosition.y, BoxZAxisVisible);
 
-                    if (MainControl.Instance.overworldPlayerBehaviour.transform.position.y >= transform.position.y - 1.25f)
+                    if (MainControl.overworldPlayerBehaviour.transform.position.y >= transform.position.y - 1.25f)
                         _overviewBox.localPosition.y = 3.325f;
                     else
                         _overviewBox.localPosition.y = -3.425f;
@@ -138,7 +138,7 @@ namespace UCT.Overworld
             {
                 if (InputService.GetKeyDown(KeyCode.Z))
                 {
-                    MainControl.Instance.overworldPlayerBehaviour.owTimer = 0.1f;
+                    MainControl.overworldPlayerBehaviour.owTimer = 0.1f;
                     _informationText.transform.localPosition = new Vector3(0.5f, -5.12f, 0);
 
                     if (select == 1)
@@ -212,12 +212,12 @@ namespace UCT.Overworld
                                             break;
                                         }
 
-                                        if (TalkBoxPositionChanger.Instance.boxDrawer.localPosition.z < 0)
+                                        if (TalkBoxController.Instance.boxDrawer.localPosition.z < 0)
                                         {
-                                            TalkBoxPositionChanger.Instance.Change();
-                                            TalkBoxPositionChanger.Instance.boxDrawer.localPosition =
-                                                new Vector3(TalkBoxPositionChanger.Instance.boxDrawer.localPosition.x,
-                                                    TalkBoxPositionChanger.Instance.boxDrawer.localPosition.y,
+                                            TalkBoxController.Instance.Change();
+                                            TalkBoxController.Instance.boxDrawer.localPosition =
+                                                new Vector3(TalkBoxController.Instance.boxDrawer.localPosition.x,
+                                                    TalkBoxController.Instance.boxDrawer.localPosition.y,
                                                     BoxZAxisVisible);
                                         }
 
@@ -418,7 +418,7 @@ namespace UCT.Overworld
                 _heart.transform.localPosition.y, BoxZAxisInvisible);
             _overviewBox.localPosition.z = BoxZAxisInvisible;
             typeWritter.TypeStop();
-            TalkBoxPositionChanger.Instance.boxDrawer.localPosition.z = BoxZAxisInvisible;
+            TalkBoxController.Instance.boxDrawer.localPosition.z = BoxZAxisInvisible;
             sonUse = 0;
             sonSelect = 0;
         }

@@ -47,7 +47,7 @@ namespace UCT.Global.Scene
             if (!InputService.GetKeyDown(KeyCode.Z)) return;
             _typeWritter.TypeStop();
             _tmp.text = "";
-            GameUtilityService.FadeOutAndSwitchScene("Start", Color.black);
+            GameUtilityService.FadeOutAndSwitchScene("Start", Color.black, null);
         }
 
         public void Fade(int number)

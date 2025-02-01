@@ -41,7 +41,7 @@ namespace UCT.Global.Scene
         {
             _setData = false;
             _overworldControl = MainControl.Instance.overworldControl;
-            _overworldControl.playerScenePos = new Vector3(-0.5f, -1);
+            new Vector3(-0.5f, -1);
             if (MainControl.Instance.saveDataId < 0)
                 MainControl.Instance.saveDataId = 0;
             MainControl.Instance.playerControl =
@@ -97,11 +97,11 @@ namespace UCT.Global.Scene
                     {
                         case 0:
                             GameUtilityService.FadeOutAndSwitchScene(MainControl.Instance.playerControl.saveScene,
-                                Color.black, true);
+                                Color.black, null, true);
                             break;
 
                         case 1:
-                            GameUtilityService.FadeOutAndSwitchScene("Rename", Color.black, true);
+                            GameUtilityService.FadeOutAndSwitchScene("Rename", Color.black, null, true);
                             break;
 
                         case 2:
@@ -152,7 +152,7 @@ namespace UCT.Global.Scene
                                     DataHandlerService.SetPlayerControl(
                                         ScriptableObject.CreateInstance<PlayerControl>());
                                 MainControl.Instance.playerControl.playerName = "";
-                                GameUtilityService.FadeOutAndSwitchScene("Rename", Color.black);
+                                GameUtilityService.FadeOutAndSwitchScene("Rename", Color.black, null);
                             }
                             else //下页
                             {

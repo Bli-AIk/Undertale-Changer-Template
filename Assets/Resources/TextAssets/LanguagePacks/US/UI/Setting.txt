@@ -22,7 +22,6 @@ In particular, if the text is<gaster>, the game will crash.
 
 Saved\File saved.;
 Example-Corridor\Last Corridor;
-Example-Study\Study Scene;
 /* Settings */
 
 
@@ -45,7 +44,7 @@ SettingFullScreen\Fullscreen;
 SettingResolving\Resolution;
 SettingSFX\Simplify SFX;
 SettingFPS\Display FPS;
-SettingTypingspeed\Typewriter speed;
+SettingTypingSpeed\Typewriter speed;
 SettingBackMenu\Return to Menu;
 SettingBack\Back;
 LanguageBack\Exiting this interface will reload the scene if the language has changed.<enter>Please remember to save your game.;
@@ -74,7 +73,7 @@ SettingFullScreenTipClose\When fullscreen mode is enabled, <enter>it’s recomme
 SettingResolvingTip\Set the game window size.;
 SettingSFXTip\Enable or disable in-game lighting and visual effects.;
 SettingFPSTip\Choose whether to display the FPS counter.;
-SettingTypingspeedTip\Adjust the speed at which in-game text is displayed.;
+SettingTypingSpeedTip\Adjust the speed at which in-game text is displayed.;
 SettingBackMenuTip\Unsaved changes will be lost.;
 SettingBackTip\Return to the previous screen.;
 

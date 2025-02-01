@@ -53,6 +53,6 @@ Text1\<image=-1><fx=0><*><- -><别><按><。> ;
 
 Text2\<image=-1><fx=0><*><- -><也><别><按><。> ;
 
-TextAlex\<image=-1><fx=0>* 你打字机没坏你被耍了111;
+TextAlex\<image=-1><fx=0>* 大哥你做模板.<stop>.<stop>.<stop>.<stop><stop>.<stop><stop><stop>.<stop*10><enter>* 你做它有啥用啊？;
 
 

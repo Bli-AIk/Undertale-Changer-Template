@@ -65,7 +65,7 @@ namespace UCT.Global.Scene
                         _textNotice.DOColor(Color.clear, 1).SetEase(Ease.Linear);
                         GameUtilityService.FadeOutAndSwitchScene(
                             string.IsNullOrEmpty(MainControl.Instance.playerControl.playerName) ? "Rename" : "Menu",
-                            Color.black, false, 2f);
+                            Color.black, null, false, 2f);
                         break;
                 }
 
@@ -81,7 +81,7 @@ namespace UCT.Global.Scene
             }
             else
             {
-                GameUtilityService.FadeOutAndSwitchScene("Story", Color.black);
+                GameUtilityService.FadeOutAndSwitchScene("Story", Color.black, null);
                 _afkTimer = 10000000000;
             }
         }

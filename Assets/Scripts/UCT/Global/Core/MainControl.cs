@@ -13,7 +13,6 @@ using UCT.Global.UI;
 using UCT.Overworld;
 using UCT.Service;
 using UnityEngine;
-using UnityEngine.Audio;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -74,8 +73,7 @@ namespace UCT.Global.Core
         public Camera mainCamera;
         public BoxDrawer mainBox;
 
-        [Space] [Title("=== 角色与行为控制 ===")] 
-        public OverworldPlayerBehaviour overworldPlayerBehaviour;
+        [Space] [Title("=== 角色与行为控制 ===")] public static OverworldPlayerBehaviour overworldPlayerBehaviour;
 
         [FormerlySerializedAs("PlayerControl")]
         public PlayerControl playerControl;
@@ -89,14 +87,14 @@ namespace UCT.Global.Core
 
         public CameraShake cameraShake, cameraShake3D;
 
+
+        public EventController eventController;
+
         private DebugStringGradient _debugStringGradient = new("Debug");
         public ItemControl ItemControl { get; private set; }
         public AudioControl AudioControl { get; private set; }
-        public BattleControl BattleControl { get; private set; } 
+        public BattleControl BattleControl { get; private set; }
 
-
-        public EventController eventController;
-        
         private void Awake()
         {
             languagePackId = PlayerPrefs.GetInt("languagePack", 2);
@@ -131,17 +129,20 @@ namespace UCT.Global.Core
             switch (sceneState)
             {
                 case SceneState.Normal:
+                    if(overworldPlayerBehaviour)
+                    {
+                        Destroy(overworldPlayerBehaviour.gameObject);
+                        overworldPlayerBehaviour = null;
+                    }
                     break;
                 case SceneState.Overworld:
                 {
                     if (!eventController)
                         eventController = GetComponent<EventController>();
-                    
-                    var owPlayer = GameObject.Find("Player");
-                    
-                    if (owPlayer)
-                        overworldPlayerBehaviour = owPlayer.GetComponent<OverworldPlayerBehaviour>();
-                    
+
+                    GetOverworldPlayerBehaviour();
+
+                    overworldPlayerBehaviour.transform.position = playerControl.playerLastPos;
                     break;
                 }
                 case SceneState.InBattle:
@@ -180,16 +181,13 @@ namespace UCT.Global.Core
             _debugStringGradient = new DebugStringGradient("Debug");
         }
 
-        private void InitializeVolume()
+        public static void GetOverworldPlayerBehaviour()
         {
-            AudioListener.volume = SettingsStorage.mainVolume;
-            
-            var bgmVolume = MathUtilityService.NormalizedValueToDb(SettingsStorage.bgmVolume);
-            AudioControl.globalAudioMixer.SetFloat("BgmVolume", bgmVolume);
-            
-            
-            var fxVolume = MathUtilityService.NormalizedValueToDb(SettingsStorage.fxVolume);
-            AudioControl.globalAudioMixer.SetFloat("FxVolume", fxVolume);
+            if (overworldPlayerBehaviour) return;
+            var owPlayer = GameObject.Find("Player");
+
+            if (owPlayer)
+                overworldPlayerBehaviour = owPlayer.GetComponent<OverworldPlayerBehaviour>();
         }
 
         private void Update()
@@ -205,6 +203,18 @@ namespace UCT.Global.Core
             SettingsShortcuts();
         }
 
+        private void InitializeVolume()
+        {
+            AudioListener.volume = SettingsStorage.mainVolume;
+
+            var bgmVolume = MathUtilityService.NormalizedValueToDb(SettingsStorage.bgmVolume);
+            AudioControl.globalAudioMixer.SetFloat("BgmVolume", bgmVolume);
+
+
+            var fxVolume = MathUtilityService.NormalizedValueToDb(SettingsStorage.fxVolume);
+            AudioControl.globalAudioMixer.SetFloat("FxVolume", fxVolume);
+        }
+
 
         private void InitializationLoad()
         {
@@ -212,8 +222,6 @@ namespace UCT.Global.Core
             AudioControl = Resources.Load<AudioControl>("AudioControl");
             //InitializationOverworld内调用OverworldControl
             //Initialization内调用ItemControl
-
-
         }
 
         /// <summary>

@@ -14,7 +14,7 @@ namespace UCT.Other
         private void OnTriggerStay2D(Collider2D collision)
         {
             if (!collision.transform.CompareTag("Player")) return;
-            var playerBehaviour = MainControl.Instance.overworldPlayerBehaviour;
+            var playerBehaviour = MainControl.overworldPlayerBehaviour;
             if (playerBehaviour) playerBehaviour.walkFxRange = walkFxRange;
         }
     }

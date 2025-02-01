@@ -35,7 +35,7 @@ namespace UCT.Global.Settings
                 .SetEase(Ease.OutCirc).OnKill(() =>
                 {
                     _settingsController.Animator.SetBool(SettingsController.Open, false);
-                    GameUtilityService.FadeOutAndSwitchScene("Battle", Color.black, false, -0.5f);
+                    GameUtilityService.FadeOutAndSwitchScene("Battle", Color.black, null, false, -0.5f);
                 });
         }
 
@@ -47,7 +47,7 @@ namespace UCT.Global.Settings
         // 供Animator使用
         public void AnimSetHeartPos()
         {
-            var uiPos = _settingsController.WorldPositionToUGUI(_settingsController.overworldControl.playerLastPos);
+            var uiPos = _settingsController.WorldPositionToUGUI(MainControl.Instance.playerControl.playerLastPos);
             transform.Find("Heart").GetComponent<RectTransform>().anchoredPosition = uiPos;
         }
 
