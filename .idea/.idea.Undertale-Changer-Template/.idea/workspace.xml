@@ -9,8 +9,13 @@
   <component name="ChangeListManager">
     <list default="true" id="8f7c2298-d077-422b-9131-f9a839bed961" name="更改" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Undertale-Changer-Template/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/Inspector/EventSystem/EntrySaver.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/Inspector/EventSystem/EntrySaver.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Editor/Inspector/EventSystem/OverworldEventTriggerInspector.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Editor/Inspector/EventSystem/OverworldEventTriggerInspector.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Tables/FactTable.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Tables/FactTable.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Tables/RuleTable.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Tables/RuleTable.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Scenes/Overworld/Example-Ruins.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Overworld/Example-Ruins.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/Other/FollowSth.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/Other/FollowSth.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/EventSystem/EventController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/EventSystem/EventController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/UCT/EventSystem/RuleTable.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/UCT/EventSystem/RuleTable.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -151,23 +156,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;XThreadsFramesViewSplitterKey&quot;: &quot;0.18181819&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;,
-    &quot;独立播放器.Start Unity.executor&quot;: &quot;Debug&quot;,
-    &quot;附加到 Unity 编辑器.附加到 Unity 编辑器.executor&quot;: &quot;Debug&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "XThreadsFramesViewSplitterKey": "0.18181819",
+    "git-widget-placeholder": "fact-bugfix",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true",
+    "独立播放器.Start Unity.executor": "Debug",
+    "附加到 Unity 编辑器.附加到 Unity 编辑器.executor": "Debug"
   }
-}</component>
+}]]></component>
   <component name="RiderProblemsViewState">
     <option name="autoscrollToSource" value="true" />
   </component>
@@ -212,13 +217,15 @@
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
       <method v="2" />
     </configuration>
-    <configuration name="附加到 Unity 编辑器" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
+    <configuration name="附加到 Unity 编辑器" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="9716">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" />
+      <option name="pid" value="9716" />
       <option name="projectPathOnTarget" />
       <option name="runtimes">
-        <list />
+        <list>
+          <MonoRuntime />
+        </list>
       </option>
       <option name="selectedOptions">
         <list />
@@ -489,7 +496,8 @@
       <workItem from="1737958456386" duration="12097000" />
       <workItem from="1738295033600" duration="35781000" />
       <workItem from="1738410978462" duration="7976000" />
-      <workItem from="1738421442433" duration="327000" />
+      <workItem from="1738421442433" duration="994000" />
+      <workItem from="1738424329411" duration="1957000" />
     </task>
     <servers />
   </component>
@@ -522,30 +530,30 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/UCT/EventSystem/OverworldEventTrigger.cs</url>
-          <line>52</line>
-          <properties documentPath="D:\Unity Projects\Undertale-Changer-Template\Assets\Scripts\UCT\EventSystem\OverworldEventTrigger.cs" containingFunctionPresentation="方法 'OnCollisionEnter2D'">
+          <url>file://$PROJECT_DIR$/Assets/Scripts/UCT/EventSystem/EventController.cs</url>
+          <line>168</line>
+          <properties documentPath="D:\Unity Projects\Undertale-Changer-Template\Assets\Scripts\UCT\EventSystem\EventController.cs" containingFunctionPresentation="方法 'DetectionRule'">
             <startOffsets>
-              <option value="1288" />
+              <option value="6560" />
             </startOffsets>
             <endOffsets>
-              <option value="1289" />
+              <option value="6585" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="11" />
+          <option name="timeStamp" value="16" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="DotNet Breakpoints">
-          <url>file://$PROJECT_DIR$/Assets/Scripts/UCT/EventSystem/OverworldEventTrigger.cs</url>
-          <line>68</line>
-          <properties documentPath="D:\Unity Projects\Undertale-Changer-Template\Assets\Scripts\UCT\EventSystem\OverworldEventTrigger.cs" containingFunctionPresentation="方法 'OnTriggerEnter2D'">
+          <url>file://$PROJECT_DIR$/Assets/Editor/Inspector/EventSystem/OverworldEventTriggerInspector.cs</url>
+          <line>353</line>
+          <properties documentPath="D:\Unity Projects\Undertale-Changer-Template\Assets\Editor\Inspector\EventSystem\OverworldEventTriggerInspector.cs" containingFunctionPresentation="lambda 表达式内 方法 'InitializeReorderableList'">
             <startOffsets>
-              <option value="1771" />
+              <option value="16500" />
             </startOffsets>
             <endOffsets>
-              <option value="1772" />
+              <option value="16550" />
             </endOffsets>
           </properties>
-          <option name="timeStamp" value="12" />
+          <option name="timeStamp" value="19" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

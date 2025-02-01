@@ -136,9 +136,9 @@ namespace UCT.EventSystem
                 }
 
 
-                foreach (var t in rule.factModifications)
+                for (var index = 0; index < rule.factModifications.Count; index++)
                 {
-                    var item = t;
+                    var item = rule.factModifications[index];
                     var number = item.fact.value;
                     var newNum = item.number;
                     switch (item.operation)
@@ -165,8 +165,9 @@ namespace UCT.EventSystem
                             throw new ArgumentOutOfRangeException();
                     }
 
+                    UnityEngine.Debug.Log(number);
                     item.fact.value = number;
-
+                    rule.factModifications[index] = item;
                     // ReSharper disable once ForCanBeConvertedToForeach
                     for (var l = 0; l < factTable.facts.Count; l++)
                     {

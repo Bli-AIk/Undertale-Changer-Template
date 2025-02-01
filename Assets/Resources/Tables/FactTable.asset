@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: FactTable
   m_EditorClassIdentifier: 
   facts:
-  - name: TestFact
+  - name: Fact1
     scope: 0
     value: 0
     area: 0

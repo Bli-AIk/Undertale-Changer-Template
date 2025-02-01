@@ -403,7 +403,7 @@ MonoBehaviour:
       criteria:
       - isResultReversed: 0
         fact:
-          name: TestFact
+          name: Fact1
           scope: 0
           value: 0
           area: 0
@@ -412,15 +412,7 @@ MonoBehaviour:
         detection: 0
         operation: 0
         criteria: []
-    factModifications:
-    - fact:
-        name: TestFact
-        scope: 0
-        value: 0
-        area: 0
-        scene: 
-      operation: 0
-      number: 0
+    factModifications: []
   clarity: 0.5
 --- !u!1 &552216032
 GameObject:
@@ -3730,7 +3722,7 @@ MonoBehaviour:
       criteria:
       - isResultReversed: 0
         fact:
-          name: TestFact
+          name: Fact1
           scope: 0
           value: 0
           area: 0
@@ -3739,15 +3731,7 @@ MonoBehaviour:
         detection: 0
         operation: 0
         criteria: []
-    factModifications:
-    - fact:
-        name: TestFact
-        scope: 0
-        value: 0
-        area: 0
-        scene: 
-      operation: 0
-      number: 0
+    factModifications: []
   clarity: 0.5
 --- !u!1 &892929037
 GameObject:
@@ -6989,24 +6973,16 @@ MonoBehaviour:
       criteria:
       - isResultReversed: 0
         fact:
-          name: TestFact
+          name: Fact1
           scope: 0
-          value: 0
+          value: 18
           area: 0
           scene: 
         compare: 0
         detection: 0
         operation: 0
         criteria: []
-    factModifications:
-    - fact:
-        name: TestFact
-        scope: 0
-        value: 0
-        area: 0
-        scene: 
-      operation: 0
-      number: 0
+    factModifications: []
   clarity: 0.5
 --- !u!1 &1254195312
 GameObject:
@@ -7156,7 +7132,7 @@ MonoBehaviour:
       criteria:
       - isResultReversed: 0
         fact:
-          name: TestFact
+          name: Fact1
           scope: 0
           value: 0
           area: 0
@@ -7165,15 +7141,7 @@ MonoBehaviour:
         detection: 0
         operation: 0
         criteria: []
-    factModifications:
-    - fact:
-        name: TestFact
-        scope: 0
-        value: 0
-        area: 0
-        scene: 
-      operation: 0
-      number: 0
+    factModifications: []
   clarity: 0.5
 --- !u!1 &1305892150
 GameObject:
@@ -7496,7 +7464,7 @@ MonoBehaviour:
       criteria:
       - isResultReversed: 0
         fact:
-          name: TestFact
+          name: Fact1
           scope: 0
           value: 0
           area: 0
@@ -7505,15 +7473,7 @@ MonoBehaviour:
         detection: 0
         operation: 0
         criteria: []
-    factModifications:
-    - fact:
-        name: TestFact
-        scope: 0
-        value: 0
-        area: 0
-        scene: 
-      operation: 0
-      number: 0
+    factModifications: []
   clarity: 0.5
 --- !u!1 &1558313326
 GameObject:
@@ -7633,7 +7593,7 @@ MonoBehaviour:
       criteria:
       - isResultReversed: 0
         fact:
-          name: TestFact
+          name: Fact1
           scope: 0
           value: 0
           area: 0
@@ -7642,15 +7602,7 @@ MonoBehaviour:
         detection: 0
         operation: 0
         criteria: []
-    factModifications:
-    - fact:
-        name: TestFact
-        scope: 0
-        value: 0
-        area: 0
-        scene: 
-      operation: 0
-      number: 0
+    factModifications: []
   clarity: 0.5
 --- !u!1 &1634860324
 GameObject:
@@ -8210,7 +8162,7 @@ MonoBehaviour:
       criteria:
       - isResultReversed: 0
         fact:
-          name: TestFact
+          name: Fact1
           scope: 0
           value: 0
           area: 0
@@ -8219,15 +8171,7 @@ MonoBehaviour:
         detection: 0
         operation: 0
         criteria: []
-    factModifications:
-    - fact:
-        name: TestFact
-        scope: 0
-        value: 0
-        area: 0
-        scene: 
-      operation: 0
-      number: 0
+    factModifications: []
   clarity: 0.5
 --- !u!1 &2059732924
 GameObject:

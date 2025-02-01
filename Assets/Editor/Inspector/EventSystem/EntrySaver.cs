@@ -82,7 +82,6 @@ namespace Editor.Inspector.EventSystem
 
             fact.FindPropertyRelative("name").stringValue = facts[popup].name;
             fact.FindPropertyRelative("scope").enumValueIndex = (int)facts[popup].scope;
-            fact.FindPropertyRelative("value").intValue = facts[popup].value;
             fact.FindPropertyRelative("area").enumValueIndex = (int)facts[popup].area;
             fact.FindPropertyRelative("scene").stringValue = facts[popup].scene;
 

@@ -463,10 +463,10 @@ namespace Editor.Inspector.EventSystem
                         {
                             color = GUI.color;
                             GUI.color = i % 2 == 0 ? new Color(0.75f, 0.85f, 1f) : new Color(0.85f, 0.75f, 1f);
-                            
+
                             methodNameRect.y += rectHeight;
                             methodNameRect.x = rect.x;
-                            methodNameRect.width = width- 20;
+                            methodNameRect.width = width - 20;
 
                             if (i >= methodNames.arraySize)
                                 methodNames.arraySize = i + 1;
@@ -500,7 +500,7 @@ namespace Editor.Inspector.EventSystem
                             methodNameRect.width = 15f;
                             itemBool.boolValue = GUI.Toggle(methodNameRect, itemBool.boolValue, new GUIContent());
                             methodNameRect.x += methodNameRect.width + 8.5f;
-                            methodNameRect.width = width- 20;
+                            methodNameRect.width = width - 20;
                             if (i >= methodEvents.arraySize)
                                 methodEvents.arraySize = i + 1;
                             var itemEvent = methodEvents.GetArrayElementAtIndex(i);
@@ -560,7 +560,7 @@ namespace Editor.Inspector.EventSystem
 
                                     GUI.Label(methodNameRect, "Duration");
                                     methodNameRect.x += methodNameRect.width + 5f;
-                                    
+
                                     if (!float.TryParse(itemSecondString.stringValue, out var floatValue))
                                         floatValue = 0;
 
@@ -623,6 +623,7 @@ namespace Editor.Inspector.EventSystem
                             GUI.color = color;
                         }
                     }
+
                     GUI.color = color;
                 },
 
@@ -936,79 +937,49 @@ namespace Editor.Inspector.EventSystem
         /// <summary>
         ///     根据枚举值获取其注释
         /// </summary>
-        private
-            static
-            string
-            GetEnumSummary
-            (
-                EventTriggerMode
-                    value
-            )
+        private static string GetEnumSummary(EventTriggerMode value)
         {
-            var
-                enumComments
-                    =
-                    new
-                        Dictionary
-                        <
-                            EventTriggerMode
-                            ,
-                            string
-                        >
-                        {
-                            {
-                                EventTriggerMode
-                                    .Interact,
-                                "调查型：按下调查键后触发。这只能用于玩家。"
-                            },
-                            {
-                                EventTriggerMode
-                                    .ColliderEnter,
-                                "碰撞器触发型：开始碰撞后触发。"
-                            },
-                            {
-                                EventTriggerMode
-                                    .ColliderExit,
-                                "碰撞器离开型：结束碰撞后触发。"
-                            },
-                            {
-                                EventTriggerMode
-                                    .TriggerEnter,
-                                "触发器触发型：进入触发器范围后触发。"
-                            },
-                            {
-                                EventTriggerMode
-                                    .TriggerExit,
-                                "触发器离开型：离开触发器范围后触发。"
-                            },
-                            {
-                                EventTriggerMode
-                                    .LineOfSightEnter,
-                                "视线触发型：进入视野（射线范围）时触发。"
-                            },
-                            {
-                                EventTriggerMode
-                                    .LineOfSightExit,
-                                "视线离开型：离开视野（射线范围）时触发。"
-                            }
-                            // { EventTriggerMode.Timer, "定时型：到达指定时间后触发。" }
-                        }
-                ;
+            var enumComments = new Dictionary<EventTriggerMode, string>
+            {
+                {
+                    EventTriggerMode
+                        .Interact,
+                    "调查型：按下调查键后触发。这只能用于玩家。"
+                },
+                {
+                    EventTriggerMode
+                        .ColliderEnter,
+                    "碰撞器触发型：开始碰撞后触发。"
+                },
+                {
+                    EventTriggerMode
+                        .ColliderExit,
+                    "碰撞器离开型：结束碰撞后触发。"
+                },
+                {
+                    EventTriggerMode
+                        .TriggerEnter,
+                    "触发器触发型：进入触发器范围后触发。"
+                },
+                {
+                    EventTriggerMode
+                        .TriggerExit,
+                    "触发器离开型：离开触发器范围后触发。"
+                },
+                {
+                    EventTriggerMode
+                        .LineOfSightEnter,
+                    "视线触发型：进入视野（射线范围）时触发。"
+                },
+                {
+                    EventTriggerMode
+                        .LineOfSightExit,
+                    "视线离开型：离开视野（射线范围）时触发。"
+                }
+                // { EventTriggerMode.Timer, "定时型：到达指定时间后触发。" }
+            };
 
-            return
-                enumComments
-                    .TryGetValue
-                    (
-                        value
-                        ,
-                        out
-                        var
-                            comment
-                    )
-                    ? comment
-                    : string
-                        .Empty
-                ;
+            return enumComments.TryGetValue(value, out var comment) ? comment : string.Empty;
         }
 
         public override void OnInspectorGUI()

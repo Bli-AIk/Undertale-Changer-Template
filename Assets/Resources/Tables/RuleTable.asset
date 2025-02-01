@@ -46,7 +46,7 @@ MonoBehaviour:
       criteria:
       - isResultReversed: 0
         fact:
-          name: TestFact
+          name: Fact1
           scope: 0
           value: 0
           area: 0
@@ -89,7 +89,7 @@ MonoBehaviour:
       criteria:
       - isResultReversed: 0
         fact:
-          name: TestFact
+          name: Fact1
           scope: 0
           value: 0
           area: 0
@@ -132,7 +132,7 @@ MonoBehaviour:
       criteria:
       - isResultReversed: 0
         fact:
-          name: TestFact
+          name: Fact1
           scope: 0
           value: 0
           area: 0
@@ -175,7 +175,7 @@ MonoBehaviour:
       criteria:
       - isResultReversed: 0
         fact:
-          name: TestFact
+          name: Fact1
           scope: 0
           value: 0
           area: 0
@@ -218,7 +218,7 @@ MonoBehaviour:
       criteria:
       - isResultReversed: 0
         fact:
-          name: TestFact
+          name: Fact1
           scope: 0
           value: 0
           area: 0
