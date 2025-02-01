@@ -6,7 +6,7 @@ namespace UCT.Other
 {
     public class FollowSth : MonoBehaviour
     {
-        public bool followMainCamera;
+        public FollowTarget followTarget;
         public GameObject sth;
         public bool followPosition;
         public Vector3 positionAdd;
@@ -15,11 +15,34 @@ namespace UCT.Other
         public bool followLocalScale;
         public Vector3 localScaleAdd;
 
+        public enum FollowTarget
+        {
+            Null,
+            Player,
+            MainCamera
+        }
+
         private void Start()
         {
-            if (!followMainCamera) return;
-            if (MainControl.Instance.mainCamera.gameObject)
-                sth = MainControl.Instance.mainCamera.gameObject;
+            switch (followTarget)
+            {
+                case FollowTarget.Null:
+                    break;
+                case FollowTarget.Player:
+                    SetSth(MainControl.overworldPlayerBehaviour.gameObject);
+                    break;
+                case FollowTarget.MainCamera:
+                    SetSth(MainControl.Instance.mainCamera.gameObject);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private void SetSth(GameObject item)
+        {
+            if (item)
+                sth = item;
             else
                 throw new NullReferenceException();
         }
