@@ -87,15 +87,19 @@ namespace UCT.EventSystem
             {
                 var rule = ruleTable.rules[j];
 
-                eventEntry = DetectionRule(eventEntry, rule);
+                eventEntry = DetectionRule(eventEntry, rule, out var isTriggered);
+           
                 ruleTable.rules[j] = rule;
+                
+                if (isTriggered) break;
             }
 
             return eventEntry;
         }
 
-        public static EventEntry DetectionRule(EventEntry eventEntry, RuleEntry rule, bool force = false)
+        public static EventEntry DetectionRule(EventEntry eventEntry, RuleEntry rule, out bool isTriggered, bool force = false)
         {
+            isTriggered = false;
             var triggeredByCount = rule.triggeredBy.Count;
 
             if (force) triggeredByCount = 1;
@@ -106,8 +110,8 @@ namespace UCT.EventSystem
 
                 if (!force && eventEntry.name != rule.triggeredBy[triggeredByIndex]) continue;
 
-
                 eventEntry.isTriggering = false;
+                isTriggered = true;
 
                 foreach (var newTrigger in rule.triggers) SetTriggering(newTrigger);
 
@@ -176,8 +180,9 @@ namespace UCT.EventSystem
                         factTable.facts[l] = fact;
                     }
                 }
+                break;
             }
-
+            
             return eventEntry;
         }
 
@@ -319,7 +324,6 @@ namespace UCT.EventSystem
             if (useEvent)
                 SetTriggering(eventName);
         }
-
 
         // TODO:把下面未完成的函数实现。
         //  带△的项是不优先考虑的项

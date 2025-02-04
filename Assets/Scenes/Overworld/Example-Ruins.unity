@@ -155,8 +155,7 @@ Transform:
   - {fileID: 731933814}
   - {fileID: 1673577616}
   - {fileID: 543475330}
-  - {fileID: 2059732926}
-  - {fileID: 785852464}
+  - {fileID: 933583217}
   - {fileID: 1917212742}
   - {fileID: 1515382445}
   - {fileID: 1558313327}
@@ -403,7 +402,7 @@ MonoBehaviour:
       criteria:
       - isResultReversed: 0
         fact:
-          name: Fact1
+          name: Button1
           scope: 0
           value: 0
           area: 0
@@ -1049,6 +1048,9 @@ GameObject:
   m_Component:
   - component: {fileID: 731933814}
   - component: {fileID: 731933813}
+  - component: {fileID: 731933816}
+  - component: {fileID: 731933815}
+  - component: {fileID: 731933817}
   m_Layer: 0
   m_Name: spr_faceswitch_0
   m_TagString: Untagged
@@ -1124,6 +1126,203 @@ Transform:
   m_Father: {fileID: 54010802}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &731933815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 731933812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40ae980b2eef463db484c0f716b88fe1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ruleCriteria:
+  - isResultReversed: 0
+    fact:
+      name: 
+      scope: 0
+      value: 0
+      area: 0
+      scene: 
+    compare: 0
+    detection: 0
+    operation: 0
+    criteria:
+    - isResultReversed: 0
+      fact:
+        name: Button1
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 2
+      detection: 0
+      operation: 0
+      criteria: []
+  - isResultReversed: 0
+    fact:
+      name: 
+      scope: 0
+      value: 0
+      area: 0
+      scene: 
+    compare: 0
+    detection: 0
+    operation: 0
+    criteria:
+    - isResultReversed: 0
+      fact:
+        name: Button1
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 2
+      detection: 1
+      operation: 0
+      criteria: []
+  methodTypes: 0000000000000000
+  targetSprites:
+  - {fileID: 21300000, guid: c970071de8b9f964896bb88bb4bdf90b, type: 3}
+  - {fileID: 21300000, guid: 31fa330f59e4f0a458d27b4e53143493, type: 3}
+  targetEnables: 0000
+--- !u!114 &731933816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 731933812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9d16ceb9f1b41529c26420f051f1438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fsmObjectName: 
+  fsmObject: {fileID: 0}
+  tags: []
+  eventTriggerModes: 00000000
+  eventNames: []
+  useSimpleRules: 1
+  simpleRules:
+  - name: Rule1
+    triggeredBy: []
+    triggers: []
+    rulePriority: 0
+    methodNames: []
+    firstStringParams: []
+    secondStringParams: []
+    thirdStringParams: []
+    useMethodEvents: 
+    methodEvents: []
+    useRuleCriterion: 1
+    ruleCriterion:
+      isResultReversed: 0
+      fact:
+        name: 
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 0
+      detection: 0
+      operation: 0
+      criteria:
+      - isResultReversed: 0
+        fact:
+          name: Button1
+          scope: 0
+          value: 0
+          area: 0
+          scene: 
+        compare: 2
+        detection: 0
+        operation: 0
+        criteria: []
+    factModifications:
+    - fact:
+        name: Button1
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      operation: 0
+      number: 1
+  - name: Rule2
+    triggeredBy: []
+    triggers: []
+    rulePriority: 0
+    methodNames: []
+    firstStringParams: []
+    secondStringParams:
+    - 
+    thirdStringParams:
+    - 
+    useMethodEvents: 00
+    methodEvents:
+    - SaveGame
+    useRuleCriterion: 1
+    ruleCriterion:
+      isResultReversed: 0
+      fact:
+        name: 
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 0
+      detection: 0
+      operation: 0
+      criteria:
+      - isResultReversed: 0
+        fact:
+          name: Button1
+          scope: 0
+          value: 0
+          area: 0
+          scene: 
+        compare: 2
+        detection: 1
+        operation: 0
+        criteria: []
+    factModifications:
+    - fact:
+        name: Button1
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      operation: 0
+      number: 0
+  clarity: 0.5
+--- !u!61 &731933817
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 731933812}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.25}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.35, y: 0.75}
+    newSize: {x: 0.07, y: 0.15}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.35, y: 1.25}
+  m_EdgeRadius: 0
 --- !u!1 &771503197
 GameObject:
   m_ObjectHideFlags: 0
@@ -3368,6 +3567,7 @@ GameObject:
   - component: {fileID: 785852464}
   - component: {fileID: 785852463}
   - component: {fileID: 785852465}
+  - component: {fileID: 785852466}
   m_Layer: 0
   m_Name: spr_spiketile_0 (1)
   m_TagString: Untagged
@@ -3435,12 +3635,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 785852462}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 17.5, y: -2.5, z: 0}
+  m_LocalPosition: {x: 0, y: -0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 54010802}
-  m_RootOrder: 4
+  m_Father: {fileID: 933583217}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &785852465
 BoxCollider2D:
@@ -3468,6 +3668,158 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.9, y: 0.9}
   m_EdgeRadius: 0
+--- !u!114 &785852466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 785852462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40ae980b2eef463db484c0f716b88fe1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ruleCriteria:
+  - isResultReversed: 0
+    fact:
+      name: 
+      scope: 0
+      value: 0
+      area: 0
+      scene: 
+    compare: 0
+    detection: 0
+    operation: 0
+    criteria:
+    - isResultReversed: 0
+      fact:
+        name: Button1
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 3
+      detection: 1
+      operation: 2
+      criteria: []
+    - isResultReversed: 0
+      fact:
+        name: Button2
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 3
+      detection: 1
+      operation: 0
+      criteria: []
+  - isResultReversed: 0
+    fact:
+      name: 
+      scope: 0
+      value: 0
+      area: 0
+      scene: 
+    compare: 0
+    detection: 0
+    operation: 0
+    criteria:
+    - isResultReversed: 0
+      fact:
+        name: Button1
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 3
+      detection: 1
+      operation: 2
+      criteria: []
+    - isResultReversed: 0
+      fact:
+        name: Button2
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 3
+      detection: 1
+      operation: 0
+      criteria: []
+  - isResultReversed: 0
+    fact:
+      name: 
+      scope: 0
+      value: 0
+      area: 0
+      scene: 
+    compare: 0
+    detection: 0
+    operation: 0
+    criteria:
+    - isResultReversed: 0
+      fact:
+        name: Button1
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 2
+      detection: 1
+      operation: 1
+      criteria: []
+    - isResultReversed: 0
+      fact:
+        name: Button2
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 2
+      detection: 1
+      operation: 0
+      criteria: []
+  - isResultReversed: 0
+    fact:
+      name: 
+      scope: 0
+      value: 0
+      area: 0
+      scene: 
+    compare: 0
+    detection: 0
+    operation: 0
+    criteria:
+    - isResultReversed: 0
+      fact:
+        name: Button1
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 2
+      detection: 1
+      operation: 1
+      criteria: []
+    - isResultReversed: 0
+      fact:
+        name: Button2
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 2
+      detection: 1
+      operation: 0
+      criteria: []
+  methodTypes: 00000000010000000000000001000000
+  targetSprites:
+  - {fileID: 21300000, guid: 8e9be4ac90883334492e55665a3fac16, type: 3}
+  - {fileID: 21300000, guid: 8e9be4ac90883334492e55665a3fac16, type: 3}
+  - {fileID: 21300000, guid: 22525ba9f0a9f3a489e3e3f37dc98a1e, type: 3}
+  - {fileID: 21300000, guid: 8e9be4ac90883334492e55665a3fac16, type: 3}
+  targetEnables: 00010000
 --- !u!1 &855404882
 GameObject:
   m_ObjectHideFlags: 0
@@ -3722,7 +4074,7 @@ MonoBehaviour:
       criteria:
       - isResultReversed: 0
         fact:
-          name: Fact1
+          name: Button1
           scope: 0
           value: 0
           area: 0
@@ -6517,6 +6869,39 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &933583216
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 933583217}
+  m_Layer: 0
+  m_Name: Spiketile
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &933583217
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 933583216}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 17.5, y: -2, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2059732926}
+  - {fileID: 785852464}
+  m_Father: {fileID: 54010802}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &967965228
 GameObject:
   m_ObjectHideFlags: 0
@@ -6973,7 +7358,7 @@ MonoBehaviour:
       criteria:
       - isResultReversed: 0
         fact:
-          name: Fact1
+          name: Button1
           scope: 0
           value: 18
           area: 0
@@ -7019,7 +7404,7 @@ Transform:
   - {fileID: 784274325}
   - {fileID: 967965231}
   m_Father: {fileID: 54010802}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &1254195314
 BoxCollider2D:
@@ -7376,7 +7761,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 54010802}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &1515382447
 BoxCollider2D:
@@ -7506,7 +7891,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 54010802}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &1558313329
 BoxCollider2D:
@@ -7697,6 +8082,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1673577616}
   - component: {fileID: 1673577615}
+  - component: {fileID: 1673577619}
+  - component: {fileID: 1673577618}
+  - component: {fileID: 1673577617}
   m_Layer: 0
   m_Name: spr_faceswitch_0 (1)
   m_TagString: Untagged
@@ -7772,6 +8160,203 @@ Transform:
   m_Father: {fileID: 54010802}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &1673577617
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1673577614}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.25}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.35, y: 0.75}
+    newSize: {x: 0.07, y: 0.15}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.35, y: 1.25}
+  m_EdgeRadius: 0
+--- !u!114 &1673577618
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1673577614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40ae980b2eef463db484c0f716b88fe1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ruleCriteria:
+  - isResultReversed: 0
+    fact:
+      name: 
+      scope: 0
+      value: 0
+      area: 0
+      scene: 
+    compare: 0
+    detection: 0
+    operation: 0
+    criteria:
+    - isResultReversed: 0
+      fact:
+        name: Button2
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 2
+      detection: 0
+      operation: 0
+      criteria: []
+  - isResultReversed: 0
+    fact:
+      name: 
+      scope: 0
+      value: 0
+      area: 0
+      scene: 
+    compare: 0
+    detection: 0
+    operation: 0
+    criteria:
+    - isResultReversed: 0
+      fact:
+        name: Button2
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 2
+      detection: 1
+      operation: 0
+      criteria: []
+  methodTypes: 0000000000000000
+  targetSprites:
+  - {fileID: 21300000, guid: c970071de8b9f964896bb88bb4bdf90b, type: 3}
+  - {fileID: 21300000, guid: 31fa330f59e4f0a458d27b4e53143493, type: 3}
+  targetEnables: 0000
+--- !u!114 &1673577619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1673577614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9d16ceb9f1b41529c26420f051f1438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fsmObjectName: 
+  fsmObject: {fileID: 0}
+  tags: []
+  eventTriggerModes: 00000000
+  eventNames: []
+  useSimpleRules: 1
+  simpleRules:
+  - name: Rule1
+    triggeredBy: []
+    triggers: []
+    rulePriority: 0
+    methodNames: []
+    firstStringParams: []
+    secondStringParams: []
+    thirdStringParams: []
+    useMethodEvents: 
+    methodEvents: []
+    useRuleCriterion: 1
+    ruleCriterion:
+      isResultReversed: 0
+      fact:
+        name: 
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 0
+      detection: 0
+      operation: 0
+      criteria:
+      - isResultReversed: 0
+        fact:
+          name: Button2
+          scope: 0
+          value: 0
+          area: 0
+          scene: 
+        compare: 2
+        detection: 0
+        operation: 0
+        criteria: []
+    factModifications:
+    - fact:
+        name: Button2
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      operation: 0
+      number: 1
+  - name: Rule2
+    triggeredBy: []
+    triggers: []
+    rulePriority: 0
+    methodNames: []
+    firstStringParams: []
+    secondStringParams:
+    - 
+    thirdStringParams:
+    - 
+    useMethodEvents: 00
+    methodEvents:
+    - SaveGame
+    useRuleCriterion: 1
+    ruleCriterion:
+      isResultReversed: 0
+      fact:
+        name: 
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 0
+      detection: 0
+      operation: 0
+      criteria:
+      - isResultReversed: 0
+        fact:
+          name: Button2
+          scope: 0
+          value: 0
+          area: 0
+          scene: 
+        compare: 2
+        detection: 1
+        operation: 0
+        criteria: []
+    factModifications:
+    - fact:
+        name: Button2
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      operation: 0
+      number: 0
+  clarity: 0.5
 --- !u!1 &1815970481
 GameObject:
   m_ObjectHideFlags: 0
@@ -8075,7 +8660,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 54010802}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &1917212743
 BoxCollider2D:
@@ -8162,7 +8747,7 @@ MonoBehaviour:
       criteria:
       - isResultReversed: 0
         fact:
-          name: Fact1
+          name: Button1
           scope: 0
           value: 0
           area: 0
@@ -8184,6 +8769,7 @@ GameObject:
   - component: {fileID: 2059732926}
   - component: {fileID: 2059732925}
   - component: {fileID: 2059732927}
+  - component: {fileID: 2059732928}
   m_Layer: 0
   m_Name: spr_spiketile_0
   m_TagString: Untagged
@@ -8251,12 +8837,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2059732924}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 17.5, y: -1.4999999, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5000001, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 54010802}
-  m_RootOrder: 3
+  m_Father: {fileID: 933583217}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &2059732927
 BoxCollider2D:
@@ -8284,6 +8870,158 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.9, y: 0.9}
   m_EdgeRadius: 0
+--- !u!114 &2059732928
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2059732924}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40ae980b2eef463db484c0f716b88fe1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ruleCriteria:
+  - isResultReversed: 0
+    fact:
+      name: 
+      scope: 0
+      value: 0
+      area: 0
+      scene: 
+    compare: 0
+    detection: 0
+    operation: 0
+    criteria:
+    - isResultReversed: 0
+      fact:
+        name: Button1
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 3
+      detection: 1
+      operation: 2
+      criteria: []
+    - isResultReversed: 0
+      fact:
+        name: Button2
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 3
+      detection: 1
+      operation: 0
+      criteria: []
+  - isResultReversed: 0
+    fact:
+      name: 
+      scope: 0
+      value: 0
+      area: 0
+      scene: 
+    compare: 0
+    detection: 0
+    operation: 0
+    criteria:
+    - isResultReversed: 0
+      fact:
+        name: Button1
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 3
+      detection: 1
+      operation: 2
+      criteria: []
+    - isResultReversed: 0
+      fact:
+        name: Button2
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 3
+      detection: 1
+      operation: 0
+      criteria: []
+  - isResultReversed: 0
+    fact:
+      name: 
+      scope: 0
+      value: 0
+      area: 0
+      scene: 
+    compare: 0
+    detection: 0
+    operation: 0
+    criteria:
+    - isResultReversed: 0
+      fact:
+        name: Button1
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 2
+      detection: 1
+      operation: 1
+      criteria: []
+    - isResultReversed: 0
+      fact:
+        name: Button2
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 2
+      detection: 1
+      operation: 0
+      criteria: []
+  - isResultReversed: 0
+    fact:
+      name: 
+      scope: 0
+      value: 0
+      area: 0
+      scene: 
+    compare: 0
+    detection: 0
+    operation: 0
+    criteria:
+    - isResultReversed: 0
+      fact:
+        name: Button1
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 2
+      detection: 1
+      operation: 1
+      criteria: []
+    - isResultReversed: 0
+      fact:
+        name: Button2
+        scope: 0
+        value: 0
+        area: 0
+        scene: 
+      compare: 2
+      detection: 1
+      operation: 0
+      criteria: []
+  methodTypes: 00000000010000000000000001000000
+  targetSprites:
+  - {fileID: 21300000, guid: 8e9be4ac90883334492e55665a3fac16, type: 3}
+  - {fileID: 21300000, guid: 8e9be4ac90883334492e55665a3fac16, type: 3}
+  - {fileID: 21300000, guid: 22525ba9f0a9f3a489e3e3f37dc98a1e, type: 3}
+  - {fileID: 21300000, guid: 8e9be4ac90883334492e55665a3fac16, type: 3}
+  targetEnables: 00010000
 --- !u!1001 &833677142046707118
 PrefabInstance:
   m_ObjectHideFlags: 0

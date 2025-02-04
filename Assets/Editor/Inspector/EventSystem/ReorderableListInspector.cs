@@ -784,7 +784,7 @@ namespace Editor.Inspector.EventSystem
                         factModifications.arraySize = i + 1;
                     var item = factModifications.GetArrayElementAtIndex(i);
                     var fact = item.FindPropertyRelative("fact");
-                    EntrySaver.FactEntryField(factModificationsRect, fact);
+                    EntrySaver.FactEntryField(factModificationsRect, fact, true, true);
                     factModificationsRect.x += factModificationsRect.width + 5f;
 
                     var operation = item.FindPropertyRelative("operation");

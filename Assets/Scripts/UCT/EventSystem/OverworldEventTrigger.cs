@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Plugins.Timer.Source;
 using UCT.Global.Core;
@@ -11,6 +12,8 @@ namespace UCT.EventSystem
 {
     public class OverworldEventTrigger : MonoBehaviour
     {
+        public Action OnTriggerEvent;
+        
         public string fsmObjectName;
 
         public FiniteStateMachine fsmObject;
@@ -147,9 +150,12 @@ namespace UCT.EventSystem
             {
                 foreach (var rule in simpleRules)
                 {
-                    EventController.DetectionRule(new EventEntry(), rule, true);
+                    EventController.DetectionRule(new EventEntry(), rule, out var isTriggered, true);
+                    if (isTriggered) break;
                 }
             }
+            
+            OnTriggerEvent?.Invoke();
         }
     }
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine.Serialization;
 
 namespace UCT.EventSystem
 {
@@ -35,7 +34,7 @@ namespace UCT.EventSystem
         ///     该Rule执行的方法名
         /// </summary>
         public List<string> methodNames;
-        
+
         /// <summary>
         ///     该Rule执行的方法传入的第一个字符串形参
         /// </summary>
@@ -45,17 +44,17 @@ namespace UCT.EventSystem
         ///     该Rule执行的方法传入的第二个字符串形参
         /// </summary>
         public List<string> secondStringParams;
-        
+
         /// <summary>
         ///     该Rule执行的方法传入的第三个字符串形参
         /// </summary>
         public List<string> thirdStringParams;
-        
+
         /// <summary>
         ///     是否使用该Rule执行的方法联动触发的Event
         /// </summary>
         public List<bool> useMethodEvents;
-        
+
         /// <summary>
         ///     该Rule执行的方法联动触发的Event
         /// </summary>
@@ -65,12 +64,12 @@ namespace UCT.EventSystem
         ///     是否使用该Rule的Fact判断组
         /// </summary>
         public bool useRuleCriterion;
-        
+
         /// <summary>
         ///     该Rule的Fact判断组
         /// </summary>
         public RuleCriterion ruleCriterion;
-        
+
         /// <summary>
         ///     该Rule修改的Fact值
         /// </summary>
@@ -126,14 +125,26 @@ namespace UCT.EventSystem
         {
             if (criteria.Count == 0)
             {
+                var value = fact.value;
+                if (EventController.factTable)
+                {
+                    var facts = EventController.factTable.facts;
+                    for (var i = 0; i < facts.Count; i++)
+                    {
+                        if (facts[i].name != fact.name) continue;
+                        value = facts[i].value;
+                        break;
+                    }
+                }
+
                 var result = compare switch
                 {
-                    CriteriaCompare.GreaterThan => fact.value > detection,
-                    CriteriaCompare.GreaterThanOrEqual => fact.value >= detection,
-                    CriteriaCompare.Equal => fact.value == detection,
-                    CriteriaCompare.NotEqual => fact.value != detection,
-                    CriteriaCompare.LessThanOrEqual => fact.value <= detection,
-                    CriteriaCompare.LessThan => fact.value < detection,
+                    CriteriaCompare.GreaterThan => value > detection,
+                    CriteriaCompare.GreaterThanOrEqual => value >= detection,
+                    CriteriaCompare.Equal => value == detection,
+                    CriteriaCompare.NotEqual => value != detection,
+                    CriteriaCompare.LessThanOrEqual => value <= detection,
+                    CriteriaCompare.LessThan => value < detection,
                     _ => throw new ArgumentOutOfRangeException()
                 };
 

@@ -13,7 +13,12 @@ MonoBehaviour:
   m_Name: FactTable
   m_EditorClassIdentifier: 
   facts:
-  - name: Fact1
+  - name: Button1
+    scope: 0
+    value: 0
+    area: 0
+    scene: 
+  - name: Button2
     scope: 0
     value: 0
     area: 0

@@ -38,7 +38,7 @@ namespace Editor.Inspector.EventSystem
         
         public static void EventEntryField(Rect rect, SerializedProperty property)
         {
-            events ??= GetAllEventEntry();
+            events = GetAllEventEntry();
             if (events.Length <= 0)
             {
                 GUI.Label(rect, "No events!",
@@ -60,9 +60,10 @@ namespace Editor.Inspector.EventSystem
             property.FindPropertyRelative("isTriggering").boolValue = events[popup].isTriggering;
         }
 
-        public static void FactEntryField(Rect rect, SerializedProperty fact, bool isDisplayValue = true)
+        public static void FactEntryField(Rect rect, SerializedProperty fact, bool isDisplayValue = true,
+            bool setValue = false)
         {
-            facts ??= GetAllFactEntry();
+            facts = GetAllFactEntry();
             if (facts.Length <= 0)
             {
                 GUI.Label(rect, "No facts!",
@@ -81,6 +82,7 @@ namespace Editor.Inspector.EventSystem
             popup = EditorGUI.Popup(rect, popup, factNames);
 
             fact.FindPropertyRelative("name").stringValue = facts[popup].name;
+            if (setValue) fact.FindPropertyRelative("value").intValue = facts[popup].value;
             fact.FindPropertyRelative("scope").enumValueIndex = (int)facts[popup].scope;
             fact.FindPropertyRelative("area").enumValueIndex = (int)facts[popup].area;
             fact.FindPropertyRelative("scene").stringValue = facts[popup].scene;
@@ -94,7 +96,7 @@ namespace Editor.Inspector.EventSystem
             var factLabelRect = rect;
             factLabelRect.x -= 15;
             factLabelRect.y -= 1;
-            GUI.Label(factLabelRect, $"({fact.FindPropertyRelative("value").intValue})", factLabelStyle);
+            GUI.Label(factLabelRect, $"({facts[popup].value})", factLabelStyle);
         }
     }
 }
