@@ -1,0 +1,3 @@
+WallBrand1\<image=-1><fx=0>* Sing with me,<enter>  sing for the year,<passText>* Sing for the laughter,<enter>  sing for the tear.;
+
+WallBrand2\<image=-1><fx=0>* Sing with me<enter>< >< >if it's just for today,<passText>* Maybe tomorrow<enter>< >< >the good Lord<enter>< >< >will take you away.;

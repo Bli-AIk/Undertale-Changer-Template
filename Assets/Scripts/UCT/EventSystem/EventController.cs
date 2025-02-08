@@ -2,12 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
+using Plugins.Timer.Source;
+using UCT.Extensions;
+using UCT.Global.Audio;
 using UCT.Global.Core;
 using UCT.Global.Settings;
 using UCT.Global.UI;
 using UCT.Overworld;
+using UCT.Overworld.FiniteStateMachine;
 using UCT.Service;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace UCT.EventSystem
 {
@@ -16,43 +21,100 @@ namespace UCT.EventSystem
     /// </summary>
     public class EventController : MonoBehaviour
     {
-        public static readonly Dictionary<string, IMethodWrapper> MethodDictionary = new()
+        public static readonly Dictionary<MethodNameData, IMethodWrapper> MethodDictionary = new()
         {
             {
-                "string:StartOverworldTypeWritter",
+                new MethodNameData("string:StartOverworldTypeWritter", "Global"),
                 new MethodWrapper(args =>
                     StartOverworldTypeWritter((string)args[0], (bool)args[1], (string)args[2]))
             },
             {
-                "string:SwitchSceneWithBgm",
-                new MethodWrapper(args =>
-                    SwitchSceneWithBgm((string)args[0], (bool)args[1], (string)args[2]))
-            },
-            {
-                "string:SwitchSceneWithoutBgm",
-                new MethodWrapper(args =>
-                    SwitchSceneWithoutBgm((string)args[0], (bool)args[1], (string)args[2]))
-            },
-            {
-                "Vector2:TeleportPlayer",
-                new MethodWrapper(args =>
-                    TeleportPlayer((Vector2)args[0], (bool)args[1], (string)args[2]))
-            },
-            {
-                "null:OpenSaveBox",
+                new MethodNameData("null:OpenSaveBox", "Global"),
                 new MethodWrapper(args =>
                     OpenSaveBox((bool)args[0], (string)args[1]))
             },
             {
-                "Vector2Ease:MoveMainCamera",
+                new MethodNameData("bool:MainCameraIsFollow", "Global"),
+                new MethodWrapper(args =>
+                    MainCameraIsFollow((bool)args[0], (bool)args[1], (string)args[2]))
+            },
+            {
+                new MethodNameData("bool:PlayerCanMove", "Global"),
+                new MethodWrapper(args =>
+                    PlayerCanMove((bool)args[0], (bool)args[1], (string)args[2]))
+            },
+            {
+                new MethodNameData("null:EnterBattleScene", "Global"),
+                new MethodWrapper(args =>
+                    EnterBattleScene((bool)args[0], (string)args[1]))
+            },
+            {
+                new MethodNameData("float:WaitingForSecond", "Global"),
+                new MethodWrapper(args =>
+                    WaitingForSecond((float)args[0], (bool)args[1], (string)args[2]))
+            },
+            {
+                new MethodNameData("float:LockPlayerForSecond", "Global"),
+                new MethodWrapper(args =>
+                    LockPlayerForSecond((float)args[0], (bool)args[1], (string)args[2]))
+            },
+            {
+                new MethodNameData("scene:SwitchOverworldScene", "Scene"),
+                new MethodWrapper(args =>
+                    SwitchOverworldScene((string)args[0], (bool)args[1], (Vector2)args[2], (bool)args[3],
+                        (string)args[4]))
+            },
+            {
+                new MethodNameData("Vector2:TeleportPlayer", "Position"),
+                new MethodWrapper(args =>
+                    TeleportPlayer((Vector2)args[0], (bool)args[1], (string)args[2]))
+            },
+            {
+                new MethodNameData("Vector2Ease:MoveMainCamera", "Position"),
                 new MethodWrapper(args =>
                     MoveMainCamera((Vector2)args[0], (float)args[1], (Ease)args[2], (bool)args[3], (string)args[4]))
             },
             {
-            "null:EnterBattleScene",
-            new MethodWrapper(args =>
-                EnterBattleScene((bool)args[0], (string)args[1]))
-        },
+                new MethodNameData("Vector2Ease:MoveMainCameraRelativeToPlayer", "Position"),
+                new MethodWrapper(args =>
+                    MoveMainCameraRelativeToPlayer((Vector2)args[0], (float)args[1], (Ease)args[2], (bool)args[3],
+                        (string)args[4]))
+            },
+            {
+                new MethodNameData("float:MakePlayerTranslucent", "Position"),
+                new MethodWrapper(args =>
+                    MakePlayerTranslucent((float)args[0], (bool)args[1], (string)args[2]))
+            },
+            {
+                new MethodNameData("Vector2Ease:MovePlayerRelative", "Position"),
+                new MethodWrapper(args =>
+                    MovePlayerRelative((Vector2)args[0], (float)args[1], (Ease)args[2], (bool)args[3], (string)args[4]))
+            },
+            {
+                new MethodNameData("float:SwingMainCamera", "Position"),
+                new MethodWrapper(args =>
+                    SwingMainCamera((float)args[0], (bool)args[1], (string)args[2]))
+            },
+            {
+                new MethodNameData("float:MakePlayerSpin", "Special"),
+                new MethodWrapper(args =>
+                    MakePlayerSpin((float)args[0], (bool)args[1], (string)args[2]))
+            },
+            {
+                new MethodNameData("null:GetPooledObjectAtPlayer", "Special"),
+                new MethodWrapper(args =>
+                    GetPooledObjectAtPlayer((bool)args[0], (string)args[1]))
+            },
+            {
+                new MethodNameData("float:BannedBGM", "Audio"),
+                new MethodWrapper(args =>
+                    BannedBGM((float)args[0], (bool)args[1], (string)args[2]))
+            },
+            {
+                new MethodNameData("int:PlayUIFx", "Audio"),
+                new MethodWrapper(args =>
+                    PlayUIFx((int)args[0], (bool)args[1], (string)args[2]))
+            }
         };
 
 
@@ -60,44 +122,69 @@ namespace UCT.EventSystem
         public static EventTable eventTable;
         public static FactTable factTable;
         public static RuleTable ruleTable;
+        public static EventTable globalEventTable;
+        public static FactTable globalFactTable;
+        public static RuleTable globalRuleTable;
         private static readonly int Open = Animator.StringToHash("Open");
 
-        private void Awake()
+        private void Start()
         {
-            eventTable = Resources.Load<EventTable>("Tables/EventTable");
-            factTable = Resources.Load<FactTable>("Tables/FactTable");
-            ruleTable = Resources.Load<RuleTable>("Tables/RuleTable");
+            LoadTables();
         }
 
         private void Update()
         {
-            for (var i = 0; i < eventTable.events.Count; i++)
+            if (MainControl.Instance.sceneState != MainControl.SceneState.Overworld) return;
+
+            UpdateEvent(globalEventTable);
+            UpdateEvent(eventTable);
+        }
+
+        public static void LoadTables(bool force = false)
+        {
+            globalEventTable = Resources.Load<EventTable>("Tables/EventTable");
+            globalFactTable = Resources.Load<FactTable>("Tables/FactTable");
+            globalRuleTable = Resources.Load<RuleTable>("Tables/RuleTable");
+            if (!force && MainControl.Instance.sceneState != MainControl.SceneState.Overworld) return;
+
+            var sceneName = SceneManager.GetActiveScene().name;
+            eventTable = Resources.Load<EventTable>($"Tables/{sceneName}/EventTable");
+            factTable = Resources.Load<FactTable>($"Tables/{sceneName}/FactTable");
+            ruleTable = Resources.Load<RuleTable>($"Tables/{sceneName}/RuleTable");
+        }
+
+        private static void UpdateEvent(EventTable inputEventTable)
+        {
+            for (var i = 0; i < inputEventTable.events.Count; i++)
             {
-                var eventEntry = eventTable.events[i];
+                var eventEntry = inputEventTable.events[i];
                 if (eventEntry.isTriggering)
                     eventEntry = Detection(eventEntry);
-                eventTable.events[i] = eventEntry;
+                inputEventTable.events[i] = eventEntry;
             }
         }
 
         private static EventEntry Detection(EventEntry eventEntry)
         {
+            var rules = ruleTable.rules.Concat(globalRuleTable.rules).ToList();
+
             // ReSharper disable once ForCanBeConvertedToForeach
-            for (var j = 0; j < ruleTable.rules.Count; j++)
+            for (var j = 0; j < rules.Count; j++)
             {
-                var rule = ruleTable.rules[j];
+                var rule = rules[j];
 
                 eventEntry = DetectionRule(eventEntry, rule, out var isTriggered);
-           
-                ruleTable.rules[j] = rule;
-                
+
+                rules[j] = rule;
+
                 if (isTriggered) break;
             }
 
             return eventEntry;
         }
 
-        public static EventEntry DetectionRule(EventEntry eventEntry, RuleEntry rule, out bool isTriggered, bool force = false)
+        public static EventEntry DetectionRule(EventEntry eventEntry, RuleEntry rule, out bool isTriggered,
+            bool force = false)
         {
             isTriggered = false;
             var triggeredByCount = rule.triggeredBy.Count;
@@ -169,31 +256,49 @@ namespace UCT.EventSystem
                             throw new ArgumentOutOfRangeException();
                     }
 
-                    UnityEngine.Debug.Log(number);
                     item.fact.value = number;
                     rule.factModifications[index] = item;
                     // ReSharper disable once ForCanBeConvertedToForeach
-                    for (var l = 0; l < factTable.facts.Count; l++)
-                    {
-                        var fact = factTable.facts[l];
-                        if (fact.name == item.fact.name) fact.value = number;
-                        factTable.facts[l] = fact;
-                    }
+                    var isGlobalFactModification = rule.isGlobalFactModifications[index];
+
+                    if (!isGlobalFactModification)
+                        factTable = SetFactEntry(factTable, item, number);
+                    else
+                        globalFactTable = SetFactEntry(globalFactTable, item, number);
                 }
+
                 break;
             }
-            
+
             return eventEntry;
+        }
+
+        private static FactTable SetFactEntry(FactTable inputFactTable, FactModification item, int number)
+        {
+            for (var l = 0; l < inputFactTable.facts.Count; l++)
+            {
+                var fact = inputFactTable.facts[l];
+                if (fact.name == item.fact.name) fact.value = number;
+                inputFactTable.facts[l] = fact;
+            }
+
+            return inputFactTable;
         }
 
         private static void SetTriggering(string newTrigger, bool value = true)
         {
-            for (var index = 0; index < eventTable.events.Count; index++)
+            UpdateEventTrigger(eventTable, newTrigger, value);
+            UpdateEventTrigger(globalEventTable, newTrigger, value);
+        }
+
+        private static void UpdateEventTrigger(EventTable table, string triggerName, bool value)
+        {
+            for (var index = 0; index < table.events.Count; index++)
             {
-                if (eventTable.events[index].name != newTrigger) continue;
-                var eventItem = eventTable.events[index];
+                if (table.events[index].name != triggerName) continue;
+                var eventItem = table.events[index];
                 eventItem.isTriggering = value;
-                eventTable.events[index] = eventItem;
+                table.events[index] = eventItem;
             }
         }
 
@@ -236,10 +341,13 @@ namespace UCT.EventSystem
                 TalkBoxController.Instance.boxDrawer.localPosition = new Vector3(
                     TalkBoxController.Instance.boxDrawer.localPosition.x,
                     TalkBoxController.Instance.boxDrawer.localPosition.y, BackpackBehaviour.BoxZAxisInvisible);
-                MainControl.Instance.playerControl.canMove = true;
-                SettingsStorage.pause = false;
-                if (useEvent)
-                    SetTriggering(eventName);
+                Timer.Register(0.1f, () =>
+                {
+                    MainControl.Instance.playerControl.canMove = true;
+                    SettingsStorage.pause = false;
+                    if (useEvent)
+                        SetTriggering(eventName);
+                });
             };
         }
 
@@ -249,31 +357,17 @@ namespace UCT.EventSystem
         /// <param name="sceneName">场景名</param>
         /// <param name="useEvent">是否联动event</param>
         /// <param name="eventName">联动的event名称</param>
-        private static void SwitchSceneWithBgm(string sceneName, bool useEvent, string eventName)
+        private static void SwitchOverworldScene(string sceneName, bool isBgmMuted, Vector2 newPos, bool useEvent,
+            string eventName)
         {
             Action action = null;
+            action += () => TeleportPlayer(newPos, false, "");
             if (useEvent)
                 action += () => SetTriggering(eventName);
 
-            GameUtilityService.FadeOutAndSwitchScene(sceneName, Color.black, action);
+            GameUtilityService.FadeOutAndSwitchScene(sceneName, Color.black, action, isBgmMuted);
         }
-
-
-        /// <summary>
-        ///     在渐出BGM的同时切换场景
-        /// </summary>
-        /// <param name="sceneName">场景名</param>
-        /// <param name="useEvent">是否联动event</param>
-        /// <param name="eventName">联动的event名称</param>
-        private static void SwitchSceneWithoutBgm(string sceneName, bool useEvent, string eventName)
-        {
-            Action action = null;
-            if (useEvent)
-                action += () => SetTriggering(eventName);
-
-            GameUtilityService.FadeOutAndSwitchScene(sceneName, Color.black, action, true);
-            //TODO: 给场景的BGM加一个渐入
-        }
+        //TODO: 给场景的BGM加一个渐入
 
         /// <summary>
         ///     传送玩家
@@ -299,8 +393,6 @@ namespace UCT.EventSystem
         private static void MoveMainCamera(Vector2 newPosition, float duration, Ease ease, bool useEvent,
             string eventName)
         {
-            MainControl.Instance.playerControl.canMove = false;
-            
             if (duration < 0)
                 UnityEngine.Debug.LogError($"{duration} 应当大于0.");
 
@@ -317,12 +409,161 @@ namespace UCT.EventSystem
                     });
         }
 
+        private static void MoveMainCameraRelativeToPlayer(Vector2 newPosition, float duration, Ease ease,
+            bool useEvent,
+            string eventName)
+        {
+            var newPos = MainControl.overworldPlayerBehaviour.transform.position + (Vector3)newPosition;
+            if (CameraFollowPlayer.Instance.isLimit)
+                newPos = CameraFollowPlayer.Instance.GetLimitedPosition(newPos);
+            MoveMainCamera(newPos, duration, ease, useEvent, eventName);
+        }
+
+        private static void MainCameraIsFollow(bool isFollow, bool useEvent, string eventName)
+        {
+            CameraFollowPlayer.Instance.isFollow = isFollow;
+            if (useEvent)
+                SetTriggering(eventName);
+        }
+
+        private static void PlayerCanMove(bool canMove, bool useEvent, string eventName)
+        {
+            MainControl.Instance.playerControl.canMove = canMove;
+            if (useEvent)
+                SetTriggering(eventName);
+        }
+
         //TODO:多战斗补全
         private static void EnterBattleScene(bool useEvent, string eventName)
         {
             SettingsController.Instance.Animator.SetBool(Open, true);
             if (useEvent)
                 SetTriggering(eventName);
+        }
+
+        private static void MakePlayerTranslucent(float duration, bool useEvent, string eventName)
+        {
+            MainControl.overworldPlayerBehaviour.spriteRenderer.color = ColorEx.HalfAlpha;
+
+            Timer.Register(duration, () =>
+            {
+                MainControl.overworldPlayerBehaviour.spriteRenderer.color = Color.white;
+                if (useEvent)
+                    SetTriggering(eventName);
+            });
+        }
+
+        private static void MakePlayerSpin(float duration, bool useEvent, string eventName)
+        {
+            MainControl.Instance.playerControl.canMove = false;
+            MainControl.overworldPlayerBehaviour.TransitionToStateIfNeeded(StateType.Spin);
+
+
+            Timer.Register(duration, () =>
+            {
+                MainControl.Instance.playerControl.canMove = true;
+                MainControl.overworldPlayerBehaviour.TransitionToStateIfNeeded(StateType.Idle);
+                if (useEvent)
+                    SetTriggering(eventName);
+            });
+        }
+
+        private static void MovePlayerRelative(Vector2 newPosition, float duration, Ease ease, bool useEvent,
+            string eventName)
+        {
+            MovePlayerAbsolute(
+                MainControl.overworldPlayerBehaviour.transform.position + (Vector3)newPosition, duration,
+                ease, useEvent, eventName);
+        }
+
+        private static void MovePlayerAbsolute(Vector2 newPosition, float duration, Ease ease, bool useEvent,
+            string eventName)
+        {
+            if (duration <= 0)
+            {
+                MainControl.overworldPlayerBehaviour.transform.position = newPosition;
+                return;
+            }
+
+            MainControl.Instance.playerControl.canMove = false;
+
+            var colliders = MainControl.overworldPlayerBehaviour.GetComponentsInChildren<Collider2D>();
+            foreach (var collider in colliders) collider.enabled = false;
+
+            MainControl.overworldPlayerBehaviour.transform
+                .DOMove(newPosition, duration)
+                .SetEase(ease)
+                .OnKill(() =>
+                {
+                    foreach (var collider in colliders) collider.enabled = true;
+
+                    MainControl.Instance.playerControl.canMove = true;
+                    if (useEvent)
+                        SetTriggering(eventName);
+                });
+        }
+
+        private static void GetPooledObjectAtPlayer(bool useEvent, string eventName)
+        {
+            var obj = GameObject.Find("ObjectPool").GetComponent<ObjectPool>().GetFromPool<Transform>();
+            obj.transform.position = MainControl.overworldPlayerBehaviour.transform.position;
+            if (useEvent)
+                SetTriggering(eventName);
+        }
+
+        private static void WaitingForSecond(float duration, bool useEvent, string eventName)
+        {
+            Timer.Register(duration, () =>
+            {
+                if (useEvent) SetTriggering(eventName);
+            });
+        }
+
+        private static void LockPlayerForSecond(float duration, bool useEvent, string eventName)
+        {
+            MainControl.Instance.playerControl.canMove = false;
+            Timer.Register(duration, () =>
+            {
+                MainControl.Instance.playerControl.canMove = true;
+                if (useEvent) SetTriggering(eventName);
+            });
+        }
+
+        private static void PlayUIFx(int index, bool useEvent, string eventName)
+        {
+            AudioController.Instance.GetFx(index, MainControl.Instance.AudioControl.fxClipUI);
+            if (useEvent) SetTriggering(eventName);
+        }
+
+        private static void BannedBGM(float duration, bool useEvent, string eventName)
+        {
+            DOTween.To(() => AudioController.Instance.audioSource.volume,
+                    x => AudioController.Instance.audioSource.volume = x, 0, duration)
+                .SetEase(Ease.Linear)
+                .OnKill(() =>
+                {
+                    if (useEvent) SetTriggering(eventName);
+                });
+        }
+
+        private static void SwingMainCamera(float duration, bool useEvent, string eventName)
+        {
+            const float dir = 0.25f;
+            CameraFollowPlayer.Instance.transform
+                .DOMove(CameraFollowPlayer.Instance.transform.position - new Vector3(dir, 0, 0), duration / 8)
+                .SetEase(Ease.Linear)
+                .OnKill(() => CameraFollowPlayer.Instance.transform
+                    .DOMove(CameraFollowPlayer.Instance.transform.position + new Vector3(dir * 2, 0, 0), duration / 4)
+                    .SetEase(Ease.Linear).SetLoops(3, LoopType.Yoyo)
+                    .OnKill(() => CameraFollowPlayer.Instance.transform
+                        .DOMove(CameraFollowPlayer.Instance.transform.position - new Vector3(dir, 0, 0), duration / 8)
+                        .SetEase(Ease.Linear)
+                        .OnKill(() =>
+                        {
+                            if (useEvent) SetTriggering(eventName);
+                        })
+                    )
+                );
         }
 
         // TODO:把下面未完成的函数实现。
@@ -360,8 +601,9 @@ namespace UCT.EventSystem
 
         {
             var tag = methodName[..methodName.IndexOf(':')];
+            var method = MethodDictionary.FirstOrDefault(kv => kv.Key.MethodName == methodName).Value;
 
-            if (MethodDictionary.TryGetValue(methodName, out var method))
+            if (method != null)
                 switch (tag)
                 {
                     case "Vector2Ease":
@@ -370,8 +612,8 @@ namespace UCT.EventSystem
                             (Ease)int.Parse(parameter3), useEvent, eventName);
                         break;
 
-                    case "string,string":
-                        method.Invoke(parameter1, parameter2, useEvent, eventName);
+                    case "bool":
+                        method.Invoke(bool.Parse(parameter1), useEvent, eventName);
                         break;
 
                     case "Vector2":
@@ -379,8 +621,21 @@ namespace UCT.EventSystem
                             eventName);
                         break;
 
+                    case "int":
+                        method.Invoke(int.Parse(parameter1), useEvent, eventName);
+                        break;
+
+                    case "float":
+                        method.Invoke(float.Parse(parameter1), useEvent, eventName);
+                        break;
+
                     case "null":
                         method.Invoke(useEvent, eventName);
+                        break;
+
+                    case "scene":
+                        method.Invoke(parameter1, bool.Parse(parameter2),
+                            TextProcessingService.StringVector2ToRealVector2(parameter3), useEvent, eventName);
                         break;
 
                     // ReSharper disable once RedundantCaseLabel
@@ -391,6 +646,34 @@ namespace UCT.EventSystem
                 }
             else
                 Console.WriteLine($"方法 {methodName} 未找到！");
+        }
+    }
+
+    [Serializable]
+    public struct MethodNameData : IEquatable<MethodNameData>
+    {
+        public MethodNameData(string methodName, string methodType)
+        {
+            MethodName = methodName;
+            MethodType = methodType;
+        }
+
+        public string MethodType { get; }
+        public string MethodName { get; }
+
+        public bool Equals(MethodNameData other)
+        {
+            return MethodType == other.MethodType && MethodName == other.MethodName;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is MethodNameData other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(MethodType, MethodName);
         }
     }
 }

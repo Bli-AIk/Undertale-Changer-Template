@@ -7,6 +7,7 @@ namespace UCT.Other
     /// </summary>
     public static class Debug
     {
+        // ReSharper disable Unity.PerformanceAnalysis
         public static void Log(object content, string color = "#FFFFFF")
         {
 #if UNITY_EDITOR
@@ -23,6 +24,7 @@ namespace UCT.Other
 #endif
         }
 
+        // ReSharper disable Unity.PerformanceAnalysis
         public static void LogWarning(object content, string color = "#FFFF00")
         {
 #if UNITY_EDITOR
@@ -39,6 +41,7 @@ namespace UCT.Other
 #endif
         }
 
+        // ReSharper disable Unity.PerformanceAnalysis
         public static void LogError(object content, string color = "#FF6666")
         {
 #if UNITY_EDITOR

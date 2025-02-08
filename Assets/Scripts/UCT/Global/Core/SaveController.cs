@@ -12,39 +12,35 @@ namespace UCT.Global.Core
     /// </summary>
     public class SaveController : MonoBehaviour
     {
-        public static Dictionary<string, PlayerControl> UsersData = new();
+        private static readonly Dictionary<string, PlayerControl> UsersData = new();
 
         public static void SaveData(PlayerControl data, string dataName)
         {
-            //Debug.Log("save");
             if (!Directory.Exists(Application.dataPath + "/Data"))
-                //Debug.Log("create");
                 Directory.CreateDirectory(Application.dataPath + "/Data");
             UsersData[data.name] = data;
-            // 转换数据
-            var jsonData = JsonConvert.SerializeObject(data);
+            
+            var settings = new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            };
+            var jsonData = JsonConvert.SerializeObject(data, settings);
 
-            File.WriteAllText(Application.dataPath + string.Format("/Data/{0}.json", dataName), jsonData);
+            File.WriteAllText(Application.dataPath + $"/Data/{dataName}.json", jsonData);
         }
 
-        // 读取用户数据到内存
         public static PlayerControl LoadData(string dataName)
         {
-            //Debug.Log("load");
 
             SortAndRenameData();
-            var path = Application.dataPath + string.Format("/Data/{0}.json", dataName);
-            // 检查用户配置文件是否存在
-            if (File.Exists(path))
-            {
-                var jsonData = File.ReadAllText(path);
-                var userData = ScriptableObject.CreateInstance<PlayerControl>(); // 使用 CreateInstance 方法
-                JsonConvert.PopulateObject(jsonData, userData); // 使用 PopulateObject 方法来填充数据
-                UsersData[dataName] = userData;
-                return userData;
-            }
+            var path = Application.dataPath + $"/Data/{dataName}.json";
+            if (!File.Exists(path)) return null;
+            var jsonData = File.ReadAllText(path);
+            var userData = ScriptableObject.CreateInstance<PlayerControl>(); 
+            JsonConvert.PopulateObject(jsonData, userData); 
+            UsersData[dataName] = userData;
+            return userData;
 
-            return null;
         }
 
         public static int GetDataNumber()
@@ -64,15 +60,12 @@ namespace UCT.Global.Core
 
         public static void DeleteData(string dataName)
         {
-            var path = Application.dataPath + string.Format("/Data/{0}.json", dataName);
+            var path = Application.dataPath + $"/Data/{dataName}.json";
 
-            // 检查存档是否存在
             if (File.Exists(path))
             {
-                // 从内存中移除存档数据
                 if (UsersData.ContainsKey(dataName)) UsersData.Remove(dataName);
 
-                // 删除文件
                 File.Delete(path);
             }
             else
@@ -93,26 +86,22 @@ namespace UCT.Global.Core
                 return;
             }
 
-            // 获取目录下所有的存档文件路径
             var files = Directory.GetFiles(dataPath, "*.json");
 
-            // 按照文件名的数字进行排序
             Array.Sort(files, (a, b) =>
             {
                 var fileNameA = Path.GetFileNameWithoutExtension(a);
                 var fileNameB = Path.GetFileNameWithoutExtension(b);
-                int numberA, numberB;
 
-                if (int.TryParse(fileNameA[4..], out numberA) && int.TryParse(fileNameB[4..], out numberB))
+                if (int.TryParse(fileNameA[4..], out var numberA) && int.TryParse(fileNameB[4..], out var numberB))
                     return numberA.CompareTo(numberB);
 
-                return fileNameA.CompareTo(fileNameB);
+                return string.Compare(fileNameA, fileNameB, StringComparison.Ordinal);
             });
 
-            // 重命名文件
             for (var i = 0; i < files.Length; i++)
             {
-                var newFileName = string.Format("Data{0}.json", i);
+                var newFileName = $"Data{i}.json";
                 var newPath = Path.Combine(dataPath, newFileName);
                 File.Move(files[i], newPath);
             }

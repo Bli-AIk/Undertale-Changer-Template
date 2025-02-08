@@ -37,6 +37,8 @@ namespace UCT.Global.Core
 
         [ReadOnly] [Header("外置语言包总数")] public static int LanguagePackageExternalNumber;
 
+        [Space] [Title("=== 角色与行为控制 ===")] public static OverworldPlayerBehaviour overworldPlayerBehaviour;
+
         [Title("=== 场景状态设置 ===")] public SceneState sceneState;
 
         [Space] [Title("=== 语言包相关设置 ===")] [Header("语言包ID")] [FormerlySerializedAs("languagePack")]
@@ -72,8 +74,6 @@ namespace UCT.Global.Core
 
         public Camera mainCamera;
         public BoxDrawer mainBox;
-
-        [Space] [Title("=== 角色与行为控制 ===")] public static OverworldPlayerBehaviour overworldPlayerBehaviour;
 
         [FormerlySerializedAs("PlayerControl")]
         public PlayerControl playerControl;
@@ -129,11 +129,12 @@ namespace UCT.Global.Core
             switch (sceneState)
             {
                 case SceneState.Normal:
-                    if(overworldPlayerBehaviour)
+                    if (overworldPlayerBehaviour)
                     {
                         Destroy(overworldPlayerBehaviour.gameObject);
                         overworldPlayerBehaviour = null;
                     }
+
                     break;
                 case SceneState.Overworld:
                 {
@@ -179,15 +180,8 @@ namespace UCT.Global.Core
             GameUtilityService.ToggleAllSfx(SettingsStorage.isSimplifySfx);
 
             _debugStringGradient = new DebugStringGradient("Debug");
-        }
 
-        public static void GetOverworldPlayerBehaviour()
-        {
-            if (overworldPlayerBehaviour) return;
-            var owPlayer = GameObject.Find("Player");
-
-            if (owPlayer)
-                overworldPlayerBehaviour = owPlayer.GetComponent<OverworldPlayerBehaviour>();
+            EventController.LoadTables();
         }
 
         private void Update()
@@ -201,6 +195,15 @@ namespace UCT.Global.Core
             if (overworldControl.isSetting)
                 return;
             SettingsShortcuts();
+        }
+
+        public static void GetOverworldPlayerBehaviour()
+        {
+            if (overworldPlayerBehaviour) return;
+            var owPlayer = GameObject.Find("Player");
+
+            if (owPlayer)
+                overworldPlayerBehaviour = owPlayer.GetComponent<OverworldPlayerBehaviour>();
         }
 
         private void InitializeVolume()
@@ -304,7 +307,7 @@ namespace UCT.Global.Core
         {
             //BattleControl加载
             //--------------------------------------------------------------------------------
-            if (BattleControl == null)
+            if (!BattleControl)
                 BattleControl = Resources.Load<BattleControl>("BattleControl");
 
             BattleControl.turnDialogAsset = new List<string>();
@@ -323,7 +326,7 @@ namespace UCT.Global.Core
             else
             {
                 turnSave = Directory.GetFiles(
-                    $"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[languagePackId - LanguagePackageInternalNumber]}\\Battle\\Turn");
+                    $@"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[languagePackId - LanguagePackageInternalNumber]}\Battle\Turn");
             }
 
             foreach (var t in turnSave)
@@ -343,7 +346,7 @@ namespace UCT.Global.Core
                 DataHandlerService.ChangeItemData(BattleControl.turnTextSave, true, new List<string>());
             //--------------------------------------------------------------------------------
             //OldBoxController = GameObject.Find("MainFrame").GetComponent<OldBoxController>();
-            battlePlayerController = GameObject.Find("Player").GetComponent<BattlePlayerController>();
+            battlePlayerController = GameObject.Find("BattlePlayer").GetComponent<BattlePlayerController>();
             selectUIController = GameObject.Find("SelectUI").GetComponent<SelectUIController>();
             if (cameraShake == null)
                 cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();

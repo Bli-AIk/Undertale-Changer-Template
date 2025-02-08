@@ -23,9 +23,9 @@ namespace UCT.EventSystem
     public enum Scope
     {
         Global,
-        Area,
-        Scene,
-        Temp
+        // Area,
+        // Scene,
+        // Temp
     }
     
     public enum Area

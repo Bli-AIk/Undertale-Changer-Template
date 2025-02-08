@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rules:
   - name: SaveGame
+    isGlobalTriggeredBy: 1
     triggeredBy:
     - SaveGame
+    isGlobalTriggers: 0
     triggers: []
     rulePriority: 0
     methodNames:
@@ -26,12 +28,14 @@ MonoBehaviour:
     - 
     thirdStringParams:
     - 
+    isGlobalMethodEvents: 00
     useMethodEvents: 000101
     methodEvents:
     - SaveGame
     - TestEvent
     - TestEvent
     useRuleCriterion: 0
+    isGlobalRuleCriterion: 0
     ruleCriterion:
       isResultReversed: 0
       fact:
@@ -55,96 +59,13 @@ MonoBehaviour:
         detection: 0
         operation: 0
         criteria: []
-    factModifications: []
-  - name: CorridorToRuins
-    triggeredBy:
-    - CorridorToRuins
-    triggers: []
-    rulePriority: 0
-    methodNames:
-    - Vector2:TeleportPlayer
-    firstStringParams:
-    - (-11,-5)
-    secondStringParams:
-    - 
-    thirdStringParams:
-    - 
-    useMethodEvents: 000101
-    methodEvents:
-    - SaveGame
-    - TestEvent
-    - TestEvent
-    useRuleCriterion: 0
-    ruleCriterion:
-      isResultReversed: 0
-      fact:
-        name: 
-        scope: 0
-        value: 0
-        area: 0
-        scene: 
-      compare: 0
-      detection: 0
-      operation: 1
-      criteria:
-      - isResultReversed: 0
-        fact:
-          name: Button1
-          scope: 0
-          value: 0
-          area: 0
-          scene: 
-        compare: 2
-        detection: 0
-        operation: 0
-        criteria: []
-    factModifications: []
-  - name: Plot
-    triggeredBy:
-    - Plot
-    triggers: []
-    rulePriority: 0
-    methodNames:
-    - string:StartOverworldTypeWritter
-    firstStringParams:
-    - Plot
-    secondStringParams:
-    - 
-    thirdStringParams:
-    - 
-    useMethodEvents: 010101
-    methodEvents:
-    - InBattle
-    - TestEvent
-    - TestEvent
-    useRuleCriterion: 0
-    ruleCriterion:
-      isResultReversed: 0
-      fact:
-        name: 
-        scope: 0
-        value: 0
-        area: 0
-        scene: 
-      compare: 0
-      detection: 0
-      operation: 1
-      criteria:
-      - isResultReversed: 0
-        fact:
-          name: Button1
-          scope: 0
-          value: 0
-          area: 0
-          scene: 
-        compare: 2
-        detection: 0
-        operation: 0
-        criteria: []
+    isGlobalFactModifications: 
     factModifications: []
   - name: InBattle
+    isGlobalTriggeredBy: 1
     triggeredBy:
     - InBattle
+    isGlobalTriggers: 0
     triggers: []
     rulePriority: 0
     methodNames:
@@ -155,12 +76,14 @@ MonoBehaviour:
     - 
     thirdStringParams:
     - 
+    isGlobalMethodEvents: 00
     useMethodEvents: 000101
     methodEvents:
     - InBattle
     - TestEvent
     - TestEvent
     useRuleCriterion: 0
+    isGlobalRuleCriterion: 0
     ruleCriterion:
       isResultReversed: 0
       fact:
@@ -184,47 +107,5 @@ MonoBehaviour:
         detection: 0
         operation: 0
         criteria: []
-    factModifications: []
-  - name: RuinsToCorridor
-    triggeredBy:
-    - RuinsToCorridor
-    triggers: []
-    rulePriority: 0
-    methodNames:
-    - Vector2:TeleportPlayer
-    firstStringParams:
-    - (0,0)
-    secondStringParams:
-    - 
-    thirdStringParams:
-    - 
-    useMethodEvents: 000101
-    methodEvents:
-    - InBattle
-    - TestEvent
-    - TestEvent
-    useRuleCriterion: 0
-    ruleCriterion:
-      isResultReversed: 0
-      fact:
-        name: 
-        scope: 0
-        value: 0
-        area: 0
-        scene: 
-      compare: 0
-      detection: 0
-      operation: 1
-      criteria:
-      - isResultReversed: 0
-        fact:
-          name: Button1
-          scope: 0
-          value: 0
-          area: 0
-          scene: 
-        compare: 2
-        detection: 0
-        operation: 0
-        criteria: []
+    isGlobalFactModifications: 
     factModifications: []

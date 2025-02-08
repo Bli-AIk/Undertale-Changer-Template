@@ -10,11 +10,10 @@ namespace UCT.Battle
     /// </summary>
     public class ProjectionCheckCollider : ObjectPool
     {
-        private GameObject _canvasBoxProjectionSet;
-
         private readonly List<GameObject> _checkColliders = new();
 
         private readonly List<GameObject> _sets = new();
+        private GameObject _canvasBoxProjectionSet;
 
         // Start is called before the first frame update
         private void Start()
@@ -33,6 +32,7 @@ namespace UCT.Battle
         // Update is called once per frame
         private void Update()
         {
+            if (!MainControl.Instance.battlePlayerController) return;
             var relative = (Vector2)MainControl.Instance.battlePlayerController.transform.position -
                            MainControl.Instance.battlePlayerController.sceneDrift;
             for (var i = 0; i < _sets.Count; i++)

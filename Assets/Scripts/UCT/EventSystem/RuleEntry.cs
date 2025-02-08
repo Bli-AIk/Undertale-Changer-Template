@@ -15,9 +15,19 @@ namespace UCT.EventSystem
         public string name;
 
         /// <summary>
+        ///     是否让triggeredBy使用全局的EventTable
+        /// </summary>
+        public bool isGlobalTriggeredBy;
+
+        /// <summary>
         ///     触发该Rule的Event名称
         /// </summary>
         public List<string> triggeredBy;
+
+        /// <summary>
+        ///     是否让triggers使用全局的EventTable
+        /// </summary>
+        public bool isGlobalTriggers;
 
         /// <summary>
         ///     该Rule触发的Event名称
@@ -51,6 +61,11 @@ namespace UCT.EventSystem
         public List<string> thirdStringParams;
 
         /// <summary>
+        ///     是否让useMethodEvents使用全局的EventTable
+        /// </summary>
+        public List<bool> isGlobalMethodEvents;
+
+        /// <summary>
         ///     是否使用该Rule执行的方法联动触发的Event
         /// </summary>
         public List<bool> useMethodEvents;
@@ -69,6 +84,11 @@ namespace UCT.EventSystem
         ///     该Rule的Fact判断组
         /// </summary>
         public RuleCriterion ruleCriterion;
+
+        /// <summary>
+        ///     是否让factModifications的所有Fact使用全局的EventTable
+        /// </summary>
+        public List<bool> isGlobalFactModifications;
 
         /// <summary>
         ///     该Rule修改的Fact值
@@ -104,6 +124,7 @@ namespace UCT.EventSystem
     public struct RuleCriterion
     {
         public bool isResultReversed;
+        public bool isGlobal;
         public FactEntry fact;
         public CriteriaCompare compare;
         public int detection;
@@ -114,37 +135,39 @@ namespace UCT.EventSystem
 
         public bool GetResult()
         {
-            return GetResult(isResultReversed, fact, compare, detection, criteria);
+            return GetResult(isResultReversed, isGlobal, fact, compare, detection, criteria);
         }
 
         /// <summary>
         ///     封装，为Editor调用
         /// </summary>
-        public static bool GetResult(bool isResultReversed, FactEntry fact,
+        public static bool GetResult(bool isResultReversed, bool isGlobal, FactEntry fact,
             CriteriaCompare compare, int detection, List<RuleCriterion> criteria)
         {
             if (criteria.Count == 0)
             {
-                var value = fact.value;
-                if (EventController.factTable)
+
+                if (!isGlobal)
                 {
-                    var facts = EventController.factTable.facts;
-                    for (var i = 0; i < facts.Count; i++)
-                    {
-                        if (facts[i].name != fact.name) continue;
-                        value = facts[i].value;
-                        break;
-                    }
+                    if (!EventController.factTable)
+                        EventController.LoadTables(true);
+                    var factTable = EventController.factTable.facts;
+                    fact.value = GetFactsValue(fact, factTable);
+                }
+                else
+                {
+                    var globalFactTable = EventController.globalFactTable.facts;
+                    fact.value = GetFactsValue(fact, globalFactTable);
                 }
 
                 var result = compare switch
                 {
-                    CriteriaCompare.GreaterThan => value > detection,
-                    CriteriaCompare.GreaterThanOrEqual => value >= detection,
-                    CriteriaCompare.Equal => value == detection,
-                    CriteriaCompare.NotEqual => value != detection,
-                    CriteriaCompare.LessThanOrEqual => value <= detection,
-                    CriteriaCompare.LessThan => value < detection,
+                    CriteriaCompare.GreaterThan => fact.value > detection,
+                    CriteriaCompare.GreaterThanOrEqual => fact.value >= detection,
+                    CriteriaCompare.Equal => fact.value == detection,
+                    CriteriaCompare.NotEqual => fact.value != detection,
+                    CriteriaCompare.LessThanOrEqual => fact.value <= detection,
+                    CriteriaCompare.LessThan => fact.value < detection,
                     _ => throw new ArgumentOutOfRangeException()
                 };
 
@@ -197,6 +220,19 @@ namespace UCT.EventSystem
             }
 
             return isResultReversed ? !finalResult : finalResult;
+        }
+
+        private static int GetFactsValue(FactEntry fact, List<FactEntry> facts)
+        {
+            var value = 0;
+            for (var i = 0; i < facts.Count; i++)
+            {
+                if (facts[i].name != fact.name) continue;
+                value = facts[i].value;
+                break;
+            }
+
+            return value;
         }
 
         private static void InvalidOperationLogError(int i, string name)

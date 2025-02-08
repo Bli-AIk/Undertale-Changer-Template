@@ -4,6 +4,7 @@ using UCT.EventSystem;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Editor.Inspector.EventSystem
 {
@@ -25,6 +26,11 @@ namespace Editor.Inspector.EventSystem
             _targetSprites = serializedObject.FindProperty("targetSprites");
             _targetEnables = serializedObject.FindProperty("targetEnables");
             InitializeReorderableList();
+        }
+
+        private static string GetSceneName()
+        {
+            return SceneManager.GetActiveScene().name;
         }
 
         public override void OnInspectorGUI()
@@ -75,7 +81,7 @@ namespace Editor.Inspector.EventSystem
                     criteriaLabelRect.height = rectHeight;
                     // line 1
                     var result = RuleTableInspector.GetRuleCriterionResult(ruleCriterion,
-                        out _, out _, out _, out _, out _);
+                        out _, out _, out _, out _, out _, out _);
 
                     GUI.Label(criteriaLabelRect,
                         $"Rule Criterion: <color={(result ? "green" : "red")}>{(result ? "True" : "False")}</color>",
@@ -90,7 +96,7 @@ namespace Editor.Inspector.EventSystem
                         ruleCriteriaRect.y,
                         ruleCriterion,
                         originalCriteriaParentOperation,
-                        fieldWidth, rectHeight, 0, 0, _ruleCriteriaRectY);
+                        fieldWidth, rectHeight, 0, 0, _ruleCriteriaRectY, GetSceneName());
                     // line 3
                     factModificationsRect.width = rect.width / 2;
 
@@ -98,7 +104,7 @@ namespace Editor.Inspector.EventSystem
                         (int)(OverworldStatusChanger.MethodType)EditorGUI.EnumPopup(factModificationsRect,
                             (OverworldStatusChanger.MethodType)method.enumValueIndex);
                     factModificationsRect.x += factModificationsRect.width + 2.5f;
-                    
+
                     switch ((OverworldStatusChanger.MethodType)method.enumValueIndex)
                     {
                         case OverworldStatusChanger.MethodType.ChangeSprite:
@@ -126,7 +132,7 @@ namespace Editor.Inspector.EventSystem
                     serializedObject.ApplyModifiedProperties();
                 },
 
-                onRemoveCallback = list =>
+                onRemoveCallback = _ =>
                 {
                     serializedObject.Update();
 
@@ -151,7 +157,7 @@ namespace Editor.Inspector.EventSystem
             };
         }
 
-        protected virtual void DrawHeader(Rect rect)
+        private static void DrawHeader(Rect rect)
         {
             EditorGUI.LabelField(rect, "Overworld Status Changer");
         }

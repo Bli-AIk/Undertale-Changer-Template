@@ -47,6 +47,33 @@ namespace Editor.Inspector.EventSystem
             listProperty.DeleteArrayElementAtIndex(index);
         }
 
+        public static string GetAssetPath(SerializedObject serializedObject)
+        {
+            return !serializedObject.targetObject ? null : AssetDatabase.GetAssetPath(serializedObject.targetObject);
+        }
+
+        public static string GetSceneName(SerializedObject serializedObject)
+        {
+            const string basePath = "Assets/Resources/Tables";
+            var path = GetAssetPath(serializedObject);
+            if (!path.StartsWith(basePath))
+            {
+                UCT.Other.Debug.LogError("错误：路径不在 Assets/Resources/Tables 内");
+                return "";
+            }
+
+            var relativePath = path[basePath.Length..].TrimStart('/');
+
+            if (!string.IsNullOrEmpty(relativePath))
+                return !relativePath.Contains("/")
+                    ? ""
+                    : relativePath[..relativePath.IndexOf("/", StringComparison.Ordinal)];
+
+
+            UCT.Other.Debug.LogError("错误：路径是 Assets/Resources/Tables 本身，而不是其中的文件或子文件夹");
+            return "";
+        }
+
         private void InitializeReorderableList()
         {
             var listProperty = serializedObject.FindProperty(PropertyName);
@@ -131,7 +158,7 @@ namespace Editor.Inspector.EventSystem
 
             var icon = EditorGUIUtility.Load(IconPath) as Texture2D;
 
-            if (icon == null)
+            if (!icon)
                 throw new NullReferenceException();
 
             var previewIcon = new Texture2D(width, height);
@@ -189,7 +216,7 @@ namespace Editor.Inspector.EventSystem
             var scopeValue = (Scope)scopeIndex;
             switch (scopeValue)
             {
-                case Scope.Global or Scope.Temp:
+                case Scope.Global: //or Scope.Temp:
                     var style = new GUIStyle(GUI.skin.label);
                     if (scopeValue is Scope.Global)
                         style = new GUIStyle(GUI.skin.label)
@@ -199,30 +226,6 @@ namespace Editor.Inspector.EventSystem
 
                     var kaomojiIndex = (int)(rect.y / EditorGUIUtility.singleLineHeight) % _kaomojis.Count;
                     GUI.Label(additionalRect, _kaomojis[kaomojiIndex], style);
-                    break;
-                case Scope.Area:
-                    EditorGUI.PropertyField(additionalRect, element.FindPropertyRelative("area"), GUIContent.none);
-                    break;
-                case Scope.Scene:
-                    var scene = element.FindPropertyRelative("scene");
-                    EditorGUI.BeginChangeCheck();
-                    var stringValue = scene.stringValue;
-                    var sceneAsset = AssetDatabase.LoadAssetAtPath<SceneAsset>(stringValue);
-                    sceneAsset =
-                        (SceneAsset)EditorGUI.ObjectField(additionalRect, sceneAsset, typeof(SceneAsset), false);
-                    if (EditorGUI.EndChangeCheck())
-                    {
-                        if (sceneAsset != null)
-                        {
-                            var scenePath = AssetDatabase.GetAssetPath(sceneAsset);
-                            scene.stringValue = scenePath;
-                        }
-                        else
-                        {
-                            scene.stringValue = string.Empty;
-                        }
-                    }
-
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -255,12 +258,12 @@ namespace Editor.Inspector.EventSystem
             var nameP = nameProperty.stringValue;
             var currentScope = (Scope)element.FindPropertyRelative("scope").enumValueIndex;
 
-            EntrySaver.facts = EntrySaver.GetAllFactEntry();
-            while (EntrySaver.facts.Any(bFact => bFact.name == nameP && bFact.scope == currentScope))
+            while (EntrySaver.GetFactEntry(true, GetSceneName(serializedObject))
+                   .Any(bFact => bFact.name == nameP && bFact.scope == currentScope))
                 nameP += "_b";
 
             nameProperty.stringValue = nameP;
-            SetAllFactEntry();
+            serializedObject.ApplyModifiedProperties();
         }
 
         protected override void OnAddElement(SerializedProperty listProperty)
@@ -275,13 +278,7 @@ namespace Editor.Inspector.EventSystem
         protected override void OnRemoveElement(SerializedProperty listProperty, int index)
         {
             listProperty.DeleteArrayElementAtIndex(index);
-            SetAllFactEntry();
-        }
-
-        private void SetAllFactEntry()
-        {
             serializedObject.ApplyModifiedProperties();
-            EntrySaver.facts = EntrySaver.GetAllFactEntry();
         }
     }
 
@@ -348,11 +345,10 @@ namespace Editor.Inspector.EventSystem
         {
             var nameProperty = element.FindPropertyRelative("name");
             var nameP = nameProperty.stringValue;
-            EntrySaver.events = EntrySaver.GetAllEventEntry();
-            while (EntrySaver.events.Any(bEvent => bEvent.name == nameP))
+            while (EntrySaver.GetEventEntry(true, GetSceneName(serializedObject)).Any(bEvent => bEvent.name == nameP))
                 nameP += "_b";
             nameProperty.stringValue = nameP;
-            SetAllEventEntry();
+            serializedObject.ApplyModifiedProperties();
         }
 
         protected override void DrawHeader(Rect rect)
@@ -383,13 +379,7 @@ namespace Editor.Inspector.EventSystem
         protected override void OnRemoveElement(SerializedProperty listProperty, int index)
         {
             listProperty.DeleteArrayElementAtIndex(index);
-            SetAllEventEntry();
-        }
-
-        private void SetAllEventEntry()
-        {
             serializedObject.ApplyModifiedProperties();
-            EntrySaver.events = EntrySaver.GetAllEventEntry();
         }
     }
 
@@ -466,14 +456,18 @@ namespace Editor.Inspector.EventSystem
         {
             extraHeight = 0.75f;
             var originalCriteria = element.FindPropertyRelative("ruleCriterion").FindPropertyRelative("criteria");
+            var isGlobalFactModifications = element.FindPropertyRelative("isGlobalFactModifications");
             var factModifications = element.FindPropertyRelative("factModifications");
+            var isGlobalTriggeredBy = element.FindPropertyRelative("isGlobalTriggeredBy");
             var triggeredBy = element.FindPropertyRelative("triggeredBy");
+            var isGlobalTriggers = element.FindPropertyRelative("isGlobalTriggers");
             var triggers = element.FindPropertyRelative("triggers");
             var methodNames = element.FindPropertyRelative("methodNames");
             var firstStringParams = element.FindPropertyRelative("firstStringParams");
             var secondStringParams = element.FindPropertyRelative("secondStringParams");
             var thirdStringParams = element.FindPropertyRelative("thirdStringParams");
             var useMethodEvents = element.FindPropertyRelative("useMethodEvents");
+            var isGlobalMethodEvents = element.FindPropertyRelative("isGlobalMethodEvents");
             var methodEvents = element.FindPropertyRelative("methodEvents");
 
             if (originalCriteria.arraySize == 0) originalCriteria.arraySize = 1;
@@ -505,11 +499,11 @@ namespace Editor.Inspector.EventSystem
                 elementHeight.Add(0);
             elementHeight[index] = (EditorGUIUtility.singleLineHeight + 2.5f) * lineCount;
 
-            EntrySaver.events ??= EntrySaver.GetAllEventEntry();
 
             var fieldWidth = rect.width / 4 - 10;
 
-            //  line 1
+            #region line 1
+
             var nameLabelRect = new Rect(rect.x, rect.y, fieldWidth, EditorGUIUtility.singleLineHeight);
             var nameFieldRect =
                 new Rect(rect.x + fieldWidth + 5, rect.y, fieldWidth, EditorGUIUtility.singleLineHeight);
@@ -558,7 +552,10 @@ namespace Editor.Inspector.EventSystem
 
             GUI.color = defaultColor;
 
-            //  line 2
+            #endregion
+
+            #region line 2
+
             var triggeredByLabelRect =
                 new Rect(rect.x, rect.y + rectHeight, fieldWidth, EditorGUIUtility.singleLineHeight);
 
@@ -580,7 +577,7 @@ namespace Editor.Inspector.EventSystem
                 if (item != null) triggeredByExistingNames.Add(item.stringValue);
             }
 
-            GUI.enabled = !EntrySaver.events.Select(entry => entry.name)
+            GUI.enabled = !EntrySaver.GetEventEntry(true, GetSceneName(serializedObject)).Select(entry => entry.name)
                 .All(nameP => triggeredByExistingNames.Contains(nameP));
             if (GUI.Button(triggeredByLabelRect, EditorGUIUtility.IconContent("d_Toolbar Plus")))
                 triggeredBy.arraySize++;
@@ -608,23 +605,16 @@ namespace Editor.Inspector.EventSystem
                 for (var i = 0; i < triggeredBy.arraySize; i++)
                 {
                     triggeredByLabelRect.x = rect.x;
-                    triggeredByLabelRect.width = fieldWidth;
+                    triggeredByLabelRect.width = fieldWidth * 2 + 2.5f;
+
                     if (i >= triggeredBy.arraySize)
                         triggeredBy.arraySize = i + 1;
 
                     var item = triggeredBy.GetArrayElementAtIndex(i);
 
-                    var entryIndex = 0;
-                    var allEventEntry = EntrySaver.GetAllEventEntry();
-                    var allEventEntryName = new List<string>();
-                    for (var j = 0; j < allEventEntry.Length; j++)
-                    {
-                        allEventEntryName.Add(allEventEntry[j].name);
-                        if (allEventEntry[j].name == item.stringValue) entryIndex = j;
-                    }
-
-                    entryIndex = EditorGUI.Popup(triggeredByLabelRect, entryIndex, allEventEntryName.ToArray());
-                    item.stringValue = allEventEntryName[entryIndex];
+                    isGlobalTriggeredBy.boolValue =
+                        EntrySaver.EventEntryField(triggeredByLabelRect, item, isGlobalTriggeredBy.boolValue,
+                            GetSceneName(serializedObject));
 
                     triggeredByLabelRect.y += rectHeight;
                 }
@@ -651,7 +641,7 @@ namespace Editor.Inspector.EventSystem
                 if (item != null) triggersExistingNames.Add(item.stringValue);
             }
 
-            GUI.enabled = !EntrySaver.events.Select(entry => entry.name)
+            GUI.enabled = !EntrySaver.GetEventEntry(true, GetSceneName(serializedObject)).Select(entry => entry.name)
                 .All(nameP => triggersExistingNames.Contains(nameP));
             if (GUI.Button(triggersRect, EditorGUIUtility.IconContent("d_Toolbar Plus")))
                 triggers.arraySize++;
@@ -678,71 +668,73 @@ namespace Editor.Inspector.EventSystem
                 for (var i = 0; i < triggers.arraySize; i++)
                 {
                     triggersRect.x = lineTwoRect.x;
-                    triggersRect.width = fieldWidth;
+                    triggersRect.width = fieldWidth * 2 + 26f;
                     if (i >= triggers.arraySize)
                         triggers.arraySize = i + 1;
 
                     var item = triggers.GetArrayElementAtIndex(i);
 
-                    var entryIndex = 0;
-                    var allEventEntry = EntrySaver.GetAllEventEntry();
-                    var allEventEntryName = new List<string>();
-                    for (var j = 0; j < allEventEntry.Length; j++)
-                    {
-                        allEventEntryName.Add(allEventEntry[j].name);
-                        if (allEventEntry[j].name == item.stringValue) entryIndex = j;
-                    }
-
-                    entryIndex = EditorGUI.Popup(triggersRect, entryIndex, allEventEntryName.ToArray());
-                    item.stringValue = allEventEntryName[entryIndex];
+                    isGlobalTriggers.boolValue =
+                        EntrySaver.EventEntryField(triggersRect, item, isGlobalTriggers.boolValue,
+                            GetSceneName(serializedObject));
                 }
             }
 
-            EnsureUniqueTriggeredBy(triggeredBy);
-            EnsureUniqueTriggeredBy(triggers);
-            //  line 3
+            EnsureUniqueTriggeredBy(triggeredBy, GetSceneName(serializedObject));
+            EnsureUniqueTriggeredBy(triggers, GetSceneName(serializedObject));
+
+            #endregion
+
+            #region line 3
+
             var criteriaLabelRect = triggeredByLabelRect;
 
             var originalRuleCriterion = element.FindPropertyRelative("ruleCriterion");
+            var useRuleCriterion = element.FindPropertyRelative("useRuleCriterion");
 
-            criteriaLabelRect.width = rect.width;
             criteriaLabelRect.y = rect.y + rectHeight * (triggerSize + 1);
             EditorService.DrawHorizontalLine(criteriaLabelRect, rect.width);
 
-            var useRuleCriterion = element.FindPropertyRelative("useRuleCriterion");
             criteriaLabelRect.y += 1;
+            criteriaLabelRect.width = 15;
             useRuleCriterion.boolValue =
                 GUI.Toggle(criteriaLabelRect, useRuleCriterion.boolValue, new GUIContent());
+            criteriaLabelRect.width = rect.width;
             criteriaLabelRect.y -= 1;
 
             var color = GUI.color;
 
             GUI.enabled = useRuleCriterion.boolValue;
             criteriaLabelRect.x += 15;
-
             bool result;
             if (!useRuleCriterion.boolValue)
                 result = true;
             else
                 result = GetRuleCriterionResult(originalRuleCriterion,
-                    out _, out _, out _, out _, out _);
+                    out _, out _, out _, out _, out _, out _);
 
             GUI.Label(criteriaLabelRect,
                 $"Rule Criterion: <color={(result ? "green" : "red")}>{(result ? "True" : "False")}</color>",
                 new GUIStyle(GUI.skin.label) { richText = true });
 
-            //  line 4
+            #endregion
+
+            #region line 4
+
             _ruleCriteriaRectY = rect.y + (lineCount - 2) * rectHeight;
             var originalCriteriaParentOperation = originalRuleCriterion.FindPropertyRelative("operation");
             var factModificationsRect = CreateRuleCriteria(rect,
                 rect.y + rectHeight * (triggerSize + 2),
                 originalRuleCriterion,
                 originalCriteriaParentOperation,
-                fieldWidth, rectHeight, 0, 0, _ruleCriteriaRectY);
+                fieldWidth, rectHeight, 0, 0, _ruleCriteriaRectY, GetSceneName(serializedObject));
             GUI.enabled = true;
             GUI.color = color;
 
-            //  line 5
+            #endregion
+
+            #region line 5
+
             EditorService.DrawHorizontalLine(factModificationsRect, rect.width);
             factModificationsRect.y += 2.5f;
 
@@ -784,7 +776,13 @@ namespace Editor.Inspector.EventSystem
                         factModifications.arraySize = i + 1;
                     var item = factModifications.GetArrayElementAtIndex(i);
                     var fact = item.FindPropertyRelative("fact");
-                    EntrySaver.FactEntryField(factModificationsRect, fact, true, true);
+
+                    if (i >= isGlobalFactModifications.arraySize)
+                        isGlobalFactModifications.arraySize = i + 1;
+                    var isGlobalFactModification = isGlobalFactModifications.GetArrayElementAtIndex(i);
+
+                    isGlobalFactModification.boolValue = EntrySaver.FactEntryField(factModificationsRect, fact,
+                        isGlobalFactModification.boolValue, GetSceneName(serializedObject), true, true);
                     factModificationsRect.x += factModificationsRect.width + 5f;
 
                     var operation = item.FindPropertyRelative("operation");
@@ -810,7 +808,11 @@ namespace Editor.Inspector.EventSystem
 
             factModificationsRect.x = rect.x;
             EditorService.DrawHorizontalLine(factModificationsRect, rect.width);
-            //  line 6
+
+            #endregion
+
+            #region line 6
+
             var methodNameRect = factModificationsRect;
             methodNameRect.width = fieldWidth * 2;
             GUI.Label(methodNameRect, "Trigger methods and events");
@@ -841,190 +843,242 @@ namespace Editor.Inspector.EventSystem
             methodNameRect.x += fieldWidth / 4 + 2.5f;
             factModificationsRect.y += rectHeight;
 
-            if (methodNames.arraySize == 0)
-            {
-                methodNameRect.y += rectHeight;
-                methodNameRect.x = rect.x;
-                GUI.Label(methodNameRect, "No Method Names.",
-                    new GUIStyle { normal = { textColor = Color.grey } });
-            }
-            else
-            {
-                var width = rect.width / 2 - 5f;
-                var keys = EventController.MethodDictionary.Keys.ToArray();
-                var methodKeys = keys.Select(key => key.Split(':')[1]).ToArray();
-
-                for (var i = 0; i < methodNames.arraySize; i++)
-                {
-                    color = GUI.color;
-                    GUI.color = i % 2 == 0 ? new Color(0.75f, 0.85f, 1f) : new Color(0.85f, 0.75f, 1f);
-
-                    methodNameRect.y += rectHeight;
-                    methodNameRect.x = rect.x;
-                    methodNameRect.width = width - 20;
-
-                    if (i >= methodNames.arraySize)
-                        methodNames.arraySize = i + 1;
-                    var item = methodNames.GetArrayElementAtIndex(i);
-                    var tag = "";
-                    var methodName = "";
-                    foreach (var t in item.stringValue)
+           if (methodNames.arraySize == 0)
                     {
-                        if (t == ':')
-                        {
-                            tag = methodName;
-                            methodName = "";
-                            continue;
-                        }
-
-                        methodName += t;
-                    }
-
-                    var methodKeysIndex = EditorGUI.Popup(methodNameRect,
-                        Array.IndexOf(keys, item.stringValue), methodKeys);
-
-                    if (methodKeysIndex >= keys.Length) methodKeysIndex = keys.Length - 1;
-                    if (methodKeysIndex < 0) methodKeysIndex = 0;
-                    item.stringValue = keys[methodKeysIndex];
-
-                    if (i >= useMethodEvents.arraySize)
-                        useMethodEvents.arraySize = i + 1;
-                    var itemBool = useMethodEvents.GetArrayElementAtIndex(i);
-
-                    methodNameRect.x += methodNameRect.width + 8.5f;
-                    methodNameRect.width = 15f;
-                    itemBool.boolValue = GUI.Toggle(methodNameRect, itemBool.boolValue, new GUIContent());
-                    methodNameRect.x += methodNameRect.width + 8.5f;
-                    methodNameRect.width = width - 20;
-                    if (i >= methodEvents.arraySize)
-                        methodEvents.arraySize = i + 1;
-                    var itemEvent = methodEvents.GetArrayElementAtIndex(i);
-
-
-                    var allEventEntry = EntrySaver.GetAllEventEntry();
-                    var allEventEntryName = allEventEntry.Select(t => t.name).ToArray();
-                    var entryIndex = 0;
-                    for (var eventEntryNameIndex = 0;
-                         eventEntryNameIndex < allEventEntryName.Length;
-                         eventEntryNameIndex++)
-                    {
-                        var eventName = allEventEntryName[eventEntryNameIndex];
-                        if (itemEvent.stringValue != eventName) continue;
-                        entryIndex = eventEntryNameIndex;
-                        break;
-                    }
-
-                    GUI.enabled = itemBool.boolValue;
-                    entryIndex = EditorGUI.Popup(methodNameRect, entryIndex, allEventEntryName);
-                    GUI.enabled = true;
-                    itemEvent.stringValue = allEventEntryName[entryIndex];
-
-                    methodNameRect.y += rectHeight;
-                    methodNameRect.x = rect.x;
-                    methodNameRect.width = rect.width - 12.5f;
-
-                    if (i >= firstStringParams.arraySize)
-                        firstStringParams.arraySize = i + 1;
-                    var itemFirstString = firstStringParams.GetArrayElementAtIndex(i);
-
-                    if (i >= secondStringParams.arraySize)
-                        secondStringParams.arraySize = i + 1;
-                    var itemSecondString = secondStringParams.GetArrayElementAtIndex(i);
-
-                    if (i >= thirdStringParams.arraySize)
-                        thirdStringParams.arraySize = i + 1;
-                    var itemThirdString = thirdStringParams.GetArrayElementAtIndex(i);
-
-
-                    switch (tag)
-                    {
-                        case "Vector2Ease":
-                        {
-                            var rectOriginal = methodNameRect;
-                            methodNameRect.width /= 3;
-
-                            var value = TextProcessingService
-                                .StringVector2ToRealVector2(itemFirstString.stringValue);
-                            itemFirstString.stringValue = TextProcessingService.RealVector2ToStringVector2
-                                (EditorGUI.Vector2Field(methodNameRect, new GUIContent(), value));
-
-                            methodNameRect.x += methodNameRect.width + 5f;
-
-                            methodNameRect.width /= 2;
-                            methodNameRect.width -= 10;
-
-                            GUI.Label(methodNameRect, "Duration");
-                            methodNameRect.x += methodNameRect.width + 5f;
-
-                            if (!float.TryParse(itemSecondString.stringValue, out var floatValue))
-                                floatValue = 0;
-
-                            itemSecondString.stringValue = EditorGUI.FloatField(methodNameRect, floatValue)
-                                .ToString(CultureInfo.CurrentCulture);
-
-                            methodNameRect.x += methodNameRect.width + 5f;
-                            methodNameRect.width += 10;
-                            methodNameRect.width *= 2;
-
-                            if (!int.TryParse(itemThirdString.stringValue, out var easeValue))
-                                easeValue = 0;
-
-                            itemThirdString.stringValue =
-                                ((int)(Ease)EditorGUI.EnumPopup(methodNameRect, (Ease)easeValue)).ToString();
-
-                            methodNameRect = rectOriginal;
-                            break;
-                        }
-
-
-                        case "string":
-                        {
-                            itemFirstString.stringValue =
-                                EditorGUI.TextField(methodNameRect, itemFirstString.stringValue);
-                            break;
-                        }
-
-                        case "Vector2":
-                        {
-                            var value = TextProcessingService
-                                .StringVector2ToRealVector2(itemFirstString.stringValue);
-                            itemFirstString.stringValue = TextProcessingService.RealVector2ToStringVector2
-                                (EditorGUI.Vector2Field(methodNameRect, new GUIContent(), value));
-                            break;
-                        }
-
-                        case "null":
-                        {
-                            GUI.Label(methodNameRect, "No parameters are required.",
-                                new GUIStyle(GUI.skin.label) { normal = { textColor = Color.gray } });
-                            break;
-                        }
-
-                        default:
-                        {
-                            if (tag != "  ")
-                                UnityEngine.Debug.Log($"Case {tag} is not defined");
-                            goto case "string";
-                        }
-                    }
-
-                    methodNameRect.x += 3;
-                    methodNameRect.y += 2;
-                    if (string.IsNullOrEmpty(itemFirstString.stringValue))
-                        GUI.Label(methodNameRect, "Parameter",
+                        methodNameRect.y += rectHeight;
+                        methodNameRect.x = rect.x;
+                        GUI.Label(methodNameRect, "No Method Names.",
                             new GUIStyle { normal = { textColor = Color.grey } });
-                    methodNameRect.y -= 2;
-                    methodNameRect.x -= 3;
-                    GUI.color = color;
-                }
-            }
+                    }
+                    else
+                    {
+                        var width = rect.width / 2 - 5f;
+                        var originalKeys = EventController.MethodDictionary.Keys.ToArray();
+                        var methodNameKeys = originalKeys.Select(t => t.MethodName).ToArray();
+                        var methodTypeKeys = originalKeys.Select(t => t.MethodType).ToArray();
+                        var methodKeys = methodNameKeys.Select(key => key.Split(':')[1]).ToArray();
+
+                        for (var i = 0; i < methodNames.arraySize; i++)
+                        {
+                            color = GUI.color;
+                            GUI.color = i % 2 == 0 ? new Color(0.75f, 0.85f, 1f) : new Color(0.85f, 0.75f, 1f);
+
+                            methodNameRect.y += rectHeight;
+                            methodNameRect.x = rect.x;
+                            methodNameRect.width = width - 20;
+
+                            if (i >= methodNames.arraySize)
+                                methodNames.arraySize = i + 1;
+                            var item = methodNames.GetArrayElementAtIndex(i);
+                            var tag = "";
+                            var methodName = "";
+                            foreach (var t in item.stringValue)
+                            {
+                                if (t == ':')
+                                {
+                                    tag = methodName;
+                                    methodName = "";
+                                    continue;
+                                }
+
+                                methodName += t;
+                            }
+
+                            var popupKeys = new List<string>();
+                            for (var j = 0; j < methodTypeKeys.Length; j++)
+                            {
+                                var popupKey = methodTypeKeys[j];
+                                popupKey = !string.IsNullOrEmpty(popupKey) ? $"{methodTypeKeys[j]}/{methodKeys[j]}" : methodKeys[j];
+
+                                popupKeys.Add(popupKey);
+                            }
+
+                            var methodKeysIndex = EditorGUI.Popup(methodNameRect,
+                                Array.IndexOf(methodNameKeys, item.stringValue), popupKeys.ToArray());
+
+                            if (methodKeysIndex >= methodNameKeys.Length) methodKeysIndex = methodNameKeys.Length - 1;
+                            if (methodKeysIndex < 0) methodKeysIndex = 0;
+                            item.stringValue = methodNameKeys[methodKeysIndex];
+
+                            if (i >= useMethodEvents.arraySize)
+                                useMethodEvents.arraySize = i + 1;
+                            var itemBool = useMethodEvents.GetArrayElementAtIndex(i);
+
+                            methodNameRect.x += methodNameRect.width + 8.5f;
+                            methodNameRect.width = 15f;
+                            itemBool.boolValue = GUI.Toggle(methodNameRect, itemBool.boolValue, new GUIContent());
+                            methodNameRect.x += methodNameRect.width + 8.5f;
+                            methodNameRect.width = width - 20;
+                            if (i >= methodEvents.arraySize)
+                                methodEvents.arraySize = i + 1;
+                            var itemEvent = methodEvents.GetArrayElementAtIndex(i);
+                            GUI.enabled = itemBool.boolValue;
+
+                            if (i >= isGlobalMethodEvents.arraySize)
+                                isGlobalMethodEvents.arraySize = i + 1;
+                            var isGlobalMethodEvent = isGlobalMethodEvents.GetArrayElementAtIndex(i);
+                            isGlobalMethodEvent.boolValue = EntrySaver.EventEntryField(methodNameRect, itemEvent,
+                                isGlobalMethodEvent.boolValue, GetSceneName(serializedObject));
+
+                            GUI.enabled = true;
+
+                            methodNameRect.y += rectHeight;
+                            methodNameRect.x = rect.x;
+                            methodNameRect.width = rect.width - 12.5f;
+
+                            if (i >= firstStringParams.arraySize)
+                                firstStringParams.arraySize = i + 1;
+                            var itemFirstString = firstStringParams.GetArrayElementAtIndex(i);
+
+                            if (i >= secondStringParams.arraySize)
+                                secondStringParams.arraySize = i + 1;
+                            var itemSecondString = secondStringParams.GetArrayElementAtIndex(i);
+
+                            if (i >= thirdStringParams.arraySize)
+                                thirdStringParams.arraySize = i + 1;
+                            var itemThirdString = thirdStringParams.GetArrayElementAtIndex(i);
+
+
+                            switch (tag)
+                            {
+                                case "Vector2Ease":
+                                {
+                                    var rectOriginal = methodNameRect;
+                                    methodNameRect.width /= 3;
+
+                                    var value = TextProcessingService
+                                        .StringVector2ToRealVector2(itemFirstString.stringValue);
+                                    itemFirstString.stringValue = TextProcessingService.RealVector2ToStringVector2
+                                        (EditorGUI.Vector2Field(methodNameRect, new GUIContent(), value));
+
+                                    methodNameRect.x += methodNameRect.width + 5f;
+
+                                    methodNameRect.width /= 2;
+                                    methodNameRect.width -= 10;
+
+                                    GUI.Label(methodNameRect, "Duration");
+                                    methodNameRect.x += methodNameRect.width + 5f;
+
+                                    if (!float.TryParse(itemSecondString.stringValue, out var floatValue))
+                                        floatValue = 0;
+
+                                    itemSecondString.stringValue = EditorGUI.FloatField(methodNameRect, floatValue)
+                                        .ToString(CultureInfo.CurrentCulture);
+
+                                    methodNameRect.x += methodNameRect.width + 5f;
+                                    methodNameRect.width += 10;
+                                    methodNameRect.width *= 2;
+
+                                    if (!int.TryParse(itemThirdString.stringValue, out var easeValue))
+                                        easeValue = 0;
+
+                                    itemThirdString.stringValue =
+                                        ((int)(Ease)EditorGUI.EnumPopup(methodNameRect, (Ease)easeValue)).ToString();
+
+                                    methodNameRect = rectOriginal;
+                                    break;
+                                }
+
+
+                                case "string":
+                                {
+                                    itemFirstString.stringValue =
+                                        EditorGUI.TextField(methodNameRect, itemFirstString.stringValue);
+                                    break;
+                                }
+
+                                case "Vector2":
+                                {
+                                    var value = TextProcessingService
+                                        .StringVector2ToRealVector2(itemFirstString.stringValue);
+                                    itemFirstString.stringValue = TextProcessingService.RealVector2ToStringVector2
+                                        (EditorGUI.Vector2Field(methodNameRect, new GUIContent(), value));
+                                    break;
+                                }
+
+                                case "bool":
+                                {
+                                    if (!bool.TryParse(itemFirstString.stringValue, out var boolValue))
+                                        boolValue = false;
+                                    itemFirstString.stringValue =
+                                        EditorGUI.Toggle(methodNameRect, "Bool Value", boolValue).ToString();
+                                    break;
+                                }
+
+                                case "int":
+                                {
+                                    if (!int.TryParse(itemFirstString.stringValue, out var intValue)) intValue = 0;
+                                    itemFirstString.stringValue =
+                                        EditorGUI.IntField(methodNameRect, intValue).ToString();
+                                    break;
+                                }
+
+                                case "float":
+                                {
+                                    if (!float.TryParse(itemFirstString.stringValue, out var floatValue))
+                                        floatValue = 0f;
+                                    itemFirstString.stringValue = EditorGUI.FloatField(methodNameRect, floatValue)
+                                        .ToString(CultureInfo.CurrentCulture);
+                                    break;
+                                }
+
+
+                                case "null":
+                                {
+                                    GUI.Label(methodNameRect, "No parameters are required.",
+                                        new GUIStyle(GUI.skin.label) { normal = { textColor = Color.gray } });
+                                    break;
+                                }
+                                
+                                case "scene":
+                                {
+                                    methodNameRect.width /= 3;
+                                    itemFirstString.stringValue =
+                                        EditorGUI.TextField(methodNameRect, itemFirstString.stringValue);
+                                    methodNameRect.x += methodNameRect.width + 2.5f;
+                                    
+                                    if (!bool.TryParse(itemSecondString.stringValue, out var boolValue))
+                                        boolValue = false;
+                                    itemSecondString.stringValue =
+                                        EditorGUI.ToggleLeft(methodNameRect, "Is Mute BGM", boolValue).ToString();
+                                    
+                                    methodNameRect.x += methodNameRect.width + 2.5f;
+                                    
+                                    var value = TextProcessingService
+                                        .StringVector2ToRealVector2(itemThirdString.stringValue);
+                                    itemThirdString.stringValue = TextProcessingService.RealVector2ToStringVector2
+                                        (EditorGUI.Vector2Field(methodNameRect, new GUIContent(), value));
+                                    break;
+                                }
+                                
+                                default:
+                                {
+                                    if (tag != "  ")
+                                        UnityEngine.Debug.Log($"Case {tag} is not defined");
+                                    goto case "string";
+                                }
+                            }
+
+                            methodNameRect.x += 3;
+                            methodNameRect.y += 2;
+                            if (string.IsNullOrEmpty(itemFirstString.stringValue))
+                                GUI.Label(methodNameRect, "Parameter",
+                                    new GUIStyle { normal = { textColor = Color.grey } });
+                            methodNameRect.y -= 2;
+                            methodNameRect.x -= 3;
+                            GUI.color = color;
+                        }
+                    }
+
+            #endregion
 
             GUI.color = color;
         }
 
-        public static void EnsureUniqueTriggeredBy(SerializedProperty triggeredByList)
+        public static void EnsureUniqueTriggeredBy(SerializedProperty triggeredByList, string sceneName)
         {
-            if (triggeredByList == null || EntrySaver.events == null || EntrySaver.events.Length == 0)
+            var eventEntries = EntrySaver.GetEventEntry(true, sceneName);
+            if (triggeredByList == null || eventEntries == null || eventEntries.Length == 0)
             {
                 UCT.Other.Debug.LogError("triggeredBy列表或EntrySaver.events为空，无法保证唯一性。");
                 return;
@@ -1040,7 +1094,7 @@ namespace Editor.Inspector.EventSystem
 
                 if (usedNames.Contains(originalName))
                 {
-                    var newName = EntrySaver.events.Select(e => e.name)
+                    var newName = eventEntries.Select(e => e.name)
                         .FirstOrDefault(itemName => !usedNames.Contains(itemName));
 
                     if (!string.IsNullOrEmpty(newName))
@@ -1060,7 +1114,7 @@ namespace Editor.Inspector.EventSystem
 
         public static Rect CreateRuleCriteria(Rect rect, float y, SerializedProperty ruleCriterion,
             SerializedProperty criteriaParentOperation, float fieldWidth,
-            float rectHeight, int nestedLevel, int index, float ruleCriteriaRectY)
+            float rectHeight, int nestedLevel, int index, float ruleCriteriaRectY, string sceneName)
         {
             var criteria = ruleCriterion.FindPropertyRelative("criteria");
             var inputColor = GetCriterionBoxColor(nestedLevel, index);
@@ -1079,13 +1133,14 @@ namespace Editor.Inspector.EventSystem
                 {
                     criteriaBoxRect = CreateRuleCriterion(ruleCriterion, criteria, criteriaParentOperation, i,
                         criteriaBoxRect, fieldWidth, operationMap, inputColor, nestedLevel, rectHeight,
-                        ruleCriteriaRectY);
+                        ruleCriteriaRectY, sceneName);
                     isGrouped = false;
                 }
                 else
                 {
                     criteriaBoxRect = CreateRuleCriteria(rect, criteriaBoxRect.y, sonRuleCriterion,
-                        sonCriteriaParentOperation, fieldWidth, rectHeight, nestedLevel + 1, i, ruleCriteriaRectY);
+                        sonCriteriaParentOperation, fieldWidth, rectHeight, nestedLevel + 1, i, ruleCriteriaRectY,
+                        sceneName);
                     isGrouped = true;
                 }
 
@@ -1243,7 +1298,7 @@ namespace Editor.Inspector.EventSystem
         private static Rect CreateRuleCriterion(SerializedProperty ruleCriterion, SerializedProperty criteria,
             SerializedProperty criteriaParentOperation,
             int index, Rect rect, float fieldWidth, Dictionary<RuleLogicalOperation, string> operationMap,
-            Color inputColor, int nestedLevel, float rectHeight, float ruleCriteriaRectY)
+            Color inputColor, int nestedLevel, float rectHeight, float ruleCriteriaRectY, string sceneName)
         {
             var rectX = rect.x;
             var item = criteria.GetArrayElementAtIndex(index);
@@ -1259,6 +1314,7 @@ namespace Editor.Inspector.EventSystem
             //  Field
             color = GUI.color;
             var result = GetRuleCriterionResult(item,
+                out var isGlobal,
                 out var isResultReversed,
                 out var fact,
                 out var compare,
@@ -1283,7 +1339,7 @@ namespace Editor.Inspector.EventSystem
             rect.width = fieldWidth;
 
             //  fact
-            EntrySaver.FactEntryField(rect, fact);
+            isGlobal.boolValue = EntrySaver.FactEntryField(rect, fact, isGlobal.boolValue, sceneName);
 
 
             //  compare
@@ -1322,7 +1378,7 @@ namespace Editor.Inspector.EventSystem
                 rect.x = rectX;
                 rect.width = fieldWidth * 3;
                 AddNestedLevelTag(criteriaParentOperation, rect, fieldWidth, inputColor, nestedLevel, item,
-                    GetRuleCriterionResult(ruleCriterion, out _, out _, out _, out _, out _), ruleCriteriaRectY);
+                    GetRuleCriterionResult(ruleCriterion, out _, out _, out _, out _, out _, out _), ruleCriteriaRectY);
                 GUI.color = color;
             }
 
@@ -1362,10 +1418,12 @@ namespace Editor.Inspector.EventSystem
             GUI.enabled = true;
         }
 
-        public static bool GetRuleCriterionResult(SerializedProperty item, out bool isResultReversed,
+        public static bool GetRuleCriterionResult(SerializedProperty item, out SerializedProperty isGlobal,
+            out bool isResultReversed,
             out SerializedProperty fact, out SerializedProperty compare, out SerializedProperty detection,
             out SerializedProperty operation)
         {
+            isGlobal = item.FindPropertyRelative("isGlobal");
             isResultReversed = item.FindPropertyRelative("isResultReversed").boolValue;
             var factEntry = ParseFactEntry(item, out fact);
             compare = item.FindPropertyRelative("compare");
@@ -1374,6 +1432,7 @@ namespace Editor.Inspector.EventSystem
             var criteria = item.FindPropertyRelative("criteria");
             var result = RuleCriterion.GetResult(
                 isResultReversed,
+                isGlobal.boolValue,
                 factEntry,
                 (CriteriaCompare)compare.intValue,
                 detection.intValue,
@@ -1436,11 +1495,10 @@ namespace Editor.Inspector.EventSystem
         {
             var nameProperty = element.FindPropertyRelative("name");
             var nameP = nameProperty.stringValue;
-            EntrySaver.rules = EntrySaver.GetAllRuleEntry();
-            while (EntrySaver.rules.Any(bRule => bRule.name == nameP))
+            while (EntrySaver.GetRuleEntry(true, GetSceneName(serializedObject)).Any(bRule => bRule.name == nameP))
                 nameP += "_b";
             nameProperty.stringValue = nameP;
-            SetAllRuleEntry();
+            serializedObject.ApplyModifiedProperties();
         }
 
         protected override void DrawHeader(Rect rect)
@@ -1463,13 +1521,7 @@ namespace Editor.Inspector.EventSystem
         protected override void OnRemoveElement(SerializedProperty listProperty, int index)
         {
             listProperty.DeleteArrayElementAtIndex(index);
-            SetAllRuleEntry();
-        }
-
-        private void SetAllRuleEntry()
-        {
             serializedObject.ApplyModifiedProperties();
-            EntrySaver.rules = EntrySaver.GetAllRuleEntry();
         }
     }
 }

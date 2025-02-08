@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -6,6 +7,7 @@ namespace UCT.Global.Core
 {
     public class ObjectPool : MonoBehaviour
     {
+        public bool isStartFillPool;
         [Header("填充对象池的对象数量")] public int count = 10;
 
         [FormerlySerializedAs("obj")] public GameObject poolObject;
@@ -13,6 +15,11 @@ namespace UCT.Global.Core
 
         // 存储对象和其对应的脚本
         private readonly Queue<(GameObject gameObject, Component component)> _availableObj = new();
+
+        private void Start()
+        {
+            if (isStartFillPool) FillPool<Transform>();
+        }
 
         /// <summary>
         /// 初始化/填充对象池

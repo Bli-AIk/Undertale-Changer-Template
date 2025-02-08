@@ -16,15 +16,6 @@ MonoBehaviour:
   - name: SaveGame
     isTriggering: 0
     closeTime: 0.1
-  - name: CorridorToRuins
-    isTriggering: 0
-    closeTime: 0.1
-  - name: Plot
-    isTriggering: 0
-    closeTime: 0.1
   - name: InBattle
-    isTriggering: 0
-    closeTime: 0.1
-  - name: RuinsToCorridor
     isTriggering: 0
     closeTime: 0.1

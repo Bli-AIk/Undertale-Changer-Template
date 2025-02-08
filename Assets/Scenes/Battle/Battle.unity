@@ -1666,7 +1666,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1578228f98898b742aa8849753da5013, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  followMainCamera: 0
+  followTarget: 0
   sth: {fileID: 227534439}
   followPosition: 1
   positionAdd: {x: 0, y: 3.9, z: 123.5}
@@ -3689,20 +3689,22 @@ MonoBehaviour:
   pressX: 0
   clockTime: 0
   isStop: 0
-  fx: 0
-  fxRandomPitch: 0
-  speed: 0.075
-  speedSlow: 0.15
-  clock: 0.01
   passText: 0
   spriteChanger: {fileID: 0}
-  isOverworld: 0
+  fx: 0
+  fxRandomPitch: 0
   pitch: 1
   volume: 0.5
+  speed: 0.075
+  currentSpeed: 0
+  speedSlow: 0.15
+  clock: 0.01
+  isOverworld: 0
   audioMixerGroup: {fileID: 0}
   useFont: 0
   dynamicType: 0
   forceReturn: 0
+  canClose: 0
 --- !u!1001 &1013083398
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4815,8 +4817,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5467764e8bb6a848b1223cfa9e5f802, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isStartFillPool: 0
   count: 10
-  obj: {fileID: 0}
+  poolObject: {fileID: 0}
   parent: {fileID: 0}
 --- !u!50 &1327598528
 Rigidbody2D:
@@ -6759,7 +6762,7 @@ GameObject:
   - component: {fileID: 1570390498}
   - component: {fileID: 1570390502}
   m_Layer: 0
-  m_Name: Player
+  m_Name: BattlePlayer
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7803,20 +7806,22 @@ MonoBehaviour:
   pressX: 0
   clockTime: 0
   isStop: 0
-  fx: 0
-  fxRandomPitch: 0
-  speed: 0.075
-  speedSlow: 0.15
-  clock: 0.1
   passText: 0
   spriteChanger: {fileID: 0}
-  isOverworld: 0
+  fx: 0
+  fxRandomPitch: 0
   pitch: 1
   volume: 0.5
+  speed: 0.075
+  currentSpeed: 0
+  speedSlow: 0.15
+  clock: 0.1
+  isOverworld: 0
   audioMixerGroup: {fileID: 0}
   useFont: 0
   dynamicType: 0
   forceReturn: 0
+  canClose: 0
 --- !u!1 &1735849019
 GameObject:
   m_ObjectHideFlags: 0

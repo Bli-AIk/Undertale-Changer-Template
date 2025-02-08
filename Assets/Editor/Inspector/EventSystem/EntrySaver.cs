@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UCT.EventSystem;
 using UnityEditor;
@@ -8,67 +9,74 @@ namespace Editor.Inspector.EventSystem
 {
     public static class EntrySaver
     {
-        public static FactEntry[] facts;
-        public static EventEntry[] events;
-        public static RuleEntry[] rules;
-
-        public static FactEntry[] GetAllFactEntry()
+        public static FactEntry[] GetFactEntry(bool isGlobal, string sceneName)
         {
-            var guids = AssetDatabase.FindAssets("t:FactTable");
-            return guids.Select(AssetDatabase.GUIDToAssetPath).Select(AssetDatabase.LoadAssetAtPath<FactTable>)
-                .Where(eventTable => eventTable && eventTable.facts != null)
-                .SelectMany(eventTable => eventTable.facts).ToArray();
+            var path = "Tables/FactTable";
+            if (!isGlobal && string.IsNullOrEmpty(sceneName)) isGlobal = true;
+            if (!isGlobal)
+                path = $"Tables/{sceneName}/FactTable";
+
+            return Resources.Load<FactTable>(path).facts.ToArray();
         }
 
-        public static EventEntry[] GetAllEventEntry()
+        public static EventEntry[] GetEventEntry(bool isGlobal, string sceneName)
         {
-            var guids = AssetDatabase.FindAssets("t:EventTable");
-            return guids.Select(AssetDatabase.GUIDToAssetPath).Select(AssetDatabase.LoadAssetAtPath<EventTable>)
-                .Where(eventTable => eventTable && eventTable.events != null)
-                .SelectMany(eventTable => eventTable.events).ToArray();
+            var path = "Tables/EventTable";
+            if (!isGlobal && string.IsNullOrEmpty(sceneName)) isGlobal = true;
+            if (!isGlobal)
+                path = $"Tables/{sceneName}/EventTable";
+
+            return Resources.Load<EventTable>(path).events.ToArray();
         }
 
-        public static RuleEntry[] GetAllRuleEntry()
+        public static RuleEntry[] GetRuleEntry(bool isGlobal, string sceneName)
         {
-            var guids = AssetDatabase.FindAssets("t:RuleTable");
-            return guids.Select(AssetDatabase.GUIDToAssetPath).Select(AssetDatabase.LoadAssetAtPath<RuleTable>)
-                .Where(ruleTable => ruleTable && ruleTable.rules != null)
-                .SelectMany(ruleTable => ruleTable.rules).ToArray();
+            var path = "Tables/RuleTable";
+            if (string.IsNullOrEmpty(sceneName)) isGlobal = false;
+            if (isGlobal)
+                path = $"Tables/{sceneName}/RuleTable";
+
+            return Resources.Load<RuleTable>(path).rules.ToArray();
         }
-        
-        public static void EventEntryField(Rect rect, SerializedProperty property)
+
+        public static bool EventEntryField(Rect rect, SerializedProperty property, bool isGlobal, string sceneName)
         {
-            events = GetAllEventEntry();
-            if (events.Length <= 0)
+            rect = RegionToggle(rect, isGlobal, out var changedIsGlobal);
+            var entryIndex = 0;
+            var allEventEntry = GetEventEntry(changedIsGlobal, sceneName);
+
+            if (allEventEntry.Length <= 0)
             {
                 GUI.Label(rect, "No events!",
                     new GUIStyle { normal = { textColor = Color.red } });
-                return;
+                return changedIsGlobal;
             }
 
-            var oldEventName = property.FindPropertyRelative("name").stringValue;
+            var allEventEntryName = new List<string>();
+            for (var j = 0; j < allEventEntry.Length; j++)
+            {
+                allEventEntryName.Add(allEventEntry[j].name);
+                if (allEventEntry[j].name == property.stringValue) entryIndex = j;
+            }
 
-            var eventNames = events.Select(nEvent => nEvent.name).ToArray();
-
-            var popup = Array.IndexOf(eventNames, oldEventName);
-
-            popup = popup >= 0 ? popup : 0;
-
-            popup = EditorGUI.Popup(rect, popup, eventNames);
-
-            property.FindPropertyRelative("name").stringValue = events[popup].name;
-            property.FindPropertyRelative("isTriggering").boolValue = events[popup].isTriggering;
+            entryIndex = EditorGUI.Popup(rect, entryIndex, allEventEntryName.ToArray());
+            property.stringValue = allEventEntryName[entryIndex];
+            return changedIsGlobal;
         }
 
-        public static void FactEntryField(Rect rect, SerializedProperty fact, bool isDisplayValue = true,
+        public static bool FactEntryField(Rect rect, SerializedProperty fact, bool isGlobal, string sceneName,
+            bool isDisplayValue = true,
             bool setValue = false)
         {
-            facts = GetAllFactEntry();
+            rect = RegionToggle(rect, isGlobal, out var changedIsGlobal);
+
+            var facts = GetFactEntry(changedIsGlobal, sceneName);
+
             if (facts.Length <= 0)
             {
                 GUI.Label(rect, "No facts!",
                     new GUIStyle { normal = { textColor = Color.red } });
-                return;
+                return changedIsGlobal;
             }
 
             var oldFactName = fact.FindPropertyRelative("name").stringValue;
@@ -87,7 +95,7 @@ namespace Editor.Inspector.EventSystem
             fact.FindPropertyRelative("area").enumValueIndex = (int)facts[popup].area;
             fact.FindPropertyRelative("scene").stringValue = facts[popup].scene;
 
-            if (!isDisplayValue) return;
+            if (!isDisplayValue) return changedIsGlobal;
 
             var factLabelStyle = new GUIStyle(GUI.skin.label)
             {
@@ -97,6 +105,31 @@ namespace Editor.Inspector.EventSystem
             factLabelRect.x -= 15;
             factLabelRect.y -= 1;
             GUI.Label(factLabelRect, $"({facts[popup].value})", factLabelStyle);
+            return changedIsGlobal;
+        }
+
+        public static Rect RegionToggle(Rect rect, bool isGlobal, out bool changedIsGlobal)
+        {
+            var toggleRect = rect;
+            toggleRect.width = rect.width / 5;
+            var toggleStyle = new GUIStyle(GUI.skin.button);
+
+            changedIsGlobal = GUI.Toggle(toggleRect, isGlobal, new GUIContent(), toggleStyle);
+            const float shrinkAmount = 2.5f;
+            var shrunkRect = new Rect(
+                toggleRect.x + shrinkAmount,
+                toggleRect.y + shrinkAmount,
+                toggleRect.width - shrinkAmount * 2,
+                toggleRect.height - shrinkAmount * 2
+            );
+            GUI.DrawTexture(shrunkRect,
+                (Texture)EditorGUIUtility.Load($"Icons/EventSystem/{(changedIsGlobal ? "Public" : "Location")}.png"),
+                ScaleMode.ScaleToFit);
+
+            rect.x += toggleRect.width + 2.5f;
+            rect.width -= toggleRect.width + 2.5f;
+
+            return rect;
         }
     }
 }

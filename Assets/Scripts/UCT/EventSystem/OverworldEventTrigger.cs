@@ -12,42 +12,41 @@ namespace UCT.EventSystem
 {
     public class OverworldEventTrigger : MonoBehaviour
     {
-        public Action OnTriggerEvent;
-        
         public string fsmObjectName;
 
         public FiniteStateMachine fsmObject;
 
         public List<string> tags;
-        
+
         public List<EventTriggerMode> eventTriggerModes;
 
-        [FormerlySerializedAs("events")] 
-        public List<string> eventNames;
+        [FormerlySerializedAs("events")] public List<string> eventNames;
 
-        [FormerlySerializedAs("useSimpleRule")] public bool useSimpleRules;
-        
+        [FormerlySerializedAs("useSimpleRule")]
+        public bool useSimpleRules;
+
         public List<RuleEntry> simpleRules;
-        
+        public bool isExecuteAllRules;
+
         /// <summary>
-        /// 能见度，取值范围为0-1。
-        /// 用于视线检测。
+        ///     能见度，取值范围为0-1。
+        ///     用于视线检测。
         /// </summary>
         public float clarity = 0.5f;
-        
+
+        private bool _isInTrigger;
+        public Action OnTriggerEvent;
+
         private void Start()
         {
             GetFsmObject();
         }
 
-        private bool IsCompareTag(GameObject obj)
+        private void Update()
         {
-            return tags.Any(obj.CompareTag);
-        }
-        
-        public bool IsEventTriggerModeActive(EventTriggerMode mode)
-        {
-            return eventTriggerModes != null && eventTriggerModes.Contains(mode);
+            if (IsEventTriggerModeActive(EventTriggerMode.Interact) &&
+                InputService.GetKeyDown(KeyCode.Z) && _isInTrigger)
+                TriggerEvent();
         }
 
         private void OnCollisionEnter2D(Collision2D other)
@@ -68,33 +67,40 @@ namespace UCT.EventSystem
 
         private void OnTriggerEnter2D(Collider2D other)
         {
+            if (other.CompareTag("PlayerTrigger"))
+                _isInTrigger = true;
+                
             if (!IsCompareTag(other.gameObject)) return;
 
-            
+
             if (IsEventTriggerModeActive(EventTriggerMode.TriggerEnter))
                 TriggerEvent();
         }
 
-        private bool _hasTriggeredInteract; //   避免Interact状态被多次触发
-        private void OnTriggerStay2D(Collider2D other)
-        {
-
-            if (InputService.GetKeyUp(KeyCode.Z))
-                _hasTriggeredInteract = false;
-
-            if (!IsEventTriggerModeActive(EventTriggerMode.Interact) || !other.CompareTag("PlayerTrigger") ||
-                !InputService.GetKey(KeyCode.Z) || _hasTriggeredInteract) return;
-            TriggerEvent();
-            _hasTriggeredInteract = true;
-        }
-
         private void OnTriggerExit2D(Collider2D other)
         {
+            _isInTrigger = false;
 
             if (!IsCompareTag(other.gameObject)) return;
 
             if (IsEventTriggerModeActive(EventTriggerMode.TriggerExit))
                 TriggerEvent();
+        }
+
+        private void OnTriggerStay2D(Collider2D other)
+        {
+        
+            
+        }
+
+        private bool IsCompareTag(GameObject obj)
+        {
+            return tags.Any(obj.CompareTag);
+        }
+
+        public bool IsEventTriggerModeActive(EventTriggerMode mode)
+        {
+            return eventTriggerModes != null && eventTriggerModes.Contains(mode);
         }
 
 
@@ -114,47 +120,50 @@ namespace UCT.EventSystem
             if (GameUtilityService.IsGamePausedOrSetting()) return;
 
             if (!useSimpleRules)
-            {
-                for (var i = 0; i < eventNames.Count; i++) 
+                for (var i = 0; i < eventNames.Count; i++)
                 {
                     var localName = eventNames[i];
                     // ReSharper disable once ForCanBeConvertedToForeach
-                    for (var j = 0; j < EventController.eventTable.events.Count; j++)
+                    var eventTables = new[] { EventController.eventTable, EventController.globalEventTable };
+                    for (var eventTableIndex = 0; eventTableIndex < eventTables.Length; eventTableIndex++)
                     {
-                        var eventEntry = EventController.eventTable.events[j];
-
-                        if (eventEntry.name != localName) continue;
-
-                        if (eventEntry.closeTime >= 0)
+                        var eventTable = eventTables[eventTableIndex];
+                        for (var j = 0; j < eventTable.events.Count; j++)
                         {
-                            var index = j;
-                            Timer.Register(eventEntry.closeTime, () =>
+                            var eventEntry = eventTable.events[j];
+
+                            if (eventEntry.name != localName) continue;
+
+                            if (eventEntry.closeTime >= 0)
                             {
-                                if (!EventController.eventTable.events[index].isTriggering)
-                                    return;
-                                var falseEntry = eventEntry;
-                        
-                                eventEntry.isTriggering = false;
-                                eventNames[index] = localName;
-                                EventController.eventTable.events[index] = falseEntry;
-                            });
+                                var index = j;
+                                Timer.Register(eventEntry.closeTime, () =>
+                                {
+                                    if (!eventTable.events[index].isTriggering)
+                                        return;
+                                    var falseEntry = eventEntry;
+
+                                    eventEntry.isTriggering = false;
+                                    eventNames[index] = localName;
+                                    eventTable.events[index] = falseEntry;
+                                });
+                            }
+
+                            eventEntry.isTriggering = true;
+                            eventNames[i] = localName;
+                            eventTable.events[j] = eventEntry;
                         }
 
-                        eventEntry.isTriggering = true;
-                        eventNames[i] = localName;
-                        EventController.eventTable.events[j] = eventEntry;
+                        eventTables[eventTableIndex] = eventTable;
                     }
                 }
-            }
             else
-            {
                 foreach (var rule in simpleRules)
                 {
                     EventController.DetectionRule(new EventEntry(), rule, out var isTriggered, true);
-                    if (isTriggered) break;
+                    if (isTriggered && !isExecuteAllRules) break;
                 }
-            }
-            
+
             OnTriggerEvent?.Invoke();
         }
     }
@@ -198,7 +207,5 @@ namespace UCT.EventSystem
         ///     视线离开型：离开视野（射线范围）时触发。
         /// </summary>
         LineOfSightExit
-        
     }
-    
 }

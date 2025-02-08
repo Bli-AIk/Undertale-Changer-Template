@@ -2,10 +2,10 @@
 using System.Linq;
 using Alchemy.Inspector;
 using UCT.Global.Core;
-using UCT.Global.Settings;
 using UCT.Overworld.FiniteStateMachine;
 using UCT.Service;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UCT.Overworld
 { 
@@ -14,16 +14,17 @@ namespace UCT.Overworld
     {
         public float owTimer; 
         public Vector2 walkFxRange = new(0, 9);
-        
+        public StateType stateType;
         
         [Title("开启倒影")] 
         public bool isShadow;
-        private SpriteRenderer _spriteRenderer, _shadowSpriteRenderer;
+        [FormerlySerializedAs("_spriteRenderer")] public SpriteRenderer spriteRenderer;
+        [FormerlySerializedAs("_shadowSpriteRenderer")] public SpriteRenderer shadowSpriteRenderer;
 
         private void Start()
         {
-            _spriteRenderer = GetComponent<SpriteRenderer>();
-            _shadowSpriteRenderer = transform.Find("BottomAxis/Shadow").GetComponent<SpriteRenderer>();
+            spriteRenderer = GetComponent<SpriteRenderer>();
+            shadowSpriteRenderer = transform.Find("BottomAxis/Shadow").GetComponent<SpriteRenderer>();
         }
         private void Update()
         {
@@ -34,20 +35,27 @@ namespace UCT.Overworld
             
             if (GameUtilityService.IsGamePausedOrSetting() || BackpackBehaviour.Instance.select > 0)
             {
-                TransitionToStateIfNeeded(States[DefaultStateType.Idle]);
+                TransitionToStateIfNeeded(StateType.Idle);
                 return;
             }
             
             InputPlayerMove();
             SetShadow();
         }
-
+        protected override void InitializeStates()
+        {
+            States.Add(StateType.Idle, new IdleState(this, data));
+            States.Add(StateType.Walk, new WalkState(this, data));
+            States.Add(StateType.Run, new RunState(this, data));
+            States.Add(StateType.Spin, new SpinState(this, data));
+            TransitionState(States[StateType.Idle]);
+        }
         private void SetShadow()
         {
-            _shadowSpriteRenderer.transform.parent.gameObject.SetActive(isShadow);
+            shadowSpriteRenderer.transform.parent.gameObject.SetActive(isShadow);
             if (isShadow)
             {
-                _shadowSpriteRenderer.sprite = _spriteRenderer.sprite;
+                shadowSpriteRenderer.sprite = spriteRenderer.sprite;
             }
         }
 
@@ -123,14 +131,13 @@ namespace UCT.Overworld
         {
             if (isGetKey)
             {
-                TransitionToStateIfNeeded(!InputService.GetKey(KeyCode.X)
-                    ? States[DefaultStateType.Walk]
-                    : States[DefaultStateType.Run]);
+                stateType = !InputService.GetKey(KeyCode.X) ? StateType.Walk : StateType.Run;
             }
-            else
+            else if (stateType != StateType.Spin)
             {
-                TransitionToStateIfNeeded(States[DefaultStateType.Idle]);
+                stateType = StateType.Idle;
             }
+            TransitionToStateIfNeeded(stateType);
         }
 
 
@@ -140,5 +147,10 @@ namespace UCT.Overworld
                 TransitionState(targetState);
         }
 
+        public void TransitionToStateIfNeeded(StateType inputStateType)
+        {
+            stateType = inputStateType;
+            TransitionToStateIfNeeded(States[inputStateType]);
+        }
     }
 }

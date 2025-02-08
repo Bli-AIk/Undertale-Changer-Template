@@ -394,7 +394,7 @@ namespace UCT.Service
             if (components.Length == 2 && float.TryParse(components[0], out var x) &&
                 float.TryParse(components[1], out var y)) return new Vector2(x, y);
             
-            Other.Debug.LogError($"输入的字符串 \"{stringVector2}\" 格式不正确，应形如 (x,y)。");
+            Other.Debug.LogWarning($"输入的字符串 \"{stringVector2}\" 格式不正确，应形如 (x,y)。");
             return new Vector2();
         }
         /// <summary>

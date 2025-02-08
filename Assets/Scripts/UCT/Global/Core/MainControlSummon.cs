@@ -2,7 +2,6 @@ using System;
 using Alchemy.Inspector;
 using UCT.Global.Audio;
 using UCT.Global.Settings;
-using UCT.Global.UI;
 using UCT.Overworld;
 using UCT.Service;
 using UnityEngine;
@@ -17,70 +16,83 @@ namespace UCT.Global.Core
     /// </summary>
     public class MainControlSummon : MonoBehaviour
     {
-        [Title("OverWorld")]
-        [TabGroup("OWLayer","OWCamera")]
+        [Title("OverWorld")] [TabGroup("OWLayer", "OWCamera")]
         public bool isCameraLimit;
-        [TabGroup("OWLayer","OWCamera")]
-        public bool isCameraFollow;
-        [TabGroup("OWLayer","OWCamera")]
-        [EnableIf("isCameraFollow")][Indent] 
-        public Vector2 cameraLimitX; //限制摄像机最大XY范围 0则不动
-        [TabGroup("OWLayer","OWCamera")]
-        [EnableIf("isCameraFollow")][Indent] 
-        public Vector2 cameraLimitY; //限制摄像机最大XY范围 0则不动
-        
-        // ---------------------------------------------------
-        
-        [TabGroup("OWLayer", "OWPlayer")] 
-        public Vector2 walkFxRange = new(0, 9);
-        [TabGroup("OWLayer","OWPlayer")]
-        public bool isShadow;
-        
-        // ---------------------------------------------------
-        [Title("Other")]
-        [TabGroup("OtherLayer","Canvas")]
-        public RenderMode renderMode;
-        [TabGroup("OtherLayer","Canvas")]
-        [FormerlySerializedAs("framePic")] 
-        public int frameSpriteIndex;
-        
-        // ---------------------------------------------------
-      
-        [TabGroup("OtherLayer","BGMControl")]
-        [Title("BGM本体音频 空为无音频")]
-        public AudioClip bgmClip;
-        [TabGroup("OtherLayer","BGMControl")]
-        [Title("BGM音量")] public float volume = 0.5f;
-        [TabGroup("OtherLayer","BGMControl")]
-        [Title("BGM音调")] public float pitch = 0.5f;
-        [TabGroup("OtherLayer","BGMControl")]
-        [Title("BGM循环播放初始状态")] public bool loop = true;
-        
+
+        [TabGroup("OWLayer", "OWCamera")] public bool isCameraFollow;
+
+        [TabGroup("OWLayer", "OWCamera")] [EnableIf("isCameraFollow")] [Indent]
+        public float cameraMinX;
+
+        [TabGroup("OWLayer", "OWCamera")] [EnableIf("isCameraFollow")] [Indent]
+        public float cameraMinY;
+
+        [TabGroup("OWLayer", "OWCamera")] [EnableIf("isCameraFollow")] [Indent]
+        public float cameraMaxX;
+
+        [TabGroup("OWLayer", "OWCamera")] [EnableIf("isCameraFollow")] [Indent]
+        public float cameraMaxY;
+
+
         // ---------------------------------------------------
 
-        [TabGroup("OtherLayer","MainControl")]
-        [Title("黑场状态相关")]
+        [TabGroup("OWLayer", "OWPlayer")] public Vector2 walkFxRange = new(0, 9);
+
+        [TabGroup("OWLayer", "OWPlayer")] public bool isShadow;
+
+        // ---------------------------------------------------
+        [Title("Other")] [TabGroup("OtherLayer", "Canvas")]
+        public RenderMode renderMode;
+
+        [TabGroup("OtherLayer", "Canvas")] [FormerlySerializedAs("framePic")]
+        public int frameSpriteIndex;
+
+        // ---------------------------------------------------
+
+        [TabGroup("OtherLayer", "BGMControl")] [Title("BGM本体音频 空为无音频")]
+        public AudioClip bgmClip;
+
+        [TabGroup("OtherLayer", "BGMControl")] [Title("BGM音量")]
+        public float volume = 0.5f;
+
+        [TabGroup("OtherLayer", "BGMControl")] [Title("BGM音调")]
+        public float pitch = 0.5f;
+
+        [TabGroup("OtherLayer", "BGMControl")] [Title("BGM循环播放初始状态")]
+        public bool loop = true;
+
+        // ---------------------------------------------------
+
+        [TabGroup("OtherLayer", "MainControl")] [Title("黑场状态相关")]
         public MainControl.SceneState sceneState;
-        [FormerlySerializedAs("haveInOutBlack")] [TabGroup("OtherLayer","MainControl")]
+
+        [FormerlySerializedAs("haveInOutBlack")] [TabGroup("OtherLayer", "MainControl")]
         public bool isFadeTransitionEnabled;
-        [FormerlySerializedAs("noInBlack")] [TabGroup("OtherLayer","MainControl")]
-        [EnableIf("isFadeTransitionEnabled")][Indent]
+
+        [FormerlySerializedAs("noInBlack")]
+        [TabGroup("OtherLayer", "MainControl")]
+        [EnableIf("isFadeTransitionEnabled")]
+        [Indent]
         public bool isFadeInDisabled;
-        [FormerlySerializedAs("notPauseIn")] [TabGroup("OtherLayer","MainControl")]
-        [EnableIf("isFadeTransitionEnabled")][Indent]
+
+        [FormerlySerializedAs("notPauseIn")]
+        [TabGroup("OtherLayer", "MainControl")]
+        [EnableIf("isFadeTransitionEnabled")]
+        [Indent]
         public bool isFadeInUnpaused;
 
         private void Awake()
         {
+            if (sceneState == MainControl.SceneState.Overworld)
+                SetupController(MainControl.overworldPlayerBehaviour, ExistingPlayerSetup, NonexistentPlayerSetup);
             SetupController(Camera.main, ExistingCameraSetup, NonexistentCameraSetup);
-            SetupController(MainControl.overworldPlayerBehaviour, ExistingPlayerSetup, NonexistentPlayerSetup);
             SetupController(SettingsController.Instance, ExistingCanvasSetup, NonexistentCanvasSetup);
             SetupController(AudioController.Instance, ExistingAudioSetup, NonexistentAudioSetup);
             SetupController(MainControl.Instance, ExistingMainControlSetup, NonexistentMainControlSetup);
         }
 
 
-        private static void SetupController<T>(T instance, Action existingSetup, Action nonexistentSetup)
+        public static void SetupController<T>(T instance, Action existingSetup, Action nonexistentSetup)
             where T : class
         {
             if (instance != null)
@@ -113,10 +125,12 @@ namespace UCT.Global.Core
         {
             cameraFollowPlayer.isLimit = isCameraLimit;
             cameraFollowPlayer.isFollow = isCameraFollow;
-            cameraFollowPlayer.limitX = cameraLimitX;
-            cameraFollowPlayer.limitY = cameraLimitY;
+            cameraFollowPlayer.minX = cameraMinX;
+            cameraFollowPlayer.maxX = cameraMaxX;
+            cameraFollowPlayer.minY = cameraMinY;
+            cameraFollowPlayer.maxY = cameraMaxY;
         }
-        
+
         private void ExistingPlayerSetup()
         {
             PlayerSetup();

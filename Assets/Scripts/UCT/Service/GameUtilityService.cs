@@ -61,7 +61,8 @@ namespace UCT.Service
 
             if (!SettingsStorage.isUsingHdFrame)
             {
-                MainControl.Instance.mainCamera.rect = new Rect(0, 0, 1, 1);
+                if (MainControl.Instance.mainCamera)
+                    MainControl.Instance.mainCamera.rect = new Rect(0, 0, 1, 1);
 
                 if (MainControl.Instance.sceneState == MainControl.SceneState.InBattle)
                     if (MainControl.Instance.cameraMainInBattle)
@@ -72,7 +73,8 @@ namespace UCT.Service
             }
             else
             {
-                MainControl.Instance.mainCamera.rect = new Rect(0, 0.056f, 1, 0.888f);
+                if (MainControl.Instance.mainCamera)
+                    MainControl.Instance.mainCamera.rect = new Rect(0, 0.056f, 1, 0.888f);
 
                 if (MainControl.Instance.sceneState == MainControl.SceneState.InBattle)
                     if (MainControl.Instance.cameraMainInBattle)

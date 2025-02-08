@@ -5,7 +5,6 @@ using DG.Tweening;
 using TMPro;
 using UCT.Global.Audio;
 using UCT.Global.Core;
-using UCT.Global.Settings;
 using UCT.Global.UI;
 using UCT.Service;
 using UnityEngine;
@@ -224,7 +223,8 @@ namespace UCT.Battle
             TurnTextLoad();
             _itemSelectController.gameObject.SetActive(true);
 
-            MainControl.Instance.battlePlayerController.collideCollider.enabled = false;
+            if (MainControl.Instance.battlePlayerController)
+                MainControl.Instance.battlePlayerController.collideCollider.enabled = false;
         }
 
         /// <summary>
