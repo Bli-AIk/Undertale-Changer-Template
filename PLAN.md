@@ -2,87 +2,84 @@
 
 This document outlines the long-term update plan for UCT.
 
-Please note that these update plans are not listed in any particular order and are subject to change, postponement, or abandonment.
+Please note that these update plans are not listed in any particular order, and may change, be shelved, or discarded.
 
-For the long-term update plan of UCT, please refer to [PLAN.md](PLAN.md), [PLAN_zh-CN.md](PLAN_zh-CN.md), or [PLAN_zh-TW.md](PLAN_zh-TW.md).
+For the long-term update plan for UCT, please refer to [PLAN.md](PLAN.md), [PLAN_zh-CN.md](PLAN_zh-CN.md) or [PLAN_zh-TW.md](PLAN_zh-TW.md).
 
-For specific update content regarding UCT, please refer to [CHANGELOG.md](CHANGELOG.md), [CHANGELOG_zh-CN.md](CHANGELOG_zh-CN.md), or [CHANGELOG_zh-TW.md](CHANGELOG_zh-TW.md).
+For specific update contents regarding UCT, please refer to [CHANGELOG.md](CHANGELOG.md), [CHANGELOG_zh-CN.md](CHANGELOG_zh-CN.md) or [CHANGELOG_zh-TW.md](CHANGELOG_zh-TW.md).
 
-The update plans/change logs in Simplified Chinese will be prioritized, and other languages will utilize GPT for translation during **version number changes**.
+Updates in Simplified Chinese will be prioritized, while updates in other languages will use GPT for translation when the **version number changes**.
 
-## Directory
+## Table of Contents
 
-[General](#General): Contains improvement plans for basic/general functionalities within the template.
+[General](#General): Includes improvement plans for basic/general functions within the template.
 
-[OW Class](#OW-Class): Contains plans for remaking systems related to the Overworld scenes.
+[OW](#OW): Includes plans for the redesign of systems involved in Overworld scenes.
 
-[Combat Class](#Combat-Class): Contains plans for expanding and restructuring the combat system.
+[Combat](#Combat): Includes plans for the expansion and reconstruction of the combat system.
 
-[New Additions](#New-Additions): Contains plans for new scenes and functionalities.
+[New Features](#New Features): Includes plans for newly added scenes and functions.
 
-[Other](#Other): Contains plans outside of the above four categories.
+[Others](#Others): Includes plans that fall outside the four categories mentioned above.
 
-[Postponed](#Postponed): Contains some plans that were once scheduled but have been postponed for various reasons.
+[On Hold](#On Hold): Includes some plans that were once scheduled but are now on hold for various reasons.
 
 ## General
-### Existing System Refinement
-- [x] Refine BGM Controller[^1]
-- [ ] Store item data in ScriptableObject
+### Refinement of Existing Systems
+- [x] Refine BGM controller[^1]
+- [ ] Store item data to ScriptableObject
 
 ### UI Optimization and Refinement
-- [ ] Add low-resolution magnification display feature[^2]
-- [ ] Separate UI drawing logic and execution logic for MENU interface, settings interface, and OW save interface
-- [ ] Refine functionalities of MENU interface, settings interface, and OW save interface
+- [ ] Add low-resolution zoom display feature[^2]
+- [ ] Separate the UI rendering logic and specific execution logic of the MENU interface, settings interface, and OW save interface
+- [ ] Refine functions of the MENU interface, settings interface, and OW save interface
 
 ### Performance Optimization
 - [x] Add DebugLogger script[^3]
 - [ ] Use coroutines to call language packs instead of calling all at once
 
-## OW Class
+## OW
 ### Event System
-- [x] Redo OW event system
+- [x] Redesign the OW event system
 - [ ] Add a Dr-style chase system
+- [ ] Store event system data
 
-### Plot System
-- [ ] Introduce a visual plot editor
-- [ ] Add plot system proofreading scene[^4]
-- [ ] Add OW plot controller
+### Story System
+- [ ] Enrich the dialogue system[^4]
+- [ ] Add proofreading scenes for all text[^5]
 
+## Combat
 ### Data Storage
-- [ ] Store room data in ScriptableObject
+- [x] Store bullet data to ScriptableObject
+- [ ] Read JSON turn data
 
-## Combat Class
-### Data Storage
-- [x] Store bullet data in ScriptableObject
-- [ ] Store turn data in ScriptableObject
-
-### Turn System Redo
-- [ ] Add visual turn system editor
+### Redesign of Turn System
+- [ ] Add a visual turn system editor (separate project) that generates JSON turn data
 - [ ] Add path bullet generator
 
 ### Combat System Expansion
-- [ ] Add functionality to insert subtitles/dialogue during turns
-- [ ] Add multiple battles[^5]
+- [ ] Add functionality to insert subtitles/dialogues during turns
+- [ ] Add multi-battles[^6]
 
 ### Fixes and Optimization
 - [x] Optimize 3D background
 - [x] Fix blue heart
 
-### Irregular Frame
-- [ ] Fix irregular frame
-- [ ] Redo collision system to accommodate irregular frames
+### Irregular Frames
+- [ ] Fix irregular frames
+- [ ] Redesign collision system to adapt to irregular frames
 
 ### Judgment and Collision
-- [ ] Refine FIGHT-related judgments
-- [ ] Add monster death judgment
-- [ ] Complete the seven types of player soul colors
+- [ ] Refine FIGHT related judgments
+- [ ] Add monster death judgments
+- [ ] Complete seven player soul colors
 
-## New Additions
+## New Features
 ### Scene Expansion
 - [x] Add multilingual expansion in naming scene
 - [ ] Add battle settlement scene
-- [ ] Add BGM broadcasting scene
-- [ ] Add credits/thanks scene
+- [ ] Add BGM broadcast scene
+- [ ] Add credits/acknowledgment scene
 - [ ] Add shop scene
 
 ### Rendering Expansion
@@ -93,28 +90,28 @@ The update plans/change logs in Simplified Chinese will be prioritized, and othe
 - [ ] Add MIDI detection system
 - [ ] Add historical text system
 - [ ] Add storage system
-- [ ] Add CC subtitle system[^6]
+- [ ] Add CC subtitle system[^7]
 - [ ] Add achievement system
-- [ ] Add Buff system[^7]
+- [ ] Add Buff system[^8]
 - [ ] Add UI manager
-- [ ] Add customizable weapon/armor expansion support
+- [ ] Add custom expansion support for weapons/armor
 
 ### Accessibility
 - [ ] Add narrator
 - [ ] Add colorblind filter
 
-## Other
+## Others
 ### Project Localization
-- [x] Merge Chinese and English branches by replacing comment texts through scripts
-- [ ] Add Rich Text TAG: Custom optional translated names (for selective translation of names, etc.)
+- [x] Merge Chinese and English branches by replacing comment texts with scripts
+- [ ] Add rich text TAG: custom optional translation names (for selective translation of names, etc.)
 
-### Cleanup and Maintenance
+### Cleaning and Maintenance
 - [x] Remove redundant original textures
 
-### Tutorials
+### Tutorial
 - [ ] New wiki and video tutorials
 
-## Postponed
+## On Hold
 
 - [ ] Add pixel-perfect post-processing
 - [ ] Introduce online libraries
@@ -123,10 +120,11 @@ The update plans/change logs in Simplified Chinese will be prioritized, and othe
 
 ---
 
-[^1]: Mainly will add features such as beat count calculation.
-[^2]: An additional setting option will be attempted that allows setting the game screen to a low resolution while magnifying the display resolution. This is more friendly for computers with lower performance.
-[^3]: This script will encapsulate all Unity's Debug-related functions for calling, which will only execute within the editor.
-[^4]: This scene will list all plot contents, consistent with how they are displayed in the game, facilitating quick proofreading.
-[^5]: This allows multiple battles and multiple fights within the game.
-[^6]: Localizers can provide localized support to players in advance by releasing preview versions of CC subtitles once the translation is completed but not formally integrated.
-[^7]: The KR system is implemented through Buffs.
+[^1]: Primarily will add functions like calculating beat counts.
+[^2]: Will attempt to add an extra item in settings that allows the game display to be set to low resolution while magnifying the display resolution. This is friendly for computers with lower performance.
+[^3]: This script will encapsulate all Unity Debug related functions for calling, and these functions will execute only in the editor.
+[^4]: The current dialogue system is difficult to support branching choices, logical jumps, etc. Maybe we can try integrating Ink language.
+[^5]: This scene will list all texts in a way consistent with in-game display, facilitating quick proofreading.
+[^6]: This allows for multiple battles in-game and multiple combats.
+[^7]: Localization personnel can provide localization support in advance for players by releasing a CC subtitle preview version after translation is completed but not yet officially integrated.
+[^8]: The KR system is realized through Buffs.
