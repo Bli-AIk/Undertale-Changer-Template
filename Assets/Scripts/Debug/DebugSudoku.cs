@@ -18,8 +18,13 @@ namespace Debug
         private void Update()
         {
             if (booooool)
+            {
                 _sprite.color = Color.yellow;
-            else _sprite.color = Color.white;
+            }
+            else
+            {
+                _sprite.color = Color.white;
+            }
 
             Changed();
         }

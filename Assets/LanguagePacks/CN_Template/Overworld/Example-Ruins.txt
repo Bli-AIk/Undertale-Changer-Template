@@ -19,7 +19,7 @@
 
 
 
-如果你需要输入很长的一段文字或单纯想要玩家多按那么一下子Z键，你可以在一段文本内插入 <passText>
+如果你需要输入很长的一段文字或单纯想要玩家多按那么一下子Z键，你可以在一段文本内插入 <waitForUpdate>
 打字机检测该字符后会停止打字，玩家若按下Z键将会清空当前文本并继续打字状态。
 此前的富文本将失效，因为此前的文本都清空了。
 
@@ -40,19 +40,19 @@
 </color>去除颜色
 */
 
-Brand\<image=-1><fx=0>* “按下<gradient="White to Yellow - UTC">[Z]</gradient>键可以阅读标牌！”<stop><stop><stop><stop><stop><stop><stop><enter>
-<size=5>* “<gradient="White to Yellow - UTC">[Enter]</gradient>也行。”</size>
-<passText>* “这个场景使用了<gradient="White to Yellow - UTC">法线贴图</gradient>！”<enter>
+Brand\<image=-1><fx=0><markPoint>“按下<gradient="White to Yellow - UTC">[Z]</gradient>键可以阅读标牌！”<stop*7><enter>
+<size=5><markPoint>“<gradient="White to Yellow - UTC">[Enter]</gradient>也行。”</size>
+<waitForUpdate><markPoint>“这个场景使用了<gradient="White to Yellow - UTC">法线贴图</gradient>！”<enter>
 <-  ->“另外，试着到<gradient="White to Red - UTC">水边</gradient>看看？”;
 
-River\<image=-1><fx=0>* 这是你！;
+River\<image=-1><fx=0><markPoint>这是你！;
 
-WallBrand\<image=-1><fx=0>* 顺着路走。如果你想。;
+WallBrand\<image=-1><fx=0><markPoint>顺着路走。如果你想。;
 
 Text1\<image=-1><fx=0><*><- -><别><按><。> ;
 
 Text2\<image=-1><fx=0><*><- -><也><别><按><。> ;
 
-TextAlex\<image=-1><fx=0>* 大哥你做模板.<stop>.<stop>.<stop>.<stop><stop>.<stop><stop><stop>.<stop*10><enter>* 你做它有啥用啊？;
+TextAlex\<image=-1><fx=0><markPoint>大哥你做模板<stop...>.<stop><stop>.<stop><stop><stop>.<stop*10><markEnter>你做它有啥用啊？;
 
 

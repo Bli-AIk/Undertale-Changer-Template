@@ -53,11 +53,17 @@ namespace UCT.Overworld.FiniteStateMachine
         {
 #if UNITY_EDITOR
             if (_traversed != null)
+            {
                 foreach (var traverse in _traversed)
+                {
                     Handles.DrawSolidDisc(traverse, Vector3.forward, 0.1f);
+                }
+            }
 
             if (_path == null || _path.Count < 2)
+            {
                 return;
+            }
 
             for (var i = 0; i < _path.Count; i++)
             {
@@ -68,7 +74,9 @@ namespace UCT.Overworld.FiniteStateMachine
                 Handles.DrawSolidDisc(_path[i], Vector3.forward, 0.1f);
 
                 if (i < _path.Count - 1)
+                {
                     Handles.DrawLine(_path[i], _path[i + 1]);
+                }
             }
 #endif
         }
@@ -76,7 +84,10 @@ namespace UCT.Overworld.FiniteStateMachine
         private void InitializeData()
         {
             if (string.IsNullOrEmpty(dataRoute))
+            {
                 dataRoute = "Default";
+            }
+
             data = Resources.Load<FiniteStateMachineData>($"FiniteStateMachine/{dataRoute}");
 
             TryGetComponent(out data.animator);
@@ -116,7 +127,9 @@ namespace UCT.Overworld.FiniteStateMachine
                     }
                 }
                 else
+                {
                     _path = new List<Vector2>();
+                }
 
                 _pathIndex = 0;
             }
@@ -248,13 +261,20 @@ namespace UCT.Overworld.FiniteStateMachine
                     aStarPath.Reverse();
 
                     if (aStarPath[0] != start)
+                    {
                         aStarPath.Insert(0, start);
+                    }
 
                     if (aStarPath[^1] != end)
+                    {
                         aStarPath.Add(end);
+                    }
+
                     if (aStarPath.Count >= 3 &&
                         Vector2.Distance(aStarPath[^1], aStarPath[^3]) < Vector2.Distance(aStarPath[^2], aStarPath[^3]))
+                    {
                         aStarPath.RemoveAt(aStarPath.Count - 2);
+                    }
 
                     _traversed = closedList.ToList();
                     return aStarPath;
@@ -264,13 +284,17 @@ namespace UCT.Overworld.FiniteStateMachine
                 {
                     var newNodePos = currentNode.Position + direction;
                     if (closedList.Contains(newNodePos))
+                    {
                         continue;
+                    }
 
                     var layerMask = ~LayerMask.GetMask("Player", "UI", "CanvasUI", "Ignore Raycast");
                     var hit = Physics2D.Raycast(currentNode.Position, direction.normalized, direction.magnitude,
                         layerMask);
                     if (hit.collider && hit.collider.transform != transform && !hit.collider.isTrigger)
+                    {
                         continue;
+                    }
 
 
                     var weight = direction.magnitude;
@@ -279,7 +303,11 @@ namespace UCT.Overworld.FiniteStateMachine
 
                     if (nodeLookup.TryGetValue(newNodePos, out var existingNode))
                     {
-                        if (!(gCost < existingNode.GCost)) continue;
+                        if (!(gCost < existingNode.GCost))
+                        {
+                            continue;
+                        }
+
                         existingNode.GCost = gCost;
                         existingNode.Parent = currentNode;
                     }

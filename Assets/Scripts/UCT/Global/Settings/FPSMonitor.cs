@@ -24,7 +24,10 @@ namespace UCT.Global.Settings
 
         private void Update()
         {
-            if (_fps) _fps.text = SettingsStorage.isDisplayFPS ? UpdateFPS(_fps.text) : "";
+            if (_fps)
+            {
+                _fps.text = SettingsStorage.isDisplayFPS ? UpdateFPS(_fps.text) : "";
+            }
         }
         
         /// <summary>
@@ -35,7 +38,11 @@ namespace UCT.Global.Settings
         private string UpdateFPS(string input)
         {
             _mFrameUpdate++;
-            if (!(Time.realtimeSinceStartup - _mLastUpdateShowTime >= MUpdateShowDeltaTime)) return input;
+            if (!(Time.realtimeSinceStartup - _mLastUpdateShowTime >= MUpdateShowDeltaTime))
+            {
+                return input;
+            }
+
             _mFPS = _mFrameUpdate / (Time.realtimeSinceStartup - _mLastUpdateShowTime);
             _mFrameUpdate = 0;
             _mLastUpdateShowTime = Time.realtimeSinceStartup;

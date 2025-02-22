@@ -45,7 +45,9 @@ namespace UCT.Battle
         private void Update()
         {
             if (followMode != FollowMode.NoFollow)
+            {
                 for (var i = 0; i < boxColliderList.Count; i++)
+                {
                     switch (followMode)
                     {
                         case FollowMode.CutFollow:
@@ -53,6 +55,8 @@ namespace UCT.Battle
                                                       boxColliderSizes[i];
                             break;
                     }
+                }
+            }
         }
 
         private void OnDisable()
@@ -64,7 +68,9 @@ namespace UCT.Battle
         {
             if (collision.transform.CompareTag("Player") && collision.name[.."CheckCollider".Length] == "CheckCollider")
                 //if(!useExtra)
+            {
                 for (var i = 0; i < boxColliderList.Count; i++)
+                {
                     if (boxColliderList[i].IsTouching(collision))
                     {
                         if (bulletColor == BattleControl.BulletColor.White
@@ -72,9 +78,14 @@ namespace UCT.Battle
                                 !MainControl.Instance.battlePlayerController.isMoving)
                             || (bulletColor == BattleControl.BulletColor.Blue &&
                                 MainControl.Instance.battlePlayerController.isMoving))
+                        {
                             HitPlayer(i);
+                        }
+
                         break;
                     }
+                }
+            }
             /*
             else if (extra.IsTouching(collision))
             {
@@ -109,15 +120,29 @@ namespace UCT.Battle
             objName ??= bulletControl.objName;
 
             if (startPosition == default)
+            {
                 startPosition = bulletControl.startPosition;
+            }
+
             if (bulletColor == default)
+            {
                 bulletColor = bulletControl.bulletColor;
+            }
+
             if (startMask == default)
+            {
                 startMask = bulletControl.startMask;
+            }
+
             if (startRotation == default)
+            {
                 startRotation = bulletControl.startRotation;
+            }
+
             if (startScale == default)
+            {
                 startScale = bulletControl.startScale;
+            }
 
             SetBullet(objName,
                 bulletControl.typeName,
@@ -178,7 +203,9 @@ namespace UCT.Battle
             transform.rotation = Quaternion.Euler(startRotation);
 
             if (startScale.z == 0)
+            {
                 startScale = Vector3.one;
+            }
 
             transform.localScale = startScale;
 
@@ -186,9 +213,13 @@ namespace UCT.Battle
             spriteRenderer.sprite = sprite;
 
             if (this.typeName != typeName)
+            {
                 this.typeName = typeName;
+            }
             else
+            {
                 return;
+            }
 
             for (var i = 0; i < boxColliderList.Count; i++)
             {
@@ -210,9 +241,13 @@ namespace UCT.Battle
                 var save = gameObject.AddComponent<BoxCollider2D>();
                 save.isTrigger = true;
                 if (followMode == FollowMode.NoFollow)
+                {
                     save.size = boxColliderSizes[i];
+                }
                 else
+                {
                     save.size = boxColliderList[i].transform.GetComponent<SpriteRenderer>().size - boxColliderSizes[i];
+                }
 
                 save.offset = triggerOffsets[i];
 
@@ -239,11 +274,15 @@ namespace UCT.Battle
                     new Vector3(r * MathUtilityService.Get1Or_1(), 0, r * MathUtilityService.Get1Or_1()), v3Spin, 4,
                     1f / 60f * 4f * 1.5f, "3D CameraPoint", Ease.OutElastic);
                 if (MainControl.Instance.playerControl.hp <= 0)
+                {
                     MainControl.Instance.battlePlayerController.KillPlayer(MainControl.Instance);
+                }
 
 
                 if (!SettingsStorage.isSimplifySfx)
+                {
                     MainControl.Instance.battlePlayerController.hitVolume.weight = 1;
+                }
             }
         }
 

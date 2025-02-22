@@ -29,6 +29,8 @@
 <img src="https://img.shields.io/github/last-commit/Bli-AIk/Undertale-Changer-Template.svg"/>
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/898e9474ef654b3481178c2cf75bb774)](https://app.codacy.com/gh/Bli-AIk/Undertale-Changer-Template/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+
 [![](https://img.shields.io/badge/Tencent_QQ-EB1923?style=for-the-badge&logo=TencentQQ&logoColor=white)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=wK7VVbI0VU8mPpG94nDLsHaLRbky5cMT&authKey=LQfQsHtXTqbrRdmhSgUtxesNz9UmiETjymrhJF%2BFT1pAiEy0HUxSfM%2Fx%2FsTdOUC%2F&noverify=0&group_code=289694657)
 [![](https://dcbadge.limes.pink/api/server/xvYKa2pSN6)](https://discord.gg/xvYKa2pSN6)
 
@@ -104,6 +106,7 @@
 - [chineseStroke](https://github.com/WTree/chineseStroke)
 - [Alchemy](https://github.com/AnnulusGames/Alchemy)
 - [UnityTimer](https://github.com/akbiggs/UnityTimer)
+- [ink-unity-integration](https://github.com/inkle/ink-unity-integration)
 
 以上函式庫/插件的貢獻者們為本計畫提供了優秀的工具和技術支持，衷心感謝你們！
 

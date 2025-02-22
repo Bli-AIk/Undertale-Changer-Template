@@ -12,24 +12,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd233730508f81c4e9962afa5c5f5269, type: 3}
   m_Name: PlayerControl
   m_EditorClassIdentifier: 
-  hp: 56
+  hp: 46
   hpMax: 92
   lv: 19
   exp: 0
   gold: 1000
-  wearAtk: 1
-  wearDef: 123
   nextExp: 0
-  missTime: -0.0209683
+  missTime: -0.02
   missTimeMax: 1
   atk: 0
   def: 0
-  playerName: <color=#BA8ADDFF>D</color><color=#BA8ADDFF>e</color><color=#BA8ADDFF>b</color><color=#BA8ADDFF>u</color><color=#BB8BDDFF>g</color>
-  myItems: 0000000001000000010000000100000001000000010000000100000000000000
-  wearArm: 10001
-  wearArmor: 20001
+  playerName: <color=#78D258FF>D</color><color=#78D258FF>e</color><color=#78D258FF>b</color><color=#78D258FF>u</color><color=#77D15FFF>g</color>
+  items:
+  - Serving
+  - Serving
+  - Serving
+  - Serving
+  - TwoServings
+  - 
+  - 
+  - 
+  wearWeapon: PSword
+  wearArmor: TPS
   canMove: 1
-  gameTime: 5499.645
+  gameTime: 8062.7285
+  playerLastPos: {x: -0.2911509, y: -1.3350011, z: 0}
   lastScene: Example-Corridor
   saveScene: Example-Corridor
   isDebug: 1

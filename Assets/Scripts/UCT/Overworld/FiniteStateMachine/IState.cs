@@ -24,7 +24,9 @@ namespace UCT.Overworld.FiniteStateMachine
         public void OnEnter()
         {
             if (_data.animator)
+            {
                 _data.animator.Play("Idle Tree");
+            }
         }
 
         public void OnUpdate()
@@ -60,7 +62,9 @@ namespace UCT.Overworld.FiniteStateMachine
         public void OnEnter()
         {
             if (_data.animator)
+            {
                 _data.animator.Play("Walk Tree");
+            }
         }
 
         public void OnUpdate()
@@ -75,7 +79,11 @@ namespace UCT.Overworld.FiniteStateMachine
             var pos = _data.rigidbody2D.transform.position;
             _data.rigidbody2D.MovePosition(pos + _data.direction * step);
 
-            if (!_data.animator) return;
+            if (!_data.animator)
+            {
+                return;
+            }
+
             _data.animator.SetFloat(MoveX, _data.directionWithoutZero.x);
             _data.animator.SetFloat(MoveY, _data.directionWithoutZero.y);
         }
@@ -104,7 +112,9 @@ namespace UCT.Overworld.FiniteStateMachine
         public void OnEnter()
         {
             if (_data.animator)
+            {
                 _data.animator.Play("Run Tree");
+            }
         }
 
         public void OnUpdate()
@@ -118,7 +128,11 @@ namespace UCT.Overworld.FiniteStateMachine
             var step = _data.speedForReal * Time.deltaTime;
             var pos = _data.rigidbody2D.transform.position;
             _data.rigidbody2D.MovePosition(pos + _data.direction * step);
-            if (!_data.animator) return;
+            if (!_data.animator)
+            {
+                return;
+            }
+
             _data.animator.SetFloat(MoveX, _data.directionWithoutZero.x);
             _data.animator.SetFloat(MoveY, _data.directionWithoutZero.y);
         }
@@ -150,7 +164,9 @@ namespace UCT.Overworld.FiniteStateMachine
         public void OnEnter()
         {
             if (_data.animator)
+            {
                 _data.animator.Play("Idle Tree");
+            }
         }
 
         public void OnUpdate()
@@ -169,7 +185,11 @@ namespace UCT.Overworld.FiniteStateMachine
             }
 
             var direction = _directions[_currentIndex];
-            if (!_data.animator) return;
+            if (!_data.animator)
+            {
+                return;
+            }
+
             _data.animator.SetFloat(MoveX, direction.x);
             _data.animator.SetFloat(MoveY, direction.y);
         }

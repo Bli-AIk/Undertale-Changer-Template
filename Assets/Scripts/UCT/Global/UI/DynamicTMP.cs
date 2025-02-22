@@ -21,7 +21,10 @@ namespace UCT.Global.UI
 
         private void FixedUpdate()
         {
-            if (dynamicMode == DynamicTMPType.None) return;
+            if (dynamicMode == DynamicTMPType.None)
+            {
+                return;
+            }
 
             _tmp.ForceMeshUpdate();
 
@@ -33,7 +36,10 @@ namespace UCT.Global.UI
                     for (var i = 0; i < textInfo.characterCount; i++)
                     {
                         var charInfo = textInfo.characterInfo[i];
-                        if (!charInfo.isVisible) continue;
+                        if (!charInfo.isVisible)
+                        {
+                            continue;
+                        }
 
                         var verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
                         var random = new Vector3(Random.Range(-0.025f, 0.025f), Random.Range(-0.025f, 0.025f), 0);
@@ -74,7 +80,10 @@ namespace UCT.Global.UI
                     for (var i = 0; i < textInfo.characterCount; i++)
                     {
                         var charInfo = textInfo.characterInfo[i];
-                        if (!charInfo.isVisible) continue;
+                        if (!charInfo.isVisible)
+                        {
+                            continue;
+                        }
 
                         var verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
 
@@ -92,7 +101,10 @@ namespace UCT.Global.UI
                     for (var i = 0; i < textInfo.characterCount; i++)
                     {
                         var charInfo = textInfo.characterInfo[i];
-                        if (!charInfo.isVisible) continue;
+                        if (!charInfo.isVisible)
+                        {
+                            continue;
+                        }
 
                         var verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
                         for (var j = 0; j < 4; j++)
@@ -104,7 +116,10 @@ namespace UCT.Global.UI
 
                             orig = verts[charInfo.vertexIndex + j];
                             if (Random.Range(0, 5) != 0)
+                            {
                                 continue;
+                            }
+
                             verts[charInfo.vertexIndex + j] = orig + new Vector3(Random.Range(-0.05f, 0.05f),
                                 Random.Range(-0.05f, 0.05f), 0);
                         }
@@ -116,7 +131,10 @@ namespace UCT.Global.UI
                     for (var i = 0; i < textInfo.characterCount; i++)
                     {
                         var charInfo = textInfo.characterInfo[i];
-                        if (!charInfo.isVisible) continue;
+                        if (!charInfo.isVisible)
+                        {
+                            continue;
+                        }
 
                         var verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
                         for (var j = 0; j < 4; j++)
@@ -137,7 +155,10 @@ namespace UCT.Global.UI
                     for (var i = 0; i < textInfo.characterCount; i++)
                     {
                         var charInfo = textInfo.characterInfo[i];
-                        if (!charInfo.isVisible) continue;
+                        if (!charInfo.isVisible)
+                        {
+                            continue;
+                        }
 
                         var verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
                         for (var j = 0; j < 4; j++)
@@ -155,7 +176,10 @@ namespace UCT.Global.UI
                     for (var i = 0; i < textInfo.characterCount; i++)
                     {
                         var charInfo = textInfo.characterInfo[i];
-                        if (!charInfo.isVisible) continue;
+                        if (!charInfo.isVisible)
+                        {
+                            continue;
+                        }
 
                         var verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
                         var waveOffset = new Vector3(0, Mathf.Sin(Time.time * 2f + i * 0.2f) * 0.05f, 0);
@@ -173,7 +197,10 @@ namespace UCT.Global.UI
                     for (var i = 0; i < textInfo.characterCount; i++)
                     {
                         var charInfo = textInfo.characterInfo[i];
-                        if (!charInfo.isVisible) continue;
+                        if (!charInfo.isVisible)
+                        {
+                            continue;
+                        }
 
                         var verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
                         var explodeOffset = (verts[charInfo.vertexIndex] - center) * Mathf.Sin(Time.time * 2f) * 0.1f;
@@ -190,7 +217,10 @@ namespace UCT.Global.UI
                     for (var i = 0; i < textInfo.characterCount; i++)
                     {
                         var charInfo = textInfo.characterInfo[i];
-                        if (!charInfo.isVisible) continue;
+                        if (!charInfo.isVisible)
+                        {
+                            continue;
+                        }
 
                         var verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
                         var bounceOffset = new Vector3(0, Mathf.Abs(Mathf.Sin(Time.time * 2f + i * 0.1f)) * 0.1f, 0);

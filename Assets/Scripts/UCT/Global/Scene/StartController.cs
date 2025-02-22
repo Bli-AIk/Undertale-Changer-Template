@@ -6,6 +6,7 @@ using UCT.Global.Audio;
 using UCT.Global.Core;
 using UCT.Service;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace UCT.Global.Scene
 {
@@ -30,10 +31,11 @@ namespace UCT.Global.Scene
             _textMessage.color = Color.clear;
             AudioController.Instance.GetFx(11, MainControl.Instance.AudioControl.fxClipUI);
 
-            var text = MainControl.Instance.overworldControl.sceneTextsAsset;
+            var text = DataHandlerService.LoadLanguageData($"Overworld\\{SceneManager.GetActiveScene().name}",
+                MainControl.Instance.languagePackId);
             var lines = text.Split(new[] { '\n' }, StringSplitOptions.None);
-            var messageText = lines.Last(); // 获取最后一行文本
-            var noticeText = string.Join("\n", lines.Take(lines.Length - 1)); // 获取除最后一行外的所有文本
+            var messageText = lines.Last();
+            var noticeText = string.Join("\n", lines.Take(lines.Length - 1)); 
             _textNotice.text = noticeText;
             _textMessage.text = messageText;
 
@@ -53,6 +55,7 @@ namespace UCT.Global.Scene
             }
 
             if (InputService.GetKeyDown(KeyCode.Z))
+            {
                 switch (_layer)
                 {
                     case 0:
@@ -68,6 +71,7 @@ namespace UCT.Global.Scene
                             Color.black, null, false, 2f);
                         break;
                 }
+            }
 
             if (Input.anyKeyDown)
             {
@@ -81,7 +85,7 @@ namespace UCT.Global.Scene
             }
             else
             {
-                GameUtilityService.FadeOutAndSwitchScene("Story", Color.black, null);
+                GameUtilityService.FadeOutAndSwitchScene("Story", Color.black);
                 _afkTimer = 10000000000;
             }
         }

@@ -290,9 +290,14 @@ namespace UCT.Global.Settings
                 {
                     QualitySettings.vSyncCount = (int)SettingsStorage.vsyncMode;
                     if ((int)SettingsStorage.vsyncMode < 2)
+                    {
                         SettingsStorage.vsyncMode++;
+                    }
                     else
+                    {
                         SettingsStorage.vsyncMode = VSyncMode.DonNotSync;
+                    }
+
                     PlayerPrefs.SetInt("vsyncMode",
                         Convert.ToInt32(SettingsStorage.vsyncMode));
                 },
@@ -505,9 +510,14 @@ namespace UCT.Global.Settings
                 {
                     QualitySettings.vSyncCount = (int)SettingsStorage.typingSpeed;
                     if ((int)SettingsStorage.typingSpeed < 2)
+                    {
                         SettingsStorage.typingSpeed++;
+                    }
                     else
+                    {
                         SettingsStorage.typingSpeed = TypingSpeed.Slow;
+                    }
+
                     PlayerPrefs.SetInt("typingSpeed",
                         Convert.ToInt32(SettingsStorage.typingSpeed));
                 },

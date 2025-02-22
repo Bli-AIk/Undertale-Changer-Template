@@ -42,17 +42,36 @@ namespace UCT.Other
         private void SetSth(GameObject item)
         {
             if (item)
+            {
                 sth = item;
+            }
             else
-                throw new NullReferenceException();
+            {
+                throw new ArgumentNullException();
+            }
         }
 
         private void Update()
         {
-            if (!sth) return;
-            if (followPosition) transform.position = sth.transform.position + positionAdd;
-            if (followRotation) transform.rotation = sth.transform.rotation * Quaternion.Euler(rotationAdd);
-            if (followLocalScale) transform.localScale = sth.transform.localScale + localScaleAdd;
+            if (!sth)
+            {
+                return;
+            }
+
+            if (followPosition)
+            {
+                transform.position = sth.transform.position + positionAdd;
+            }
+
+            if (followRotation)
+            {
+                transform.rotation = sth.transform.rotation * Quaternion.Euler(rotationAdd);
+            }
+
+            if (followLocalScale)
+            {
+                transform.localScale = sth.transform.localScale + localScaleAdd;
+            }
         }
     }
 }

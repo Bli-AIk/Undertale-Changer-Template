@@ -52,7 +52,7 @@ namespace Editor.Inspector.EventSystem
             _reorderableList = new ReorderableList(serializedObject, _ruleCriteria, true,
                 true, true, true)
             {
-                drawHeaderCallback = DrawHeader,
+                drawHeaderCallback = rect => EditorGUI.LabelField(rect, "Overworld Status Changer"),
 
                 drawElementCallback = (rect, index, _, _) =>
                 {
@@ -69,7 +69,11 @@ namespace Editor.Inspector.EventSystem
 
                     var originalCriteria = ruleCriterion.FindPropertyRelative("criteria");
 
-                    if (originalCriteria.arraySize == 0) originalCriteria.arraySize = 1;
+                    if (originalCriteria.arraySize == 0)
+                    {
+                        originalCriteria.arraySize = 1;
+                    }
+
                     var calculateCriteriaSize = RuleTableInspector.CalculateCriteriaSize(originalCriteria);
 
                     var lineCount = calculateCriteriaSize + 2;
@@ -148,18 +152,15 @@ namespace Editor.Inspector.EventSystem
                     elementHeight ??= new List<float> { 0 };
 
                     if (index >= elementHeight.Count)
+                    {
                         elementHeight.Add(0);
+                    }
 
                     return elementHeight[index] == 0
                         ? EditorGUIUtility.singleLineHeight
                         : elementHeight[index] + 0.75f;
                 }
             };
-        }
-
-        private static void DrawHeader(Rect rect)
-        {
-            EditorGUI.LabelField(rect, "Overworld Status Changer");
         }
     }
 }

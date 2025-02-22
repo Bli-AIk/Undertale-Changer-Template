@@ -942,17 +942,17 @@ Line 1794: /// </summary>
 Line 1797: //max.Clear();
 Line 1834: /// <summary>
 Line 1835: /// Get Item information by Id:
-Line 1836: /// type: Foods Arms Armors Others Auto
+Line 1836: /// type: Foods Weapons Armors Others Auto
 Line 1837: /// number: 0 language package name
 Line 1838: /// 1/2: data1/2.
 Line 1839: /// Do not enter more.
-Line 1840: /// Arm and Armor only have 1
+Line 1840: /// Weapon and Armor only have 1
 Line 1841: /// </summary>
 Line 1846: //Get the number name
 Line 1911: //Get the name in the language pack
 Line 1937: /// <summary>
 Line 1938: /// Get the item data (HP, ATK, etc.) through the Id:
-Line 1939: /// type：Foods Arms Armors Others Auto
+Line 1939: /// type：Foods Weapons Armors Others Auto
 Line 1940: /// justId: If checked, +xxHP/AT/DF and other information will be added
 Line 1941: /// </summary>
 Line 1946: //Get the number name
@@ -961,7 +961,7 @@ Line 2055: /// After identifying 0, it will be transmitted
 Line 2056: /// </summary>
 Line 2071: /// <summary>
 Line 2072: /// Get its id through the item data name.
-Line 2073: /// type：Foods Arms Armors Others
+Line 2073: /// type：Foods Weapons Armors Others
 Line 2074: /// </summary>
 Line 2121: /// <summary>
 Line 2122: /// Given List<Int>, return if empty

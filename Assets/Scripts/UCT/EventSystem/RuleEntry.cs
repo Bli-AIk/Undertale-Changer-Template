@@ -150,7 +150,10 @@ namespace UCT.EventSystem
                 if (!isGlobal)
                 {
                     if (!EventController.factTable)
+                    {
                         EventController.LoadTables(true);
+                    }
+
                     var factTable = EventController.factTable.facts;
                     fact.value = GetFactsValue(fact, factTable);
                 }
@@ -201,7 +204,11 @@ namespace UCT.EventSystem
                     default: throw new ArgumentOutOfRangeException();
                 }
 
-                if (operations[i - 1] == RuleLogicalOperation.None) InvalidOperationLogError(i, "None");
+                if (operations[i - 1] == RuleLogicalOperation.None)
+                {
+                    InvalidOperationLogError(i, "None");
+                }
+
                 switch (operations[^1])
                 {
                     case RuleLogicalOperation.And:
@@ -227,7 +234,11 @@ namespace UCT.EventSystem
             var value = 0;
             for (var i = 0; i < facts.Count; i++)
             {
-                if (facts[i].name != fact.name) continue;
+                if (facts[i].name != fact.name)
+                {
+                    continue;
+                }
+
                 value = facts[i].value;
                 break;
             }

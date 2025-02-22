@@ -21,7 +21,11 @@ namespace UCT.Battle
         {
             if (MainControl.Instance.selectUIController.selectedButton != SelectUIController.SelectedButton.Fight ||
                 MainControl.Instance.selectUIController.selectedLayer !=
-                SelectUIController.SelectedLayer.NameLayer) return;
+                SelectUIController.SelectedLayer.NameLayer)
+            {
+                return;
+            }
+
             if (MainControl.Instance.BattleControl.enemiesHp.Count - 1 < enemyId * 2)
             {
                 transform.localScale = Vector2.zero;

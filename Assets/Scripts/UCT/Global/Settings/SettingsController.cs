@@ -11,7 +11,6 @@ using UCT.Control;
 using UCT.Extensions;
 using UCT.Global.Audio;
 using UCT.Global.Core;
-using UCT.Global.UI;
 using UCT.Service;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -108,7 +107,11 @@ namespace UCT.Global.Settings
         private void Update()
         {
             SetSettingsLayer();
-            if (!IsUpdateInitializationPassed()) return;
+            if (!IsUpdateInitializationPassed())
+            {
+                return;
+            }
+
             UpdateLayer(_settingsLayer, _settingSelectedOption);
         }
 
@@ -122,7 +125,9 @@ namespace UCT.Global.Settings
                 for (var i = 0;
                      i < MainControl.LanguagePackageInternalNumber + MainControl.LanguagePackageExternalNumber;
                      i++)
+                {
                     _settingsLayer.AddLanguagePackageOption();
+                }
             }
 
             var allSettingsOptionsCopy = _settingsLayer.AllSettingsOptions.ToList();
@@ -148,8 +153,10 @@ namespace UCT.Global.Settings
                     allSettingsOptionsCopy.Count);
 
                 if (_startIndexCurrent >= allSettingsOptionsCopy.Count)
+                {
                     throw new ArgumentOutOfRangeException(nameof(_settingOptionsPage),
                         "Setting options page is out of range.");
+                }
 
                 _settingsLayer.DisplayedSettingsOptions =
                     allSettingsOptionsCopy.GetRange(_startIndexCurrent, _endIndexCurrent - _startIndexCurrent);
@@ -176,9 +183,15 @@ namespace UCT.Global.Settings
             _isPauseCanvas = false;
             _canvas.renderMode = renderMode;
             if (_canvas.renderMode == RenderMode.ScreenSpaceCamera)
+            {
                 _canvas.worldCamera = Camera.main;
+            }
+
             if (!overworldControl)
+            {
                 overworldControl = MainControl.Instance.overworldControl;
+            }
+
             _settingSoul.rectTransform.anchoredPosition = new Vector2(-225f, 147.5f);
             _settingOptionsPage = 0;
             _languagePackIdStorage = MainControl.Instance.languagePackId;
@@ -186,11 +199,30 @@ namespace UCT.Global.Settings
 
         private bool IsUpdateInitializationPassed()
         {
-            if (IsInScene("Story")) return false;
-            if (IsInBattleAndNotMyTurn()) return false;
-            if (_isPauseCanvas) return false;
-            if (IsSettingKey()) return false;
-            if (MainControl.Instance.isSceneSwitching) return false;
+            if (IsInScene("Story"))
+            {
+                return false;
+            }
+
+            if (IsInBattleAndNotMyTurn())
+            {
+                return false;
+            }
+
+            if (_isPauseCanvas)
+            {
+                return false;
+            }
+
+            if (IsSettingKey())
+            {
+                return false;
+            }
+
+            if (MainControl.Instance.isSceneSwitching)
+            {
+                return false;
+            }
 
             if (InputService.GetKeyDown(KeyCode.V) && !overworldControl.isSetting)
             {
@@ -198,8 +230,16 @@ namespace UCT.Global.Settings
                 OpenSetting();
             }
 
-            if (!overworldControl.isSetting) return false;
-            if (_settingSelectedOptionCheck == _settingSelectedOption) return _settingPageBackground.color.a > 0.7;
+            if (!overworldControl.isSetting)
+            {
+                return false;
+            }
+
+            if (_settingSelectedOptionCheck == _settingSelectedOption)
+            {
+                return _settingPageBackground.color.a > 0.7;
+            }
+
             _settingSelectedOptionCheck = _settingSelectedOption;
             MoveSettingSoul();
             return _settingPageBackground.color.a > 0.7;
@@ -225,15 +265,23 @@ namespace UCT.Global.Settings
             var settingsOption = layer.DisplayedSettingsOptions[option];
             if ((InputService.GetKeyDown(KeyCode.X) || InputService.GetKeyDown(KeyCode.V)) &&
                 layer.DisplayedSettingsOptions[option].Type != OptionType.SelectionBasedTrue)
+            {
                 ReturnToPreviousLayer(layer);
+            }
 
             if (layer is SettingsLayerBase)
+            {
                 if (UpdateLayerBase(layer, option))
+                {
                     return;
+                }
+            }
 
             if (layer.DisplayedSettingsOptions[option].Type != OptionType.SelectionBasedTrue)
+            {
                 _settingSelectedOption = GetKeyDownToUpdateSelectedOption
                     (_settingSelectedOption, layer.DisplayedSettingsOptions.Count - 1);
+            }
 
             _optionTipText.text = GetOptionTipTextWith(settingsOption);
             UpdateLayerDisplay(layer.DisplayedSettingsOptions);
@@ -254,20 +302,36 @@ namespace UCT.Global.Settings
                     GetKeyDownToUpdateSelectionBasedTrue(settingsOption);
                     break;
                 case OptionType.EnterLayer:
-                    if (GetKeyDownToEnterLayer(layer, option)) return true;
+                    if (GetKeyDownToEnterLayer(layer, option))
+                    {
+                        return true;
+                    }
+
                     break;
                 case OptionType.EnterScene:
                     if (InputService.GetKeyDown(KeyCode.Z))
                     {
-                        if (SceneManager.GetActiveScene().name == "Rename") return true;
+                        if (SceneManager.GetActiveScene().name == "Rename")
+                        {
+                            return true;
+                        }
+
                         var sceneName = (string)layer.DisplayedSettingsOptions[option].GetValue();
-                        if (SceneManager.GetActiveScene().name == sceneName) goto case OptionType.Back;
+                        if (SceneManager.GetActiveScene().name == sceneName)
+                        {
+                            goto case OptionType.Back;
+                        }
+
                         ReturnToScene(sceneName);
                     }
 
                     break;
                 case OptionType.Back:
-                    if (InputService.GetKeyDown(KeyCode.Z)) ReturnToPreviousLayer(layer);
+                    if (InputService.GetKeyDown(KeyCode.Z))
+                    {
+                        ReturnToPreviousLayer(layer);
+                    }
+
                     break;
                 case OptionType.ConfigurableKeyFalse:
                     if (InputService.GetKeyDown(KeyCode.Z))
@@ -279,7 +343,10 @@ namespace UCT.Global.Settings
                     }
 
                     if (InputService.GetKeyDown(KeyCode.C))
+                    {
                         SettingsStorage.KeyBindingType = EnumService.IncrementEnum(SettingsStorage.KeyBindingType);
+                    }
+
                     break;
                 case OptionType.ConfigurableKeyTrue:
                     //  无事发生
@@ -301,20 +368,29 @@ namespace UCT.Global.Settings
                     }
 
                     if (InputService.GetKeyDown(KeyCode.UpArrow) || InputService.GetKeyDown(KeyCode.DownArrow))
+                    {
                         _isPageUp = false;
+                    }
+
                     if (InputService.GetKeyDown(KeyCode.Z))
                     {
                         AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
                         if (!_isPageUp) //  PageDown
                         {
                             if (_settingOptionsPage == 0)
+                            {
                                 break;
+                            }
+
                             _settingOptionsPage--;
                         }
                         else
                         {
                             if (_settingOptionsPage == _settingOptionsPageMax)
+                            {
                                 break;
+                            }
+
                             _settingOptionsPage++;
                         }
 
@@ -342,13 +418,19 @@ namespace UCT.Global.Settings
 
         private bool GetKeyDownToEnterLayer(ISettingsLayer layer, int option)
         {
-            if (!InputService.GetKeyDown(KeyCode.Z)) return false;
+            if (!InputService.GetKeyDown(KeyCode.Z))
+            {
+                return false;
+            }
+
             AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
             _settingsPreviousLayers.Add(settingsLayer);
             settingsLayer = (string)layer.DisplayedSettingsOptions[option].GetValue();
             var settingSelectedOption = layer.DisplayedSettingsOptions[option].NewSelectedOption;
             if (settingSelectedOption < 0)
+            {
                 settingSelectedOption = layer.DisplayedSettingsOptions.Count - 1 + settingSelectedOption;
+            }
 
             _settingSelectedOption = settingSelectedOption;
             return true;
@@ -356,7 +438,11 @@ namespace UCT.Global.Settings
 
         private void GetKeyDownToUpdateSelectionBasedFalse(SettingsOption settingsOption)
         {
-            if (!InputService.GetKeyDown(KeyCode.Z)) return;
+            if (!InputService.GetKeyDown(KeyCode.Z))
+            {
+                return;
+            }
+
             AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
             settingsOption.Type = OptionType.SelectionBasedTrue;
             _saveSelectionBasedValue = Convert.ToSingle(settingsOption.GetValue());
@@ -376,17 +462,24 @@ namespace UCT.Global.Settings
 
             ReturnToPreviousLayer(_settingsPreviousLayers.Count > 0 ? _settingsPreviousLayers[^1] : null, false);
             if (_settingsPreviousLayers.Count > 0)
+            {
                 _settingsPreviousLayers.RemoveAt(_settingsPreviousLayers.Count - 1);
+            }
         }
 
         private static string GetOptionTipTextWith(SettingsOption settingsOption)
         {
             if (settingsOption.Type is OptionType.ConfigurableKeyFalse or OptionType.ConfigurableKeyTrue)
+            {
                 return TextProcessingService.GetFirstChildStringByPrefix(
-                    MainControl.Instance.overworldControl.settingSave,
+                    MainControl.Instance.LanguagePackControl.settingTexts,
                     "OptionTip" + (int)SettingsStorage.KeyBindingType);
+            }
+
             if (settingsOption.DescriptionDataName == null)
+            {
                 return "";
+            }
 
             object value;
             switch (settingsOption.Type)
@@ -405,16 +498,23 @@ namespace UCT.Global.Settings
 
             var valueInt = (int)value;
             if (valueInt >= settingsOption.DescriptionDataName.Length)
+            {
                 valueInt = settingsOption.DescriptionDataName.Length - 1;
+            }
+
             var dataName = settingsOption.DescriptionDataName[valueInt];
             var result = TextProcessingService.GetFirstChildStringByPrefix(
-                MainControl.Instance.overworldControl.settingSave, dataName);
+                MainControl.Instance.LanguagePackControl.settingTexts, dataName);
             return result;
         }
 
         private static void GetKeyDownToUpdateSelectionToggle(SettingsOption settingsOption)
         {
-            if (!InputService.GetKeyDown(KeyCode.Z)) return;
+            if (!InputService.GetKeyDown(KeyCode.Z))
+            {
+                return;
+            }
+
             AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
             settingsOption.OnSelected?.Invoke();
         }
@@ -432,7 +532,10 @@ namespace UCT.Global.Settings
                     var newValue = (float)settingsOption.GetValue() - unit;
                     settingsOption.SetValue(newValue);
                     if (Convert.ToSingle(settingsOption.GetValue()) < settingsOption.SelectionBasedChangedMin)
+                    {
                         settingsOption.SetValue(settingsOption.SelectionBasedChangedMin);
+                    }
+
                     settingsOption.SelectionBasedChangedValueSetter(Convert.ToSingle(settingsOption.GetValue()));
                 }
             }
@@ -444,7 +547,10 @@ namespace UCT.Global.Settings
                     var newValue = Convert.ToSingle(settingsOption.GetValue()) + unit;
                     settingsOption.SetValue(newValue);
                     if (Convert.ToSingle(settingsOption.GetValue()) > settingsOption.SelectionBasedChangedMax)
+                    {
                         settingsOption.SetValue(settingsOption.SelectionBasedChangedMax);
+                    }
+
                     settingsOption.SelectionBasedChangedValueSetter(Convert.ToSingle(settingsOption.GetValue()));
                 }
             }
@@ -469,9 +575,13 @@ namespace UCT.Global.Settings
             var settingsOptionsForSetting = new List<SettingsOption>();
 
             if (settingsLayer == "SettingLanguagePackageLayer")
+            {
                 UpdateLanguagePacksConfigDisplay();
+            }
             else
+            {
                 settingsOptionsForSetting.Add(null);
+            }
 
             settingsOptionsForSetting.AddRange(settingsOptions);
             _optionKeyText.text += BuildSettingText(settingsOptionsForSetting, GetOptionKeyText);
@@ -504,20 +614,30 @@ namespace UCT.Global.Settings
 
         private static string GetOptionKeyText(SettingsOption option)
         {
-            if (option is { Type: OptionType.LanguagePackage }) return null;
+            if (option is { Type: OptionType.LanguagePackage })
+            {
+                return null;
+            }
 
             var dataName = option != null ? option.DataName : "Setting";
             var result = "";
             if (dataName == "PageUp" && _settingOptionsPage == 0)
+            {
                 result += "<color=#808080>";
+            }
+
             result += TextProcessingService.GetFirstChildStringByPrefix(
-                MainControl.Instance.overworldControl.settingSave, dataName);
+                MainControl.Instance.LanguagePackControl.settingTexts, dataName);
             return result + "</color>";
         }
 
         private static string GetOptionValueText(SettingsOption option)
         {
-            if (option == null) return null;
+            if (option == null)
+            {
+                return null;
+            }
+
             switch (option.OptionDisplayMode)
             {
                 case OptionDisplayMode.Default:
@@ -531,9 +651,12 @@ namespace UCT.Global.Settings
                 case OptionDisplayMode.DataName:
                     var result = "";
                     if (_settingOptionsPage == _settingOptionsPageMax)
+                    {
                         result += "<color=#808080>";
+                    }
+
                     return result + TextProcessingService.GetFirstChildStringByPrefix(
-                        MainControl.Instance.overworldControl.settingSave,
+                        MainControl.Instance.LanguagePackControl.settingTexts,
                         (option.SelectionBasedChangedValueGetter?.Invoke()!).ToString()) + "</color>";
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -547,8 +670,10 @@ namespace UCT.Global.Settings
 
             if (gotValue is int intValue && option.GetSpDataNameWithIndex != null &&
                 option.GetSpDataNameWithIndex.TryGetValue(intValue, out var value1))
+            {
                 gotValue = TextProcessingService.GetFirstChildStringByPrefix(
-                    MainControl.Instance.overworldControl.settingSave, value1);
+                    MainControl.Instance.LanguagePackControl.settingTexts, value1);
+            }
 
             return gotValue switch
             {
@@ -575,13 +700,19 @@ namespace UCT.Global.Settings
             {
                 AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
                 result++;
-                if (result > selectedOptionMax) result = 0;
+                if (result > selectedOptionMax)
+                {
+                    result = 0;
+                }
             }
             else if (InputService.GetKeyDown(KeyCode.UpArrow))
             {
                 AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
                 result--;
-                if (result < 0) result = selectedOptionMax;
+                if (result < 0)
+                {
+                    result = selectedOptionMax;
+                }
             }
 
             return result;
@@ -589,20 +720,33 @@ namespace UCT.Global.Settings
 
         private bool IsSettingKey()
         {
-            if (!_isSettingKey) return false;
+            if (!_isSettingKey)
+            {
+                return false;
+            }
+
             var settingsOptions = _settingsLayer.DisplayedSettingsOptions;
             UpdateLayerDisplay(settingsOptions);
 
             var pressedKeycode = GetSettingKeyControl();
-            if (pressedKeycode == KeyCode.None) return true;
+            if (pressedKeycode == KeyCode.None)
+            {
+                return true;
+            }
 
             var dataName = _selectedSettingsOption.GetValue().ToString();
             var oldKeyCodeStorage = KeyBindings.GetKeyCode(SettingsStorage.KeyBindingType, dataName);
 
             for (var i = 0; i < KeyBindings.GetKeyCodes(KeyBindingType.Primary).Count; i++)
+            {
                 foreach (KeyBindingType keyBindingType in Enum.GetValues(typeof(KeyBindingType)))
+                {
                     if (KeyBindings.GetKeyCodeAtIndex(keyBindingType, i) == pressedKeycode)
+                    {
                         KeyBindings.SetKeyCodeAtIndex(keyBindingType, i, oldKeyCodeStorage);
+                    }
+                }
+            }
 
             KeyBindings.SetKeyCode(SettingsStorage.KeyBindingType, dataName, pressedKeycode);
 
@@ -610,7 +754,10 @@ namespace UCT.Global.Settings
             _isSettingKey = false;
             foreach (var settingsOption in settingsOptions.Where(settingsOption =>
                          settingsOption.Type == OptionType.ConfigurableKeyTrue))
+            {
                 settingsOption.Type = OptionType.ConfigurableKeyFalse;
+            }
+
             return true;
         }
 
@@ -634,7 +781,8 @@ namespace UCT.Global.Settings
             var pathStringSaver = "";
 
             _optionKeyText.text =
-                TextProcessingService.GetFirstChildStringByPrefix(overworldControl.settingSave, "LanguagePack")
+                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.LanguagePackControl.settingTexts,
+                    "LanguagePack")
                 + '\n';
 
             _optionValueText.text = "\n";
@@ -647,10 +795,17 @@ namespace UCT.Global.Settings
 
             var fixedEndIndexCurrent = _endIndexCurrent;
             if (_languagePackageKeyTexts.Count <= 7)
+            {
                 fixedEndIndexCurrent++;
+            }
+
             for (var i = 0; i < _languagePackageKeyTexts.Count; i++)
             {
-                if (_endIndexCurrent != 0 && (i < _startIndexCurrent || i >= fixedEndIndexCurrent)) continue;
+                if (_endIndexCurrent != 0 && (i < _startIndexCurrent || i >= fixedEndIndexCurrent))
+                {
+                    continue;
+                }
+
                 var keyText = _languagePackageKeyTexts[i];
                 _optionKeyText.text += keyText;
                 _optionValueText.text += "\n";
@@ -662,7 +817,8 @@ namespace UCT.Global.Settings
             var fixedOption = _settingSelectedOption + _startIndexCurrent;
             _optionTipText.text =
                 _endIndexCurrent != 0 && (fixedOption < _startIndexCurrent || fixedOption >= _endIndexCurrent)
-                    ? TextProcessingService.GetFirstChildStringByPrefix(overworldControl.settingSave, "LanguageBack")
+                    ? TextProcessingService.GetFirstChildStringByPrefix(
+                        MainControl.Instance.LanguagePackControl.settingTexts, "LanguageBack")
                     : GetLanguagePacksName(pathStringSaver, "LanguagePackInformation",
                           fixedOption >= MainControl.LanguagePackageInternalNumber) + '\n' +
                       GetLanguagePacksName(pathStringSaver, "LanguagePackAuthor",
@@ -671,7 +827,11 @@ namespace UCT.Global.Settings
 
         private static int GetLanguagePackagesOptionFrom(int i, bool isExternal)
         {
-            if (!isExternal) return i;
+            if (!isExternal)
+            {
+                return i;
+            }
+
             return MainControl.LanguagePackageInternalNumber + i;
         }
 
@@ -689,13 +849,17 @@ namespace UCT.Global.Settings
                     : basePath + DataHandlerService.GetLanguageInsideId(i);
 
                 if (_languagePackSelectedOptionMax == _settingSelectedOption + _startIndexCurrent)
+                {
                     pathStringSaver = pathString;
+                }
 
                 _languagePackSelectedOptionMax++;
 
                 var newKeyText = "";
                 if (MainControl.Instance.languagePackId == GetLanguagePackagesOptionFrom(i, isExternal))
+                {
                     newKeyText += "<color=yellow>";
+                }
 
                 newKeyText += GetLanguagePacksName(pathString, "LanguagePackName", isExternal) + "</color>\n";
 
@@ -724,7 +888,11 @@ namespace UCT.Global.Settings
         /// <param name="isExternal">是否为外部路径</param>
         private static string GetLanguagePacksName(string pathString, string returnString, bool isExternal)
         {
-            if (string.IsNullOrEmpty(pathString)) return "";
+            if (string.IsNullOrEmpty(pathString))
+            {
+                return "";
+            }
+
             var strings =
                 DataHandlerService.LoadItemData(ReadFile(pathString + "\\LanguagePackInformation", isExternal));
             strings = DataHandlerService.ChangeItemData(strings, true, new List<string>());
@@ -742,7 +910,7 @@ namespace UCT.Global.Settings
         private static string GetOpenOrCloseString(bool inputBool)
         {
             return TextProcessingService.GetFirstChildStringByPrefix
-                (MainControl.Instance.overworldControl.settingSave, inputBool ? "Open" : "Close");
+                (MainControl.Instance.LanguagePackControl.settingTexts, inputBool ? "Open" : "Close");
         }
 
         /// <summary>
@@ -780,7 +948,7 @@ namespace UCT.Global.Settings
             _settingSoul.DOColor(Color.red, AnimSpeed).SetEase(Ease.Linear);
             _settingSelectedOption = 0;
             _optionTipText.text =
-                TextProcessingService.GetFirstChildStringByPrefix(overworldControl.settingSave,
+                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.LanguagePackControl.settingTexts,
                     "ControlCommonDescriptionText");
             UpdateLayerDisplay(_settingsLayer.DisplayedSettingsOptions);
         }
@@ -805,13 +973,15 @@ namespace UCT.Global.Settings
                 settingsLayer = "HomeSettingsLayer";
                 _settingSoul.rectTransform.anchoredPosition = new Vector2(-225f, 147.5f);
                 if (isLan)
+                {
                     SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                }
             });
             _optionValueText.DOColor(ColorEx.WhiteClear, AnimSpeed).SetEase(Ease.Linear);
             _optionTipText.DOColor(ColorEx.WhiteClear, AnimSpeed).SetEase(Ease.Linear);
             _settingSoul.DOColor(ColorEx.RedClear, AnimSpeed).SetEase(Ease.Linear);
             _optionTipText.text =
-                TextProcessingService.GetFirstChildStringByPrefix(overworldControl.settingSave,
+                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.LanguagePackControl.settingTexts,
                     "ControlCommonDescriptionText");
         }
 

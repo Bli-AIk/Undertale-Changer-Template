@@ -63,12 +63,28 @@ namespace Volume
 
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
-            if (_mat == null) return;
-            if (!renderingData.cameraData.postProcessEnabled) return;
+            if (_mat == null)
+            {
+                return;
+            }
+
+            if (!renderingData.cameraData.postProcessEnabled)
+            {
+                return;
+            }
+
             var stack = VolumeManager.instance.stack;
             _chromaticAberrationVolume = stack.GetComponent<ChromaticAberrationComponent>();
-            if (_chromaticAberrationVolume == null) return;
-            if (_chromaticAberrationVolume.isShow.value == false) return;
+            if (_chromaticAberrationVolume == null)
+            {
+                return;
+            }
+
+            if (_chromaticAberrationVolume.isShow.value == false)
+            {
+                return;
+            }
+
             var cmd = CommandBufferPool.Get(RenderTag);
             Render(cmd, ref renderingData);
             context.ExecuteCommandBuffer(cmd);

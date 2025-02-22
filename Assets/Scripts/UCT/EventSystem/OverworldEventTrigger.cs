@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Plugins.Timer.Source;
 using UCT.Global.Core;
+using UCT.Overworld;
 using UCT.Overworld.FiniteStateMachine;
 using UCT.Service;
 using UnityEngine;
@@ -44,53 +45,73 @@ namespace UCT.EventSystem
 
         private void Update()
         {
+            
+            
             if (IsEventTriggerModeActive(EventTriggerMode.Interact) &&
                 InputService.GetKeyDown(KeyCode.Z) && _isInTrigger)
+            {
                 TriggerEvent();
+            }
         }
 
         private void OnCollisionEnter2D(Collision2D other)
         {
-            if (!IsCompareTag(other.gameObject)) return;
+            if (!IsCompareTag(other.gameObject))
+            {
+                return;
+            }
 
             if (IsEventTriggerModeActive(EventTriggerMode.ColliderEnter))
+            {
                 TriggerEvent();
+            }
         }
 
         private void OnCollisionExit2D(Collision2D other)
         {
-            if (!IsCompareTag(other.gameObject)) return;
+            if (!IsCompareTag(other.gameObject))
+            {
+                return;
+            }
 
             if (IsEventTriggerModeActive(EventTriggerMode.ColliderExit))
+            {
                 TriggerEvent();
+            }
         }
 
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (other.CompareTag("PlayerTrigger"))
+            {
                 _isInTrigger = true;
-                
-            if (!IsCompareTag(other.gameObject)) return;
+            }
+
+            if (!IsCompareTag(other.gameObject))
+            {
+                return;
+            }
 
 
             if (IsEventTriggerModeActive(EventTriggerMode.TriggerEnter))
+            {
                 TriggerEvent();
+            }
         }
 
         private void OnTriggerExit2D(Collider2D other)
         {
             _isInTrigger = false;
 
-            if (!IsCompareTag(other.gameObject)) return;
+            if (!IsCompareTag(other.gameObject))
+            {
+                return;
+            }
 
             if (IsEventTriggerModeActive(EventTriggerMode.TriggerExit))
+            {
                 TriggerEvent();
-        }
-
-        private void OnTriggerStay2D(Collider2D other)
-        {
-        
-            
+            }
         }
 
         private bool IsCompareTag(GameObject obj)
@@ -107,9 +128,13 @@ namespace UCT.EventSystem
         private void GetFsmObject()
         {
             if (!fsmObject && string.IsNullOrEmpty(fsmObjectName))
+            {
                 fsmObject = MainControl.overworldPlayerBehaviour;
+            }
             else if (!fsmObject || fsmObjectName != fsmObject.name)
+            {
                 fsmObject = GameObject.Find(fsmObjectName).GetComponent<FiniteStateMachine>();
+            }
         }
 
         /// <summary>
@@ -117,9 +142,18 @@ namespace UCT.EventSystem
         /// </summary>
         public void TriggerEvent()
         {
-            if (GameUtilityService.IsGamePausedOrSetting()) return;
+            if (GameUtilityService.IsGamePausedOrSetting())
+            {
+                return;
+            }
+
+            if (BackpackBehaviour.Instance && BackpackBehaviour.Instance.IsOpenBackPack)
+            {
+                return;
+            }
 
             if (!useSimpleRules)
+            {
                 for (var i = 0; i < eventNames.Count; i++)
                 {
                     var localName = eventNames[i];
@@ -132,7 +166,10 @@ namespace UCT.EventSystem
                         {
                             var eventEntry = eventTable.events[j];
 
-                            if (eventEntry.name != localName) continue;
+                            if (eventEntry.name != localName)
+                            {
+                                continue;
+                            }
 
                             if (eventEntry.closeTime >= 0)
                             {
@@ -140,7 +177,10 @@ namespace UCT.EventSystem
                                 Timer.Register(eventEntry.closeTime, () =>
                                 {
                                     if (!eventTable.events[index].isTriggering)
+                                    {
                                         return;
+                                    }
+
                                     var falseEntry = eventEntry;
 
                                     eventEntry.isTriggering = false;
@@ -157,12 +197,18 @@ namespace UCT.EventSystem
                         eventTables[eventTableIndex] = eventTable;
                     }
                 }
+            }
             else
+            {
                 foreach (var rule in simpleRules)
                 {
                     EventController.DetectionRule(new EventEntry(), rule, out var isTriggered, true);
-                    if (isTriggered && !isExecuteAllRules) break;
+                    if (isTriggered && !isExecuteAllRules)
+                    {
+                        break;
+                    }
                 }
+            }
 
             OnTriggerEvent?.Invoke();
         }

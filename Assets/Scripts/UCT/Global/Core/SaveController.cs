@@ -17,7 +17,10 @@ namespace UCT.Global.Core
         public static void SaveData(PlayerControl data, string dataName)
         {
             if (!Directory.Exists(Application.dataPath + "/Data"))
+            {
                 Directory.CreateDirectory(Application.dataPath + "/Data");
+            }
+
             UsersData[data.name] = data;
             
             var settings = new JsonSerializerSettings
@@ -34,7 +37,11 @@ namespace UCT.Global.Core
 
             SortAndRenameData();
             var path = Application.dataPath + $"/Data/{dataName}.json";
-            if (!File.Exists(path)) return null;
+            if (!File.Exists(path))
+            {
+                return null;
+            }
+
             var jsonData = File.ReadAllText(path);
             var userData = ScriptableObject.CreateInstance<PlayerControl>(); 
             JsonConvert.PopulateObject(jsonData, userData); 
@@ -45,14 +52,19 @@ namespace UCT.Global.Core
 
         public static int GetDataNumber()
         {
-            if (!Directory.Exists(Application.dataPath + "/Data")) return 0;
+            if (!Directory.Exists(Application.dataPath + "/Data"))
+            {
+                return 0;
+            }
 
             var returnNumber = 0;
             for (var i = 0; i < Directory.GetFiles(Application.dataPath + "/Data").Length; i++)
             {
                 var text = Directory.GetFiles(Application.dataPath + "/Data")[i];
                 if (text[^5..] == ".json")
+                {
                     returnNumber++;
+                }
             }
 
             return returnNumber;
@@ -64,7 +76,10 @@ namespace UCT.Global.Core
 
             if (File.Exists(path))
             {
-                if (UsersData.ContainsKey(dataName)) UsersData.Remove(dataName);
+                if (UsersData.ContainsKey(dataName))
+                {
+                    UsersData.Remove(dataName);
+                }
 
                 File.Delete(path);
             }
@@ -94,7 +109,9 @@ namespace UCT.Global.Core
                 var fileNameB = Path.GetFileNameWithoutExtension(b);
 
                 if (int.TryParse(fileNameA[4..], out var numberA) && int.TryParse(fileNameB[4..], out var numberB))
+                {
                     return numberA.CompareTo(numberB);
+                }
 
                 return string.Compare(fileNameA, fileNameB, StringComparison.Ordinal);
             });

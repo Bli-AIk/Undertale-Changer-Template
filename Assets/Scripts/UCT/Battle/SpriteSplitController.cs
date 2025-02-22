@@ -30,9 +30,14 @@ namespace UCT.Battle
         {
             startPos = new Vector2(-_map.width / 2 * 0.05f, _map.height / 2 * 0.05f);
             if (_map.width % 2 == 0)
+            {
                 startPos += new Vector2(0.025f, 0);
+            }
+
             if (_map.height % 2 == 0)
+            {
                 startPos -= new Vector2(0, 0.025f);
+            }
 
             _mask.transform.localScale = new Vector2(_map.width, _map.height);
             _mask.transform.localPosition = new Vector3(0, 0.05f * _map.height);
@@ -48,13 +53,18 @@ namespace UCT.Battle
                     var skip = false;
                     var color = _map.GetPixel(x, y);
                     for (var i = 0; i < colorExclude.Count; i++)
+                    {
                         if (color == colorExclude[i])
                         {
                             skip = true;
                             break;
                         }
+                    }
 
-                    if (skip) continue;
+                    if (skip)
+                    {
+                        continue;
+                    }
 
                     var obj = GetFromPool();
                     obj.GetComponent<SpriteRenderer>().color = color;
@@ -98,7 +108,9 @@ namespace UCT.Battle
         public GameObject GetFromPool()
         {
             if (_available.Count == 0)
+            {
                 FillPool();
+            }
 
             var square = _available.Dequeue();
 

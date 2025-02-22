@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace UCT.Control
 {
@@ -19,20 +18,10 @@ namespace UCT.Control
             Up
         }
 
-        [Header("--UI--")] [Header("字体存储")]
-        public List<TMP_FontAsset> tmpFonts;
-
-        [Header("文本包读取")] 
-        public string sceneTextsAsset;
-
-        public List<string> sceneTextsSave;
-
-        public string settingAsset;
-        public List<string> settingSave;
-        public bool isSetting;
-
-        public Vector2 animDirection;
-
         public List<Sprite> frames;
+
+        [Header("状态")] public bool isSetting;
+
+        [Header("--UI--")] [Header("字体存储")] public List<TMP_FontAsset> tmpFonts;
     }
 }

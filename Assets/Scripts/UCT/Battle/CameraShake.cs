@@ -17,14 +17,19 @@ namespace UCT.Battle
         private void Update()
         {
             if (moveWithHeart && !TurnController.Instance.isMyTurn)
+            {
                 transform.position = new Vector3(
                     moveExtent.x * (MainControl.Instance.battlePlayerController.transform.position.x - heartBasicPos.x),
                     0,
                     moveExtent.y * (MainControl.Instance.battlePlayerController.transform.position.y -
                                     heartBasicPos.y));
+            }
+
             if (moveWithHeart && _tweenMoveBack == null && TurnController.Instance.isMyTurn &&
                 transform.position != Vector3.zero)
+            {
                 _tweenMoveBack = transform.DOMove(Vector3.zero, 0.5f).OnKill(KillTweenMoveBack);
+            }
         }
 
         private void KillTweenMoveBack()
@@ -41,22 +46,33 @@ namespace UCT.Battle
         {
             Transform transformer;
             if (getSon == "")
+            {
                 transformer = transform;
+            }
             else
+            {
                 transformer = transform.Find(getSon);
+            }
 
             _tweenMove.Kill(true);
             _tweenSpin.Kill(true);
 
             if (loops % 2 != 0)
+            {
                 loops++;
+            }
+
             if (v3Move != Vector3.zero)
+            {
                 _tweenMove = transformer.DOLocalMove(transformer.localPosition + v3Move, shakeTime)
                     .SetLoops(loops, LoopType.Yoyo).SetEase(easeMove);
+            }
 
             if (v3Spin != Vector3.zero)
+            {
                 _tweenSpin = transformer.DOLocalRotate(transformer.localRotation.eulerAngles + v3Spin, shakeTime)
                     .SetLoops(loops, LoopType.Yoyo).SetEase(easeSpin);
+            }
         }
     }
 }

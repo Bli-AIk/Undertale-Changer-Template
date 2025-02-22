@@ -4,6 +4,7 @@ using UCT.Global.Audio;
 using UCT.Global.Core;
 using UCT.Service;
 using UnityEngine;
+using DataHandlerService = UCT.Service.DataHandlerService;
 
 namespace UCT.Battle
 {
@@ -38,6 +39,7 @@ namespace UCT.Battle
         private void Update()
         {
             if (!_pressZ)
+            {
                 if (InputService.GetKeyDown(KeyCode.Z))
                 {
                     _pressZ = true;
@@ -46,12 +48,15 @@ namespace UCT.Battle
                     AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipBattle);
                     Hit();
                 }
+            }
         }
 
         private void OnEnable()
         {
             if (_anim == null)
+            {
                 _anim = GetComponent<Animator>();
+            }
 
             //anim.enabled = true;
             _anim.SetBool("Hit", false);
@@ -65,15 +70,19 @@ namespace UCT.Battle
         private void Hit()
         {
             if (Mathf.Abs(_bar.transform.localPosition.x) > 0.8f)
+            {
                 hitDamage = (int)
                     (2.2f / 13.2f * (14 - Mathf.Abs(_bar.transform.localPosition.x)) //准确度系数
-                                  * (MainControl.Instance.playerControl.atk + MainControl.Instance.playerControl.wearAtk
+                                  * (MainControl.Instance.playerControl.atk + DataHandlerService.GetItemFormDataName(MainControl.Instance.playerControl.wearWeapon).Data.Value
                                       - MainControl.Instance.BattleControl.enemiesDef[select] + Random.Range(0, 2)));
+            }
             else
+            {
                 hitDamage = (int)
                     (2.2f / 13.2f * (14 - 0.8f) //准确度系数
-                                  * (MainControl.Instance.playerControl.atk + MainControl.Instance.playerControl.wearAtk
+                                  * (MainControl.Instance.playerControl.atk + DataHandlerService.GetItemFormDataName(MainControl.Instance.playerControl.wearWeapon).Data.Value
                                       - MainControl.Instance.BattleControl.enemiesDef[select] + Random.Range(0, 2)));
+            }
 
             if (hitDamage <= 0)
             {

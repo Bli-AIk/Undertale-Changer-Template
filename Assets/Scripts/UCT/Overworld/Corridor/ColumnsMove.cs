@@ -12,20 +12,26 @@ namespace UCT.Overworld.Corridor
         private CameraFollowPlayer _parentCamera;
         private void Start()
         {
-            if (!_parentCamera) 
+            if (!_parentCamera)
+            {
                 _parentCamera = CameraFollowPlayer.Instance;
+            }
 
             transform.position = _parentCamera.transform.position + _parentCamera.transform.position * speed;
         }
 
         private void Update()
         {
-            if (!_parentCamera) 
+            if (!_parentCamera)
+            {
                 _parentCamera = CameraFollowPlayer.Instance;
-            
+            }
+
             if (_parentCamera.transform.position.x >= _parentCamera.minX ||
                 _parentCamera.transform.position.x <= _parentCamera.maxX)
+            {
                 transform.position = _parentCamera.transform.position * speed;
+            }
         }
     }
 }

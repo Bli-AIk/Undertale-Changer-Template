@@ -65,9 +65,13 @@ namespace UCT.Battle
             if (collision.CompareTag("Player"))
             {
                 if (_boxCollider2DDown.IsTouching(collision)) //进入的是下面
+                {
                     _edgeCollider2D.isTrigger = true;
+                }
                 else if (_boxCollider2DUp.IsTouching(collision))
+                {
                     _edgeCollider2D.isTrigger = false;
+                }
             }
         }
 
@@ -96,11 +100,18 @@ namespace UCT.Battle
         public void ChangeMove(bool isChange = false)
         {
             if (isChange)
+            {
                 canMove = !canMove;
+            }
+
             if (!canMove)
+            {
                 _spriteRenderer.sprite = Resources.Load<Sprite>("Sprites/Board/Board_unmove");
+            }
             else
+            {
                 _spriteRenderer.sprite = Resources.Load<Sprite>("Sprites/Board/Board_move");
+            }
         }
 
         /*

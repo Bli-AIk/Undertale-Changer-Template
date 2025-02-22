@@ -49,10 +49,15 @@ namespace UCT.Other
         /// </summary>
         private static List<float> MusicBpmCount(float inputBpm, float inputBpmDeviation, float musicDuration = 0)
         {
-            if (AudioController.Instance.audioSource.clip == null) return new List<float>();
+            if (AudioController.Instance.audioSource.clip == null)
+            {
+                return new List<float>();
+            }
 
             if (musicDuration <= 0)
+            {
                 musicDuration = AudioController.Instance.audioSource.clip.length;
+            }
 
             var beatInterval = 60f / inputBpm;
             var currentTime = inputBpmDeviation;
@@ -73,27 +78,41 @@ namespace UCT.Other
         /// <param name="instanceBeatTimes"></param>
         private void CalculateAndPlayMetronome(List<float> instanceBeatTimes)
         {
-            if (instanceBeatTimes.Count <= 0) return;
+            if (instanceBeatTimes.Count <= 0)
+            {
+                return;
+            }
 
             var firstIn = true;
             while (currentBeatIndex < instanceBeatTimes.Count &&
                    AudioController.Instance.audioSource.time >= nextBeatSecond)
             {
                 if (!Mathf.Approximately(bpm, _bpmBackup) || !Mathf.Approximately(bpmDeviation, _bpmDeviationBackup))
+                {
                     return;
+                }
 
                 if (firstIn && isPlayMetronome)
+                {
                     AudioController.Instance.GetFx(currentBeatIndex % 4 == 0 ? 13 : 14,
                         MainControl.Instance.AudioControl.fxClipUI);
+                }
 
                 currentBeatIndex++;
 
-                if (currentBeatIndex < instanceBeatTimes.Count) nextBeatSecond = instanceBeatTimes[currentBeatIndex];
+                if (currentBeatIndex < instanceBeatTimes.Count)
+                {
+                    nextBeatSecond = instanceBeatTimes[currentBeatIndex];
+                }
 
                 firstIn = false;
             }
 
-            if (currentBeatIndex < instanceBeatTimes.Count) return;
+            if (currentBeatIndex < instanceBeatTimes.Count)
+            {
+                return;
+            }
+
             nextBeatSecond = instanceBeatTimes[0];
             currentBeatIndex = 0;
         }

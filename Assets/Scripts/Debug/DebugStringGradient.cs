@@ -43,7 +43,9 @@ namespace Debug
                     _gradientNumberList[i] = 0; // 重置为0
 
                     if (i == 0)
+                    {
                         _newColor = GameUtilityService.GetSimilarButDifferentColor(_colorList[i]);
+                    }
 
                     _colorList[i] = _targetColorList[i];
                     _targetColorList[i] = _newColor;

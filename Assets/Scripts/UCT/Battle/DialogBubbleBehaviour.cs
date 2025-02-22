@@ -1,4 +1,5 @@
 using TMPro;
+using UCT.Global.Core;
 using UCT.Global.UI;
 using UnityEngine;
 
@@ -39,9 +40,13 @@ namespace UCT.Battle
             _sprite.size = size;
             _spriteBack.flipX = isBackRight;
             if (!isBackRight)
+            {
                 _spriteBack.transform.localPosition = new Vector3(-0.2396f, backY, 0);
+            }
             else
+            {
                 _spriteBack.transform.localPosition = new Vector3(4.2396f + _sprite.size.x - 4, backY, 0);
+            }
         }
     }
 }

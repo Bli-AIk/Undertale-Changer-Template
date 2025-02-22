@@ -46,10 +46,14 @@ namespace UCT.Global.UI
                     _tmp.paragraphSpacing = options[Convert.ToInt32(isUseWidth)].w;
 
                     if (fontSizes.Length >= 2 && fontSizes[0] != 0 && fontSizes[1] != 0)
+                    {
                         _tmp.fontSize = fontSizes[Convert.ToInt32(isUseWidth)];
+                    }
 
                     if (positions.Length >= 2 && !(positions[0] == new Vector3() && positions[1] == new Vector3()))
+                    {
                         _tmp.transform.position = positions[Convert.ToInt32(isUseWidth)];
+                    }
                 }
                 else
                 {

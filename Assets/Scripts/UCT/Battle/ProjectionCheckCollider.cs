@@ -32,7 +32,11 @@ namespace UCT.Battle
         // Update is called once per frame
         private void Update()
         {
-            if (!MainControl.Instance.battlePlayerController) return;
+            if (!MainControl.Instance.battlePlayerController)
+            {
+                return;
+            }
+
             var relative = (Vector2)MainControl.Instance.battlePlayerController.transform.position -
                            MainControl.Instance.battlePlayerController.sceneDrift;
             for (var i = 0; i < _sets.Count; i++)

@@ -16,7 +16,7 @@ Please note that pressing X won't pause at this character. This character can be
 <x> Directly input character x. x can only be a single character, and the typewriter will skip it and input directly.
 <fx=x> Change the typewriter's sound effect to the x-th one.
 
-If you need to input a long paragraph or simply want the player to press the Z key multiple times, you can insert <passText> within a paragraph of text.
+If you need to input a long paragraph or simply want the player to press the Z key multiple times, you can insert <waitForUpdate> within a paragraph of text.
 When the typewriter detects this character, it will stop typing, and if the player presses the Z key, the current text will be cleared, and typing will resume.
 Previous rich text formatting will be invalidated since the previous text has been cleared.
 
@@ -37,21 +37,20 @@ Rich text input examples:
 </color>Remove color.
 */
 
-DemoBox1\<image=-1><fx=0>* This is a <gradient="White to Yellow - UTC">broken box</gradient><stop><stop...><enter>* Haha, we didn't<enter><-  ->make the interface.
-<passText><image=0><fx=3>* <gradient="White to Red - UTC">Huh???</gradient><fx=2><stop><stop><stop><enter>* Well, <stop><image=1><fx=3>you<stop> just<stop> <enter><-  ->take<stop> it<stop> easy<stop>.
-<passText><image=2><fx=2>* Right now,<stop>this dialogue<enter><-  ->is a test for<gradient="White to Yellow - UTC"> <enter><-  ->the typewriter</gradient>.
-<passText><image=0><fx=3>* <j><u><s><t><- -><l><i><k><e><- -><t><h><i><s><stop>.
-<passText><image=0><fx=2><*><- -><S><n><a><p><stop> and it's <d><o><n><e> <stop><enter><-  -><s><p><e><a><k><stop> a<stop> whole<stop>sentence.<stop><enter>* <stop><stop><stop><gradient="White to Red - UTC">Cool.</gradient>
-<passText><image=2>* What? <stop>Didn't you see it<enter><-  ->clearly?<stop><enter>* Should I slow down then? 
-<passText><image=2><*><- -><stop><S><n><a><p><stop> and it's <d><o><n><e>.<stop><stop><stop>Huh?;
+DemoBox1\<image=-1><fx=0><markPoint>This is a <gradient="White to Yellow - UTC">broken box</gradient><stop><stop...><markEnter>Haha, we didn't<enter><-  ->make the interface.
+<waitForUpdate><image=0><fx=3><markPoint><gradient="White to Red - UTC">Huh???</gradient><fx=2><stop><stop><stop><markEnter>Well, <stop><image=1><fx=3>you<stop> just<stop> <enter><-  ->take<stop> it<stop> easy<stop>.
+<waitForUpdate><image=2><fx=2><markPoint>Right now,<stop>this dialogue<enter><-  ->is a test for<gradient="White to Yellow - UTC"> <enter><-  ->the typewriter</gradient>.
+<waitForUpdate><image=0><fx=3><markPoint><j><u><s><t><- -><l><i><k><e><- -><t><h><i><s><stop>.
+<waitForUpdate><image=0><fx=2><*><- -><S><n><a><p><stop> and it's <d><o><n><e> <stop><enter><-  -><s><p><e><a><k><stop> a<stop> whole<stop>sentence.<stop><markEnter><stop><stop><stop><gradient="White to Red - UTC">Cool.</gradient>
+<waitForUpdate><image=2><markPoint>What? <stop>Didn't you see it<enter><-  ->clearly?<stop><markEnter>Should I slow down then? 
+<waitForUpdate><image=2><*><- -><stop><S><n><a><p><stop> and it's <d><o><n><e>.<stop><stop><stop>Huh?;
 
-Plot\<image=-1><fx=0>* <stop...><stop...>
-<passText>* Ah<stop><stop...>Is there nobody here?<stop>?
-<passText><image=0><fx=2>* Hello.
-<passText><image=-1><fx=0>* Ah? <stop>Flowey!<stop><enter>* Where have you been hiding,<enter><-  ->you scoundrel?
-<passText><image=2><fx=2>* None of your business.<stop><stop><stop><stop><stop><image=1><enter>* It's time for a battle<enter><-  ->now!;
+Plot\<image=-1><fx=0><markPoint><stop...><stop...>
+<waitForUpdate><markPoint>Ah<stop><stop...>Is there nobody here?<stop>?
+<waitForUpdate><image=0><fx=2><markPoint>Hello.
+<waitForUpdate><image=-1><fx=0><markPoint>Ah? <stop>Flowey!<stop><markEnter>Where have you been hiding,<enter><-  ->you scoundrel?
+<waitForUpdate><image=2><fx=2><markPoint>None of your business.<stop><stop><stop><stop><stop><image=1><markEnter>It's time for a battle<enter><-  ->now!;
 
 
-Save\<image=-1><fx=0>* (The floor of corridor was<enter><-  ->covered in golden light,filling<enter><-  ->you with <gradient="White to Red - UTC">determination</gradient>.);
+Save\<image=-1><fx=0><markPoint>(The floor of corridor was<enter><-  ->covered in golden light,filling<enter><-  ->you with <gradient="White to Red - UTC">determination</gradient>.);
 
-BackMenu\<image=-1><fx=1>* (This is a test text, meow.)<enter>* (Wanna back to the MENU, meow?)<enter><fx=-1><size=5> </size><-      ->   Meow<size=5> </size><-       -> Annoyed<select>BackMenu;

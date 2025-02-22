@@ -1,3 +1,3 @@
-WallBrand1\<image=-1><fx=0>* 乌云阻拦明月涌河湾.<stop>.<stop>.<stop><passText>* .<stop>.<stop>.<stop>他起身独立向荒原。;
+WallBrand1\<image=-1><fx=0><markPoint>乌云阻拦明月涌河湾<stop...><waitForUpdate><markPoint><stop...>他起身独立向荒原。;
 
-WallBrand2\<image=-1><fx=0>* 西郊有密林，<stop>助君出重围。;
+WallBrand2\<image=-1><fx=0><markPoint>西郊有密林，<stop>助君出重围。;

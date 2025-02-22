@@ -12,9 +12,15 @@ namespace Editor.Inspector.EventSystem
         public static FactEntry[] GetFactEntry(bool isGlobal, string sceneName)
         {
             var path = "Tables/FactTable";
-            if (!isGlobal && string.IsNullOrEmpty(sceneName)) isGlobal = true;
+            if (!isGlobal && string.IsNullOrEmpty(sceneName))
+            {
+                isGlobal = true;
+            }
+
             if (!isGlobal)
+            {
                 path = $"Tables/{sceneName}/FactTable";
+            }
 
             return Resources.Load<FactTable>(path).facts.ToArray();
         }
@@ -22,9 +28,15 @@ namespace Editor.Inspector.EventSystem
         public static EventEntry[] GetEventEntry(bool isGlobal, string sceneName)
         {
             var path = "Tables/EventTable";
-            if (!isGlobal && string.IsNullOrEmpty(sceneName)) isGlobal = true;
+            if (!isGlobal && string.IsNullOrEmpty(sceneName))
+            {
+                isGlobal = true;
+            }
+
             if (!isGlobal)
+            {
                 path = $"Tables/{sceneName}/EventTable";
+            }
 
             return Resources.Load<EventTable>(path).events.ToArray();
         }
@@ -32,9 +44,15 @@ namespace Editor.Inspector.EventSystem
         public static RuleEntry[] GetRuleEntry(bool isGlobal, string sceneName)
         {
             var path = "Tables/RuleTable";
-            if (string.IsNullOrEmpty(sceneName)) isGlobal = false;
+            if (string.IsNullOrEmpty(sceneName))
+            {
+                isGlobal = false;
+            }
+
             if (isGlobal)
+            {
                 path = $"Tables/{sceneName}/RuleTable";
+            }
 
             return Resources.Load<RuleTable>(path).rules.ToArray();
         }
@@ -56,7 +74,10 @@ namespace Editor.Inspector.EventSystem
             for (var j = 0; j < allEventEntry.Length; j++)
             {
                 allEventEntryName.Add(allEventEntry[j].name);
-                if (allEventEntry[j].name == property.stringValue) entryIndex = j;
+                if (allEventEntry[j].name == property.stringValue)
+                {
+                    entryIndex = j;
+                }
             }
 
             entryIndex = EditorGUI.Popup(rect, entryIndex, allEventEntryName.ToArray());
@@ -90,12 +111,19 @@ namespace Editor.Inspector.EventSystem
             popup = EditorGUI.Popup(rect, popup, factNames);
 
             fact.FindPropertyRelative("name").stringValue = facts[popup].name;
-            if (setValue) fact.FindPropertyRelative("value").intValue = facts[popup].value;
+            if (setValue)
+            {
+                fact.FindPropertyRelative("value").intValue = facts[popup].value;
+            }
+
             fact.FindPropertyRelative("scope").enumValueIndex = (int)facts[popup].scope;
             fact.FindPropertyRelative("area").enumValueIndex = (int)facts[popup].area;
             fact.FindPropertyRelative("scene").stringValue = facts[popup].scene;
 
-            if (!isDisplayValue) return changedIsGlobal;
+            if (!isDisplayValue)
+            {
+                return changedIsGlobal;
+            }
 
             var factLabelStyle = new GUIStyle(GUI.skin.label)
             {

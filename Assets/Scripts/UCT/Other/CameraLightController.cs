@@ -24,7 +24,9 @@ namespace UCT.Other
         private void UpdateLightsVisibility()
         {
             if (SettingsStorage.isSimplifySfx)
+            {
                 return;
+            }
 
             // 获取所有光源组件的引用
             var lights = FindObjectsOfType<Light2D>();
@@ -32,7 +34,9 @@ namespace UCT.Other
             foreach (var light in lights)
             {
                 if (light.lightType == Light2D.LightType.Global)
+                {
                     return;
+                }
 
                 light.enabled = Vector3.Distance(light.transform.position, _mainCamera.transform.position) <=
                                 viewDistance;

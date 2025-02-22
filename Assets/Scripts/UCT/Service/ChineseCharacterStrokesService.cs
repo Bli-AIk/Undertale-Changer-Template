@@ -25,9 +25,16 @@ namespace UCT.Service
                 foreach (var line in lineArray)
                 {
                     var parts = line.Split('|');
-                    if (parts.Length != 3) continue;
+                    if (parts.Length != 3)
+                    {
+                        continue;
+                    }
+
                     var character = parts[1];
-                    if (int.TryParse(parts[2], out var strokes)) CharacterStrokes[character] = strokes;
+                    if (int.TryParse(parts[2], out var strokes))
+                    {
+                        CharacterStrokes[character] = strokes;
+                    }
                 }
             }
             catch (Exception ex)
@@ -40,7 +47,9 @@ namespace UCT.Service
         public static string[] GetCharactersByStrokeCount(string[] characters)
         {
             if (CharacterStrokes == null)
+            {
                 LoadCharacterStrokes();
+            }
 
             var sortedCharacters = characters
                 .Where(c => CharacterStrokes.ContainsKey(c)) // 过滤掉字典中不存在的字符

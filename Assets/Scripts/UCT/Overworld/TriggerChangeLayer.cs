@@ -16,7 +16,9 @@ namespace UCT.Overworld
             _player = GameObject.Find("Player");
             _spriteRenderer = transform.parent.GetComponent<SpriteRenderer>();
             if (followParentPlus)
+            {
                 _spriteRendererP = transform.parent.parent.GetComponent<SpriteRenderer>();
+            }
         }
 
         private void OnTriggerStay2D(Collider2D collision)
@@ -26,16 +28,25 @@ namespace UCT.Overworld
                 if (followParentPlus)
                 {
                     if (_player.transform.position.y > transform.position.y)
+                    {
                         _spriteRenderer.sortingOrder = _spriteRendererP.sortingOrder + upLayer;
+                    }
                     else
+                    {
                         _spriteRenderer.sortingOrder = _spriteRendererP.sortingOrder + downLayer;
+                    }
+
                     return;
                 }
 
                 if (_player.transform.position.y > transform.position.y)
+                {
                     _spriteRenderer.sortingOrder = upLayer;
+                }
                 else
+                {
                     _spriteRenderer.sortingOrder = downLayer;
+                }
             }
         }
     }

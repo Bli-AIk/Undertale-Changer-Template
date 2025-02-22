@@ -83,7 +83,9 @@ namespace UCT.Battle
         private void Update()
         {
             if (!SettingsStorage.isSimplifySfx && hitVolume.weight > 0)
+            {
                 hitVolume.weight -= Time.deltaTime;
+            }
 
             if (MainControl.Instance.playerControl.hp <= 0)
             {
@@ -103,15 +105,20 @@ namespace UCT.Battle
                 }
             }
 
-            if (GameUtilityService.IsGamePausedOrSetting()) return;
+            if (GameUtilityService.IsGamePausedOrSetting())
+            {
+                return;
+            }
 
             if (MainControl.Instance.playerControl.missTime >= 0)
             {
                 MainControl.Instance.playerControl.missTime -= Time.deltaTime;
                 if (_missAnim == null && MainControl.Instance.playerControl.missTimeMax >= 0.4f)
+                {
                     _missAnim = _spriteRenderer
                         .DOColor(MainControl.Instance.BattleControl.playerMissColorList[(int)playerColor], 0.2f)
                         .SetLoops(-1, LoopType.Yoyo).SetEase(Ease.InOutSine);
+                }
             }
             else
             {
@@ -127,38 +134,59 @@ namespace UCT.Battle
             if (MainControl.Instance.playerControl.isDebug)
             {
                 if (Input.GetKeyDown(KeyCode.Keypad1))
+                {
                     ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[0], 0);
+                }
                 else if (Input.GetKeyDown(KeyCode.Keypad2))
+                {
                     ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[1],
                         (BattleControl.PlayerColor)1);
+                }
                 else if (Input.GetKeyDown(KeyCode.Keypad6))
+                {
                     ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[5],
                         (BattleControl.PlayerColor)5);
+                }
 
                 if (Input.GetKeyDown(KeyCode.I))
+                {
                     ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[5],
                         (BattleControl.PlayerColor)5, 2.5f, 0);
+                }
                 else if (Input.GetKeyDown(KeyCode.K))
+                {
                     ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[5],
                         (BattleControl.PlayerColor)5, 2.5f, (PlayerDirEnum)1);
+                }
                 else if (Input.GetKeyDown(KeyCode.J))
+                {
                     ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[5],
                         (BattleControl.PlayerColor)5, 2.5f, (PlayerDirEnum)2);
+                }
                 else if (Input.GetKeyDown(KeyCode.L))
+                {
                     ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[5],
                         (BattleControl.PlayerColor)5, 2.5f, (PlayerDirEnum)3);
+                }
 
                 if (Input.GetKeyDown(KeyCode.P))
+                {
                     MainControl.Instance.playerControl.hp = 0;
+                }
             }
         }
 
         private void FixedUpdate()
         {
             if (GameUtilityService.IsGamePausedOrSetting())
+            {
                 return;
+            }
+
             if (!TurnController.Instance.isMyTurn)
+            {
                 Moving();
+            }
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
@@ -166,7 +194,10 @@ namespace UCT.Battle
             //蓝心碰板子确保再次可以跳
             if (collision.transform.CompareTag("board") &&
                 collision.transform.GetComponent<EdgeCollider2D>().IsTouching(collideCollider) &&
-                playerColor == BattleControl.PlayerColor.Blue) BlueJumpReady();
+                playerColor == BattleControl.PlayerColor.Blue)
+            {
+                BlueJumpReady();
+            }
         }
 
 
@@ -176,7 +207,10 @@ namespace UCT.Battle
         private void OnCollisionExit2D(Collision2D collision)
         {
             if (collision.transform.CompareTag("board") && playerColor == BattleControl.PlayerColor.Blue &&
-                !isJump) BlueDown();
+                !isJump)
+            {
+                BlueDown();
+            }
         }
 
         private void Moving()
@@ -225,26 +259,43 @@ namespace UCT.Battle
                     }
 
                     if (InputService.GetKey(KeyCode.UpArrow))
+                    {
                         moving = new Vector3(moving.x, 1);
+                    }
                     else if (InputService.GetKey(KeyCode.DownArrow))
+                    {
                         moving = new Vector3(moving.x, -1);
+                    }
                     else
+                    {
                         moving = new Vector3(moving.x, 0);
+                    }
 
                     if (InputService.GetKey(KeyCode.UpArrow) &&
                         InputService.GetKey(KeyCode.DownArrow))
+                    {
                         moving = new Vector3(moving.x, 0);
+                    }
 
                     if (InputService.GetKey(KeyCode.RightArrow))
+                    {
                         moving = new Vector3(1, moving.y);
+                    }
                     else if (InputService.GetKey(KeyCode.LeftArrow))
+                    {
                         moving = new Vector3(-1, moving.y);
+                    }
                     else
+                    {
                         moving = new Vector3(0, moving.y);
+                    }
 
                     if (InputService.GetKey(KeyCode.RightArrow) &&
                         InputService.GetKey(KeyCode.LeftArrow))
+                    {
                         moving = new Vector3(0, moving.y);
+                    }
+
                     break;
 
                 case BattleControl.PlayerColor.Orange:
@@ -265,8 +316,12 @@ namespace UCT.Battle
                     {
                         var obj = infoForBoard.collider.gameObject;
                         if (obj.transform.CompareTag(tag))
+                        {
                             if (!isJump && moving == Vector3.zero)
+                            {
                                 BlueDown(0, playerDir);
+                            }
+                        }
 
                         if (obj.transform.CompareTag("board"))
                         {
@@ -292,30 +347,48 @@ namespace UCT.Battle
                     {
                         case PlayerDirEnum.Up:
                             if (InputService.GetKey(KeyCode.X))
+                            {
                                 speedWeightX = SpeedWeight;
+                            }
                             else
+                            {
                                 speedWeightX = 1;
+                            }
 
                             transform.rotation = Quaternion.Euler(0, 0, 180);
                             Physics2D.gravity = new Vector2(0, 9.8f);
                             if (InputService.GetKey(KeyCode.RightArrow))
+                            {
                                 moving = new Vector3(1, moving.y);
+                            }
                             else if (InputService.GetKey(KeyCode.LeftArrow))
+                            {
                                 moving = new Vector3(-1, moving.y);
+                            }
                             else
+                            {
                                 moving = new Vector3(0, moving.y);
+                            }
 
                             if (InputService.GetKey(KeyCode.RightArrow) &&
                                 InputService.GetKey(KeyCode.LeftArrow))
+                            {
                                 moving = new Vector3(0, moving.y);
+                            }
+
                             if (!InputService.GetKey(KeyCode.DownArrow))
                             {
                                 if (!InputService.GetKey(KeyCode.RightArrow) ||
                                     !InputService.GetKey(KeyCode.LeftArrow))
+                                {
                                     jumpRayDistanceForBoard = 0.2f;
+                                }
+
                                 if (InputService.GetKey(KeyCode.RightArrow) ||
                                     InputService.GetKey(KeyCode.LeftArrow))
+                                {
                                     jumpRayDistanceForBoard = 0;
+                                }
                             }
 
                             if (InputService.GetKey(KeyCode.DownArrow) && !isJump && moving.y == 0)
@@ -329,12 +402,14 @@ namespace UCT.Battle
                             if (isJump && (!InputService.GetKey(KeyCode.DownArrow) ||
                                            (infoF.collider && infoF.collider.gameObject.CompareTag("Box"))) &&
                                 moving.y < -0)
+                            {
                                 if (infoF.collider &&
                                     Mathf.Approximately(infoF.transform.position.z, transform.position.z))
                                 {
                                     jumpRayDistanceForBoard = 0.2f;
                                     moving = new Vector3(moving.x, -0);
                                 }
+                            }
 
                             if (isJump)
                             {
@@ -342,7 +417,10 @@ namespace UCT.Battle
                                     Mathf.Approximately(info.transform.position.z, transform.position.z))
                                 {
                                     var obj = info.collider.gameObject;
-                                    if (obj.transform.CompareTag("Box")) BlueJumpReady();
+                                    if (obj.transform.CompareTag("Box"))
+                                    {
+                                        BlueJumpReady();
+                                    }
                                 }
 
                                 moving.y += Time.deltaTime * (float)Math.Pow(3, jumpAcceleration);
@@ -358,29 +436,48 @@ namespace UCT.Battle
 
                         case PlayerDirEnum.Down: ////////////////////////////////////////////////
                             if (InputService.GetKey(KeyCode.X))
+                            {
                                 speedWeightX = SpeedWeight;
+                            }
                             else
+                            {
                                 speedWeightX = 1;
+                            }
+
                             transform.rotation = Quaternion.Euler(0, 0, 0);
                             Physics2D.gravity = new Vector2(0, -9.8f);
                             if (InputService.GetKey(KeyCode.RightArrow))
+                            {
                                 moving = new Vector3(1, moving.y);
+                            }
                             else if (InputService.GetKey(KeyCode.LeftArrow))
+                            {
                                 moving = new Vector3(-1, moving.y);
+                            }
                             else
+                            {
                                 moving = new Vector3(0, moving.y);
+                            }
+
                             if (InputService.GetKey(KeyCode.RightArrow) &&
                                 InputService.GetKey(KeyCode.LeftArrow))
+                            {
                                 moving = new Vector3(0, moving.y);
+                            }
 
                             if (!InputService.GetKey(KeyCode.UpArrow))
                             {
                                 if (!InputService.GetKey(KeyCode.RightArrow) ||
                                     !InputService.GetKey(KeyCode.LeftArrow))
+                                {
                                     jumpRayDistanceForBoard = 0.2f;
+                                }
+
                                 if (InputService.GetKey(KeyCode.RightArrow) ||
                                     InputService.GetKey(KeyCode.LeftArrow))
+                                {
                                     jumpRayDistanceForBoard = 0;
+                                }
                             }
 
 
@@ -395,12 +492,14 @@ namespace UCT.Battle
                             if (isJump && (!InputService.GetKey(KeyCode.UpArrow) ||
                                            (infoF.collider != null && infoF.collider.gameObject.CompareTag("Box"))) &&
                                 moving.y > 0)
+                            {
                                 if (infoF.collider &&
                                     Mathf.Approximately(infoF.transform.position.z, transform.position.z))
                                 {
                                     jumpRayDistanceForBoard = 0.2f;
                                     moving = new Vector3(moving.x, 0);
                                 }
+                            }
 
                             if (isJump)
                             {
@@ -408,7 +507,10 @@ namespace UCT.Battle
                                     Mathf.Approximately(info.transform.position.z, transform.position.z))
                                 {
                                     var obj = info.collider.gameObject;
-                                    if (obj.transform.CompareTag("Box")) BlueJumpReady();
+                                    if (obj.transform.CompareTag("Box"))
+                                    {
+                                        BlueJumpReady();
+                                    }
                                 }
 
                                 moving.y -= Time.deltaTime * (float)Math.Pow(3, jumpAcceleration);
@@ -424,28 +526,48 @@ namespace UCT.Battle
 
                         case PlayerDirEnum.Left: ////////////////////////////////////////////////
                             if (InputService.GetKey(KeyCode.X))
+                            {
                                 speedWeightY = SpeedWeight;
+                            }
                             else
+                            {
                                 speedWeightY = 1;
+                            }
+
                             transform.rotation = Quaternion.Euler(0, 0, 270);
                             Physics2D.gravity = new Vector2(-9.8f, 0);
                             if (InputService.GetKey(KeyCode.UpArrow))
+                            {
                                 moving = new Vector3(moving.x, 1);
+                            }
                             else if (InputService.GetKey(KeyCode.DownArrow))
+                            {
                                 moving = new Vector3(moving.x, -1);
+                            }
                             else
+                            {
                                 moving = new Vector3(moving.x, 0);
+                            }
+
                             if (InputService.GetKey(KeyCode.UpArrow) &&
                                 InputService.GetKey(KeyCode.DownArrow))
+                            {
                                 moving = new Vector3(moving.x, 0);
+                            }
+
                             if (!InputService.GetKey(KeyCode.RightArrow))
                             {
                                 if (!InputService.GetKey(KeyCode.UpArrow) ||
                                     !InputService.GetKey(KeyCode.DownArrow))
+                                {
                                     jumpRayDistanceForBoard = 0.2f;
+                                }
+
                                 if (InputService.GetKey(KeyCode.UpArrow) ||
                                     InputService.GetKey(KeyCode.DownArrow))
+                                {
                                     jumpRayDistanceForBoard = 0;
+                                }
                             }
 
                             if (InputService.GetKey(KeyCode.RightArrow) && !isJump && moving.x == 0)
@@ -459,12 +581,14 @@ namespace UCT.Battle
                             if (isJump && (!InputService.GetKey(KeyCode.RightArrow) ||
                                            (infoF.collider && infoF.collider.gameObject.CompareTag("Box"))) &&
                                 moving.x > 0)
+                            {
                                 if (infoF.collider &&
                                     Mathf.Approximately(infoF.transform.position.z, transform.position.z))
                                 {
                                     jumpRayDistanceForBoard = 0.2f;
                                     moving = new Vector3(0, moving.y);
                                 }
+                            }
 
                             if (isJump)
                             {
@@ -472,7 +596,10 @@ namespace UCT.Battle
                                     Mathf.Approximately(info.transform.position.z, transform.position.z))
                                 {
                                     var obj = info.collider.gameObject;
-                                    if (obj.transform.CompareTag("Box")) BlueJumpReady();
+                                    if (obj.transform.CompareTag("Box"))
+                                    {
+                                        BlueJumpReady();
+                                    }
                                 }
 
                                 moving.x -= Time.deltaTime * (float)Math.Pow(3, jumpAcceleration);
@@ -488,28 +615,48 @@ namespace UCT.Battle
 
                         case PlayerDirEnum.Right:
                             if (InputService.GetKey(KeyCode.X))
+                            {
                                 speedWeightY = SpeedWeight;
+                            }
                             else
+                            {
                                 speedWeightY = 1;
+                            }
+
                             transform.rotation = Quaternion.Euler(0, 0, 90);
                             Physics2D.gravity = new Vector2(9.8f, 0);
                             if (InputService.GetKey(KeyCode.UpArrow))
+                            {
                                 moving = new Vector3(moving.x, 1);
+                            }
                             else if (InputService.GetKey(KeyCode.DownArrow))
+                            {
                                 moving = new Vector3(moving.x, -1);
+                            }
                             else
+                            {
                                 moving = new Vector3(moving.x, 0);
+                            }
+
                             if (InputService.GetKey(KeyCode.UpArrow) &&
                                 InputService.GetKey(KeyCode.DownArrow))
+                            {
                                 moving = new Vector3(moving.x, 0);
+                            }
+
                             if (!InputService.GetKey(KeyCode.LeftArrow))
                             {
                                 if (!InputService.GetKey(KeyCode.UpArrow) ||
                                     !InputService.GetKey(KeyCode.DownArrow))
+                                {
                                     jumpRayDistanceForBoard = 0.2f;
+                                }
+
                                 if (InputService.GetKey(KeyCode.UpArrow) ||
                                     InputService.GetKey(KeyCode.DownArrow))
+                                {
                                     jumpRayDistanceForBoard = 0;
+                                }
                             }
 
                             if (InputService.GetKey(KeyCode.LeftArrow) && !isJump && moving.x == 0)
@@ -523,12 +670,14 @@ namespace UCT.Battle
                             if (isJump && (!InputService.GetKey(KeyCode.LeftArrow) ||
                                            (infoF.collider && infoF.collider.gameObject.CompareTag("Box"))) &&
                                 moving.x < -0)
+                            {
                                 if (infoF.collider &&
                                     Mathf.Approximately(infoF.transform.position.z, transform.position.z))
                                 {
                                     jumpRayDistanceForBoard = 0.2f;
                                     moving = new Vector3(-0, moving.y);
                                 }
+                            }
 
                             if (isJump)
                             {
@@ -536,7 +685,10 @@ namespace UCT.Battle
                                     Mathf.Approximately(info.transform.position.z, transform.position.z))
                                 {
                                     var obj = info.collider.gameObject;
-                                    if (obj.transform.CompareTag("Box")) BlueJumpReady();
+                                    if (obj.transform.CompareTag("Box"))
+                                    {
+                                        BlueJumpReady();
+                                    }
                                 }
 
                                 moving.x += Time.deltaTime * (float)Math.Pow(3, jumpAcceleration);
@@ -581,7 +733,9 @@ namespace UCT.Battle
 
             if (InputService.GetKey(KeyCode.UpArrow) &&
                 InputService.GetKey(KeyCode.DownArrow))
+            {
                 isMoveY = false;
+            }
 
             if (InputService.GetKey(KeyCode.LeftArrow))
             {
@@ -596,7 +750,9 @@ namespace UCT.Battle
 
             if (InputService.GetKey(KeyCode.LeftArrow) &&
                 InputService.GetKey(KeyCode.RightArrow))
+            {
                 isMoveX = false;
+            }
 
             Ray2D rayMoveX = new(transform.position, dirMoveX);
             Other.Debug.DrawRay(rayMoveX.origin, rayMoveX.direction, Color.green);
@@ -607,7 +763,9 @@ namespace UCT.Battle
 
             if (isMoveX && infoMoveX.collider && (infoMoveX.collider.gameObject.CompareTag("Box") ||
                                                   infoMoveX.collider.gameObject.CompareTag("board")))
+            {
                 isMoving = false;
+            }
 
             if (isMoveX || isMoveY)
             {
@@ -619,10 +777,15 @@ namespace UCT.Battle
                          infoMoveY.collider.gameObject.CompareTag("board"));
                 if (x && !y && (InputService.GetKey(KeyCode.UpArrow) ||
                                 InputService.GetKey(KeyCode.DownArrow)))
+                {
                     x = y;
+                }
+
                 if (y && !x && (InputService.GetKey(KeyCode.LeftArrow) ||
                                 InputService.GetKey(KeyCode.RightArrow)))
+                {
                     y = x;
+                }
 
                 isMoving = !(x || y);
 
@@ -634,13 +797,18 @@ namespace UCT.Battle
             else
             {
                 if (playerColor == BattleControl.PlayerColor.Blue && jumpRayDistance != 0)
+                {
                     isMoving = true;
+                }
                 else
+                {
                     isMoving = false;
+                }
             }
 
             float movingSave = 0;
             if (playerColor == BattleControl.PlayerColor.Blue && isJump)
+            {
                 movingSave = playerDir switch
                 {
                     PlayerDirEnum.Up => moving.y,
@@ -649,6 +817,7 @@ namespace UCT.Battle
                     PlayerDirEnum.Right => moving.x,
                     _ => movingSave
                 };
+            }
 
             moving.x = MathUtilityService.GetGreaterNumber(moving.x, -5);
             moving.y = MathUtilityService.GetGreaterNumber(moving.y, -5);
@@ -661,19 +830,28 @@ namespace UCT.Battle
             var checkPos = CheckPoint(newPos, displacement + BoxController.Instance.width / 2);
 
             if (newPos == checkPos)
+            {
                 _rigidBody.MovePosition(newPos);
+            }
             else
+            {
                 transform.position = checkPos;
+            }
 
 
             if (movingSave != 0)
+            {
                 moving.y = movingSave;
+            }
         }
 
         private void BlueJumpReady()
         {
             jumpRayDistance = 0;
-            if (isJump) isJump = false;
+            if (isJump)
+            {
+                isJump = false;
+            }
         }
 
         /// <summary>
@@ -690,9 +868,14 @@ namespace UCT.Battle
             AudioController.Instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipBattle);
 
             if (inputGradientTime < 0)
+            {
                 inputGradientTime = gradientTime;
+            }
+
             if (inputDingTime < 0)
+            {
                 inputDingTime = dingTime;
+            }
 
 
             if (inputGradientTime <= 0)
@@ -752,7 +935,11 @@ namespace UCT.Battle
         /// </summary>
         private void BlueDown(float startForce = 0, PlayerDirEnum dir = PlayerDirEnum.NullDir)
         {
-            if (dir != PlayerDirEnum.NullDir) playerDir = dir;
+            if (dir != PlayerDirEnum.NullDir)
+            {
+                playerDir = dir;
+            }
+
             jumpRayDistance = 0.2f;
             isJump = true;
             switch (playerDir)
@@ -783,10 +970,15 @@ namespace UCT.Battle
             //遍历多边形的每一条边，使用射线法判断点是否在多边形内
             for (int i = 0, j = polygon.Count - 1; i < polygon.Count; j = i++)
                 //如果点与当前边的两个端点之一在Y轴的两侧，并且在X轴的左侧，则反转内部标志
+            {
                 if (polygon[i].y > point.y != polygon[j].y > point.y &&
                     point.x < (polygon[j].x - polygon[i].x) * (point.y - polygon[i].y) / (polygon[j].y - polygon[i].y) +
                     polygon[i].x)
+                {
                     isInside = !isInside;
+                }
+            }
+
             return isInside; //返回点是否在多边形内的最终结果
         }
 
@@ -816,7 +1008,10 @@ namespace UCT.Battle
         //定义计算内缩多边形顶点的方法
         private List<Vector2> CalculateInwardOffset(List<Vector2> vertices, float offset)
         {
-            if (vertices == null || vertices.Count < 3) return null; //如果顶点列表为空或少于3个，返回null
+            if (vertices == null || vertices.Count < 3)
+            {
+                return null; //如果顶点列表为空或少于3个，返回null
+            }
 
             List<Vector2> offsetVertices = new(); //初始化存储位移后顶点的列表
             List<Vector2> intersectionPoints = new(); //初始化存储交点的列表
@@ -836,16 +1031,26 @@ namespace UCT.Battle
                 offsetVertices.Add(offsetCurrentVertex); //添加位移后的当前顶点到列表
                 offsetVertices.Add(offsetNextVertex); //添加位移后的下一个顶点到列表
 
-                if (i <= 0) continue; //从第二条边开始计算交点
+                if (i <= 0)
+                {
+                    continue; //从第二条边开始计算交点
+                }
+
                 var foundIntersection = LineLineIntersection(out var intersection, offsetVertices[i * 2 - 2],
                     offsetVertices[i * 2 - 1], offsetCurrentVertex, offsetNextVertex);
-                if (foundIntersection) intersectionPoints.Add(intersection); //如果找到交点，添加到交点列表
+                if (foundIntersection)
+                {
+                    intersectionPoints.Add(intersection); //如果找到交点，添加到交点列表
+                }
             }
 
             //计算首尾两条边的交点
             var foundFinalIntersection = LineLineIntersection(out var finalIntersection, offsetVertices[^2],
                 offsetVertices[^1], offsetVertices[0], offsetVertices[1]);
-            if (foundFinalIntersection) intersectionPoints.Add(finalIntersection); //如果找到交点，添加到交点列表
+            if (foundFinalIntersection)
+            {
+                intersectionPoints.Add(finalIntersection); //如果找到交点，添加到交点列表
+            }
 
             return intersectionPoints; //返回交点列表，即内缩多边形的顶点
         }
@@ -858,7 +1063,10 @@ namespace UCT.Battle
 
             var d = (point1.x - point2.x) * (point3.y - point4.y) -
                     (point1.y - point2.y) * (point3.x - point4.x); //计算分母
-            if (d == 0) return false; //如果分母为0，则线段平行或重合，无交点
+            if (d == 0)
+            {
+                return false; //如果分母为0，则线段平行或重合，无交点
+            }
 
             float pre = point1.x * point2.y - point1.y * point2.x, post = point3.x * point4.y - point3.y * point4.x;
             intersection.x = (pre * (point3.x - point4.x) - (point1.x - point2.x) * post) / d; //计算交点X坐标
@@ -874,20 +1082,29 @@ namespace UCT.Battle
             Vector2 originalPoint = point; //保存原始点位置
             var z = point.z;
             if (currentDepth >= maxDepth) //检查是否达到递归次数限制
+            {
                 return point; //如果达到最大次数，返回当前点
+            }
 
             foreach (var box in BoxController.Instance.boxes.Where(box => Mathf.Approximately(box.localPosition.z, z)))
             {
                 float rDis;
                 if (box.sonBoxDrawer.Count > 0)
+                {
                     rDis = inputDisplacement + -0.5f;
+                }
                 else
+                {
                     rDis = inputDisplacement;
+                }
+
                 var movedVertices = CalculateInwardOffset(box.GetRealPoints(false), -rDis); //计算缩放后的多边形顶点
 
                 if (IsPointInPolygon(point, movedVertices)) //如果点 在 调整后的多边形内
                     //Debug.Log(point, "#FF00FF"); //记录日志
+                {
                     return point; //返回原始坐标
+                }
             }
             //如果点 不在 调整后的多边形内
 
@@ -898,6 +1115,7 @@ namespace UCT.Battle
             var isParent = false; //确定框是否为复合的框，如果是，需要额外调整移动距离
 
             foreach (var box in BoxController.Instance.boxes.Where(box => Mathf.Approximately(box.localPosition.z, z)))
+            {
                 for (int i = 0, j = box.GetRealPoints(false).Count - 1;
                      i < box.GetRealPoints(false).Count;
                      j = i++) //遍历框的所有边
@@ -906,7 +1124,11 @@ namespace UCT.Battle
                         GetNearestPointOnLine(point, box.GetRealPoints(false)[i],
                             box.GetRealPoints(false)[j]); //计算到当前边的最近点
                     var tempDistance = Vector2.Distance(point, tempNearestPoint); //计算距离
-                    if (!(tempDistance < nearestDistance)) continue;
+                    if (!(tempDistance < nearestDistance))
+                    {
+                        continue;
+                    }
+
                     //如果距离更短
                     nearestPoint = tempNearestPoint; //更新最近点
                     lineStart = box.GetRealPoints(false)[i]; //更新线段起点
@@ -914,17 +1136,28 @@ namespace UCT.Battle
                     nearestDistance = tempDistance; //更新最近距离
                     isParent = box.sonBoxDrawer.Count > 0;
                 }
+            }
 
-            if (!(nearestDistance < float.MaxValue)) return point; //如果没有找到更近的点，返回原点
+            if (!(nearestDistance < float.MaxValue))
+            {
+                return point; //如果没有找到更近的点，返回原点
+            }
+
             //如果找到最近点
             if (isParent)
+            {
                 inputDisplacement -= 0.05f;
+            }
 
             var moved = (Vector3)CalculateDisplacedPoint(nearestPoint, lineStart, lineEnd, -inputDisplacement) +
                         new Vector3(0, 0, z); //计算位移后的点位置
             //Debug.Log(moved, "#FF0000"); //记录日志
 
-            if (!isInitialCall && (Vector2)moved == originalPoint) return point; //如果没有找到更近的点，返回原点
+            if (!isInitialCall && (Vector2)moved == originalPoint)
+            {
+                return point; //如果没有找到更近的点，返回原点
+            }
+
             //如果是初次调用或移动后的点不等于原点
             var newCheck = (Vector3)(Vector2)CheckPoint(moved, inputDisplacement, maxDepth, currentDepth + 1, false) +
                            new Vector3(0, 0, z); //递归调用，增加递归深度

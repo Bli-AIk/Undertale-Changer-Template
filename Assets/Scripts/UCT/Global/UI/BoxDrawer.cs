@@ -89,7 +89,9 @@ namespace UCT.Global.UI
             transform.tag = parent ? "Untagged" : "Box";
 
             if (boxType == BoxController.BoxType.Sub)
+            {
                 ClearComponentsData();
+            }
 
             switch (sonBoxDrawer.Count)
             {
@@ -100,7 +102,11 @@ namespace UCT.Global.UI
                         : vertexPoints;
                     break;
                 case 2 when transform.childCount == 2:
-                    if (SetParentBox()) return;
+                    if (SetParentBox())
+                    {
+                        return;
+                    }
+
                     break;
                 default:
                     ExitParent();
@@ -117,7 +123,9 @@ namespace UCT.Global.UI
                 transform.localPosition = localPosition;
 
                 if (boxType != BoxController.BoxType.Sub) // 减框不绘制
+                {
                     SummonBox();
+                }
             }
         }
 
@@ -186,7 +194,11 @@ namespace UCT.Global.UI
                 : vertexPoints;
             SummonBox();
 
-            if (boxType == BoxController.BoxType.None) return;
+            if (boxType == BoxController.BoxType.None)
+            {
+                return;
+            }
+
             Other.Debug.LogError($"{gameObject.name}是单独存在的框，它的boxType不可以设为{boxType}！已将其设为None。");
             boxType = BoxController.BoxType.None;
         }
@@ -218,7 +230,9 @@ namespace UCT.Global.UI
                     sonBoxDrawer[i].SummonBox();
 
                     if (sonBoxDrawer[i].boxType == BoxController.BoxType.Sub)
+                    {
                         sonBoxDrawer[i].ClearComponentsData();
+                    }
                 }
 
 
@@ -229,10 +243,16 @@ namespace UCT.Global.UI
             rotation = Quaternion.identity;
 
             if (parent)
+            {
                 parent.ExitParent();
+            }
+
             //SubListsWhenExitParent(GetRealPoints());
             if (BoxController.Instance.boxes.Find(x => x == this))
+            {
                 BoxController.Instance.boxes.Remove(this);
+            }
+
             transform.SetParent(boxController);
             parent = null;
         }
@@ -288,15 +308,21 @@ namespace UCT.Global.UI
             if (!forceBesselFlash)
             {
                 if (!isBessel)
+                {
                     besselPoints.Clear();
+                }
                 else if (besselPoints.Count == 0 || besselPoints.Count != vertexPoints.Count * (besselInsertNumber + 1))
+                {
                     besselPoints = InterpolatePoints(vertexPoints, besselInsertNumber);
+                }
             }
             else
             {
                 besselPoints.Clear();
                 if (isBessel)
+                {
                     besselPoints = InterpolatePoints(vertexPoints, besselInsertNumber);
+                }
             }
         }
 
@@ -320,7 +346,10 @@ namespace UCT.Global.UI
             {
                 interpolatedPoints.Add(points[i]);
                 if (i == points.Count - 1)
+                {
                     break;
+                }
+
                 for (var j = 1; j <= interpolation; j++)
                 {
                     var t = j / (float)(interpolation + 1);
@@ -361,7 +390,11 @@ namespace UCT.Global.UI
             var pointList = new List<Vector2>();
             for (var i = 0; i < controlPoints.Count - besselInsertNumber; i += besselInsertNumber + 1)
             {
-                for (var k = 0; k < besselInsertNumber + 2; k++) pointList.Add(controlPoints[i + k]);
+                for (var k = 0; k < besselInsertNumber + 2; k++)
+                {
+                    pointList.Add(controlPoints[i + k]);
+                }
+
                 // 根据所需点的数量在当前曲线段上生成点
                 for (var j = 0; j <= numberPoints; j++)
                 {
@@ -398,7 +431,10 @@ namespace UCT.Global.UI
         {
             float result = 1;
 
-            for (var i = 1; i <= k; i++) result *= (n - i + 1) / (float)i;
+            for (var i = 1; i <= k; i++)
+            {
+                result *= (n - i + 1) / (float)i;
+            }
 
             return result;
         }
@@ -425,7 +461,9 @@ namespace UCT.Global.UI
         public void OnDrawGizmos()
         {
             if (vertexPoints == null)
+            {
                 return;
+            }
 
             if (meshFilter != null && showMesh)
             {
@@ -437,8 +475,10 @@ namespace UCT.Global.UI
             {
                 Gizmos.color = Color.yellow;
                 foreach (var point in realPoints)
+                {
                     Gizmos.DrawSphere(transform.TransformPoint(rotation * new Vector3(point.x, point.y, 0)),
                         0.1f / 2);
+                }
             }
 
             if (isBessel)
@@ -450,16 +490,24 @@ namespace UCT.Global.UI
                     {
                         if (showGizmosPoint == ShowGizmosPoint.JustVertexBessel ||
                             showGizmosPoint == ShowGizmosPoint.All)
+                        {
                             Gizmos.color = Color.cyan;
+                        }
                         else
+                        {
                             continue;
+                        }
                     }
                     else
                     {
                         if (showGizmosPoint != ShowGizmosPoint.Nope)
+                        {
                             Gizmos.color = Color.white;
+                        }
                         else
+                        {
                             continue;
+                        }
                     }
 
                     Gizmos.DrawSphere(
@@ -470,24 +518,38 @@ namespace UCT.Global.UI
             }
 
             if (showGizmosPoint == ShowGizmosPoint.Nope)
+            {
                 return;
+            }
 
 
             Gizmos.color = Color.blue;
             foreach (var point in pointsCross)
+            {
                 Gizmos.DrawSphere(transform.TransformPoint(new Vector3(point.x, point.y, 0)), 0.15f);
+            }
 
             if (pointsOutCross == null)
+            {
                 return;
+            }
+
             Gizmos.color = Color.green;
             foreach (var point in pointsOutCross)
+            {
                 Gizmos.DrawSphere(transform.TransformPoint(new Vector3(point.x, point.y, 0)), 0.15f);
+            }
 
             if (pointsInCross == null)
+            {
                 return;
+            }
+
             Gizmos.color = Color.magenta;
             foreach (var point in pointsInCross)
+            {
                 Gizmos.DrawSphere(transform.TransformPoint(new Vector3(point.x, point.y, 0)), 0.15f);
+            }
         }
 #endif
     }
@@ -506,14 +568,23 @@ namespace UCT.Global.UI
 
             List<Vector2> vertices;
             if (example.isBessel && example.besselPoints.Count > 0)
+            {
                 vertices = example.besselPoints;
+            }
             else
+            {
                 vertices = example.vertexPoints;
+            }
 
             Vector3 localPosition;
             if (!example.parent)
+            {
                 localPosition = example.localPosition;
-            else localPosition = example.localPosition + example.parent.localPosition;
+            }
+            else
+            {
+                localPosition = example.localPosition + example.parent.localPosition;
+            }
 
             var rotation = example.rotation;
             var parent = example.parent;
@@ -525,7 +596,9 @@ namespace UCT.Global.UI
 
             if (Mathf.Approximately(rotation.x, 0) && Mathf.Approximately(rotation.y, 0) &&
                 Mathf.Approximately(rotation.z, 0) && Mathf.Approximately(rotation.w, 0))
+            {
                 rotation = new Quaternion(0, 0, 0, 1);
+            }
 
             for (var i = 0; i < vertices.Count; i++)
             {
@@ -537,15 +610,28 @@ namespace UCT.Global.UI
                         rotation) -
                     example.transform.parent.localPosition;
 
-                if (!EditorGUI.EndChangeCheck()) continue;
+                if (!EditorGUI.EndChangeCheck())
+                {
+                    continue;
+                }
+
                 example.GetComponents();
                 Undo.RecordObject(example, "Changed point " + i);
                 vertices[i] = newVertexPoints;
                 if (example.isBessel)
+                {
                     if (i % (example.besselInsertNumber + 1) == 0)
+                    {
                         example.vertexPoints[i / (example.besselInsertNumber + 1)] = newVertexPoints;
+                    }
+                }
+
                 example.Update();
-                if (_isUndoRedoPerformed) continue;
+                if (_isUndoRedoPerformed)
+                {
+                    continue;
+                }
+
                 Undo.undoRedoPerformed += example.Update;
                 _isUndoRedoPerformed = true;
             }
@@ -555,10 +641,19 @@ namespace UCT.Global.UI
             var gameObjectPos =
                 Handles.PositionHandle(example.transform.parent.localPosition + localPosition, rotation) -
                 example.transform.parent.localPosition;
-            if (!EditorGUI.EndChangeCheck()) return;
+            if (!EditorGUI.EndChangeCheck())
+            {
+                return;
+            }
+
             if (!example.parent)
+            {
                 example.localPosition = gameObjectPos;
-            else example.localPosition = gameObjectPos - example.parent.localPosition;
+            }
+            else
+            {
+                example.localPosition = gameObjectPos - example.parent.localPosition;
+            }
         }
 
         public override void OnInspectorGUI()
@@ -604,12 +699,22 @@ namespace UCT.Global.UI
                 example.Update();
             }
 
-            if (!GUILayout.Button("生成正多边形")) return;
+            if (!GUILayout.Button("生成正多边形"))
+            {
+                return;
+            }
+
             example.vertexPoints.Clear();
             var sides = 3;
             if (example.regularEdge >= 3)
+            {
                 sides = example.regularEdge;
-            else Other.Debug.Log("regularEdge should > 3", "#FF0000");
+            }
+            else
+            {
+                Other.Debug.Log("regularEdge should > 3", "#FF0000");
+            }
+
             const float radius = 3;
             for (var i = sides - 1; i >= 0; i--)
             {

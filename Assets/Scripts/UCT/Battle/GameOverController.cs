@@ -4,7 +4,6 @@ using DG.Tweening;
 using TMPro;
 using UCT.Global.Audio;
 using UCT.Global.Core;
-using UCT.Global.UI;
 using UCT.Service;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -67,9 +66,13 @@ namespace UCT.Battle
         public void PlayFX(int i)
         {
             if (i < 0)
+            {
                 _bgmSource.Play();
+            }
             else
+            {
                 AudioController.Instance.GetFx(i, MainControl.Instance.AudioControl.fxClipUI);
+            }
         }
 
         public void StartParticleSystem()
@@ -83,16 +86,16 @@ namespace UCT.Battle
         {
             var strings = new List<string>
             {
-                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.sceneTextsSave,
+                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.LanguagePackControl.sceneTexts,
                     "GameOver1"),
-                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.sceneTextsSave,
+                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.LanguagePackControl.sceneTexts,
                     "GameOver2"),
-                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.sceneTextsSave,
+                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.LanguagePackControl.sceneTexts,
                     "GameOver3"),
-                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.sceneTextsSave,
+                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.LanguagePackControl.sceneTexts,
                     "GameOver4")
             };
-            _typeWritter.TypeOpen(strings[Random.Range(0, 4)], false, 0, 4, _textOptions);
+            _typeWritter.StartTypeWritter(strings[Random.Range(0, 4)], 4, _textOptions);
             canChangeScene = true;
         }
 

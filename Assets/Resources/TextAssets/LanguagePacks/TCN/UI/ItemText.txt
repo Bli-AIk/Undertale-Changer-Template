@@ -27,18 +27,18 @@ Data\顯示名稱; 用於其餘顯示
 請注意，該字元只能放在 食用顯示 內，在別的位置上時，程式會無視它。
 
 <autoCheckFood>自動偵測該食物並顯示 * “姓名”-治癒 XX HP
--子項<itemHp>取得食物補充的hp
--子項<itemNameFood>取得物品名稱。其中的 Food 可以改為 Arm/Armor/Other
+-子項<itemValue>取得食物補充的hp
+-子項<itemNameFood>取得物品名稱。其中的 Food 可以改為 Weapon/Armor/Other
 
-<autoArm>自動偵測該武器並顯示 * 你裝備了XX。
+<autoWeapon>自動偵測該武器並顯示 * 你裝備了XX。
 <autoArmor>自動偵測該防具並顯示 * 你裝備了XX。
 
-<autoCheckArm>自動偵測該武器並顯示 * “名稱”-武器 AT XX
--字項<itemAtk>取得ATK
+<autoCheckWeapon>自動偵測該武器並顯示 * “名稱”-武器 AT XX
+-字項<itemValue>取得ATK
 <autoCheckArmor>自動偵測該防具並顯示 * “名稱”-防具 DF XX
--字項<itemDef>取得DEF
+-字項<itemValue>取得DEF
 
-<autoLoseFood>自動偵測物品名稱並顯示 * XX被你丟掉了。其中的 Food 可以改為 Arm/Armor/Other
+<autoLoseFood>自動偵測物品名稱並顯示 * XX被你丟掉了。其中的 Food 可以改為 Weapon/Armor/Other
 以上原理均為呼叫data。
 
 打字機特殊字元(通用)輸入：
@@ -52,7 +52,7 @@ Data\顯示名稱; 用於其餘顯示
 </else>顯示分隔符，如果若食物有多種顯示文本，請使用該符號分割。
 -一般情況下，各個文字顯示出現的機率均等。 (WIP 未完成 勿用)
 
-如果你需要輸入很長的一段文字或單純想要玩家多按那麼一下子Z鍵，你可以在一段文字內插入 <passText>字符
+如果你需要輸入很長的一段文字或單純想要玩家多按那麼一下子Z鍵，你可以在一段文字內插入 <waitForUpdate>字符
 打字機偵測該字元後會停止打字，玩家若按下Z鍵將會清空目前文字並繼續打字狀態。
 先前的富文本將失效，因為先前的文字都清空了。
 
@@ -80,15 +80,15 @@ Data\顯示名稱; 用於其餘顯示
 */
 
 /* I T E M */
-Item\baaaaaaaaaaaaaaaa\兩份吃的\<autoFoodFull><enter>* 又得測試，寄了<stop><stop...><passText>* 不過還蠻順利的嘛。 \<autoCheckFood><enter>* 不可名狀的玩意兒<stop><stop...><passText><color=yellow>* 草測試成功了我操！ ！ ！ \<autoLoseFood>;
-Item\bang\一份吃的\* 你嚐了一口這剩下的玩意兒。 <stop><enter><autoFood>\<autoCheckFood><enter>* 仍舊是不可名狀<stop><stop...>\<autoLoseFood>;
+Item\TwoServings\兩份吃的\<autoFoodFull><markEnter>又得測試，寄了<stop><stop...><waitForUpdate><markPoint>不過還蠻順利的嘛。 \<autoCheckFood><markEnter>不可名狀的玩意兒<stop><stop...><waitForUpdate><color=yellow><markPoint>草測試成功了我操！ ！ ！ \<autoLoseFood>;
+Item\Serving\一份吃的\<markPoint>你嚐了一口這剩下的玩意兒。 <stop><enter><autoFood>\<autoCheckFood><markEnter>仍舊是不可名狀<stop><stop...>\<autoLoseFood>;
 
-Item\pia1\破爛玩具刀\<autoArm>\<autoCheckArm>\<autoLoseArm>;
-Item\pia2\<color=yellow>黃金聖劍普拉斯</color>\<autoArm><enter>* 金色傳說了屬於是。 \<autoCheckArm><enter>* 嗯...你媽的什麼玩意(\* <color=red>你就這麼丟了？<stop>？<stop>？</color>;
+Item\TKnife\破爛玩具刀\<autoWeapon>\<autoCheckWeapon>\<autoLoseWeapon>;
+Item\PSword\<color=yellow>黃金聖劍普拉斯</color>\<autoWeapon><markEnter>金色傳說了屬於是。 \<autoCheckWeapon><markEnter>嗯...你媽的什麼玩意(\<markPoint><color=red>你就這麼丟了？<stop>？<stop>？</color>;
 
 
-Item\tatata1\測試用紙殼子\<autoArmor>\<autoCheckArmor>\<autoLoseArmor>;
-Item\tatata2\能穿的玩意兒\<autoArmor>\<autoCheckArmor>\<autoLoseArmor>;
+Item\TPS\測試用紙殼子\<autoArmor>\<autoCheckArmor>\<autoLoseArmor>;
+Item\WearableSth\能穿的玩意兒\<autoArmor>\<autoCheckArmor>\<autoLoseArmor>;
 
 
 /* D A T A */
@@ -110,15 +110,15 @@ Data\丟棄;/*編號：10*/
 11+
 */
 
-Data\* 你吃了<itemNameFood>。 <stop>;
-Data\* 你回覆了 <itemHp> HP！ <stop>;/*未用到<itemHp>。這一步驟需要即時檢測，故在打字機中單獨插入一個檢測方法。這裡的 <autoFood> 只會用來偵測在哪裡插入HP數*/
-Data\* “<itemNameFood>” - 治癒 <itemHp> HP<stop>;
-Data\* 你裝備了<itemNameArm>。 <stop>;
-Data\* 你裝備了<itemNameArmor>。 <stop>;
-Data\* “<itemNameArm>” - 武器 <stop>AT <itemAtk><stop>;
-Data\* “<itemNameArmor>” - 防具 <stop>DF <itemDef><stop>;
-Data\* <itemNameFood>被你丟掉了。 <stop>;
-Data\* <itemNameArm>被你丟掉了。 <stop>;
-Data\* <itemNameArmor>被你丟掉了。 <stop>;/*20*/
-Data\* <itemNameOther>被你丟掉了。 <stop>;
-Data\* 你的HP已滿。 <stop>;
+Data\<markPoint>你吃了<itemNameFood>。 <stop>;
+Data\<markPoint>你回覆了 <itemValue> HP！ <stop>;/*未用到<itemValue>。這一步驟需要即時檢測，故在打字機中單獨插入一個檢測方法。這裡的 <autoFood> 只會用來偵測在哪裡插入HP數*/
+Data\<markPoint>“<itemNameFood>” - 治癒 <itemValue> HP<stop>;
+Data\<markPoint>你裝備了<itemNameWeapon>。 <stop>;
+Data\<markPoint>你裝備了<itemNameArmor>。 <stop>;
+Data\<markPoint>“<itemNameWeapon>” - 武器 <stop>AT <itemValue><stop>;
+Data\<markPoint>“<itemNameArmor>” - 防具 <stop>DF <itemValue><stop>;
+Data\<markPoint><itemNameFood>被你丟掉了。 <stop>;
+Data\<markPoint><itemNameWeapon>被你丟掉了。 <stop>;
+Data\<markPoint><itemNameArmor>被你丟掉了。 <stop>;/*20*/
+Data\<markPoint><itemNameOther>被你丟掉了。 <stop>;
+Data\<markPoint>你的HP已滿。 <stop>;

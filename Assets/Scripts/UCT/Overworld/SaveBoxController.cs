@@ -1,7 +1,11 @@
 ﻿using System;
+using Plugins.Timer.Source;
+using TMPro;
+using UCT.Control;
 using UCT.Global.Audio;
 using UCT.Global.Core;
 using UCT.Global.Settings;
+using UCT.Global.UI;
 using UCT.Service;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -10,143 +14,215 @@ namespace UCT.Overworld
 {
     public class SaveBoxController : MonoBehaviour
     {
-        public static SaveBoxController Instance;
+        private SaveSelectionState _currentSelection = SaveSelectionState.Confirm;
+
+        private bool _isSaveOpen;
+        private static Transform SaveHeart => BackpackBehaviour.Instance.saveHeart;
+        private static TMP_Text SaveText => BackpackBehaviour.Instance.saveText;
+        private static BoxDrawer SaveBox => BackpackBehaviour.Instance.saveBox;
+        public static SaveBoxController Instance { get; private set; }
+
+        private static PlayerControl PlayerControl => MainControl.Instance.playerControl;
+        private static OverworldControl OverworldControl => MainControl.Instance.overworldControl;
+        private static AudioControl AudioControl => MainControl.Instance.AudioControl;
 
         private void Awake()
         {
             Instance = this;
         }
 
-        private bool _saveOpen;
+        private void Update()
+        {
+            if (!_isSaveOpen)
+            {
+                return;
+            }
 
-        private enum SaveSelect
+            HandleSelectionInput();
+            HandleConfirmationInput();
+            HandleCancellationInput();
+        }
+
+        public void OpenSaveBox()
+        {
+            SetGamePaused(true);
+            _isSaveOpen = true;
+            _currentSelection = SaveSelectionState.Confirm;
+
+            InitializeSaveBoxPosition();
+            UpdateSaveText();
+            UpdateSelectionIndicator();
+        }
+
+        private static void SetGamePaused(bool isPaused)
+        {
+            PlayerControl.canMove = !isPaused;
+            SettingsStorage.pause = isPaused;
+        }
+
+        private static void InitializeSaveBoxPosition()
+        {
+            SaveBox.localPosition = new Vector3(
+                SaveBox.localPosition.x,
+                SaveBox.localPosition.y,
+                5);
+        }
+
+        private static void UpdateSaveText()
+        {
+            var saveContent = BuildSaveTextContent();
+            SaveText.text = FormatSaveText(saveContent);
+        }
+
+        private static (string summary, string saveLabel, string backLabel) BuildSaveTextContent()
+        {
+            return (
+                BuildSaveSummaryText(PlayerControl.playerName),
+                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.LanguagePackControl.settingTexts,
+                    "Save"),
+                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.LanguagePackControl.settingTexts,
+                    "Back")
+            );
+        }
+
+        private static string FormatSaveText((string summary, string saveLabel, string backLabel) content)
+        {
+            return $"{content.summary}<indent=7.5></indent>{content.saveLabel}"
+                   + $"<indent=52.5></indent>{content.backLabel}";
+        }
+
+        private static string BuildSaveSummaryText(string playerName)
+        {
+            return $"{playerName}<indent=35></indent>LV{PlayerControl.lv}"
+                   + $"<indent=72></indent>{TextProcessingService.GetRealTime((int)PlayerControl.gameTime)}\n"
+                   + $"{TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.LanguagePackControl.settingTexts, SceneManager.GetActiveScene().name)}\n"
+                   + "<line-height=1.5>\n</line-height>";
+        }
+
+        private void HandleSelectionInput()
+        {
+            if (_currentSelection == SaveSelectionState.Confirmed)
+            {
+                return;
+            }
+
+            if (!InputService.GetKeyDown(KeyCode.LeftArrow) && !InputService.GetKeyDown(KeyCode.RightArrow))
+            {
+                return;
+            }
+
+            ToggleSelection();
+            UpdateSelectionIndicator();
+        }
+
+        private void ToggleSelection()
+        {
+            _currentSelection = _currentSelection switch
+            {
+                SaveSelectionState.Confirm => SaveSelectionState.Cancel,
+                SaveSelectionState.Cancel => SaveSelectionState.Confirm,
+                _ => _currentSelection
+            };
+        }
+
+        private void UpdateSelectionIndicator()
+        {
+            var xPosition = -4.225f + (int)_currentSelection * 4.5f;
+            SaveHeart.localPosition = new Vector3(xPosition, -1.25f, 0);
+        }
+
+        private void HandleConfirmationInput()
+        {
+            if (!InputService.GetKeyDown(KeyCode.Z))
+            {
+                return;
+            }
+
+            switch (_currentSelection)
+            {
+                case SaveSelectionState.Confirm:
+                    ProcessSaveConfirmation();
+                    break;
+                case SaveSelectionState.Cancel:
+                case SaveSelectionState.Confirmed:
+                default:
+                    CloseSaveBox();
+                    break;
+            }
+        }
+
+        private void ProcessSaveConfirmation()
+        {
+            _currentSelection = SaveSelectionState.Confirmed;
+            SaveService.SaveGame();
+
+            AudioController.Instance.GetFx(12, AudioControl.fxClipUI);
+            UpdateAfterSaveUI();
+        }
+
+        private static void UpdateAfterSaveUI()
+        {
+            SaveHeart.position = new Vector2(10000, 10000);
+            SaveText.text = $"<color=yellow>{BuildSaveSummaryText(PlayerControl.playerName)}"
+                            + $"<indent=7.5></indent>{TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.LanguagePackControl.settingTexts, "Saved")}";
+        }
+
+        private void HandleCancellationInput()
+        {
+            if (!InputService.GetKeyDown(KeyCode.X))
+            {
+                return;
+            }
+
+            CloseSaveBox();
+        }
+
+        private void CloseSaveBox()
+        {
+            ResetUIElements();
+            Timer.Register(0.1f, () => SetGamePaused(false));
+
+            _isSaveOpen = false;
+        }
+
+        private static void ResetUIElements()
+        {
+            SaveHeart.position = new Vector2(10000, 10000);
+            SaveBox.localPosition = new Vector3(
+                SaveBox.localPosition.x,
+                SaveBox.localPosition.y,
+                -50);
+            SaveText.text = "";
+        }
+
+        private enum SaveSelectionState
         {
             Confirm,
             Cancel,
             Confirmed
         }
-        
-        private SaveSelect _saveSelect;
+    }
 
-        private void Update()
-        {
-            if (_saveOpen) UpdateSave();
-        }
-        
-        public void OpenSaveBox()
-        {
-            MainControl.Instance.playerControl.canMove = false;
-            SettingsStorage.pause = true;
-            
-            _saveOpen = true;
-            _saveSelect = SaveSelect.Confirm;
-
-            BackpackBehaviour.Instance.saveBox.localPosition = new Vector3(
-                BackpackBehaviour.Instance.saveBox.localPosition.x, BackpackBehaviour.Instance.saveBox.localPosition.y,
-                5);
-            var playerName = MainControl.Instance.playerControl.playerName;
-            BackpackBehaviour.Instance.saveText.text =
-                SetFirstHalfSaveText(playerName) +
-                "<indent=7.5></indent>" +
-                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave,
-                    "Save") +
-                "<indent=52.5></indent>" +
-                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave,
-                    "Back");
-
-            BackpackBehaviour.Instance.saveHeart.localPosition = new Vector3(-4.225f, -1.25f, 0);
-        }
-        
-        private static string SetFirstHalfSaveText(string playerName)
-        {
-            return playerName +
-                   "<indent=35></indent>" +
-                   "LV" +
-                   MainControl.Instance.playerControl.lv +
-                   "<indent=72></indent>" +
-                   TextProcessingService.GetRealTime((int)MainControl.Instance.playerControl.gameTime) + "\n" +
-                   TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave,
-                       SceneManager.GetActiveScene().name) + "\n" +
-                   "<line-height=1.5>\n</line-height>";
-        }
-
-        private void UpdateSave()
-        {
-            if (_saveSelect != SaveSelect.Confirmed)
-            {
-                if (InputService.GetKeyDown(KeyCode.LeftArrow) ||
-                    InputService.GetKeyDown(KeyCode.RightArrow))
-                {
-                    _saveSelect = _saveSelect switch
-                    {
-                        SaveSelect.Confirm => SaveSelect.Cancel,
-                        SaveSelect.Cancel => SaveSelect.Confirm,
-                        _ => _saveSelect
-                    };
-
-                    BackpackBehaviour.Instance.saveHeart.localPosition =
-                        new Vector3(-4.225f + (int)_saveSelect * 4.5f, -1.25f, 0);
-                }
-            }
-
-            if (InputService.GetKeyDown(KeyCode.Z))
-            {
-                switch (_saveSelect)
-                {
-                    case SaveSelect.Confirm:
-                        _saveSelect = SaveSelect.Confirmed;
-                        SaveGame();
-                        AudioController.Instance.GetFx(12, MainControl.Instance.AudioControl.fxClipUI);
-                        BackpackBehaviour.Instance.saveHeart.position = new Vector2(10000, 10000);
-                        BackpackBehaviour.Instance.saveText.text =
-                            "<color=yellow>" +
-                            SetFirstHalfSaveText(MainControl.Instance.playerControl.playerName) +
-                            "<indent=7.5></indent>" +
-                            TextProcessingService.GetFirstChildStringByPrefix(
-                                MainControl.Instance.overworldControl.settingSave, "Saved");
-                        break;
-
-                    case SaveSelect.Cancel:
-                    case SaveSelect.Confirmed:
-                        goto default;
-                    default:
-                        BackpackBehaviour.Instance.saveHeart.position = new Vector2(10000, 10000);
-                        BackpackBehaviour.Instance.saveBox.localPosition = new Vector3(
-                            BackpackBehaviour.Instance.saveBox.localPosition.x,
-                            BackpackBehaviour.Instance.saveBox.localPosition.y, -50);
-                        BackpackBehaviour.Instance.saveText.text = "";
-                        MainControl.Instance.playerControl.canMove = true;
-                        SettingsStorage.pause = false;
-                        _saveOpen = false;
-                        break;
-
-                }
-            }
-            else if (InputService.GetKeyDown(KeyCode.X))
-            {
-                BackpackBehaviour.Instance.saveHeart.position = new Vector2(10000, 10000);
-                BackpackBehaviour.Instance.saveBox.localPosition = new Vector3(
-                    BackpackBehaviour.Instance.saveBox.localPosition.x,
-                    BackpackBehaviour.Instance.saveBox.localPosition.y, -50);
-                BackpackBehaviour.Instance.saveText.text = "";
-                MainControl.Instance.playerControl.canMove = true;
-                SettingsStorage.pause = false;
-                _saveOpen = false;
-            }
-        }
-
-        private static void SaveGame()
+    public static class SaveService
+    {
+        public static void SaveGame()
         {
             SaveController.SaveData(MainControl.Instance.playerControl,
-                "Data" + MainControl.Instance.saveDataId);
-            MainControl.Instance.playerControl.saveScene = SceneManager.GetActiveScene().name;
+                $"Data{MainControl.Instance.saveDataId}");
+
+            var player = MainControl.Instance.playerControl;
+            player.saveScene = SceneManager.GetActiveScene().name;
+
+            SavePlayerPreferences();
+        }
+
+        private static void SavePlayerPreferences()
+        {
             PlayerPrefs.SetInt("languagePack", MainControl.Instance.languagePackId);
             PlayerPrefs.SetInt("dataNumber", MainControl.Instance.saveDataId);
-            PlayerPrefs.SetInt("hdResolution",
-                Convert.ToInt32(SettingsStorage.isUsingHdFrame));
+            PlayerPrefs.SetInt("hdResolution", Convert.ToInt32(SettingsStorage.isUsingHdFrame));
             PlayerPrefs.SetInt("noSFX", Convert.ToInt32(SettingsStorage.isSimplifySfx));
-            PlayerPrefs.SetInt("vsyncMode",
-                Convert.ToInt32(SettingsStorage.vsyncMode));
+            PlayerPrefs.SetInt("vsyncMode", Convert.ToInt32(SettingsStorage.vsyncMode));
         }
     }
 }

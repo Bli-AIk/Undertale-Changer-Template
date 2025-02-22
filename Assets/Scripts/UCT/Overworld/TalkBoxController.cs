@@ -1,7 +1,10 @@
 using System;
 using TMPro;
+using UCT.Battle;
+using UCT.Global.Core;
 using UCT.Global.UI;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UCT.Overworld
 {
@@ -15,6 +18,7 @@ namespace UCT.Overworld
         public bool isUp;
         public bool haveHead;
         private TextMeshPro _typeMessage;
+        public ItemScroller ItemScroller { get; private set; }
 
         private void Awake()
         {
@@ -25,6 +29,7 @@ namespace UCT.Overworld
         {
             boxDrawer = GetComponent<BoxDrawer>();
             _typeMessage = GetTypeMessage();
+            ItemScroller = transform.Find("ItemSelect").GetComponent<ItemScroller>();
             boxDrawer.localPosition = new Vector3(boxDrawer.localPosition.x, boxDrawer.localPosition.y,
                 BackpackBehaviour.BoxZAxisInvisible);
         }
@@ -34,21 +39,27 @@ namespace UCT.Overworld
         {
             GetTypeMessage();
             if (_typeMessage)
+            {
                 _typeMessage.gameObject.SetActive(true);
+            }
         }
 
         private void OnDisable()
         {
             GetTypeMessage();
             if (_typeMessage)
+            {
                 _typeMessage.gameObject.SetActive(false);
+            }
         }
 
         private TextMeshPro GetTypeMessage()
         {
             var talkText = BackpackBehaviour.Instance.talkText;
             if (!_typeMessage && talkText)
+            {
                 _typeMessage = talkText;
+            }
 
             return _typeMessage;
         }
@@ -60,11 +71,16 @@ namespace UCT.Overworld
             {
                 GetTypeMessage().text = "";
                 if (typeWritter)
+                {
                     typeWritter.endString = "";
+                }
             }
 
             if (!updateHeader)
+            {
                 return;
+            }
+
             haveHead = haveHeader;
 
             const float boxUpYAxis = 3.85f;

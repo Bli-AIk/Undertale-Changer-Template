@@ -39,7 +39,10 @@ namespace UCT.Global.Audio
             AudioMixerGroup audioMixerGroup = default)
         {
             if (fxNumber < 0)
+            {
                 return;
+            }
+
             var fxAudioPlayer = GetFromPool<AudioPlayer>();
             var fxAudioSource = fxAudioPlayer.audioSource;
             fxAudioSource.volume = volume;
@@ -47,16 +50,24 @@ namespace UCT.Global.Audio
             if (audioMixerGroup == default)
             {
                 if (list == MainControl.Instance.AudioControl.fxClipUI)
+                {
                     audioMixerGroup = MainControl.Instance.AudioControl.globalAudioMixer.FindMatchingGroups("FX/UI")[0];
+                }
                 else if (list == MainControl.Instance.AudioControl.fxClipWalk)
+                {
                     audioMixerGroup =
                         MainControl.Instance.AudioControl.globalAudioMixer.FindMatchingGroups("FX/Walk")[0];
+                }
                 else if (list == MainControl.Instance.AudioControl.fxClipBattle)
+                {
                     audioMixerGroup =
                         MainControl.Instance.AudioControl.globalAudioMixer.FindMatchingGroups("FX/Battle")[0];
+                }
                 else if (list == MainControl.Instance.AudioControl.fxClipType)
+                {
                     audioMixerGroup =
                         MainControl.Instance.AudioControl.globalAudioMixer.FindMatchingGroups("FX/Type")[0];
+                }
             }
 
             fxAudioSource.outputAudioMixerGroup = audioMixerGroup;

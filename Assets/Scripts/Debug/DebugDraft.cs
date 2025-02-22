@@ -1,4 +1,5 @@
 using TMPro;
+using UCT.Global.Core;
 using UCT.Global.UI;
 using UnityEngine;
 
@@ -19,7 +20,7 @@ namespace Debug
             if (!_wozhenfule)
             {
                 GetComponent<TypeWritter>()
-                    .TypeOpen("<color=red>text123</color>", false, 0, 0, GetComponent<TMP_Text>());
+                    .StartTypeWritter("<color=red>text123</color>", 0, GetComponent<TMP_Text>());
                 _wozhenfule = true;
             }
         }

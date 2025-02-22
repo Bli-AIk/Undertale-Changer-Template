@@ -29,22 +29,31 @@ namespace UCT.Overworld
 
         private void Update()
         {
-            if (!isFollow) return;
+            if (!isFollow)
+            {
+                return;
+            }
 
             if (!player)
+            {
                 player = GameObject.Find("Player");
+            }
 
             followPosition = transform.position;
             //跟随玩家
             if (isLimit)
             {
                 if (player.transform.position.x >= minX || player.transform.position.x <= maxX)
+                {
                     transform.position = new Vector3(player.transform.position.x, transform.position.y,
                         transform.position.z);
+                }
 
                 if (player.transform.position.y >= minY || player.transform.position.y <= maxY)
+                {
                     transform.position = new Vector3(transform.position.x, player.transform.position.y,
                         transform.position.z);
+                }
 
                 //限制范围
                 transform.position = GetLimitedPosition(transform.position);
@@ -59,14 +68,22 @@ namespace UCT.Overworld
         public Vector3 GetLimitedPosition(Vector3 pos)
         {
             if (pos.x <= minX)
+            {
                 pos = new Vector3(minX, pos.y, pos.z);
+            }
             else if (pos.x >= maxX)
+            {
                 pos = new Vector3(maxX, pos.y, pos.z);
-            
+            }
+
             if (pos.y <= minY)
+            {
                 pos = new Vector3(pos.x, minY, pos.z);
+            }
             else if (pos.y >= maxY)
+            {
                 pos = new Vector3(pos.x, maxY, pos.z);
+            }
 
             return pos;
         }

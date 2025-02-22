@@ -50,7 +50,11 @@ namespace Debug
         private Vector2 CalculatePolygonCenter(List<Vector2> vertices)
         {
             var sum = Vector2.zero;
-            foreach (var vertex in vertices) sum += vertex;
+            foreach (var vertex in vertices)
+            {
+                sum += vertex;
+            }
+
             return sum / vertices.Count;
         }
 
@@ -58,7 +62,11 @@ namespace Debug
         private void DrawPolygon(LineRenderer lineRenderer, List<Vector2> vertices)
         {
             lineRenderer.positionCount = vertices.Count + 1; // 设置顶点数（+1是为了闭合多边形）
-            for (var i = 0; i < vertices.Count; i++) lineRenderer.SetPosition(i, vertices[i]);
+            for (var i = 0; i < vertices.Count; i++)
+            {
+                lineRenderer.SetPosition(i, vertices[i]);
+            }
+
             lineRenderer.SetPosition(vertices.Count, vertices[0]); // 闭合多边形
         }
     }

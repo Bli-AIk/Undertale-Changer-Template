@@ -28,14 +28,21 @@ namespace Debug
             var textCap = " ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             for (var i = 0; i < str.Length; i++)
             for (var j = 0; j < text.Length; j++)
+            {
                 if (str[i] == text[j] || str[i] == textCap[j])
                 {
                     if (j > 9)
+                    {
                         returnText += j.ToString();
+                    }
                     else
+                    {
                         returnText += "0" + j;
+                    }
+
                     break;
                 }
+            }
 
             return returnText;
         }
@@ -52,11 +59,13 @@ namespace Debug
 
             for (var i = 0; i < str.Length; i++)
             for (var j = 0; j < text.Length; j++)
+            {
                 if (str[i] == text[j])
                 {
                     returnText += textB[j];
                     break;
                 }
+            }
 
             return returnText;
         }
@@ -72,11 +81,13 @@ namespace Debug
             var back = "112122233132334142435152536162637172737481828391929394";
             for (var i = 0; i < str.Length; i++)
             for (var j = 0; j < text.Length; j++)
+            {
                 if (str[i] == text[j] || str[i] == textCap[j])
                 {
                     returnText += back[2 * j] + back[2 * j + 1].ToString();
                     break;
                 }
+            }
 
             return returnText;
         }
@@ -88,7 +99,11 @@ namespace Debug
         {
             var returnText = "";
 
-            for (var i = str.Length - 1; i >= 0; i--) returnText += str[i];
+            for (var i = str.Length - 1; i >= 0; i--)
+            {
+                returnText += str[i];
+            }
+
             return returnText;
         }
     }

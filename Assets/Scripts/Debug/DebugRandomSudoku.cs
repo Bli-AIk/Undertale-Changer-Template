@@ -18,12 +18,15 @@ namespace Debug
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.Space))
+            {
                 Randomer();
+            }
         }
 
         private void Randomer()
         {
             if (randomNumber > 0)
+            {
                 for (var i = 0; i < randomNumber; i++)
                 {
                     var j = Random.Range(0, sudokos.Count);
@@ -31,6 +34,7 @@ namespace Debug
                     sudokos[j].Changed();
                     ///Debug.Log(j + 1);
                 }
+            }
         }
     }
 }

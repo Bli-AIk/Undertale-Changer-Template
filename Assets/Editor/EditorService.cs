@@ -44,23 +44,38 @@ namespace Editor
             {
                 case SerializedPropertyType.Boolean:
                     if (defaultValue is bool boolValue)
+                    {
                         targetProperty.boolValue = boolValue;
+                    }
+
                     break;
                 case SerializedPropertyType.Integer:
                     if (defaultValue is int intValue)
+                    {
                         targetProperty.intValue = intValue;
+                    }
+
                     break;
                 case SerializedPropertyType.String:
                     if (defaultValue is string stringValue)
+                    {
                         targetProperty.stringValue = stringValue;
+                    }
+
                     break;
                 case SerializedPropertyType.Enum:
                     if (defaultValue is int enumValueIndex)
+                    {
                         targetProperty.enumValueIndex = enumValueIndex;
+                    }
+
                     break;
                 case SerializedPropertyType.ObjectReference:
                     if (defaultValue == null)
+                    {
                         targetProperty.objectReferenceValue = null;
+                    }
+
                     break;
                 default:
                     UCT.Other.Debug.LogWarning($"Unsupported property type: {targetProperty.propertyType}");
@@ -111,7 +126,11 @@ namespace Editor
             var currentIndex = keys.IndexOf(currentEnumValue);
             var selectedIndex = EditorGUI.Popup(rect, currentIndex, displayOptions.ToArray(), guiStyle);
 
-            if (selectedIndex == currentIndex || selectedIndex < 0 || selectedIndex >= keys.Count) return;
+            if (selectedIndex == currentIndex || selectedIndex < 0 || selectedIndex >= keys.Count)
+            {
+                return;
+            }
+
             property.enumValueIndex = Convert.ToInt32(keys[selectedIndex]);
             property.serializedObject.ApplyModifiedProperties();
         }

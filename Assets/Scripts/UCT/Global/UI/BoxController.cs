@@ -47,7 +47,11 @@ namespace UCT.Global.UI
 
         private void Start()
         {
-            if (string.IsNullOrEmpty(startSummonName)) return;
+            if (string.IsNullOrEmpty(startSummonName))
+            {
+                return;
+            }
+
             var start = GetFromThePool();
             start.name = startSummonName;
             start.localPosition = startSummonPos;
@@ -60,10 +64,14 @@ namespace UCT.Global.UI
             for (var j = 0; j < boxes.Count; j++)
             {
                 if (i >= j)
+                {
                     continue;
+                }
 
                 if (boxes[i].transform.parent != transform || boxes[j].transform.parent != transform)
+                {
                     continue;
+                }
 
 
                 var box0 = boxes[i];
@@ -83,9 +91,17 @@ namespace UCT.Global.UI
 
 
                 //两个 特殊框 重合时合并，剩下的交给父BoxDrawer。
-                if (pointsCrossSave.Count == 0 && pointsInCrossSave.Count == 0) continue;
+                if (pointsCrossSave.Count == 0 && pointsInCrossSave.Count == 0)
+                {
+                    continue;
+                }
+
                 if (box0.boxType == BoxType.None || box1.boxType == BoxType.None ||
-                    (box0.boxType == BoxType.Sub && box1.boxType == BoxType.Sub)) continue;
+                    (box0.boxType == BoxType.Sub && box1.boxType == BoxType.Sub))
+                {
+                    continue;
+                }
+
                 var boxParent = GetFromThePool();
 
                 boxParent.localPosition = new Vector3(0, 0, (box0.localPosition.z + box1.localPosition.z) / 2);

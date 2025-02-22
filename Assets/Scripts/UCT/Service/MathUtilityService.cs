@@ -32,9 +32,13 @@ namespace UCT.Service
             var result = input;
 
             if (result >= 0)
+            {
                 result = 1;
+            }
             else
+            {
                 result = -1;
+            }
 
             return (int)result;
         }
@@ -45,7 +49,11 @@ namespace UCT.Service
         public static Vector2 CalculatePolygonCenter(List<Vector2> vertexPoints)
         {
             var result = Vector2.zero;
-            if (vertexPoints == null || vertexPoints.Count == 0) return result;
+            if (vertexPoints == null || vertexPoints.Count == 0)
+            {
+                return result;
+            }
+
             result = vertexPoints.Aggregate(result, (current, vertex) => current + vertex);
             result /= vertexPoints.Count;
             return result;
@@ -90,10 +98,16 @@ namespace UCT.Service
             var result = new List<int>();
 
             for (var i = 0; i < resolutionHeights.Count; i++)
+            {
                 if (i < resolutionCutPoint)
+                {
                     result.Add(resolutionHeights[i] * 4 / 3);
+                }
                 else
+                {
                     result.Add(resolutionHeights[i] * 16 / 9);
+                }
+            }
 
             return result;
         }

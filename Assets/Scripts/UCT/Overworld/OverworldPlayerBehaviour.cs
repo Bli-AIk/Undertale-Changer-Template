@@ -29,19 +29,34 @@ namespace UCT.Overworld
         private void Update()
         {
             if (!MainControl.Instance.isSceneSwitching)
+            {
                 MainControl.Instance.playerControl.playerLastPos = transform.position;
-            if (owTimer > 0) 
+            }
+
+            if (owTimer > 0)
+            {
                 owTimer -= Time.deltaTime;
-            
+            }
+
             if (GameUtilityService.IsGamePausedOrSetting() || BackpackBehaviour.Instance.select > 0)
             {
-                TransitionToStateIfNeeded(StateType.Idle);
+                if (!IsSpecialState())
+                {
+                    TransitionToStateIfNeeded(StateType.Idle);
+                }
+
                 return;
             }
             
             InputPlayerMove();
             SetShadow();
         }
+
+        private bool IsSpecialState()
+        {
+            return stateType == StateType.Spin;
+        }
+
         protected override void InitializeStates()
         {
             States.Add(StateType.Idle, new IdleState(this, data));
@@ -120,7 +135,9 @@ namespace UCT.Overworld
         private void UpdateAnimationDirection()
         {
             if (data.direction != Vector3.zero)
+            {
                 data.directionWithoutZero = data.direction;
+            }
 
             data.directionPlayer = Mathf.Abs(data.directionWithoutZero.x) > Mathf.Abs(data.directionWithoutZero.y)
                 ? new Vector3(Mathf.Sign(data.directionWithoutZero.x), 0, 0)
@@ -133,7 +150,7 @@ namespace UCT.Overworld
             {
                 stateType = !InputService.GetKey(KeyCode.X) ? StateType.Walk : StateType.Run;
             }
-            else if (stateType != StateType.Spin)
+            else if (!IsSpecialState())
             {
                 stateType = StateType.Idle;
             }
@@ -144,7 +161,9 @@ namespace UCT.Overworld
         private void TransitionToStateIfNeeded(IState targetState)
         {
             if (CurrentState != targetState)
+            {
                 TransitionState(targetState);
+            }
         }
 
         public void TransitionToStateIfNeeded(StateType inputStateType)

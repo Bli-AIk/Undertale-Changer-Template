@@ -18,7 +18,7 @@ In particular, if the text is<gaster>, the game will crash.
 
 */
 
-GameOver1\You're going to<enter>be alright!<passText><playerName>!<stop><stop><stop><enter>Stay determined<stop><stop...>;
-GameOver2\You cannot give<enter>up just yet<stop><stop...><passText><playerName>!<stop><stop><stop><enter>Stay determined<stop><stop...>;
-GameOver3\Don't lost hope!<passText><playerName>!<stop><stop><stop><enter>Stay determined<stop><stop...>;
-GameOver4\It cannot end<enter>now!<passText><playerName>!<stop><stop><stop><enter>Stay determined<stop><stop...>;
+GameOver1\You're going to<enter>be alright!<waitForUpdate><playerName>!<stop><stop><stop><enter>Stay determined<stop><stop...>;
+GameOver2\You cannot give<enter>up just yet<stop><stop...><waitForUpdate><playerName>!<stop><stop><stop><enter>Stay determined<stop><stop...>;
+GameOver3\Don't lost hope!<waitForUpdate><playerName>!<stop><stop><stop><enter>Stay determined<stop><stop...>;
+GameOver4\It cannot end<enter>now!<waitForUpdate><playerName>!<stop><stop><stop><enter>Stay determined<stop><stop...>;

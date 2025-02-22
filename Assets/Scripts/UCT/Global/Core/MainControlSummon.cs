@@ -84,7 +84,10 @@ namespace UCT.Global.Core
         private void Awake()
         {
             if (sceneState == MainControl.SceneState.Overworld)
+            {
                 SetupController(MainControl.overworldPlayerBehaviour, ExistingPlayerSetup, NonexistentPlayerSetup);
+            }
+
             SetupController(Camera.main, ExistingCameraSetup, NonexistentCameraSetup);
             SetupController(SettingsController.Instance, ExistingCanvasSetup, NonexistentCanvasSetup);
             SetupController(AudioController.Instance, ExistingAudioSetup, NonexistentAudioSetup);
@@ -96,25 +99,41 @@ namespace UCT.Global.Core
             where T : class
         {
             if (instance != null)
+            {
                 existingSetup();
+            }
             else
+            {
                 nonexistentSetup();
+            }
         }
 
         private void ExistingCameraSetup()
         {
             System.Diagnostics.Debug.Assert(Camera.main != null, "Camera.main != null");
             var mainCamera = CameraFollowPlayer.Instance;
-            if (!mainCamera) return;
+            if (!mainCamera)
+            {
+                return;
+            }
+
             if (sceneState != MainControl.SceneState.Overworld)
+            {
                 Destroy(mainCamera.gameObject);
+            }
             else
+            {
                 CameraSetup(mainCamera);
+            }
         }
 
         private void NonexistentCameraSetup()
         {
-            if (sceneState != MainControl.SceneState.Overworld) return;
+            if (sceneState != MainControl.SceneState.Overworld)
+            {
+                return;
+            }
+
             var mainCamera = Instantiate(Resources.Load<GameObject>("Prefabs/MainCameraOverworld"));
             mainCamera.name = "MainCameraOverworld";
             CameraSetup(CameraFollowPlayer.Instance);
@@ -192,7 +211,11 @@ namespace UCT.Global.Core
             audioSource.pitch = pitch;
             audioSource.volume = volume;
             audioSource.loop = loop;
-            if (audioSource.clip == bgmClip) return;
+            if (audioSource.clip == bgmClip)
+            {
+                return;
+            }
+
             audioSource.clip = bgmClip;
             audioSource.Play();
         }

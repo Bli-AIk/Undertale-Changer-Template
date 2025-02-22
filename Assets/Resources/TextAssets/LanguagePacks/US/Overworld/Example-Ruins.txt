@@ -16,7 +16,7 @@ Please note that pressing X won't pause at this character. This character can be
 <x> Directly input character x. x can only be a single character, and the typewriter will skip it and input directly.
 <fx=x> Change the typewriter's sound effect to the x-th one.
 
-If you need to input a long paragraph or simply want the player to press the Z key multiple times, you can insert <passText> within a paragraph of text.
+If you need to input a long paragraph or simply want the player to press the Z key multiple times, you can insert <waitForUpdate> within a paragraph of text.
 When the typewriter detects this character, it will stop typing, and if the player presses the Z key, the current text will be cleared, and typing will resume.
 Previous rich text formatting will be invalidated since the previous text has been cleared.
 
@@ -37,17 +37,17 @@ Rich text input examples:
 </color>Remove color.
 */
 
-Brand\<image=-1><fx=0>* "Press <gradient="White to Yellow - UTC">[Z]</gradient> to read the sign!"<stop><stop><stop><stop><stop><stop><stop><enter>
-<size=5>* "<gradient="White to Yellow - UTC">[Enter]</gradient> works too.</size>"
-<passText>* "This scene uses <gradient="White to Yellow - UTC">normal maps</gradient>! <enter>
+Brand\<image=-1><fx=0><markPoint>"Press <gradient="White to Yellow - UTC">[Z]</gradient> to read the sign!"<stop*7><enter>
+<size=5><markPoint>"<gradient="White to Yellow - UTC">[Enter]</gradient> works too."</size>
+<waitForUpdate><markPoint>"This scene uses <gradient="White to Yellow - UTC">normal maps</gradient>! <enter>
 <-  ->Also, try going to <enter><-  ->the <gradient="White to Red - UTC">riverside</gradient>?";
 
-River\<image=-1><fx=0>* This is you! ;
+River\<image=-1><fx=0><markPoint>This is you! ;
 
-WallBrand\<image=-1><fx=0>* Follow the path if you want. ;
+WallBrand\<image=-1><fx=0><markPoint>Follow the path if you want. ;
 
 Text1\<image=-1><fx=0><*><- -><D><o><n><'><t><- -><p><r><e><s><s><.> ;
 
 Text2\<image=-1><fx=0><*><- -><D><o><n><'><t><- -><p><r><e><s><s><,><t><o><o><.> ;
 
-TextAlex\<image=-1><fx=0>* That’s the only way you’ll keep on digging it.<stop>.<stop>.;
+TextAlex\<image=-1><fx=0><markPoint>That’s the only way you’ll keep on digging it.<stop>.<stop>.;

@@ -18,7 +18,10 @@ namespace UCT.Global.Core
 
         private void Start()
         {
-            if (isStartFillPool) FillPool<Transform>();
+            if (isStartFillPool)
+            {
+                FillPool<Transform>();
+            }
         }
 
         /// <summary>
@@ -27,7 +30,9 @@ namespace UCT.Global.Core
         public void FillPool<T>() where T : Component
         {
             if (!parent)
+            {
                 parent = transform;
+            }
 
             for (var i = 0; i < count; i++)
             {
@@ -38,7 +43,9 @@ namespace UCT.Global.Core
                 {
                     script = newObj.GetComponent<T>();
                     if (!script)
+                    {
                         script = newObj.AddComponent<T>(); // 如果没有组件，自动添加
+                    }
                 }
 
                 ReturnPool(newObj, script);
@@ -51,7 +58,9 @@ namespace UCT.Global.Core
         public void ReturnPool<T>(GameObject inputGameObject, T script) where T : Component
         {
             if (!parent)
+            {
                 parent = transform;
+            }
 
             inputGameObject.SetActive(false);
             inputGameObject.transform.SetParent(parent);
@@ -65,14 +74,18 @@ namespace UCT.Global.Core
         public T GetFromPool<T>() where T : Component
         {
             if (_availableObj.Count == 0)
+            {
                 FillPool<T>();
+            }
 
             var (availableObj, component) = _availableObj.Dequeue();
 
             availableObj.SetActive(true);
 
             if (typeof(T) == typeof(Transform))
+            {
                 return availableObj.transform as T;
+            }
 
             return component as T;
         }

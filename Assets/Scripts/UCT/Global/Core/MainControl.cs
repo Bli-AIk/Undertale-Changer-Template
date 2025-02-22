@@ -41,10 +41,16 @@ namespace UCT.Global.Core
 
         [Title("=== 场景状态设置 ===")] public SceneState sceneState;
 
-        [Space] [Title("=== 语言包相关设置 ===")] [Header("语言包ID")] [FormerlySerializedAs("languagePack")]
+        [Space]
+        [Title("=== 语言包相关设置 ===")]
+        [Header("语言包ID")]
+        [FormerlySerializedAs("languagePack")]
         public int languagePackId;
 
-        [Space] [Title("=== 存档相关设置 ===")] [Header("存档id")] [FormerlySerializedAs("dataNumber")]
+        [Space]
+        [Title("=== 存档相关设置 ===")]
+        [Header("存档id")]
+        [FormerlySerializedAs("dataNumber")]
         public int saveDataId;
 
         [FormerlySerializedAs("isSceneSwitchingFadeTransitionEnabled")]
@@ -64,11 +70,11 @@ namespace UCT.Global.Core
         [FormerlySerializedAs("notPauseIn")]
         public bool isFadeInUnpaused;
 
-        [Header("场景切换使用的Image")] [FormerlySerializedAs("_inOutBlack")]
-        public Image sceneSwitchingFadeImage;
+        [Header("场景切换使用的Image")]
+        [FormerlySerializedAs("_inOutBlack")] public Image sceneSwitchingFadeImage;
 
-        [Header("场景是否在切换")] [FormerlySerializedAs("blacking")]
-        public bool isSceneSwitching;
+        [Header("场景是否在切换")]
+        [FormerlySerializedAs("blacking")] public bool isSceneSwitching;
 
         [Space] [Title("=== UI与画面相关 ===")] public Camera cameraMainInBattle;
 
@@ -90,13 +96,17 @@ namespace UCT.Global.Core
 
         public EventController eventController;
 
+        public readonly ItemController ItemController = new();
+
         private DebugStringGradient _debugStringGradient = new("Debug");
-        public ItemControl ItemControl { get; private set; }
+        public LanguagePackControl LanguagePackControl { get; private set; }
         public AudioControl AudioControl { get; private set; }
         public BattleControl BattleControl { get; private set; }
 
         private void Awake()
         {
+            ItemController.InitializeItems();
+
             languagePackId = PlayerPrefs.GetInt("languagePack", 2);
 
             if (PlayerPrefs.GetInt("dataNumber", 0) >= 0)
@@ -109,20 +119,27 @@ namespace UCT.Global.Core
                 saveDataId = 0;
             }
 
-            if (saveDataId > SaveController.GetDataNumber() - 1) saveDataId = SaveController.GetDataNumber() - 1;
+            if (saveDataId > SaveController.GetDataNumber() - 1)
+            {
+                saveDataId = SaveController.GetDataNumber() - 1;
+            }
 
             Instance = this;
             InitializationLoad();
             Initialization(languagePackId);
 
             if (saveDataId == -1)
+            {
                 playerControl = DataHandlerService.SetPlayerControl(ScriptableObject.CreateInstance<PlayerControl>());
+            }
         }
 
         public void Start()
         {
             if (playerControl.isDebug && playerControl.invincible)
+            {
                 playerControl.hp = playerControl.hpMax / 2;
+            }
 
             DataHandlerService.InitializationLanguagePackFullWidth();
 
@@ -139,7 +156,9 @@ namespace UCT.Global.Core
                 case SceneState.Overworld:
                 {
                     if (!eventController)
+                    {
                         eventController = GetComponent<EventController>();
+                    }
 
                     GetOverworldPlayerBehaviour();
 
@@ -188,22 +207,37 @@ namespace UCT.Global.Core
         {
             playerControl.gameTime += Time.deltaTime;
 
-            if (playerControl.isDebug) DebugUpdate();
+            if (playerControl.isDebug)
+            {
+                DebugUpdate();
+            }
+
             if (playerControl.hpMax < playerControl.hp)
+            {
                 playerControl.hp = playerControl.hpMax;
+            }
 
             if (overworldControl.isSetting)
+            {
                 return;
+            }
+
             SettingsShortcuts();
         }
 
         public static void GetOverworldPlayerBehaviour()
         {
-            if (overworldPlayerBehaviour) return;
+            if (overworldPlayerBehaviour)
+            {
+                return;
+            }
+
             var owPlayer = GameObject.Find("Player");
 
             if (owPlayer)
+            {
                 overworldPlayerBehaviour = owPlayer.GetComponent<OverworldPlayerBehaviour>();
+            }
         }
 
         private void InitializeVolume()
@@ -225,6 +259,11 @@ namespace UCT.Global.Core
             AudioControl = Resources.Load<AudioControl>("AudioControl");
             //InitializationOverworld内调用OverworldControl
             //Initialization内调用ItemControl
+
+            if (playerControl.items.Count < 8)
+            {
+                playerControl.items = new List<string> { "", "", "", "", "", "", "", "" };
+            }
         }
 
         /// <summary>
@@ -232,34 +271,37 @@ namespace UCT.Global.Core
         /// </summary>
         public void Initialization(int languageId)
         {
-            if (!ItemControl)
-                ItemControl = Resources.Load<ItemControl>("ItemControl");
+            if (!LanguagePackControl)
+            {
+                LanguagePackControl = Resources.Load<LanguagePackControl>("LanguagePackControl");
+            }
 
             if (!languageId.Equals(languagePackId))
+            {
                 languagePackId = languageId;
+            }
 
             languagePackId = DataHandlerService.LanguagePackDetection(languagePackId);
 
             //ItemControl加载
             //--------------------------------------------------------------------------------
-            ItemControl.itemText = DataHandlerService.LoadLanguageData("UI\\ItemText", languagePackId);
 
-            ItemControl.itemMax = DataHandlerService.LoadItemData(ItemControl.itemData);
-            ItemControl.itemTextMax = DataHandlerService.LoadItemData(ItemControl.itemText);
+            var itemTextMax =
+                DataHandlerService.LoadItemData(DataHandlerService.LoadLanguageData("UI\\ItemText", languagePackId));
 
-            TextProcessingService.ClassifyStringsByPrefix(ItemControl.itemTextMax, new[] { "Data", "Item" },
-                new[] { ItemControl.itemTextMaxData, ItemControl.itemTextMaxItem });
-            DataHandlerService.ClassifyItemsData(ItemControl);
+            var stringsByPrefix = TextProcessingService.ClassifyStringsByPrefix(itemTextMax, new[] { "Data", "Item" });
+            LanguagePackControl.dataTexts = stringsByPrefix[0];
+            var itemTextMaxItem = stringsByPrefix[1];
 
-            ItemControl.itemTextMaxData =
-                DataHandlerService.ChangeItemData(ItemControl.itemTextMaxData, true, new List<string>());
-            ItemControl.itemTextMaxItem =
-                DataHandlerService.ChangeItemData(ItemControl.itemTextMaxItem, true, new List<string>());
-            ItemControl.itemTextMaxItem =
-                DataHandlerService.ChangeItemData(ItemControl.itemTextMaxItem, false, new List<string>());
+            LanguagePackControl.dataTexts =
+                DataHandlerService.ChangeItemData(LanguagePackControl.dataTexts, true, new List<string>());
+            itemTextMaxItem =
+                DataHandlerService.ChangeItemData(itemTextMaxItem, true, new List<string>());
+            itemTextMaxItem =
+                DataHandlerService.ChangeItemData(itemTextMaxItem, false, new List<string>());
 
-            TextProcessingService.SplitStringToListWithDelimiter(ItemControl.itemTextMaxItem,
-                ItemControl.itemTextMaxItemSon);
+            TextProcessingService.SplitStringToListWithDelimiter(itemTextMaxItem,
+                LanguagePackControl.itemTexts);
             //--------------------------------------------------------------------------------
         }
 
@@ -267,36 +309,33 @@ namespace UCT.Global.Core
         {
             languagePackId = DataHandlerService.LanguagePackDetection(languagePackId);
 
-            if (overworldControl == null)
+            if (!overworldControl)
             {
                 overworldControl = Resources.Load<OverworldControl>("OverworldControl");
                 KeyBindings.ResetDictionary();
             }
 
 
-            overworldControl.settingAsset = DataHandlerService.LoadLanguageData("UI\\Setting", languagePackId);
-
-            overworldControl.settingSave = DataHandlerService.LoadItemData(overworldControl.settingAsset);
+            var settingAsset = DataHandlerService.LoadLanguageData("UI\\Setting", languagePackId);
+            LanguagePackControl.settingTexts = DataHandlerService.LoadItemData(settingAsset);
 
             if (sceneState == SceneState.InBattle)
+            {
                 return;
-            //OverworldControl加载
-            //--------------------------------------------------------------------------------
+            }
 
-            overworldControl.sceneTextsAsset =
-                DataHandlerService.LoadLanguageData($"Overworld\\{SceneManager.GetActiveScene().name}", languagePackId);
+            if (SceneManager.GetActiveScene().name != "Start")
+            {
+                var sceneTextsAsset =
+                    DataHandlerService.LoadLanguageData($"Overworld\\{SceneManager.GetActiveScene().name}",
+                        languagePackId);
+                LanguagePackControl.sceneTexts = DataHandlerService.LoadItemData(sceneTextsAsset);
+                LanguagePackControl.sceneTexts =
+                    DataHandlerService.ChangeItemData(LanguagePackControl.sceneTexts, true, new List<string>());
+            }
 
-            if (SceneManager.GetActiveScene().name == "Start")
-                return;
-            overworldControl.sceneTextsSave = DataHandlerService.LoadItemData(overworldControl.sceneTextsAsset);
-
-            overworldControl.settingSave =
-                DataHandlerService.ChangeItemData(overworldControl.settingSave, true, new List<string>());
-
-            overworldControl.sceneTextsSave =
-                DataHandlerService.ChangeItemData(overworldControl.sceneTextsSave, true, new List<string>());
-
-            //--------------------------------------------------------------------------------
+            LanguagePackControl.settingTexts =
+                DataHandlerService.ChangeItemData(LanguagePackControl.settingTexts, true, new List<string>());
 
             SettingsStorage.isUsingHdFrame = Convert.ToBoolean(PlayerPrefs.GetInt("hdResolution", 0));
             SettingsStorage.isSimplifySfx = Convert.ToBoolean(PlayerPrefs.GetInt("noSFX", 0));
@@ -308,7 +347,9 @@ namespace UCT.Global.Core
             //BattleControl加载
             //--------------------------------------------------------------------------------
             if (!BattleControl)
+            {
                 BattleControl = Resources.Load<BattleControl>("BattleControl");
+            }
 
             BattleControl.turnDialogAsset = new List<string>();
 
@@ -321,7 +362,10 @@ namespace UCT.Global.Core
                     $"TextAssets/LanguagePacks/{DataHandlerService.GetLanguageInsideId(languagePackId)}/Battle/Turn");
 
                 turnSave = new string[textAssets.Length];
-                for (var i = 0; i < textAssets.Length; i++) turnSave[i] = textAssets[i].text;
+                for (var i = 0; i < textAssets.Length; i++)
+                {
+                    turnSave[i] = textAssets[i].text;
+                }
             }
             else
             {
@@ -330,10 +374,16 @@ namespace UCT.Global.Core
             }
 
             foreach (var t in turnSave)
+            {
                 if (languagePackId < LanguagePackageInternalNumber)
+                {
                     BattleControl.turnDialogAsset.Add(t);
+                }
                 else if (t[^3..] == "txt")
+                {
                     BattleControl.turnDialogAsset.Add(File.ReadAllText(t));
+                }
+            }
 
             BattleControl.uiTextSave = DataHandlerService.LoadItemData(BattleControl.uiText);
             TextProcessingService.GetFirstChildStringByPrefix(BattleControl.uiTextSave, BattleControl.actSave, "Act\\");
@@ -349,10 +399,15 @@ namespace UCT.Global.Core
             battlePlayerController = GameObject.Find("BattlePlayer").GetComponent<BattlePlayerController>();
             selectUIController = GameObject.Find("SelectUI").GetComponent<SelectUIController>();
             if (cameraShake == null)
+            {
                 cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
+            }
+
             cameraShake3D = GameObject.Find("3D CameraP").GetComponent<CameraShake>();
             if (cameraMainInBattle == null)
+            {
                 cameraMainInBattle = cameraShake.GetComponent<Camera>();
+            }
         }
 
         /// <summary>
@@ -361,7 +416,11 @@ namespace UCT.Global.Core
         private void DebugUpdate()
         {
             // F5刷新场景
-            if (Input.GetKeyDown(KeyCode.F5)) GameUtilityService.RefreshTheScene();
+            if (Input.GetKeyDown(KeyCode.F5))
+            {
+                GameUtilityService.RefreshTheScene();
+            }
+
             // 无敌模式 Ctrl+i开启
             if ((Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)) &&
                 Input.GetKeyDown(KeyCode.I))
@@ -371,7 +430,9 @@ namespace UCT.Global.Core
             }
 
             if (playerControl.keepInvincible)
+            {
                 playerControl.hp = playerControl.hpMax;
+            }
 
             if (_debugStringGradient == null)
             {
@@ -389,9 +450,12 @@ namespace UCT.Global.Core
         private static void SettingsShortcuts()
         {
             if (InputService.GetKeyDown(KeyCode.Tab))
+            {
                 SettingsStorage.resolutionLevel =
                     GameUtilityService.UpdateResolutionSettings(SettingsStorage.isUsingHdFrame,
                         SettingsStorage.resolutionLevel);
+            }
+
             if (InputService.GetKeyDown(KeyCode.Semicolon))
             {
                 SettingsStorage.isSimplifySfx = !SettingsStorage.isSimplifySfx;

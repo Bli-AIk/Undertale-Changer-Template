@@ -6,7 +6,6 @@ using System.Text;
 using DG.Tweening;
 using hyjiacan.py4n;
 using TMPro;
-using UCT.Control;
 using UCT.Global.Audio;
 using UCT.Global.Core;
 using UCT.Global.Settings;
@@ -133,14 +132,18 @@ namespace UCT.Global.Scene
             }
 
             _backspaceTip.text = TextProcessingService.GetFirstChildStringByPrefix(
-                MainControl.Instance.overworldControl.sceneTextsSave, "BackspaceTip");
+                MainControl.Instance.LanguagePackControl.sceneTexts, "BackspaceTip");
             _randomNameTip.text = TextProcessingService.GetFirstChildStringByPrefix(
-                MainControl.Instance.overworldControl.sceneTextsSave, "RandomNameTip");
+                MainControl.Instance.LanguagePackControl.sceneTexts, "RandomNameTip");
         }
 
         private void Update()
         {
-            if (MainControl.Instance.overworldControl.isSetting) return;
+            if (MainControl.Instance.overworldControl.isSetting)
+            {
+                return;
+            }
+
             _randomNameTip.color =
                 new Color(1, 1, 1, Mathf.Sin(_randomSetNameTime / RandomSetNameTimeMax * Mathf.PI / 2));
             _backspaceTip.color =
@@ -191,27 +194,40 @@ namespace UCT.Global.Scene
             MainControl.Instance.playerControl.hpMax = 92;
             MainControl.Instance.playerControl.lv = 19;
             MainControl.Instance.playerControl.gold = 1000;
-            MainControl.Instance.playerControl.wearArm = 10001;
-            MainControl.Instance.playerControl.wearArmor = 20001;
-            MainControl.Instance.playerControl.wearAtk = 1;
-            MainControl.Instance.playerControl.wearDef = 123;
+            MainControl.Instance.playerControl.wearWeapon = "TKnife";
+            MainControl.Instance.playerControl.wearArmor = "TPS";
             MainControl.Instance.playerControl.saveScene = "Example-Corridor";
-            MainControl.Instance.playerControl.myItems = new List<int> { 0, 0, 0, 0, 0, 0, 0, 0 };
+            MainControl.Instance.playerControl.items = new List<string> { "", "", "", "", "", "", "", "" };
         }
 
         private void SetPinYin()
         {
-            if (_pinYinText.text == _pinYin) return;
+            if (_pinYinText.text == _pinYin)
+            {
+                return;
+            }
+
             _pinYinText.text = _pinYin;
 
             //以下部分只在_pinYin更新时触发
 
-            if (sceneState != SceneState.Naming) return;
+            if (sceneState != SceneState.Naming)
+            {
+                return;
+            }
+
             if (_alphabetNum != SelectedAlphabet.Chinese && _alphabetNum != SelectedAlphabet.Chosung &&
                 _alphabetNum != SelectedAlphabet.Chosung && _alphabetNum != SelectedAlphabet.Jungsung &&
-                _alphabetNum != SelectedAlphabet.Jongsung) return;
+                _alphabetNum != SelectedAlphabet.Jongsung)
+            {
+                return;
+            }
 
-            if (_alphabetNum != SelectedAlphabet.Chinese) return;
+            if (_alphabetNum != SelectedAlphabet.Chinese)
+            {
+                return;
+            }
+
             var hanZiString = GetHanZiString(_pinYinText.text);
             _cutHanZiString = new List<string> { "" };
             var cutHanZiListIndex = 0;
@@ -220,7 +236,11 @@ namespace UCT.Global.Scene
                 _cutHanZiString[cutHanZiListIndex] += hanZiString[i];
 
                 if ((cutHanZiListIndex != 0 || i == 0 || i % 19 != 0) &&
-                    (cutHanZiListIndex <= 0 || i % 19 != 0)) continue;
+                    (cutHanZiListIndex <= 0 || i % 19 != 0))
+                {
+                    continue;
+                }
+
                 _cutHanZiString.Add("");
                 cutHanZiListIndex++;
             }
@@ -248,7 +268,11 @@ namespace UCT.Global.Scene
                 AlphabetLowercase[(int)_alphabetNum] = _cutHanZiString[pinYinNum];
             }
 
-            if (AlphabetLowercase[(int)_alphabetNum].Length <= 0) return;
+            if (AlphabetLowercase[(int)_alphabetNum].Length <= 0)
+            {
+                return;
+            }
+
             TMPDynamicFontController.Instance.SimsunClear(new List<TMP_Text>
             {
                 _titleText,
@@ -266,6 +290,7 @@ namespace UCT.Global.Scene
         private void ConfirmNameUpdate()
         {
             if (InputService.GetKeyDown(KeyCode.Z))
+            {
                 switch (selectedCharactersId)
                 {
                     case 0:
@@ -278,11 +303,11 @@ namespace UCT.Global.Scene
                         _nameText.GetComponent<DynamicTMP>().dynamicMode = 0;
                         _selectText.text =
                             TextProcessingService.GetFirstChildStringByPrefix(
-                                MainControl.Instance.overworldControl.sceneTextsSave, "Quit") +
+                                MainControl.Instance.LanguagePackControl.sceneTexts, "Quit") +
                             TextProcessingService.GetFirstChildStringByPrefix(
-                                MainControl.Instance.overworldControl.sceneTextsSave, "Backspace") +
+                                MainControl.Instance.LanguagePackControl.sceneTexts, "Backspace") +
                             TextProcessingService.GetFirstChildStringByPrefix(
-                                MainControl.Instance.overworldControl.sceneTextsSave, "Done");
+                                MainControl.Instance.LanguagePackControl.sceneTexts, "Done");
                         break;
                     }
 
@@ -311,6 +336,7 @@ namespace UCT.Global.Scene
                         break;
                     }
                 }
+            }
 
             if (InputService.GetKeyDown(KeyCode.X))
             {
@@ -323,52 +349,64 @@ namespace UCT.Global.Scene
                 _nameText.GetComponent<DynamicTMP>().dynamicMode = 0;
                 _selectText.text =
                     TextProcessingService.GetFirstChildStringByPrefix(
-                        MainControl.Instance.overworldControl.sceneTextsSave, "Quit") +
+                        MainControl.Instance.LanguagePackControl.sceneTexts, "Quit") +
                     TextProcessingService.GetFirstChildStringByPrefix(
-                        MainControl.Instance.overworldControl.sceneTextsSave, "Backspace") +
+                        MainControl.Instance.LanguagePackControl.sceneTexts, "Backspace") +
                     TextProcessingService.GetFirstChildStringByPrefix(
-                        MainControl.Instance.overworldControl.sceneTextsSave, _alphabetNum.ToString()) +
+                        MainControl.Instance.LanguagePackControl.sceneTexts, _alphabetNum.ToString()) +
                     TextProcessingService.GetFirstChildStringByPrefix(
-                        MainControl.Instance.overworldControl.sceneTextsSave, "Done");
+                        MainControl.Instance.LanguagePackControl.sceneTexts, "Done");
             }
 
             if (!isSelectedDone || (!InputService.GetKeyDown(KeyCode.LeftArrow) &&
-                                    !InputService.GetKeyDown(KeyCode.RightArrow))) return;
+                                    !InputService.GetKeyDown(KeyCode.RightArrow)))
+            {
+                return;
+            }
+
             if (selectedCharactersId == 0)
             {
                 selectedCharactersId = 1;
                 if (SettingsStorage.textWidth)
+                {
                     _selectText.text =
                         TextProcessingService.GetFirstChildStringByPrefix(
-                            MainControl.Instance.overworldControl.sceneTextsSave, "No") +
+                            MainControl.Instance.LanguagePackControl.sceneTexts, "No") +
                         "    <color=yellow>" +
                         TextProcessingService.GetFirstChildStringByPrefix(
-                            MainControl.Instance.overworldControl.sceneTextsSave, "Yes") + "</color>";
+                            MainControl.Instance.LanguagePackControl.sceneTexts, "Yes") + "</color>";
+                }
                 else
+                {
                     _selectText.text = TextProcessingService.GetFirstChildStringByPrefix(
-                                           MainControl.Instance.overworldControl.sceneTextsSave, "No") +
+                                           MainControl.Instance.LanguagePackControl.sceneTexts, "No") +
                                        "    <indent=85><color=yellow>" +
                                        TextProcessingService.GetFirstChildStringByPrefix(
-                                           MainControl.Instance.overworldControl.sceneTextsSave, "Yes") +
+                                           MainControl.Instance.LanguagePackControl.sceneTexts, "Yes") +
                                        "</color>";
+                }
             }
             else
             {
                 selectedCharactersId = 0;
                 if (SettingsStorage.textWidth)
+                {
                     _selectText.text = "<color=yellow>" +
                                        TextProcessingService.GetFirstChildStringByPrefix(
-                                           MainControl.Instance.overworldControl.sceneTextsSave, "No") +
+                                           MainControl.Instance.LanguagePackControl.sceneTexts, "No") +
                                        "</color>    <color=white>" +
                                        TextProcessingService.GetFirstChildStringByPrefix(
-                                           MainControl.Instance.overworldControl.sceneTextsSave, "Yes");
+                                           MainControl.Instance.LanguagePackControl.sceneTexts, "Yes");
+                }
                 else
+                {
                     _selectText.text = "<color=yellow>" +
                                        TextProcessingService.GetFirstChildStringByPrefix(
-                                           MainControl.Instance.overworldControl.sceneTextsSave, "No") +
+                                           MainControl.Instance.LanguagePackControl.sceneTexts, "No") +
                                        "</color>    <indent=85>" +
                                        TextProcessingService.GetFirstChildStringByPrefix(
-                                           MainControl.Instance.overworldControl.sceneTextsSave, "Yes");
+                                           MainControl.Instance.LanguagePackControl.sceneTexts, "Yes");
+                }
             }
         }
 
@@ -433,11 +471,13 @@ namespace UCT.Global.Scene
                                     setName += nameChar;
                                     if (_alphabetNum is SelectedAlphabet.Chinese or SelectedAlphabet.Chosung
                                         or SelectedAlphabet.Jungsung or SelectedAlphabet.Jongsung)
+                                    {
                                         if (selectedCharactersId > alphabetCapital.Length - 1)
                                         {
                                             selectedCharactersId = 0;
                                             _pinYin = "";
                                         }
+                                    }
 
                                     break;
                                 }
@@ -454,9 +494,14 @@ namespace UCT.Global.Scene
                                 {
                                     if (_alphabetNum == SelectedAlphabet.Jungsung &&
                                         (_pinYin[0] == '√' || _pinYin[1] == '√') && _pinYin != "√√")
+                                    {
                                         ComposeHangul();
+                                    }
                                     else
+                                    {
                                         _alphabetNum += 1;
+                                    }
+
                                     break;
                                 }
                                 case SelectedAlphabet.Jongsung:
@@ -472,7 +517,7 @@ namespace UCT.Global.Scene
                 {
                     if (!string.IsNullOrEmpty(MainControl.Instance.playerControl.playerName))
                     {
-                        GameUtilityService.FadeOutAndSwitchScene("Menu", Color.black, null);
+                        GameUtilityService.FadeOutAndSwitchScene("Menu", Color.black);
                         sceneState = SceneState.SwitchScene;
                     }
                     else
@@ -498,26 +543,30 @@ namespace UCT.Global.Scene
                         selectedCharactersId = 0;
                         sceneState = SceneState.ConfirmName;
                         var list = TextProcessingService.GetAllChildStringsByPrefix(
-                            MainControl.Instance.overworldControl.sceneTextsSave, "RenameSp");
+                            MainControl.Instance.LanguagePackControl.sceneTexts, "RenameSp");
                         _titleText.text =
                             TextProcessingService.GetFirstChildStringByPrefix(
-                                MainControl.Instance.overworldControl.sceneTextsSave, "DefaultQuestion");
+                                MainControl.Instance.LanguagePackControl.sceneTexts, "DefaultQuestion");
                         if (SettingsStorage.textWidth)
+                        {
                             _selectText.text =
                                 "<color=yellow>" +
                                 TextProcessingService.GetFirstChildStringByPrefix(
-                                    MainControl.Instance.overworldControl.sceneTextsSave, "No") +
+                                    MainControl.Instance.LanguagePackControl.sceneTexts, "No") +
                                 "</color>    " +
                                 TextProcessingService.GetFirstChildStringByPrefix(
-                                    MainControl.Instance.overworldControl.sceneTextsSave, "Yes");
+                                    MainControl.Instance.LanguagePackControl.sceneTexts, "Yes");
+                        }
                         else
+                        {
                             _selectText.text =
                                 "<color=yellow>" +
                                 TextProcessingService.GetFirstChildStringByPrefix(
-                                    MainControl.Instance.overworldControl.sceneTextsSave, "No") +
+                                    MainControl.Instance.LanguagePackControl.sceneTexts, "No") +
                                 "</color>    <indent=85>" +
                                 TextProcessingService.GetFirstChildStringByPrefix(
-                                    MainControl.Instance.overworldControl.sceneTextsSave, "Yes");
+                                    MainControl.Instance.LanguagePackControl.sceneTexts, "Yes");
+                        }
 
                         isSelectedDone = true;
                         foreach (var item in list)
@@ -526,19 +575,28 @@ namespace UCT.Global.Scene
                             TextProcessingService.SplitStringToListWithDelimiter(item + '|', lister, '|');
                             if ((lister[0] != TextProcessingService.ConvertLettersCase(setName, true) ||
                                  bool.Parse(lister[2])) &&
-                                (lister[0] != setName || !bool.Parse(lister[2]))) continue;
+                                (lister[0] != setName || !bool.Parse(lister[2])))
+                            {
+                                continue;
+                            }
+
                             if (lister[3] == "<gaster>")
+                            {
                                 Application.Quit();
+                            }
                             else
+                            {
                                 _titleText.text = lister[3];
+                            }
+
                             if (!bool.Parse(lister[1]))
                             {
                                 isSelectedDone = false;
                                 _selectText.text = "<color=yellow>" +
                                                    TextProcessingService
                                                        .GetFirstChildStringByPrefix(
-                                                           MainControl.Instance.overworldControl
-                                                               .sceneTextsSave, "GoBack") +
+                                                           MainControl.Instance.LanguagePackControl
+                                                               .sceneTexts, "GoBack") +
                                                    "</color>";
                             }
 
@@ -600,11 +658,20 @@ namespace UCT.Global.Scene
             }
 
             if (!InputService.GetKey(KeyCode.X))
+            {
                 _backspaceTime = _backspaceTime > 0 ? _backspaceTime - Time.deltaTime : 0;
-            if (!InputService.GetKey(KeyCode.C))
-                _randomSetNameTime = _randomSetNameTime > 0 ? _randomSetNameTime - Time.deltaTime : 0;
+            }
 
-            if (breaker) return;
+            if (!InputService.GetKey(KeyCode.C))
+            {
+                _randomSetNameTime = _randomSetNameTime > 0 ? _randomSetNameTime - Time.deltaTime : 0;
+            }
+
+            if (breaker)
+            {
+                return;
+            }
+
             if (InputService.GetKeyDown(KeyCode.UpArrow))
             {
                 if (selectedCharactersId < MaxCharactersPerLine)
@@ -641,26 +708,35 @@ namespace UCT.Global.Scene
                     if (selectedCharactersId == alphabetLength)
                     {
                         if (alphabetLowercase.Length == 0 && lowercaseRemainderFix == MaxCharactersPerLine)
+                        {
                             lowercaseRemainderFix = uppercaseRemainder;
+                        }
+
                         possibleCharacterId = alphabetLength - lowercaseRemainderFix;
                     }
                     else if (selectedCharactersId == alphabetLength + 1)
                     {
                         possibleCharacterId = alphabetLength - lowercaseRemainderFix + 2;
                         if (alphabetLowercase.Length < 3)
+                        {
                             possibleCharacterId += MaxCharactersPerLine - uppercaseRemainder;
+                        }
                     }
                     else if (selectedCharactersId == alphabetLength + 2)
                     {
                         possibleCharacterId = alphabetLength - lowercaseRemainderFix + 4;
                         if (alphabetLowercase.Length < 5)
+                        {
                             possibleCharacterId += MaxCharactersPerLine - uppercaseRemainder;
+                        }
                     }
                     else
                     {
                         possibleCharacterId = alphabetLength - lowercaseRemainderFix + 5;
                         if (alphabetLowercase.Length < 6)
+                        {
                             possibleCharacterId += MaxCharactersPerLine - uppercaseRemainder;
+                        }
                     }
 
                     selectedCharactersId = possibleCharacterId < alphabetLength
@@ -674,7 +750,9 @@ namespace UCT.Global.Scene
                 }
 
                 if (selectedCharactersId < 0)
+                {
                     selectedCharactersId = alphabetLength + 3;
+                }
             }
             else if (InputService.GetKeyDown(KeyCode.DownArrow))
             {
@@ -684,7 +762,9 @@ namespace UCT.Global.Scene
                 if (selectedCharactersId >= alphabetCapital.Length - MaxCharactersPerLine &&
                     selectedCharactersId < alphabetCapital.Length - uppercaseRemainder &&
                     alphabetLowercase.Length < maxUppercaseCharactersPerLine)
+                {
                     selectedCharactersId += MaxCharactersPerLine * 2 - (MaxCharactersPerLine - uppercaseRemainder);
+                }
 
 
                 if (selectedCharactersId >= alphabetCapital.Length - MaxCharactersPerLine &&
@@ -715,31 +795,54 @@ namespace UCT.Global.Scene
                     var lowercaseRemainderFix = lowercaseRemainder;
 
                     if (selectedCharactersId < alphabetCapital.Length)
+                    {
                         lowercaseRemainderFix += uppercaseRemainder;
+                    }
+
                     if (alphabetLowercase.Length > 0)
+                    {
                         if (lowercaseRemainder == 0 ||
                             selectedCharactersId < alphabetLength - lowercaseRemainder)
+                        {
                             lowercaseRemainderFix += MaxCharactersPerLine;
+                        }
+                    }
 
                     if (selectedCharactersId == alphabetLength)
+                    {
                         selectedCharactersId = 0;
+                    }
                     else if (selectedCharactersId == alphabetLength + 1)
+                    {
                         selectedCharactersId = 2;
+                    }
                     else if (selectedCharactersId == alphabetLength + 2)
+                    {
                         selectedCharactersId = 4;
+                    }
                     else if (selectedCharactersId == alphabetLength + 3)
+                    {
                         selectedCharactersId = 5;
+                    }
                     else if (selectedCharactersId >= alphabetLength - lowercaseRemainderFix &&
                              selectedCharactersId < alphabetLength - lowercaseRemainderFix + 2)
+                    {
                         selectedCharactersId = alphabetLength;
+                    }
                     else if (selectedCharactersId >= alphabetLength - lowercaseRemainderFix + 2 &&
                              selectedCharactersId < alphabetLength - lowercaseRemainderFix + 4)
+                    {
                         selectedCharactersId = alphabetLength + 1;
+                    }
                     else if (selectedCharactersId >= alphabetLength - lowercaseRemainderFix + 4 &&
                              selectedCharactersId < alphabetLength - lowercaseRemainderFix + 5)
+                    {
                         selectedCharactersId = alphabetLength + 2;
+                    }
                     else if (selectedCharactersId < alphabetLength - lowercaseRemainderFix + 7)
+                    {
                         selectedCharactersId = alphabetLength + 3;
+                    }
                 }
                 else
                 {
@@ -747,25 +850,31 @@ namespace UCT.Global.Scene
                 }
 
                 if (selectedCharactersId > alphabetLength + 3)
+                {
                     selectedCharactersId = 0;
+                }
             }
 
             if (InputService.GetKeyDown(KeyCode.LeftArrow))
             {
                 selectedCharactersId -= 1;
                 if (selectedCharactersId < 0)
+                {
                     selectedCharactersId = alphabetLength + 3;
+                }
             }
             else if (InputService.GetKeyDown(KeyCode.RightArrow))
             {
                 selectedCharactersId += 1;
                 if (selectedCharactersId > alphabetLength + 3)
+                {
                     selectedCharactersId = 0;
+                }
             }
 
             _titleText.text =
                 TextProcessingService.GetFirstChildStringByPrefix(
-                    MainControl.Instance.overworldControl.sceneTextsSave, "NameTheHuman");
+                    MainControl.Instance.LanguagePackControl.sceneTexts, "NameTheHuman");
             _nameText.text = setName;
             _characterText.text = GenerateSelectableTextForRename(selectedCharactersId);
             HighlightSelectedOptions(selectedCharactersId);
@@ -776,7 +885,10 @@ namespace UCT.Global.Scene
         private void ComposeHangul()
         {
             if (_pinYin != "√√√")
+            {
                 setName += HangulComposerService.ComposeHangul(_pinYin);
+            }
+
             _pinYin = "";
             _alphabetNum = SelectedAlphabet.Chosung;
             selectedCharactersId = 0;
@@ -790,19 +902,31 @@ namespace UCT.Global.Scene
                  _alphabetNum != SelectedAlphabet.Jongsung) || _pinYin.Length == 0)
             {
                 if (setName.Length > 0)
+                {
                     setName = setName[..^1];
+                }
             }
             else
             {
                 if (_alphabetNum is SelectedAlphabet.Jungsung or SelectedAlphabet.Jongsung)
+                {
                     _alphabetNum -= 1;
+                }
 
-                if (_pinYin.Length <= 0) return;
+                if (_pinYin.Length <= 0)
+                {
+                    return;
+                }
+
                 _pinYin = _pinYin[..^1];
                 selectedCharactersId = selectedCharactersId > AlphabetCapital[(int)_alphabetNum].Length - 1
                     ? AlphabetCapital[(int)_alphabetNum].Length - 1
                     : selectedCharactersId;
-                if (_pinYin.Length != 0) return;
+                if (_pinYin.Length != 0)
+                {
+                    return;
+                }
+
                 InitializePinyinAndCutHanZiString();
             }
         }
@@ -845,7 +969,9 @@ namespace UCT.Global.Scene
             _cutHanZiString = new List<string> { "" };
             _pinYinNum = 0;
             if (isCleanPinYin)
+            {
                 _pinYin = "";
+            }
         }
 
         private void InstructionUpdate()
@@ -856,13 +982,15 @@ namespace UCT.Global.Scene
             _characterText.text = "";
             _selectText.text = "";
             _teachText.text =
-                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.sceneTextsSave,
+                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.LanguagePackControl.sceneTexts,
                     "Teach");
             _textMessage.text =
                 TextProcessingService.GetFirstChildStringByPrefix(
-                    MainControl.Instance.overworldControl.sceneTextsSave, "MenuUnder") + Application.version;
+                    MainControl.Instance.LanguagePackControl.sceneTexts, "MenuUnder") + Application.version;
             if (InputService.GetKeyDown(KeyCode.Z) && setName.Length < MaxSetNameLength)
+            {
                 sceneState = SceneState.Naming;
+            }
         }
 
         /// <summary>
@@ -876,12 +1004,21 @@ namespace UCT.Global.Scene
             for (var i = 0; i < alphabet.Length; i++)
             {
                 if (i == selectNumber * 2)
+                {
                     final += "<color=yellow>";
-                else if (i == selectNumber * 2 + 1) final += "</color>";
+                }
+                else if (i == selectNumber * 2 + 1)
+                {
+                    final += "</color>";
+                }
 
                 if (_alphabetNum == SelectedAlphabet.Chinese)
+                {
                     if (i == AlphabetCapital[(int)_alphabetNum].Length * 2)
+                    {
                         final += "<mspace=3.225>";
+                    }
+                }
 
                 final += alphabet[i];
             }
@@ -889,7 +1026,10 @@ namespace UCT.Global.Scene
             if (_alphabetNum is SelectedAlphabet.Hiragana1 or SelectedAlphabet.Hiragana2 or SelectedAlphabet.Katakana1
                 or SelectedAlphabet.Katakana2 or SelectedAlphabet.Katakana3 or SelectedAlphabet.Chosung
                 or SelectedAlphabet.Jungsung or SelectedAlphabet.Jongsung)
+            {
                 final = "<mspace=3.225>" + final;
+            }
+
             return final;
         }
 
@@ -903,9 +1043,13 @@ namespace UCT.Global.Scene
             {
                 formatted.Append(input[i]);
                 if ((i + 1) % MaxCharactersPerLine == 0 && i != input.Length - 1)
+                {
                     formatted.Append("\n");
+                }
                 else if (i != input.Length - 1)
+                {
                     formatted.Append(" ");
+                }
             }
 
             return formatted.ToString();
@@ -921,21 +1065,24 @@ namespace UCT.Global.Scene
             var strings = new List<string>();
             var selectId = selectNumber -
                            (AlphabetCapital[(int)_alphabetNum].Length + AlphabetLowercase[(int)_alphabetNum].Length);
-            for (var i = 0; i < 4; i++) strings.Add(i == selectId ? "<color=yellow>" : "");
+            for (var i = 0; i < 4; i++)
+            {
+                strings.Add(i == selectId ? "<color=yellow>" : "");
+            }
 
             _selectText.text = strings[0] +
                                TextProcessingService.GetFirstChildStringByPrefix(
-                                   MainControl.Instance.overworldControl.sceneTextsSave, "Quit") + "</color> " +
+                                   MainControl.Instance.LanguagePackControl.sceneTexts, "Quit") + "</color> " +
                                strings[1] +
                                TextProcessingService.GetFirstChildStringByPrefix(
-                                   MainControl.Instance.overworldControl.sceneTextsSave, "Backspace") + "</color> " +
+                                   MainControl.Instance.LanguagePackControl.sceneTexts, "Backspace") + "</color> " +
                                strings[2] +
                                TextProcessingService.GetFirstChildStringByPrefix(
-                                   MainControl.Instance.overworldControl.sceneTextsSave, _alphabetNum.ToString()) +
+                                   MainControl.Instance.LanguagePackControl.sceneTexts, _alphabetNum.ToString()) +
                                "</color> " +
                                strings[3] +
                                TextProcessingService.GetFirstChildStringByPrefix(
-                                   MainControl.Instance.overworldControl.sceneTextsSave, "Done") + "</color>";
+                                   MainControl.Instance.LanguagePackControl.sceneTexts, "Done") + "</color>";
         }
 
         private static string[] GetHanZi(string input, bool matchAll = true)

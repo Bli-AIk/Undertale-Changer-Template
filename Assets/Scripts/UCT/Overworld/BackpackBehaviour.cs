@@ -1,11 +1,10 @@
-using Alchemy.Inspector;
 using TMPro;
 using UCT.Global.Audio;
 using UCT.Global.Core;
-using UCT.Global.Settings;
 using UCT.Global.UI;
 using UCT.Service;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UCT.Overworld
 {
@@ -34,13 +33,12 @@ namespace UCT.Overworld
         [HideInInspector] public TypeWritter typeWritter;
 
         private float _clock;
-        private SpriteRenderer _heart;
+        public SpriteRenderer Heart { get; private set; }
         private TextMeshPro _informationText, _overviewNameText, _overviewInfoText, _optionsText;
-
-        [ShowInInspector] private bool _isOpenBackPack;
 
         private BoxDrawer _overviewBox, _informationBox;
         private int _sonSelectMax;
+        public bool IsOpenBackPack { get; private set; }
 
         private void Awake()
         {
@@ -52,24 +50,42 @@ namespace UCT.Overworld
         private void Start()
         {
             GetComponent();
-            _isOpenBackPack = false;
+            IsOpenBackPack = false;
             MainControl.Instance.playerControl.canMove = true;
         }
 
         private void Update()
-        {            
-            if (GameUtilityService.IsGamePausedOrSetting()) return;
+        {
+            if (GameUtilityService.IsGamePausedOrSetting())
+            {
+                if (IsOpenBackPack)
+                {
+                    BackpackExit();
+                }
+
+                return;
+            }
 
             if (TalkBoxController.Instance)
+            {
                 TalkBoxController.Instance.isUp = MainControl.overworldPlayerBehaviour.transform.position.y <
-                                                       transform.position.y - 1.25f;
+                                                  transform.position.y - 1.25f;
+            }
             else
+            {
                 Other.Debug.LogWarning("TalkBoxPositionChanger instance is missing!");
+            }
 
 
             if (_clock > 0)
+            {
                 _clock -= Time.deltaTime;
-            else if (select > 0) _isOpenBackPack = true;
+            }
+            else if (select > 0)
+            {
+                IsOpenBackPack = true;
+            }
+
             if (sonUse != 4)
             {
                 _informationText.gameObject.SetActive(sonSelect != 0);
@@ -85,35 +101,48 @@ namespace UCT.Overworld
                  InputService.GetKeyDown(KeyCode.C)) &&
                 sonSelect == 0)
             {
-                if (_isOpenBackPack) //关闭
+                if (IsOpenBackPack) //关闭
                 {
                     BackpackExit();
                 }
                 else if (InputService.GetKeyDown(KeyCode.C)) //开启
                 {
                     AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
-                    MainControl.Instance.playerControl.myItems =
-                        ListManipulationService.MoveZerosToEnd(MainControl.Instance.playerControl.myItems);
+                    MainControl.Instance.playerControl.items =
+                        ListManipulationService.CheckAllDataNamesInItemList(MainControl.Instance.playerControl.items);
+                    MainControl.Instance.playerControl.items =
+                        ListManipulationService.MoveNullOrEmptyToEnd(MainControl.Instance.playerControl.items);
                     var uiSelectPlusColor = "";
                     _sonSelectMax = 8;
-                    for (var i = 0; i < MainControl.Instance.playerControl.myItems.Count; i++)
+                    for (var i = 0; i < MainControl.Instance.playerControl.items.Count; i++)
                     {
-                        if (MainControl.Instance.playerControl.myItems[i] != 0) continue;
+                        if (!string.IsNullOrEmpty(MainControl.Instance.playerControl.items[i]))
+                        {
+                            continue;
+                        }
+
                         if (i == 0)
+                        {
                             uiSelectPlusColor = "<color=grey>";
+                        }
+
                         _sonSelectMax = i;
                         break;
                     }
 
                     sonUse = 0;
                     optionsBox.localPosition.z = BoxZAxisVisible;
-                    _heart.transform.localPosition = new Vector3(_heart.transform.localPosition.x,
-                        _heart.transform.localPosition.y, BoxZAxisVisible);
+                    Heart.transform.localPosition = new Vector3(Heart.transform.localPosition.x,
+                        Heart.transform.localPosition.y, BoxZAxisVisible);
 
                     if (MainControl.overworldPlayerBehaviour.transform.position.y >= transform.position.y - 1.25f)
+                    {
                         _overviewBox.localPosition.y = 3.325f;
+                    }
                     else
+                    {
                         _overviewBox.localPosition.y = -3.425f;
+                    }
 
                     _overviewBox.localPosition.z = BoxZAxisVisible;
 
@@ -122,19 +151,15 @@ namespace UCT.Overworld
                     MainControl.Instance.playerControl.canMove = false;
 
                     _optionsText.text = uiSelectPlusColor +
-                                        MainControl.Instance.ItemControl.itemTextMaxData[0][
-                                            ..(MainControl.Instance.ItemControl.itemTextMaxData[0].Length - 1)];
-                    _overviewNameText.text = MainControl.Instance.playerControl.playerName;
-                    _overviewInfoText.text = $"LV {MainControl.Instance.playerControl.lv}\n" +
-                                             $"HP {MainControl.Instance.playerControl.hp}/" +
-                                             $"{MainControl.Instance.playerControl.hpMax}\n" +
-                                             $"G<indent=9.25>{MainControl.Instance.playerControl.gold}";
-
+                                        MainControl.Instance.LanguagePackControl.dataTexts[0][
+                                            ..(MainControl.Instance.LanguagePackControl.dataTexts[0].Length - 1)];
+                    UpdateOverviewBoxText();
                     FlashBackpackBoxRightPoint(select == 1 ? ItemBoxY : InfoBoxY);
                 }
             }
 
-            if (_isOpenBackPack && !typeWritter.isTyping)
+            var index = sonSelect - 1;
+            if (IsOpenBackPack && !typeWritter.isTyping)
             {
                 if (InputService.GetKeyDown(KeyCode.Z))
                 {
@@ -143,8 +168,10 @@ namespace UCT.Overworld
 
                     if (select == 1)
                     {
-                        if (sonUse == 0 && MainControl.Instance.playerControl.myItems[0] != 0)
+                        if (sonUse == 0 && !string.IsNullOrEmpty(MainControl.Instance.playerControl.items[0]))
+                        {
                             AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                        }
 
                         if (_sonSelectMax != 0)
                         {
@@ -152,28 +179,35 @@ namespace UCT.Overworld
                             {
                                 sonSelect = 1;
                                 _informationText.text = "<indent=4>";
-                                foreach (var t in MainControl.Instance.playerControl.myItems)
-                                    if (t != 0)
+                                foreach (var t in MainControl.Instance.playerControl.items)
+                                {
+                                    if (!string.IsNullOrEmpty(t))
+                                    {
                                         _informationText.text +=
-                                            DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, t,
-                                                "Auto", 0) + "\n";
-                                    else _informationText.text += "\n";
+                                            DataHandlerService.ItemDataNameGetLanguagePackName(t) + "\n";
+                                    }
+                                    else
+                                    {
+                                        _informationText.text += "\n";
+                                    }
+                                }
 
                                 _informationText.text +=
-                                    $"\n{MainControl.Instance.ItemControl.itemTextMaxData[8][..^1]}" +
-                                    $"{MainControl.Instance.ItemControl.itemTextMaxData[9][..^1]}" +
-                                    $"{MainControl.Instance.ItemControl.itemTextMaxData[10][..^1]}";
+                                    $"\n{MainControl.Instance.LanguagePackControl.dataTexts[8][..^1]}" +
+                                    $"{MainControl.Instance.LanguagePackControl.dataTexts[9][..^1]}" +
+                                    $"{MainControl.Instance.LanguagePackControl.dataTexts[10][..^1]}";
                             }
                             else
                             {
-                                var plusText = MainControl.Instance.playerControl.myItems[sonSelect - 1] switch
+                                var dataName = MainControl.Instance.playerControl.items[index];
+                                if (string.IsNullOrEmpty(dataName))
                                 {
-                                    >= 20000 => -20000 + MainControl.Instance.ItemControl.itemFoods.Count / 3 +
-                                                MainControl.Instance.ItemControl.itemArms.Count / 2,
-                                    >= 10000 => -10000 + MainControl.Instance.ItemControl.itemFoods.Count / 3,
-                                    _ => 0
-                                };
+                                    BackpackExit();
+                                    return;
+                                }
 
+                                var item = DataHandlerService.GetItemFormDataName(dataName);
+                                TypeWritterTagProcessor.SetItemDataName(dataName);
                                 switch (sonUse)
                                 {
                                     case 0:
@@ -182,30 +216,31 @@ namespace UCT.Overworld
 
                                     case 1:
                                         sonUse = 4;
-                                        GameUtilityService.UseItem(typeWritter, talkText, sonSelect, plusText);
+                                        typeWritter.StartTypeWritter(
+                                            DataHandlerService.ItemDataNameGetLanguagePackUseText(dataName), 1, talkText);
+
                                         _overviewInfoText.text = $"LV {MainControl.Instance.playerControl.lv}\n" +
                                                                  $"HP {MainControl.Instance.playerControl.hp}/" +
                                                                  $"{MainControl.Instance.playerControl.hpMax}\n" +
                                                                  $"G<indent=9.25>{MainControl.Instance.playerControl.gold}";
+                                        item.OnUse(index);
                                         goto default;
                                     case 2:
                                         sonUse = 4;
-                                        typeWritter.TypeOpen(
-                                            MainControl.Instance.ItemControl.itemTextMaxItemSon[
-                                                (MainControl.Instance.playerControl.myItems[sonSelect - 1] + plusText) *
-                                                5 - 2], false, 0, 1, talkText);
+                                        typeWritter.StartTypeWritter(
+                                            DataHandlerService.ItemDataNameGetLanguagePackInfoText(dataName), 1, talkText);
 
+                                        item.OnCheck(index);
                                         goto default;
                                     case 3:
                                         sonUse = 4;
-                                        typeWritter.TypeOpen(
-                                            MainControl.Instance.ItemControl.itemTextMaxItemSon[
-                                                (MainControl.Instance.playerControl.myItems[sonSelect - 1] + plusText) *
-                                                5 - 1], false, 0, 1, talkText);
-
-                                        MainControl.Instance.playerControl.myItems[sonSelect - 1] = 0;
+                                        typeWritter.StartTypeWritter(
+                                            DataHandlerService.ItemDataNameGetLanguagePackDropText(dataName), 1, talkText);
+                                        item.OnDrop(index);
                                         goto default;
                                     default:
+                                        UpdateOverviewBoxText();
+
                                         if (!typeWritter.isTyping)
                                         {
                                             BackpackExit();
@@ -242,24 +277,24 @@ namespace UCT.Overworld
                                                 + $"HP {MainControl.Instance.playerControl.hp}" +
                                                 "<indent=18></indent>/<indent=23></indent>" +
                                                 $"{MainControl.Instance.playerControl.hpMax}\n\n" +
-                                                $"{MainControl.Instance.ItemControl.itemTextMaxData[1][..^1]}" +
+                                                $"{MainControl.Instance.LanguagePackControl.dataTexts[1][..^1]}" +
                                                 "<indent=9.75></indent>" +
                                                 $"{MainControl.Instance.playerControl.atk - 10}" +
-                                                $"({MainControl.Instance.playerControl.wearAtk})" +
+                                                $"({DataHandlerService.GetItemFormDataName(MainControl.Instance.playerControl.wearWeapon).Data.Value})" +
                                                 "<indent=41.75></indent>" +
                                                 $"EXP:<indent=55.25></indent>{MainControl.Instance.playerControl.exp}\n" +
-                                                $"{MainControl.Instance.ItemControl.itemTextMaxData[2][..^1]}" +
+                                                $"{MainControl.Instance.LanguagePackControl.dataTexts[2][..^1]}" +
                                                 "<indent=9.75></indent>" +
                                                 $"{MainControl.Instance.playerControl.def - 10}" +
-                                                $"({MainControl.Instance.playerControl.wearDef})" +
+                                                $"({DataHandlerService.GetItemFormDataName(MainControl.Instance.playerControl.wearArmor).Data.Value})" +
                                                 "<indent=40></indent>" +
-                                                $"{MainControl.Instance.ItemControl.itemTextMaxData[3][..^1]}:" +
+                                                $"{MainControl.Instance.LanguagePackControl.dataTexts[3][..^1]}:" +
                                                 $"{MainControl.Instance.playerControl.nextExp}\n\n" +
-                                                $"{MainControl.Instance.ItemControl.itemTextMaxData[4][..^1]}" +
-                                                $"{DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.wearArm, "Auto", 0)}\n" +
-                                                $"{MainControl.Instance.ItemControl.itemTextMaxData[5][..^1]}" +
-                                                $"{DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.wearArmor, "Auto", 0)}<line-height=7.5>\n" +
-                                                $"{MainControl.Instance.ItemControl.itemTextMaxData[6][..^1]}" +
+                                                $"{MainControl.Instance.LanguagePackControl.dataTexts[4][..^1]}" +
+                                                $"{DataHandlerService.ItemDataNameGetLanguagePackName(MainControl.Instance.playerControl.wearWeapon)}\n" +
+                                                $"{MainControl.Instance.LanguagePackControl.dataTexts[5][..^1]}" +
+                                                $"{DataHandlerService.ItemDataNameGetLanguagePackName(MainControl.Instance.playerControl.wearArmor)}<line-height=7.5>\n" +
+                                                $"{MainControl.Instance.LanguagePackControl.dataTexts[6][..^1]}" +
                                                 $"{MainControl.Instance.playerControl.gold}";
                     }
                 }
@@ -269,8 +304,8 @@ namespace UCT.Overworld
                     if (select == 2 || (select == 1 && sonUse == 0))
                     {
                         sonSelect = 0;
-                        _heart.transform.localPosition = new Vector3(_heart.transform.localPosition.x,
-                            _heart.transform.localPosition.y, BoxZAxisVisible);
+                        Heart.transform.localPosition = new Vector3(Heart.transform.localPosition.x,
+                            Heart.transform.localPosition.y, BoxZAxisVisible);
                     }
                     else
                     {
@@ -312,7 +347,9 @@ namespace UCT.Overworld
 
                 if (InputService.GetKeyDown(KeyCode.UpArrow) ||
                     InputService.GetKeyDown(KeyCode.DownArrow))
+                {
                     FlashBackpackBoxRightPoint(select == 1 ? ItemBoxY : InfoBoxY);
+                }
 
                 if (sonUse != 0)
                 {
@@ -332,50 +369,65 @@ namespace UCT.Overworld
             }
             else
             {
-                _heart.transform.localPosition = new Vector3(-6.385f, 0.9f, _heart.transform.localPosition.z);
+                Heart.transform.localPosition = new Vector3(-6.385f, 0.9f, Heart.transform.localPosition.z);
             }
 
             switch (sonUse)
             {
                 case 0:
                     if (sonSelect == 0)
-                        _heart.transform.localPosition = new Vector3(-6.385f, 0.9f - (select - 1) * 0.9f,
-                            _heart.transform.localPosition.z);
+                    {
+                        Heart.transform.localPosition = new Vector3(-6.385f, 0.9f - (select - 1) * 0.9f,
+                            Heart.transform.localPosition.z);
+                    }
                     else
+                    {
                         switch (select)
                         {
                             case 1:
                             {
                                 if (sonSelect is < 9 and > 0)
-                                    _heart.transform.localPosition = new Vector3(-2.575f,
-                                        3.575f - (sonSelect - 1) * 0.775f,
-                                        _heart.transform.localPosition.z);
+                                {
+                                    Heart.transform.localPosition = new Vector3(-2.575f,
+                                        3.575f - index * 0.775f,
+                                        Heart.transform.localPosition.z);
+                                }
 
                                 break;
                             }
                             case 2:
-                                _heart.transform.localPosition = Vector3.one * 10000;
+                                Heart.transform.localPosition = Vector3.one * 10000;
                                 break;
                         }
+                    }
 
                     break;
 
                 case 1:
-                    _heart.transform.localPosition = new Vector3(-2.575f, -3.4f, _heart.transform.localPosition.z);
+                    Heart.transform.localPosition = new Vector3(-2.575f, -3.4f, Heart.transform.localPosition.z);
                     break;
 
                 case 2:
-                    _heart.transform.localPosition = new Vector3(-0.16f, -3.4f, _heart.transform.localPosition.z);
+                    Heart.transform.localPosition = new Vector3(-0.16f, -3.4f, Heart.transform.localPosition.z);
                     break;
 
                 case 3:
-                    _heart.transform.localPosition = new Vector3(2.675f, -3.4f, _heart.transform.localPosition.z);
+                    Heart.transform.localPosition = new Vector3(2.675f, -3.4f, Heart.transform.localPosition.z);
                     break;
 
                 case 4:
-                    _heart.transform.localPosition = Vector3.one * 10000;
+                    Heart.transform.localPosition = Vector3.one * 10000;
                     break;
             }
+        }
+
+        private void UpdateOverviewBoxText()
+        {
+            _overviewNameText.text = MainControl.Instance.playerControl.playerName;
+            _overviewInfoText.text = $"LV {MainControl.Instance.playerControl.lv}\n" +
+                                     $"HP {MainControl.Instance.playerControl.hp}/" +
+                                     $"{MainControl.Instance.playerControl.hpMax}\n" +
+                                     $"G<indent=9.25>{MainControl.Instance.playerControl.gold}";
         }
 
         private void GetComponent()
@@ -388,7 +440,7 @@ namespace UCT.Overworld
                 .GetComponent<TextMeshPro>();
             _optionsText = transform.Find("BackpackCamera/BackpackBoxes/OptionsBox/OptionsText")
                 .GetComponent<TextMeshPro>();
-            _heart = transform.Find("BackpackCamera/Heart").GetComponent<SpriteRenderer>();
+            Heart = transform.Find("BackpackCamera/Heart").GetComponent<SpriteRenderer>();
             optionsBox = transform.Find("BackpackCamera/BackpackBoxes/OptionsBox").GetComponent<BoxDrawer>();
             optionsBox.localPosition.z = BoxZAxisInvisible;
             _overviewBox = transform.Find("BackpackCamera/BackpackBoxes/OverviewBox").GetComponent<BoxDrawer>();
@@ -412,10 +464,10 @@ namespace UCT.Overworld
             MainControl.Instance.playerControl.canMove = true;
             sonSelect = 0;
             select = 0;
-            _isOpenBackPack = false;
+            IsOpenBackPack = false;
             optionsBox.localPosition.z = BoxZAxisInvisible;
-            _heart.transform.localPosition = new Vector3(_heart.transform.localPosition.x,
-                _heart.transform.localPosition.y, BoxZAxisInvisible);
+            Heart.transform.localPosition = new Vector3(Heart.transform.localPosition.x,
+                Heart.transform.localPosition.y, BoxZAxisInvisible);
             _overviewBox.localPosition.z = BoxZAxisInvisible;
             typeWritter.TypeStop();
             TalkBoxController.Instance.boxDrawer.localPosition.z = BoxZAxisInvisible;

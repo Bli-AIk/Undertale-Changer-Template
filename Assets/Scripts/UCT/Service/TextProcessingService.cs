@@ -20,6 +20,7 @@ namespace UCT.Service
             sonList.Clear();
             var text = "";
             foreach (var t1 in parentList.SelectMany(t => t))
+            {
                 if (t1 == delimiter || t1 == ';')
                 {
                     sonList.Add(text);
@@ -29,6 +30,7 @@ namespace UCT.Service
                 {
                     text += t1;
                 }
+            }
         }
 
         /// <summary>
@@ -42,6 +44,7 @@ namespace UCT.Service
             var text = "";
 
             foreach (var t in parentString)
+            {
                 if (t == delimiter || t == ';')
                 {
                     sonList.Add(text);
@@ -51,6 +54,7 @@ namespace UCT.Service
                 {
                     text += t;
                 }
+            }
         }
 
         /// <summary>
@@ -61,9 +65,17 @@ namespace UCT.Service
         {
             var result = "";
             foreach (var t in input)
+            {
                 if (t != delimiter)
+                {
                     result += t;
-                else break;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
             return result;
         }
 
@@ -80,12 +92,23 @@ namespace UCT.Service
             char delimiter = '\\')
         {
             if (isIgnoreSemicolon && input[^1..] == ";")
+            {
                 input = input[..^1];
+            }
+
             var changed = "";
-            for (var i = 0; i < input.Length; i++) changed += input[input.Length - i - 1];
+            for (var i = 0; i < input.Length; i++)
+            {
+                changed += input[input.Length - i - 1];
+            }
+
             changed = SplitFirstStringWithDelimiter(changed, delimiter);
             input = "";
-            for (var i = 0; i < changed.Length; i++) input += changed[changed.Length - i - 1];
+            for (var i = 0; i < changed.Length; i++)
+            {
+                input += changed[changed.Length - i - 1];
+            }
+
             return float.TryParse(input, out var y) ? y : Mathf.Infinity;
         }
 
@@ -100,7 +123,11 @@ namespace UCT.Service
                      where t.Length > screen.Length && SplitFirstStringWithDelimiter(t) == screen
                      select t[(screen.Length + 1)..]
                      into str
-                     select str[..^1]) return result;
+                     select str[..^1])
+            {
+                return result;
+            }
+
             var nullText = $"<color=yellow><color=#FF6666>{screen}</color> is null!</color>";
             Other.Debug.LogError(nullText);
             return nullText;
@@ -133,15 +160,39 @@ namespace UCT.Service
         /// <summary>
         ///     再分配文本包
         /// </summary>
-        public static void ClassifyStringsByPrefix(List<string> max, string[] text, List<string>[] son)
+        public static List<string>[] ClassifyStringsByPrefix(List<string> sourceStrings, string[] prefixes)
         {
-            foreach (var t in son) t.Clear();
+            var classifiedSubstrings = new List<string>[prefixes.Length];
+    
+            for (var i = 0; i < prefixes.Length; i++)
+            {
+                classifiedSubstrings[i] = new List<string>();
+            }
 
-            foreach (var t in max)
-                for (var j = 0; j < text.Length; j++)
-                    if (t[..text[j].Length] == text[j])
-                        son[j].Add(t[(text[j].Length + 1)..]);
+            foreach (var sourceString in sourceStrings)
+            {
+                for (var prefixIndex = 0; prefixIndex < prefixes.Length; prefixIndex++)
+                {
+                    var prefix = prefixes[prefixIndex];
+            
+                    if (sourceString.Length <= prefix.Length)
+                    {
+                        continue;
+                    }
+
+                    if (!sourceString.StartsWith(prefix))
+                    {
+                        continue;
+                    }
+
+                    var substring = sourceString[(prefix.Length + 1)..];
+                    classifiedSubstrings[prefixIndex].Add(substring);
+                }
+            }
+
+            return classifiedSubstrings;
         }
+
 
         /// <summary>
         ///     给一个指定长度，然后会用空格填充原字符串
@@ -153,7 +204,11 @@ namespace UCT.Service
         {
             var result = origin;
 
-            for (var i = 0; i < length - result.Length; i++) result += " ";
+            for (var i = 0; i < length - result.Length; i++)
+            {
+                result += " ";
+            }
+
             return result;
         }
 
@@ -163,7 +218,9 @@ namespace UCT.Service
         public static string GetRealTime(int totalSeconds)
         {
             if (totalSeconds < 0)
+            {
                 totalSeconds = 0;
+            }
 
             //int seconds = totalSeconds % 60;
             totalSeconds /= 60;
@@ -239,7 +296,11 @@ namespace UCT.Service
         {
             var text = "";
 
-            for (var i = 0; i < length; i++) text += alphabet[Random.Range(0, alphabet.Length)];
+            for (var i = 0; i < length; i++)
+            {
+                text += alphabet[Random.Range(0, alphabet.Length)];
+            }
+
             return text;
         }
 
@@ -292,7 +353,11 @@ namespace UCT.Service
         public static string RandomStringColor()
         {
             var text = "<color=#";
-            for (var i = 0; i < 6; i++) text += $"{Random.Range(0, 16):X}";
+            for (var i = 0; i < 6; i++)
+            {
+                text += $"{Random.Range(0, 16):X}";
+            }
+
             text += "FF>";
             return text;
         }
@@ -303,17 +368,6 @@ namespace UCT.Service
         public static string RandomStringColor(string inputString)
         {
             return RandomStringColor() + inputString + "</color>";
-        }
-
-        /// <summary>
-        ///     检查输入文本是否以检测文本为开头。
-        /// </summary>
-        /// <param name="inputText">输入文本</param>
-        /// <param name="detectText">检测文本</param>
-        /// <returns></returns>
-        public static bool IsSameFrontTexts(string inputText, string detectText)
-        {
-            return inputText.Length > detectText.Length && inputText[..detectText.Length] == detectText;
         }
 
         /// <summary>
@@ -350,6 +404,7 @@ namespace UCT.Service
                 {
                     float x1 = 0;
                     foreach (var t in text)
+                    {
                         switch (t)
                         {
                             case 'r' or 'R' when !isHaveR:
@@ -365,18 +420,29 @@ namespace UCT.Service
                                 save += t;
                                 break;
                         }
+                    }
 
-                    if (!isHaveR) return plusSave + float.Parse(text);
+                    if (!isHaveR)
+                    {
+                        return plusSave + float.Parse(text);
+                    }
+
                     var x2 = float.Parse(save);
                     return plusSave + Random.Range(x1, x2);
                 }
 
                 if (text is "P" or "p")
+                {
                     return isY
                         ? MainControl.Instance.battlePlayerController.transform.position.y
                         : MainControl.Instance.battlePlayerController.transform.position.x;
+                }
 
-                if (text.Length <= 1 || (text[0] != 'O' && text[0] != 'o') || text[1] != '+') return origin;
+                if (text.Length <= 1 || (text[0] != 'O' && text[0] != 'o') || text[1] != '+')
+                {
+                    return origin;
+                }
+
                 text = text[2..];
                 plusSave = origin;
             }
@@ -392,8 +458,11 @@ namespace UCT.Service
             var components = stringVector2.Split(',');
 
             if (components.Length == 2 && float.TryParse(components[0], out var x) &&
-                float.TryParse(components[1], out var y)) return new Vector2(x, y);
-            
+                float.TryParse(components[1], out var y))
+            {
+                return new Vector2(x, y);
+            }
+
             Other.Debug.LogWarning($"输入的字符串 \"{stringVector2}\" 格式不正确，应形如 (x,y)。");
             return new Vector2();
         }
@@ -415,6 +484,7 @@ namespace UCT.Service
             var save = "";
             var isSetX = false;
             foreach (var t in stringVector2)
+            {
                 if (t == ',')
                 {
                     if (!isSetX)
@@ -433,6 +503,7 @@ namespace UCT.Service
                 {
                     save += t;
                 }
+            }
 
             return realVector2;
         }
@@ -448,7 +519,9 @@ namespace UCT.Service
             var save = "";
             var isSet = 0;
             foreach (var t in stringVector4)
+            {
                 if (t == ',')
+                {
                     switch (isSet)
                     {
                         case 0:
@@ -472,15 +545,22 @@ namespace UCT.Service
                             save = "";
                             break;
                     }
+                }
                 else
+                {
                     save += t;
+                }
+            }
 
             return realVector4;
         }
 
         public static string ToFirstLetterUpperCase(string input)
         {
-            if (string.IsNullOrWhiteSpace(input)) return input;
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                return input;
+            }
 
             return char.ToUpper(input[0]) + input[1..];
         }

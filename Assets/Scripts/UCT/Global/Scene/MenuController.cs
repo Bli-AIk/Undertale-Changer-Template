@@ -41,9 +41,12 @@ namespace UCT.Global.Scene
         {
             _setData = false;
             _overworldControl = MainControl.Instance.overworldControl;
-            new Vector3(-0.5f, -1);
+
             if (MainControl.Instance.saveDataId < 0)
+            {
                 MainControl.Instance.saveDataId = 0;
+            }
+
             MainControl.Instance.playerControl =
                 DataHandlerService.SetPlayerControl(SaveController.LoadData("Data" + MainControl.Instance.saveDataId));
             saveNumber = MainControl.Instance.saveDataId;
@@ -53,46 +56,80 @@ namespace UCT.Global.Scene
         private void Update()
         {
             if (!_textOptionsLeft.enabled)
+            {
                 _textOptionsLeft.enabled = true;
+            }
+
             if (!_textOptionsRight.enabled)
+            {
                 _textOptionsRight.enabled = true;
+            }
 
 
             if (_overworldControl.isSetting || SettingsStorage.pause)
+            {
                 return;
+            }
 
             if (InputService.GetKeyDown(KeyCode.LeftArrow))
+            {
                 _select--;
-            else if (InputService.GetKeyDown(KeyCode.UpArrow)) _select -= 2;
+            }
+            else if (InputService.GetKeyDown(KeyCode.UpArrow))
+            {
+                _select -= 2;
+            }
+
             if (InputService.GetKeyDown(KeyCode.RightArrow))
+            {
                 _select++;
-            else if (InputService.GetKeyDown(KeyCode.DownArrow)) _select += 2;
+            }
+            else if (InputService.GetKeyDown(KeyCode.DownArrow))
+            {
+                _select += 2;
+            }
+
             if (_select < 0 + 2 * Convert.ToInt32(_setData))
             {
                 if (_select % 2 != 0)
+                {
                     _select = SelectMax;
+                }
                 else
+                {
                     _select = SelectMax - 1;
+                }
             }
 
             if (_select > SelectMax)
             {
                 if (_select % 2 == 0)
+                {
                     _select = 0 + 2 * Convert.ToInt32(_setData);
-                else _select = 1 + 2 * Convert.ToInt32(_setData);
+                }
+                else
+                {
+                    _select = 1 + 2 * Convert.ToInt32(_setData);
+                }
             }
 
-            if (_setData && _select == 2 && saveNumber == 0) _select = _select % 2 == 0 ? 3 : 4;
+            if (_setData && _select == 2 && saveNumber == 0)
+            {
+                _select = _select % 2 == 0 ? 3 : 4;
+            }
 
             if (InputService.GetKeyDown(KeyCode.UpArrow) ||
                 InputService.GetKeyDown(KeyCode.DownArrow) ||
                 InputService.GetKeyDown(KeyCode.LeftArrow) ||
                 InputService.GetKeyDown(KeyCode.RightArrow))
+            {
                 Flash();
+            }
 
             if (InputService.GetKeyDown(KeyCode.Z))
             {
                 if (!_setData)
+                {
                     switch (_select)
                     {
                         case 0:
@@ -115,7 +152,10 @@ namespace UCT.Global.Scene
                             _setData = true;
                             saveNumber = MainControl.Instance.saveDataId;
                             if (0 != SaveController.GetDataNumber() - 1)
+                            {
                                 _select = 5;
+                            }
+
                             Flash();
                             _textOptionsLeft.enabled = false;
                             _textOptionsRight.enabled = false;
@@ -129,13 +169,18 @@ namespace UCT.Global.Scene
                         default:
                             goto case 5;
                     }
+                }
                 else
+                {
                     switch (_select)
                     {
                         case 2:
                             AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
                             if (saveNumber > 0)
+                            {
                                 saveNumber--;
+                            }
+
                             _select = 3;
                             LoadLayer0();
                             break;
@@ -152,7 +197,7 @@ namespace UCT.Global.Scene
                                     DataHandlerService.SetPlayerControl(
                                         ScriptableObject.CreateInstance<PlayerControl>());
                                 MainControl.Instance.playerControl.playerName = "";
-                                GameUtilityService.FadeOutAndSwitchScene("Rename", Color.black, null);
+                                GameUtilityService.FadeOutAndSwitchScene("Rename", Color.black);
                             }
                             else //下页
                             {
@@ -164,10 +209,16 @@ namespace UCT.Global.Scene
 
                         case 4:
                             if (SaveController.GetDataNumber() - 1 <= 0)
+                            {
                                 goto case 5;
+                            }
+
                             SaveController.DeleteData("Data" + saveNumber);
                             if (saveNumber > SaveController.GetDataNumber() - 1)
+                            {
                                 saveNumber = SaveController.GetDataNumber() - 1;
+                            }
+
                             LoadLayer0();
                             break;
 
@@ -187,6 +238,7 @@ namespace UCT.Global.Scene
                             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
                             break;
                     }
+                }
             }
             else if (InputService.GetKeyDown(KeyCode.X) && _setData)
             {
@@ -218,11 +270,12 @@ namespace UCT.Global.Scene
             _textName.text = playerControl.playerName;
             _textLv.text = "LV " + playerControl.lv;
             _textPosition.text =
-                TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.settingSave,
+                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.LanguagePackControl.settingTexts,
                     playerControl.saveScene);
             Flash();
             _textMessage.text =
-                TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave, "MenuUnder") +
+                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.LanguagePackControl.sceneTexts,
+                    "MenuUnder") +
                 Application.version;
         }
 
@@ -230,46 +283,65 @@ namespace UCT.Global.Scene
         {
             var list = new List<string>();
             for (var i = 0; i < 6; i++)
+            {
                 if (_setData && i == 2 && saveNumber == 0)
+                {
                     list.Add("<color=grey>");
+                }
                 else if (i != _select)
+                {
                     list.Add("<color=white>");
+                }
                 else
+                {
                     list.Add("<color=yellow>");
+                }
+            }
 
             if (!_setData)
             {
                 _textOptionsLeft.text =
-                    list[0] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave,
+                    list[0] + TextProcessingService.GetFirstChildStringByPrefix(
+                        MainControl.Instance.LanguagePackControl.sceneTexts,
                         "Menu0") + "</color>\n" +
-                    list[2] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave,
+                    list[2] + TextProcessingService.GetFirstChildStringByPrefix(
+                        MainControl.Instance.LanguagePackControl.sceneTexts,
                         "Menu2") + "</color>\n" +
-                    list[4] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave,
+                    list[4] + TextProcessingService.GetFirstChildStringByPrefix(
+                        MainControl.Instance.LanguagePackControl.sceneTexts,
                         "Menu4") + "</color>";
 
                 _textOptionsRight.text =
-                    list[1] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave,
+                    list[1] + TextProcessingService.GetFirstChildStringByPrefix(
+                        MainControl.Instance.LanguagePackControl.sceneTexts,
                         "Menu1") + "</color>\n" +
-                    list[3] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave,
+                    list[3] + TextProcessingService.GetFirstChildStringByPrefix(
+                        MainControl.Instance.LanguagePackControl.sceneTexts,
                         "Menu3") + "</color>\n" +
-                    list[5] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave,
+                    list[5] + TextProcessingService.GetFirstChildStringByPrefix(
+                        MainControl.Instance.LanguagePackControl.sceneTexts,
                         "Menu5") + "</color>";
             }
             else
             {
                 _textOptionsLeft.text =
-                    list[0] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave,
+                    list[0] + TextProcessingService.GetFirstChildStringByPrefix(
+                        MainControl.Instance.LanguagePackControl.sceneTexts,
                         "Menu12") + "</color>\n" +
-                    list[2] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave,
+                    list[2] + TextProcessingService.GetFirstChildStringByPrefix(
+                        MainControl.Instance.LanguagePackControl.sceneTexts,
                         "Menu6") + "</color>\n" +
-                    list[4] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave,
+                    list[4] + TextProcessingService.GetFirstChildStringByPrefix(
+                        MainControl.Instance.LanguagePackControl.sceneTexts,
                         0 == SaveController.GetDataNumber() - 1 ? "Menu8" : "Menu11") + "</color>";
 
                 _textOptionsRight.text =
                     list[1] + "Data" + saveNumber + "</color>\n" +
-                    list[3] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave,
+                    list[3] + TextProcessingService.GetFirstChildStringByPrefix(
+                        MainControl.Instance.LanguagePackControl.sceneTexts,
                         saveNumber == SaveController.GetDataNumber() - 1 ? "Menu10" : "Menu7") + "</color>\n" +
-                    list[5] + TextProcessingService.GetFirstChildStringByPrefix(_overworldControl.sceneTextsSave,
+                    list[5] + TextProcessingService.GetFirstChildStringByPrefix(
+                        MainControl.Instance.LanguagePackControl.sceneTexts,
                         "Menu9") + "</color>";
             }
         }

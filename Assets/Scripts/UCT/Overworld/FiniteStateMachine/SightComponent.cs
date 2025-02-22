@@ -39,7 +39,10 @@ namespace UCT.Overworld.FiniteStateMachine
 
         private void Update()
         {
-            if (!fsm) return;
+            if (!fsm)
+            {
+                return;
+            }
 
             var direction = fsm.data.directionPlayer;
             if (fsm && directionList.Count == offsetList.Count)
@@ -50,12 +53,19 @@ namespace UCT.Overworld.FiniteStateMachine
                 for (var i = 0; i < directionList.Count; i++)
                 {
                     var angle = Vector2.Angle(direction, directionList[i]);
-                    if (!(angle < closestAngle)) continue;
+                    if (!(angle < closestAngle))
+                    {
+                        continue;
+                    }
+
                     closestAngle = angle;
                     closestIndex = i;
                 }
 
-                if (closestIndex >= 0) _rayOffset = offsetList[closestIndex];
+                if (closestIndex >= 0)
+                {
+                    _rayOffset = offsetList[closestIndex];
+                }
             }
 
             _basicRay = new Ray(_rayOffset + transform.position, direction);
@@ -65,7 +75,10 @@ namespace UCT.Overworld.FiniteStateMachine
 
         private void OnDrawGizmos()
         {
-            if (fsm == null || fsm.data == null) return;
+            if (fsm == null || fsm.data == null)
+            {
+                return;
+            }
 
             Gizmos.color = Color.red;
             Gizmos.DrawRay(_basicRay.origin, _basicRay.direction * gizmosDistance);
@@ -88,7 +101,10 @@ namespace UCT.Overworld.FiniteStateMachine
 
             var angles = CalculateRayAngles();
 
-            foreach (var currentAngle in angles) ProcessRayAtAngle(currentAngle);
+            foreach (var currentAngle in angles)
+            {
+                ProcessRayAtAngle(currentAngle);
+            }
 
             HandleExitEvents();
         }
@@ -108,8 +124,15 @@ namespace UCT.Overworld.FiniteStateMachine
                 var upwardAngle = centerAngle + i * angleStep;
                 var downwardAngle = centerAngle - i * angleStep;
 
-                if (upwardAngle <= rayAngleRange.y) angles.Add(upwardAngle);
-                if (downwardAngle >= rayAngleRange.x) angles.Add(downwardAngle);
+                if (upwardAngle <= rayAngleRange.y)
+                {
+                    angles.Add(upwardAngle);
+                }
+
+                if (downwardAngle >= rayAngleRange.x)
+                {
+                    angles.Add(downwardAngle);
+                }
             }
 
             return angles;
@@ -130,22 +153,45 @@ namespace UCT.Overworld.FiniteStateMachine
             var currentLayer = gameObject.layer;
 
             if (currentLayer == LayerMask.NameToLayer("Player"))
+            {
                 layerMask &= ~(1 << LayerMask.NameToLayer("Player"));
+            }
 
             if (currentLayer == LayerMask.NameToLayer("NPC"))
+            {
                 layerMask &= ~(1 << LayerMask.NameToLayer("NPC"));
+            }
 
             var hit = Physics2D.Raycast(_basicRay.origin, rayDirection, Mathf.Infinity, layerMask);
-            if (!hit.collider) return;
-            if (!hit.collider.CompareTag("owObjTrigger")) return;
-            if (!hit.collider.TryGetComponent<OverworldEventTrigger>(out var trigger)) return;
-            if (!IsObjectVisible(trigger)) return;
+            if (!hit.collider)
+            {
+                return;
+            }
+
+            if (!hit.collider.CompareTag("owObjTrigger"))
+            {
+                return;
+            }
+
+            if (!hit.collider.TryGetComponent<OverworldEventTrigger>(out var trigger))
+            {
+                return;
+            }
+
+            if (!IsObjectVisible(trigger))
+            {
+                return;
+            }
 
             _currentColliders.Add(hit.collider);
             _visibleColliders.Add(hit.collider);
 
             if (_processedColliders.Contains(hit.collider) ||
-                !trigger.IsEventTriggerModeActive(EventTriggerMode.LineOfSightEnter)) return;
+                !trigger.IsEventTriggerModeActive(EventTriggerMode.LineOfSightEnter))
+            {
+                return;
+            }
+
             trigger.TriggerEvent();
             _processedColliders.Add(hit.collider);
         }
@@ -158,7 +204,10 @@ namespace UCT.Overworld.FiniteStateMachine
             foreach (var item in _visibleColliders.ToList())
             {
                 if (_currentColliders.Contains(item) ||
-                    !item.TryGetComponent<OverworldEventTrigger>(out var trigger)) continue;
+                    !item.TryGetComponent<OverworldEventTrigger>(out var trigger))
+                {
+                    continue;
+                }
 
 
                 if (trigger.IsEventTriggerModeActive(EventTriggerMode.LineOfSightExit))
@@ -180,7 +229,10 @@ namespace UCT.Overworld.FiniteStateMachine
         /// <returns>物体是否可见</returns>
         private bool IsObjectVisible(float clarity, float distance, float itemAngle)
         {
-            if (distance >= MaxDistance) return false;
+            if (distance >= MaxDistance)
+            {
+                return false;
+            }
 
             var distanceFactor = Mathf.Clamp01(1 - distance / MaxDistance);
 
@@ -189,7 +241,10 @@ namespace UCT.Overworld.FiniteStateMachine
 
             var angleDifference = Mathf.Abs(Mathf.DeltaAngle(itemAngle, centerAngle));
 
-            if (angleDifference > range) return false;
+            if (angleDifference > range)
+            {
+                return false;
+            }
 
             var angleFactor = 1 - angleDifference / range;
 
@@ -218,7 +273,9 @@ namespace UCT.Overworld.FiniteStateMachine
         private float CalculateDistance(Transform target)
         {
             if (target)
+            {
                 return Vector3.Distance(transform.position, target.position);
+            }
 
             Other.Debug.LogError("目标物体为空。");
             return 0f;

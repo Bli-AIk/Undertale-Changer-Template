@@ -39,12 +39,20 @@ namespace UCT.Global.Settings
         private void Update()
         {
             if (InputService.GetKeyDown(KeyCode.Escape))
+            {
                 _exitImageTween.Kill();
-            
-            if (InputService.GetKey(KeyCode.Escape))
-                UpdateHandleExitInput();
+            }
 
-            if (!InputService.GetKeyUp(KeyCode.Escape)) return;
+            if (InputService.GetKey(KeyCode.Escape))
+            {
+                UpdateHandleExitInput();
+            }
+
+            if (!InputService.GetKeyUp(KeyCode.Escape))
+            {
+                return;
+            }
+
             _exitImageClock = 0;
             _exitImageTween = _exitImage.DOColor(ColorEx.WhiteClear,0.5f);
         }
@@ -56,7 +64,10 @@ namespace UCT.Global.Settings
         private void UpdateHandleExitInput()
         {
             if (_exitImage.color.a < 1)
+            {
                 _exitImage.color += Time.deltaTime * Color.white;
+            }
+
             if (_exitImageClock < 3)
             {
                 _exitImage.sprite = _exitImageSprites[(int)_exitImageClock];

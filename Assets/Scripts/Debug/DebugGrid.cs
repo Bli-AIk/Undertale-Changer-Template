@@ -38,7 +38,10 @@ namespace Debug
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.G)) SummonGrid();
+            if (Input.GetKeyDown(KeyCode.G))
+            {
+                SummonGrid();
+            }
         }
 
         private void SummonGrid()
@@ -47,7 +50,9 @@ namespace Debug
             {
                 var grid = transform.GetChild(i).gameObject;
                 if (grid.activeSelf)
+                {
                     ReturnPool(grid, grid.transform);
+                }
             }
 
             //x

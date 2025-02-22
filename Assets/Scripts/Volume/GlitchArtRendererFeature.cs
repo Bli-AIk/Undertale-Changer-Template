@@ -67,12 +67,28 @@ namespace Volume
 
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
-            if (_mat == null) return;
-            if (!renderingData.cameraData.postProcessEnabled) return;
+            if (_mat == null)
+            {
+                return;
+            }
+
+            if (!renderingData.cameraData.postProcessEnabled)
+            {
+                return;
+            }
+
             var stack = VolumeManager.instance.stack;
             _glitchArtVolume = stack.GetComponent<GlitchArtComponent>();
-            if (_glitchArtVolume == null) return;
-            if (_glitchArtVolume.isShow.value == false) return;
+            if (_glitchArtVolume == null)
+            {
+                return;
+            }
+
+            if (_glitchArtVolume.isShow.value == false)
+            {
+                return;
+            }
+
             var cmd = CommandBufferPool.Get(RenderTag);
             Render(cmd, ref renderingData);
             context.ExecuteCommandBuffer(cmd);

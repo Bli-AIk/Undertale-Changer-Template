@@ -35,10 +35,25 @@ namespace UCT.EventSystem
             var maxCount = Mathf.Max(ruleCriteria.Count, methodTypes.Count, targetSprites.Count, targetEnables.Count);
             for (var i = 0; i < maxCount; i++)
             {
-                if (i >= ruleCriteria.Count) ruleCriteria.Add(default);
-                if (i >= methodTypes.Count) methodTypes.Add(default);
-                if (i >= targetSprites.Count) targetSprites.Add(null);
-                if (i >= targetEnables.Count) targetEnables.Add(false);
+                if (i >= ruleCriteria.Count)
+                {
+                    ruleCriteria.Add(default);
+                }
+
+                if (i >= methodTypes.Count)
+                {
+                    methodTypes.Add(default);
+                }
+
+                if (i >= targetSprites.Count)
+                {
+                    targetSprites.Add(null);
+                }
+
+                if (i >= targetEnables.Count)
+                {
+                    targetEnables.Add(false);
+                }
 
                 var ruleCriterion = ruleCriteria[i];
                 var methodType = methodTypes[i];
@@ -50,7 +65,11 @@ namespace UCT.EventSystem
                     switch (methodType)
                     {
                         case MethodType.ChangeSprite:
-                            if (!_spriteRenderer) break;
+                            if (!_spriteRenderer)
+                            {
+                                break;
+                            }
+
                             _spriteRenderer.sprite = targetSprite;
                             break;
                         case MethodType.SetColliderEnable:
@@ -66,7 +85,10 @@ namespace UCT.EventSystem
         public static void SetCollidersEnabled(GameObject obj, bool input)
         {
             var colliders = obj.GetComponents<Collider2D>();
-            foreach (var item in colliders) item.enabled = input;
+            foreach (var item in colliders)
+            {
+                item.enabled = input;
+            }
         }
     }
 }

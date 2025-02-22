@@ -16,8 +16,12 @@ namespace UCT.Service
             var maxValue = (T)values.GetValue(0);
 
             foreach (T value in values)
+            {
                 if (Convert.ToInt32(value) > Convert.ToInt32(maxValue))
+                {
                     maxValue = value;
+                }
+            }
 
             return maxValue;
         }
@@ -31,8 +35,12 @@ namespace UCT.Service
             var minValue = (T)values.GetValue(0);
 
             foreach (T value in values)
+            {
                 if (Convert.ToInt32(value) < Convert.ToInt32(minValue))
+                {
                     minValue = value;
+                }
+            }
 
             return minValue;
         }

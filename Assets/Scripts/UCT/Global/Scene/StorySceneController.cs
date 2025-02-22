@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using DG.Tweening;
+using Plugins.Timer.Source;
 using TMPro;
 using UCT.Extensions;
 using UCT.Global.Core;
-using UCT.Global.Settings;
-using UCT.Global.UI;
 using UCT.Service;
 using UnityEngine;
 
@@ -35,26 +34,34 @@ namespace UCT.Global.Scene
             _tmp = transform.Find("Text").GetComponent<TextMeshPro>();
             mask = GameObject.Find("MaskCanvas").gameObject;
 
-            _typeWritter.TypeOpen(
-                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.sceneTextsSave,
-                    "Text"), false, 0, 1, _tmp, TypeWritter.TypeMode.CantZx);
+            _typeWritter.StartTypeWritter(
+                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.LanguagePackControl.sceneTexts,
+                    "Text"), 1, _tmp);
+            _typeWritter.typeMode = TypeWritter.TypeMode.IgnorePlayerInput;
         }
 
         private void Update()
         {
             if (GameUtilityService.IsGamePausedOrSetting())
+            {
                 return;
-            if (!InputService.GetKeyDown(KeyCode.Z)) return;
+            }
+
+            if (!InputService.GetKeyDown(KeyCode.Z))
+            {
+                return;
+            }
+
             _typeWritter.TypeStop();
             _tmp.text = "";
-            GameUtilityService.FadeOutAndSwitchScene("Start", Color.black, null);
+            GameUtilityService.FadeOutAndSwitchScene("Start", Color.black);
         }
 
         public void Fade(int number)
         {
             _picNumber = number;
             _spriteRenderer.DOColor(ColorEx.WhiteClear, 0.5f).SetEase(Ease.Linear).SetLoops(2, LoopType.Yoyo);
-            Invoke(nameof(ChangePic), 0.5f);
+            Timer.Register(0.5f, ChangePic);
         }
 
         private void ChangePic()

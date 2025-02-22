@@ -24,18 +24,33 @@ namespace UCT.Service
         // 拼出一个完整的韩语音节，输入格式为类似 "한" 的字符串
         public static char ComposeHangul(string syllable)
         {
-            if (syllable.Length is < 2 or > 3) throw new ArgumentException("输入字符串的长度应为 2 或 3");
+            if (syllable.Length is < 2 or > 3)
+            {
+                throw new ArgumentException("输入字符串的长度应为 2 或 3");
+            }
 
             if (syllable[0] == '√')
+            {
                 if (syllable[1] != '√')
+                {
                     return syllable[1];
+                }
+            }
 
-            if (syllable[1] == '√' && syllable[0] != '√') return syllable[0];
+            if (syllable[1] == '√' && syllable[0] != '√')
+            {
+                return syllable[0];
+            }
 
-            if (syllable[1] == '√' && syllable[0] == '√') return syllable[2];
+            if (syllable[1] == '√' && syllable[0] == '√')
+            {
+                return syllable[2];
+            }
 
             if (syllable[2] == '√')
+            {
                 syllable = syllable[..2];
+            }
 
             // 拆解输入的字符串
             var cho = syllable[0].ToString(); // 初声
@@ -47,7 +62,10 @@ namespace UCT.Service
             var jungIndex = Array.IndexOf(Jungsung, jung);
             var jongIndex = Array.IndexOf(Jongsung, jong);
 
-            if (choIndex == -1 || jungIndex == -1 || jongIndex == -1) throw new ArgumentException("无效的韩语字母组合");
+            if (choIndex == -1 || jungIndex == -1 || jongIndex == -1)
+            {
+                throw new ArgumentException("无效的韩语字母组合");
+            }
 
             // 计算音节的Unicode编码
             var code = 0xAC00 + (choIndex * 21 + jungIndex) * 28 + jongIndex;

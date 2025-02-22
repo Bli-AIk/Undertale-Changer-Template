@@ -32,7 +32,7 @@ Please note that pressing X won't pause at this character. This character can be
 </else> Display separator. If there are multiple display texts for an item, use this symbol to separate them.
 -In general, each text has an equal probability of being displayed. (WIP, not finished, do not use)
 
-If you need to input a long paragraph or simply want the player to press the Z key multiple times, you can insert <passText> character within a paragraph of text.
+If you need to input a long paragraph or simply want the player to press the Z key multiple times, you can insert <waitForUpdate> character within a paragraph of text.
 When the typewriter detects this character, it will stop typing, and if the player presses the Z key, the current text will be cleared, and typing will resume.
 Previous rich text formatting will be invalidated since the previous text has been cleared.
 
@@ -59,20 +59,20 @@ Also, do not write two comments together, leave at least 3 characters of space b
 
 */
 
-Turn\0\* Turn 0.;
+Turn\0\<markPoint>Turn 0.;
 Turn\0\* Another version of Turn 0<stop><stop......>;
-Turn\1\* Welcome to Turn 1<stop><stop...><enter>* Of course.;
+Turn\1\* Welcome to Turn 1<stop><stop...><markEnter>Of course.;
 
 
-Act\NPC1\Check\* <getEnemiesName> <stop>-<stop> ATK<stop> <getEnemiesATK><stop> DEF<stop> <getEnemiesDEF><stop><enter>* What's this?;
-Act\NPC1\Pet\* You pet <getEnemiesName>.<stop><enter>* It makes a sound like "ow.";
-Act\NPC1\Glare\* You glare at it fiercely.<stop><enter>* When you gaze into the abyss<stop><stop...>;
+Act\NPC1\Check\* <getEnemiesName> <stop>-<stop> ATK<stop> <getEnemiesATK><stop> DEF<stop> <getEnemiesDEF><stop><markEnter>What's this?;
+Act\NPC1\Pet\* You pet <getEnemiesName>.<stop><markEnter>It makes a sound like "ow.";
+Act\NPC1\Glare\* You glare at it fiercely.<stop><markEnter>When you gaze into the abyss<stop><stop...>;
 Act\NPC1\Ignore\* You don't look at it<stop...><enter><-  ->Probably<stop...>;
 
-Act\NPC2\Check\* <getEnemiesName> <stop>-<stop> ATK<stop> <getEnemiesATK><stop> DEF<stop> <getEnemiesDEF><stop><enter>* What's this again?;
-Act\NPC2\Compliment\* You compliment <getEnemiesName> on its<enter><-  ->unique appearance.<stop><enter>* <getEnemiesName> looks very puzzled.;
-Act\NPC2\Hug\* You pick up <getEnemiesName>.<stop><enter>* <getEnemiesName> seems startled<stop...><passText>* But it feels happy.;
-Act\NPC2\Grin\* You let out an evil grin.<stop><enter>* <getEnemiesName> can't figure out<enter><-  ->what you're doing.;
+Act\NPC2\Check\* <getEnemiesName> <stop>-<stop> ATK<stop> <getEnemiesATK><stop> DEF<stop> <getEnemiesDEF><stop><markEnter>What's this again?;
+Act\NPC2\Compliment\* You compliment <getEnemiesName> on its<enter><-  ->unique appearance.<stop><markEnter><getEnemiesName> looks very puzzled.;
+Act\NPC2\Hug\* You pick up <getEnemiesName>.<stop><markEnter><getEnemiesName> seems startled<stop...><waitForUpdate><markPoint>But it feels happy.;
+Act\NPC2\Grin\* You let out an evil grin.<stop><markEnter><getEnemiesName> can't figure out<enter><-  ->what you're doing.;
 
 Mercy\NPC1\Spare\Null;
 Mercy\NPC1\Flee\* You can't run away.;

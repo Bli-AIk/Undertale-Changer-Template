@@ -60,12 +60,28 @@ namespace Volume
 
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
-            if (_mat == null) return;
-            if (!renderingData.cameraData.postProcessEnabled) return;
+            if (_mat == null)
+            {
+                return;
+            }
+
+            if (!renderingData.cameraData.postProcessEnabled)
+            {
+                return;
+            }
+
             var stack = VolumeManager.instance.stack;
             _stretchPostVolume = stack.GetComponent<StretchPostComponent>();
-            if (_stretchPostVolume == null) return;
-            if (_stretchPostVolume.isShow.value == false) return;
+            if (_stretchPostVolume == null)
+            {
+                return;
+            }
+
+            if (_stretchPostVolume.isShow.value == false)
+            {
+                return;
+            }
+
             var cmd = CommandBufferPool.Get(RenderTag);
             Render(cmd, ref renderingData);
             context.ExecuteCommandBuffer(cmd);

@@ -17,25 +17,42 @@ namespace Debug
         private void Update()
         {
             if (!MainControl.Instance.playerControl.isDebug)
+            {
                 return;
+            }
 
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 if (_videoPlayer.isPaused)
+                {
                     _videoPlayer.Play();
+                }
                 //Debug.Log("video play");
                 else
+                {
                     _videoPlayer.Pause();
+                }
                 //Debug.Log("video pause");
             }
 
-            if (Input.GetKeyDown(KeyCode.KeypadPlus)) _videoPlayer.StepForward();
+            if (Input.GetKeyDown(KeyCode.KeypadPlus))
+            {
+                _videoPlayer.StepForward();
+            }
+
             //Debug.Log("video +");
             //Debug.Log("frame:" + videoPlayer.frame);
-            if (Input.GetKeyDown(KeyCode.KeypadMinus)) _videoPlayer.frame -= 1;
+            if (Input.GetKeyDown(KeyCode.KeypadMinus))
+            {
+                _videoPlayer.frame -= 1;
+            }
+
             //Debug.Log("video -");
             //Debug.Log("frame:" + videoPlayer.frame);
-            if (Input.GetKeyDown(KeyCode.KeypadEnter)) _videoPlayer.frame = skip;
+            if (Input.GetKeyDown(KeyCode.KeypadEnter))
+            {
+                _videoPlayer.frame = skip;
+            }
             //Debug.Log("video skip");
         }
     }

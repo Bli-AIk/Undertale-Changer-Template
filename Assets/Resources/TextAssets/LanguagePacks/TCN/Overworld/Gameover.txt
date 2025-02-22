@@ -11,7 +11,7 @@ RenameSp\name|true|true|text;
 
 <playerName>取得玩家名稱
 */
-GameOver1\你<stop><- ->會<stop><- ->沒<stop><- ->事<stop><- ->的<stop><- ->！ <stop><- -><passText><playerName>！ <stop><- -><stop><- -><stop><- -><enter>保<stop><- ->持<stop><- ->你<stop><- ->的< stop><- ->決<stop><- ->心<stop>.<stop><- ->.<stop><- ->.;
-GameOver2\我<stop><- ->們<stop><- ->的<stop><- ->命<stop><- ->運<stop><- -><enter><stop>都< stop><- ->寄<stop><- ->托<stop><- ->予<stop><- ->你<stop>.<stop><- ->.<stop><- -> .<stop><- -><passText><playerName>！ <stop><- -><stop><- -><stop><- -><enter>保<stop><- ->持<stop><- ->你<stop><- ->的< stop><- ->決<stop><- ->心<stop>.<stop><- ->.<stop><- ->.;
-GameOver3\別<stop><- ->失<stop><- ->去<stop><- ->希<stop><- ->望<stop><- ->！ <stop><- -><passText><playerName>！ <stop><- -><stop><- -><stop><- -><enter>保<stop><- ->持<stop><- ->你<stop><- ->的< stop><- ->決<stop><- ->心<stop>.<stop><- ->.<stop><- ->.;
-GameOver4\現<stop><- ->在<stop><- -><enter><stop>也<stop><- ->不<stop><- ->能<stop><- ->結< stop><- ->束<stop><- ->！ <stop><- -><passText><playerName>！ <stop><- -><stop><- -><stop><- -><enter>保<stop><- ->持<stop><- ->你<stop><- ->的< stop><- ->決<stop><- ->心<stop>.<stop><- ->.<stop><- ->.;
+GameOver1\你<stop><- ->會<stop><- ->沒<stop><- ->事<stop><- ->的<stop><- ->！ <stop><- -><waitForUpdate><playerName>！ <stop><- -><stop><- -><stop><- -><enter>保<stop><- ->持<stop><- ->你<stop><- ->的< stop><- ->決<stop><- ->心<stop>.<stop><- ->.<stop><- ->.;
+GameOver2\我<stop><- ->們<stop><- ->的<stop><- ->命<stop><- ->運<stop><- -><enter><stop>都< stop><- ->寄<stop><- ->托<stop><- ->予<stop><- ->你<stop>.<stop><- ->.<stop><- -> .<stop><- -><waitForUpdate><playerName>！ <stop><- -><stop><- -><stop><- -><enter>保<stop><- ->持<stop><- ->你<stop><- ->的< stop><- ->決<stop><- ->心<stop>.<stop><- ->.<stop><- ->.;
+GameOver3\別<stop><- ->失<stop><- ->去<stop><- ->希<stop><- ->望<stop><- ->！ <stop><- -><waitForUpdate><playerName>！ <stop><- -><stop><- -><stop><- -><enter>保<stop><- ->持<stop><- ->你<stop><- ->的< stop><- ->決<stop><- ->心<stop>.<stop><- ->.<stop><- ->.;
+GameOver4\現<stop><- ->在<stop><- -><enter><stop>也<stop><- ->不<stop><- ->能<stop><- ->結< stop><- ->束<stop><- ->！ <stop><- -><waitForUpdate><playerName>！ <stop><- -><stop><- -><stop><- -><enter>保<stop><- ->持<stop><- ->你<stop><- ->的< stop><- ->決<stop><- ->心<stop>.<stop><- ->.<stop><- ->.;

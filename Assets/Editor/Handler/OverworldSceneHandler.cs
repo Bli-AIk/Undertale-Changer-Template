@@ -19,7 +19,10 @@ namespace Editor.Handler
 
         private static void OnPlayModeStateChanged(PlayModeStateChange state)
         {
-            if (state == PlayModeStateChange.EnteredPlayMode) CheckSceneState();
+            if (state == PlayModeStateChange.EnteredPlayMode)
+            {
+                CheckSceneState();
+            }
         }
 
         private static void CheckSceneState()
@@ -31,7 +34,11 @@ namespace Editor.Handler
                 return;
             }
 
-            if (mainControl.sceneState != MainControl.SceneState.Overworld) return;
+            if (mainControl.sceneState != MainControl.SceneState.Overworld)
+            {
+                return;
+            }
+
             var sceneName = SceneManager.GetActiveScene().name;
             CreateLanguagePackFiles($"{Application.dataPath}/Resources/TextAssets/LanguagePacks", sceneName);
             CreateLanguagePackFiles($"{Application.dataPath}/LanguagePacks", sceneName);
@@ -73,11 +80,15 @@ namespace Editor.Handler
                 {
                     var overworldPath = Path.Combine(subDir, "Overworld");
                     if (!Directory.Exists(overworldPath))
+                    {
                         continue;
+                    }
 
                     var filePath = Path.Combine(overworldPath, $"{sceneName}.txt");
                     if (File.Exists(filePath))
+                    {
                         continue;
+                    }
 
                     File.Create(filePath).Close();
                     UCT.Other.Debug.Log($"已生成{sceneName}场景的语言包文件: {filePath}");
@@ -93,12 +104,19 @@ namespace Editor.Handler
         public static void EnsureScriptableObjects(string path, string sceneName)
         {
             var folderPath = Path.Combine(path, sceneName);
-            if (!Directory.Exists(folderPath)) Directory.CreateDirectory(folderPath);
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
 
             var isFact = EnsureScriptableObject<FactTable>(folderPath, "FactTable");
             var isEvent = EnsureScriptableObject<EventTable>(folderPath, "EventTable");
             var isRule = EnsureScriptableObject<RuleTable>(folderPath, "RuleTable");
-            if (!isFact && !isEvent && !isRule) return;
+            if (!isFact && !isEvent && !isRule)
+            {
+                return;
+            }
+
             UCT.Other.Debug.Log($"已生成{sceneName}场景的事件系统文件！");
             UCT.Other.Debug.LogWarning("重新加载此场景后即可正常运行！");
             //对于存储在SceneManager的场景，可以自动重载，但此外的只能手动处理。
@@ -108,7 +126,11 @@ namespace Editor.Handler
         private static bool EnsureScriptableObject<T>(string folderPath, string fileName) where T : ScriptableObject
         {
             var assetPath = Path.Combine(folderPath, fileName + ".asset").Replace("\\", "/");
-            if (File.Exists(assetPath)) return false;
+            if (File.Exists(assetPath))
+            {
+                return false;
+            }
+
             var instance = ScriptableObject.CreateInstance<T>();
             var uniquePath = AssetDatabase.GenerateUniqueAssetPath(assetPath);
             AssetDatabase.CreateAsset(instance, uniquePath);

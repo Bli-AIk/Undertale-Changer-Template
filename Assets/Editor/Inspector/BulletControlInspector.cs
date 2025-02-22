@@ -15,7 +15,11 @@ namespace Editor.Inspector
         {
             var bullet = (BulletControl)target;
 
-            if (!bullet.sprite) return base.RenderStaticPreview(assetPath, subAssets, width, height);
+            if (!bullet.sprite)
+            {
+                return base.RenderStaticPreview(assetPath, subAssets, width, height);
+            }
+
             var icon = new Texture2D(width, height);
             EditorUtility.CopySerialized(bullet.sprite.texture, icon);
             return icon;
@@ -30,7 +34,11 @@ namespace Editor.Inspector
 
             InspectorElement.FillDefaultInspector(root, serializedObject, this);
 
-            if (bullet.sprite == null) return root;
+            if (!bullet.sprite)
+            {
+                return root;
+            }
+
             var background = new VisualElement()
             {
                 style =
@@ -91,7 +99,9 @@ namespace Editor.Inspector
                     var offset = TriggerOffset[i];
 
                     if (TriggerFollowMode == FollowMode.CutFollow)
+                    {
                         size = Vector2.one - TriggerSize[i];
+                    }
 
                     var centerX = offset.x * rect.width + rect.width / 2;
                     var centerY = (offset.y - 1) * rect.height + rect.height / 2;

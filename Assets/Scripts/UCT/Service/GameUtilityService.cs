@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
 using UCT.Battle;
+using UCT.Control;
 using UCT.Extensions;
 using UCT.Global.Audio;
 using UCT.Global.Core;
@@ -40,7 +41,10 @@ namespace UCT.Service
                 if (!MainControl.Instance.cameraShake)
                 {
                     var mainCamera = Camera.main;
-                    if (mainCamera) MainControl.Instance.cameraShake = mainCamera.GetComponent<CameraShake>();
+                    if (mainCamera)
+                    {
+                        MainControl.Instance.cameraShake = mainCamera.GetComponent<CameraShake>();
+                    }
                 }
                 else
                 {
@@ -51,22 +55,32 @@ namespace UCT.Service
             if (!SettingsStorage.isUsingHdFrame)
             {
                 if (SettingsStorage.resolutionLevel > 4)
+                {
                     SettingsStorage.resolutionLevel = 0;
+                }
             }
             else
             {
                 if (SettingsStorage.resolutionLevel < 5)
+                {
                     SettingsStorage.resolutionLevel = 5;
+                }
             }
 
             if (!SettingsStorage.isUsingHdFrame)
             {
                 if (MainControl.Instance.mainCamera)
+                {
                     MainControl.Instance.mainCamera.rect = new Rect(0, 0, 1, 1);
+                }
 
                 if (MainControl.Instance.sceneState == MainControl.SceneState.InBattle)
+                {
                     if (MainControl.Instance.cameraMainInBattle)
+                    {
                         MainControl.Instance.cameraMainInBattle.rect = new Rect(0, 0, 1, 1);
+                    }
+                }
 
                 SettingsController.Instance.DOKill();
                 SettingsController.Instance.Frame.color = ColorEx.WhiteClear;
@@ -74,16 +88,25 @@ namespace UCT.Service
             else
             {
                 if (MainControl.Instance.mainCamera)
+                {
                     MainControl.Instance.mainCamera.rect = new Rect(0, 0.056f, 1, 0.888f);
+                }
 
                 if (MainControl.Instance.sceneState == MainControl.SceneState.InBattle)
+                {
                     if (MainControl.Instance.cameraMainInBattle)
+                    {
                         MainControl.Instance.cameraMainInBattle.rect = new Rect(0, 0.056f, 1, 0.888f);
+                    }
+                }
 
                 SettingsController.Instance.DOKill();
 
                 if (SettingsController.Instance.frameSpriteIndex < 0)
+                {
                     SettingsController.Instance.Frame.color = Color.black;
+                }
+
                 SettingsController.Instance.Frame.DOColor(
                     Color.white * Convert.ToInt32(SettingsController.Instance.frameSpriteIndex >= 0), 1f);
             }
@@ -111,10 +134,18 @@ namespace UCT.Service
             if (SceneManager.GetActiveScene().name != "Menu" && SceneManager.GetActiveScene().name != "Rename" &&
                 SceneManager.GetActiveScene().name != "Story" && SceneManager.GetActiveScene().name != "Start" &&
                 SceneManager.GetActiveScene().name != "GameOver")
+            {
                 MainControl.Instance.playerControl.lastScene = SceneManager.GetActiveScene().name;
+            }
+
             if (async)
+            {
                 SceneManager.LoadSceneAsync(sceneName);
-            else SceneManager.LoadScene(sceneName);
+            }
+            else
+            {
+                SceneManager.LoadScene(sceneName);
+            }
 
             SetResolution(SettingsStorage.resolutionLevel);
             MainControl.Instance.isSceneSwitching = false;
@@ -142,7 +173,7 @@ namespace UCT.Service
             bool isBgmMuted = false,
             float fadeTime = 0.5f, bool isAsync = true)
         {
-            action += () => SwitchScene(scene);
+            action += () => SwitchScene(scene, isAsync);
             MainControl.Instance.isSceneSwitching = true;
             if (isBgmMuted)
             {
@@ -169,7 +200,10 @@ namespace UCT.Service
                     MainControl.Instance.sceneSwitchingFadeImage.DOColor(fadeColor, fadeTime).SetEase(Ease.Linear)
                         .OnKill(() => action.Invoke());
                     if (!SettingsStorage.isUsingHdFrame)
+                    {
                         SettingsController.Instance.Frame.color = ColorEx.WhiteClear;
+                    }
+
                     break;
                 }
                 case 0:
@@ -183,7 +217,10 @@ namespace UCT.Service
                     MainControl.Instance.sceneSwitchingFadeImage.DOColor(fadeColor, fadeTime).SetEase(Ease.Linear)
                         .OnKill(() => action.Invoke());
                     if (!SettingsStorage.isUsingHdFrame)
+                    {
                         SettingsController.Instance.Frame.color = ColorEx.WhiteClear;
+                    }
+
                     break;
                 }
             }
@@ -197,16 +234,24 @@ namespace UCT.Service
             if (!isUsingHdFrame)
             {
                 if (resolutionLevel is >= 0 and < 4)
+                {
                     resolutionLevel += 1;
+                }
                 else
+                {
                     resolutionLevel = 0;
+                }
             }
             else
             {
                 if (resolutionLevel is >= 5 and < 6)
+                {
                     resolutionLevel += 1;
+                }
                 else
+                {
                     resolutionLevel = 5;
+                }
             }
 
             SetResolution(resolutionLevel);
@@ -226,114 +271,26 @@ namespace UCT.Service
             }
 
             if (MainControl.Instance.mainCamera)
+            {
                 MainControl.Instance.mainCamera.GetUniversalAdditionalCameraData().renderPostProcessing = !isClose;
+            }
 
-            if (MainControl.Instance.sceneState != MainControl.SceneState.InBattle) return;
+            if (MainControl.Instance.sceneState != MainControl.SceneState.InBattle)
+            {
+                return;
+            }
 
             if (!MainControl.Instance.cameraMainInBattle)
             {
                 if (!MainControl.Instance.cameraShake)
+                {
                     MainControl.Instance.cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
+                }
+
                 MainControl.Instance.cameraMainInBattle = MainControl.Instance.cameraShake.GetComponent<Camera>();
             }
 
             MainControl.Instance.cameraMainInBattle.GetUniversalAdditionalCameraData().renderPostProcessing = !isClose;
-        }
-
-        /// <summary>
-        ///     传入使用背包的哪个物体
-        ///     然后就使用 打true会顺带把背包顺序整理下
-        ///     然后再让打字机打个字
-        ///     plusText填0就自己计算
-        /// </summary>
-        public static void UseItem(TypeWritter typeWritter, TMP_Text tmpText, int sonSelect, int plusText = 0)
-        {
-            if (plusText == 0)
-                plusText = MainControl.Instance.playerControl.myItems[sonSelect - 1] switch
-                {
-                    >= 20000 => -20000 + MainControl.Instance.ItemControl.itemFoods.Count / 3 +
-                                MainControl.Instance.ItemControl.itemArms.Count / 2,
-                    >= 10000 => -10000 + MainControl.Instance.ItemControl.itemFoods.Count / 3,
-                    _ => 0
-                };
-
-            switch (MainControl.Instance.playerControl.myItems[sonSelect - 1])
-            {
-                case >= 20000: // 防具
-                    ProcessArmor(typeWritter, tmpText, sonSelect, plusText);
-                    break;
-                case >= 10000: // 武器
-                    ProcessArm(typeWritter, tmpText, sonSelect, plusText);
-                    break;
-                // 食物
-                default:
-                {
-                    ProcessFood(typeWritter, tmpText, sonSelect);
-                    break;
-                }
-            }
-        }
-
-        private static void ProcessFood(TypeWritter typeWritter, TMP_Text tmpText, int sonSelect)
-        {
-            var plusHp = int.Parse(DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl,
-                MainControl.Instance.playerControl.myItems[sonSelect - 1], "Auto", 2));
-            //if (MainControl.Instance.playerControl.wearArm == 10001)
-            //    plusHp += 4;
-
-            typeWritter.TypeOpen(
-                MainControl.Instance.ItemControl.itemTextMaxItemSon[
-                    MainControl.Instance.playerControl.myItems[sonSelect - 1] * 5 - 3], false,
-                plusHp, 0, tmpText);
-
-            MainControl.Instance.playerControl.hp += plusHp;
-
-            if (MainControl.Instance.playerControl.hp > MainControl.Instance.playerControl.hpMax)
-                MainControl.Instance.playerControl.hp = MainControl.Instance.playerControl.hpMax;
-            for (var i = 0; i < MainControl.Instance.ItemControl.itemFoods.Count; i++)
-            {
-                if (MainControl.Instance.ItemControl.itemTextMaxItemSon[
-                        MainControl.Instance.playerControl.myItems[sonSelect - 1] * 5 - 5] !=
-                    MainControl.Instance.ItemControl.itemFoods[i]) continue;
-                var text = MainControl.Instance.ItemControl.itemFoods[i + 1];
-                text = text.Substring(1, text.Length - 1);
-                MainControl.Instance.playerControl.myItems[sonSelect - 1] =
-                    DataHandlerService.ItemNameGetId(MainControl.Instance.ItemControl, text, "Foods");
-                break;
-            }
-
-            AudioController.Instance.GetFx(2, MainControl.Instance.AudioControl.fxClipUI);
-        }
-
-        private static void ProcessArm(TypeWritter typeWritter, TMP_Text tmpText, int sonSelect, int plusText)
-        {
-            typeWritter.TypeOpen(
-                MainControl.Instance.ItemControl.itemTextMaxItemSon[
-                    (MainControl.Instance.playerControl.myItems[sonSelect - 1] + plusText) * 5 - 3], false, 0, 0,
-                tmpText);
-            MainControl.Instance.playerControl.wearAtk = int.Parse(DataHandlerService.ItemIdGetName(
-                MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[sonSelect - 1], "Auto",
-                1));
-            (MainControl.Instance.playerControl.wearArm, MainControl.Instance.playerControl.myItems[sonSelect - 1]) = (
-                MainControl.Instance.playerControl.myItems[sonSelect - 1], MainControl.Instance.playerControl.wearArm);
-
-            AudioController.Instance.GetFx(3, MainControl.Instance.AudioControl.fxClipUI);
-        }
-
-        private static void ProcessArmor(TypeWritter typeWritter, TMP_Text tmpText, int sonSelect, int plusText)
-        {
-            typeWritter.TypeOpen(
-                MainControl.Instance.ItemControl.itemTextMaxItemSon[
-                    (MainControl.Instance.playerControl.myItems[sonSelect - 1] + plusText) * 5 - 3], false, 0, 0,
-                tmpText);
-            MainControl.Instance.playerControl.wearDef = int.Parse(DataHandlerService.ItemIdGetName(
-                MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[sonSelect - 1], "Auto",
-                1));
-            (MainControl.Instance.playerControl.wearArmor, MainControl.Instance.playerControl.myItems[sonSelect - 1]) =
-                (MainControl.Instance.playerControl.myItems[sonSelect - 1],
-                    MainControl.Instance.playerControl.wearArmor);
-
-            AudioController.Instance.GetFx(3, MainControl.Instance.AudioControl.fxClipUI);
         }
 
         public static Color GetRandomColor()
@@ -349,7 +306,6 @@ namespace UCT.Service
             {
                 newColor = GetRandomColor();
             } while (newColor == colorToAvoid);
-
             return newColor;
         }
 

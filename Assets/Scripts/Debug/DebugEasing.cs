@@ -33,7 +33,9 @@ namespace Debug
                     _timer = baseTime;
 
                     if (_lineRenderer.positionCount <= _setNumber)
+                    {
                         _lineRenderer.positionCount++;
+                    }
 
                     _lineRenderer.SetPosition(_setNumber, transform.position);
                     _setNumber++;

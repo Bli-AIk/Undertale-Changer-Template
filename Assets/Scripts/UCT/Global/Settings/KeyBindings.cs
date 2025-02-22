@@ -73,16 +73,23 @@ namespace UCT.Global.Settings
         {
             var subDictionary = GetKeyCodes(type);
             if (subDictionary.ContainsKey(dataName))
+            {
                 subDictionary[dataName] = key;
+            }
             else
+            {
                 throw new ArgumentException("The key binding does not exist.");
+            }
         }
 
         public static void SetKeyCodeAtIndex(KeyBindingType type, int index, KeyCode key)
         {
             var subDictionary = GetKeyCodes(type);
             if (index < 0 || index >= subDictionary.Count)
+            {
                 throw new ArgumentOutOfRangeException(nameof(index), "Index is out of range.");
+            }
+
             var keyValuePair = subDictionary.ElementAt(index);
             subDictionary[keyValuePair.Key] = key;
         }
@@ -98,7 +105,10 @@ namespace UCT.Global.Settings
         {
             var subDictionary = GetKeyCodes(type);
             if (index < 0 || index >= subDictionary.Count)
+            {
                 throw new ArgumentOutOfRangeException(nameof(index), "Index is out of range.");
+            }
+
             var keyValuePair = subDictionary.ElementAt(index);
             return keyValuePair.Value;
         }
@@ -175,7 +185,11 @@ namespace UCT.Global.Settings
             KeyValuePair<KeyBindingType, Dictionary<string, KeyCode>> keyBinding)
         {
             var subDictionary = keyBinding.Value;
-            if (index < 0 || index >= subDictionary.Count) return KeyCode.None;
+            if (index < 0 || index >= subDictionary.Count)
+            {
+                return KeyCode.None;
+            }
+
             var keyCode = subDictionary.ElementAt(index).Value;
             return keyCode;
         }

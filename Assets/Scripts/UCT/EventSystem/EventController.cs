@@ -7,7 +7,6 @@ using UCT.Extensions;
 using UCT.Global.Audio;
 using UCT.Global.Core;
 using UCT.Global.Settings;
-using UCT.Global.UI;
 using UCT.Overworld;
 using UCT.Overworld.FiniteStateMachine;
 using UCT.Service;
@@ -134,7 +133,10 @@ namespace UCT.EventSystem
 
         private void Update()
         {
-            if (MainControl.Instance.sceneState != MainControl.SceneState.Overworld) return;
+            if (MainControl.Instance.sceneState != MainControl.SceneState.Overworld)
+            {
+                return;
+            }
 
             UpdateEvent(globalEventTable);
             UpdateEvent(eventTable);
@@ -145,7 +147,10 @@ namespace UCT.EventSystem
             globalEventTable = Resources.Load<EventTable>("Tables/EventTable");
             globalFactTable = Resources.Load<FactTable>("Tables/FactTable");
             globalRuleTable = Resources.Load<RuleTable>("Tables/RuleTable");
-            if (!force && MainControl.Instance.sceneState != MainControl.SceneState.Overworld) return;
+            if (!force && MainControl.Instance.sceneState != MainControl.SceneState.Overworld)
+            {
+                return;
+            }
 
             var sceneName = SceneManager.GetActiveScene().name;
             eventTable = Resources.Load<EventTable>($"Tables/{sceneName}/EventTable");
@@ -159,7 +164,10 @@ namespace UCT.EventSystem
             {
                 var eventEntry = inputEventTable.events[i];
                 if (eventEntry.isTriggering)
+                {
                     eventEntry = Detection(eventEntry);
+                }
+
                 inputEventTable.events[i] = eventEntry;
             }
         }
@@ -177,7 +185,10 @@ namespace UCT.EventSystem
 
                 rules[j] = rule;
 
-                if (isTriggered) break;
+                if (isTriggered)
+                {
+                    break;
+                }
             }
 
             return eventEntry;
@@ -189,38 +200,60 @@ namespace UCT.EventSystem
             isTriggered = false;
             var triggeredByCount = rule.triggeredBy.Count;
 
-            if (force) triggeredByCount = 1;
+            if (force)
+            {
+                triggeredByCount = 1;
+            }
 
             for (var triggeredByIndex = 0; triggeredByIndex < triggeredByCount; triggeredByIndex++)
             {
-                if (!rule.ruleCriterion.GetResult() && rule.useRuleCriterion) continue;
+                if (!rule.ruleCriterion.GetResult() && rule.useRuleCriterion)
+                {
+                    continue;
+                }
 
-                if (!force && eventEntry.name != rule.triggeredBy[triggeredByIndex]) continue;
+                if (!force && eventEntry.name != rule.triggeredBy[triggeredByIndex])
+                {
+                    continue;
+                }
 
                 eventEntry.isTriggering = false;
                 isTriggered = true;
 
-                foreach (var newTrigger in rule.triggers) SetTriggering(newTrigger);
+                foreach (var newTrigger in rule.triggers)
+                {
+                    SetTriggering(newTrigger);
+                }
 
                 for (var k = 0; k < rule.methodNames.Count; k++)
                 {
                     if (rule.firstStringParams.Count <= k)
+                    {
                         rule.firstStringParams.AddRange(Enumerable.Repeat<string>(null,
                             k + 1 - rule.firstStringParams.Count));
+                    }
 
                     if (rule.secondStringParams.Count <= k)
+                    {
                         rule.secondStringParams.AddRange(Enumerable.Repeat<string>(null,
                             k + 1 - rule.secondStringParams.Count));
+                    }
 
                     if (rule.thirdStringParams.Count <= k)
+                    {
                         rule.thirdStringParams.AddRange(Enumerable.Repeat<string>(null,
                             k + 1 - rule.thirdStringParams.Count));
+                    }
 
                     if (rule.useMethodEvents.Count <= k)
+                    {
                         rule.useMethodEvents.AddRange(Enumerable.Repeat(false, k + 1 - rule.useMethodEvents.Count));
+                    }
 
                     if (rule.methodEvents.Count <= k)
+                    {
                         rule.methodEvents.AddRange(Enumerable.Repeat<string>(null, k + 1 - rule.methodEvents.Count));
+                    }
 
                     InvokeMethodByName(rule.methodNames[k], rule.firstStringParams[k], rule.secondStringParams[k],
                         rule.thirdStringParams[k], rule.useMethodEvents[k], rule.methodEvents[k]);
@@ -248,9 +281,14 @@ namespace UCT.EventSystem
                             break;
                         case FactModification.Operation.Divide:
                             if (newNum != 0)
+                            {
                                 number /= newNum;
+                            }
                             else
+                            {
                                 Other.Debug.LogError("不可除以0.");
+                            }
+
                             break;
                         default:
                             throw new ArgumentOutOfRangeException();
@@ -262,9 +300,13 @@ namespace UCT.EventSystem
                     var isGlobalFactModification = rule.isGlobalFactModifications[index];
 
                     if (!isGlobalFactModification)
+                    {
                         factTable = SetFactEntry(factTable, item, number);
+                    }
                     else
+                    {
                         globalFactTable = SetFactEntry(globalFactTable, item, number);
+                    }
                 }
 
                 break;
@@ -278,7 +320,11 @@ namespace UCT.EventSystem
             for (var l = 0; l < inputFactTable.facts.Count; l++)
             {
                 var fact = inputFactTable.facts[l];
-                if (fact.name == item.fact.name) fact.value = number;
+                if (fact.name == item.fact.name)
+                {
+                    fact.value = number;
+                }
+
                 inputFactTable.facts[l] = fact;
             }
 
@@ -295,7 +341,11 @@ namespace UCT.EventSystem
         {
             for (var index = 0; index < table.events.Count; index++)
             {
-                if (table.events[index].name != triggerName) continue;
+                if (table.events[index].name != triggerName)
+                {
+                    continue;
+                }
+
                 var eventItem = table.events[index];
                 eventItem.isTriggering = value;
                 table.events[index] = eventItem;
@@ -315,25 +365,30 @@ namespace UCT.EventSystem
 
             TalkBoxController.Instance.Change(true, true);
             if (TalkBoxController.Instance.boxDrawer.localPosition.z < 0)
+            {
                 TalkBoxController.Instance.boxDrawer.localPosition = new Vector3(
                     TalkBoxController.Instance.boxDrawer.localPosition.x,
                     TalkBoxController.Instance.boxDrawer.localPosition.y,
                     BackpackBehaviour.BoxZAxisVisible);
+            }
 
             var mainCamera = Camera.main;
             if (mainCamera)
+            {
                 TalkBoxController.Instance.isUp =
                     MainControl.overworldPlayerBehaviour.transform.position.y <
                     mainCamera.transform.position.y - 1.25f;
+            }
 
             if (!_overworldTypeWritter)
+            {
                 _overworldTypeWritter = BackpackBehaviour.Instance.typeWritter;
+            }
 
-            _overworldTypeWritter.TypeOpen(
+            _overworldTypeWritter.StartTypeWritter(
                 TextProcessingService.GetFirstChildStringByPrefix(
-                    MainControl.Instance.overworldControl.sceneTextsSave,
-                    dataName),
-                false, 0, 1, BackpackBehaviour.Instance.talkText);
+                    MainControl.Instance.LanguagePackControl.sceneTexts,
+                    dataName), 1, BackpackBehaviour.Instance.talkText);
 
             _overworldTypeWritter.OnClose = () =>
             {
@@ -346,7 +401,9 @@ namespace UCT.EventSystem
                     MainControl.Instance.playerControl.canMove = true;
                     SettingsStorage.pause = false;
                     if (useEvent)
+                    {
                         SetTriggering(eventName);
+                    }
                 });
             };
         }
@@ -363,7 +420,9 @@ namespace UCT.EventSystem
             Action action = null;
             action += () => TeleportPlayer(newPos, false, "");
             if (useEvent)
+            {
                 action += () => SetTriggering(eventName);
+            }
 
             GameUtilityService.FadeOutAndSwitchScene(sceneName, Color.black, action, isBgmMuted);
         }
@@ -374,12 +433,18 @@ namespace UCT.EventSystem
         /// </summary>
         private static void TeleportPlayer(Vector2 newPosition, bool useEvent, string eventName)
         {
-            if (!MainControl.overworldPlayerBehaviour) return;
+            if (!MainControl.overworldPlayerBehaviour)
+            {
+                return;
+            }
+
             MainControl.overworldPlayerBehaviour.transform.position = newPosition;
             MainControl.Instance.playerControl.playerLastPos = newPosition;
 
             if (useEvent)
+            {
                 SetTriggering(eventName);
+            }
         }
 
         private static void OpenSaveBox(bool useEvent, string eventName)
@@ -387,26 +452,34 @@ namespace UCT.EventSystem
             SaveBoxController.Instance.OpenSaveBox();
 
             if (useEvent)
+            {
                 SetTriggering(eventName);
+            }
         }
 
         private static void MoveMainCamera(Vector2 newPosition, float duration, Ease ease, bool useEvent,
             string eventName)
         {
             if (duration < 0)
+            {
                 UnityEngine.Debug.LogError($"{duration} 应当大于0.");
+            }
 
             var mainCamera = CameraFollowPlayer.Instance;
             mainCamera.isFollow = false;
             if (mainCamera)
+            {
                 mainCamera.transform
                     .DOMove(new Vector3(newPosition.x, newPosition.y, mainCamera.transform.position.z), duration)
                     .SetEase(ease)
                     .OnKill(() =>
                     {
                         if (useEvent)
+                        {
                             SetTriggering(eventName);
+                        }
                     });
+            }
         }
 
         private static void MoveMainCameraRelativeToPlayer(Vector2 newPosition, float duration, Ease ease,
@@ -415,7 +488,10 @@ namespace UCT.EventSystem
         {
             var newPos = MainControl.overworldPlayerBehaviour.transform.position + (Vector3)newPosition;
             if (CameraFollowPlayer.Instance.isLimit)
+            {
                 newPos = CameraFollowPlayer.Instance.GetLimitedPosition(newPos);
+            }
+
             MoveMainCamera(newPos, duration, ease, useEvent, eventName);
         }
 
@@ -423,14 +499,18 @@ namespace UCT.EventSystem
         {
             CameraFollowPlayer.Instance.isFollow = isFollow;
             if (useEvent)
+            {
                 SetTriggering(eventName);
+            }
         }
 
         private static void PlayerCanMove(bool canMove, bool useEvent, string eventName)
         {
             MainControl.Instance.playerControl.canMove = canMove;
             if (useEvent)
+            {
                 SetTriggering(eventName);
+            }
         }
 
         //TODO:多战斗补全
@@ -438,7 +518,9 @@ namespace UCT.EventSystem
         {
             SettingsController.Instance.Animator.SetBool(Open, true);
             if (useEvent)
+            {
                 SetTriggering(eventName);
+            }
         }
 
         private static void MakePlayerTranslucent(float duration, bool useEvent, string eventName)
@@ -449,22 +531,28 @@ namespace UCT.EventSystem
             {
                 MainControl.overworldPlayerBehaviour.spriteRenderer.color = Color.white;
                 if (useEvent)
+                {
                     SetTriggering(eventName);
+                }
             });
         }
 
         private static void MakePlayerSpin(float duration, bool useEvent, string eventName)
         {
             MainControl.Instance.playerControl.canMove = false;
+            SettingsStorage.pause = true;
             MainControl.overworldPlayerBehaviour.TransitionToStateIfNeeded(StateType.Spin);
 
 
             Timer.Register(duration, () =>
             {
                 MainControl.Instance.playerControl.canMove = true;
+                SettingsStorage.pause = false;
                 MainControl.overworldPlayerBehaviour.TransitionToStateIfNeeded(StateType.Idle);
                 if (useEvent)
+                {
                     SetTriggering(eventName);
+                }
             });
         }
 
@@ -488,18 +576,26 @@ namespace UCT.EventSystem
             MainControl.Instance.playerControl.canMove = false;
 
             var colliders = MainControl.overworldPlayerBehaviour.GetComponentsInChildren<Collider2D>();
-            foreach (var collider in colliders) collider.enabled = false;
+            foreach (var collider in colliders)
+            {
+                collider.enabled = false;
+            }
 
             MainControl.overworldPlayerBehaviour.transform
                 .DOMove(newPosition, duration)
                 .SetEase(ease)
                 .OnKill(() =>
                 {
-                    foreach (var collider in colliders) collider.enabled = true;
+                    foreach (var collider in colliders)
+                    {
+                        collider.enabled = true;
+                    }
 
                     MainControl.Instance.playerControl.canMove = true;
                     if (useEvent)
+                    {
                         SetTriggering(eventName);
+                    }
                 });
         }
 
@@ -508,14 +604,19 @@ namespace UCT.EventSystem
             var obj = GameObject.Find("ObjectPool").GetComponent<ObjectPool>().GetFromPool<Transform>();
             obj.transform.position = MainControl.overworldPlayerBehaviour.transform.position;
             if (useEvent)
+            {
                 SetTriggering(eventName);
+            }
         }
 
         private static void WaitingForSecond(float duration, bool useEvent, string eventName)
         {
             Timer.Register(duration, () =>
             {
-                if (useEvent) SetTriggering(eventName);
+                if (useEvent)
+                {
+                    SetTriggering(eventName);
+                }
             });
         }
 
@@ -525,14 +626,20 @@ namespace UCT.EventSystem
             Timer.Register(duration, () =>
             {
                 MainControl.Instance.playerControl.canMove = true;
-                if (useEvent) SetTriggering(eventName);
+                if (useEvent)
+                {
+                    SetTriggering(eventName);
+                }
             });
         }
 
         private static void PlayUIFx(int index, bool useEvent, string eventName)
         {
             AudioController.Instance.GetFx(index, MainControl.Instance.AudioControl.fxClipUI);
-            if (useEvent) SetTriggering(eventName);
+            if (useEvent)
+            {
+                SetTriggering(eventName);
+            }
         }
 
         private static void BannedBGM(float duration, bool useEvent, string eventName)
@@ -542,7 +649,10 @@ namespace UCT.EventSystem
                 .SetEase(Ease.Linear)
                 .OnKill(() =>
                 {
-                    if (useEvent) SetTriggering(eventName);
+                    if (useEvent)
+                    {
+                        SetTriggering(eventName);
+                    }
                 });
         }
 
@@ -560,7 +670,10 @@ namespace UCT.EventSystem
                         .SetEase(Ease.Linear)
                         .OnKill(() =>
                         {
-                            if (useEvent) SetTriggering(eventName);
+                            if (useEvent)
+                            {
+                                SetTriggering(eventName);
+                            }
                         })
                     )
                 );
@@ -604,6 +717,7 @@ namespace UCT.EventSystem
             var method = MethodDictionary.FirstOrDefault(kv => kv.Key.MethodName == methodName).Value;
 
             if (method != null)
+            {
                 switch (tag)
                 {
                     case "Vector2Ease":
@@ -644,8 +758,11 @@ namespace UCT.EventSystem
                         method.Invoke(parameter1, useEvent, eventName);
                         break;
                 }
+            }
             else
+            {
                 Console.WriteLine($"方法 {methodName} 未找到！");
+            }
         }
     }
 
