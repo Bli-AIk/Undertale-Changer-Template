@@ -1,12 +1,12 @@
-# CHANGELOG
+# CHANGELOG Update Log
 
-This document contains the update log for UCT, which usually outlines short-term plans and arrangements.
+This document describes the update log for UCT, which typically outlines short-term plans and arrangements.
 
-For information on long-term update plans for UCT, please refer to [PLAN.md](PLAN.md), [PLAN_zh-CN.md](PLAN_zh-CN.md), or [PLAN_zh-TW.md](PLAN_zh-TW.md).
+For long-term update plans regarding UCT, please refer to [PLAN.md](PLAN.md), [PLAN_zh-CN.md](PLAN_zh-CN.md), or [PLAN_zh-TW.md](PLAN_zh-TW.md).
 
-For the specific update logs of UCT, please check [CHANGELOG.md](CHANGELOG.md), [CHANGELOG_zh-CN.md](CHANGELOG_zh-CN.md), or [CHANGELOG_zh-TW.md](CHANGELOG_zh-TW.md).
+For specific update logs of UCT, please refer to [CHANGELOG.md](CHANGELOG.md), [CHANGELOG_zh-CN.md](CHANGELOG_zh-CN.md), or [CHANGELOG_zh-TW.md](CHANGELOG_zh-TW.md).
 
-**Simplified Chinese** update plans/update logs are **prioritized**, and other languages will be translated using GPT at **version number changes**.
+The update plans/update logs in **Simplified Chinese** will be **updated first**; other languages will be translated using GPT when **the version number changes**.
 
 ## About Version Number Changes
 
@@ -14,199 +14,223 @@ The version number format for UTR is:
 
 <p style="text-align: center;"><strong>v1.X.X(f(n))(- partN(a))</strong></p>
 
-The specific meanings are as follows:
+Its specific meaning is as follows:
 
 1. **Major Version Number (1)** 
-   - This is unlikely to change.
+   - This may never change.
 
 2. **Minor Version Number (X)** 
-   - Changes when one category of the long-term update plan is completed.
+   - Changes when completing a class in the long-term update plan.
 
 3. **Patch Version Number (X)** 
-   - Changes after completing a phased update.
+   - Changes after completing a phase update.
 
 4. **f(n)** 
    - Indicates that the plans listed in the update log have changed. 
-     - The first change is marked as `f`, and subsequent changes are `f(n-1)` (e.g., `f1` indicates the second change).
-   - Changed plans will be temporarily listed in **[Pending Updates for Subsequent Versions](#後續版本待定更新)**.
+     - The first change is marked as `f`, and subsequent changes as `f(n-1)` (e.g., `f1` indicates the second change).
+   - Changed plans will be temporarily listed under **[Pending Updates for Subsequent Versions](#后续版本待定更新)**.
 
 5. **- partN(a)** 
-   - Represents specific progress in the phased update, with updates detailed within this document. 
-     - `partN`: The N-th update is completed within the phase. 
-     - `partN(a)`: The a-th small update of the N-th update is completed.
+   - Indicates specific progress in phase updates, the detailed updates are written in this document. 
+     - `partN`: The N-th update completed in the phase. 
+     - `partN(a)`: The a-th minor update completed for the N-th update.
 
-## v1.0.5 -> v1.0.6 OW Event System
+##  v1.0.6 -> v1.0.7 Major Refactor
 
-- [ ] Add visual scene transition window
-- [ ] Add other triggering event cases: character state triggered, dialogue triggered, gain/lose item triggered, enter/exit combat triggered
-- [x] Allow the Overworld scene to check and complete language packs and event system files upon loading
-- [x] Add a runnable puzzle (pull lever to open door) to the Ruins example scene
-- [ ] Add event system examples with puzzle scenes:
-  - [x] Ruins leaf maze room
-  - [ ] Snow Town ice-skating decryption room
-  - [ ] Waterfall four-flower connection room
-  - [ ] Heat area steam jump room
-- [ ] Let the OW event system come to a conclusion. It should end.
+- [ ] Conduct a major refactor based on code quality analysis from **[Codacy](https://app.codacy.com/gh/Bli-AIk/Undertale-Changer-Template/)**.
 
-2024/12/16 Plan (1)
+- [ ] Write a markdown document for OW's update content and prepare a promotional video.
 
-2024/12/25 Plan (2)
+- [ ] Archive event system data.
 
-2025/2/8 Plan (3)
+- [ ] Merge into the **main** branch.
 
-2025/2/3 Plan (4-10)
+February 16, 2025 Plan (3)
 
-## v1.0.4 -> v1.0.5f Overworld Preliminary Restructure
+February 17, 2025 Plan (2)
 
-- [x] Add a "Welcome to UCT" editor window
-- [x] Integrate FSM system
-- [x] Add Fact, Rule, Entry structures for the event system
-- [x] Rewrite inspector view for the Fact, Rule, Entry structure list
-- [x] Rework OverworldObjTrigger
-- [x] Add inspector interface for TypeWritter
+February 18, 2025 Plan (1, 4)
 
-2024/12/12 Plan (6)
+##  v1.0.5 -> v1.0.6 OW Event System
 
-2024/12/15 Plan (1)
+- [x] Enable the Overworld scene to detect and complete language packs and event system files at load time.
+- [x] Add runnable puzzles (pulling levers to open doors) to the ruins example scene.
+- [x] Ruins leaf maze room.
+- [x] Integrate ink language reading with JSON detection and conversion.
+- [x] Allow OW dialogues to insert the original Japanese item choice branches.
+- [x] Predefine character expressions and sounds using rich text tags.
 
-2024/12/22 Plan (2-5)
+February 8, 2025 Plan (1)
 
-2025/2/3 completed
+February 3, 2025 Plan (2-3)
 
-## v1.0.3 -> v1.0.4 UI Display Fixes and Scene Naming Expansion
+February 16, 2025 Plan (3-6)
 
-- [x] Change the anchor points of UI boxes in OW scenes to the center.
-- [x] Place the main camera in DontDestroyOnLoad and generated by MainControlSummon (similar to MainControl, BGMControl generation).
-- [x] Check and fix UI position and size for the Rename scene.
-- [x] Check and fix UI position and size for the Menu scene.
-- [x] Check and fix UI position and size for PPT and Start scenes.
-- [x] Check and fix UI position and size for OW scene.
-- [x] Check and fix UI position and size for Gameover scene.
-- [x] Check and fix UI position and size for Battle scene.
-- [x] Replace transparent character indentations with <indent>.
-- [x] Adjust the English font to fix character overlap issues.
+## v1.0.4 -> v1.0.5f Preliminary Refactor of Overworld
+
+- [x] Add a “Welcome to UCT” editor window.
+- [x] Add FSM system.
+- [x] Add structures for event system: Fact, Rule, Entry.
+- [x] Rewrite checker view for Fact, Rule, Entry structure list.
+- [x] Redo OverworldObjTrigger.
+- [x] Add the checker interface for TypeWriter.
+
+December 12, 2024 Plan (6)
+
+December 15, 2024 Plan (1)
+
+December 22, 2024 Plan (2-5)
+
+February 3, 2025 Completed
+
+## v1.0.3 -> v1.0.4 UI Display Fixes and Naming Scene Extensions
+
+- [x] Center the axis points of the frame UI in OW scenes.
+- [x] Place the main camera in DontDestroyOnLoad and have it generated by MainControlSummon. (Similar to how MainControl and BGMControl are generated)
+- [x] Check and fix the UI position and size of the Rename scene.
+- [x] Check and fix the UI position and size of the Menu scene.
+- [x] Check and fix the UI position and size of the PPT and Start scenes.
+- [x] Check and fix the UI position and size of the OW scene.
+- [x] Check and fix the UI position and size of the Gameover scene.
+- [x] Check and fix the UI position and size of the Battle scene.
+- [x] Replace transparent characters with \<indent\> for indentation.
+- [x] Adjust the English font to fix character overlapping issues.
 - [x] Introduce [Fusion](https://github.com/TakWolf/fusion-pixel-font) 8px font.
-- [x] Expand the character count for the naming interface, categorized into basic letters, numbers, symbols, Latin letters, Cyrillic letters, Greek letters, etc.
-- [x] Introduce Chinese, Japanese, and Korean spelling libraries.
-- [x] Add Chinese input support to the naming interface.
-- [x] Add Japanese input support to the naming interface.
-- [x] Add Korean input support to the naming interface.
-- [x] Use GitHub Actions with the ChatGPT API for automatic translation of [PLAN.md](PLAN.md) and [CHANGELOG.md](CHANGELOG.md).
+- [x] Expand the number of characters in the naming interface, dividing them into basic letters, numbers and symbols, Latin letters, Cyrillic letters, Greek letters, etc.
+- [x] Introduce spelling libraries for Chinese, Japanese, and Korean languages.
+- [x] Add Chinese input support in the naming interface.
+- [x] Add Japanese input support in the naming interface.
+- [x] Add Korean input support in the naming interface.
+- [x] Automatically translate [PLAN.md](PLAN.md) and [CHANGELOG.md](CHANGELOG.md) via Github Actions and ChatGPT API.
 - [x] Merge this version into Main.
 
-2024/11/4 Plan (1-2)
+November 4, 2024 Plan (1-2)
 
-2024/11/6 Plan (3-9)
+November 6, 2024 Plan (3-9)
 
-2024/11/7 Plan (10-16)
+November 7, 2024 Plan (10-16)
 
-2024/11/11 Plan (17)
+November 11, 2024 Plan (17)
 
-2024/11/12 Plan (18)
+November 12, 2024 Plan (18)
 
-2024/11/19 completed
+November 19, 2024 Completed
 
 ## v1.0.2 -> v1.0.3 Bug Fixes
 
-- [x] Fix the issue where executing Fight in the Battle scene causes enemy dialogue to freeze.
-- [x] Fix the game/editor crash issue after using an item in the Battle scene.
-- [x] Fix the issue where using an item in the Battle scene while the ButtonLayer typewriter input was not finished still shows ButtonLayer text.
-- [x] Fix the issue where the OW scene still uses deprecated box UI.
-- [x] Fix the issue where the typewriter cannot recognize <X> rich text.
-- [x] Add a new rich text <JumpText> for skipping large chunks of text input.
+- [x] Fix the issue in the Battle scene where executing Fight causes enemy dialogue to freeze.
+- [x] Fix the issue in the Battle scene where using an item causes the game/editor to crash.
+- [x] Fix the typing issue in the Battle scene where using an item before the ButtonLayer typing is complete still displays ButtonLayer text.
+- [x] Fix the issue where the OW scene still uses deprecated frame UI.
+- [x] Fix the typing machine's inability to recognize \<X\> rich text.
+- [x] Add a new rich text \<JumpText\> for skipping large segments of text in the typing machine.
 
-2024/11/4 Plan (1-2, 4-5)
+November 4, 2024 Plan (1-2, 4-5)
 
-2024/11/5 Plan (3, 6)
+November 5, 2024 Plan (3, 6)
 
-2024/11/6 completed
+November 6, 2024 Completed
 
-Note: The current OW scene UI fix is only effective in the corridor scene and will be fixed in v1.0.4.
+Note: The UI fix for the OW scene is currently only effective in the corridor scene and will be fixed in v1.0.4.
 
 ## v1.0.2 - Preface
 
-First of all, I made a big mistake—since the update of UCT to v1.0.2, there have been numerous updates, but its version number still remains at v1.0.2. This is the result of long-term neglect of the update log.
+First, I made a big mistake—since UCT updated to v1.0.2, there have been numerous updates, but its version number has remained at v1.0.2. This is the result of neglecting the update log for a long time.
 
-In fact, the initial update to UCT v1.0.0 was, in a sense, a mistake—I thought at that time that my template was completed, but it seems now that it is still far from that. Nevertheless, changing the version number back would be more troublesome. So let's leave it as is for now.
+In fact, the initial update of UCT to v1.0.0 was, in some sense, a mistake—at that time I thought my template was finished, but now it seems there is still a long way to go. However, changing the version number back would be more troublesome. So let's leave it as is for now.
 
-In the last update of v1.0.2, I added this file—**CHANGELOG.md**—as a record of the content of each update and plans for the next update.
+In the final update of v1.0.2, I added this file—**CHANGELOG.md**—to record the contents of each update and plans for the next update.
 
-Version number updates will follow this rule:
+The version number updates will follow this rule:
 
-1. When a **PATCH** update occurs (X in 1.0.X), it typically means this update is a bug fix or restructuring of existing features, without adding new functions or content.
-2. When a **MINOR** update occurs (X in 1.X.0), it usually means this update adds new features or content.
-3. When a **MAJOR** update occurs (X in X.0.0), it typically means… <small>*Well, I guess MAJOR will never change.*</small>
-4. Before updating to the next version, the version number will have the suffix -part X, where X is the number of completed tasks.
+1. When a **PATCH** update occurs (the **X** in 1.0.X), it generally means that this update is a bug fix or a modification/refactor of existing functions, without adding new features or content.
+2. When a **MINOR** update occurs (the **X** in 1.X.0), it generally indicates that this update adds new features or content.
+3. When a **MAJOR** update occurs (the **X** in X.0.0), it generally means… <small>*Well, I guess MAJOR will never change.*</small>
+4. Before updating to the next version, the version number will have the suffix -part X, where X is the number of completed task items.
 
-The format of updates is as follows:
+The update format is as follows:
 
-#### vX.X.0 -> vX.X.1 Overview of Update Content
+#### vX.X.0 -> vX.X.1 Overview of Updates
 
-- [x] Task 1 (completed)
-- [x] Task 2 (completed)
+- [x] Task 1 (Completed)
+- [x] Task 2 (Completed)
 
-Date XX/XX/XX Plan
+XX Year/XX Month/XX Day Plan
 
-Date XX/XX/XX Completed
+XX Year/XX Month/XX Day Completed
 
-#### vX.X.1 -> vX.X.2 Overview of Update Content
+#### vX.X.1 -> vX.X.2 Overview of Updates
 
-- [ ] Task 1 (not completed)
-- [ ] Task 2 (not completed)
+- [ ] Task 1 (Not Completed)
+- [ ] Task 2 (Not Completed)
 
-Date XX/XX/XX Plan (x-x task count)
+XX Year/XX Month/XX Day Plan (x-x tasks)
 
-Date XX/XX/XX Completed
+XX Year/XX Month/XX Day Completed
 
-The completion time is the time of the last completed task, as mentioned above.
+The completion time is the time of the last item completed, that is all.
 
-2024/11/4 Plan
+November 4, 2024 Plan
 
-2024/11/4 Completed
+November 4, 2024 Completed
 
 ## Pending Updates for Subsequent Versions
 
-### UI Optimization and Expansion
-(Originally planned: v1.0.5 -> v1.0.6)
+### UI Optimization and Expansion 
+(Originally planned: v1.0.5 -> v1.0.6) 
 
-- [ ] Add enlargement to 640x480. (See update plan for details)
-- [ ] Separate MENU scene drawing logic from execution logic.
-- [ ] Separate OW save page drawing logic from execution logic.
-- [ ] Store existing UI data in ScriptableObject.
-- [ ] Add UI manager.
-- [ ] Add Dr style MENU interface.
-- [ ] Add Dr style settings interface.
-- [ ] Add Dr style OW save interface.
-- [ ] Add in-game console.
-- [ ] Merge this version into Main.
+- [ ] Add 640x480 scaling. (See update plan for details) 
+- [ ] Separate the drawing logic and execution logic of the MENU scene. 
+- [ ] Separate the drawing logic and execution logic of the OW save page. 
+- [ ] Store current UI data in ScriptableObject. 
+- [ ] Add a UI manager. 
+- [ ] Add a Dr-style MENU interface. 
+- [ ] Add a Dr-style settings interface. 
+- [ ] Add a Dr-style OW save interface. 
+- [ ] Add an in-game console. 
+- [ ] Merge this version into Main. 
 
-2024/11/12 Plan (1-8, 10)
+November 12, 2024 Plan (1-8, 10) 
 
-2024/11/29 Plan (9)
+November 29, 2024 Plan (9) 
 
-### Settings Page Restructure and Expansion
-(Originally planned: v1.0.4 -> v1.0.5)
+### Settings Page Refactor and Expansion 
+(Originally planned: v1.0.4 -> v1.0.5) 
 
-- [ ] Separate settings page drawing logic from execution logic.
+- [ ] Separate the drawing logic and execution logic of the settings page. 
 
-- [x] Refine settings: video settings, audio settings, input settings.
+- [x] Refine the settings: video settings, audio settings, input settings. 
 
-- [ ] Add text settings: historical text.
+- [ ] Add text settings: history text.
 
 - [ ] Add text settings: typing speed.
 
-- [ ] Add text settings: CC subtitles.
+- [ ] Add text settings: CC subtitles. 
 
 - [ ] Add achievement system.
 
-- [ ] Add auto-layout achievement page.
+- [ ] Add an auto-layout achievement page.
 
-- [ ] Add achievement settings.
+- [ ] Add achievement settings. 
 
-- [ ] Expand language settings: force unicode, force full-width.
+- [ ] Expand language settings: Force Unicode, Force Full-width. 
 
-- [ ] Add accessibility settings: narrator, color-blind mode.
+- [ ] Add accessibility settings: Narrator, Colorblind mode. 
 
-2024/11/4 Plan (1-2)
+November 4, 2024 Plan (1-2) 
 
-2024/11/29 Plan (3-8)
+November 29, 2024 Plan (3-8) 
+
+###  v1.0.5 -> v1.0.6 OW Event System
+
+- [ ] Add a visual scene switching window.
+- [ ] Add other trigger events: character status trigger, dialogue trigger, item gain/loss trigger, battle start/end trigger.
+- [ ] Snow Town ice skating puzzle room.
+- [ ] Waterfall flower connection room.
+- [ ] Hot zone steam jump room.
+
+December 16, 2024 Plan (1)
+
+December 25, 2024 Plan (2)
+
+February 3, 2025 Plan (3-5)
