@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using UCT.Control;
@@ -6,6 +7,7 @@ using UCT.Global.Core;
 using UCT.Global.Settings;
 using UCT.Service;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace UCT.Battle
 {
@@ -44,17 +46,23 @@ namespace UCT.Battle
 
         private void Update()
         {
-            if (followMode != FollowMode.NoFollow)
+            if (followMode == FollowMode.NoFollow)
             {
-                for (var i = 0; i < boxColliderList.Count; i++)
+                return;
+            }
+
+            for (var i = 0; i < boxColliderList.Count; i++)
+            {
+                switch (followMode)
                 {
-                    switch (followMode)
-                    {
-                        case FollowMode.CutFollow:
-                            boxColliderList[i].size = boxColliderList[i].transform.GetComponent<SpriteRenderer>().size -
-                                                      boxColliderSizes[i];
-                            break;
-                    }
+                    case FollowMode.CutFollow:
+                        boxColliderList[i].size = boxColliderList[i].transform.GetComponent<SpriteRenderer>().size -
+                                                  boxColliderSizes[i];
+                        break;
+                    case FollowMode.NoFollow:
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
         }

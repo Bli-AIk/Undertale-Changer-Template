@@ -12,8 +12,8 @@ namespace UCT.Overworld
     /// </summary>
     public class BackpackBehaviour : MonoBehaviour
     {
-        public const int BoxZAxisVisible = 5;
-        public const int BoxZAxisInvisible = -50;
+        public static int BoxZAxisVisible => 5;
+        public static int BoxZAxisInvisible => -50;
         private const float ItemBoxY = -8.9f;
         private const float InfoBoxY = -10.3f;
         public static BackpackBehaviour Instance;

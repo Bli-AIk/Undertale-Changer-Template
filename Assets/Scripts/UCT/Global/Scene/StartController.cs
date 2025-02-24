@@ -58,18 +58,21 @@ namespace UCT.Global.Scene
             {
                 switch (_layer)
                 {
+                    case -1:
+                        break;
                     case 0:
                         _layer = -1;
                         _title.transform.DOLocalMoveY(-12, 2).SetEase(Ease.InOutSine).OnKill(TextAnim);
                         break;
 
                     case 1:
-
                         _textNotice.DOColor(Color.clear, 1).SetEase(Ease.Linear);
                         GameUtilityService.FadeOutAndSwitchScene(
                             string.IsNullOrEmpty(MainControl.Instance.playerControl.playerName) ? "Rename" : "Menu",
                             Color.black, null, false, 2f);
                         break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
             }
 

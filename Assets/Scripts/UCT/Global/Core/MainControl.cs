@@ -30,8 +30,8 @@ namespace UCT.Global.Core
             Overworld,
             InBattle
         }
-
-        [ReadOnly] [Header("内置语言包总数")] public const int LanguagePackageInternalNumber = 3;
+        
+        public static int LanguagePackageInternalNumber => 3;
 
         public static MainControl Instance;
 

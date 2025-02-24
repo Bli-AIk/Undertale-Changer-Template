@@ -586,7 +586,7 @@ namespace UCT.Global.Settings
             settingsOptionsForSetting.AddRange(settingsOptions);
             _optionKeyText.text += BuildSettingText(settingsOptionsForSetting, GetOptionKeyText);
             _optionValueText.text += BuildSettingText(settingsOptionsForSetting, GetOptionValueText);
-        } // ReSharper disable Unity.PerformanceAnalysis
+        }
         private static string BuildSettingText(List<SettingsOption> settingsOptions,
             Func<SettingsOption, string> textExtractor)
         {
@@ -602,6 +602,8 @@ namespace UCT.Global.Settings
                     case OptionType.SelectionBasedTrue or OptionType.ConfigurableKeyTrue:
                         result.Append("<color=yellow>");
                         break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
 
                 result.Append(extractor);

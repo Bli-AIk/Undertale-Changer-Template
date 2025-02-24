@@ -1,5 +1,7 @@
+using System;
 using TMPro;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace UCT.Global.UI
 {
@@ -231,6 +233,10 @@ namespace UCT.Global.UI
                     }
 
                     break;
+                case DynamicTMPType.None:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             for (var i = 0; i < textInfo.meshInfo.Length; i++)
