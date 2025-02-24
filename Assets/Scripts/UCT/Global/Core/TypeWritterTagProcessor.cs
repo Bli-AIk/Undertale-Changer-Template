@@ -5,10 +5,10 @@ using System.Linq;
 using Ink.Runtime;
 using MEC;
 using TMPro;
+using UCT.Control;
 using UCT.Global.Audio;
 using UCT.Global.Scene;
 using UCT.Global.Settings;
-using UCT.Overworld;
 using UCT.Service;
 using UnityEngine;
 
@@ -33,8 +33,12 @@ namespace UCT.Global.Core
         /// <param name="yieldString">打字机停顿过程中会逐步输出的文本内容。根据yieldNum决定一次的输出字数。</param>
         /// <param name="startPassText">是否执行PassText</param>
         /// <returns></returns>
-        public static void TypeWritterProcessTag(TypeWritter typeWritter, TMP_Text tmpText,
-            ref int index, out int yieldNum, out string yieldString, out bool startPassText)
+        public static void TypeWritterProcessTag(TypeWritter typeWritter,
+            TMP_Text tmpText,
+            ref int index,
+            out int yieldNum,
+            out string yieldString,
+            out bool startPassText)
         {
             yieldNum = 0;
             yieldString = null;
@@ -81,8 +85,13 @@ namespace UCT.Global.Core
             }
         }
 
-        private static int TypeWritterExecuteHalfTag(TypeWritter typeWritter, TMP_Text tmpText, string spText,
-            int index, ref int yieldNum, ref string yieldString, ref bool startPassText)
+        private static int TypeWritterExecuteHalfTag(TypeWritter typeWritter,
+            TMP_Text tmpText,
+            string spText,
+            int index,
+            ref int yieldNum,
+            ref string yieldString,
+            ref bool startPassText)
         {
             object[] args = { typeWritter, tmpText, spText, index, yieldNum, startPassText };
 
@@ -92,7 +101,8 @@ namespace UCT.Global.Core
                     ref startPassText);
         }
 
-        private static bool TryGetHalfValue<T>(string spText, Dictionary<string, IMethodWrapper<T>> dictionary,
+        private static bool TryGetHalfValue<T>(string spText,
+            Dictionary<string, IMethodWrapper<T>> dictionary,
             out IMethodWrapper<T> handler)
         {
             string longestMatch = null;
@@ -133,8 +143,13 @@ namespace UCT.Global.Core
             typeWritter.PassTextWithDelay(spText, delay);
         }
 
-        private static int TypeWritterExecuteFullTag(TypeWritter typeWritter, TMP_Text tmpText, string spText,
-            int index, ref int yieldNum, ref string yieldString, ref bool startPassText)
+        private static int TypeWritterExecuteFullTag(TypeWritter typeWritter,
+            TMP_Text tmpText,
+            string spText,
+            int index,
+            ref int yieldNum,
+            ref string yieldString,
+            ref bool startPassText)
         {
             var data = new FullTagData
             {
@@ -169,7 +184,9 @@ namespace UCT.Global.Core
             return index;
         }
 
-        private static void FullTagDefaultCase(FullTagData data, TypeWritter typeWritter, TMP_Text tmpText,
+        private static void FullTagDefaultCase(FullTagData data,
+            TypeWritter typeWritter,
+            TMP_Text tmpText,
             string spText)
         {
             if (!string.IsNullOrEmpty(data.OverWriteSpText))
@@ -182,6 +199,65 @@ namespace UCT.Global.Core
 
         private static void FullTagDefaultCase(TypeWritter typeWritter, TMP_Text tmpText, string spText)
         {
+            if (!TextMeshProRichTextChecker.ContainsRichText(spText))
+            {
+                if (spText.Length >= 2 && spText[0] == '<' && spText[2] == '>')
+                {
+                    spText = spText[1].ToString();
+                }
+                else if (spText.Length - 2 > 0 && spText[1] == '-' && spText[^2] == '-')
+                {
+                    spText = SkipSomeText(typeWritter, spText);
+                }
+                else
+                {
+                    ParseCharacterRichText(typeWritter, spText);
+                    return;
+                }
+            }
+
+            typeWritter.endString += spText;
+            tmpText.text = typeWritter.endString;
+        }
+
+        private static void ParseCharacterRichText(TypeWritter typeWritter, string spText)
+        {
+            var standardizeCharacterKey = CharacterSpriteManager.StandardizeCharacterKey(spText);
+            var parsedValue = CharacterSpriteManager.ParseTernary(standardizeCharacterKey.result);
+            if (parsedValue == null)
+            {
+                return;
+            }
+
+            typeWritter.characterSpriteManager = standardizeCharacterKey.manager;
+            typeWritter.fxClip = AudioController.GetClipFromCharacterSpriteManager(
+                parsedValue.Value.AudioClip,
+                typeWritter.characterSpriteManager);
+
+            if (string.Equals(parsedValue.Value.Manager, "default",
+                    StringComparison.CurrentCultureIgnoreCase))
+            {
+                typeWritter.overworldSpriteChanger.spriteExpressionCollection = null;
+            }
+            else
+            {
+                for (var index = 0; index < typeWritter.characterSpriteManager.spriteKeys.Count; index++)
+                {
+                    var spriteKey = typeWritter.characterSpriteManager.spriteKeys[index];
+                    var spriteValue = typeWritter.characterSpriteManager.spriteValues[index];
+                    if (string.Equals(spriteKey, parsedValue.Value.Sprite,
+                            StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        typeWritter.overworldSpriteChanger.spriteExpressionCollection = spriteValue;
+                    }
+                }
+            }
+
+            typeWritter.overworldSpriteChanger.UpdateSpriteDisplay();
+        }
+
+        private static string ConvertSkipText(TypeWritter typeWritter, string spText)
+        {
             if (spText.Length >= 2 && spText[0] == '<' && spText[2] == '>')
             {
                 spText = spText[1].ToString();
@@ -191,8 +267,7 @@ namespace UCT.Global.Core
                 spText = SkipSomeText(typeWritter, spText);
             }
 
-            typeWritter.endString += spText;
-            tmpText.text = typeWritter.endString;
+            return spText;
         }
 
         private static string SkipSomeText(TypeWritter typeWritter, string spText)
@@ -203,13 +278,8 @@ namespace UCT.Global.Core
                 return spText;
             }
 
-            TypeWritterGetFx(typeWritter);
+            TypeWritterPlayFx(typeWritter);
             typeWritter.isUsedFx = true;
-
-            if (typeWritter.overworldSpriteChanger)
-            {
-                typeWritter.overworldSpriteChanger.isIgnoreConditions = true;
-            }
 
             return spText;
         }
@@ -249,11 +319,12 @@ namespace UCT.Global.Core
                                          typeWritter.speedSlow * 0.25f * Convert.ToInt32(!SettingsStorage.textWidth));
         }
 
-        private static void TypeWritterGetFx(TypeWritter typeWritter)
+        public static void TypeWritterPlayFx(TypeWritter typeWritter)
         {
-            AudioController.Instance.GetFx(typeWritter.fx, MainControl.Instance.AudioControl.fxClipType,
+            AudioController.Instance.PlayFx(typeWritter.fxClip,
                 typeWritter.volume, typeWritter.pitch, typeWritter.audioMixerGroup);
         }
+
 
         private static void TypeWritterFixedSpeed(TypeWritter typeWritter)
         {
@@ -272,22 +343,15 @@ namespace UCT.Global.Core
         {
             var save = spText[4..];
             save = save[..^1];
-            typeWritter.fx = int.Parse(save);
-        }
-
-        private static void SetTalkBoxImage(TypeWritter typeWritter, string spText)
-        {
-            var save = spText[7..];
-            save = save[..^1];
-            var s = int.Parse(save);
-            if (typeWritter.overworldSpriteChanger)
+            var clipFromCharacterSpriteManager = AudioController.GetClipFromCharacterSpriteManager(save);
+            if (clipFromCharacterSpriteManager.result)
             {
-                typeWritter.overworldSpriteChanger.UpdateSpriteDisplay(s);
+                typeWritter.fxClip = clipFromCharacterSpriteManager.result;
             }
 
-            if (MainControl.Instance.sceneState == MainControl.SceneState.Overworld)
+            if (clipFromCharacterSpriteManager.manager)
             {
-                TalkBoxController.Instance.Change(true, s >= 0, false);
+                typeWritter.characterSpriteManager = clipFromCharacterSpriteManager.manager;
             }
         }
 
@@ -305,8 +369,11 @@ namespace UCT.Global.Core
         /// <summary>
         ///     检测富文本符号并转换
         /// </summary>
-        public static string ConvertStaticTagHandlers(string text, string inputText, bool isData,
-            string inputName, List<string> ex)
+        public static string ConvertStaticTagHandlers(string text,
+            string inputText,
+            bool isData,
+            string inputName,
+            List<string> ex)
         {
             object[] args = { text, isData, inputName, ex };
 
@@ -327,8 +394,11 @@ namespace UCT.Global.Core
             return text + MainControl.Instance.LanguagePackControl.dataTexts[dataIndex][..^1];
         }
 
-        private static string HandleEnemyInfo(string text, string inputName, bool isData,
-            List<string> ex, int index)
+        private static string HandleEnemyInfo(string text,
+            string inputName,
+            bool isData,
+            List<string> ex,
+            int index)
         {
             return !isData && !string.IsNullOrEmpty(inputName)
                 ? text + ex[index]
@@ -489,11 +559,6 @@ namespace UCT.Global.Core
                     SetTypeWritterFont((TypeWritter)args[0], (TMP_Text)args[1], (string)args[2]);
                     return (int)args[3];
                 }),
-                ["<image="] = new MethodWrapper<int>(args =>
-                {
-                    SetTalkBoxImage((TypeWritter)args[0], (string)args[2]);
-                    return (int)args[3];
-                }),
                 ["<waitForTime="] = new MethodWrapper<int>(args =>
                 {
                     PassTextWithDelay((TypeWritter)args[0], (string)args[2]);
@@ -529,7 +594,7 @@ namespace UCT.Global.Core
                     var dialogue = typeWritter.SelectController.GetStoryDialogue();
                     dialogue = DataHandlerService.ChangeItemData(dialogue, false, new List<string>());
                     typeWritter.originString += dialogue;
-                    
+
                     return (int)args[3];
                 })
             };
@@ -587,7 +652,7 @@ namespace UCT.Global.Core
                     var data = (FullTagData)args[3];
                     if (!(typeWritter.isSkip || typeWritter.isJumpingText))
                     {
-                        TypeWritterGetFx(typeWritter);
+                        TypeWritterPlayFx(typeWritter);
                     }
 
                     data.ProceedToDefault = true;

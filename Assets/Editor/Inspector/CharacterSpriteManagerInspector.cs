@@ -32,7 +32,9 @@ namespace Editor.Inspector
         {
             var characterSpriteManager = (CharacterSpriteManager)target;
 
-            if (characterSpriteManager.spriteValues.Count == 0 || !characterSpriteManager.spriteValues[0])
+            if (characterSpriteManager.spriteValues == null ||
+                characterSpriteManager.spriteValues.Count == 0 || 
+                !characterSpriteManager.spriteValues[0])
             {
                 return base.RenderStaticPreview(assetPath, subAssets, width, height);
             }

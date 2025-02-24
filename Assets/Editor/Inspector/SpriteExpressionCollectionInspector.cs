@@ -26,7 +26,7 @@ namespace Editor.Inspector
 
         private void UpdateExpressionTimer(ref int index, ref float lastUpdateTime, float interval, int count)
         {
-            if (!(Time.realtimeSinceStartup - lastUpdateTime >= interval))
+            if (!(Time.realtimeSinceStartup - lastUpdateTime >= interval) || count == 0)
             {
                 return;
             }
@@ -40,13 +40,21 @@ namespace Editor.Inspector
         private void UpdateSpeakingTimer()
         {
             var spriteExpressionCollection = (SpriteExpressionCollection)target;
+            if (spriteExpressionCollection.speakingSprites == null)
+            {
+                return;
+            }
             UpdateExpressionTimer(ref _speakingIndex, ref _speakingLastUpdateTime, 0.2f,
                 spriteExpressionCollection.speakingSprites.Count);
         }
 
         private void UpdateBlinkingTimer()
         {
-            var spriteExpressionCollection = (SpriteExpressionCollection)target;
+            var spriteExpressionCollection = (SpriteExpressionCollection)target;  
+            if (spriteExpressionCollection.blinkingSprites == null)
+            {
+                return;
+            }
             UpdateExpressionTimer(ref _blinkingIndex, ref _blinkingLastUpdateTime, 0.2f,
                 spriteExpressionCollection.blinkingSprites.Count);
         }
@@ -54,6 +62,11 @@ namespace Editor.Inspector
 
         public override void OnInspectorGUI()
         {
+            
+            EditorGUI.BeginDisabledGroup(true);
+            EditorGUILayout.ObjectField("Object", target,
+                typeof(ScriptableObject), false);
+            EditorGUI.EndDisabledGroup();
             base.OnInspectorGUI();
             var spriteExpressionCollection = (SpriteExpressionCollection)target;
 
@@ -75,14 +88,14 @@ namespace Editor.Inspector
                     width);
             }
 
-            if (spriteExpressionCollection.speakingSprites.Count > 0 &&
+            if (spriteExpressionCollection.speakingSprites is { Count: > 0 } &&
                 spriteExpressionCollection.speakingSprites[_speakingIndex])
             {
                 lastRect = ShowSprite(lastRect,
                     spriteExpressionCollection.speakingSprites[_speakingIndex].texture, "Speaking", lineHeight, width);
             }
 
-            if (spriteExpressionCollection.blinkingSprites.Count > 0 &&
+            if (spriteExpressionCollection.blinkingSprites is { Count: > 0 } &&
                 spriteExpressionCollection.blinkingSprites[_blinkingIndex])
             {
                 ShowSprite(lastRect,

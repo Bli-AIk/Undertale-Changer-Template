@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using DG.Tweening;
-using TMPro;
 using UCT.Battle;
 using UCT.Control;
 using UCT.Extensions;
 using UCT.Global.Audio;
 using UCT.Global.Core;
 using UCT.Global.Settings;
-using UCT.Global.UI;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
@@ -125,8 +123,8 @@ namespace UCT.Service
         }
 
         /// <summary>
-        /// 切换场景。
-        /// 优先在此项目中使用这个封装后的方法进行场景切换操作。
+        ///     切换场景。
+        ///     优先在此项目中使用这个封装后的方法进行场景切换操作。
         /// </summary>
         public static void SwitchScene(string sceneName, bool async = true)
         {
@@ -155,7 +153,7 @@ namespace UCT.Service
         {
             MainControl.Instance.isSceneSwitching = true;
             MainControl.Instance.sceneSwitchingFadeImage.color = ColorEx.WhiteClear;
-            AudioController.Instance.GetFx(6, MainControl.Instance.AudioControl.fxClipUI);
+            AudioController.Instance.PlayFx(6, MainControl.Instance.AudioControl.fxClipUI);
             MainControl.Instance.sceneSwitchingFadeImage.DOColor(Color.white, 5.5f).SetEase(Ease.Linear)
                 .OnKill(() => SwitchScene(scene));
         }
@@ -169,9 +167,12 @@ namespace UCT.Service
         /// <param name="isBgmMuted">是否静音背景音乐</param>
         /// <param name="fadeTime">淡出时间，默认为0.5秒</param>
         /// <param name="isAsync">是否异步切换场景，默认为true</param>
-        public static void FadeOutAndSwitchScene(string scene, Color fadeColor, Action action = null,
+        public static void FadeOutAndSwitchScene(string scene,
+            Color fadeColor,
+            Action action = null,
             bool isBgmMuted = false,
-            float fadeTime = 0.5f, bool isAsync = true)
+            float fadeTime = 0.5f,
+            bool isAsync = true)
         {
             action += () => SwitchScene(scene, isAsync);
             MainControl.Instance.isSceneSwitching = true;
@@ -309,8 +310,10 @@ namespace UCT.Service
             return newColor;
         }
 
-        public static Color GetSimilarButDifferentColor(Color originalColor, float hueOffset = 0.05f,
-            float saturationOffset = 0.1f, float valueOffset = 0.1f)
+        public static Color GetSimilarButDifferentColor(Color originalColor,
+            float hueOffset = 0.05f,
+            float saturationOffset = 0.1f,
+            float valueOffset = 0.1f)
         {
             // 使用可控的随机生成器
             var random = new Random();

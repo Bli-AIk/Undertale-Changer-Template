@@ -156,7 +156,7 @@ namespace UCT.Overworld
             _currentSelection = SaveSelectionState.Confirmed;
             SaveService.SaveGame();
 
-            AudioController.Instance.GetFx(12, AudioControl.fxClipUI);
+            AudioController.Instance.PlayFx(12, AudioControl.fxClipUI);
             UpdateAfterSaveUI();
         }
 

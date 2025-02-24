@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -10,22 +9,23 @@ namespace UCT.Overworld
     public class CameraFollowPlayer : MonoBehaviour
     {
         public static CameraFollowPlayer Instance;
-        private void Awake()
-        {
-            Instance = this;
-        }
 
         [FormerlySerializedAs("limit")] public bool isLimit = true;
         public bool isFollow;
 
-        
+
         public float minX;
         public float minY;
         public float maxX;
         public float maxY;
-        
+
         public GameObject player;
         public Vector3 followPosition;
+
+        private void Awake()
+        {
+            Instance = this;
+        }
 
         private void Update()
         {

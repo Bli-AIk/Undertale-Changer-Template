@@ -1,6 +1,3 @@
-using UCT.Global.Core;
-using UCT.Global.Settings;
-using UCT.Service;
 using UnityEngine;
 
 namespace UCT.Battle

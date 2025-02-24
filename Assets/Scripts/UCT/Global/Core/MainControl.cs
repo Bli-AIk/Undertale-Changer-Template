@@ -102,6 +102,7 @@ namespace UCT.Global.Core
         public LanguagePackControl LanguagePackControl { get; private set; }
         public AudioControl AudioControl { get; private set; }
         public BattleControl BattleControl { get; private set; }
+        public CharacterSpriteManager[] CharacterSpriteManagers { get; private set; }
 
         private void Awake()
         {
@@ -127,6 +128,8 @@ namespace UCT.Global.Core
             Instance = this;
             InitializationLoad();
             Initialization(languagePackId);
+
+            CharacterSpriteManagers = Resources.LoadAll<CharacterSpriteManager>("CharacterSprites");
 
             if (saveDataId == -1)
             {

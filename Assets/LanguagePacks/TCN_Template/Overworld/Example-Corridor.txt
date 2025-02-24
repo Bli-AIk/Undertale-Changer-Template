@@ -40,17 +40,17 @@
 </color>去除顏色
 */
 
-DemoBox1\<image=-1><fx=0><markPoint>這是個<gradient="White to Yellow - UTC">破箱子</gradient><stop><stop...><markEnter>哈哈，咱沒做介面。
-<waitForUpdate><image=0><fx=3>* <gradient="White to Red - UTC">啊？ ？ ？ </gradient><fx=2><stop*3>怎麼說，<stop><image=1><fx=3><enter><- ->你<stop>先<stop>別<stop>急<stop>。
-<waitForUpdate><image=2><fx=2>* 現在捏，<stop>這個對話是測試<gradient="White to Yellow - UTC"><enter><- ->打字機</gradient>來的， <fx=3><stop><image=0><-就像這樣->。
-<waitForUpdate><image=0><fx=2><-* 啪的一下就說完了一句話。 -><enter><- -><stop*3><gradient="White to Red - UTC">炫。 </gradient>
-<waitForUpdate><image=2>* 啥？ <stop>你沒看清楚？ <stop><enter><- ->那我慢一點？ <stop*5><enter><-* -><stop><-啪的-><stop><-一下-><stop><-就說-><stop><-完了-><stop> <-。 -><stop*3>蛤？;
+DemoBox1\<default><markPoint>這是個<gradient="White to Yellow - UTC">破箱子</gradient><stop><stop...><markEnter>哈哈，咱沒做介面。
+<waitForUpdate><Flowey><fx=flowey, evil>* <gradient="White to Red - UTC">啊？ ？ ？ </gradient><fx=flowey><stop*3>怎麼說，<stop><Flowey, Menace><fx=flowey, evil><enter><- ->你<stop>先<stop>別<stop>急<stop>。
+<waitForUpdate><Flowey, Side>* 現在捏，<stop>這個對話是測試<gradient="White to Yellow - UTC"><enter><- ->打字機</gradient>來的， <fx=flowey, evil><stop><Flowey><-就像這樣->。
+<waitForUpdate><Flowey><-* 啪的一下就說完了一句話。 -><enter><- -><stop*3><gradient="White to Red - UTC">炫。 </gradient>
+<waitForUpdate><Flowey, Side>* 啥？ <stop>你沒看清楚？ <stop><enter><- ->那我慢一點？ <stop*5><enter><-* -><stop><-啪的-><stop><-一下-><stop><-就說-><stop><-完了-><stop> <-。 -><stop*3>蛤？;
 
-Plot\<image=-1><fx=0>* <stop...><stop...>
+Plot\<default>* <stop...><stop...>
 <waitForUpdate>* 啊<stop><stop...>沒有人？ <stop>？
-<waitForUpdate><image=0><fx=2>* 你好。
-<waitForUpdate><image=-1><fx=0>* 啊？ <stop>Flowey！ <stop><markEnter>你這傢伙躲哪去了？
-<waitForUpdate><image=2><fx=2>* 要你管。 <stop*5><image=1>現在該對戰辣！;
+<waitForUpdate><Flowey>* 你好。
+<waitForUpdate><default>* 啊？ <stop>Flowey！ <stop><markEnter>你這傢伙躲哪去了？
+<waitForUpdate><Flowey, Side>* 要你管。 <stop*5><Flowey, Menace>現在該對戰辣！;
 
-Save\<image=-1><fx=0>* (長廊的地板上鋪滿了金色的光芒，<enter><- ->這讓你充滿了<gradient="White to Red - UTC">決心</gradient>。
+Save\<default>* (長廊的地板上鋪滿了金色的光芒，<enter><- ->這讓你充滿了<gradient="White to Red - UTC">決心</gradient>。
 

@@ -54,9 +54,9 @@ namespace UCT.Global.Core
         public OverworldSpriteChanger overworldSpriteChanger;
 
         [Title("FX data")] [TabGroup("TypeWritter", "Data")]
-        public int fx;
+        public AudioClip fxClip;
 
-        [TabGroup("TypeWritter", "Data")] public bool fxRandomPitch;
+        [TabGroup("TypeWritter", "Data")] public CharacterSpriteManager characterSpriteManager;
 
         [TabGroup("TypeWritter", "Data")] public float pitch = 1;
 
@@ -98,12 +98,6 @@ namespace UCT.Global.Core
         /// </summary>
         public Action OnClose;
 
-
-        /// <summary>
-        ///     打字机启用时调用
-        /// </summary>
-        public Action OnOpen;
-
         public TypeWritterSelectController SelectController;
 
         private void Start()
@@ -127,7 +121,7 @@ namespace UCT.Global.Core
                 _itemScroller.UpdateHandleItemInput(ref SelectController.GlobalItemIndex,
                     ref SelectController.VisibleItemIndex, SelectController.Story.currentChoices.Count, _ =>
                     {
-                        AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                        AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
                         UpdateChoiceText();
                     });
             }
@@ -146,7 +140,8 @@ namespace UCT.Global.Core
             {
                 if (overworldSpriteChanger)
                 {
-                    overworldSpriteChanger.UpdateSpriteDisplay(-1);
+                    overworldSpriteChanger.spriteExpressionCollection = null;
+                    overworldSpriteChanger.UpdateSpriteDisplay();
                 }
             }
 
@@ -184,7 +179,7 @@ namespace UCT.Global.Core
             if (MainControl.Instance.sceneState == MainControl.SceneState.Overworld)
             {
                 BackpackBehaviour.Instance.Heart.transform.localPosition = new Vector3(-6.2f,
-                    4.85f - 0.9f * SelectController.VisibleItemIndex, 5);
+                    (TalkBoxController.Instance.isUp ? 4.85f : -2.95f) - 0.9f * SelectController.VisibleItemIndex, 5);
             }
         }
 
@@ -203,7 +198,7 @@ namespace UCT.Global.Core
                 SelectController.Story.ChooseChoiceIndex(SelectController.GlobalItemIndex);
                 var dialogue = SelectController.GetStoryDialogue();
                 dialogue = DataHandlerService.ChangeItemData(dialogue, false, new List<string>());
-                StartTypeWritter(dialogue, fx, _tmpText);
+                StartTypeWritter(dialogue, _tmpText);
                 _itemScroller.Close();
                 BackpackBehaviour.Instance.Heart.transform.localPosition = new Vector3(
                     BackpackBehaviour.Instance.Heart.transform.localPosition.x,
@@ -219,6 +214,7 @@ namespace UCT.Global.Core
                 {
                     return;
                 }
+
                 SelectController.IsSelecting = true;
                 UpdateChoiceText();
                 _itemScroller.Open(SelectController.Story.currentChoices.Count, 1.175f);
@@ -234,7 +230,7 @@ namespace UCT.Global.Core
         /// <summary>
         ///     开启打字机。
         /// </summary>
-        public void StartTypeWritter(string text, int inputFX, TMP_Text tmpText)
+        public void StartTypeWritter(string text, TMP_Text tmpText)
         {
             isRunning = true;
             TypeWritterTagProcessor.SetSpeedMode(this);
@@ -245,14 +241,13 @@ namespace UCT.Global.Core
             }
 
             StopAllCoroutines();
-            SetUpTypeWritter(text, inputFX, tmpText);
+            SetUpTypeWritter(text, tmpText);
 
             if (MainControl.Instance.sceneState == MainControl.SceneState.Overworld &&
                 originString.Length > "<waitForUpdate>".Length)
             {
-                TalkBoxController.Instance.Change(true,
-                    originString[.."<waitForUpdate>".Length] == "<waitForUpdate>", true,
-                    this);
+                //TalkBoxController.Instance.SetHead(false);
+                TalkBoxController.Instance.CleanText(this);
             }
 
             if (!_itemScroller && MainControl.Instance.sceneState == MainControl.SceneState.Overworld)
@@ -263,7 +258,7 @@ namespace UCT.Global.Core
             Timing.RunCoroutine(_Typing(_tmpText));
         }
 
-        private void SetUpTypeWritter(string text, int inputFX, TMP_Text tmpText)
+        private void SetUpTypeWritter(string text, TMP_Text tmpText)
         {
             passText = false;
             endString = "";
@@ -273,7 +268,6 @@ namespace UCT.Global.Core
             hpSave = MainControl.Instance.playerControl.hp;
             clockTime = skipClock;
             isSkip = false;
-            fx = inputFX;
             _tmpText = tmpText;
         }
 
@@ -306,23 +300,16 @@ namespace UCT.Global.Core
         private IEnumerator<float> _Typing(TMP_Text tmpText)
         {
             _isReadyToClose = false;
-            OnOpen?.Invoke();
             isRunning = true;
+            if (overworldSpriteChanger)
+            {
+                overworldSpriteChanger.state = SpriteExpressionCollection.State.Speaking;
+            }
 
             for (var i = 0; i < originString.Length; i++)
             {
-                if (overworldSpriteChanger)
-                {
-                    overworldSpriteChanger.isIgnoreConditions = false;
-                }
-
                 isTyping = true;
                 isUsedFx = false;
-
-                if (fxRandomPitch)
-                {
-                    pitch = Random.Range(0.25f, 1.25f);
-                }
 
                 if (!passText)
                 {
@@ -345,10 +332,21 @@ namespace UCT.Global.Core
                                 endString += yieldString[j];
                                 UpdateTmpText(tmpText);
                             }
-
-                            if (!isSkip)
+                            else if (overworldSpriteChanger)
                             {
-                                yield return TypeWritterTagProcessor.GetTypeWritterStopTime(this);
+                                overworldSpriteChanger.state = SpriteExpressionCollection.State.Default;
+                            }
+
+                            if (isSkip)
+                            {
+                                continue;
+                            }
+
+                            yield return TypeWritterTagProcessor.GetTypeWritterStopTime(this);
+
+                            if (overworldSpriteChanger)
+                            {
+                                overworldSpriteChanger.state = SpriteExpressionCollection.State.Speaking;
                             }
                         }
                     }
@@ -365,8 +363,7 @@ namespace UCT.Global.Core
 
                 if (cantString != "" && !(isSkip || isJumpingText) && !isUsedFx)
                 {
-                    AudioController.Instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipType, volume, pitch,
-                        audioMixerGroup);
+                    TypeWritterTagProcessor.TypeWritterPlayFx(this);
                 }
 
                 if (!passText)
@@ -395,17 +392,15 @@ namespace UCT.Global.Core
                 cantSkip = false;
             }
 
+            if (overworldSpriteChanger)
+            {
+                overworldSpriteChanger.state = SpriteExpressionCollection.State.Default;
+            }
+
 
             if (!passText)
             {
                 _isReadyToClose = true;
-            }
-
-
-            if (overworldSpriteChanger)
-            {
-                overworldSpriteChanger.isBackState = true;
-                overworldSpriteChanger.HandleSpriteChange();
             }
 
             isRunning = false;
@@ -608,7 +603,7 @@ namespace UCT.Global.Core
 
             if (MainControl.Instance.sceneState == MainControl.SceneState.Overworld)
             {
-                TalkBoxController.Instance.Change(false, false, true, this);
+                TalkBoxController.Instance.CleanText(this);
                 if (originString[..inputPassText.Length] == inputPassText)
                 {
                     originString = originString[inputPassText.Length..];

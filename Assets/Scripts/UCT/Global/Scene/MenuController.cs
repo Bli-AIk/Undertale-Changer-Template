@@ -159,7 +159,7 @@ namespace UCT.Global.Scene
                             Flash();
                             _textOptionsLeft.enabled = false;
                             _textOptionsRight.enabled = false;
-                            AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                            AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
                             break;
 
                         case 5:
@@ -175,7 +175,7 @@ namespace UCT.Global.Scene
                     switch (_select)
                     {
                         case 2:
-                            AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                            AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
                             if (saveNumber > 0)
                             {
                                 saveNumber--;
@@ -186,7 +186,7 @@ namespace UCT.Global.Scene
                             break;
 
                         case 3:
-                            AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                            AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
                             if (saveNumber == SaveController.GetDataNumber() - 1) //新建
                             {
                                 saveNumber++;
@@ -229,12 +229,12 @@ namespace UCT.Global.Scene
                                 Flash();
                                 _textOptionsLeft.enabled = false;
                                 _textOptionsRight.enabled = false;
-                                AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                                AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
                                 break;
                             }
 
                             MainControl.Instance.saveDataId = saveNumber;
-                            AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                            AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
                             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
                             break;
                     }
@@ -244,7 +244,7 @@ namespace UCT.Global.Scene
             {
                 _setData = false;
                 Flash();
-                AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
             }
         }
 

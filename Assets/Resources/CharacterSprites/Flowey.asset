@@ -20,5 +20,9 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 4561a7744d07e9e468e457a91a5f6c71, type: 3}
   spriteKeys:
   - Default
+  - Side
+  - Menace
   spriteValues:
   - {fileID: 11400000, guid: 0d7a6f8263429af4ea36ae242017c960, type: 2}
+  - {fileID: 11400000, guid: 6ede582db9239524ca477c4c044fccc9, type: 2}
+  - {fileID: 11400000, guid: f2fe5608c6beb7648863397252a15242, type: 2}

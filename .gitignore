@@ -79,8 +79,8 @@ crashlytics-build.properties
 /[Aa]ssets/[Pp]lugins/[Ii]gnore[Pp]aid[Pp]lugins/
 /[Aa]ssets/[Pp]lugins/[Ii]gnore[Pp]aid[Pp]lugins.meta
 
-/.idea/
-/[Aa]ssets/Z_Waste/
 
-*.lnk
-*.lnk.meta
+# IDE
+**/.idea
+
+/[Aa]ssets/Z_Waste/

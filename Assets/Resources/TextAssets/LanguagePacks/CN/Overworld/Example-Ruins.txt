@@ -40,19 +40,19 @@
 </color>去除颜色
 */
 
-Brand\<image=-1><fx=0><markPoint>“按下<gradient="White to Yellow - UTC">[Z]</gradient>键可以阅读标牌！”<stop*7><enter>
+Brand\<default><markPoint>“按下<gradient="White to Yellow - UTC">[Z]</gradient>键可以阅读标牌！”<stop*7><enter>
 <size=5><markPoint>“<gradient="White to Yellow - UTC">[Enter]</gradient>也行。”</size>
 <waitForUpdate><markPoint>“这个场景使用了<gradient="White to Yellow - UTC">法线贴图</gradient>！”<enter>
 <-  ->“另外，试着到<gradient="White to Red - UTC">水边</gradient>看看？”;
 
-River\<image=-1><fx=0><markPoint>这是你！;
+River\<default><markPoint>这是你！;
 
-WallBrand\<image=-1><fx=0><markPoint>顺着路走。如果你想。;
+WallBrand\<default><markPoint>顺着路走。如果你想。;
 
-Text1\<image=-1><fx=0><*><- -><别><按><。> ;
+Text1\<default><*><- -><别><按><。> ;
 
-Text2\<image=-1><fx=0><*><- -><也><别><按><。> ;
+Text2\<default><*><- -><也><别><按><。> ;
 
-TextAlex\<image=-1><fx=0><markPoint>大哥你做模板<stop...>.<stop><stop>.<stop><stop><stop>.<stop*10><markEnter>你做它有啥用啊？;
+TextAlex\<default><markPoint>大哥你做模板<stop...>.<stop><stop>.<stop><stop><stop>.<stop*10><markEnter>你做它有啥用啊？;
 
 

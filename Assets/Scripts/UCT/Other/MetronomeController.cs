@@ -94,7 +94,7 @@ namespace UCT.Other
 
                 if (firstIn && isPlayMetronome)
                 {
-                    AudioController.Instance.GetFx(currentBeatIndex % 4 == 0 ? 13 : 14,
+                    AudioController.Instance.PlayFx(currentBeatIndex % 4 == 0 ? 13 : 14,
                         MainControl.Instance.AudioControl.fxClipUI);
                 }
 

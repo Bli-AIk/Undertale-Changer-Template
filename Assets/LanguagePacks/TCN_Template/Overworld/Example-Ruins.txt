@@ -40,17 +40,17 @@
 </color>去除顏色
 */
 
-Brand\<image=-1><fx=0><markPoint>「按<gradient="White to Yellow - UTC">[Z]</gradient>鍵可以閱讀標示牌！」<stop><stop><stop> <stop><stop><stop><stop><enter>
+Brand\<default><markPoint>「按<gradient="White to Yellow - UTC">[Z]</gradient>鍵可以閱讀標示牌！」<stop><stop><stop> <stop><stop><stop><stop><enter>
 <size=5><markPoint>“<gradient="White to Yellow - UTC">[Enter]</gradient>也行。”</size>
 <waitForUpdate><markPoint>「這個場景使用了<gradient="White to Yellow - UTC">法線貼圖</gradient>!」<enter>
 <- ->「另外，試著去<gradient="White to Red - UTC">水邊</gradient>看看？」;
 
-River\<image=-1><fx=0><markPoint>這是你！;
+River\<default><markPoint>這是你！;
 
-WallBrand\<image=-1><fx=0><markPoint>順著路走。如果你想。;
+WallBrand\<default><markPoint>順著路走。如果你想。;
 
-Text1\<image=-1><fx=0><*><- -><別><按><。 >;
+Text1\<default><*><- -><別><按><。 >;
 
-Text2\<image=-1><fx=0><*><- -><也><別><按><。 >;
+Text2\<default><*><- -><也><別><按><。 >;
 
-TextAlex\<image=-1><fx=0><markPoint>我必須學會新的賣弄啊.<stop>.<stop>.;
+TextAlex\<default><markPoint>我必須學會新的賣弄啊.<stop>.<stop>.;

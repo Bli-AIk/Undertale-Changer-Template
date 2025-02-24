@@ -1,9 +1,7 @@
 ﻿using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace UCT.Overworld.FiniteStateMachine
 {
-    
     [CreateAssetMenu(fileName = "FsmData", menuName = "UCT/FsmData")]
     public class FiniteStateMachineData : ScriptableObject
     {

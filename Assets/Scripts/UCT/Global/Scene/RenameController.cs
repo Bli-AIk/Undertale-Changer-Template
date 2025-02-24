@@ -649,7 +649,7 @@ namespace UCT.Global.Scene
                     _randomSetNameTime = 0.5f;
                     setName = TextProcessingService.RandomString(Random.Range(1, 7),
                         alphabetCapital + alphabetLowercase);
-                    AudioController.Instance.GetFx(2, MainControl.Instance.AudioControl.fxClipBattle);
+                    AudioController.Instance.PlayFx(2, MainControl.Instance.AudioControl.fxClipBattle);
                 }
             }
             else if (_randomSetNameTime < 0.5f && InputService.GetKeyUp(KeyCode.C))

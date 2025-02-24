@@ -36,7 +36,7 @@ namespace UCT.Global.Scene
 
             _typeWritter.StartTypeWritter(
                 TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.LanguagePackControl.sceneTexts,
-                    "Text"), 1, _tmp);
+                    "Text"), _tmp);
             _typeWritter.typeMode = TypeWritter.TypeMode.IgnorePlayerInput;
         }
 

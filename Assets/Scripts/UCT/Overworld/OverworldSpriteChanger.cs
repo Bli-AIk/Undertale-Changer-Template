@@ -1,9 +1,9 @@
-using System.Collections.Generic;
+using System;
 using Alchemy.Inspector;
+using UCT.Control;
 using UCT.Global.Core;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace UCT.Overworld
 {
@@ -13,36 +13,33 @@ namespace UCT.Overworld
     [RequireComponent(typeof(TypeWritter))]
     public class OverworldSpriteChanger : MonoBehaviour
     {
-        private const float SecondsPerFrame = 1f / 60f;
+        private const float SpeakUpdateInterval = 0.2f;
+        private const float BlinkUpdateInterval = 0.1f;
 
         [Title("Component Settings")] [SerializeField]
         private string spritePath = "BackpackCamera/TalkBox/HeadSculpture";
 
-        [SerializeField] private bool hasSecondSprite;
 
         [Title("Animation Settings")] [SerializeField]
         private float frameInterval = 10f;
 
+        [Title("Sprite Resources")] [SerializeField] [ReadOnly]
+        public SpriteExpressionCollection spriteExpressionCollection;
 
-        public bool isIgnoreConditions;
+        [ReadOnly] public SpriteExpressionCollection.State state;
 
-        [Title("Sprite Resources")] [SerializeField]
-        private List<Sprite> sprites;
-
-        [FormerlySerializedAs("spritesSayBack")]
-        [SerializeField] private List<Sprite> spritesSecond;
-
-        private float _currentFrameTime;
-        private int _currentSpriteIndex = -1;
-        public bool isBackState;
+        private float _blinkTimer;
+        private int _spriteIndex = -1;
 
         private SpriteRenderer _spriteRenderer;
-        private TypeWritter _typeWritter;
+
+        private float _spriteUpdateTimer;
+
 
         private void Start()
         {
-            InitializeComponents();
             FindSpriteComponent();
+            _blinkTimer = Random.Range(5, 10);
         }
 
         private void Update()
@@ -52,21 +49,65 @@ namespace UCT.Overworld
                 return;
             }
 
-            UpdateClock();
-
-            if (!ShouldUpdateSprite())
+            _spriteUpdateTimer += Time.deltaTime;
+            switch (state)
             {
-                return;
+                case SpriteExpressionCollection.State.Default:
+                {
+                    _spriteUpdateTimer = 0f;
+
+                    if (_blinkTimer <= 0)
+                    {
+                        _blinkTimer = Random.Range(5, 10);
+                        state = SpriteExpressionCollection.State.Blinking;
+                    }
+                    else
+                    {
+                        _blinkTimer -= Time.deltaTime;
+                    }
+
+                    if (!spriteExpressionCollection || !spriteExpressionCollection.defaultSprite)
+                    {
+                        return;
+                    }
+
+                    var sprite = spriteExpressionCollection.defaultSprite;
+
+                    if (_spriteRenderer.sprite != sprite)
+                    {
+                        SetSprite(sprite);
+                    }
+
+                    return;
+                }
+                case SpriteExpressionCollection.State.Speaking:
+                {
+                    if (_spriteUpdateTimer < SpeakUpdateInterval)
+                    {
+                        return;
+                    }
+
+                    break;
+                }
+
+                case SpriteExpressionCollection.State.Blinking:
+                {
+                    if (_spriteUpdateTimer < BlinkUpdateInterval)
+                    {
+                        return;
+                    }
+
+                    break;
+                }
+                default:
+                {
+                    throw new ArgumentOutOfRangeException();
+                }
             }
 
-            HandleSpriteChange();
-            ResetClock();
-        }
+            _spriteUpdateTimer = 0f;
 
-        private void InitializeComponents()
-        {
-            _currentFrameTime = frameInterval * SecondsPerFrame;
-            _typeWritter = GetComponent<TypeWritter>();
+            UpdateSpriteDisplay();
         }
 
         private void FindSpriteComponent()
@@ -78,59 +119,78 @@ namespace UCT.Overworld
             _spriteRenderer = targetTransform.GetComponent<SpriteRenderer>();
         }
 
-        private void UpdateClock()
-        {
-            _currentFrameTime -= Time.deltaTime;
-        }
-
-        private bool ShouldUpdateSprite()
-        {
-            if (isIgnoreConditions)
-            {
-                return true;
-            }
-
-            if (!hasSecondSprite || !_typeWritter.isTyping || _typeWritter.passText)
-            {
-                return false;
-            }
-
-            return _currentFrameTime <= 0;
-        }
-
-        public void HandleSpriteChange()
-        {
-            if (!isIgnoreConditions)
-            {
-                isBackState = !isBackState && _currentSpriteIndex >= 0;
-            }
-
-            UpdateSpriteDisplay(_currentSpriteIndex);
-        }
-
-        private void ResetClock()
-        {
-            _currentFrameTime = frameInterval * SecondsPerFrame;
-        }
-
         /// <summary>
         ///     更新当前显示的精灵
         /// </summary>
-        /// <param name="spriteIndex">目标精灵索引</param>
-        public void UpdateSpriteDisplay(int spriteIndex)
+        public void UpdateSpriteDisplay()
         {
-            TalkBoxController.Instance.haveHead = spriteIndex >= 0;
-            _currentSpriteIndex = spriteIndex;
+            if (!spriteExpressionCollection)
+            {
+                _spriteIndex = -1;
+            }
+            else if (_spriteIndex < 0)
+            {
+                _spriteIndex = 0;
+            }
 
-            if (spriteIndex < 0)
+            TalkBoxController.Instance.SetHead(_spriteIndex >= 0);
+            if (_spriteIndex < 0)
             {
                 ClearSprite();
                 return;
             }
 
-            SetSprite(isBackState
-                ? spritesSecond[spriteIndex]
-                : sprites[spriteIndex]);
+            Sprite sprite;
+
+            switch (state)
+            {
+                case SpriteExpressionCollection.State.Default:
+                {
+                    sprite = spriteExpressionCollection.defaultSprite;
+                    break;
+                }
+                case SpriteExpressionCollection.State.Speaking:
+                {
+                    if (spriteExpressionCollection.speakingSprites.Count == 0)
+                    {
+                        goto case SpriteExpressionCollection.State.Default;
+                    }
+
+                    _spriteIndex = Mathf.Clamp(_spriteIndex, 0, spriteExpressionCollection.speakingSprites.Count - 1);
+                    sprite = spriteExpressionCollection.speakingSprites[_spriteIndex];
+                    _spriteIndex++;
+                    if (_spriteIndex >= spriteExpressionCollection.speakingSprites.Count)
+                    {
+                        _spriteIndex = 0;
+                    }
+
+                    break;
+                }
+                case SpriteExpressionCollection.State.Blinking:
+                {
+                    if (spriteExpressionCollection.blinkingSprites.Count == 0)
+                    {
+                        goto case SpriteExpressionCollection.State.Default;
+                    }
+
+                    _spriteIndex = Mathf.Clamp(_spriteIndex, 0, spriteExpressionCollection.blinkingSprites.Count - 1);
+                    sprite = spriteExpressionCollection.blinkingSprites[_spriteIndex];
+                    _spriteIndex++;
+                    if (_spriteIndex >= spriteExpressionCollection.blinkingSprites.Count)
+                    {
+                        _spriteIndex = 0;
+                        state = SpriteExpressionCollection.State.Default;
+                    }
+
+                    break;
+                }
+                default:
+                {
+                    throw new ArgumentOutOfRangeException(nameof(state), state, null);
+                }
+            }
+
+            SetSprite(sprite);
         }
 
         private void SetSprite(Sprite sprite)

@@ -1,6 +1,5 @@
 using System;
 using TMPro;
-using UCT.Global.Core;
 using UCT.Global.Settings;
 using UnityEngine;
 using UnityEngine.Serialization;

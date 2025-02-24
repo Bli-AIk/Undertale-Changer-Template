@@ -261,7 +261,7 @@ namespace UCT.Battle
             {
                 MainControl.Instance.playerControl.hp -= boxHitList[i];
                 MainControl.Instance.playerControl.missTime = MainControl.Instance.playerControl.missTimeMax;
-                AudioController.Instance.GetFx(5, MainControl.Instance.AudioControl.fxClipUI);
+                AudioController.Instance.PlayFx(5, MainControl.Instance.AudioControl.fxClipUI);
 
                 MainControl.Instance.selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
 

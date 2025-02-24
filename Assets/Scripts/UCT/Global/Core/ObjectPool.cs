@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -8,7 +7,9 @@ namespace UCT.Global.Core
     public class ObjectPool : MonoBehaviour
     {
         public bool isStartFillPool;
-        [Header("填充对象池的对象数量")] public int count = 10;
+
+        [Header("填充对象池的对象数量")]
+        public int count = 10;
 
         [FormerlySerializedAs("obj")] public GameObject poolObject;
         public Transform parent;
@@ -25,7 +26,7 @@ namespace UCT.Global.Core
         }
 
         /// <summary>
-        /// 初始化/填充对象池
+        ///     初始化/填充对象池
         /// </summary>
         public void FillPool<T>() where T : Component
         {
@@ -53,7 +54,7 @@ namespace UCT.Global.Core
         }
 
         /// <summary>
-        /// 返回对象池
+        ///     返回对象池
         /// </summary>
         public void ReturnPool<T>(GameObject inputGameObject, T script) where T : Component
         {
@@ -69,7 +70,7 @@ namespace UCT.Global.Core
         }
 
         /// <summary>
-        /// 获取对象池中的物体或脚本
+        ///     获取对象池中的物体或脚本
         /// </summary>
         public T GetFromPool<T>() where T : Component
         {

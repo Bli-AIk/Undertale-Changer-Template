@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Plugins/Ink.meta
 guid: 1bf17f10e03c1924dbfdd18d35932e2a
+========
+guid: da588702bb69d6f47afa65e689537f99
+>>>>>>>> feat-richText:Assets/LanguagePacks/CN_Template/Ink.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

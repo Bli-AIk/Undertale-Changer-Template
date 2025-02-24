@@ -40,17 +40,17 @@
 </color>去除颜色
 */
 
-DemoBox1\<image=-1><fx=3><markPoint>啥<stop*10>呢。<waitForUpdate><image=-1><fx=0><markPoint>这是个<gradient="White to Yellow - UTC">破箱子</gradient><stop...><stop...><markEnter>哈哈，咱没做界面。
-<waitForUpdate><image=0><fx=3><markPoint><gradient="White to Red - UTC">啊？？？</gradient><fx=2><stop*3>怎么说，<stop><image=1><fx=3><enter><-  ->你<stop>先<stop>别<stop>急<stop>。
-<waitForUpdate><image=2><fx=2><markPoint>现在捏，<stop>这个对话是测试<gradient="White to Yellow - UTC"><enter><-  ->打字机</gradient>来的，<fx=3><stop><image=0><-就像这样->。
-<waitForUpdate><image=0><fx=2><-* 啪的一下就说完了一句话。-><enter><-  -><stop*3><gradient="White to Red - UTC">炫炫炫炫炫炫炫炫炫炫。</gradient>
-<waitForUpdate><image=2><markPoint>啥？<stop>你没看清？<stop><enter><-  ->那我慢点？<stop*5><enter><-* -><stop><-啪的-><stop><-一下-><stop><-就说-><stop><-完了-><stop><-。-><stop*3>蛤？;
+DemoBox1\<default><fx=flowey, evil><markPoint>啥<stop*10>呢。<waitForUpdate><default><markPoint>这是个<gradient="White to Yellow - UTC">破箱子</gradient><stop...><stop...><markEnter>哈哈，咱没做界面。
+<waitForUpdate><Flowey><fx=flowey, evil><markPoint><gradient="White to Red - UTC">啊？？？</gradient><fx=flowey><stop*3>怎么说，<stop><Flowey, Menace><fx=flowey, evil><enter><-  ->你<stop>先<stop>别<stop>急<stop>。
+<waitForUpdate><Flowey, Side><markPoint>现在捏，<stop>这个对话是测试<gradient="White to Yellow - UTC"><enter><-  ->打字机</gradient>来的，<fx=flowey, evil><stop><Flowey><-就像这样->。
+<waitForUpdate><Flowey><-* 啪的一下就说完了一句话。-><enter><-  -><stop*3><gradient="White to Red - UTC">炫炫炫炫炫炫炫炫炫炫。</gradient>
+<waitForUpdate><Flowey, Side><markPoint>啥？<stop>你没看清？<stop><enter><-  ->那我慢点？<stop*5><enter><-* -><stop><-啪的-><stop><-一下-><stop><-就说-><stop><-完了-><stop><-。-><stop*3>蛤？;
 
-Plot\<image=-1><fx=0><markPoint><stop......>
+Plot\<default><markPoint><stop......>
 <waitForUpdate><markPoint>啊<stop><stop...>没有人？<stop>？
-<waitForUpdate><image=0><fx=2><markPoint>你好。
-<waitForUpdate><image=-1><fx=0><markPoint>啊？<stop>Flowey！<stop><markEnter>你这家伙躲哪去了？
-<waitForUpdate><image=2><fx=2><markPoint>要你管。<stop*5><image=1>现在该对战辣！;
+<waitForUpdate><Flowey><markPoint>你好。
+<waitForUpdate><default><markPoint>啊？<stop>Flowey！<stop><markEnter>你这家伙躲哪去了？
+<waitForUpdate><Flowey, Side><markPoint>要你管。<stop*5><Flowey, Menace>现在该对战辣！;
 
-Save\<image=-1><fx=0><markPoint>(长廊的地板上铺满了金色的光芒，<enter><-  ->这使你充满了<gradient="White to Red - UTC">决心</gradient>。);
+Save\<default><markPoint>(长廊的地板上铺满了金色的光芒，<enter><-  ->这使你充满了<gradient="White to Red - UTC">决心</gradient>。);
 

@@ -336,7 +336,7 @@ namespace UCT.Global.Settings
                 case OptionType.ConfigurableKeyFalse:
                     if (InputService.GetKeyDown(KeyCode.Z))
                     {
-                        AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                        AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
                         settingsOption.Type = OptionType.ConfigurableKeyTrue;
                         _isSettingKey = true;
                         _selectedSettingsOption = settingsOption;
@@ -354,7 +354,7 @@ namespace UCT.Global.Settings
                 case OptionType.KeyBindingsReset:
                     if (InputService.GetKeyDown(KeyCode.Z))
                     {
-                        AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                        AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
                         KeyBindings.ResetDictionary();
                     }
 
@@ -362,7 +362,7 @@ namespace UCT.Global.Settings
                 case OptionType.SwitchPage:
                     if (InputService.GetKeyDown(KeyCode.LeftArrow) || InputService.GetKeyDown(KeyCode.RightArrow))
                     {
-                        AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                        AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
                         _isPageUp = !_isPageUp;
                         MoveSettingSoul();
                     }
@@ -374,7 +374,7 @@ namespace UCT.Global.Settings
 
                     if (InputService.GetKeyDown(KeyCode.Z))
                     {
-                        AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                        AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
                         if (!_isPageUp) //  PageDown
                         {
                             if (_settingOptionsPage == 0)
@@ -403,7 +403,7 @@ namespace UCT.Global.Settings
                 case OptionType.LanguagePackage:
                     if (InputService.GetKeyDown(KeyCode.Z))
                     {
-                        AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                        AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
                         MainControl.Instance.languagePackId = _settingSelectedOption;
                         MainControl.Instance.Initialization(_settingSelectedOption + _startIndexCurrent);
                     }
@@ -423,7 +423,7 @@ namespace UCT.Global.Settings
                 return false;
             }
 
-            AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
+            AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
             _settingsPreviousLayers.Add(settingsLayer);
             settingsLayer = (string)layer.DisplayedSettingsOptions[option].GetValue();
             var settingSelectedOption = layer.DisplayedSettingsOptions[option].NewSelectedOption;
@@ -443,7 +443,7 @@ namespace UCT.Global.Settings
                 return;
             }
 
-            AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
+            AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
             settingsOption.Type = OptionType.SelectionBasedTrue;
             _saveSelectionBasedValue = Convert.ToSingle(settingsOption.GetValue());
         }
@@ -515,7 +515,7 @@ namespace UCT.Global.Settings
                 return;
             }
 
-            AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
+            AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
             settingsOption.OnSelected?.Invoke();
         }
 
@@ -528,7 +528,7 @@ namespace UCT.Global.Settings
             {
                 if (Convert.ToSingle(settingsOption.GetValue()) > settingsOption.SelectionBasedChangedMin)
                 {
-                    AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                    AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
                     var newValue = (float)settingsOption.GetValue() - unit;
                     settingsOption.SetValue(newValue);
                     if (Convert.ToSingle(settingsOption.GetValue()) < settingsOption.SelectionBasedChangedMin)
@@ -543,7 +543,7 @@ namespace UCT.Global.Settings
             {
                 if (Convert.ToSingle(settingsOption.GetValue()) < settingsOption.SelectionBasedChangedMax)
                 {
-                    AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                    AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
                     var newValue = Convert.ToSingle(settingsOption.GetValue()) + unit;
                     settingsOption.SetValue(newValue);
                     if (Convert.ToSingle(settingsOption.GetValue()) > settingsOption.SelectionBasedChangedMax)
@@ -557,7 +557,7 @@ namespace UCT.Global.Settings
 
             if (InputService.GetKeyDown(KeyCode.Z))
             {
-                AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
                 settingsOption.Type = OptionType.SelectionBasedFalse;
             }
             else if (InputService.GetKeyDown(KeyCode.X) || InputService.GetKeyDown(KeyCode.V))
@@ -698,7 +698,7 @@ namespace UCT.Global.Settings
             var result = selectedOption;
             if (InputService.GetKeyDown(KeyCode.DownArrow))
             {
-                AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
                 result++;
                 if (result > selectedOptionMax)
                 {
@@ -707,7 +707,7 @@ namespace UCT.Global.Settings
             }
             else if (InputService.GetKeyDown(KeyCode.UpArrow))
             {
-                AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
                 result--;
                 if (result < 0)
                 {

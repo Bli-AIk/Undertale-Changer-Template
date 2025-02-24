@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 namespace UCT.Overworld.Corridor
@@ -10,6 +9,7 @@ namespace UCT.Overworld.Corridor
     {
         public float speed = -1.381f; //包括方向(正负)
         private CameraFollowPlayer _parentCamera;
+
         private void Start()
         {
             if (!_parentCamera)

@@ -1,5 +1,4 @@
 using TMPro;
-using UCT.Control;
 using UnityEngine;
 
 namespace UCT.Global.UI

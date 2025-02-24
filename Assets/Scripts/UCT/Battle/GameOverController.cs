@@ -71,7 +71,7 @@ namespace UCT.Battle
             }
             else
             {
-                AudioController.Instance.GetFx(i, MainControl.Instance.AudioControl.fxClipUI);
+                AudioController.Instance.PlayFx(i, MainControl.Instance.AudioControl.fxClipUI);
             }
         }
 
@@ -95,7 +95,7 @@ namespace UCT.Battle
                 TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.LanguagePackControl.sceneTexts,
                     "GameOver4")
             };
-            _typeWritter.StartTypeWritter(strings[Random.Range(0, 4)], 4, _textOptions);
+            _typeWritter.StartTypeWritter(strings[Random.Range(0, 4)], _textOptions);
             canChangeScene = true;
         }
 

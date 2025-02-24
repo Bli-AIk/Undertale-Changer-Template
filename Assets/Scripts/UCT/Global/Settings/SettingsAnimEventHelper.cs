@@ -41,7 +41,7 @@ namespace UCT.Global.Settings
 
         public void AnimPlayFX(int i)
         {
-            AudioController.Instance.GetFx(i, MainControl.Instance.AudioControl.fxClipUI);
+            AudioController.Instance.PlayFx(i, MainControl.Instance.AudioControl.fxClipUI);
         }
         
         // 供Animator使用

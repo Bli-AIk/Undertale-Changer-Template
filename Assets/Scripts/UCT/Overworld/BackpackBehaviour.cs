@@ -4,7 +4,6 @@ using UCT.Global.Core;
 using UCT.Global.UI;
 using UCT.Service;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace UCT.Overworld
 {
@@ -107,7 +106,7 @@ namespace UCT.Overworld
                 }
                 else if (InputService.GetKeyDown(KeyCode.C)) //开启
                 {
-                    AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                    AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
                     MainControl.Instance.playerControl.items =
                         ListManipulationService.CheckAllDataNamesInItemList(MainControl.Instance.playerControl.items);
                     MainControl.Instance.playerControl.items =
@@ -170,7 +169,7 @@ namespace UCT.Overworld
                     {
                         if (sonUse == 0 && !string.IsNullOrEmpty(MainControl.Instance.playerControl.items[0]))
                         {
-                            AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                            AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
                         }
 
                         if (_sonSelectMax != 0)
@@ -217,7 +216,7 @@ namespace UCT.Overworld
                                     case 1:
                                         sonUse = 4;
                                         typeWritter.StartTypeWritter(
-                                            DataHandlerService.ItemDataNameGetLanguagePackUseText(dataName), 1, talkText);
+                                            DataHandlerService.ItemDataNameGetLanguagePackUseText(dataName), talkText);
 
                                         _overviewInfoText.text = $"LV {MainControl.Instance.playerControl.lv}\n" +
                                                                  $"HP {MainControl.Instance.playerControl.hp}/" +
@@ -228,14 +227,14 @@ namespace UCT.Overworld
                                     case 2:
                                         sonUse = 4;
                                         typeWritter.StartTypeWritter(
-                                            DataHandlerService.ItemDataNameGetLanguagePackInfoText(dataName), 1, talkText);
+                                            DataHandlerService.ItemDataNameGetLanguagePackInfoText(dataName), talkText);
 
                                         item.OnCheck(index);
                                         goto default;
                                     case 3:
                                         sonUse = 4;
                                         typeWritter.StartTypeWritter(
-                                            DataHandlerService.ItemDataNameGetLanguagePackDropText(dataName), 1, talkText);
+                                            DataHandlerService.ItemDataNameGetLanguagePackDropText(dataName), talkText);
                                         item.OnDrop(index);
                                         goto default;
                                     default:
@@ -249,7 +248,7 @@ namespace UCT.Overworld
 
                                         if (TalkBoxController.Instance.boxDrawer.localPosition.z < 0)
                                         {
-                                            TalkBoxController.Instance.Change();
+                                            TalkBoxController.Instance.SetHead(false);
                                             TalkBoxController.Instance.boxDrawer.localPosition =
                                                 new Vector3(TalkBoxController.Instance.boxDrawer.localPosition.x,
                                                     TalkBoxController.Instance.boxDrawer.localPosition.y,
@@ -267,7 +266,7 @@ namespace UCT.Overworld
                         if (sonSelect == 0)
                         {
                             sonSelect = 1;
-                            AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                            AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
                         }
 
                         _informationText.transform.localPosition = new Vector3(0.5f, -5.2f, 0);
@@ -319,13 +318,13 @@ namespace UCT.Overworld
                     {
                         if (select > 1 && sonSelect == 0)
                         {
-                            AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                            AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
                             select -= 1;
                         }
 
                         if (select == 1 && sonSelect > 1 && sonSelect != 0)
                         {
-                            AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                            AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
                             sonSelect -= 1;
                         }
                     }
@@ -334,13 +333,13 @@ namespace UCT.Overworld
                         if (select < 2 && sonSelect == 0)
                         {
                             select += 1;
-                            AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                            AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
                         }
 
                         if (select == 1 && sonSelect < _sonSelectMax && sonSelect != 0)
                         {
                             sonSelect += 1;
-                            AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                            AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
                         }
                     }
                 }
@@ -357,13 +356,13 @@ namespace UCT.Overworld
                     {
                         sonUse -= 1;
 
-                        AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                        AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
                     }
                     else if (InputService.GetKeyDown(KeyCode.RightArrow) && sonUse < 3)
                     {
                         sonUse += 1;
 
-                        AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                        AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
                     }
                 }
             }

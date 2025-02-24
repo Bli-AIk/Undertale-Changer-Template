@@ -19,7 +19,7 @@ namespace UCT.Overworld
         public void PlayWalkAudio() //动画器引用
         {
             var walkFxRange = _overworldPlayerBehaviour.walkFxRange;
-            AudioController.Instance.GetFx(Random.Range((int)walkFxRange.x, (int)walkFxRange.y),
+            AudioController.Instance.PlayFx(Random.Range((int)walkFxRange.x, (int)walkFxRange.y),
                 MainControl.Instance.AudioControl.fxClipWalk, 1);
         }
     }

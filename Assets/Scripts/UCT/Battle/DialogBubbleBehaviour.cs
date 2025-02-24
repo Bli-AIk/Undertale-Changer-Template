@@ -1,6 +1,5 @@
 using TMPro;
 using UCT.Global.Core;
-using UCT.Global.UI;
 using UnityEngine;
 
 namespace UCT.Battle

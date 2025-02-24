@@ -45,7 +45,7 @@ namespace UCT.Battle
                     _pressZ = true;
                     _anim.SetBool("Hit", true);
                     _anim.SetFloat("MoveSpeed", 0);
-                    AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipBattle);
+                    AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipBattle);
                     Hit();
                 }
             }

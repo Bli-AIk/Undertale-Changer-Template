@@ -362,8 +362,7 @@ namespace UCT.EventSystem
         {
             MainControl.Instance.playerControl.canMove = false;
             SettingsStorage.pause = true;
-
-            TalkBoxController.Instance.Change(true, true);
+            TalkBoxController.Instance.SetHead(false);
             if (TalkBoxController.Instance.boxDrawer.localPosition.z < 0)
             {
                 TalkBoxController.Instance.boxDrawer.localPosition = new Vector3(
@@ -384,11 +383,13 @@ namespace UCT.EventSystem
             {
                 _overworldTypeWritter = BackpackBehaviour.Instance.typeWritter;
             }
+            _overworldTypeWritter.overworldSpriteChanger.spriteExpressionCollection = null;
+            _overworldTypeWritter.overworldSpriteChanger.UpdateSpriteDisplay();
 
             _overworldTypeWritter.StartTypeWritter(
                 TextProcessingService.GetFirstChildStringByPrefix(
                     MainControl.Instance.LanguagePackControl.sceneTexts,
-                    dataName), 1, BackpackBehaviour.Instance.talkText);
+                    dataName), BackpackBehaviour.Instance.talkText);
 
             _overworldTypeWritter.OnClose = () =>
             {
@@ -635,7 +636,7 @@ namespace UCT.EventSystem
 
         private static void PlayUIFx(int index, bool useEvent, string eventName)
         {
-            AudioController.Instance.GetFx(index, MainControl.Instance.AudioControl.fxClipUI);
+            AudioController.Instance.PlayFx(index, MainControl.Instance.AudioControl.fxClipUI);
             if (useEvent)
             {
                 SetTriggering(eventName);

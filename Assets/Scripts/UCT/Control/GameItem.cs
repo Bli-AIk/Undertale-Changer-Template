@@ -64,7 +64,7 @@ namespace UCT.Control
             }
 
             MainControl.Instance.playerControl.items[index] = null;
-            AudioController.Instance.GetFx(2, MainControl.Instance.AudioControl.fxClipUI);
+            AudioController.Instance.PlayFx(2, MainControl.Instance.AudioControl.fxClipUI);
         }
     }
     public class ParentFoodItem : GameItem
@@ -86,7 +86,7 @@ namespace UCT.Control
             }
 
             MainControl.Instance.playerControl.items[index] = _child.Data.DataName;
-            AudioController.Instance.GetFx(2, MainControl.Instance.AudioControl.fxClipUI);
+            AudioController.Instance.PlayFx(2, MainControl.Instance.AudioControl.fxClipUI);
         }
     }
 
@@ -253,7 +253,7 @@ namespace UCT.Control
         {
             (MainControl.Instance.playerControl.wearWeapon, MainControl.Instance.playerControl.items[index]) = (
                 MainControl.Instance.playerControl.items[index], MainControl.Instance.playerControl.wearWeapon);
-            AudioController.Instance.GetFx(3, MainControl.Instance.AudioControl.fxClipUI);
+            AudioController.Instance.PlayFx(3, MainControl.Instance.AudioControl.fxClipUI);
         }
 
 
@@ -296,7 +296,7 @@ namespace UCT.Control
         {
             (MainControl.Instance.playerControl.wearArmor, MainControl.Instance.playerControl.items[index]) = (
                 MainControl.Instance.playerControl.items[index], MainControl.Instance.playerControl.wearArmor);
-            AudioController.Instance.GetFx(3, MainControl.Instance.AudioControl.fxClipUI);
+            AudioController.Instance.PlayFx(3, MainControl.Instance.AudioControl.fxClipUI);
         }
 
         public void OnDamageTaken(int index)

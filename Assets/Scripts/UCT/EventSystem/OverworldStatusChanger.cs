@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace UCT.EventSystem
 {
@@ -17,9 +15,9 @@ namespace UCT.EventSystem
             ChangeSprite,
             SetColliderEnable
         }
-        
+
         public List<RuleCriterion> ruleCriteria;
-        
+
         public List<MethodType> methodTypes;
         public List<Sprite> targetSprites;
         public List<bool> targetEnables;

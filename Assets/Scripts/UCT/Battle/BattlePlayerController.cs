@@ -865,7 +865,7 @@ namespace UCT.Battle
             PlayerDirEnum dir = PlayerDirEnum.NullDir, float inputGradientTime = -1, float inputDingTime = -1,
             int fx = 2)
         {
-            AudioController.Instance.GetFx(fx, MainControl.Instance.AudioControl.fxClipBattle);
+            AudioController.Instance.PlayFx(fx, MainControl.Instance.AudioControl.fxClipBattle);
 
             if (inputGradientTime < 0)
             {

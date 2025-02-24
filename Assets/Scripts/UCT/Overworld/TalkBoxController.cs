@@ -1,10 +1,8 @@
 using System;
 using TMPro;
-using UCT.Battle;
 using UCT.Global.Core;
 using UCT.Global.UI;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace UCT.Overworld
 {
@@ -64,25 +62,18 @@ namespace UCT.Overworld
             return _typeMessage;
         }
 
-        public void Change(bool updateHeader = true, bool haveHeader = false, bool cleaner = true,
-            TypeWritter typeWritter = null)
+        public void CleanText(TypeWritter typeWritter)
         {
-            if (cleaner)
+            GetTypeMessage().text = "";
+            if (typeWritter)
             {
-                GetTypeMessage().text = "";
-                if (typeWritter)
-                {
-                    typeWritter.endString = "";
-                }
+                typeWritter.endString = "";
             }
+        }
 
-            if (!updateHeader)
-            {
-                return;
-            }
-
-            haveHead = haveHeader;
-
+        public void SetHead(bool inputHaveHead)
+        {
+            haveHead = inputHaveHead;
             const float boxUpYAxis = 3.85f;
             const float boxDownYAxis = -3.85f;
             if (isUp)

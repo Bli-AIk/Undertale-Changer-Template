@@ -231,7 +231,7 @@ namespace UCT.Battle
         /// </summary>
         private void Type(string text)
         {
-            _typeWritter.StartTypeWritter(text, 0, _textUI);
+            _typeWritter.StartTypeWritter(text, _textUI);
         }
 
         /// <summary>
@@ -255,7 +255,7 @@ namespace UCT.Battle
                 nameLayerIndex < MainControl.Instance.BattleControl.enemies.Count - 1)
             {
                 nameLayerIndex++;
-                AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
             }
 
             if (!InputService.GetKeyDown(KeyCode.UpArrow) || nameLayerIndex <= 0)
@@ -264,7 +264,7 @@ namespace UCT.Battle
             }
 
             nameLayerIndex--;
-            AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+            AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
         }
 
         /// <summary>
@@ -301,7 +301,7 @@ namespace UCT.Battle
                             MainControl.Instance.battlePlayerController.transform.position.z);
                     if (InputService.GetKeyDown(KeyCode.LeftArrow))
                     {
-                        AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                        AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
                         if (selectedButton >= EnumService.GetMinEnumValue<SelectedButton>())
                         {
                             SpriteChange();
@@ -319,7 +319,7 @@ namespace UCT.Battle
                     }
                     else if (InputService.GetKeyDown(KeyCode.RightArrow))
                     {
-                        AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                        AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
                         if (selectedButton <= EnumService.GetMaxEnumValue<SelectedButton>())
                         {
                             SpriteChange();
@@ -340,7 +340,7 @@ namespace UCT.Battle
                     {
                         selectedLayer = SelectedLayer.NameLayer;
                         optionLayerIndex = 0;
-                        AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                        AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
                         _typeWritter.TypeStop();
                         _textUI.text = "";
 
@@ -413,7 +413,7 @@ namespace UCT.Battle
 
                         optionLayerIndex = 0;
                         _textUI.text = "";
-                        AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                        AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
                     }
 
                     switch (selectedButton)
@@ -558,26 +558,26 @@ namespace UCT.Battle
                         {
                             if (InputService.GetKeyDown(KeyCode.UpArrow) && optionLayerIndex - 2 >= 0)
                             {
-                                AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                                AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
                                 optionLayerIndex -= 2;
                             }
                             else if (InputService.GetKeyDown(KeyCode.DownArrow) &&
                                      optionLayerIndex + 2 <= actSave.Count / 2 - 1)
                             {
-                                AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                                AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
                                 optionLayerIndex += 2;
                             }
 
                             if (InputService.GetKeyDown(KeyCode.LeftArrow) &&
                                 optionLayerIndex - 1 >= 0)
                             {
-                                AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                                AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
                                 optionLayerIndex--;
                             }
                             else if (InputService.GetKeyDown(KeyCode.RightArrow) &&
                                      optionLayerIndex + 1 <= actSave.Count / 2 - 1)
                             {
-                                AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                                AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
                                 optionLayerIndex++;
                             }
 
@@ -629,7 +629,7 @@ namespace UCT.Battle
                                             case 1:
                                             {
                                                 Other.Debug.Log(1);
-                                                AudioController.Instance.GetFx(3,
+                                                AudioController.Instance.PlayFx(3,
                                                     MainControl.Instance.AudioControl.fxClipBattle);
 
                                                 break;
@@ -767,13 +767,13 @@ namespace UCT.Battle
 
                             if (InputService.GetKeyDown(KeyCode.UpArrow) && optionLayerIndex - 1 >= 0)
                             {
-                                AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                                AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
                                 optionLayerIndex--;
                             }
                             else if (InputService.GetKeyDown(KeyCode.DownArrow) &&
                                      optionLayerIndex + 1 <= actSave.Count / 2 - 1)
                             {
-                                AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                                AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
                                 optionLayerIndex++;
                             }
 
@@ -884,7 +884,7 @@ namespace UCT.Battle
 
                 TypeWritterTagProcessor.SetItemDataName(dataName);
                 _typeWritter.StartTypeWritter(
-                    DataHandlerService.ItemDataNameGetLanguagePackUseText(dataName), 1, _textUI);
+                    DataHandlerService.ItemDataNameGetLanguagePackUseText(dataName),  _textUI);
                 DataHandlerService.GetItemFormDataName(dataName).OnUse(globalItemIndex + 1);
 
                 SpriteChange();
@@ -929,7 +929,7 @@ namespace UCT.Battle
 
         private void CommonItemNavigationLogic(int globalItemIndex)
         {
-            AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
+            AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
             var dataName = MainControl.Instance.playerControl.items[globalItemIndex];
             var item = DataHandlerService.GetItemFormDataName(dataName);
             if (item is FoodItem or ParentFoodItem)
@@ -965,7 +965,7 @@ namespace UCT.Battle
 
             _dialog.isBackRight = Convert.ToBoolean(save[3]);
             _dialog.backY = float.Parse(save[4]);
-            _dialog.typeWritter.StartTypeWritter(save[5], 1, _dialog.tmp);
+            _dialog.typeWritter.StartTypeWritter(save[5],  _dialog.tmp);
             numberDialog++;
             _dialog.tmp.text = "";
             _dialog.PositionChange();

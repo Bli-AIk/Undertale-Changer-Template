@@ -29,7 +29,7 @@ namespace UCT.Global.Scene
             _textNotice = transform.Find("TextNotice").GetComponent<TextMeshPro>();
             _textNotice.color = Color.clear;
             _textMessage.color = Color.clear;
-            AudioController.Instance.GetFx(11, MainControl.Instance.AudioControl.fxClipUI);
+            AudioController.Instance.PlayFx(11, MainControl.Instance.AudioControl.fxClipUI);
 
             var text = DataHandlerService.LoadLanguageData($"Overworld\\{SceneManager.GetActiveScene().name}",
                 MainControl.Instance.languagePackId);
