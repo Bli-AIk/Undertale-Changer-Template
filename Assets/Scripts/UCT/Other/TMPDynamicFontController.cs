@@ -32,10 +32,9 @@ namespace UCT.Other
             }
 
             _simsun.ClearFontAssetData();
-            switch (forceMeshUpdateTexts)
+            if (forceMeshUpdateTexts is { Count: <= 0 } or null)
             {
-                case { Count: <= 0 }:
-                case null: return;
+                return;
             }
 
             foreach (var tmp in forceMeshUpdateTexts)

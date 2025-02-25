@@ -55,7 +55,7 @@ namespace UCT.Overworld.FiniteStateMachine
             for (var i = 0; i < specifiedDirectionsList.Count; i++)
             {
                 var angle = Vector2.Angle(direction, specifiedDirectionsList[i]);
-                if (!(angle < closestAngle))
+                if (angle >= closestAngle)
                 {
                     continue;
                 }

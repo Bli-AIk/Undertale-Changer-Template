@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using MEC;
@@ -5,6 +6,7 @@ using UCT.Control;
 using UCT.Global.Core;
 using UCT.Service;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace UCT.Battle
 {
@@ -171,6 +173,9 @@ namespace UCT.Battle
                     yield return Timing.WaitForSeconds(0.5f);
 
                     break;
+                
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             turn++;
@@ -192,35 +197,34 @@ namespace UCT.Battle
         /// </summary>
         private IEnumerator<float> _TurnNest(Nest nest)
         {
-            switch (nest)
+            if (nest != Nest.SimpleNestBullet)
             {
-                case Nest.SimpleNestBullet:
-                    var obj = objectPools[0].GetFromPool<BulletController>();
-
-                    obj.SetBullet("CupCake", "CupCake", new Vector3(0, -3.35f),
-                        (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
-
-                    obj.transform.localPosition += new Vector3(Random.Range(-0.5f, 0.5f), 0);
-
-                    obj.transform.DOMoveY(0, 1).SetEase(Ease.OutSine).SetLoops(2, LoopType.Yoyo);
-
-                    obj.transform.DORotate(new Vector3(0, 0, 360), 2, RotateMode.WorldAxisAdd).SetEase(Ease.InOutSine);
-                    yield return Timing.WaitForSeconds(0.5f);
-
-                    obj.spriteRenderer.sortingOrder = 60;
-                    obj.SetMask(SpriteMaskInteraction.None);
-
-                    yield return Timing.WaitForSeconds(1f);
-
-                    obj.spriteRenderer.sortingOrder = 40;
-                    obj.SetMask(SpriteMaskInteraction.VisibleInsideMask);
-
-                    yield return Timing.WaitForSeconds(1f);
-
-                    objectPools[0].ReturnPool(obj.gameObject, obj);
-
-                    break;
+                yield break;
             }
+
+            var obj = objectPools[0].GetFromPool<BulletController>();
+
+            obj.SetBullet("CupCake", "CupCake", new Vector3(0, -3.35f),
+                (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
+
+            obj.transform.localPosition += new Vector3(Random.Range(-0.5f, 0.5f), 0);
+
+            obj.transform.DOMoveY(0, 1).SetEase(Ease.OutSine).SetLoops(2, LoopType.Yoyo);
+
+            obj.transform.DORotate(new Vector3(0, 0, 360), 2, RotateMode.WorldAxisAdd).SetEase(Ease.InOutSine);
+            yield return Timing.WaitForSeconds(0.5f);
+
+            obj.spriteRenderer.sortingOrder = 60;
+            obj.SetMask(SpriteMaskInteraction.None);
+
+            yield return Timing.WaitForSeconds(1f);
+
+            obj.spriteRenderer.sortingOrder = 40;
+            obj.SetMask(SpriteMaskInteraction.VisibleInsideMask);
+
+            yield return Timing.WaitForSeconds(1f);
+
+            objectPools[0].ReturnPool(obj.gameObject, obj);
         }
 
         private enum Nest

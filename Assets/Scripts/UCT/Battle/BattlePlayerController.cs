@@ -1298,7 +1298,7 @@ namespace UCT.Battle
                         GetNearestPointOnLine(point, box.GetRealPoints(false)[i],
                             box.GetRealPoints(false)[j]); //计算到当前边的最近点
                     var tempDistance = Vector2.Distance(point, tempNearestPoint); //计算距离
-                    if (!(tempDistance < nearestDistance))
+                    if (tempDistance >= nearestDistance)
                     {
                         continue;
                     }
@@ -1312,7 +1312,7 @@ namespace UCT.Battle
                 }
             }
 
-            if (!(nearestDistance < float.MaxValue))
+            if (nearestDistance >= float.MaxValue)
             {
                 return point; //如果没有找到更近的点，返回原点
             }

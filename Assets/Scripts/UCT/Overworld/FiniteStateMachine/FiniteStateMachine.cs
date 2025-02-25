@@ -113,7 +113,7 @@ namespace UCT.Overworld.FiniteStateMachine
                 var sqrDistance = ((Vector3)data.rigidbody2D.position - targetPosition).sqrMagnitude;
 
 
-                if (!(sqrDistance < 0.01f))
+                if (sqrDistance >= 0.01f)
                 {
                     _path = GetAStarPath(data.rigidbody2D.position, targetPosition);
 
@@ -300,7 +300,7 @@ namespace UCT.Overworld.FiniteStateMachine
 
                     if (nodeLookup.TryGetValue(newNodePos, out var existingNode))
                     {
-                        if (!(gCost < existingNode.GCost))
+                        if (gCost >= existingNode.GCost)
                         {
                             continue;
                         }

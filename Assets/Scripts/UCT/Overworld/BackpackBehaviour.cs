@@ -381,22 +381,21 @@ namespace UCT.Overworld
                     }
                     else
                     {
-                        switch (select)
+                        if (select != 1)
                         {
-                            case 1:
+                            if (select == 2)
                             {
-                                if (sonSelect is < 9 and > 0)
-                                {
-                                    Heart.transform.localPosition = new Vector3(-2.575f,
-                                        3.575f - index * 0.775f,
-                                        Heart.transform.localPosition.z);
-                                }
-
-                                break;
-                            }
-                            case 2:
                                 Heart.transform.localPosition = Vector3.one * 10000;
-                                break;
+                            }
+                        }
+                        else
+                        {
+                            if (sonSelect is < 9 and > 0)
+                            {
+                                Heart.transform.localPosition = new Vector3(-2.575f,
+                                    3.575f - index * 0.775f,
+                                    Heart.transform.localPosition.z);
+                            }
                         }
                     }
 
