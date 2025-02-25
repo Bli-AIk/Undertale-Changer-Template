@@ -417,12 +417,8 @@ namespace UCT.Global.Core
                 tmpText.text = endString;
 
                 Timing.RunCoroutine(_Dynamic(endString.Length - 1, dynamicType));
-
-
-                if (tmpText.font != MainControl.Instance.overworldControl.tmpFonts[fontIndex])
-                {
-                    tmpText.font = MainControl.Instance.overworldControl.tmpFonts[fontIndex];
-                }
+                
+                tmpText.font = MainControl.Instance.overworldControl.tmpFonts[fontIndex];
             }
             else
             {

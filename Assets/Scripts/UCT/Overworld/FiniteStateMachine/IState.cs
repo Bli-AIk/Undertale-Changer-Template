@@ -13,7 +13,7 @@ namespace UCT.Overworld.FiniteStateMachine
     public class IdleState : IState
     {
         private readonly FiniteStateMachineData _data;
-        private FiniteStateMachine _fsm;
+        private readonly FiniteStateMachine _fsm;
 
         public IdleState(FiniteStateMachine fsm, FiniteStateMachineData data)
         {
@@ -51,7 +51,7 @@ namespace UCT.Overworld.FiniteStateMachine
         private static readonly int MoveY = Animator.StringToHash("MoveY");
 
         private readonly FiniteStateMachineData _data;
-        private FiniteStateMachine _fsm;
+        private readonly FiniteStateMachine _fsm;
 
         public WalkState(FiniteStateMachine fsm, FiniteStateMachineData data)
         {
@@ -101,7 +101,7 @@ namespace UCT.Overworld.FiniteStateMachine
         private static readonly int MoveY = Animator.StringToHash("MoveY");
 
         private readonly FiniteStateMachineData _data;
-        private FiniteStateMachine _fsm;
+        private readonly FiniteStateMachine _fsm;
 
         public RunState(FiniteStateMachine fsm, FiniteStateMachineData data)
         {
@@ -152,7 +152,7 @@ namespace UCT.Overworld.FiniteStateMachine
         private int _currentIndex;
 
         private readonly FiniteStateMachineData _data;
-        private FiniteStateMachine _fsm;
+        private readonly FiniteStateMachine _fsm;
         private float _timer;
 
         public SpinState(FiniteStateMachine fsm, FiniteStateMachineData data)

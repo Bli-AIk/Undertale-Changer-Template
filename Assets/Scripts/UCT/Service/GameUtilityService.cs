@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using DG.Tweening;
 using UCT.Battle;
-using UCT.Control;
 using UCT.Extensions;
 using UCT.Global.Audio;
 using UCT.Global.Core;
@@ -10,7 +9,7 @@ using UCT.Global.Settings;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
-using Random = System.Random;
+using Random = UnityEngine.Random;
 
 namespace UCT.Service
 {
@@ -126,7 +125,7 @@ namespace UCT.Service
         ///     切换场景。
         ///     优先在此项目中使用这个封装后的方法进行场景切换操作。
         /// </summary>
-        public static void SwitchScene(string sceneName, bool async = true)
+        public static void SwitchScene(string sceneName, bool isAsync = true)
         {
             SetCanvasFrameSprite();
             if (SceneManager.GetActiveScene().name != "Menu" && SceneManager.GetActiveScene().name != "Rename" &&
@@ -136,7 +135,7 @@ namespace UCT.Service
                 MainControl.Instance.playerControl.lastScene = SceneManager.GetActiveScene().name;
             }
 
-            if (async)
+            if (isAsync)
             {
                 SceneManager.LoadSceneAsync(sceneName);
             }
@@ -296,8 +295,7 @@ namespace UCT.Service
 
         public static Color GetRandomColor()
         {
-            var random = new Random();
-            return new Color((float)random.NextDouble(), (float)random.NextDouble(), (float)random.NextDouble(), 1);
+            return new Color(Random.value, Random.value, Random.value, 1f);
         }
 
         public static Color GetDifferentRandomColor(Color colorToAvoid)
@@ -307,6 +305,7 @@ namespace UCT.Service
             {
                 newColor = GetRandomColor();
             } while (newColor == colorToAvoid);
+
             return newColor;
         }
 
@@ -315,14 +314,11 @@ namespace UCT.Service
             float saturationOffset = 0.1f,
             float valueOffset = 0.1f)
         {
-            // 使用可控的随机生成器
-            var random = new Random();
-
             Color.RGBToHSV(originalColor, out var h, out var s, out var v);
 
-            h = Mathf.Repeat(h + (float)(random.NextDouble() * 2 - 1) * hueOffset, 1.0f);
-            s = Mathf.Clamp01(s + (float)(random.NextDouble() * 2 - 1) * saturationOffset);
-            v = Mathf.Clamp01(v + (float)(random.NextDouble() * 2 - 1) * valueOffset);
+            h = Mathf.Repeat(h + (Random.value * 2f - 1f) * hueOffset, 1.0f);
+            s = Mathf.Clamp01(s + (Random.value * 2f - 1f) * saturationOffset);
+            v = Mathf.Clamp01(v + (Random.value * 2f - 1f) * valueOffset);
 
             return Color.HSVToRGB(h, s, v);
         }

@@ -37,8 +37,6 @@ namespace UCT.Service
         {
             var result = keyCodes.Any(keyBinding 
                 => KeyBindings.GetInputEveryKeyCodeAtIndex(index, keyBinding, Input.GetKeyDown));
-            if(result)
-            {}
             
             return result;
         }

@@ -36,7 +36,7 @@ namespace Editor
             }
         }
 
-        public static void ResetProperty<T>(SerializedProperty property, string propertyName, T defaultValue) 
+        public static void ResetProperty<T>(SerializedProperty property, string propertyName, T defaultValue)
         {
             var targetProperty = property.FindPropertyRelative(propertyName);
 
@@ -47,36 +47,40 @@ namespace Editor
                     {
                         targetProperty.boolValue = boolValue;
                     }
-
                     break;
+
                 case SerializedPropertyType.Integer:
                     if (defaultValue is int intValue)
                     {
                         targetProperty.intValue = intValue;
                     }
-
                     break;
+
                 case SerializedPropertyType.String:
                     if (defaultValue is string stringValue)
                     {
                         targetProperty.stringValue = stringValue;
                     }
-
                     break;
+
                 case SerializedPropertyType.Enum:
                     if (defaultValue is int enumValueIndex)
                     {
                         targetProperty.enumValueIndex = enumValueIndex;
                     }
-
                     break;
+
                 case SerializedPropertyType.ObjectReference:
-                    if (defaultValue == null)
+                    if (EqualityComparer<T>.Default.Equals(defaultValue, default))
                     {
                         targetProperty.objectReferenceValue = null;
                     }
-
+                    else if (defaultValue is UnityEngine.Object obj)
+                    {
+                        targetProperty.objectReferenceValue = obj;
+                    }
                     break;
+
                 default:
                     UCT.Other.Debug.LogWarning($"Unsupported property type: {targetProperty.propertyType}");
                     break;
