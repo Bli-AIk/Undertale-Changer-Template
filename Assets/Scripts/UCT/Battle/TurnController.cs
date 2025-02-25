@@ -44,6 +44,12 @@ namespace UCT.Battle
             objectPools[^1].count = poolCount[1];
             objectPools[^1].poolObject = Resources.Load<GameObject>("Template/Board Template");
             objectPools[^1].FillPool<BoardController>();
+
+            //子弹(黄魂)
+            objectPools.Add(gameObject.AddComponent<ObjectPool>());
+            objectPools[^1].parent = saveBullet.transform;
+            objectPools[^1].count = poolCount[1];
+            objectPools[^1].poolObject = Resources.Load<GameObject>("Template/YellowBullet Template");
         }
 
         public void KillIEnumerator()
@@ -171,6 +177,13 @@ namespace UCT.Battle
             turn++;
             MainControl.Instance.selectUIController.InTurn();
             yield return 0;
+        }
+
+        public void YellowBullet(Vector3 soulsPosition)
+        {
+            var obj = objectPools[0].GetFromPool<BulletController>();
+            obj.SetBullet("YellowBullet","YellowBullet",soulsPosition);
+            obj.transform.localPosition += Vector3.forward;
         }
 
         /// <summary>

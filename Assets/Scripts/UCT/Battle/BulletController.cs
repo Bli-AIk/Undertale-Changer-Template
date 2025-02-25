@@ -74,7 +74,8 @@ namespace UCT.Battle
 
         private void OnTriggerStay2D(Collider2D collision) //伤害判定
         {
-            if (collision.transform.CompareTag("Player") && collision.name[.."CheckCollider".Length] == "CheckCollider")
+            if (collision.transform.CompareTag("Player") &&
+                collision.name[.."CheckCollider".Length] == "CheckCollider")
                 //if(!useExtra)
             {
                 for (var i = 0; i < boxColliderList.Count; i++)

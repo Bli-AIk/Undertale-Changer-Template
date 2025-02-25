@@ -30,8 +30,6 @@ namespace UCT.Global.Core
             Overworld,
             InBattle
         }
-        
-        public static int LanguagePackageInternalNumber => 3;
 
         public static MainControl Instance;
 
@@ -99,6 +97,8 @@ namespace UCT.Global.Core
         public readonly ItemController ItemController = new();
 
         private DebugStringGradient _debugStringGradient = new("Debug");
+
+        public static int LanguagePackageInternalNumber => 3;
         public LanguagePackControl LanguagePackControl { get; private set; }
         public AudioControl AudioControl { get; private set; }
         public BattleControl BattleControl { get; private set; }
@@ -398,16 +398,15 @@ namespace UCT.Global.Core
             BattleControl.turnTextSave =
                 DataHandlerService.ChangeItemData(BattleControl.turnTextSave, true, new List<string>());
             //--------------------------------------------------------------------------------
-            //OldBoxController = GameObject.Find("MainFrame").GetComponent<OldBoxController>();
             battlePlayerController = GameObject.Find("BattlePlayer").GetComponent<BattlePlayerController>();
             selectUIController = GameObject.Find("SelectUI").GetComponent<SelectUIController>();
-            if (cameraShake == null)
+            if (!cameraShake)
             {
                 cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
             }
 
             cameraShake3D = GameObject.Find("3D CameraP").GetComponent<CameraShake>();
-            if (cameraMainInBattle == null)
+            if (!cameraMainInBattle)
             {
                 cameraMainInBattle = cameraShake.GetComponent<Camera>();
             }

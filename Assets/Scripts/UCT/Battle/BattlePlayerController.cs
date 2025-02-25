@@ -10,7 +10,6 @@ using UCT.Global.Settings;
 using UCT.Global.UI;
 using UCT.Service;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace UCT.Battle
 {
@@ -30,28 +29,109 @@ namespace UCT.Battle
 
         private const float SpeedWeight = 0.5f;
 
-        [Header("心变色时的ding动画速度，0为关")] public float dingTime;
+        [Header("心变色时的ding动画速度，0为关")]
+        public float dingTime;
 
-        [Header("心渐变动画速度，0为关")] public float gradientTime;
+        [Header("心渐变动画速度，0为关")]
+        public float gradientTime;
 
-        [Header("基本属性调整")] public float speed;
+        [Header("基本属性调整")]
+        public float speed;
 
-        public float speedWeightX, speedWeightY; //速度与权重(按X乘以倍数)，速度测试为3，权重0.5f
-        [FormerlySerializedAs("hitCD")] public float hitCd; //无敌时间
-        [FormerlySerializedAs("hitCDMax")] public float hitCdMax; //无敌时间
-        public float displacement = 0.175f; //碰撞距离判定
-        public bool isMoving; //用于蓝橙骨判断：玩家是否真的在移动
+        /// <summary>
+        ///     速度与权重(按X乘以倍数)，速度测试为3，权重0.5f
+        /// </summary>
+        public float speedWeightX, speedWeightY;
+
+        /// <summary>
+        ///     碰撞距离判定
+        /// </summary>
+        public float displacement = 0.175f;
+
+        /// <summary>
+        ///     用于蓝橙骨判断：玩家是否真的在移动
+        /// </summary>
+        public bool isMoving;
+
+        /// <summary>
+        ///     时间插值
+        /// </summary>
         public float timeInterpolation = -0.225f;
+
+        /// <summary>
+        ///     场景漂移
+        /// </summary>
         public Vector2 sceneDrift = new(-1000, 0);
 
-        public PlayerDirEnum playerDir; //方向
+        /// <summary>
+        ///     玩家方向
+        /// </summary>
+        public PlayerDirEnum playerDir;
+
+        /// <summary>
+        ///     玩家移动方向，用于橙心和绿心判断
+        /// </summary>
+        public float angle;
+
+        /// <summary>
+        ///     用于判断绿魂旋转角度
+        /// </summary>
+        public bool isRotate;
+
+        /// <summary>
+        ///     当前角度
+        /// </summary>
+        public float currentAngle;
+
+        /// <summary>
+        ///     当前行
+        /// </summary>
+        public int currentLine = 2;
+
+        /// <summary>
+        ///     箭头位置
+        /// </summary>
+        public Transform arrowPosition;
+
+        /// <summary>
+        ///     橙魂移动残影开关
+        /// </summary>
+        public ParticleSystem orangeDash;
+
+        /// <summary>
+        ///     移动向量
+        /// </summary>
         public Vector3 moving;
-        public bool isJump; //是否处于“跳起”状态
-        public float jumpAcceleration; //跳跃的加速度
-        public float jumpRayDistance; //射线距离
+
+        /// <summary>
+        ///     是否处于“跳起”状态
+        /// </summary>
+        public bool isJump;
+
+        /// <summary>
+        ///     跳跃的加速度
+        /// </summary>
+        public float jumpAcceleration;
+
+        /// <summary>
+        ///     跳跃射线距离
+        /// </summary>
+        public float jumpRayDistance;
+
+        /// <summary>
+        ///     板上的跳跃射线距离
+        /// </summary>
         public float jumpRayDistanceForBoard;
-        public CircleCollider2D collideCollider; //圆形碰撞体
-        public BattleControl.PlayerColor playerColor; //含有属性的颜色 读取BattleControl中的enum PlayerColor.颜色变换通过具体变换的函数来执行
+
+        /// <summary>
+        ///     圆形碰撞体
+        /// </summary>
+        public CircleCollider2D collideCollider;
+
+        /// <summary>
+        ///     含有属性的颜色，读取 <see cref="BattleControl.PlayerColor" />，颜色变换通过具体变换的函数来执行
+        /// </summary>
+        public BattleControl.PlayerColor playerColor;
 
         public UnityEngine.Rendering.Volume hitVolume;
         private Tween _missAnim, _changeColor, _changeDingColor, _changeDingScale;
@@ -59,7 +139,6 @@ namespace UCT.Battle
         private Rigidbody2D _rigidBody;
         private SpriteRenderer _spriteRenderer, _dingSpriteRenderer;
 
-        //LayerMask mask;
         private void Start()
         {
             speedWeightX = 1;
@@ -76,8 +155,9 @@ namespace UCT.Battle
             _dingSpriteRenderer.color = Color.clear;
             hitVolume = GetComponent<UnityEngine.Rendering.Volume>();
             hitVolume.weight = 0;
-            //mask = 1 << 6;
             MainControl.Instance.playerControl.missTime = 0;
+            orangeDash.Stop();
+            arrowPosition.GetComponent<SpriteRenderer>().enabled = false;
         }
 
         private void Update()
@@ -133,46 +213,7 @@ namespace UCT.Battle
             //Debug
             if (MainControl.Instance.playerControl.isDebug)
             {
-                if (Input.GetKeyDown(KeyCode.Keypad1))
-                {
-                    ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[0], 0);
-                }
-                else if (Input.GetKeyDown(KeyCode.Keypad2))
-                {
-                    ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[1],
-                        (BattleControl.PlayerColor)1);
-                }
-                else if (Input.GetKeyDown(KeyCode.Keypad6))
-                {
-                    ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[5],
-                        (BattleControl.PlayerColor)5);
-                }
-
-                if (Input.GetKeyDown(KeyCode.I))
-                {
-                    ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[5],
-                        (BattleControl.PlayerColor)5, 2.5f, 0);
-                }
-                else if (Input.GetKeyDown(KeyCode.K))
-                {
-                    ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[5],
-                        (BattleControl.PlayerColor)5, 2.5f, (PlayerDirEnum)1);
-                }
-                else if (Input.GetKeyDown(KeyCode.J))
-                {
-                    ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[5],
-                        (BattleControl.PlayerColor)5, 2.5f, (PlayerDirEnum)2);
-                }
-                else if (Input.GetKeyDown(KeyCode.L))
-                {
-                    ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[5],
-                        (BattleControl.PlayerColor)5, 2.5f, (PlayerDirEnum)3);
-                }
-
-                if (Input.GetKeyDown(KeyCode.P))
-                {
-                    MainControl.Instance.playerControl.hp = 0;
-                }
+                DebugInput();
             }
         }
 
@@ -213,27 +254,72 @@ namespace UCT.Battle
             }
         }
 
+        private void DebugInput()
+        {
+            var keyMappings = new Dictionary<KeyCode, int>
+            {
+                { KeyCode.Keypad1, 0 },
+                { KeyCode.Keypad2, 1 },
+                { KeyCode.Keypad3, 2 },
+                { KeyCode.Keypad4, 3 },
+                { KeyCode.Keypad6, 5 },
+                { KeyCode.Keypad7, 6 },
+                { KeyCode.Alpha1, 0 },
+                { KeyCode.Alpha2, 1 },
+                { KeyCode.Alpha3, 2 },
+                { KeyCode.Alpha4, 3 },
+                { KeyCode.Alpha6, 5 },
+                { KeyCode.Alpha7, 6 }
+            };
+
+            var isCtrlPressed = Input.GetKey(KeyCode.Tab);
+
+            foreach (var kvp in keyMappings.Where(kvp => Input.GetKeyDown(kvp.Key))
+                         .Where(kvp => kvp.Key.ToString().StartsWith("Keypad") || isCtrlPressed))
+            {
+                ChangePlayerColor(
+                    MainControl.Instance.BattleControl.playerColorList[kvp.Value],
+                    (BattleControl.PlayerColor)kvp.Value);
+            }
+
+
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[5],
+                    (BattleControl.PlayerColor)5, 2.5f, 0);
+            }
+            else if (Input.GetKeyDown(KeyCode.K))
+            {
+                ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[5],
+                    (BattleControl.PlayerColor)5, 2.5f, (PlayerDirEnum)1);
+            }
+            else if (Input.GetKeyDown(KeyCode.J))
+            {
+                ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[5],
+                    (BattleControl.PlayerColor)5, 2.5f, (PlayerDirEnum)2);
+            }
+            else if (Input.GetKeyDown(KeyCode.L))
+            {
+                ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[5],
+                    (BattleControl.PlayerColor)5, 2.5f, (PlayerDirEnum)3);
+            }
+
+            if (Input.GetKeyDown(KeyCode.P))
+            {
+                MainControl.Instance.playerControl.hp = 0;
+            }
+        }
+
         private void Moving()
         {
-            Vector2 dirReal = new();
-            switch (playerDir)
+            var dirReal = playerDir switch
             {
-                case PlayerDirEnum.Up:
-                    dirReal = Vector2.up;
-                    break;
-
-                case PlayerDirEnum.Down:
-                    dirReal = Vector2.down;
-                    break;
-
-                case PlayerDirEnum.Left:
-                    dirReal = Vector2.left;
-                    break;
-
-                case PlayerDirEnum.Right:
-                    dirReal = Vector2.right;
-                    break;
-            }
+                PlayerDirEnum.Up => Vector2.up,
+                PlayerDirEnum.Down => Vector2.down,
+                PlayerDirEnum.Left => Vector2.left,
+                PlayerDirEnum.Right => Vector2.right,
+                _ => new Vector2()
+            };
 
             Ray2D ray = new(transform.position, dirReal);
             Other.Debug.DrawRay(ray.origin, ray.direction, Color.blue);
@@ -247,6 +333,10 @@ namespace UCT.Battle
             switch (playerColor)
             {
                 case BattleControl.PlayerColor.Red:
+                    SoulsMove();
+                    break;
+
+                case BattleControl.PlayerColor.Orange:
                     if (InputService.GetKey(KeyCode.X))
                     {
                         speedWeightX = SpeedWeight;
@@ -258,53 +348,90 @@ namespace UCT.Battle
                         speedWeightY = 1;
                     }
 
-                    if (InputService.GetKey(KeyCode.UpArrow))
+                    if (InputService.GetKey(KeyCode.UpArrow) && InputService.GetKey(KeyCode.LeftArrow))
                     {
-                        moving = new Vector3(moving.x, 1);
+                        angle = 45;
+                    }
+                    else if (InputService.GetKey(KeyCode.UpArrow) && InputService.GetKey(KeyCode.RightArrow))
+                    {
+                        angle = -45;
+                    }
+                    else if (InputService.GetKey(KeyCode.DownArrow) && InputService.GetKey(KeyCode.LeftArrow))
+                    {
+                        angle = 135;
+                    }
+                    else if (InputService.GetKey(KeyCode.DownArrow) && InputService.GetKey(KeyCode.RightArrow))
+                    {
+                        angle = -135;
+                    }
+                    else if (InputService.GetKey(KeyCode.UpArrow))
+                    {
+                        angle = 0;
                     }
                     else if (InputService.GetKey(KeyCode.DownArrow))
                     {
-                        moving = new Vector3(moving.x, -1);
+                        angle = 180;
                     }
-                    else
+                    else if (InputService.GetKey(KeyCode.RightArrow))
                     {
-                        moving = new Vector3(moving.x, 0);
-                    }
-
-                    if (InputService.GetKey(KeyCode.UpArrow) &&
-                        InputService.GetKey(KeyCode.DownArrow))
-                    {
-                        moving = new Vector3(moving.x, 0);
-                    }
-
-                    if (InputService.GetKey(KeyCode.RightArrow))
-                    {
-                        moving = new Vector3(1, moving.y);
+                        angle = -90;
                     }
                     else if (InputService.GetKey(KeyCode.LeftArrow))
                     {
-                        moving = new Vector3(-1, moving.y);
-                    }
-                    else
-                    {
-                        moving = new Vector3(0, moving.y);
+                        angle = 90;
                     }
 
-                    if (InputService.GetKey(KeyCode.RightArrow) &&
-                        InputService.GetKey(KeyCode.LeftArrow))
-                    {
-                        moving = new Vector3(0, moving.y);
-                    }
-
-                    break;
-
-                case BattleControl.PlayerColor.Orange:
+                    moving = Quaternion.Euler(0, 0, angle) * transform.up;
                     break;
 
                 case BattleControl.PlayerColor.Yellow:
-                    break;
+                    SoulsMove();
+                    transform.rotation = Quaternion.Euler(0, 0, 180);
+                    if (InputService.GetKey(KeyCode.Z))
+                    {
+                        TurnController.Instance.YellowBullet(transform.position);
+                    }
 
+                    break;
                 case BattleControl.PlayerColor.Green:
+                {
+                    arrowPosition.GetComponent<SpriteRenderer>().enabled = true;
+                    if (InputService.GetKeyDown(KeyCode.UpArrow))
+                    {
+                        angle = 0;
+                        isRotate = true;
+                    }
+
+                    if (InputService.GetKeyDown(KeyCode.DownArrow))
+                    {
+                        angle = 90;
+                        isRotate = true;
+                    }
+
+                    if (InputService.GetKeyDown(KeyCode.LeftArrow))
+                    {
+                        angle = 180;
+                        isRotate = true;
+                    }
+
+                    if (InputService.GetKeyDown(KeyCode.RightArrow))
+                    {
+                        angle = 270;
+                        isRotate = true;
+                    }
+
+                    if (isRotate)
+                    {
+                        var step = Mathf.Min(90f * Time.deltaTime, angle - currentAngle);
+                        arrowPosition.RotateAround(transform.position, Vector3.forward, step);
+                        currentAngle += step;
+                        if (currentAngle >= angle)
+                        {
+                            isRotate = false;
+                        }
+                    }
+                }
+
                     break;
 
                 case BattleControl.PlayerColor.Cyan:
@@ -710,6 +837,38 @@ namespace UCT.Battle
                     break;
 
                 case BattleControl.PlayerColor.Purple:
+                    if (InputService.GetKey(KeyCode.RightArrow))
+                    {
+                        moving = new Vector3(1, moving.y);
+                    }
+                    else if (InputService.GetKey(KeyCode.LeftArrow))
+                    {
+                        moving = new Vector3(-1, moving.y);
+                    }
+                    else
+                    {
+                        moving = new Vector3(0, moving.y);
+                    }
+
+                    if (InputService.GetKey(KeyCode.RightArrow) &&
+                        InputService.GetKey(KeyCode.LeftArrow))
+                    {
+                        moving = new Vector3(0, moving.y);
+                    }
+
+                    if (InputService.GetKeyDown(KeyCode.UpArrow) && currentLine > 1)
+                    {
+                        currentLine -= 1;
+                        ChangeLine();
+                    }
+
+                    if (InputService.GetKeyDown(KeyCode.DownArrow) && currentLine < 3)
+                    {
+                        currentLine += 1;
+                        ChangeLine();
+                    }
+
+
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -861,8 +1020,12 @@ namespace UCT.Battle
         ///     若PlayerColor输入为nullColor，则不会更改玩家的实际颜色属性。
         /// </summary>
         // ReSharper disable once MemberCanBePrivate.Global
-        public void ChangePlayerColor(Color aimColor, BattleControl.PlayerColor aimPlayerColor, float startForce = 0,
-            PlayerDirEnum dir = PlayerDirEnum.NullDir, float inputGradientTime = -1, float inputDingTime = -1,
+        public void ChangePlayerColor(Color aimColor,
+            BattleControl.PlayerColor aimPlayerColor,
+            float startForce = 0,
+            PlayerDirEnum dir = PlayerDirEnum.NullDir,
+            float inputGradientTime = -1,
+            float inputDingTime = -1,
             int fx = 2)
         {
             AudioController.Instance.PlayFx(fx, MainControl.Instance.AudioControl.fxClipBattle);
@@ -927,6 +1090,15 @@ namespace UCT.Battle
             {
                 transform.SetParent(null);
                 BlueDown(startForce, dir);
+            }
+
+            if (aimPlayerColor != BattleControl.PlayerColor.Orange)
+            {
+                orangeDash.Stop();
+            }
+            else
+            {
+                orangeDash.Play();
             }
         }
 
@@ -996,7 +1168,9 @@ namespace UCT.Battle
         }
 
         //定义计算位移后垂点位置的方法
-        private static Vector2 CalculateDisplacedPoint(Vector2 nearestPoint, Vector2 lineStart, Vector2 lineEnd,
+        private static Vector2 CalculateDisplacedPoint(Vector2 nearestPoint,
+            Vector2 lineStart,
+            Vector2 lineEnd,
             float displacement)
         {
             var lineDirection = (lineEnd - lineStart).normalized; //计算线段方向向量
@@ -1056,8 +1230,11 @@ namespace UCT.Battle
         }
 
         //定义线线交点计算的方法
-        private static bool LineLineIntersection(out Vector2 intersection, Vector2 point1, Vector2 point2,
-            Vector2 point3, Vector2 point4)
+        private static bool LineLineIntersection(out Vector2 intersection,
+            Vector2 point1,
+            Vector2 point2,
+            Vector2 point3,
+            Vector2 point4)
         {
             intersection = new Vector2(); //初始化交点坐标
 
@@ -1076,7 +1253,10 @@ namespace UCT.Battle
         }
 
         // 定义根据位移检查并调整点位置的方法
-        private Vector3 CheckPoint(Vector3 point, float inputDisplacement, int maxDepth = 10, int currentDepth = 0,
+        private Vector3 CheckPoint(Vector3 point,
+            float inputDisplacement,
+            int maxDepth = 10,
+            int currentDepth = 0,
             bool isInitialCall = true)
         {
             Vector2 originalPoint = point; //保存原始点位置
@@ -1101,7 +1281,6 @@ namespace UCT.Battle
                 var movedVertices = CalculateInwardOffset(box.GetRealPoints(false), -rDis); //计算缩放后的多边形顶点
 
                 if (IsPointInPolygon(point, movedVertices)) //如果点 在 调整后的多边形内
-                    //Debug.Log(point, "#FF00FF"); //记录日志
                 {
                     return point; //返回原始坐标
                 }
@@ -1151,7 +1330,6 @@ namespace UCT.Battle
 
             var moved = (Vector3)CalculateDisplacedPoint(nearestPoint, lineStart, lineEnd, -inputDisplacement) +
                         new Vector3(0, 0, z); //计算位移后的点位置
-            //Debug.Log(moved, "#FF0000"); //记录日志
 
             if (!isInitialCall && (Vector2)moved == originalPoint)
             {
@@ -1175,7 +1353,6 @@ namespace UCT.Battle
 
             if (!(mainControl.playerControl.isDebug && mainControl.playerControl.invincible))
             {
-                //spriteRenderer.color = Color.red;
                 mainControl.playerControl.playerLastPos = transform.position - (Vector3)sceneDrift;
                 SettingsStorage.pause = true;
                 TurnController.Instance.KillIEnumerator();
@@ -1186,6 +1363,69 @@ namespace UCT.Battle
                 mainControl.selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
                 Other.Debug.Log("Debug无敌模式已将您的血量恢复", "#FF0000");
             }
+        }
+
+        private void SoulsMove()
+        {
+            if (InputService.GetKey(KeyCode.X))
+            {
+                speedWeightX = SpeedWeight;
+                speedWeightY = SpeedWeight;
+            }
+            else
+            {
+                speedWeightX = 1;
+                speedWeightY = 1;
+            }
+
+            if (InputService.GetKey(KeyCode.UpArrow))
+            {
+                moving = new Vector3(moving.x, 1);
+            }
+            else if (InputService.GetKey(KeyCode.DownArrow))
+            {
+                moving = new Vector3(moving.x, -1);
+            }
+            else
+            {
+                moving = new Vector3(moving.x, 0);
+            }
+
+            if (InputService.GetKey(KeyCode.UpArrow) &&
+                InputService.GetKey(KeyCode.DownArrow))
+            {
+                moving = new Vector3(moving.x, 0);
+            }
+
+            if (InputService.GetKey(KeyCode.RightArrow))
+            {
+                moving = new Vector3(1, moving.y);
+            }
+            else if (InputService.GetKey(KeyCode.LeftArrow))
+            {
+                moving = new Vector3(-1, moving.y);
+            }
+            else
+            {
+                moving = new Vector3(0, moving.y);
+            }
+
+            if (InputService.GetKey(KeyCode.RightArrow) &&
+                InputService.GetKey(KeyCode.LeftArrow))
+            {
+                moving = new Vector3(0, moving.y);
+            }
+        }
+
+        private void ChangeLine()
+        {
+            transform.position = currentLine switch
+            {
+                1 => new Vector3(moving.x, -1.3f, 0),
+                2 => new Vector3(moving.x, -1.6f, 0),
+                3 => new Vector3(moving.x, -1.9f, 0),
+                _ => transform.position
+            };
         }
     }
 }
