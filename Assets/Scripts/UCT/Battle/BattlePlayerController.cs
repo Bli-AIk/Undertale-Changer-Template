@@ -11,6 +11,7 @@ using UCT.Global.UI;
 using UCT.Service;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UIElements;
 
 namespace UCT.Battle
 {
@@ -45,6 +46,12 @@ namespace UCT.Battle
         public Vector2 sceneDrift = new(-1000, 0);
 
         public PlayerDirEnum playerDir; //方向
+        public float angle; //玩家移动方向，用于橙心和绿心判断
+        public bool isRotate = false;   //用于判断绿魂旋转角度
+        public float currentAngle = 0;
+        public int CurrentLine = 2;
+        public Transform arrowposition;
+        public ParticleSystem orangeDash; //橙魂移动残影开关
         public Vector3 moving;
         public bool isJump; //是否处于“跳起”状态
         public float jumpAcceleration; //跳跃的加速度
@@ -78,6 +85,8 @@ namespace UCT.Battle
             hitVolume.weight = 0;
             //mask = 1 << 6;
             MainControl.Instance.playerControl.missTime = 0;
+            orangeDash.Stop();
+            arrowposition.GetComponent<SpriteRenderer>().enabled = false;
         }
 
         private void Update()
@@ -131,9 +140,18 @@ namespace UCT.Battle
                 else if (Input.GetKeyDown(KeyCode.Keypad2))
                     ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[1],
                         (BattleControl.PlayerColor)1);
+                else if (Input.GetKeyDown(KeyCode.Keypad3))
+                    ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[2],
+                        (BattleControl.PlayerColor)2);
+                else if (Input.GetKeyDown(KeyCode.Keypad4))
+                    ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[3],
+                        (BattleControl.PlayerColor)3);
                 else if (Input.GetKeyDown(KeyCode.Keypad6))
                     ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[5],
                         (BattleControl.PlayerColor)5);
+                else if (Input.GetKeyDown(KeyCode.Keypad7))
+                    ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[6],
+                        (BattleControl.PlayerColor)6);
 
                 if (Input.GetKeyDown(KeyCode.I))
                     ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[5],
@@ -213,6 +231,10 @@ namespace UCT.Battle
             switch (playerColor)
             {
                 case BattleControl.PlayerColor.Red:
+                    SoulsMove();
+                    break;
+
+                case BattleControl.PlayerColor.Orange:
                     if (InputService.GetKey(KeyCode.X))
                     {
                         speedWeightX = SpeedWeight;
@@ -224,36 +246,69 @@ namespace UCT.Battle
                         speedWeightY = 1;
                     }
 
-                    if (InputService.GetKey(KeyCode.UpArrow))
-                        moving = new Vector3(moving.x, 1);
+                    if (InputService.GetKey(KeyCode.UpArrow) && InputService.GetKey(KeyCode.LeftArrow))
+                        angle = 45;
+                    else if (InputService.GetKey(KeyCode.UpArrow) && InputService.GetKey(KeyCode.RightArrow))
+                        angle = -45;
+                    else if (InputService.GetKey(KeyCode.DownArrow) && InputService.GetKey(KeyCode.LeftArrow))
+                        angle = 135;
+                    else if (InputService.GetKey(KeyCode.DownArrow) && InputService.GetKey(KeyCode.RightArrow))
+                        angle = -135;
+                    else if (InputService.GetKey(KeyCode.UpArrow))
+                        angle = 0;
                     else if (InputService.GetKey(KeyCode.DownArrow))
-                        moving = new Vector3(moving.x, -1);
-                    else
-                        moving = new Vector3(moving.x, 0);
-
-                    if (InputService.GetKey(KeyCode.UpArrow) &&
-                        InputService.GetKey(KeyCode.DownArrow))
-                        moving = new Vector3(moving.x, 0);
-
-                    if (InputService.GetKey(KeyCode.RightArrow))
-                        moving = new Vector3(1, moving.y);
+                        angle = 180;
+                    else if (InputService.GetKey(KeyCode.RightArrow))
+                        angle = -90;
                     else if (InputService.GetKey(KeyCode.LeftArrow))
-                        moving = new Vector3(-1, moving.y);
-                    else
-                        moving = new Vector3(0, moving.y);
+                        angle = 90;
 
-                    if (InputService.GetKey(KeyCode.RightArrow) &&
-                        InputService.GetKey(KeyCode.LeftArrow))
-                        moving = new Vector3(0, moving.y);
-                    break;
-
-                case BattleControl.PlayerColor.Orange:
+                    moving = Quaternion.Euler(0, 0, angle) * transform.up;
                     break;
 
                 case BattleControl.PlayerColor.Yellow:
+                    SoulsMove();
+                    transform.rotation = Quaternion.Euler(0, 0, 180);
+                    if (InputService.GetKey(KeyCode.Z))
+                        TurnController.Instance.YellowBullet(transform.position);
                     break;
-
                 case BattleControl.PlayerColor.Green:
+                {
+                    arrowposition.GetComponent<SpriteRenderer>().enabled = true;
+                    if (InputService.GetKeyDown(KeyCode.UpArrow))
+                    {
+                        angle = 0;
+                        isRotate = true;
+                    }
+
+                    if (InputService.GetKeyDown(KeyCode.DownArrow))
+                    {
+                        angle = 90;
+                        isRotate = true;
+                    }
+                    if (InputService.GetKeyDown(KeyCode.LeftArrow))
+                    {
+                        angle = 180;
+                        isRotate = true;
+                    }
+                    if (InputService.GetKeyDown(KeyCode.RightArrow))
+                    {
+                        angle = 270;
+                        isRotate = true;
+                    }
+
+                    if (isRotate)
+                    {
+                        float step = Mathf.Min(90f * Time.deltaTime, angle - currentAngle);
+                        arrowposition.RotateAround(transform.position,Vector3.forward, step);
+                        currentAngle += step;
+                        if (currentAngle >= angle)
+                        {
+                            isRotate = false;
+                        }
+                    }
+                }
+
                     break;
 
                 case BattleControl.PlayerColor.Cyan:
@@ -558,6 +613,28 @@ namespace UCT.Battle
                     break;
 
                 case BattleControl.PlayerColor.Purple:
+                    if (InputService.GetKey(KeyCode.RightArrow))
+                        moving = new Vector3(1, moving.y);
+                    else if (InputService.GetKey(KeyCode.LeftArrow))
+                        moving = new Vector3(-1, moving.y);
+                    else
+                        moving = new Vector3(0, moving.y);
+
+                    if (InputService.GetKey(KeyCode.RightArrow) &&
+                        InputService.GetKey(KeyCode.LeftArrow))
+                        moving = new Vector3(0, moving.y);
+                    if (InputService.GetKeyDown(KeyCode.UpArrow) && CurrentLine > 1)
+                    {
+                        CurrentLine -= 1;
+                        ChangeLine();
+                    }
+                    if (InputService.GetKeyDown(KeyCode.DownArrow) && CurrentLine < 3)
+                    {
+                        CurrentLine += 1;
+                        ChangeLine();
+                    }
+                    
+
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -745,6 +822,11 @@ namespace UCT.Battle
                 transform.SetParent(null);
                 BlueDown(startForce, dir);
             }
+
+            if (aimPlayerColor != BattleControl.PlayerColor.Orange)
+                orangeDash.Stop();
+            else
+                orangeDash.Play();
         }
 
         /// <summary>
@@ -954,5 +1036,57 @@ namespace UCT.Battle
                 Other.Debug.Log("Debug无敌模式已将您的血量恢复", "#FF0000");
             }
         }
+
+        private void SoulsMove()
+        {
+            if (InputService.GetKey(KeyCode.X))
+            {
+                speedWeightX = SpeedWeight;
+                speedWeightY = SpeedWeight;
+            }
+            else
+            {
+                speedWeightX = 1;
+                speedWeightY = 1;
+            }
+
+            if (InputService.GetKey(KeyCode.UpArrow))
+                moving = new Vector3(moving.x, 1);
+            else if (InputService.GetKey(KeyCode.DownArrow))
+                moving = new Vector3(moving.x, -1);
+            else
+                moving = new Vector3(moving.x, 0);
+
+            if (InputService.GetKey(KeyCode.UpArrow) &&
+                InputService.GetKey(KeyCode.DownArrow))
+                moving = new Vector3(moving.x, 0);
+
+            if (InputService.GetKey(KeyCode.RightArrow))
+                moving = new Vector3(1, moving.y);
+            else if (InputService.GetKey(KeyCode.LeftArrow))
+                moving = new Vector3(-1, moving.y);
+            else
+                moving = new Vector3(0, moving.y);
+
+            if (InputService.GetKey(KeyCode.RightArrow) &&
+                InputService.GetKey(KeyCode.LeftArrow))
+                moving = new Vector3(0, moving.y);
+        }
+        public void ChangeLine()
+        {
+            switch (CurrentLine)
+            {
+                case 1:
+                    transform.position = new Vector3(moving.x, -1.3f, 0);
+                    break;
+                case 2:
+                    transform.position = new Vector3(moving.x, -1.6f, 0);
+                    break;
+                case 3:
+                    transform.position = new Vector3(moving.x, -1.9f, 0);
+                    break;
+            }
+        }
+        
     }
 }

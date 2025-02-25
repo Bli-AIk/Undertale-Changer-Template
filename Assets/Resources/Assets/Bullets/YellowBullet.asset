@@ -10,20 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8af6835af6fd18e45b8cff33dfa3d893, type: 3}
-  m_Name: CupCake
+  m_Name: YellowBullet
   m_EditorClassIdentifier: 
-  typeName: CupCake
+  typeName: YellowBullet
   objName: DemoBullet
   layer: 40
-  sprite: {fileID: 21300000, guid: a55224a9007c69a4e97f55b16a124d64, type: 3}
+  sprite: {fileID: 21300000, guid: 4eb2039958698b2488a245c765822001, type: 3}
   triggerSize:
-  - {x: 1, y: 1}
-  triggerHit: 01000000
+  - {x: 0.53, y: 0.94}
+  triggerHit: 00000000
   triggerOffset:
   - {x: 0, y: 0}
-  startPosition: {x: 1, y: -1.6, z: 0}
+  startPosition: {x: 0, y: 0, z: 0}
   startRotation: {x: 0, y: 0, z: 0}
-  startScale: {x: 0, y: 0, z: 0}
+  startScale: {x: 1, y: 1, z: 1}
   bulletColor: 0
   startMask: 0
   triggerFollowMode: 1

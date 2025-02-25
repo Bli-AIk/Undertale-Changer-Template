@@ -9,6 +9,7 @@ TagManager:
   - owObjTrigger
   - Box
   - PlayerTrigger
+  - SoulsBullet
   layers:
   - Default
   - TransparentFX
