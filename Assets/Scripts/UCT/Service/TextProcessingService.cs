@@ -222,7 +222,6 @@ namespace UCT.Service
                 totalSeconds = 0;
             }
 
-            //int seconds = totalSeconds % 60;
             totalSeconds /= 60;
             var minutes = totalSeconds % 60;
             var hours = totalSeconds / 60;
@@ -283,7 +282,6 @@ namespace UCT.Service
 
             var part1 = inputString[..startIndex]; // 从开头到A之前的部分
             var part2 = inputString[(endIndex + 1)..]; // 从B之后到字符串末尾的部分
-            //Other.Debug.Log(inputString.Substring(startIndex + 1));
             var result = part1 + add + part2; // 合并两部分
             return result;
         }

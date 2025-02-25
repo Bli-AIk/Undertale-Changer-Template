@@ -149,6 +149,9 @@ namespace UCT.EventSystem
             globalRuleTable = Resources.Load<RuleTable>("Tables/RuleTable");
             if (!force && MainControl.Instance.sceneState != MainControl.SceneState.Overworld)
             {
+                eventTable = globalEventTable;
+                factTable = globalFactTable;
+                ruleTable = globalRuleTable;
                 return;
             }
 

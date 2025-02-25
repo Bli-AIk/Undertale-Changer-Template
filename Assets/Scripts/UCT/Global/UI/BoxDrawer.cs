@@ -288,8 +288,6 @@ namespace UCT.Global.UI
         /// </summary>
         public void IsOpenComponentsData(bool isOpen = false)
         {
-            //meshFilter.mesh = null;
-            //lineRenderer.positionCount = 0;
             meshRenderer.enabled = isOpen;
             lineRenderer.enabled = isOpen;
         }

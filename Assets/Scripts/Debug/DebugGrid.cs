@@ -59,7 +59,6 @@ namespace Debug
             for (var x = 1; x < divisionX; x++)
             {
                 var length = Mathf.Abs(referenceX.y - referenceX.x);
-                //Debug.Log(length);
                 var objGrid = GetFromPool<Transform>();
                 objGrid.transform.localPosition = new Vector3(length / divisionX * x - deviationX, 0, 0);
                 objGrid.GetComponent<SpriteRenderer>().color = colorY;
@@ -76,7 +75,6 @@ namespace Debug
             for (var y = 1; y < divisionX; y++)
             {
                 var length = Mathf.Abs(referenceY.y - referenceY.x);
-                //Debug.Log(length);
                 var objGrid = GetFromPool<Transform>();
                 objGrid.transform.localPosition = new Vector3(0, length / divisionY * y - deviationY, 0);
                 objGrid.GetComponent<SpriteRenderer>().color = colorX;

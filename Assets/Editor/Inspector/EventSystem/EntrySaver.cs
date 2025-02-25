@@ -116,7 +116,6 @@ namespace Editor.Inspector.EventSystem
                 fact.FindPropertyRelative("value").intValue = facts[popup].value;
             }
 
-            fact.FindPropertyRelative("scope").enumValueIndex = (int)facts[popup].scope;
             fact.FindPropertyRelative("area").enumValueIndex = (int)facts[popup].area;
             fact.FindPropertyRelative("scene").stringValue = facts[popup].scene;
 
@@ -136,7 +135,7 @@ namespace Editor.Inspector.EventSystem
             return changedIsGlobal;
         }
 
-        public static Rect RegionToggle(Rect rect, bool isGlobal, out bool changedIsGlobal)
+        private static Rect RegionToggle(Rect rect, bool isGlobal, out bool changedIsGlobal)
         {
             var toggleRect = rect;
             toggleRect.width = rect.width / 5;

@@ -13,6 +13,8 @@ namespace UCT.Battle
     /// </summary>
     public class TargetController : MonoBehaviour
     {
+        private static readonly int Hit1 = Animator.StringToHash("Hit");
+        private static readonly int MoveSpeed = Animator.StringToHash("MoveSpeed");
         [Header("攻击造成的伤害")] public int hitDamage;
 
         public GameObject hpBar;
@@ -38,17 +40,21 @@ namespace UCT.Battle
 
         private void Update()
         {
-            if (!_pressZ)
+            if (_pressZ)
             {
-                if (InputService.GetKeyDown(KeyCode.Z))
-                {
-                    _pressZ = true;
-                    _anim.SetBool("Hit", true);
-                    _anim.SetFloat("MoveSpeed", 0);
-                    AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipBattle);
-                    Hit();
-                }
+                return;
             }
+
+            if (!InputService.GetKeyDown(KeyCode.Z))
+            {
+                return;
+            }
+
+            _pressZ = true;
+            _anim.SetBool(Hit1, true);
+            _anim.SetFloat(MoveSpeed, 0);
+            AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipBattle);
+            Hit();
         }
 
         private void OnEnable()
@@ -58,9 +64,8 @@ namespace UCT.Battle
                 _anim = GetComponent<Animator>();
             }
 
-            //anim.enabled = true;
-            _anim.SetBool("Hit", false);
-            _anim.SetFloat("MoveSpeed", 1);
+            _anim.SetBool(Hit1, false);
+            _anim.SetFloat(MoveSpeed, 1);
             _pressZ = true;
         }
 
@@ -101,7 +106,7 @@ namespace UCT.Battle
         //以下皆用于anim
         private void HitAnim()
         {
-            hitMonster.anim.SetBool("Hit", true);
+            hitMonster.anim.SetBool(Hit1, true);
             hpBar.transform.localScale =
                 new Vector3(
                     (float)MainControl.Instance.BattleControl.enemiesHp[select * 2] /
@@ -126,7 +131,6 @@ namespace UCT.Battle
 
         private void NotActive()
         {
-            //anim.enabled = false;
             gameObject.SetActive(false);
         }
     }

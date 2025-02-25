@@ -35,12 +35,11 @@ MonoBehaviour:
     - TestEvent
     - TestEvent
     useRuleCriterion: 0
-    isGlobalRuleCriterion: 0
     ruleCriterion:
       isResultReversed: 0
+      isGlobal: 0
       fact:
         name: 
-        scope: 0
         value: 0
         area: 0
         scene: 
@@ -49,9 +48,9 @@ MonoBehaviour:
       operation: 1
       criteria:
       - isResultReversed: 0
+        isGlobal: 0
         fact:
-          name: Button1
-          scope: 0
+          name: Fact1
           value: 0
           area: 0
           scene: 
@@ -83,12 +82,11 @@ MonoBehaviour:
     - TestEvent
     - TestEvent
     useRuleCriterion: 0
-    isGlobalRuleCriterion: 0
     ruleCriterion:
       isResultReversed: 0
+      isGlobal: 0
       fact:
         name: 
-        scope: 0
         value: 0
         area: 0
         scene: 
@@ -97,9 +95,9 @@ MonoBehaviour:
       operation: 1
       criteria:
       - isResultReversed: 0
+        isGlobal: 0
         fact:
-          name: Button1
-          scope: 0
+          name: Fact1
           value: 0
           area: 0
           scene: 

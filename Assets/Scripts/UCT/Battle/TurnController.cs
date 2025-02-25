@@ -19,7 +19,6 @@ namespace UCT.Battle
 
         public List<int> poolCount;
 
-        //public List<string> inheritList = new List<string>();
         public List<ObjectPool> objectPools = new();
 
         private void Awake()

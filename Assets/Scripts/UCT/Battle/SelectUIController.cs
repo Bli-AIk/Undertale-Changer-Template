@@ -374,7 +374,6 @@ namespace UCT.Battle
                         }
                     }
 
-                    //if (hpFood != MainControl.instance.PlayerControl.hp)
                     _hpUI.text = FormatWithLeadingZero(_hpFood) + " / " +
                                  FormatWithLeadingZero(MainControl.Instance.playerControl.hpMax);
                     break;
@@ -790,7 +789,6 @@ namespace UCT.Battle
 
                 case SelectedLayer.NarratorLayer:
                 {
-                    //DataHandlerService.ForceJumpLoadTurn  = true;
                     firstIn = false;
 
                     if (selectedButton == SelectedButton.Fight && !_target.gameObject.activeSelf)

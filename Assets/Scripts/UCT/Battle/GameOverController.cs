@@ -54,12 +54,14 @@ namespace UCT.Battle
                 canChangeScene = false;
             }
 
-            if (InputService.GetKeyDown(KeyCode.C) && canChangeSceneForC)
+            if (!InputService.GetKeyDown(KeyCode.C) || !canChangeSceneForC)
             {
-                GameUtilityService.FadeOutAndSwitchScene("Example-Corridor", Color.black, null, true);
-                _typeWritter.TypeStop();
-                canChangeSceneForC = false;
+                return;
             }
+
+            GameUtilityService.FadeOutAndSwitchScene("Example-Corridor", Color.black, null, true);
+            _typeWritter.TypeStop();
+            canChangeSceneForC = false;
         }
 
         //接下来交给Animator表演
@@ -99,23 +101,24 @@ namespace UCT.Battle
             canChangeScene = true;
         }
 
-        public void Follish()
+        public void Prank()
         {
-            if (_foolDay)
+            if (!_foolDay)
             {
-                var main = _mParticleSystem.main;
-                main.loop = true;
-                main.startLifetime = Random.Range(1.5f, 3);
-                var emission = _mParticleSystem.emission;
-                emission.rateOverDistance = Random.Range(5, 51);
-                //m_ParticleSystem.transform.position = new Vector3(UnityEngine.Random.Range(-6.85f, 6.85f), UnityEngine.Random.Range(-5.25f, 5.25f));
-                var time = Random.Range(0.5f, 1f);
-
-                _mParticleSystem.transform.DOMoveX(Random.Range(-6.85f, 6.85f), time)
-                    .SetEase((Ease)Random.Range(1, 35));
-                _mParticleSystem.transform.DOMoveY(Random.Range(-5.25f, 5.25f), time).SetEase((Ease)Random.Range(1, 35))
-                    .OnKill(Follish);
+                return;
             }
+
+            var main = _mParticleSystem.main;
+            main.loop = true;
+            main.startLifetime = Random.Range(1.5f, 3);
+            var emission = _mParticleSystem.emission;
+            emission.rateOverDistance = Random.Range(5, 51);
+            var time = Random.Range(0.5f, 1f);
+
+            _mParticleSystem.transform.DOMoveX(Random.Range(-6.85f, 6.85f), time)
+                .SetEase((Ease)Random.Range(1, 35));
+            _mParticleSystem.transform.DOMoveY(Random.Range(-5.25f, 5.25f), time).SetEase((Ease)Random.Range(1, 35))
+                .OnKill(Prank);
         }
     }
 }

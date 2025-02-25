@@ -154,10 +154,18 @@ namespace UCT.EventSystem
                         EventController.LoadTables(true);
                     }
 
-                    var factTable = EventController.factTable.facts;
-                    fact.value = GetFactsValue(fact, factTable);
+                    if (!EventController.factTable)
+                    {
+                        isGlobal = true;
+                    }
+                    else
+                    {
+                        var factTable = EventController.factTable.facts;
+                        fact.value = GetFactsValue(fact, factTable);
+                    }
                 }
-                else
+                
+                if (isGlobal)
                 {
                     var globalFactTable = EventController.globalFactTable.facts;
                     fact.value = GetFactsValue(fact, globalFactTable);

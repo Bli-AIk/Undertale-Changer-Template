@@ -9,11 +9,11 @@ namespace UCT.Global.Settings
     /// </summary>
     public class FPSMonitor : MonoBehaviour
     {
-        private const float MUpdateShowDeltaTime = 0.2f; //更新帧率的时间间隔;
+        private const float MUpdateShowDeltaTime = 0.2f; 
         private TMP_Text _fps;
-        private float _mFPS; //帧率
-        private int _mFrameUpdate; //帧数;
-        private float _mLastUpdateShowTime; //上一次更新帧率的时间;
+        private float _mFPS; 
+        private int _mFrameUpdate;
+        private float _mLastUpdateShowTime; 
 
         private void Start()
         {

@@ -947,11 +947,6 @@ namespace UCT.Battle
                 }
 
                 isMoving = !(x || y);
-
-                /*
-            ////Debug.Log("X:" + x);
-            ////Debug.Log("Y:" + y);
-            */
             }
             else
             {

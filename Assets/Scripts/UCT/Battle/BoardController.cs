@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,21 +9,23 @@ namespace UCT.Battle
     /// </summary>
     public class BoardController : MonoBehaviour
     {
-        [Header("宽度")] public float width = 2.1f;
+        [Header("宽度")]
+        public float width = 2.1f;
 
-        [Header("是否为跟踪板")] public bool canMove;
+        [Header("是否为跟踪板")]
+        public bool canMove;
 
-        [Header("是否让边缘碰撞器长度随sprite宽度而变化")] public bool keepEdge;
+        [Header("是否让边缘碰撞器长度随sprite宽度而变化")]
+        public bool keepEdge;
 
-        public List<Sprite> boards;
+        public List<Sprite> boardSprites;
 
         private BoxCollider2D
-            _boxCollider2DUp, _boxCollider2DDown; //纯纯的检测器 检测玩家在上面就把EdgeCollider掐了。具体在BattlePlayerController内控
+            _boxCollider2DUp, _boxCollider2DDown;
 
-        private EdgeCollider2D _edgeCollider2D; //默认为触发器。
+        private EdgeCollider2D _edgeCollider2D;
         private SpriteRenderer _spriteRenderer;
 
-        //public bool test;
         private void Awake()
         {
             _spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
@@ -37,6 +40,12 @@ namespace UCT.Battle
 
             _boxCollider2DDown = gameObject.AddComponent<BoxCollider2D>();
             _boxCollider2DDown.isTrigger = true;
+
+            boardSprites = new List<Sprite>
+            {
+                Resources.Load<Sprite>("Sprites/Board/Board_unMove"),
+                Resources.Load<Sprite>("Sprites/Board/Board_move")
+            };
         }
 
         private void Start()
@@ -46,36 +55,38 @@ namespace UCT.Battle
 
         private void Update()
         {
-            if (keepEdge)
+            if (!keepEdge)
             {
-                var points = new List<Vector2>
-                    { new(-_spriteRenderer.size.x / 2, 0.025f), new(_spriteRenderer.size.x / 2, 0.025f) };
-                _edgeCollider2D.SetPoints(points);
-                _boxCollider2DUp.size = new Vector2(_spriteRenderer.size.x, 3);
-                _boxCollider2DDown.size = new Vector2(_spriteRenderer.size.x, 3);
-
-                _spriteRenderer.size = new Vector2(width, 0.5f);
+                return;
             }
 
-            //if (test)  transform.position = new Vector3(Time.time, transform.position.y);
+            var points = new List<Vector2>
+                { new(-_spriteRenderer.size.x / 2, 0.025f), new(_spriteRenderer.size.x / 2, 0.025f) };
+            _edgeCollider2D.SetPoints(points);
+            _boxCollider2DUp.size = new Vector2(_spriteRenderer.size.x, 3);
+            _boxCollider2DDown.size = new Vector2(_spriteRenderer.size.x, 3);
+
+            _spriteRenderer.size = new Vector2(width, 0.5f);
         }
 
         private void OnTriggerStay2D(Collider2D collision)
         {
-            if (collision.CompareTag("Player"))
+            if (!collision.CompareTag("Player"))
             {
-                if (_boxCollider2DDown.IsTouching(collision)) //进入的是下面
-                {
-                    _edgeCollider2D.isTrigger = true;
-                }
-                else if (_boxCollider2DUp.IsTouching(collision))
-                {
-                    _edgeCollider2D.isTrigger = false;
-                }
+                return;
+            }
+
+            if (_boxCollider2DDown.IsTouching(collision)) //进入的是下面
+            {
+                _edgeCollider2D.isTrigger = true;
+            }
+            else if (_boxCollider2DUp.IsTouching(collision))
+            {
+                _edgeCollider2D.isTrigger = false;
             }
         }
 
-        public void SetBoard(bool canMover, string setName, int layer, Vector3 startLocalPosition)
+        private void SetBoard(bool canMover, string setName, int layer, Vector3 startLocalPosition)
         {
             canMove = canMover;
             transform.name = setName;
@@ -97,31 +108,14 @@ namespace UCT.Battle
             _boxCollider2DDown.offset = new Vector2(0, -1.5f);
         }
 
-        public void ChangeMove(bool isChange = false)
+        private void ChangeMove(bool isChange = false)
         {
             if (isChange)
             {
                 canMove = !canMove;
             }
 
-            if (!canMove)
-            {
-                _spriteRenderer.sprite = Resources.Load<Sprite>("Sprites/Board/Board_unmove");
-            }
-            else
-            {
-                _spriteRenderer.sprite = Resources.Load<Sprite>("Sprites/Board/Board_move");
-            }
+            _spriteRenderer.sprite = boardSprites[Convert.ToInt32(canMove)];
         }
-
-        /*
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.CompareTag("Player")
-        {
-            edgeCollider2D.isTrigger = true;
-        }
-    }
-    */
     }
 }

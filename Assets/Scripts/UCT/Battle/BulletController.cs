@@ -16,8 +16,6 @@ namespace UCT.Battle
     /// </summary>
     public class BulletController : MonoBehaviour
     {
-        //public bool useExtra;
-        //public Collider2D extra;
         /// <summary>
         ///     设置碰撞箱跟随SpriteRenderer缩放的模式。
         ///     CutFollow:切去boxColliderSizes内存储的数据；
@@ -29,13 +27,16 @@ namespace UCT.Battle
             NoFollow
         }
 
+        private static readonly int OpenMask = Shader.PropertyToID("_OpenMask");
+        private static readonly int OutSide = Shader.PropertyToID("_OutSide");
+
         public string typeName;
 
         public SpriteRenderer spriteRenderer;
         public List<BoxCollider2D> boxColliderList = new();
         public List<Vector2> boxColliderSizes = new();
         public List<int> boxHitList = new();
-        public BattleControl.BulletColor bulletColor; //含有属性的颜色 读取BattleControl中的enum BulletColor
+        public BattleControl.BulletColor bulletColor;
 
         public FollowMode followMode;
 
@@ -72,60 +73,56 @@ namespace UCT.Battle
             name = "Bullet";
         }
 
-        private void OnTriggerStay2D(Collider2D collision) //伤害判定
+        private void OnTriggerStay2D(Collider2D collision)
         {
-            if (collision.transform.CompareTag("Player") &&
-                collision.name[.."CheckCollider".Length] == "CheckCollider")
-                //if(!useExtra)
+            if (!collision.transform.CompareTag("Player") ||
+                collision.name[.."CheckCollider".Length] != "CheckCollider")
             {
-                for (var i = 0; i < boxColliderList.Count; i++)
-                {
-                    if (boxColliderList[i].IsTouching(collision))
-                    {
-                        if (bulletColor == BattleControl.BulletColor.White
-                            || (bulletColor == BattleControl.BulletColor.Orange &&
-                                !MainControl.Instance.battlePlayerController.isMoving)
-                            || (bulletColor == BattleControl.BulletColor.Blue &&
-                                MainControl.Instance.battlePlayerController.isMoving))
-                        {
-                            HitPlayer(i);
-                        }
+                return;
+            }
 
-                        break;
-                    }
-                }
-            }
-            /*
-            else if (extra.IsTouching(collision))
+            for (var i = 0; i < boxColliderList.Count; i++)
             {
-                if (bulletColor == BattleControl.BulletColor.white
-                    || (bulletColor == BattleControl.BulletColor.orange && !MainControl.instance.battlePlayerController.isMoving)
-                    || (bulletColor == BattleControl.BulletColor.blue && MainControl.instance.battlePlayerController.isMoving))
+                if (!boxColliderList[i].IsTouching(collision))
                 {
-                    HitPlayer(0);
-                    if (!MainControl.instance.OverworldControl.noSFX)
-                        MainControl.instance.battlePlayerController.hitVolume.weight = 1;
+                    continue;
                 }
+
+                if (bulletColor == BattleControl.BulletColor.White
+                    || (bulletColor == BattleControl.BulletColor.Orange &&
+                        !MainControl.Instance.battlePlayerController.isMoving)
+                    || (bulletColor == BattleControl.BulletColor.Blue &&
+                        MainControl.Instance.battlePlayerController.isMoving))
+                {
+                    HitPlayer(i);
+                }
+
+                break;
             }
-            */
         }
 
-        public void SetBullet(string bulletPathName, string objName = default,
-            Vector3 startPosition = default, BattleControl.BulletColor bulletColor = default,
-            SpriteMaskInteraction startMask = default, Vector3 startRotation = default, Vector3 startScale = default)
+        public void SetBullet(string bulletPathName,
+            string objName = null,
+            Vector3 startPosition = default,
+            BattleControl.BulletColor inputBulletColor = default,
+            SpriteMaskInteraction startMask = default,
+            Vector3 startRotation = default,
+            Vector3 startScale = default)
         {
             var path = "Assets/Bullets/" + bulletPathName;
 
-            SetBullet((BulletControl)Resources.Load(path), objName, startPosition, bulletColor, startMask,
+            SetBullet((BulletControl)Resources.Load(path), objName, startPosition, inputBulletColor, startMask,
                 startRotation, startScale);
         }
 
-        private void SetBullet(BulletControl bulletControl, string objName = default,
-            Vector3 startPosition = default, BattleControl.BulletColor bulletColor = default,
-            SpriteMaskInteraction startMask = default, Vector3 startRotation = default, Vector3 startScale = default)
+        private void SetBullet(BulletControl bulletControl,
+            string objName = null,
+            Vector3 startPosition = default,
+            BattleControl.BulletColor inputBulletColor = default,
+            SpriteMaskInteraction startMask = default,
+            Vector3 startRotation = default,
+            Vector3 startScale = default)
         {
-            //Global.Other.Debug.LogWarning(startPosition);
-
             objName ??= bulletControl.objName;
 
             if (startPosition == default)
@@ -133,9 +130,9 @@ namespace UCT.Battle
                 startPosition = bulletControl.startPosition;
             }
 
-            if (bulletColor == default)
+            if (inputBulletColor == default)
             {
-                bulletColor = bulletControl.bulletColor;
+                inputBulletColor = bulletControl.bulletColor;
             }
 
             if (startMask == default)
@@ -161,7 +158,7 @@ namespace UCT.Battle
                 bulletControl.triggerHit,
                 bulletControl.triggerOffset,
                 startPosition,
-                bulletColor,
+                inputBulletColor,
                 startMask,
                 startRotation,
                 startScale,
@@ -172,7 +169,7 @@ namespace UCT.Battle
         ///     初始化弹幕（循环生成盒状碰撞模式）。
         /// </summary>
         /// <param name="objName">设置弹幕的Obj的名称，以便查找。</param>
-        /// <param name="typeName">设置弹幕的种类名称，如果种类名称与当前的弹幕一致，则保留原有的碰撞相关参数，反之清空。</param>
+        /// <param name="inputTypeName">设置弹幕的种类名称，如果种类名称与当前的弹幕一致，则保留原有的碰撞相关参数，反之清空。</param>
         /// <param name="layer">玩家为100，战斗框边缘为50。可参考。</param>
         /// <param name="sprite">一般在Resources内导入。</param>
         /// <param name="triggerSizes">设置判定箱大小，可设定多个List，但多数情况下需要避免其重叠。（NoFollow情况下设为(0,0)，会自动与sprite大小同步）</param>
@@ -180,20 +177,20 @@ namespace UCT.Battle
         /// <param name="triggerOffsets">设定判定箱偏移，List大小必须与sizes相等。</param>
         /// <param name="triggerFollowMode">设置碰撞箱跟随SpriteRenderer缩放的模式。</param>
         /// <param name="startMask">设置Sprite遮罩模式。</param>
-        /// <param name="bulletColor">设置弹幕属性颜色数据</param>
+        /// <param name="inputBulletColor">设置弹幕属性颜色数据</param>
         /// <param name="startPosition">设置起始位置（相对坐标）。</param>
         /// <param name="startRotation">设置旋转角度，一般只需更改Z轴。</param>
         /// <param name="startScale">若弹幕不需拉伸，StartScale一般设置(1,1,1)。检测到Z为0时会归位到(1,1,1)。</param>
         private void SetBullet(
             string objName,
-            string typeName,
+            string inputTypeName,
             int layer,
             Sprite sprite,
             List<Vector2> triggerSizes,
             List<int> triggerHits,
             List<Vector2> triggerOffsets,
             Vector3 startPosition = new(),
-            BattleControl.BulletColor bulletColor = BattleControl.BulletColor.White,
+            BattleControl.BulletColor inputBulletColor = BattleControl.BulletColor.White,
             SpriteMaskInteraction startMask = SpriteMaskInteraction.None,
             Vector3 startRotation = new(),
             Vector3 startScale = new(),
@@ -204,8 +201,8 @@ namespace UCT.Battle
 
             spriteRenderer.sortingOrder = layer;
 
-            this.bulletColor = bulletColor;
-            spriteRenderer.color = MainControl.Instance.BattleControl.bulletColorList[(int)this.bulletColor];
+            bulletColor = inputBulletColor;
+            spriteRenderer.color = MainControl.Instance.BattleControl.bulletColorList[(int)bulletColor];
 
             transform.localPosition = startPosition;
 
@@ -221,9 +218,9 @@ namespace UCT.Battle
             SetMask(startMask);
             spriteRenderer.sprite = sprite;
 
-            if (this.typeName != typeName)
+            if (typeName != inputTypeName)
             {
-                this.typeName = typeName;
+                typeName = inputTypeName;
             }
             else
             {
@@ -300,18 +297,20 @@ namespace UCT.Battle
             switch (spriteMaskInteraction)
             {
                 case SpriteMaskInteraction.None:
-                    spriteRenderer.material.SetFloat("_OpenMask", 0);
+                    spriteRenderer.material.SetFloat(OpenMask, 0);
                     break;
 
                 case SpriteMaskInteraction.VisibleInsideMask:
-                    spriteRenderer.material.SetFloat("_OpenMask", 1);
-                    spriteRenderer.material.SetFloat("_OutSide", 0);
+                    spriteRenderer.material.SetFloat(OpenMask, 1);
+                    spriteRenderer.material.SetFloat(OutSide, 0);
                     break;
 
                 case SpriteMaskInteraction.VisibleOutsideMask:
-                    spriteRenderer.material.SetFloat("_OpenMask", 1);
-                    spriteRenderer.material.SetFloat("_OutSide", 1);
+                    spriteRenderer.material.SetFloat(OpenMask, 1);
+                    spriteRenderer.material.SetFloat(OutSide, 1);
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(spriteMaskInteraction), spriteMaskInteraction, null);
             }
         }
     }

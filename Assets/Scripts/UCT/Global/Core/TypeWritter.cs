@@ -246,7 +246,6 @@ namespace UCT.Global.Core
             if (MainControl.Instance.sceneState == MainControl.SceneState.Overworld &&
                 originString.Length > "<waitForUpdate>".Length)
             {
-                //TalkBoxController.Instance.SetHead(false);
                 TalkBoxController.Instance.CleanText(this);
             }
 

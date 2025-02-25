@@ -27,10 +27,8 @@ namespace UCT.Overworld.FiniteStateMachine
         private List<Vector2> _path;
         private List<Vector2> _traversed;
         protected IState CurrentState;
-
-
-        //TODO:接入A*寻路
-        private int _pathIndex; // 当前移动目标点索引
+        
+        private int _pathIndex;
 
         private void Awake()
         {
@@ -41,7 +39,6 @@ namespace UCT.Overworld.FiniteStateMachine
         private void Update()
         {
             CurrentState.OnUpdate();
-            //UpdateMoveTo(new Vector3(0, 0));
         }
 
         private void FixedUpdate()
