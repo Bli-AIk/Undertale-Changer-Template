@@ -247,7 +247,7 @@ namespace UCT.Global.Settings
 
         private void MoveSettingSoul()
         {
-            MoveSettingSoul(new Vector2(-225f + 269 * Convert.ToInt32(_isPageUp),
+            MoveSettingSoul(new Vector2(-225f + 255 * Convert.ToInt32(_isPageUp),
                 147.5f + _settingSelectedOption * -37.5f));
         }
 
@@ -603,7 +603,7 @@ namespace UCT.Global.Settings
                         result.Append("<color=yellow>");
                         break;
                     default:
-                        throw new ArgumentOutOfRangeException();
+                        break;
                 }
 
                 result.Append(extractor);
