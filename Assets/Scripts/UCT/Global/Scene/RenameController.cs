@@ -324,10 +324,10 @@ namespace UCT.Global.Scene
                     PlayerPrefs.SetInt("languagePack", MainControl.Instance.languagePackId);
                     PlayerPrefs.SetInt("dataNumber", MainControl.Instance.saveDataId);
                     PlayerPrefs.SetInt("hdResolution",
-                        Convert.ToInt32(SettingsStorage.isUsingHdFrame));
-                    PlayerPrefs.SetInt("noSFX", Convert.ToInt32(SettingsStorage.isSimplifySfx));
+                        Convert.ToInt32(SettingsStorage.IsUsingHdFrame));
+                    PlayerPrefs.SetInt("noSFX", Convert.ToInt32(SettingsStorage.IsSimplifySfx));
                     PlayerPrefs.SetInt("vsyncMode",
-                        Convert.ToInt32(SettingsStorage.vsyncMode));
+                        Convert.ToInt32(SettingsStorage.VsyncMode));
 
                     GameUtilityService.FadeOutToWhiteAndSwitchScene("Menu");
                 }
@@ -362,7 +362,7 @@ namespace UCT.Global.Scene
             if (selectedCharactersId == 0)
             {
                 selectedCharactersId = 1;
-                if (SettingsStorage.textWidth)
+                if (SettingsStorage.TextWidth)
                 {
                     _selectText.text =
                         TextProcessingService.GetFirstChildStringByPrefix(
@@ -384,7 +384,7 @@ namespace UCT.Global.Scene
             else
             {
                 selectedCharactersId = 0;
-                if (SettingsStorage.textWidth)
+                if (SettingsStorage.TextWidth)
                 {
                     _selectText.text = "<color=yellow>" +
                                        TextProcessingService.GetFirstChildStringByPrefix(
@@ -476,7 +476,7 @@ namespace UCT.Global.Scene
                         _titleText.text =
                             TextProcessingService.GetFirstChildStringByPrefix(
                                 MainControl.Instance.LanguagePackControl.sceneTexts, "DefaultQuestion");
-                        if (SettingsStorage.textWidth)
+                        if (SettingsStorage.TextWidth)
                         {
                             _selectText.text =
                                 "<color=yellow>" +

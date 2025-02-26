@@ -429,7 +429,7 @@ namespace UCT.Global.Core
         private float TypeStopSeconds()
         {
             return Timing.WaitForSeconds(currentSpeed -
-                                         currentSpeed * 0.25f * Convert.ToInt32(!SettingsStorage.textWidth));
+                                         currentSpeed * 0.25f * Convert.ToInt32(!SettingsStorage.TextWidth));
         }
 
         private IEnumerator<float> _Dynamic(int number, OverworldControl.DynamicType inputDynamicType)

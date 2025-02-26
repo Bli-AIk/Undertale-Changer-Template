@@ -193,12 +193,12 @@ namespace UCT.Global.Settings
                 DescriptionDataName = new[] { "SettingFullScreenTipOpen", "SettingFullScreenTipClose" },
                 Type = OptionType.SelectionToggle,
                 OptionDisplayMode = OptionDisplayMode.Default,
-                SelectionBasedChangedValueGetter = () => SettingsStorage.fullScreen,
-                SelectionBasedChangedValueSetter = value => SettingsStorage.fullScreen = (bool)value,
+                SelectionBasedChangedValueGetter = () => SettingsStorage.FullScreen,
+                SelectionBasedChangedValueSetter = value => SettingsStorage.FullScreen = (bool)value,
                 OnSelected = () =>
                 {
-                    SettingsStorage.fullScreen = !SettingsStorage.fullScreen;
-                    GameUtilityService.SetResolution(SettingsStorage.resolutionLevel);
+                    SettingsStorage.FullScreen = !SettingsStorage.FullScreen;
+                    GameUtilityService.SetResolution(SettingsStorage.ResolutionLevel);
                 }
             });
 
@@ -212,12 +212,12 @@ namespace UCT.Global.Settings
                 DescriptionDataName = new[] { "SettingResolvingTip" },
                 Type = OptionType.SelectionToggle,
                 OptionDisplayMode = OptionDisplayMode.Resolution,
-                SelectionBasedChangedValueGetter = () => SettingsStorage.resolution,
-                SelectionBasedChangedValueSetter = value => SettingsStorage.resolution = (Vector2)value,
+                SelectionBasedChangedValueGetter = () => SettingsStorage.Resolution,
+                SelectionBasedChangedValueSetter = value => SettingsStorage.Resolution = (Vector2)value,
                 OnSelected = () =>
                 {
-                    SettingsStorage.resolutionLevel = GameUtilityService.UpdateResolutionSettings
-                        (SettingsStorage.isUsingHdFrame, SettingsStorage.resolutionLevel);
+                    SettingsStorage.ResolutionLevel = GameUtilityService.UpdateResolutionSettings
+                        (SettingsStorage.IsUsingHdFrame, SettingsStorage.ResolutionLevel);
                 }
             });
 
@@ -243,25 +243,25 @@ namespace UCT.Global.Settings
                 DescriptionDataName = new[] { "SettingFPSTip" },
                 Type = OptionType.SelectionToggle,
                 OptionDisplayMode = OptionDisplayMode.Default,
-                SelectionBasedChangedValueGetter = () => SettingsStorage.isDisplayFPS,
-                SelectionBasedChangedValueSetter = value => SettingsStorage.isDisplayFPS = (bool)value,
-                OnSelected = () => { SettingsStorage.isDisplayFPS = !SettingsStorage.isDisplayFPS; }
+                SelectionBasedChangedValueGetter = () => SettingsStorage.IsDisplayFPS,
+                SelectionBasedChangedValueSetter = value => SettingsStorage.IsDisplayFPS = (bool)value,
+                OnSelected = () => { SettingsStorage.IsDisplayFPS = !SettingsStorage.IsDisplayFPS; }
             });
 
             #endregion
 
             #region LockFrameRate
 
-            AllSettingsOptions.Add(new SettingsOption(SettingsStorage.frameRate)
+            AllSettingsOptions.Add(new SettingsOption(SettingsStorage.FrameRate)
             {
                 DataName = "LockFrameRate",
                 DescriptionDataName = new[] { "LockFrameRateTip" },
                 Type = OptionType.SelectionBasedFalse,
                 OptionDisplayMode = OptionDisplayMode.Default,
-                SelectionBasedChangedValueGetter = () => SettingsStorage.frameRate,
+                SelectionBasedChangedValueGetter = () => SettingsStorage.FrameRate,
                 SelectionBasedChangedValueSetter = value =>
                 {
-                    SettingsStorage.frameRate = Convert.ToInt32(value);
+                    SettingsStorage.FrameRate = Convert.ToInt32(value);
                     Application.targetFrameRate = Convert.ToInt32(value);
                 },
                 SelectionBasedChangedUnit = 10,
@@ -284,22 +284,22 @@ namespace UCT.Global.Settings
                 DescriptionDataName = new[] { "SettingVSyncTip" },
                 Type = OptionType.SelectionToggle,
                 OptionDisplayMode = OptionDisplayMode.Default,
-                SelectionBasedChangedValueGetter = () => (int)SettingsStorage.vsyncMode,
-                SelectionBasedChangedValueSetter = value => SettingsStorage.vsyncMode = (VSyncMode)value,
+                SelectionBasedChangedValueGetter = () => (int)SettingsStorage.VsyncMode,
+                SelectionBasedChangedValueSetter = value => SettingsStorage.VsyncMode = (VSyncMode)value,
                 OnSelected = () =>
                 {
-                    QualitySettings.vSyncCount = (int)SettingsStorage.vsyncMode;
-                    if ((int)SettingsStorage.vsyncMode < 2)
+                    QualitySettings.vSyncCount = (int)SettingsStorage.VsyncMode;
+                    if ((int)SettingsStorage.VsyncMode < 2)
                     {
-                        SettingsStorage.vsyncMode++;
+                        SettingsStorage.VsyncMode++;
                     }
                     else
                     {
-                        SettingsStorage.vsyncMode = VSyncMode.DonNotSync;
+                        SettingsStorage.VsyncMode = VSyncMode.DonNotSync;
                     }
 
                     PlayerPrefs.SetInt("vsyncMode",
-                        Convert.ToInt32(SettingsStorage.vsyncMode));
+                        Convert.ToInt32(SettingsStorage.VsyncMode));
                 },
                 GetSpDataNameWithIndex = new Dictionary<int, string>
                 {
@@ -323,7 +323,7 @@ namespace UCT.Global.Settings
         {
             #region SettingMainVolume
 
-            AllSettingsOptions.Add(new SettingsOption(SettingsStorage.mainVolume)
+            AllSettingsOptions.Add(new SettingsOption(SettingsStorage.MainVolume)
             {
                 DataName = "SettingMainVolume",
                 DescriptionDataName = new[] { "SettingMainVolumeTip" },
@@ -333,7 +333,7 @@ namespace UCT.Global.Settings
                 SelectionBasedChangedValueSetter = value =>
                 {
                     AudioListener.volume = (float)value;
-                    SettingsStorage.mainVolume = (float)value;
+                    SettingsStorage.MainVolume = (float)value;
                 },
                 SelectionBasedChangedUnit = 0.01f,
                 SelectionBasedChangedUnitWhenGetC = 0.1f,
@@ -345,7 +345,7 @@ namespace UCT.Global.Settings
 
             #region SettingBgmVolume
 
-            AllSettingsOptions.Add(new SettingsOption(SettingsStorage.bgmVolume)
+            AllSettingsOptions.Add(new SettingsOption(SettingsStorage.BGMVolume)
             {
                 DataName = "SettingBgmVolume",
                 DescriptionDataName = new[] { "SettingBgmVolumeTip" },
@@ -360,7 +360,7 @@ namespace UCT.Global.Settings
                 {
                     var bgmVolume = MathUtilityService.NormalizedValueToDb((float)value);
                     MainControl.Instance.AudioControl.globalAudioMixer.SetFloat("BgmVolume", bgmVolume);
-                    SettingsStorage.bgmVolume = (float)value;
+                    SettingsStorage.BGMVolume = (float)value;
                 },
                 SelectionBasedChangedUnit = 0.01f,
                 SelectionBasedChangedUnitWhenGetC = 0.1f,
@@ -372,7 +372,7 @@ namespace UCT.Global.Settings
 
             #region SettingFxVolume
 
-            AllSettingsOptions.Add(new SettingsOption(SettingsStorage.fxVolume)
+            AllSettingsOptions.Add(new SettingsOption(SettingsStorage.FXVolume)
             {
                 DataName = "SettingFxVolume",
                 DescriptionDataName = new[] { "SettingFxVolumeTip" },
@@ -387,7 +387,7 @@ namespace UCT.Global.Settings
                 {
                     var bgmVolume = MathUtilityService.NormalizedValueToDb((float)value);
                     MainControl.Instance.AudioControl.globalAudioMixer.SetFloat("FxVolume", bgmVolume);
-                    SettingsStorage.fxVolume = (float)value;
+                    SettingsStorage.FXVolume = (float)value;
                 },
                 SelectionBasedChangedUnit = 0.01f,
                 SelectionBasedChangedUnitWhenGetC = 0.1f,
@@ -421,13 +421,13 @@ namespace UCT.Global.Settings
                 DescriptionDataName = new[] { "SettingSFXTip" },
                 Type = OptionType.SelectionToggle,
                 OptionDisplayMode = OptionDisplayMode.Default,
-                SelectionBasedChangedValueGetter = () => SettingsStorage.isSimplifySfx,
-                SelectionBasedChangedValueSetter = value => SettingsStorage.isSimplifySfx = (bool)value,
+                SelectionBasedChangedValueGetter = () => SettingsStorage.IsSimplifySfx,
+                SelectionBasedChangedValueSetter = value => SettingsStorage.IsSimplifySfx = (bool)value,
                 OnSelected = () =>
                 {
-                    SettingsStorage.isSimplifySfx = !SettingsStorage.isSimplifySfx;
-                    GameUtilityService.ToggleAllSfx(SettingsStorage.isSimplifySfx);
-                    PlayerPrefs.SetInt("noSFX", Convert.ToInt32(SettingsStorage.isSimplifySfx));
+                    SettingsStorage.IsSimplifySfx = !SettingsStorage.IsSimplifySfx;
+                    GameUtilityService.ToggleAllSfx(SettingsStorage.IsSimplifySfx);
+                    PlayerPrefs.SetInt("noSFX", Convert.ToInt32(SettingsStorage.IsSimplifySfx));
                 }
             });
 
@@ -498,28 +498,28 @@ namespace UCT.Global.Settings
         {
             #region SettingTypingSpeed
 
-            AllSettingsOptions.Add(new SettingsOption(SettingsStorage.typingSpeed)
+            AllSettingsOptions.Add(new SettingsOption(SettingsStorage.TypingSpeed)
             {
                 DataName = "SettingTypingSpeed",
                 DescriptionDataName = new[] { "SettingTypingSpeedTip" },
                 Type = OptionType.SelectionToggle,
                 OptionDisplayMode = OptionDisplayMode.Default,
-                SelectionBasedChangedValueGetter = () => (int)SettingsStorage.typingSpeed,
-                SelectionBasedChangedValueSetter = value => SettingsStorage.typingSpeed = (TypingSpeed)value,
+                SelectionBasedChangedValueGetter = () => (int)SettingsStorage.TypingSpeed,
+                SelectionBasedChangedValueSetter = value => SettingsStorage.TypingSpeed = (TypingSpeed)value,
                 OnSelected = () =>
                 {
-                    QualitySettings.vSyncCount = (int)SettingsStorage.typingSpeed;
-                    if ((int)SettingsStorage.typingSpeed < 2)
+                    QualitySettings.vSyncCount = (int)SettingsStorage.TypingSpeed;
+                    if ((int)SettingsStorage.TypingSpeed < 2)
                     {
-                        SettingsStorage.typingSpeed++;
+                        SettingsStorage.TypingSpeed++;
                     }
                     else
                     {
-                        SettingsStorage.typingSpeed = TypingSpeed.Slow;
+                        SettingsStorage.TypingSpeed = TypingSpeed.Slow;
                     }
 
                     PlayerPrefs.SetInt("typingSpeed",
-                        Convert.ToInt32(SettingsStorage.typingSpeed));
+                        Convert.ToInt32(SettingsStorage.TypingSpeed));
                 },
                 GetSpDataNameWithIndex = new Dictionary<int, string>
                 {

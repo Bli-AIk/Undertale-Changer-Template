@@ -162,7 +162,7 @@ namespace UCT.Battle
 
         private void Update()
         {
-            if (!SettingsStorage.isSimplifySfx && hitVolume.weight > 0)
+            if (!SettingsStorage.IsSimplifySfx && hitVolume.weight > 0)
             {
                 hitVolume.weight -= Time.deltaTime;
             }
@@ -175,7 +175,7 @@ namespace UCT.Battle
                 {
                     _spriteRenderer.color = Color.red;
                     MainControl.Instance.playerControl.playerLastPos = transform.position - (Vector3)sceneDrift;
-                    SettingsStorage.pause = true;
+                    SettingsStorage.Pause = true;
                     TurnController.Instance.KillIEnumerator();
                     GameUtilityService.SwitchScene("GameOver", false);
                 }
@@ -1343,7 +1343,7 @@ namespace UCT.Battle
             if (!(mainControl.playerControl.isDebug && mainControl.playerControl.invincible))
             {
                 mainControl.playerControl.playerLastPos = transform.position - (Vector3)sceneDrift;
-                SettingsStorage.pause = true;
+                SettingsStorage.Pause = true;
                 TurnController.Instance.KillIEnumerator();
                 GameUtilityService.SwitchScene("GameOver", false);
             }

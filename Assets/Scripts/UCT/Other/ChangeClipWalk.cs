@@ -18,7 +18,7 @@ namespace UCT.Other
                 return;
             }
 
-            var playerBehaviour = MainControl.overworldPlayerBehaviour;
+            var playerBehaviour = MainControl.OverworldPlayerBehaviour;
             if (playerBehaviour)
             {
                 playerBehaviour.walkFxRange = walkFxRange;

@@ -29,7 +29,7 @@ namespace UCT.Other
                 case FollowTarget.Null:
                     break;
                 case FollowTarget.Player:
-                    SetSth(MainControl.overworldPlayerBehaviour.gameObject);
+                    SetSth(MainControl.OverworldPlayerBehaviour.gameObject);
                     break;
                 case FollowTarget.MainCamera:
                     SetSth(MainControl.Instance.mainCamera.gameObject);

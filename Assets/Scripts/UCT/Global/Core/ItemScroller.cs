@@ -12,13 +12,13 @@ namespace UCT.Global.Core
     /// </summary>
     public class ItemScroller : MonoBehaviour
     {
-        private int _itemCount;
-        private int _currentSelectionIndex;
-        private int _highlightedIndex;
         private List<SpriteRenderer> _allScrollPoints;
         private Tween _closeTween;
         private Tween _currentHighlightTween;
         private List<GameObject> _currentScrollPoints;
+        private int _currentSelectionIndex;
+        private int _highlightedIndex;
+        private int _itemCount;
         private float _originalLocalXValue;
 
         private void Awake()
@@ -34,6 +34,7 @@ namespace UCT.Global.Core
             {
                 _currentScrollPoints.Add(transform.Find($"Point{i}").gameObject);
             }
+
             SetAllPointActive(false);
 
             _originalLocalXValue = transform.localPosition.x;
@@ -43,7 +44,7 @@ namespace UCT.Global.Core
         {
             switch (_highlightedIndex)
             {
-                case > 0 when _allScrollPoints[0].color.a == 0:
+                case > 0 when Mathf.Approximately(_allScrollPoints[0].color.a, 0):
                     DOTween.To(() => _allScrollPoints[0].color, x => _allScrollPoints[0].color = x, Color.white, 0.15f)
                         .SetEase(Ease.Linear);
                     break;
@@ -56,7 +57,7 @@ namespace UCT.Global.Core
                     break;
             }
 
-            if (_highlightedIndex < _itemCount - 1 && _allScrollPoints[1].color.a == 0)
+            if (_highlightedIndex < _itemCount - 1 && Mathf.Approximately(_allScrollPoints[1].color.a, 0))
             {
                 DOTween.To(() => _allScrollPoints[1].color, x => _allScrollPoints[1].color = x, Color.white, 0.15f)
                     .SetEase(Ease.Linear);
@@ -125,6 +126,7 @@ namespace UCT.Global.Core
             {
                 _currentScrollPoints[_currentSelectionIndex - 1].transform.localScale = Vector3.one * 2;
             }
+
             HighlightCurrentPoint();
         }
 
@@ -134,6 +136,7 @@ namespace UCT.Global.Core
             {
                 _currentScrollPoints[_currentSelectionIndex + 1].transform.localScale = Vector3.one * 2;
             }
+
             HighlightCurrentPoint();
         }
 
@@ -166,13 +169,14 @@ namespace UCT.Global.Core
         {
             _highlightedIndex = globalItemIndex;
             CalculateAndSetCurrentSelectionIndex(globalItemIndex, count);
-            
+
             if (InputService.GetKeyDown(KeyCode.UpArrow) && globalItemIndex > 0)
             {
                 if (visibleItemIndex > 0)
                 {
                     visibleItemIndex--;
                 }
+
                 PressUp();
                 globalItemIndex--;
                 onKeyDown.Invoke(globalItemIndex);
@@ -183,6 +187,7 @@ namespace UCT.Global.Core
                 {
                     visibleItemIndex++;
                 }
+
                 PressDown();
                 globalItemIndex++;
                 onKeyDown.Invoke(globalItemIndex);

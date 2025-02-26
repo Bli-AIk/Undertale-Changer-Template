@@ -24,7 +24,7 @@ namespace UCT.Global.Settings
         {
             if (_fps)
             {
-                _fps.text = SettingsStorage.isDisplayFPS ? UpdateFPS(_fps.text) : "";
+                _fps.text = SettingsStorage.IsDisplayFPS ? UpdateFPS(_fps.text) : "";
             }
         }
 

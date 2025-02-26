@@ -813,8 +813,8 @@ namespace UCT.Global.Settings
                 _optionValueText.text += "\n";
             }
 
-            MainControl.LanguagePackageExternalNumber =
-                _languagePackSelectedOptionMax - MainControl.LanguagePackageInternalNumber;
+            MainControl.SetLanguagePackageExternalNumber(
+                _languagePackSelectedOptionMax - MainControl.LanguagePackageInternalNumber);
 
             var fixedOption = _settingSelectedOption + _startIndexCurrent;
             _optionTipText.text =

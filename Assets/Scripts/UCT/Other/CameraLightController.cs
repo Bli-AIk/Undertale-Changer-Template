@@ -23,7 +23,7 @@ namespace UCT.Other
 
         private void UpdateLightsVisibility()
         {
-            if (SettingsStorage.isSimplifySfx)
+            if (SettingsStorage.IsSimplifySfx)
             {
                 return;
             }

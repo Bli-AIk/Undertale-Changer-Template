@@ -66,7 +66,7 @@ namespace UCT.Global.Scene
             }
 
 
-            if (_overworldControl.isSetting || SettingsStorage.pause)
+            if (_overworldControl.isSetting || SettingsStorage.Pause)
             {
                 return;
             }

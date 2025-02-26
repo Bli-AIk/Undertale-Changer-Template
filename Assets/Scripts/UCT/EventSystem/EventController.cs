@@ -365,7 +365,7 @@ namespace UCT.EventSystem
         private static void StartOverworldTypeWritter(string dataName, bool useEvent, string eventName)
         {
             MainControl.Instance.playerControl.canMove = false;
-            SettingsStorage.pause = true;
+            SettingsStorage.Pause = true;
             TalkBoxController.Instance.SetHead(false);
             if (TalkBoxController.Instance.boxDrawer.localPosition.z < 0)
             {
@@ -379,7 +379,7 @@ namespace UCT.EventSystem
             if (mainCamera)
             {
                 TalkBoxController.Instance.isUp =
-                    MainControl.overworldPlayerBehaviour.transform.position.y <
+                    MainControl.OverworldPlayerBehaviour.transform.position.y <
                     mainCamera.transform.position.y - 1.25f;
             }
 
@@ -404,7 +404,7 @@ namespace UCT.EventSystem
                 Timer.Register(0.1f, () =>
                 {
                     MainControl.Instance.playerControl.canMove = true;
-                    SettingsStorage.pause = false;
+                    SettingsStorage.Pause = false;
                     if (useEvent)
                     {
                         SetTriggering(eventName);
@@ -438,12 +438,12 @@ namespace UCT.EventSystem
         /// </summary>
         private static void TeleportPlayer(Vector2 newPosition, bool useEvent, string eventName)
         {
-            if (!MainControl.overworldPlayerBehaviour)
+            if (!MainControl.OverworldPlayerBehaviour)
             {
                 return;
             }
 
-            MainControl.overworldPlayerBehaviour.transform.position = newPosition;
+            MainControl.OverworldPlayerBehaviour.transform.position = newPosition;
             MainControl.Instance.playerControl.playerLastPos = newPosition;
 
             if (useEvent)
@@ -491,7 +491,7 @@ namespace UCT.EventSystem
             bool useEvent,
             string eventName)
         {
-            var newPos = MainControl.overworldPlayerBehaviour.transform.position + (Vector3)newPosition;
+            var newPos = MainControl.OverworldPlayerBehaviour.transform.position + (Vector3)newPosition;
             if (CameraFollowPlayer.Instance.isLimit)
             {
                 newPos = CameraFollowPlayer.Instance.GetLimitedPosition(newPos);
@@ -530,11 +530,11 @@ namespace UCT.EventSystem
 
         private static void MakePlayerTranslucent(float duration, bool useEvent, string eventName)
         {
-            MainControl.overworldPlayerBehaviour.spriteRenderer.color = ColorEx.HalfAlpha;
+            MainControl.OverworldPlayerBehaviour.spriteRenderer.color = ColorEx.HalfAlpha;
 
             Timer.Register(duration, () =>
             {
-                MainControl.overworldPlayerBehaviour.spriteRenderer.color = Color.white;
+                MainControl.OverworldPlayerBehaviour.spriteRenderer.color = Color.white;
                 if (useEvent)
                 {
                     SetTriggering(eventName);
@@ -545,15 +545,15 @@ namespace UCT.EventSystem
         private static void MakePlayerSpin(float duration, bool useEvent, string eventName)
         {
             MainControl.Instance.playerControl.canMove = false;
-            SettingsStorage.pause = true;
-            MainControl.overworldPlayerBehaviour.TransitionToStateIfNeeded(StateType.Spin);
+            SettingsStorage.Pause = true;
+            MainControl.OverworldPlayerBehaviour.TransitionToStateIfNeeded(StateType.Spin);
 
 
             Timer.Register(duration, () =>
             {
                 MainControl.Instance.playerControl.canMove = true;
-                SettingsStorage.pause = false;
-                MainControl.overworldPlayerBehaviour.TransitionToStateIfNeeded(StateType.Idle);
+                SettingsStorage.Pause = false;
+                MainControl.OverworldPlayerBehaviour.TransitionToStateIfNeeded(StateType.Idle);
                 if (useEvent)
                 {
                     SetTriggering(eventName);
@@ -565,7 +565,7 @@ namespace UCT.EventSystem
             string eventName)
         {
             MovePlayerAbsolute(
-                MainControl.overworldPlayerBehaviour.transform.position + (Vector3)newPosition, duration,
+                MainControl.OverworldPlayerBehaviour.transform.position + (Vector3)newPosition, duration,
                 ease, useEvent, eventName);
         }
 
@@ -574,19 +574,19 @@ namespace UCT.EventSystem
         {
             if (duration <= 0)
             {
-                MainControl.overworldPlayerBehaviour.transform.position = newPosition;
+                MainControl.OverworldPlayerBehaviour.transform.position = newPosition;
                 return;
             }
 
             MainControl.Instance.playerControl.canMove = false;
 
-            var colliders = MainControl.overworldPlayerBehaviour.GetComponentsInChildren<Collider2D>();
+            var colliders = MainControl.OverworldPlayerBehaviour.GetComponentsInChildren<Collider2D>();
             foreach (var collider in colliders)
             {
                 collider.enabled = false;
             }
 
-            MainControl.overworldPlayerBehaviour.transform
+            MainControl.OverworldPlayerBehaviour.transform
                 .DOMove(newPosition, duration)
                 .SetEase(ease)
                 .OnKill(() =>
@@ -607,7 +607,7 @@ namespace UCT.EventSystem
         private static void GetPooledObjectAtPlayer(bool useEvent, string eventName)
         {
             var obj = GameObject.Find("ObjectPool").GetComponent<ObjectPool>().GetFromPool<Transform>();
-            obj.transform.position = MainControl.overworldPlayerBehaviour.transform.position;
+            obj.transform.position = MainControl.OverworldPlayerBehaviour.transform.position;
             if (useEvent)
             {
                 SetTriggering(eventName);

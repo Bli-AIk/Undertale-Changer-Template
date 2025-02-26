@@ -129,7 +129,7 @@ namespace UCT.EventSystem
         {
             if (!fsmObject && string.IsNullOrEmpty(fsmObjectName))
             {
-                fsmObject = MainControl.overworldPlayerBehaviour;
+                fsmObject = MainControl.OverworldPlayerBehaviour;
             }
             else if (!fsmObject || fsmObjectName != fsmObject.name)
             {

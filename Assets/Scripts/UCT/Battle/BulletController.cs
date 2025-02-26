@@ -285,7 +285,7 @@ namespace UCT.Battle
                 }
 
 
-                if (!SettingsStorage.isSimplifySfx)
+                if (!SettingsStorage.IsSimplifySfx)
                 {
                     MainControl.Instance.battlePlayerController.hitVolume.weight = 1;
                 }

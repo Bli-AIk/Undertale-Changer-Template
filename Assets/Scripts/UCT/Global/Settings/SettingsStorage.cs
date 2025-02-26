@@ -5,21 +5,21 @@ namespace UCT.Global.Settings
 {
     public static class SettingsStorage
     {
-        public static bool pause;
-        public static bool textWidth;
-        public static int resolutionLevel;
-        public static int frameRate;
-        public static bool fullScreen;
-        public static float mainVolume = 0.5f;
-        public static float bgmVolume = 1;
-        public static float fxVolume = 1;
-        public static bool isSimplifySfx;
-        public static bool isDisplayFPS;
-        public static Vector2 resolution;
-        public static VSyncMode vsyncMode = VSyncMode.DonNotSync;
-        public static bool isUsingHdFrame;
+        public static bool Pause;
+        public static bool TextWidth;
+        public static int ResolutionLevel;
+        public static int FrameRate;
+        public static bool FullScreen;
+        public static float MainVolume = 0.5f;
+        public static float BGMVolume = 1;
+        public static float FXVolume = 1;
+        public static bool IsSimplifySfx;
+        public static bool IsDisplayFPS;
+        public static Vector2 Resolution;
+        public static VSyncMode VsyncMode = VSyncMode.DonNotSync;
+        public static bool IsUsingHdFrame;
         public static KeyBindingType KeyBindingType = KeyBindingType.Primary;
-        public static TypingSpeed typingSpeed = TypingSpeed.Medium;
+        public static TypingSpeed TypingSpeed = TypingSpeed.Medium;
 
         public static Dictionary<string, SettingsLayerBase> CubismSettingsLayers { get; private set; } = new()
         {

@@ -317,7 +317,7 @@ namespace UCT.Global.Core
         public static float GetTypeWritterStopTime(TypeWritter typeWritter)
         {
             return Timing.WaitForSeconds(typeWritter.speedSlow -
-                                         typeWritter.speedSlow * 0.25f * Convert.ToInt32(!SettingsStorage.textWidth));
+                                         typeWritter.speedSlow * 0.25f * Convert.ToInt32(!SettingsStorage.TextWidth));
         }
 
         public static void TypeWritterPlayFx(TypeWritter typeWritter)
@@ -358,7 +358,7 @@ namespace UCT.Global.Core
 
         public static void SetSpeedMode(TypeWritter typeWritter)
         {
-            typeWritter.currentSpeed = SettingsStorage.typingSpeed switch
+            typeWritter.currentSpeed = SettingsStorage.TypingSpeed switch
             {
                 TypingSpeed.Slow => typeWritter.speed + 0.025f,
                 TypingSpeed.Medium => typeWritter.speed,

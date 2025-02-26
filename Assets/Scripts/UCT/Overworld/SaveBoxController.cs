@@ -57,7 +57,7 @@ namespace UCT.Overworld
         private static void SetGamePaused(bool isPaused)
         {
             PlayerControl.canMove = !isPaused;
-            SettingsStorage.pause = isPaused;
+            SettingsStorage.Pause = isPaused;
         }
 
         private static void InitializeSaveBoxPosition()
@@ -217,9 +217,9 @@ namespace UCT.Overworld
         {
             PlayerPrefs.SetInt("languagePack", MainControl.Instance.languagePackId);
             PlayerPrefs.SetInt("dataNumber", MainControl.Instance.saveDataId);
-            PlayerPrefs.SetInt("hdResolution", Convert.ToInt32(SettingsStorage.isUsingHdFrame));
-            PlayerPrefs.SetInt("noSFX", Convert.ToInt32(SettingsStorage.isSimplifySfx));
-            PlayerPrefs.SetInt("vsyncMode", Convert.ToInt32(SettingsStorage.vsyncMode));
+            PlayerPrefs.SetInt("hdResolution", Convert.ToInt32(SettingsStorage.IsUsingHdFrame));
+            PlayerPrefs.SetInt("noSFX", Convert.ToInt32(SettingsStorage.IsSimplifySfx));
+            PlayerPrefs.SetInt("vsyncMode", Convert.ToInt32(SettingsStorage.VsyncMode));
         }
     }
 }

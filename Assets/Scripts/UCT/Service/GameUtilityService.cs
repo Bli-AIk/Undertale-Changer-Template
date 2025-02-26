@@ -53,11 +53,11 @@ namespace UCT.Service
                 }
             }
 
-            if (!SettingsStorage.isUsingHdFrame)
+            if (!SettingsStorage.IsUsingHdFrame)
             {
-                if (SettingsStorage.resolutionLevel > 4)
+                if (SettingsStorage.ResolutionLevel > 4)
                 {
-                    SettingsStorage.resolutionLevel = 0;
+                    SettingsStorage.ResolutionLevel = 0;
                 }
 
                 if (MainControl.Instance.mainCamera)
@@ -78,9 +78,9 @@ namespace UCT.Service
             }
             else
             {
-                if (SettingsStorage.resolutionLevel < 5)
+                if (SettingsStorage.ResolutionLevel < 5)
                 {
-                    SettingsStorage.resolutionLevel = 5;
+                    SettingsStorage.ResolutionLevel = 5;
                 }
 
                 if (MainControl.Instance.mainCamera)
@@ -114,8 +114,8 @@ namespace UCT.Service
             var currentResolutionHeight = resolutionHeights[resolution];
 
             Screen.SetResolution(currentResolutionWidth, currentResolutionHeight,
-                SettingsStorage.fullScreen);
-            SettingsStorage.resolution =
+                SettingsStorage.FullScreen);
+            SettingsStorage.Resolution =
                 new Vector2(currentResolutionWidth, currentResolutionHeight);
         }
 
@@ -142,7 +142,7 @@ namespace UCT.Service
                 SceneManager.LoadScene(sceneName);
             }
 
-            SetResolution(SettingsStorage.resolutionLevel);
+            SetResolution(SettingsStorage.ResolutionLevel);
             MainControl.Instance.isSceneSwitching = false;
         }
 
@@ -190,14 +190,14 @@ namespace UCT.Service
                 }
             }
 
-            SettingsStorage.pause = true;
+            SettingsStorage.Pause = true;
             switch (fadeTime)
             {
                 case > 0:
                 {
                     MainControl.Instance.sceneSwitchingFadeImage.DOColor(fadeColor, fadeTime).SetEase(Ease.Linear)
                         .OnKill(() => action.Invoke());
-                    if (!SettingsStorage.isUsingHdFrame)
+                    if (!SettingsStorage.IsUsingHdFrame)
                     {
                         SettingsController.Instance.Frame.color = ColorEx.WhiteClear;
                     }
@@ -214,7 +214,7 @@ namespace UCT.Service
                     MainControl.Instance.sceneSwitchingFadeImage.color = fadeColor;
                     MainControl.Instance.sceneSwitchingFadeImage.DOColor(fadeColor, fadeTime).SetEase(Ease.Linear)
                         .OnKill(() => action.Invoke());
-                    if (!SettingsStorage.isUsingHdFrame)
+                    if (!SettingsStorage.IsUsingHdFrame)
                     {
                         SettingsController.Instance.Frame.color = ColorEx.WhiteClear;
                     }
@@ -339,7 +339,7 @@ namespace UCT.Service
 
         public static bool IsGamePausedOrSetting()
         {
-            return MainControl.Instance.overworldControl.isSetting || SettingsStorage.pause;
+            return MainControl.Instance.overworldControl.isSetting || SettingsStorage.Pause;
         }
     }
 }

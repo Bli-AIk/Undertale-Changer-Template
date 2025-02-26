@@ -67,7 +67,7 @@ namespace UCT.Overworld
 
             if (TalkBoxController.Instance)
             {
-                TalkBoxController.Instance.isUp = MainControl.overworldPlayerBehaviour.transform.position.y <
+                TalkBoxController.Instance.isUp = MainControl.OverworldPlayerBehaviour.transform.position.y <
                                                   transform.position.y - 1.25f;
             }
             else
@@ -134,7 +134,7 @@ namespace UCT.Overworld
                     Heart.transform.localPosition = new Vector3(Heart.transform.localPosition.x,
                         Heart.transform.localPosition.y, BoxZAxisVisible);
 
-                    if (MainControl.overworldPlayerBehaviour.transform.position.y >= transform.position.y - 1.25f)
+                    if (MainControl.OverworldPlayerBehaviour.transform.position.y >= transform.position.y - 1.25f)
                     {
                         _overviewBox.localPosition.y = 3.325f;
                     }
@@ -162,7 +162,7 @@ namespace UCT.Overworld
             {
                 if (InputService.GetKeyDown(KeyCode.Z))
                 {
-                    MainControl.overworldPlayerBehaviour.owTimer = 0.1f;
+                    MainControl.OverworldPlayerBehaviour.owTimer = 0.1f;
                     _informationText.transform.localPosition = new Vector3(0.5f, -5.12f, 0);
 
                     if (select == 1)

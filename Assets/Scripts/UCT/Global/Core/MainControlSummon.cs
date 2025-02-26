@@ -85,7 +85,7 @@ namespace UCT.Global.Core
         {
             if (sceneState == MainControl.SceneState.Overworld)
             {
-                SetupController(MainControl.overworldPlayerBehaviour, ExistingPlayerSetup, NonexistentPlayerSetup);
+                SetupController(MainControl.OverworldPlayerBehaviour, ExistingPlayerSetup, NonexistentPlayerSetup);
             }
 
             SetupController(Camera.main, ExistingCameraSetup, NonexistentCameraSetup);
@@ -166,8 +166,8 @@ namespace UCT.Global.Core
 
         private void PlayerSetup()
         {
-            MainControl.overworldPlayerBehaviour.walkFxRange = walkFxRange;
-            MainControl.overworldPlayerBehaviour.isShadow = isShadow;
+            MainControl.OverworldPlayerBehaviour.walkFxRange = walkFxRange;
+            MainControl.OverworldPlayerBehaviour.isShadow = isShadow;
         }
 
 
@@ -244,7 +244,7 @@ namespace UCT.Global.Core
             mainControl.isFadeInUnpaused = isFadeInUnpaused;
             mainControl.InitializationOverworld();
             mainControl.mainCamera = Camera.main;
-            GameUtilityService.SetResolution(SettingsStorage.resolutionLevel);
+            GameUtilityService.SetResolution(SettingsStorage.ResolutionLevel);
         }
     }
 }

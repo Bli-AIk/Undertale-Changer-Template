@@ -30,7 +30,7 @@ namespace UCT.Global.UI
         public void Set()
         {
             _tmp = GetComponent<TMP_Text>();
-            isUseWidth = SettingsStorage.textWidth;
+            isUseWidth = SettingsStorage.TextWidth;
         }
 
         public void Change()

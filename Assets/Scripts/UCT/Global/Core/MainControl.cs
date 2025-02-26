@@ -30,12 +30,7 @@ namespace UCT.Global.Core
             Overworld,
             InBattle
         }
-
-        public static MainControl Instance { get; private set; }
-
-        [ReadOnly] [Header("外置语言包总数")] public static int LanguagePackageExternalNumber;
-
-        [Space] [Title("=== 角色与行为控制 ===")] public static OverworldPlayerBehaviour overworldPlayerBehaviour;
+        public static OverworldPlayerBehaviour OverworldPlayerBehaviour{ get; private set; }
 
         [Title("=== 场景状态设置 ===")] public SceneState sceneState;
 
@@ -98,6 +93,10 @@ namespace UCT.Global.Core
 
         private DebugStringGradient _debugStringGradient = new("Debug");
 
+        public static MainControl Instance { get; private set; }
+
+        public static int LanguagePackageExternalNumber { get; private set; }
+
         public static int LanguagePackageInternalNumber => 3;
         public LanguagePackControl LanguagePackControl { get; private set; }
         public AudioControl AudioControl { get; private set; }
@@ -149,10 +148,10 @@ namespace UCT.Global.Core
             switch (sceneState)
             {
                 case SceneState.Normal:
-                    if (overworldPlayerBehaviour)
+                    if (OverworldPlayerBehaviour)
                     {
-                        Destroy(overworldPlayerBehaviour.gameObject);
-                        overworldPlayerBehaviour = null;
+                        Destroy(OverworldPlayerBehaviour.gameObject);
+                        OverworldPlayerBehaviour = null;
                     }
 
                     break;
@@ -165,26 +164,26 @@ namespace UCT.Global.Core
 
                     GetOverworldPlayerBehaviour();
 
-                    overworldPlayerBehaviour.transform.position = playerControl.playerLastPos;
+                    OverworldPlayerBehaviour.transform.position = playerControl.playerLastPos;
                     break;
                 }
                 case SceneState.InBattle:
                     InitializationBattle();
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException($"Unexpected sceneState value: {sceneState}");
             }
 
             if (isFadeTransitionEnabled)
             {
                 sceneSwitchingFadeImage = GameObject.Find("Canvas/InOutBlack").GetComponent<Image>();
                 sceneSwitchingFadeImage.color = Color.black;
-                SettingsStorage.pause = !isFadeInUnpaused;
+                SettingsStorage.Pause = !isFadeInUnpaused;
                 if (!isFadeInDisabled)
                 {
                     sceneSwitchingFadeImage.DOColor(Color.clear, 0.5f).SetEase(Ease.Linear)
-                        .OnKill(() => SettingsStorage.pause = false);
-                    SettingsController.Instance.Frame.color = SettingsStorage.isUsingHdFrame
+                        .OnKill(() => SettingsStorage.Pause = false);
+                    SettingsController.Instance.Frame.color = SettingsStorage.IsUsingHdFrame
                         ? Color.white
                         : ColorEx.WhiteClear;
                 }
@@ -199,7 +198,7 @@ namespace UCT.Global.Core
             InitializeVolume();
             overworldControl.isSetting = false;
 
-            GameUtilityService.ToggleAllSfx(SettingsStorage.isSimplifySfx);
+            GameUtilityService.ToggleAllSfx(SettingsStorage.IsSimplifySfx);
 
             _debugStringGradient = new DebugStringGradient("Debug");
 
@@ -228,9 +227,14 @@ namespace UCT.Global.Core
             SettingsShortcuts();
         }
 
+        public static void SetLanguagePackageExternalNumber(int value)
+        {
+            LanguagePackageExternalNumber = value;
+        }
+
         public static void GetOverworldPlayerBehaviour()
         {
-            if (overworldPlayerBehaviour)
+            if (OverworldPlayerBehaviour)
             {
                 return;
             }
@@ -239,19 +243,19 @@ namespace UCT.Global.Core
 
             if (owPlayer)
             {
-                overworldPlayerBehaviour = owPlayer.GetComponent<OverworldPlayerBehaviour>();
+                OverworldPlayerBehaviour = owPlayer.GetComponent<OverworldPlayerBehaviour>();
             }
         }
 
         private void InitializeVolume()
         {
-            AudioListener.volume = SettingsStorage.mainVolume;
+            AudioListener.volume = SettingsStorage.MainVolume;
 
-            var bgmVolume = MathUtilityService.NormalizedValueToDb(SettingsStorage.bgmVolume);
+            var bgmVolume = MathUtilityService.NormalizedValueToDb(SettingsStorage.BGMVolume);
             AudioControl.globalAudioMixer.SetFloat("BgmVolume", bgmVolume);
 
 
-            var fxVolume = MathUtilityService.NormalizedValueToDb(SettingsStorage.fxVolume);
+            var fxVolume = MathUtilityService.NormalizedValueToDb(SettingsStorage.FXVolume);
             AudioControl.globalAudioMixer.SetFloat("FxVolume", fxVolume);
         }
 
@@ -340,9 +344,9 @@ namespace UCT.Global.Core
             LanguagePackControl.settingTexts =
                 DataHandlerService.ChangeItemData(LanguagePackControl.settingTexts, true, new List<string>());
 
-            SettingsStorage.isUsingHdFrame = Convert.ToBoolean(PlayerPrefs.GetInt("hdResolution", 0));
-            SettingsStorage.isSimplifySfx = Convert.ToBoolean(PlayerPrefs.GetInt("noSFX", 0));
-            SettingsStorage.vsyncMode = (VSyncMode)PlayerPrefs.GetInt("vsyncMode", 0);
+            SettingsStorage.IsUsingHdFrame = Convert.ToBoolean(PlayerPrefs.GetInt("hdResolution", 0));
+            SettingsStorage.IsSimplifySfx = Convert.ToBoolean(PlayerPrefs.GetInt("noSFX", 0));
+            SettingsStorage.VsyncMode = (VSyncMode)PlayerPrefs.GetInt("vsyncMode", 0);
         }
 
         private void InitializationBattle()
@@ -453,22 +457,22 @@ namespace UCT.Global.Core
         {
             if (InputService.GetKeyDown(KeyCode.Tab))
             {
-                SettingsStorage.resolutionLevel =
-                    GameUtilityService.UpdateResolutionSettings(SettingsStorage.isUsingHdFrame,
-                        SettingsStorage.resolutionLevel);
+                SettingsStorage.ResolutionLevel =
+                    GameUtilityService.UpdateResolutionSettings(SettingsStorage.IsUsingHdFrame,
+                        SettingsStorage.ResolutionLevel);
             }
 
             if (InputService.GetKeyDown(KeyCode.Semicolon))
             {
-                SettingsStorage.isSimplifySfx = !SettingsStorage.isSimplifySfx;
-                GameUtilityService.ToggleAllSfx(SettingsStorage.isSimplifySfx);
+                SettingsStorage.IsSimplifySfx = !SettingsStorage.IsSimplifySfx;
+                GameUtilityService.ToggleAllSfx(SettingsStorage.IsSimplifySfx);
             }
 
             // ReSharper disable once InvertIf
             if (InputService.GetKeyDown(KeyCode.F4))
             {
-                SettingsStorage.fullScreen = !SettingsStorage.fullScreen;
-                GameUtilityService.SetResolution(SettingsStorage.resolutionLevel);
+                SettingsStorage.FullScreen = !SettingsStorage.FullScreen;
+                GameUtilityService.SetResolution(SettingsStorage.ResolutionLevel);
             }
         }
     }

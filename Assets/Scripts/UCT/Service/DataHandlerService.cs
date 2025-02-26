@@ -274,19 +274,19 @@ namespace UCT.Service
         /// </summary>
         public static void InitializationLanguagePackFullWidth()
         {
-            if (SettingsStorage.textWidth != bool.Parse(
+            if (SettingsStorage.TextWidth != bool.Parse(
                     TextProcessingService.GetFirstChildStringByPrefix(
                         MainControl.Instance.LanguagePackControl.settingTexts,
                         "LanguagePackFullWidth")))
             {
-                SettingsStorage.textWidth = bool.Parse(
+                SettingsStorage.TextWidth = bool.Parse(
                     TextProcessingService.GetFirstChildStringByPrefix(
                         MainControl.Instance.LanguagePackControl.settingTexts,
                         "LanguagePackFullWidth"));
                 foreach (var obj in Resources.FindObjectsOfTypeAll(typeof(TextChanger)))
                 {
                     var textChanger = (TextChanger)obj;
-                    textChanger.isUseWidth = SettingsStorage.textWidth;
+                    textChanger.isUseWidth = SettingsStorage.TextWidth;
                     textChanger.Set();
                     textChanger.Change();
                 }
