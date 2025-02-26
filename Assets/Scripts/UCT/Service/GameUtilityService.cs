@@ -20,13 +20,13 @@ namespace UCT.Service
     {
         private static readonly Random Rng = new();
 
-        private static readonly Random ColorGenerator = new(); // 线程安全的实例
+        private static readonly Random ColorGenerator = new();
 
         /// <summary>
         ///     设置16:9边框的Sprite
         /// </summary>
         /// <param name="framePic"></param>
-        public static void SetCanvasFrameSprite(int framePic = 2) //一般为CanvasController.instance.framePic
+        public static void SetCanvasFrameSprite(int framePic = 2) 
         {
             var frame = SettingsController.Instance.Frame;
             frame.sprite = framePic < 0 ? null : MainControl.Instance.overworldControl.frames[framePic];
@@ -322,7 +322,7 @@ namespace UCT.Service
         {
             Color.RGBToHSV(originalColor, out var h, out var s, out var v);
 
-            lock (ColorGenerator) // 确保线程安全
+            lock (ColorGenerator)
             {
                 h = Mathf.Repeat((float)(h + (ColorGenerator.NextDouble() * 2.0 - 1.0) * hueOffset), 1.0f);
                 s = Mathf.Clamp01(s + (float)(ColorGenerator.NextDouble() * 2.0 - 1.0) * saturationOffset);

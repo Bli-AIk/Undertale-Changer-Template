@@ -17,7 +17,7 @@ namespace UCT.Global.UI
             Sub
         }
 
-        public static BoxController Instance;
+        public static BoxController Instance { get; private set; }
 
         [Header("线宽")] public float width = 0.15f;
 
@@ -166,37 +166,5 @@ namespace UCT.Global.UI
             newBoxDrawer.tag = "Box";
             return newBoxDrawer;
         }
-
-        /*
-#if UNITY_EDITOR
-    public void OnDrawGizmos()
-    {
-        if (pointsCrossSave == null)
-            return;
-        Gizmos.color = Color.blue;
-        foreach (var point in pointsCrossSave)
-        {
-            Gizmos.DrawSphere(transform.TransformPoint(new Vector3(point.x, point.y, 0)), 0.15f);
-        }
-
-        if (pointsOutCrossSave == null)
-            return;
-        Gizmos.color = Color.green;
-        foreach (var point in pointsOutCrossSave)
-        {
-            Gizmos.DrawSphere(transform.TransformPoint(new Vector3(point.x, point.y, 0)), 0.15f);
-        }
-
-        if (pointsInCrossSave == null)
-            return;
-        Gizmos.color = Color.magenta;
-        foreach (var point in pointsInCrossSave)
-        {
-            Gizmos.DrawSphere(transform.TransformPoint(new Vector3(point.x, point.y, 0)), 0.15f);
-        }
-
-    }
-#endif
-    */
     }
 }

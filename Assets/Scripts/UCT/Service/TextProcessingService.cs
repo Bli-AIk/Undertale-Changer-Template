@@ -15,9 +15,18 @@ namespace UCT.Service
         ///     检测 '\'字符然后分割文本到子List
         ///     批量处理List string
         /// </summary>
-        public static void SplitStringToListWithDelimiter(List<string> parentList,
+        public static void SplitStringToListWithDelimiter(List<string> parentList, List<string> sonList)
+        {
+            SplitStringToListWithDelimiter(parentList, sonList, '\\');
+        }
+
+        /// <summary>
+        ///     检测 '\'字符然后分割文本到子List
+        ///     批量处理List string
+        /// </summary>
+        private static void SplitStringToListWithDelimiter(List<string> parentList,
             List<string> sonList,
-            char delimiter = '\\')
+            char delimiter)
         {
             sonList.Clear();
             var text = "";
@@ -35,13 +44,22 @@ namespace UCT.Service
             }
         }
 
+
         /// <summary>
         ///     检测 '\'字符然后分割文本到子List
         ///     传入一个string
         /// </summary>
         public static void SplitStringToListWithDelimiter(string parentString,
-            List<string> sonList,
-            char delimiter = '\\')
+            List<string> sonList)
+        {
+            SplitStringToListWithDelimiter(parentString, sonList, '\\');
+        }
+
+        /// <summary>
+        ///     检测 '\'字符然后分割文本到子List
+        ///     传入一个string
+        /// </summary>
+        public static void SplitStringToListWithDelimiter(string parentString, List<string> sonList, char delimiter)
         {
             sonList.Clear();
             var text = "";
@@ -63,8 +81,7 @@ namespace UCT.Service
         /// <summary>
         ///     检测输入字符串，返回第一个分隔符之前的部分。
         /// </summary>
-        // ReSharper disable once MemberCanBePrivate.Global
-        public static string SplitFirstStringWithDelimiter(string input, char delimiter = '\\')
+        private static string SplitFirstStringWithDelimiter(string input, char delimiter = '\\')
         {
             var result = "";
             foreach (var t in input)
@@ -80,40 +97,6 @@ namespace UCT.Service
             }
 
             return result;
-        }
-
-        /// <summary>
-        ///     从输入字符串中获取最后一个分隔符前的浮点数。
-        ///     默认忽略最后一个分号，反向搜索直到遇到指定的分隔符。
-        ///     如果无法解析浮点数，返回一个默认的极大值。
-        /// </summary>
-        /// <param name="input">原字符串</param>
-        /// <param name="isIgnoreSemicolon">是否忽略分号</param>
-        /// <param name="delimiter">分隔符</param>
-        /// <returns>填充后的字符串</returns>
-        public static float GetLastFloatBeforeDelimiter(string input,
-            bool isIgnoreSemicolon = true,
-            char delimiter = '\\')
-        {
-            if (isIgnoreSemicolon && input[^1..] == ";")
-            {
-                input = input[..^1];
-            }
-
-            var changed = "";
-            for (var i = 0; i < input.Length; i++)
-            {
-                changed += input[input.Length - i - 1];
-            }
-
-            changed = SplitFirstStringWithDelimiter(changed, delimiter);
-            input = "";
-            for (var i = 0; i < changed.Length; i++)
-            {
-                input += changed[changed.Length - i - 1];
-            }
-
-            return float.TryParse(input, out var y) ? y : Mathf.Infinity;
         }
 
         /// <summary>
@@ -199,24 +182,6 @@ namespace UCT.Service
 
 
         /// <summary>
-        ///     给一个指定长度，然后会用空格填充原字符串
-        /// </summary>
-        /// <param name="origin">原字符串</param>
-        /// <param name="length">返回长度</param>
-        /// <returns></returns>
-        public static string PadStringToLength(string origin, int length)
-        {
-            var result = origin;
-
-            for (var i = 0; i < length - result.Length; i++)
-            {
-                result += " ";
-            }
-
-            return result;
-        }
-
-        /// <summary>
         ///     换算时间
         /// </summary>
         public static string GetRealTime(int totalSeconds)
@@ -234,42 +199,6 @@ namespace UCT.Service
             var minutesString = minutes < 10 ? $"0{minutes}" : $"{minutes}";
 
             var result = $"{hoursString}:{minutesString}";
-            return result;
-        }
-
-        /// <summary>
-        ///     快捷输入富文本标记
-        /// </summary>
-        public static string RichText(string richText)
-        {
-            var result = $"<{richText}>";
-            return result;
-        }
-
-        /// <summary>
-        ///     快捷输入含参富文本标记
-        /// </summary>
-        public static string RichText(string richText, int number)
-        {
-            var result = $"<{richText}={number}>";
-            return result;
-        }
-
-        /// <summary>
-        ///     快捷输入富文本标记，包含结尾
-        /// </summary>
-        public static string RichTextWithEnd(string richText, string internalString = default)
-        {
-            var result = $"<{richText}>{internalString}</{richText}>";
-            return result;
-        }
-
-        /// <summary>
-        ///     快捷输入含参富文本标记，包含结尾
-        /// </summary>
-        public static string RichTextWithEnd(string richText, int number, string internalString = default)
-        {
-            var result = $"<{richText}={number}>{internalString}</{richText}>";
             return result;
         }
 
@@ -304,37 +233,6 @@ namespace UCT.Service
             }
 
             return text;
-        }
-
-        /// <summary>
-        ///     生成指定颜色的字符串形式。
-        /// </summary>
-        /// <param name="hexColor">颜色的16进制字符串</param>
-        /// <returns>带有指定颜色的字符串格式</returns>
-        public static string StringColor(string hexColor)
-        {
-            return $"<color=#{hexColor}FF>";
-        }
-
-        /// <summary>
-        ///     生成指定颜色的字符串形式，并包含原始文本。
-        /// </summary>
-        /// <param name="hexColor">颜色的16进制字符串</param>
-        /// <param name="inputString">原始文本。</param>
-        /// <returns>带有指定颜色的字符串格式</returns>
-        public static string StringColor(string hexColor, string inputString)
-        {
-            return $"<color=#{hexColor}FF>{inputString}</color>";
-        }
-
-        /// <summary>
-        ///     生成指定Color的字符串形式。
-        /// </summary>
-        /// <param name="color">目标颜色。</param>
-        /// <returns>带有指定颜色的字符串格式</returns>
-        public static string StringColor(Color color)
-        {
-            return $"<color=#{ColorUtility.ToHtmlStringRGB(color)}FF>";
         }
 
         /// <summary>
@@ -515,53 +413,6 @@ namespace UCT.Service
             }
 
             return realVector2;
-        }
-
-        /// <summary>
-        ///     输入形如(r,g,b,a)的字符串，返回Color
-        ///     使用ParseFloatWithSpecialCharacters进行转换。
-        /// </summary>
-        public static Color StringVector4ToRealColor(string stringVector4, Color origin)
-        {
-            stringVector4 = stringVector4.Substring(1, stringVector4.Length - 2) + ",";
-            var realVector4 = Color.white;
-            var save = "";
-            var isSet = 0;
-            foreach (var t in stringVector4)
-            {
-                if (t == ',')
-                {
-                    switch (isSet)
-                    {
-                        case 0:
-                            realVector4.r = ParseFloatWithSpecialCharacters(save, origin.r);
-                            goto default;
-
-                        case 1:
-                            realVector4.g = ParseFloatWithSpecialCharacters(save, origin.g);
-                            goto default;
-
-                        case 2:
-                            realVector4.b = ParseFloatWithSpecialCharacters(save, origin.b);
-                            goto default;
-
-                        case 3:
-                            realVector4.a = ParseFloatWithSpecialCharacters(save, origin.a);
-                            break;
-
-                        default:
-                            isSet++;
-                            save = "";
-                            break;
-                    }
-                }
-                else
-                {
-                    save += t;
-                }
-            }
-
-            return realVector4;
         }
 
         public static string ToFirstLetterUpperCase(string input)

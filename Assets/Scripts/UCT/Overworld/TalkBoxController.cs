@@ -11,7 +11,7 @@ namespace UCT.Overworld
     /// </summary>
     public class TalkBoxController : MonoBehaviour
     {
-        public static TalkBoxController Instance;
+        public static TalkBoxController Instance { get; private set; }
         public BoxDrawer boxDrawer;
         public bool isUp;
         public bool haveHead;

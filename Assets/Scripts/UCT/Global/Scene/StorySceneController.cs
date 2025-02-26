@@ -14,7 +14,7 @@ namespace UCT.Global.Scene
     /// </summary>
     public class StorySceneController : MonoBehaviour
     {
-        public static StorySceneController Instance;
+        public static StorySceneController Instance { get; private set; }
         public List<Sprite> pics;
         public GameObject mask;
         private int _picNumber;

@@ -15,7 +15,7 @@ namespace UCT.Battle
     /// </summary>
     public class TurnController : MonoBehaviour
     {
-        public static TurnController Instance;
+        public static TurnController Instance { get; private set; }
         public int turn;
         public bool isMyTurn;
 

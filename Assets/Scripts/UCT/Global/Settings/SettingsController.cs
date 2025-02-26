@@ -27,7 +27,7 @@ namespace UCT.Global.Settings
     {
         internal const float AnimSpeed = 0.25f;
         private const int SettingOptionsCount = 7;
-        public static SettingsController Instance;
+        public static SettingsController Instance { get; private set; }
         internal static readonly int Open = Animator.StringToHash("Open");
 
         [ShowInInspector] [ReadOnly] private static int _settingOptionsPage;

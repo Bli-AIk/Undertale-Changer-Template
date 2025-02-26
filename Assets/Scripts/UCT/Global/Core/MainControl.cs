@@ -31,7 +31,7 @@ namespace UCT.Global.Core
             InBattle
         }
 
-        public static MainControl Instance;
+        public static MainControl Instance { get; private set; }
 
         [ReadOnly] [Header("外置语言包总数")] public static int LanguagePackageExternalNumber;
 

@@ -19,10 +19,6 @@ namespace UCT.Overworld
         [Title("Component Settings")] [SerializeField]
         private string spritePath = "BackpackCamera/TalkBox/HeadSculpture";
 
-
-        [Title("Animation Settings")] [SerializeField]
-        private float frameInterval = 10f;
-
         [Title("Sprite Resources")] [SerializeField] [ReadOnly]
         public SpriteExpressionCollection spriteExpressionCollection;
 
@@ -101,8 +97,9 @@ namespace UCT.Overworld
                 }
                 default:
                 {
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException($"Unexpected state value: {state}");
                 }
+
             }
 
             _spriteUpdateTimer = 0f;
@@ -153,7 +150,8 @@ namespace UCT.Overworld
                 {
                     if (spriteExpressionCollection.speakingSprites.Count == 0)
                     {
-                        goto case SpriteExpressionCollection.State.Default;
+                        sprite = spriteExpressionCollection.defaultSprite;
+                        break;
                     }
 
                     _spriteIndex = Mathf.Clamp(_spriteIndex, 0, spriteExpressionCollection.speakingSprites.Count - 1);
@@ -170,7 +168,8 @@ namespace UCT.Overworld
                 {
                     if (spriteExpressionCollection.blinkingSprites.Count == 0)
                     {
-                        goto case SpriteExpressionCollection.State.Default;
+                        sprite = spriteExpressionCollection.defaultSprite;
+                        break;
                     }
 
                     _spriteIndex = Mathf.Clamp(_spriteIndex, 0, spriteExpressionCollection.blinkingSprites.Count - 1);
@@ -185,8 +184,8 @@ namespace UCT.Overworld
                     break;
                 }
                 default:
-                {
-                    throw new ArgumentOutOfRangeException(nameof(state), state, null);
+                {            
+                    throw new ArgumentOutOfRangeException($"Unexpected state value: {state}");
                 }
             }
 

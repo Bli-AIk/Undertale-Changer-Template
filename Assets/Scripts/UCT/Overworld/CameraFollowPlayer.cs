@@ -8,7 +8,7 @@ namespace UCT.Overworld
     /// </summary>
     public class CameraFollowPlayer : MonoBehaviour
     {
-        public static CameraFollowPlayer Instance;
+        public static CameraFollowPlayer Instance { get; private set; }
 
         [FormerlySerializedAs("limit")] public bool isLimit = true;
         public bool isFollow;
@@ -20,7 +20,6 @@ namespace UCT.Overworld
         public float maxY;
 
         public GameObject player;
-        public Vector3 followPosition;
 
         private void Awake()
         {
@@ -39,8 +38,6 @@ namespace UCT.Overworld
                 player = GameObject.Find("Player");
             }
 
-            followPosition = transform.position;
-            //跟随玩家
             if (isLimit)
             {
                 if (player.transform.position.x >= minX || player.transform.position.x <= maxX)
@@ -55,7 +52,6 @@ namespace UCT.Overworld
                         transform.position.z);
                 }
 
-                //限制范围
                 transform.position = GetLimitedPosition(transform.position);
             }
             else

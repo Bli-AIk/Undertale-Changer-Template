@@ -16,7 +16,7 @@ namespace UCT.Overworld
         public static int BoxZAxisInvisible => -50;
         private const float ItemBoxY = -8.9f;
         private const float InfoBoxY = -10.3f;
-        public static BackpackBehaviour Instance;
+        public static BackpackBehaviour Instance { get; private set; }
         public int select, sonSelect, sonUse;
 
         [HideInInspector] public TextMeshPro talkText;

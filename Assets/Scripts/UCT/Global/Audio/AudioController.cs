@@ -12,7 +12,7 @@ namespace UCT.Global.Audio
     /// </summary>
     public class AudioController : ObjectPool
     {
-        public static AudioController Instance;
+        public static AudioController Instance { get; private set; }
         public AudioSource audioSource;
 
         private void Awake()
