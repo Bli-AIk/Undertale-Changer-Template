@@ -142,7 +142,7 @@ namespace UCT.EventSystem
             UpdateEvent(eventTable);
         }
 
-        public static void LoadTables(bool force = false)
+        public static bool LoadTables(bool force = false)
         {
             globalEventTable = Resources.Load<EventTable>("Tables/EventTable");
             globalFactTable = Resources.Load<FactTable>("Tables/FactTable");
@@ -152,13 +152,14 @@ namespace UCT.EventSystem
                 eventTable = globalEventTable;
                 factTable = globalFactTable;
                 ruleTable = globalRuleTable;
-                return;
+                return false;
             }
 
             var sceneName = SceneManager.GetActiveScene().name;
             eventTable = Resources.Load<EventTable>($"Tables/{sceneName}/EventTable");
             factTable = Resources.Load<FactTable>($"Tables/{sceneName}/FactTable");
             ruleTable = Resources.Load<RuleTable>($"Tables/{sceneName}/RuleTable");
+            return true;
         }
 
         private static void UpdateEvent(EventTable inputEventTable)
@@ -756,8 +757,6 @@ namespace UCT.EventSystem
                             TextProcessingService.StringVector2ToRealVector2(parameter3), useEvent, eventName);
                         break;
 
-                    // ReSharper disable once RedundantCaseLabel
-                    case "string":
                     default:
                         method.Invoke(parameter1, useEvent, eventName);
                         break;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UCT.Global.Core;
@@ -23,7 +24,7 @@ namespace UCT.Control
         /// </summary>
         public static (string result, CharacterSpriteManager manager) StandardizeCharacterKey(string key)
         {
-            key = key.ToLower();
+            key = key.ToLower(CultureInfo.InvariantCulture);
             var characterSpriteManagers = MainControl.Instance.CharacterSpriteManagers;
             CharacterSpriteManager characterSpriteManager = null;
             if (string.IsNullOrWhiteSpace(key))

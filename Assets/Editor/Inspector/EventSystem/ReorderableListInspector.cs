@@ -163,7 +163,7 @@ namespace Editor.Inspector.EventSystem
 
             if (!icon)
             {
-                throw new NullReferenceException();
+                throw new ArgumentNullException();
             }
 
             var previewIcon = new Texture2D(width, height);
@@ -198,7 +198,7 @@ namespace Editor.Inspector.EventSystem
             {
                 RenameDetection(element);
             }
-            
+
             EditorGUI.PropertyField(valueRect, element.FindPropertyRelative("value"), GUIContent.none);
         }
 

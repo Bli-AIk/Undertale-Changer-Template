@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using UCT.Global.Core;
 using UnityEngine;
@@ -14,7 +15,8 @@ namespace UCT.Service
         ///     检测 '\'字符然后分割文本到子List
         ///     批量处理List string
         /// </summary>
-        public static void SplitStringToListWithDelimiter(List<string> parentList, List<string> sonList,
+        public static void SplitStringToListWithDelimiter(List<string> parentList,
+            List<string> sonList,
             char delimiter = '\\')
         {
             sonList.Clear();
@@ -37,7 +39,8 @@ namespace UCT.Service
         ///     检测 '\'字符然后分割文本到子List
         ///     传入一个string
         /// </summary>
-        public static void SplitStringToListWithDelimiter(string parentString, List<string> sonList,
+        public static void SplitStringToListWithDelimiter(string parentString,
+            List<string> sonList,
             char delimiter = '\\')
         {
             sonList.Clear();
@@ -88,7 +91,8 @@ namespace UCT.Service
         /// <param name="isIgnoreSemicolon">是否忽略分号</param>
         /// <param name="delimiter">分隔符</param>
         /// <returns>填充后的字符串</returns>
-        public static float GetLastFloatBeforeDelimiter(string input, bool isIgnoreSemicolon = true,
+        public static float GetLastFloatBeforeDelimiter(string input,
+            bool isIgnoreSemicolon = true,
             char delimiter = '\\')
         {
             if (isIgnoreSemicolon && input[^1..] == ";")
@@ -163,7 +167,7 @@ namespace UCT.Service
         public static List<string>[] ClassifyStringsByPrefix(List<string> sourceStrings, string[] prefixes)
         {
             var classifiedSubstrings = new List<string>[prefixes.Length];
-    
+
             for (var i = 0; i < prefixes.Length; i++)
             {
                 classifiedSubstrings[i] = new List<string>();
@@ -174,7 +178,7 @@ namespace UCT.Service
                 for (var prefixIndex = 0; prefixIndex < prefixes.Length; prefixIndex++)
                 {
                     var prefix = prefixes[prefixIndex];
-            
+
                     if (sourceString.Length <= prefix.Length)
                     {
                         continue;
@@ -376,7 +380,9 @@ namespace UCT.Service
         /// <returns>转换后的字符串</returns>
         public static string ConvertLettersCase(string input, bool toLowercase)
         {
-            return toLowercase ? input.ToLower() : input.ToUpper();
+            return toLowercase
+                ? input.ToLower(CultureInfo.InvariantCulture)
+                : input.ToUpper(CultureInfo.InvariantCulture);
         }
 
 
@@ -391,9 +397,12 @@ namespace UCT.Service
         /// <param name="isY">确定在使用 "P" 或 "p" 时是否返回 Y 轴位置。</param>
         /// <param name="plusSave">对最终结果的可选调整，默认为 0。</param>
         /// <returns>基于输入字符串的随机浮点数，如果未找到随机范围则返回原始值。</returns>
-        private static float ParseFloatWithSpecialCharacters(string text, float origin, bool isY = false,
+        private static float ParseFloatWithSpecialCharacters(string text,
+            float origin,
+            bool isY = false,
             float plusSave = 0)
         {
+            var plus = plusSave;
             while (true)
             {
                 var isHaveR = false;
@@ -411,7 +420,7 @@ namespace UCT.Service
                                 isHaveR = true;
                                 break;
                             case '+':
-                                plusSave = float.Parse(save);
+                                plus = float.Parse(save);
                                 save = "";
                                 break;
                             default:
@@ -422,11 +431,11 @@ namespace UCT.Service
 
                     if (!isHaveR)
                     {
-                        return plusSave + float.Parse(text);
+                        return plus + float.Parse(text);
                     }
 
                     var x2 = float.Parse(save);
-                    return plusSave + Random.Range(x1, x2);
+                    return plus + Random.Range(x1, x2);
                 }
 
                 if (text is "P" or "p")
@@ -442,7 +451,7 @@ namespace UCT.Service
                 }
 
                 text = text[2..];
-                plusSave = origin;
+                plus = origin;
             }
         }
 
@@ -464,6 +473,7 @@ namespace UCT.Service
             Other.Debug.LogWarning($"输入的字符串 \"{stringVector2}\" 格式不正确，应形如 (x,y)。");
             return new Vector2();
         }
+
         /// <summary>
         ///     将 Vector2 转换为形如 (x,y) 的字符串表示
         /// </summary>
@@ -471,6 +481,7 @@ namespace UCT.Service
         {
             return $"({vector2.x},{vector2.y})";
         }
+
         /// <summary>
         ///     输入形如(x,y)的字符串向量，返回Vector2
         ///     使用ParseFloatWithSpecialCharacters进行转换。

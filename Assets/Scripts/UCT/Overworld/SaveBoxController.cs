@@ -138,16 +138,13 @@ namespace UCT.Overworld
                 return;
             }
 
-            switch (_currentSelection)
+            if (_currentSelection == SaveSelectionState.Confirm)
             {
-                case SaveSelectionState.Confirm:
-                    ProcessSaveConfirmation();
-                    break;
-                case SaveSelectionState.Cancel:
-                case SaveSelectionState.Confirmed:
-                default:
-                    CloseSaveBox();
-                    break;
+                ProcessSaveConfirmation();
+            }
+            else
+            {
+                CloseSaveBox();
             }
         }
 

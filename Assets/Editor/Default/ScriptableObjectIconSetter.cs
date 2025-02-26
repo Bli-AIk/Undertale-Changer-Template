@@ -39,7 +39,7 @@ namespace Editor.Default
 
             if (!icon)
             {
-                throw new NullReferenceException();
+                throw new ArgumentNullException();
             }
 
             var previewIcon = new Texture2D(width, height);

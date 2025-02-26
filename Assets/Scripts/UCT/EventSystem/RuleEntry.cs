@@ -149,12 +149,13 @@ namespace UCT.EventSystem
 
                 if (!isGlobal)
                 {
+                    var isGetLocal = true;
                     if (!EventController.factTable)
                     {
-                        EventController.LoadTables(true);
+                        isGetLocal = EventController.LoadTables(true);
                     }
 
-                    if (!EventController.factTable)
+                    if (!isGetLocal)
                     {
                         isGlobal = true;
                     }

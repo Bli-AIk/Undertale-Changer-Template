@@ -85,7 +85,7 @@ namespace UCT.Global.UI
                     //计算三大List
                     pointsCrossSave = BoxService.FindIntersections(realPointsBack0, realPointsBack1);
 
-                    pointsOutCrossSave = BoxService.ProcessPolygons(realPointsBack0, realPointsBack1, pointsCrossSave);
+                    pointsOutCrossSave = BoxService.ProcessPolygons(realPointsBack0, realPointsBack1);
 
                     pointsInCrossSave = BoxService.AddAndSubLists(realPointsBack0, realPointsBack1, pointsCrossSave,
                         pointsOutCrossSave);

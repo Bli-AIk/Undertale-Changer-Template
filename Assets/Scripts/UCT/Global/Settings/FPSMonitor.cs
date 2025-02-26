@@ -9,11 +9,11 @@ namespace UCT.Global.Settings
     /// </summary>
     public class FPSMonitor : MonoBehaviour
     {
-        private const float MUpdateShowDeltaTime = 0.2f; 
+        private const float MUpdateShowDeltaTime = 0.2f;
         private TMP_Text _fps;
-        private float _mFPS; 
+        private float _mFPS;
         private int _mFrameUpdate;
-        private float _mLastUpdateShowTime; 
+        private float _mLastUpdateShowTime;
 
         private void Start()
         {
@@ -37,7 +37,7 @@ namespace UCT.Global.Settings
         private string UpdateFPS(string input)
         {
             _mFrameUpdate++;
-            if (!(Time.realtimeSinceStartup - _mLastUpdateShowTime >= MUpdateShowDeltaTime))
+            if (Time.realtimeSinceStartup - _mLastUpdateShowTime < MUpdateShowDeltaTime)
             {
                 return input;
             }

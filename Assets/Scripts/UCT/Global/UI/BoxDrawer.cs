@@ -154,7 +154,7 @@ namespace UCT.Global.UI
 
             pointsOutCross =
                 BoxService.ProcessPolygons(realPointsBack0,
-                    realPointsBack1, pointsCross);
+                    realPointsBack1);
 
             pointsInCross = BoxService.AddAndSubLists(realPointsBack0, realPointsBack1, pointsCross,
                 pointsOutCross);

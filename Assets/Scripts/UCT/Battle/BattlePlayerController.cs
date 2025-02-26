@@ -950,14 +950,8 @@ namespace UCT.Battle
             }
             else
             {
-                if (playerColor == BattleControl.PlayerColor.Blue && jumpRayDistance != 0)
-                {
-                    isMoving = true;
-                }
-                else
-                {
-                    isMoving = false;
-                }
+                isMoving = playerColor == BattleControl.PlayerColor.Blue &&
+                           !Mathf.Approximately(jumpRayDistance, 0);
             }
 
             float movingSave = 0;
@@ -993,7 +987,7 @@ namespace UCT.Battle
             }
 
 
-            if (movingSave != 0)
+            if (!Mathf.Approximately(movingSave, 0))
             {
                 moving.y = movingSave;
             }

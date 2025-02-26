@@ -44,7 +44,8 @@ namespace UCT.Global.UI
                     _tmp.lineSpacing = options[Convert.ToInt32(isUseWidth)].z;
                     _tmp.paragraphSpacing = options[Convert.ToInt32(isUseWidth)].w;
 
-                    if (fontSizes.Length >= 2 && fontSizes[0] != 0 && fontSizes[1] != 0)
+                    if (fontSizes.Length >= 2 && !Mathf.Approximately(fontSizes[0], 0f) &&
+                        !Mathf.Approximately(fontSizes[1], 0f))
                     {
                         _tmp.fontSize = fontSizes[Convert.ToInt32(isUseWidth)];
                     }

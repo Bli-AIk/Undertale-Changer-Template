@@ -43,13 +43,14 @@ namespace Editor.Inspector.EventSystem
 
         public static RuleEntry[] GetRuleEntry(bool isGlobal, string sceneName)
         {
+            var useGlobal = isGlobal;
             var path = "Tables/RuleTable";
             if (string.IsNullOrEmpty(sceneName))
             {
-                isGlobal = false;
+                useGlobal = false;
             }
 
-            if (isGlobal)
+            if (useGlobal)
             {
                 path = $"Tables/{sceneName}/RuleTable";
             }

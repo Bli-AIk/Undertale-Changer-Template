@@ -26,7 +26,7 @@ namespace Editor.Inspector
 
         private void UpdateExpressionTimer(ref int index, ref float lastUpdateTime, float interval, int count)
         {
-            if (!(Time.realtimeSinceStartup - lastUpdateTime >= interval) || count == 0)
+            if (Time.realtimeSinceStartup - lastUpdateTime < interval || count == 0)
             {
                 return;
             }
@@ -44,17 +44,19 @@ namespace Editor.Inspector
             {
                 return;
             }
+
             UpdateExpressionTimer(ref _speakingIndex, ref _speakingLastUpdateTime, 0.2f,
                 spriteExpressionCollection.speakingSprites.Count);
         }
 
         private void UpdateBlinkingTimer()
         {
-            var spriteExpressionCollection = (SpriteExpressionCollection)target;  
+            var spriteExpressionCollection = (SpriteExpressionCollection)target;
             if (spriteExpressionCollection.blinkingSprites == null)
             {
                 return;
             }
+
             UpdateExpressionTimer(ref _blinkingIndex, ref _blinkingLastUpdateTime, 0.2f,
                 spriteExpressionCollection.blinkingSprites.Count);
         }
@@ -62,7 +64,6 @@ namespace Editor.Inspector
 
         public override void OnInspectorGUI()
         {
-            
             EditorGUI.BeginDisabledGroup(true);
             EditorGUILayout.ObjectField("Object", target,
                 typeof(ScriptableObject), false);
@@ -122,13 +123,13 @@ namespace Editor.Inspector
             rect.x += width / 3 + 20;
             return rect;
         }
-        
-        
+
+
         public override Texture2D RenderStaticPreview(string assetPath, Object[] subAssets, int width, int height)
         {
             var characterSpriteManager = (SpriteExpressionCollection)target;
 
-            if (!characterSpriteManager.defaultSprite) 
+            if (!characterSpriteManager.defaultSprite)
             {
                 return base.RenderStaticPreview(assetPath, subAssets, width, height);
             }

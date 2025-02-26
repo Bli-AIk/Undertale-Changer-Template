@@ -55,17 +55,7 @@ namespace UCT.Service
                 {
                     SettingsStorage.resolutionLevel = 0;
                 }
-            }
-            else
-            {
-                if (SettingsStorage.resolutionLevel < 5)
-                {
-                    SettingsStorage.resolutionLevel = 5;
-                }
-            }
 
-            if (!SettingsStorage.isUsingHdFrame)
-            {
                 if (MainControl.Instance.mainCamera)
                 {
                     MainControl.Instance.mainCamera.rect = new Rect(0, 0, 1, 1);
@@ -84,6 +74,11 @@ namespace UCT.Service
             }
             else
             {
+                if (SettingsStorage.resolutionLevel < 5)
+                {
+                    SettingsStorage.resolutionLevel = 5;
+                }
+
                 if (MainControl.Instance.mainCamera)
                 {
                     MainControl.Instance.mainCamera.rect = new Rect(0, 0.056f, 1, 0.888f);
@@ -107,7 +102,6 @@ namespace UCT.Service
                 SettingsController.Instance.Frame.DOColor(
                     Color.white * Convert.ToInt32(SettingsController.Instance.frameSpriteIndex >= 0), 1f);
             }
-
 
             var resolutionHeights = new List<int> { 480, 768, 864, 960, 1080, 540, 1080 };
             var resolutionWidths = MathUtilityService.GetResolutionWidthsWithHeights(resolutionHeights, 5);

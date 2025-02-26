@@ -148,7 +148,7 @@ namespace UCT.Service
 
             mesh.uv = uvs;
 
-            // 为了更好的渲染效果，可以计算法线和边界
+            // 为了更好地渲染效果，可以计算法线和边界
             mesh.RecalculateNormals();
             mesh.RecalculateBounds();
 
@@ -210,50 +210,50 @@ namespace UCT.Service
         /// <summary>
         ///     检查点C是否在AB线段上
         /// </summary>
-        private static bool IsPointOnLineSegment(Vector2 a, Vector2 b, Vector2 c)
+        private static bool IsPointOnLineSegment(Vector2 linePointA, Vector2 linePointB, Vector2 pointC)
         {
-            return CrossSave(a, b, c) == 0 && (c.x - a.x) * (c.x - b.x) <= 0 && (c.y - a.y) * (c.y - b.y) <= 0;
+            return  Mathf.Approximately(CrossSave(linePointA, linePointB, pointC), 0f) && (pointC.x - linePointA.x) * (pointC.x - linePointB.x) <= 0 && (pointC.y - linePointA.y) * (pointC.y - linePointB.y) <= 0;
         }
 
         /// <summary>
         ///     检查线段AB和CD是否相交
         /// </summary>
-        private static bool DoLineSegmentsIntersect(Vector2 a, Vector2 b, Vector2 c, Vector2 d)
+        private static bool DoLineSegmentsIntersect(Vector2 linePointA, Vector2 linePointB, Vector2 linePointC, Vector2 linePointD)
         {
-            if (IsPointOnLineSegment(a, b, c) || IsPointOnLineSegment(a, b, d) || IsPointOnLineSegment(c, d, a) ||
-                IsPointOnLineSegment(c, d, b))
+            if (IsPointOnLineSegment(linePointA, linePointB, linePointC) || IsPointOnLineSegment(linePointA, linePointB, linePointD) || IsPointOnLineSegment(linePointC, linePointD, linePointA) ||
+                IsPointOnLineSegment(linePointC, linePointD, linePointB))
             {
                 return true;
             }
 
-            return CrossSave(a, b, c) * CrossSave(a, b, d) < 0 && CrossSave(c, d, a) * CrossSave(c, d, b) < 0;
+            return CrossSave(linePointA, linePointB, linePointC) * CrossSave(linePointA, linePointB, linePointD) < 0 && CrossSave(linePointC, linePointD, linePointA) * CrossSave(linePointC, linePointD, linePointB) < 0;
         }
 
         /// <summary>
         ///     计算两线段AB和CD的交点
         /// </summary>
-        private static Vector2? CalculateIntersectionPoint(Vector2 a, Vector2 b, Vector2 c, Vector2 d)
+        private static Vector2? CalculateIntersectionPoint(Vector2 linePointA, Vector2 linePointB, Vector2 linePointC, Vector2 linePointD)
         {
-            if (!DoLineSegmentsIntersect(a, b, c, d))
+            if (!DoLineSegmentsIntersect(linePointA, linePointB, linePointC, linePointD))
             {
                 return null;
             }
 
             // 计算线性方程的参数
-            var denominator = (b.x - a.x) * (d.y - c.y) - (b.y - a.y) * (d.x - c.x);
+            var denominator = (linePointB.x - linePointA.x) * (linePointD.y - linePointC.y) - (linePointB.y - linePointA.y) * (linePointD.x - linePointC.x);
             if (denominator == 0)
             {
                 return null; // 线段平行或共线
             }
 
-            var u = ((c.x - a.x) * (d.y - c.y) - (c.y - a.y) * (d.x - c.x)) / denominator;
-            return new Vector2(a.x + u * (b.x - a.x), a.y + u * (b.y - a.y));
+            var u = ((linePointC.x - linePointA.x) * (linePointD.y - linePointC.y) - (linePointC.y - linePointA.y) * (linePointD.x - linePointC.x)) / denominator;
+            return new Vector2(linePointA.x + u * (linePointB.x - linePointA.x), linePointA.y + u * (linePointB.y - linePointA.y));
         }
 
         /// <summary>
         ///     计算非重合点
         /// </summary>
-        public static List<Vector2> ProcessPolygons(List<Vector2> box1, List<Vector2> box2, List<Vector2> intersection)
+        public static List<Vector2> ProcessPolygons(List<Vector2> box1, List<Vector2> box2)
         {
             var filteredBox1 = RemovePointsInsideOtherPolygon(box1, box2);
             var filteredBox2 = RemovePointsInsideOtherPolygon(box2, box1);

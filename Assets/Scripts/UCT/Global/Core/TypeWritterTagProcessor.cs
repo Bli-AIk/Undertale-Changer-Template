@@ -189,12 +189,13 @@ namespace UCT.Global.Core
             TMP_Text tmpText,
             string spText)
         {
+            var dataOverWriteSpText = spText;
             if (!string.IsNullOrEmpty(data.OverWriteSpText))
             {
-                spText = data.OverWriteSpText;
+                dataOverWriteSpText = data.OverWriteSpText;
             }
 
-            FullTagDefaultCase(typeWritter, tmpText, spText);
+            FullTagDefaultCase(typeWritter, tmpText, dataOverWriteSpText);
         }
 
         private static void FullTagDefaultCase(TypeWritter typeWritter, TMP_Text tmpText, string spText)
