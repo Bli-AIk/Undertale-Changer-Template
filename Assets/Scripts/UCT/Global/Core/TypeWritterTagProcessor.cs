@@ -464,7 +464,7 @@ namespace UCT.Global.Core
             return text;
         }
 
-        private struct FullTagData
+        private struct FullTagData : IEquatable<FullTagData>
         {
             public int Index;
             public int YieldNum;
@@ -472,6 +472,23 @@ namespace UCT.Global.Core
             public bool StartPassText;
             public bool ProceedToDefault;
             public string OverWriteSpText;
+
+            public bool Equals(FullTagData other)
+            {
+                return Index == other.Index && YieldNum == other.YieldNum && YieldString == other.YieldString &&
+                       StartPassText == other.StartPassText && ProceedToDefault == other.ProceedToDefault &&
+                       OverWriteSpText == other.OverWriteSpText;
+            }
+
+            public override bool Equals(object obj)
+            {
+                return obj is FullTagData other && Equals(other);
+            }
+
+            public override int GetHashCode()
+            {
+                return HashCode.Combine(Index, YieldNum, YieldString, StartPassText, ProceedToDefault, OverWriteSpText);
+            }
         }
     }
 

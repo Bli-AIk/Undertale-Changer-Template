@@ -7,7 +7,7 @@ namespace UCT.EventSystem
     ///     事件系统的Rule条目，被其他Event调用，同时可以触发其他Event与执行具体方法。
     /// </summary>
     [Serializable]
-    public struct RuleEntry
+    public struct RuleEntry : IEquatable<RuleEntry>
     {
         /// <summary>
         ///     该Rule的名称
@@ -94,13 +94,56 @@ namespace UCT.EventSystem
         ///     该Rule修改的Fact值
         /// </summary>
         public List<FactModification> factModifications;
+
+        public bool Equals(RuleEntry other)
+        {
+            return name == other.name && isGlobalTriggeredBy == other.isGlobalTriggeredBy &&
+                   Equals(triggeredBy, other.triggeredBy) && isGlobalTriggers == other.isGlobalTriggers &&
+                   Equals(triggers, other.triggers) && rulePriority == other.rulePriority &&
+                   Equals(methodNames, other.methodNames) && Equals(firstStringParams, other.firstStringParams) &&
+                   Equals(secondStringParams, other.secondStringParams) &&
+                   Equals(thirdStringParams, other.thirdStringParams) &&
+                   Equals(isGlobalMethodEvents, other.isGlobalMethodEvents) &&
+                   Equals(useMethodEvents, other.useMethodEvents) && Equals(methodEvents, other.methodEvents) &&
+                   useRuleCriterion == other.useRuleCriterion && ruleCriterion.Equals(other.ruleCriterion) &&
+                   Equals(isGlobalFactModifications, other.isGlobalFactModifications) &&
+                   Equals(factModifications, other.factModifications);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is RuleEntry other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            var hashCode = new HashCode();
+            hashCode.Add(name);
+            hashCode.Add(isGlobalTriggeredBy);
+            hashCode.Add(triggeredBy);
+            hashCode.Add(isGlobalTriggers);
+            hashCode.Add(triggers);
+            hashCode.Add((int)rulePriority);
+            hashCode.Add(methodNames);
+            hashCode.Add(firstStringParams);
+            hashCode.Add(secondStringParams);
+            hashCode.Add(thirdStringParams);
+            hashCode.Add(isGlobalMethodEvents);
+            hashCode.Add(useMethodEvents);
+            hashCode.Add(methodEvents);
+            hashCode.Add(useRuleCriterion);
+            hashCode.Add(ruleCriterion);
+            hashCode.Add(isGlobalFactModifications);
+            hashCode.Add(factModifications);
+            return hashCode.ToHashCode();
+        }
     }
 
     /// <summary>
     ///     用于传递修改Fact值参数的结构体。
     /// </summary>
     [Serializable]
-    public struct FactModification
+    public struct FactModification : IEquatable<FactModification>
     {
         public FactEntry fact;
         public Operation operation;
@@ -114,6 +157,21 @@ namespace UCT.EventSystem
             Multiply,
             Divide
         }
+
+        public bool Equals(FactModification other)
+        {
+            return fact.Equals(other.fact) && operation == other.operation && number == other.number;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is FactModification other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(fact, (int)operation, number);
+        }
     }
 
     /// <summary>
@@ -121,7 +179,7 @@ namespace UCT.EventSystem
     ///     请特别注意：倘若criteria包含值，那么会忽略除了criteria和result之外的所有值。
     /// </summary>
     [Serializable]
-    public struct RuleCriterion
+    public struct RuleCriterion : IEquatable<RuleCriterion>
     {
         public bool isResultReversed;
         public bool isGlobal;
@@ -141,12 +199,15 @@ namespace UCT.EventSystem
         /// <summary>
         ///     封装，为Editor调用
         /// </summary>
-        public static bool GetResult(bool isResultReversed, bool isGlobal, FactEntry fact,
-            CriteriaCompare compare, int detection, List<RuleCriterion> criteria)
+        public static bool GetResult(bool isResultReversed,
+            bool isGlobal,
+            FactEntry fact,
+            CriteriaCompare compare,
+            int detection,
+            List<RuleCriterion> criteria)
         {
             if (criteria.Count == 0)
             {
-
                 if (!isGlobal)
                 {
                     var isGetLocal = true;
@@ -165,7 +226,7 @@ namespace UCT.EventSystem
                         fact.value = GetFactsValue(fact, factTable);
                     }
                 }
-                
+
                 if (isGlobal)
                 {
                     var globalFactTable = EventController.globalFactTable.facts;
@@ -259,6 +320,24 @@ namespace UCT.EventSystem
         {
             Other.Debug.LogWarning(
                 $"Invalid operation '{name}' at index {i - 1}. This will cause calculation anomalies.");
+        }
+
+        public bool Equals(RuleCriterion other)
+        {
+            return isResultReversed == other.isResultReversed && isGlobal == other.isGlobal &&
+                   fact.Equals(other.fact) && compare == other.compare && detection == other.detection &&
+                   operation == other.operation && Equals(criteria, other.criteria);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is RuleCriterion other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(isResultReversed, isGlobal, fact, (int)compare, detection, (int)operation,
+                criteria);
         }
     }
 

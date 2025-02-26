@@ -6,7 +6,7 @@ namespace UCT.EventSystem
     ///     事件系统的Fact条目，用于存储世界信息
     /// </summary>
     [Serializable]
-    public struct FactEntry
+    public struct FactEntry : IEquatable<FactEntry>
     {
         public string name;
         public int value;
@@ -16,6 +16,21 @@ namespace UCT.EventSystem
 
         // 仅当 Scope 为 Scene 时有效
         public string scene;
+
+        public bool Equals(FactEntry other)
+        {
+            return name == other.name && value == other.value && area == other.area && scene == other.scene;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is FactEntry other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(name, value, (int)area, scene);
+        }
     }
 
     public enum Area

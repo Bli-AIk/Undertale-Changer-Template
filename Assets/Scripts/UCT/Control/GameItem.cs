@@ -5,28 +5,45 @@ using UCT.Global.Core;
 
 namespace UCT.Control
 {
-    public struct ItemData
+    public readonly struct ItemData : IEquatable<ItemData>
     {
-        public string DataName;
-        public int Value;
+        public readonly string DataName;
+        public readonly int Value;
 
         public ItemData(string dataName, int value)
         {
             DataName = dataName;
             Value = value;
         }
+
+        public bool Equals(ItemData other)
+        {
+            return DataName == other.DataName && Value == other.Value;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is ItemData other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(DataName, Value);
+        }
     }
 
     public abstract class GameItem
     {
-        protected Action<int> OnUseAction, OnCheckAction, OnDropAction;
+        protected Action<int> OnUseAction;
+        private readonly Action<int> _onCheckAction;
+        private readonly Action<int> _onDropAction;
 
         protected GameItem(ItemData data, Action<int> onUse, Action<int> onCheck, Action<int> onDrop)
         {
             Data = data;
             OnUseAction = onUse;
-            OnCheckAction = onCheck;
-            OnDropAction = onDrop;
+            _onCheckAction = onCheck;
+            _onDropAction = onDrop;
         }
 
         public ItemData Data { get; }
@@ -38,12 +55,12 @@ namespace UCT.Control
 
         public void OnCheck(int index)
         {
-            OnCheckAction?.Invoke(index);
+            _onCheckAction?.Invoke(index);
         }
 
         public void OnDrop(int index)
         {
-            OnDropAction?.Invoke(index);
+            _onDropAction?.Invoke(index);
         }
     }
 
@@ -55,7 +72,7 @@ namespace UCT.Control
             OnUseAction += ConsumeFood;
         }
 
-        public void ConsumeFood(int index)
+        private void ConsumeFood(int index)
         {
             MainControl.Instance.playerControl.hp += Data.Value;
             if (MainControl.Instance.playerControl.hp > MainControl.Instance.playerControl.hpMax)
@@ -161,36 +178,39 @@ namespace UCT.Control
 
     public class EquipmentItem : GameItem
     {
-        protected Action<int> OnSwitchAction, OnEquipAction, OnRemoveAction, OnUpdateAction;
+        private readonly Action<int> _onSwitchAction;
+        private readonly Action<int> _onEquipAction;
+        private readonly Action<int> _onRemoveAction;
+        private readonly Action<int> _onUpdateAction;
 
         protected internal EquipmentItem(ItemData data, Action<int> onUse, Action<int> onCheck, Action<int> onDrop,
             Action<int> onSwitch, Action<int> onEquip, Action<int> onRemove, Action<int> onUpdate)
             : base(data, onUse, onCheck, onDrop)
         {
-            OnSwitchAction = onSwitch;
-            OnEquipAction = onEquip;
-            OnRemoveAction = onRemove;
-            OnUpdateAction = onUpdate;
+            _onSwitchAction = onSwitch;
+            _onEquipAction = onEquip;
+            _onRemoveAction = onRemove;
+            _onUpdateAction = onUpdate;
         }
 
         public void OnSwitch(int index)
         {
-            OnSwitchAction?.Invoke(index);
+            _onSwitchAction?.Invoke(index);
         }
 
         public void OnEquip(int index)
         {
-            OnEquipAction?.Invoke(index);
+            _onEquipAction?.Invoke(index);
         }
 
         public void OnRemove(int index)
         {
-            OnRemoveAction?.Invoke(index);
+            _onRemoveAction?.Invoke(index);
         }
 
         public void OnUpdate(int index)
         {
-            OnUpdateAction?.Invoke(index);
+            _onUpdateAction?.Invoke(index);
         }
     }
 
@@ -234,17 +254,20 @@ namespace UCT.Control
 
     public class WeaponItem : EquipmentItem
     {
-        protected Action<int> OnAttackAction, OnMissAction, OnHitAction, OnHitMissAction;
+        private readonly Action<int> _onAttackAction;
+        private readonly Action<int> _onMissAction;
+        private readonly Action<int> _onHitAction;
+        private readonly Action<int> _onHitMissAction;
 
         protected internal WeaponItem(ItemData data, Action<int> onUse, Action<int> onCheck, Action<int> onDrop,
             Action<int> onSwitch, Action<int> onEquip, Action<int> onRemove, Action<int> onUpdate,
             Action<int> onAttack, Action<int> onMiss, Action<int> onHit, Action<int> onHitMiss)
             : base(data, onUse, onCheck, onDrop, onSwitch, onEquip, onRemove, onUpdate)
         {
-            OnAttackAction = onAttack;
-            OnMissAction = onMiss;
-            OnHitAction = onHit;
-            OnHitMissAction = onHitMiss;
+            _onAttackAction = onAttack;
+            _onMissAction = onMiss;
+            _onHitAction = onHit;
+            _onHitMissAction = onHitMiss;
 
             OnUseAction += EquipWeapon;
         }
@@ -259,35 +282,35 @@ namespace UCT.Control
 
         public void OnAttack(int index)
         {
-            OnAttackAction?.Invoke(index);
+            _onAttackAction?.Invoke(index);
         }
 
         public void OnMiss(int index)
         {
-            OnMissAction?.Invoke(index);
+            _onMissAction?.Invoke(index);
         }
 
         public void OnHit(int index)
         {
-            OnHitAction?.Invoke(index);
+            _onHitAction?.Invoke(index);
         }
 
         public void OnHitMiss(int index)
         {
-            OnHitMissAction?.Invoke(index);
+            _onHitMissAction?.Invoke(index);
         }
     }
 
     public class ArmorItem : EquipmentItem
     {
-        protected Action<int> OnDamageTakenAction;
+        private readonly Action<int> _onDamageTakenAction;
 
         protected internal ArmorItem(ItemData data, Action<int> onUse, Action<int> onCheck, Action<int> onDrop,
             Action<int> onSwitch, Action<int> onEquip, Action<int> onRemove, Action<int> onUpdate,
             Action<int> onDamageTaken)
             : base(data, onUse, onCheck, onDrop, onSwitch, onEquip, onRemove, onUpdate)
         {
-            OnDamageTakenAction = onDamageTaken;
+            _onDamageTakenAction = onDamageTaken;
 
             OnUseAction += EquipArmor;
         }
@@ -301,7 +324,7 @@ namespace UCT.Control
 
         public void OnDamageTaken(int index)
         {
-            OnDamageTakenAction?.Invoke(index);
+            _onDamageTakenAction?.Invoke(index);
         }
     }
 
