@@ -13,7 +13,6 @@ namespace Editor.Inspector
 
         private ReorderableList _fxList;
         private SerializedProperty _fxValues;
-        private float _spriteFieldWidth;
         private SerializedProperty _spriteKeys;
 
         private ReorderableList _spriteList;
@@ -115,17 +114,17 @@ namespace Editor.Inspector
 
                 drawElementCallback = (rect, index, _, _) =>
                 {
-                    _spriteFieldWidth = rect.width / 2 - 10;
+                    var spriteFieldWidth = rect.width / 2 - 10;
                     if (_spriteKeys.arraySize <= index)
                     {
                         _spriteKeys.arraySize = index + 1;
                     }
 
-                    var spriteKeyRect = new Rect(rect.x, rect.y, _spriteFieldWidth, EditorGUIUtility.singleLineHeight);
+                    var spriteKeyRect = new Rect(rect.x, rect.y, spriteFieldWidth, EditorGUIUtility.singleLineHeight);
                     Rect spriteValueRect;
                     if (!_spriteValues.GetArrayElementAtIndex(index).objectReferenceValue)
                     {
-                        spriteValueRect = new Rect(rect.x + _spriteFieldWidth + 5, rect.y, _spriteFieldWidth,
+                        spriteValueRect = new Rect(rect.x + spriteFieldWidth + 5, rect.y, spriteFieldWidth,
                             EditorGUIUtility.singleLineHeight);
                     }
                     else
@@ -157,7 +156,7 @@ namespace Editor.Inspector
                         spriteValue.objectReferenceValue, typeof(SpriteExpressionCollection), false);
                     
                     var spriteTextureRect =
-                        new Rect(rect.x + _spriteFieldWidth + 5, rect.y, _spriteFieldWidth,
+                        new Rect(rect.x + spriteFieldWidth + 5, rect.y, spriteFieldWidth,
                             EditorGUIUtility.singleLineHeight * 3);
                     
                     if (spriteValue.objectReferenceValue is SpriteExpressionCollection collection)

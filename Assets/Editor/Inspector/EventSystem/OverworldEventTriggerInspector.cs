@@ -16,7 +16,6 @@ namespace Editor.Inspector.EventSystem
     [CustomEditor(typeof(OverworldEventTrigger))]
     public class OverworldEventTriggerEditor : UnityEditor.Editor
     {
-        private static float _ruleCriteriaRectY;
         public List<float> elementHeight;
         private ReorderableList _eventList;
         private ReorderableList _simpleRulesList;
@@ -373,13 +372,13 @@ namespace Editor.Inspector.EventSystem
                         new GUIStyle(GUI.skin.label) { richText = true });
 
                     //  line 4
-                    _ruleCriteriaRectY = rect.y + (lineCount - 2) * rectHeight;
+                    var ruleCriteriaRectY = rect.y + (lineCount - 2) * rectHeight;
                     var originalCriteriaParentOperation = originalRuleCriterion.FindPropertyRelative("operation");
                     var factModificationsRect = RuleTableInspector.CreateRuleCriteria(rect,
                         rect.y + rectHeight * (triggerSize + 2),
                         originalRuleCriterion,
                         originalCriteriaParentOperation,
-                        fieldWidth, rectHeight, 0, 0, _ruleCriteriaRectY,
+                        fieldWidth, rectHeight, 0, 0, ruleCriteriaRectY,
                         GetSceneName());
                     GUI.enabled = true;
                     GUI.color = color;

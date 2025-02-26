@@ -11,7 +11,7 @@ using Random = UnityEngine.Random;
 namespace UCT.Battle
 {
     /// <summary>
-    ///     Gameover控制器
+    ///     GameOver控制器
     /// </summary>
     public class GameOverController : MonoBehaviour
     {
@@ -22,7 +22,6 @@ namespace UCT.Battle
 
         private bool _foolDay;
         private ParticleSystem _mParticleSystem;
-        private GameObject _player;
         private TextMeshPro _textOptions;
         private TypeWritter _typeWritter;
 
@@ -33,13 +32,15 @@ namespace UCT.Battle
             _typeWritter = GetComponent<TypeWritter>();
             _mParticleSystem = transform.Find("Player/Particle System").GetComponent<ParticleSystem>();
             _textOptions = transform.Find("Text Options").GetComponent<TextMeshPro>();
-            _player = _mParticleSystem.transform.parent.gameObject;
 
             _mParticleSystem.transform.localPosition = new Vector3(0, 0, -5);
             _foolDay = DateTime.Now.Month == 4 && DateTime.Now.Day == 1;
             _bgmSource = AudioController.Instance.audioSource;
             _bgmSource.clip = clips[Convert.ToInt32(_foolDay)];
-            _player.transform.position = MainControl.Instance.playerControl.playerLastPos;
+            
+            var player = _mParticleSystem.transform.parent.gameObject;
+            player.transform.position = MainControl.Instance.playerControl.playerLastPos;
+            
             _mParticleSystem.transform.position = MainControl.Instance.playerControl.playerLastPos;
             _mParticleSystem.Pause();
             _mParticleSystem.gameObject.SetActive(false);

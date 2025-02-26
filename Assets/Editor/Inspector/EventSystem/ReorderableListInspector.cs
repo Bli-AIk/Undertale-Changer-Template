@@ -362,8 +362,6 @@ namespace Editor.Inspector.EventSystem
     [CustomEditor(typeof(RuleTable))]
     public class RuleTableInspector : ReorderableListInspector<RuleTable>
     {
-        private static float _ruleCriteriaRectY;
-
         private static readonly Dictionary<RuleLogicalOperation, string> OperationMapNoNext = new()
         {
             { RuleLogicalOperation.None, ";" }
@@ -747,13 +745,13 @@ namespace Editor.Inspector.EventSystem
 
             #region line 4
 
-            _ruleCriteriaRectY = rect.y + (lineCount - 2) * rectHeight;
+            var ruleCriteriaRectY = rect.y + (lineCount - 2) * rectHeight;
             var originalCriteriaParentOperation = originalRuleCriterion.FindPropertyRelative("operation");
             var factModificationsRect = CreateRuleCriteria(rect,
                 rect.y + rectHeight * (triggerSize + 2),
                 originalRuleCriterion,
                 originalCriteriaParentOperation,
-                fieldWidth, rectHeight, 0, 0, _ruleCriteriaRectY, GetSceneName(serializedObject));
+                fieldWidth, rectHeight, 0, 0, ruleCriteriaRectY, GetSceneName(serializedObject));
             GUI.enabled = true;
             GUI.color = color;
 

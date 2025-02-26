@@ -11,7 +11,6 @@ namespace Editor.Inspector.EventSystem
     [CustomEditor(typeof(OverworldStatusChanger))]
     public class OverworldStatusChangerInspector : UnityEditor.Editor
     {
-        private static float _ruleCriteriaRectY;
         public List<float> elementHeight;
         private SerializedProperty _methodTypes;
         private ReorderableList _reorderableList;
@@ -94,13 +93,13 @@ namespace Editor.Inspector.EventSystem
                     // line 2
                     criteriaLabelRect.y += rectHeight;
                     var ruleCriteriaRect = criteriaLabelRect;
-                    _ruleCriteriaRectY = ruleCriteriaRect.y + (lineCount - 2) * rectHeight;
+                    var ruleCriteriaRectY = ruleCriteriaRect.y + (lineCount - 2) * rectHeight;
                     var originalCriteriaParentOperation = ruleCriterion.FindPropertyRelative("operation");
                     var factModificationsRect = RuleTableInspector.CreateRuleCriteria(ruleCriteriaRect,
                         ruleCriteriaRect.y,
                         ruleCriterion,
                         originalCriteriaParentOperation,
-                        fieldWidth, rectHeight, 0, 0, _ruleCriteriaRectY, GetSceneName());
+                        fieldWidth, rectHeight, 0, 0, ruleCriteriaRectY, GetSceneName());
                     // line 3
                     factModificationsRect.width = rect.width / 2;
 

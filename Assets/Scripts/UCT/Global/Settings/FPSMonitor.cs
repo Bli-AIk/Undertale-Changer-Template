@@ -11,7 +11,6 @@ namespace UCT.Global.Settings
     {
         private const float MUpdateShowDeltaTime = 0.2f;
         private TMP_Text _fps;
-        private float _mFPS;
         private int _mFrameUpdate;
         private float _mLastUpdateShowTime;
 
@@ -42,10 +41,10 @@ namespace UCT.Global.Settings
                 return input;
             }
 
-            _mFPS = _mFrameUpdate / (Time.realtimeSinceStartup - _mLastUpdateShowTime);
+            var mFPS = _mFrameUpdate / (Time.realtimeSinceStartup - _mLastUpdateShowTime);
             _mFrameUpdate = 0;
             _mLastUpdateShowTime = Time.realtimeSinceStartup;
-            return ((int)_mFPS).ToString();
+            return ((int)mFPS).ToString();
         }
     }
 }
