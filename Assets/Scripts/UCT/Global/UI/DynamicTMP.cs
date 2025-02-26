@@ -1,304 +1,274 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace UCT.Global.UI
 {
     public enum DynamicTMPType
     {
-        /// <summary>
-        /// 无效果
-        /// </summary>
         None,
-        /// <summary>
-        /// 每个字符自行抖动
-        /// </summary>
         RandomShake,
-        /// <summary>
-        /// 随机隔一段时间抖动单个字符
-        /// </summary>
         RandomShakeSingle,
-        /// <summary>
-        /// 所有字符一起抖动
-        /// </summary>
         RandomShakeAll,
-        /// <summary>
-        /// 所有字符抽搐的抖动
-        /// </summary>
         CrazyShake,
-        /// <summary>
-        /// 类似小幽灵的字符抖动
-        /// </summary>
         NapShake,
-        /// <summary>
-        /// 类似小幽灵的字符漂浮
-        /// </summary>
         NapFloat,
-        Wave, 
-        Explode, 
-        Bounce 
+        Wave,
+        Explode,
+        Bounce
     }
-    
+
     /// <summary>
-    ///     给字体添加各种奇奇怪怪的效果，如变形/位移/抖动。
+    /// Applies various dynamic effects to TextMeshPro text components.
     /// </summary>
     public class DynamicTMP : MonoBehaviour
     {
-        public DynamicTMPType dynamicMode;
-        private float _randomStart;
-        private TMP_Text _tmp;
+        private const int SingleShakeProbability = 120;
+        private const float MaxShakeIntensity = 0.05f;
+        private const float BaseFrequency = 2.5f;
 
+        [FormerlySerializedAs("dynamicMode")] 
+        public DynamicTMPType effectType = DynamicTMPType.None;
+        
+        private TMP_Text _textMeshPro;
+        private float _initialRandomOffset;
+        
         private void Start()
         {
-            _tmp = GetComponent<TMP_Text>();
-            _randomStart = Random.Range(2, 2.5f);
+            _textMeshPro = GetComponent<TMP_Text>();
+            _initialRandomOffset = Random.Range(2f, 2.5f);
         }
 
         private void FixedUpdate()
         {
-            if (dynamicMode == DynamicTMPType.None)
+            if (effectType == DynamicTMPType.None)
             {
                 return;
             }
 
-            _tmp.ForceMeshUpdate();
+            _textMeshPro.ForceMeshUpdate();
+            var textInfo = _textMeshPro.textInfo;
 
-            var textInfo = _tmp.textInfo;
-
-            switch (dynamicMode)
+            switch (effectType)
             {
                 case DynamicTMPType.RandomShake:
-                {
-                    for (var i = 0; i < textInfo.characterCount; i++)
-                    {
-                        var charInfo = textInfo.characterInfo[i];
-                        if (!charInfo.isVisible)
-                        {
-                            continue;
-                        }
-
-                        var verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
-                        var random = new Vector3(Random.Range(-0.025f, 0.025f), Random.Range(-0.025f, 0.025f), 0);
-                        for (var j = 0; j < 4; j++)
-                        {
-                            var orig = verts[charInfo.vertexIndex + j];
-                            //动画
-                            verts[charInfo.vertexIndex + j] = orig + random;
-                        }
-                    }
-
+                    ApplyRandomShake(textInfo);
                     break;
-                }
-
                 case DynamicTMPType.RandomShakeSingle:
-                {
-                    var random = Random.Range(0, 120);
-                    if (random == 0)
-                    {
-                        var j = Random.Range(0, textInfo.characterCount);
-                        var charInfo = textInfo.characterInfo[j];
-                        if (charInfo.isVisible)
-                        {
-                            var verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
-                            var randomVector = new Vector3(Random.Range(-0.1f, 0.1f), Random.Range(-0.1f, 0.1f), 0);
-                            for (var i = 0; i < 4; i++)
-                            {
-                                var orig = verts[charInfo.vertexIndex + i];
-                                //动画
-                                verts[charInfo.vertexIndex + i] = orig + randomVector;
-                            }
-                        }
-                    }
-
+                    ApplyRandomSingleShake(textInfo);
                     break;
-                }
-
                 case DynamicTMPType.RandomShakeAll:
-                {
-                    var random = new Vector3(Random.Range(-0.05f, 0.05f), Random.Range(-0.05f, 0.05f), 0);
-                    for (var i = 0; i < textInfo.characterCount; i++)
-                    {
-                        var charInfo = textInfo.characterInfo[i];
-                        if (!charInfo.isVisible)
-                        {
-                            continue;
-                        }
-
-                        var verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
-
-                        for (var j = 0; j < 4; j++)
-                        {
-                            var orig = verts[charInfo.vertexIndex + j];
-                            //动画
-                            verts[charInfo.vertexIndex + j] = orig + random;
-                        }
-                    }
-
+                    ApplyRandomShakeAll(textInfo);
                     break;
-                }
-
-                case DynamicTMPType.CrazyShake: 
-                {
-                    for (var i = 0; i < textInfo.characterCount; i++)
-                    {
-                        var charInfo = textInfo.characterInfo[i];
-                        if (!charInfo.isVisible)
-                        {
-                            continue;
-                        }
-
-                        var verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
-                        for (var j = 0; j < 4; j++)
-                        {
-                            var orig = verts[charInfo.vertexIndex + j];
-                            //动画
-                            verts[charInfo.vertexIndex + j] = orig + new Vector3(0,
-                                0.025f * Mathf.Sin(Random.Range(1, 2.5f) * Time.time + orig.x * 0.45f), 0);
-
-                            orig = verts[charInfo.vertexIndex + j];
-                            if (Random.Range(0, 5) != 0)
-                            {
-                                continue;
-                            }
-
-                            verts[charInfo.vertexIndex + j] = orig + new Vector3(Random.Range(-0.05f, 0.05f),
-                                Random.Range(-0.05f, 0.05f), 0);
-                        }
-                    }
-
+                case DynamicTMPType.CrazyShake:
+                    ApplyCrazyShake(textInfo);
                     break;
-                }
-
-                case DynamicTMPType.NapShake: 
-                {
-                    for (var i = 0; i < textInfo.characterCount; i++)
-                    {
-                        var charInfo = textInfo.characterInfo[i];
-                        if (!charInfo.isVisible)
-                        {
-                            continue;
-                        }
-
-                        var verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
-                        for (var j = 0; j < 4; j++)
-                        {
-                            var orig = verts[charInfo.vertexIndex + j];
-                            //动画
-                            verts[charInfo.vertexIndex + j] = orig + new Vector3(0,
-                                0.05f * Mathf.Cos(_randomStart * Time.time + orig.x * 0.45f), 0);
-                            orig = verts[charInfo.vertexIndex + j];
-                            verts[charInfo.vertexIndex + j] = orig + new Vector3(Random.Range(-0.01f, 0.01f),
-                                Random.Range(-0.01f, 0.01f), 0);
-                        }
-                    }
-
+                case DynamicTMPType.NapShake:
+                    ApplyNapShake(textInfo);
                     break;
-                }
-
                 case DynamicTMPType.NapFloat:
-                {
-                    for (var i = 0; i < textInfo.characterCount; i++)
-                    {
-                        var charInfo = textInfo.characterInfo[i];
-                        if (!charInfo.isVisible)
-                        {
-                            continue;
-                        }
-
-                        var verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
-                        for (var j = 0; j < 4; j++)
-                        {
-                            var orig = verts[charInfo.vertexIndex + j];
-                            verts[charInfo.vertexIndex + j] = orig + new Vector3(0,
-                                0.05f * Mathf.Sin(_randomStart * Time.time + orig.x * 0.45f), 0);
-                        }
-                    }
-
+                    ApplyNapFloat(textInfo);
                     break;
-                }
-
                 case DynamicTMPType.Wave:
-                {
-                    for (var i = 0; i < textInfo.characterCount; i++)
-                    {
-                        var charInfo = textInfo.characterInfo[i];
-                        if (!charInfo.isVisible)
-                        {
-                            continue;
-                        }
-
-                        var verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
-                        var waveOffset = new Vector3(0, Mathf.Sin(Time.time * 2f + i * 0.2f) * 0.05f, 0);
-                        for (var j = 0; j < 4; j++)
-                        {
-                            var orig = verts[charInfo.vertexIndex + j];
-                            verts[charInfo.vertexIndex + j] = orig + waveOffset;
-                        }
-                    }
-
+                    ApplyWaveEffect(textInfo);
                     break;
-                }
-
                 case DynamicTMPType.Explode:
-                {
-                    var center = new Vector3(0, 0, 0);
-                    for (var i = 0; i < textInfo.characterCount; i++)
-                    {
-                        var charInfo = textInfo.characterInfo[i];
-                        if (!charInfo.isVisible)
-                        {
-                            continue;
-                        }
-
-                        var verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
-                        var explodeOffset = (verts[charInfo.vertexIndex] - center) * (Mathf.Sin(Time.time * 2f) * 0.1f);
-                        for (var j = 0; j < 4; j++)
-                        {
-                            var orig = verts[charInfo.vertexIndex + j];
-                            verts[charInfo.vertexIndex + j] = orig + explodeOffset;
-                        }
-                    }
-
+                    ApplyExplodeEffect(textInfo);
                     break;
-                }
-
                 case DynamicTMPType.Bounce:
-                {
-                    for (var i = 0; i < textInfo.characterCount; i++)
-                    {
-                        var charInfo = textInfo.characterInfo[i];
-                        if (!charInfo.isVisible)
-                        {
-                            continue;
-                        }
-
-                        var verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
-                        var bounceOffset = new Vector3(0, Mathf.Abs(Mathf.Sin(Time.time * 2f + i * 0.1f)) * 0.1f, 0);
-                        for (var j = 0; j < 4; j++)
-                        {
-                            var orig = verts[charInfo.vertexIndex + j];
-                            verts[charInfo.vertexIndex + j] = orig + bounceOffset;
-                        }
-                    }
-
+                    ApplyBounceEffect(textInfo);
                     break;
-                }
                 case DynamicTMPType.None:
-                {
                     break;
-                }
                 default:
-                {
                     throw new ArgumentOutOfRangeException();
-                }
             }
 
+            UpdateAllMeshes(textInfo);
+        }
+
+        private void UpdateAllMeshes(TMP_TextInfo textInfo)
+        {
             for (var i = 0; i < textInfo.meshInfo.Length; i++)
             {
                 var meshInfo = textInfo.meshInfo[i];
                 meshInfo.mesh.vertices = meshInfo.vertices;
-                _tmp.UpdateGeometry(meshInfo.mesh, i);
+                _textMeshPro.UpdateGeometry(meshInfo.mesh, i);
+            }
+        }
+
+        private static void ForEachVisibleCharacter(TMP_TextInfo textInfo, Action<TMP_CharacterInfo, Vector3[]> action)
+        {
+            for (var i = 0; i < textInfo.characterCount; i++)
+            {
+                var charInfo = textInfo.characterInfo[i];
+                if (!charInfo.isVisible)
+                {
+                    continue;
+                }
+
+                var vertices = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
+                action(charInfo, vertices);
+            }
+        }
+
+        private static void ApplyRandomShake(TMP_TextInfo textInfo)
+        {
+            ForEachVisibleCharacter(textInfo, (charInfo, vertices) =>
+            {
+                var randomOffset = new Vector3(
+                    Random.Range(-MaxShakeIntensity, MaxShakeIntensity),
+                    Random.Range(-MaxShakeIntensity, MaxShakeIntensity),
+                    0);
+
+                ApplyVertexOffset(charInfo, vertices, randomOffset);
+            });
+        }
+
+        private static void ApplyRandomSingleShake(TMP_TextInfo textInfo)
+        {
+            if (Random.Range(0, SingleShakeProbability) != 0)
+            {
+                return;
+            }
+
+            var randomIndex = Random.Range(0, textInfo.characterCount);
+            var charInfo = textInfo.characterInfo[randomIndex];
+            if (!charInfo.isVisible)
+            {
+                return;
+            }
+
+            var vertices = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
+            var randomOffset = new Vector3(
+                Random.Range(-0.1f, 0.1f),
+                Random.Range(-0.1f, 0.1f),
+                0);
+
+            ApplyVertexOffset(charInfo, vertices, randomOffset);
+        }
+
+        private static void ApplyRandomShakeAll(TMP_TextInfo textInfo)
+        {
+            var sharedOffset = new Vector3(
+                Random.Range(-MaxShakeIntensity, MaxShakeIntensity),
+                Random.Range(-MaxShakeIntensity, MaxShakeIntensity),
+                0);
+
+            ForEachVisibleCharacter(textInfo, (charInfo, vertices) =>
+            {
+                ApplyVertexOffset(charInfo, vertices, sharedOffset);
+            });
+        }
+
+        private static void ApplyCrazyShake(TMP_TextInfo textInfo)
+        {
+            ForEachVisibleCharacter(textInfo, (charInfo, vertices) =>
+            {
+                for (var j = 0; j < 4; j++)
+                {
+                    var orig = vertices[charInfo.vertexIndex + j];
+                    var sinOffset = new Vector3(
+                        0f,
+                        0.025f * Mathf.Sin(Random.Range(1f, BaseFrequency) * Time.time + orig.x * 0.45f),
+                        0f);
+
+                    vertices[charInfo.vertexIndex + j] = orig + sinOffset;
+
+                    if (Random.Range(0, 5) == 0)
+                    {
+                        vertices[charInfo.vertexIndex + j] += new Vector3(
+                            Random.Range(-MaxShakeIntensity, MaxShakeIntensity),
+                            Random.Range(-MaxShakeIntensity, MaxShakeIntensity),
+                            0f);
+                    }
+                }
+            });
+        }
+
+        private void ApplyNapShake(TMP_TextInfo textInfo)
+        {
+            ForEachVisibleCharacter(textInfo, (charInfo, vertices) =>
+            {
+                for (var j = 0; j < 4; j++)
+                {
+                    var orig = vertices[charInfo.vertexIndex + j];
+                    var cosOffset = new Vector3(
+                        0f,
+                        0.05f * Mathf.Cos(_initialRandomOffset * Time.time + orig.x * 0.45f),
+                        0f);
+
+                    var randomOffset = new Vector3(
+                        Random.Range(-0.01f, 0.01f),
+                        Random.Range(-0.01f, 0.01f),
+                        0f);
+
+                    vertices[charInfo.vertexIndex + j] = orig + cosOffset + randomOffset;
+                }
+            });
+        }
+
+        private void ApplyNapFloat(TMP_TextInfo textInfo)
+        {
+            ForEachVisibleCharacter(textInfo, (charInfo, vertices) =>
+            {
+                for (var j = 0; j < 4; j++)
+                {
+                    var orig = vertices[charInfo.vertexIndex + j];
+                    var sinOffset = new Vector3(
+                        0f,
+                        0.05f * Mathf.Sin(_initialRandomOffset * Time.time + orig.x * 0.45f),
+                        0f);
+
+                    vertices[charInfo.vertexIndex + j] = orig + sinOffset;
+                }
+            });
+        }
+
+        private static void ApplyWaveEffect(TMP_TextInfo textInfo)
+        {
+            ForEachVisibleCharacter(textInfo, (charInfo, vertices) =>
+            {
+                var waveOffset = new Vector3(
+                    0f,
+                    Mathf.Sin(Time.time * 2f + charInfo.vertexIndex * 0.2f) * MaxShakeIntensity,
+                    0f);
+
+                ApplyVertexOffset(charInfo, vertices, waveOffset);
+            });
+        }
+
+        private static void ApplyExplodeEffect(TMP_TextInfo textInfo)
+        {
+            var center = Vector3.zero;
+            ForEachVisibleCharacter(textInfo, (charInfo, vertices) =>
+            {
+                var basePosition = vertices[charInfo.vertexIndex];
+                var explodeOffset = (basePosition - center) * (Mathf.Sin(Time.time * 2f) * 0.1f);
+                ApplyVertexOffset(charInfo, vertices, explodeOffset);
+            });
+        }
+
+        private static void ApplyBounceEffect(TMP_TextInfo textInfo)
+        {
+            ForEachVisibleCharacter(textInfo, (charInfo, vertices) =>
+            {
+                var bounceOffset = new Vector3(
+                    0f,
+                    Mathf.Abs(Mathf.Sin(Time.time * 2f + charInfo.vertexIndex * 0.1f)) * 0.1f,
+                    0f);
+
+                ApplyVertexOffset(charInfo, vertices, bounceOffset);
+            });
+        }
+
+        private static void ApplyVertexOffset(TMP_CharacterInfo charInfo, Vector3[] vertices, Vector3 offset)
+        {
+            for (var j = 0; j < 4; j++)
+            {
+                vertices[charInfo.vertexIndex + j] += offset;
             }
         }
     }

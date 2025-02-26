@@ -53,7 +53,7 @@ namespace UCT.Global.Core
                         .SetEase(Ease.Linear);
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    break;
             }
 
             if (_highlightedIndex < _itemCount - 1 && _allScrollPoints[1].color.a == 0)

@@ -9,7 +9,7 @@ using UCT.Global.Settings;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
-using Random = UnityEngine.Random;
+using Random = System.Random;
 
 namespace UCT.Service
 {
@@ -18,6 +18,10 @@ namespace UCT.Service
     /// </summary>
     public static class GameUtilityService
     {
+        private static readonly Random Rng = new();
+
+        private static readonly Random ColorGenerator = new(); // 线程安全的实例
+
         /// <summary>
         ///     设置16:9边框的Sprite
         /// </summary>
@@ -289,7 +293,15 @@ namespace UCT.Service
 
         public static Color GetRandomColor()
         {
-            return new Color(Random.value, Random.value, Random.value, 1f);
+            lock (Rng) // 确保线程安全
+            {
+                return new Color(
+                    (float)Rng.NextDouble(),
+                    (float)Rng.NextDouble(),
+                    (float)Rng.NextDouble(),
+                    1f
+                );
+            }
         }
 
         public static Color GetDifferentRandomColor(Color colorToAvoid)
@@ -310,9 +322,12 @@ namespace UCT.Service
         {
             Color.RGBToHSV(originalColor, out var h, out var s, out var v);
 
-            h = Mathf.Repeat(h + (Random.value * 2f - 1f) * hueOffset, 1.0f);
-            s = Mathf.Clamp01(s + (Random.value * 2f - 1f) * saturationOffset);
-            v = Mathf.Clamp01(v + (Random.value * 2f - 1f) * valueOffset);
+            lock (ColorGenerator) // 确保线程安全
+            {
+                h = Mathf.Repeat((float)(h + (ColorGenerator.NextDouble() * 2.0 - 1.0) * hueOffset), 1.0f);
+                s = Mathf.Clamp01(s + (float)(ColorGenerator.NextDouble() * 2.0 - 1.0) * saturationOffset);
+                v = Mathf.Clamp01(v + (float)(ColorGenerator.NextDouble() * 2.0 - 1.0) * valueOffset);
+            }
 
             return Color.HSVToRGB(h, s, v);
         }

@@ -9,7 +9,6 @@ namespace UCT.Other
     /// </summary>
     public class TMPDynamicFontController : MonoBehaviour
     {
-        private const string Fonts = "Fonts/";
         private const string SonFonts = "Fonts/SonFonts/";
         public static TMPDynamicFontController Instance;
         private TMP_FontAsset _simsun;

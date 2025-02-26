@@ -299,7 +299,7 @@ namespace UCT.Global.Scene
                     _animScale.Kill();
                     _nameText.transform.localPosition = new Vector3(0, 0.6f);
                     _nameText.transform.localScale = Vector3.one;
-                    _nameText.GetComponent<DynamicTMP>().dynamicMode = 0;
+                    _nameText.GetComponent<DynamicTMP>().effectType = 0;
                     _selectText.text =
                         TextProcessingService.GetFirstChildStringByPrefix(
                             MainControl.Instance.LanguagePackControl.sceneTexts, "Quit") +
@@ -341,7 +341,7 @@ namespace UCT.Global.Scene
                 _animScale.Kill();
                 _nameText.transform.localPosition = new Vector3(0, 0.6f);
                 _nameText.transform.localScale = Vector3.one;
-                _nameText.GetComponent<DynamicTMP>().dynamicMode = 0;
+                _nameText.GetComponent<DynamicTMP>().effectType = 0;
                 _selectText.text =
                     TextProcessingService.GetFirstChildStringByPrefix(
                         MainControl.Instance.LanguagePackControl.sceneTexts, "Quit") +
@@ -541,7 +541,7 @@ namespace UCT.Global.Scene
                             .SetEase(Ease.Linear);
                         // ReSharper disable once Unity.PerformanceCriticalCodeInvocation
                         // 该方法只会在输入完名称确定时执行一次。
-                        _nameText.GetComponent<DynamicTMP>().dynamicMode =
+                        _nameText.GetComponent<DynamicTMP>().effectType =
                             DynamicTMPType.RandomShakeAll;
                         _characterText.text = "";
                         _teachText.text = "";
