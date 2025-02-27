@@ -37,10 +37,10 @@ namespace UCT.Battle
             _foolDay = DateTime.Now.Month == 4 && DateTime.Now.Day == 1;
             _bgmSource = AudioController.Instance.audioSource;
             _bgmSource.clip = clips[Convert.ToInt32(_foolDay)];
-            
+
             var player = _mParticleSystem.transform.parent.gameObject;
             player.transform.position = MainControl.Instance.playerControl.playerLastPos;
-            
+
             _mParticleSystem.transform.position = MainControl.Instance.playerControl.playerLastPos;
             _mParticleSystem.Pause();
             _mParticleSystem.gameObject.SetActive(false);

@@ -8,8 +8,6 @@ namespace UCT.Overworld
     /// </summary>
     public class CameraFollowPlayer : MonoBehaviour
     {
-        public static CameraFollowPlayer Instance { get; private set; }
-
         [FormerlySerializedAs("limit")] public bool isLimit = true;
         public bool isFollow;
 
@@ -20,6 +18,7 @@ namespace UCT.Overworld
         public float maxY;
 
         public GameObject player;
+        public static CameraFollowPlayer Instance { get; private set; }
 
         private void Awake()
         {

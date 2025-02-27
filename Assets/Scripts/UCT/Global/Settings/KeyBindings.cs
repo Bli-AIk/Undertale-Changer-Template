@@ -180,7 +180,7 @@ namespace UCT.Global.Settings
                 }
             };
         }
-        
+
         private static KeyCode GetEveryKeyCodeAtIndex(int index,
             KeyValuePair<KeyBindingType, Dictionary<string, KeyCode>> keyBinding)
         {
@@ -195,7 +195,8 @@ namespace UCT.Global.Settings
         }
 
         public static bool GetInputEveryKeyCodeAtIndex(int index,
-            KeyValuePair<KeyBindingType, Dictionary<string, KeyCode>> keyBinding, Func<KeyCode, bool> inputMethod)
+            KeyValuePair<KeyBindingType, Dictionary<string, KeyCode>> keyBinding,
+            Func<KeyCode, bool> inputMethod)
         {
             return inputMethod(GetEveryKeyCodeAtIndex(index, keyBinding));
         }

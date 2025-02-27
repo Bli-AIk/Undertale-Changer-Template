@@ -14,8 +14,12 @@ namespace UCT.Service
         /// <summary>
         ///     生成框
         /// </summary>
-        public static void SummonBox(List<Vector2> list, Quaternion rotation, Transform inputTransform,
-            float inputWidth = 0.15f, LineRenderer lineRenderer = null, EdgeCollider2D edgeCollider2D = null,
+        public static void SummonBox(List<Vector2> list,
+            Quaternion rotation,
+            Transform inputTransform,
+            float inputWidth = 0.15f,
+            LineRenderer lineRenderer = null,
+            EdgeCollider2D edgeCollider2D = null,
             MeshFilter meshFilter = null)
         {
             if (!lineRenderer)
@@ -81,7 +85,9 @@ namespace UCT.Service
         /// <summary>
         ///     计算坐标获取RealPoints
         /// </summary>
-        public static List<Vector2> GetRealPoints(List<Vector2> list, Quaternion rotation, Transform inputTransform,
+        public static List<Vector2> GetRealPoints(List<Vector2> list,
+            Quaternion rotation,
+            Transform inputTransform,
             bool isLocal = true)
         {
             var local = isLocal ? inputTransform.localPosition : inputTransform.position;
@@ -212,27 +218,38 @@ namespace UCT.Service
         /// </summary>
         private static bool IsPointOnLineSegment(Vector2 linePointA, Vector2 linePointB, Vector2 pointC)
         {
-            return  Mathf.Approximately(CrossSave(linePointA, linePointB, pointC), 0f) && (pointC.x - linePointA.x) * (pointC.x - linePointB.x) <= 0 && (pointC.y - linePointA.y) * (pointC.y - linePointB.y) <= 0;
+            return Mathf.Approximately(CrossSave(linePointA, linePointB, pointC), 0f) &&
+                   (pointC.x - linePointA.x) * (pointC.x - linePointB.x) <= 0 &&
+                   (pointC.y - linePointA.y) * (pointC.y - linePointB.y) <= 0;
         }
 
         /// <summary>
         ///     检查线段AB和CD是否相交
         /// </summary>
-        private static bool DoLineSegmentsIntersect(Vector2 linePointA, Vector2 linePointB, Vector2 linePointC, Vector2 linePointD)
+        private static bool DoLineSegmentsIntersect(Vector2 linePointA,
+            Vector2 linePointB,
+            Vector2 linePointC,
+            Vector2 linePointD)
         {
-            if (IsPointOnLineSegment(linePointA, linePointB, linePointC) || IsPointOnLineSegment(linePointA, linePointB, linePointD) || IsPointOnLineSegment(linePointC, linePointD, linePointA) ||
+            if (IsPointOnLineSegment(linePointA, linePointB, linePointC) ||
+                IsPointOnLineSegment(linePointA, linePointB, linePointD) ||
+                IsPointOnLineSegment(linePointC, linePointD, linePointA) ||
                 IsPointOnLineSegment(linePointC, linePointD, linePointB))
             {
                 return true;
             }
 
-            return CrossSave(linePointA, linePointB, linePointC) * CrossSave(linePointA, linePointB, linePointD) < 0 && CrossSave(linePointC, linePointD, linePointA) * CrossSave(linePointC, linePointD, linePointB) < 0;
+            return CrossSave(linePointA, linePointB, linePointC) * CrossSave(linePointA, linePointB, linePointD) < 0 &&
+                   CrossSave(linePointC, linePointD, linePointA) * CrossSave(linePointC, linePointD, linePointB) < 0;
         }
 
         /// <summary>
         ///     计算两线段AB和CD的交点
         /// </summary>
-        private static Vector2? CalculateIntersectionPoint(Vector2 linePointA, Vector2 linePointB, Vector2 linePointC, Vector2 linePointD)
+        private static Vector2? CalculateIntersectionPoint(Vector2 linePointA,
+            Vector2 linePointB,
+            Vector2 linePointC,
+            Vector2 linePointD)
         {
             if (!DoLineSegmentsIntersect(linePointA, linePointB, linePointC, linePointD))
             {
@@ -240,14 +257,17 @@ namespace UCT.Service
             }
 
             // 计算线性方程的参数
-            var denominator = (linePointB.x - linePointA.x) * (linePointD.y - linePointC.y) - (linePointB.y - linePointA.y) * (linePointD.x - linePointC.x);
+            var denominator = (linePointB.x - linePointA.x) * (linePointD.y - linePointC.y) -
+                              (linePointB.y - linePointA.y) * (linePointD.x - linePointC.x);
             if (denominator == 0)
             {
                 return null; // 线段平行或共线
             }
 
-            var u = ((linePointC.x - linePointA.x) * (linePointD.y - linePointC.y) - (linePointC.y - linePointA.y) * (linePointD.x - linePointC.x)) / denominator;
-            return new Vector2(linePointA.x + u * (linePointB.x - linePointA.x), linePointA.y + u * (linePointB.y - linePointA.y));
+            var u = ((linePointC.x - linePointA.x) * (linePointD.y - linePointC.y) -
+                     (linePointC.y - linePointA.y) * (linePointD.x - linePointC.x)) / denominator;
+            return new Vector2(linePointA.x + u * (linePointB.x - linePointA.x),
+                linePointA.y + u * (linePointB.y - linePointA.y));
         }
 
         /// <summary>
@@ -291,7 +311,9 @@ namespace UCT.Service
         /// <summary>
         ///     前面两个相加，减去后面两个
         /// </summary>
-        public static List<Vector2> AddAndSubLists(List<Vector2> list1, List<Vector2> list2, List<Vector2> list3,
+        public static List<Vector2> AddAndSubLists(List<Vector2> list1,
+            List<Vector2> list2,
+            List<Vector2> list3,
             List<Vector2> list4)
         {
             var concatenatedList = AddLists(list1, list2);

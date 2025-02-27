@@ -34,9 +34,9 @@ namespace UCT.Control
 
     public abstract class GameItem
     {
-        protected Action<int> OnUseAction;
         private readonly Action<int> _onCheckAction;
         private readonly Action<int> _onDropAction;
+        protected Action<int> OnUseAction;
 
         protected GameItem(ItemData data, Action<int> onUse, Action<int> onCheck, Action<int> onDrop)
         {
@@ -84,11 +84,14 @@ namespace UCT.Control
             AudioController.Instance.PlayFx(2, MainControl.Instance.AudioControl.fxClipUI);
         }
     }
+
     public class ParentFoodItem : GameItem
     {
         private readonly GameItem _child;
-        public ParentFoodItem(ItemData data, Action<int> onUse, Action<int> onCheck, Action<int> onDrop, GameItem child) : base(data, onUse,
-            onCheck, onDrop)
+
+        public ParentFoodItem(ItemData data, Action<int> onUse, Action<int> onCheck, Action<int> onDrop, GameItem child)
+            : base(data, onUse,
+                onCheck, onDrop)
         {
             _child = child;
             OnUseAction += ConsumeFoodAndSpawnChild;
@@ -107,9 +110,7 @@ namespace UCT.Control
         }
     }
 
-    public class GameItemBuilder : GameItemBuilder<GameItemBuilder>
-    {
-    }
+    public class GameItemBuilder : GameItemBuilder<GameItemBuilder> { }
 
     public class FoodItemBuilder : GameItemBuilder<FoodItemBuilder>
     {
@@ -118,6 +119,7 @@ namespace UCT.Control
             return new FoodItem(Data, OnUse, OnCheck, OnDrop);
         }
     }
+
     public class ParentFoodItemBuilder : GameItemBuilder<ParentFoodItemBuilder>
     {
         private readonly GameItem _child;
@@ -170,21 +172,25 @@ namespace UCT.Control
         private class GameItemImpl : GameItem
         {
             public GameItemImpl(ItemData data, Action<int> onUse, Action<int> onCheck, Action<int> onDrop)
-                : base(data, onUse, onCheck, onDrop)
-            {
-            }
+                : base(data, onUse, onCheck, onDrop) { }
         }
     }
 
     public class EquipmentItem : GameItem
     {
-        private readonly Action<int> _onSwitchAction;
         private readonly Action<int> _onEquipAction;
         private readonly Action<int> _onRemoveAction;
+        private readonly Action<int> _onSwitchAction;
         private readonly Action<int> _onUpdateAction;
 
-        protected internal EquipmentItem(ItemData data, Action<int> onUse, Action<int> onCheck, Action<int> onDrop,
-            Action<int> onSwitch, Action<int> onEquip, Action<int> onRemove, Action<int> onUpdate)
+        protected internal EquipmentItem(ItemData data,
+            Action<int> onUse,
+            Action<int> onCheck,
+            Action<int> onDrop,
+            Action<int> onSwitch,
+            Action<int> onEquip,
+            Action<int> onRemove,
+            Action<int> onUpdate)
             : base(data, onUse, onCheck, onDrop)
         {
             _onSwitchAction = onSwitch;
@@ -214,9 +220,7 @@ namespace UCT.Control
         }
     }
 
-    public class EquipmentItemBuilder : EquipmentItemBuilder<EquipmentItemBuilder>
-    {
-    }
+    public class EquipmentItemBuilder : EquipmentItemBuilder<EquipmentItemBuilder> { }
 
     public class EquipmentItemBuilder<T> : GameItemBuilder<T> where T : EquipmentItemBuilder<T>
     {
@@ -255,13 +259,22 @@ namespace UCT.Control
     public class WeaponItem : EquipmentItem
     {
         private readonly Action<int> _onAttackAction;
-        private readonly Action<int> _onMissAction;
         private readonly Action<int> _onHitAction;
         private readonly Action<int> _onHitMissAction;
+        private readonly Action<int> _onMissAction;
 
-        protected internal WeaponItem(ItemData data, Action<int> onUse, Action<int> onCheck, Action<int> onDrop,
-            Action<int> onSwitch, Action<int> onEquip, Action<int> onRemove, Action<int> onUpdate,
-            Action<int> onAttack, Action<int> onMiss, Action<int> onHit, Action<int> onHitMiss)
+        protected internal WeaponItem(ItemData data,
+            Action<int> onUse,
+            Action<int> onCheck,
+            Action<int> onDrop,
+            Action<int> onSwitch,
+            Action<int> onEquip,
+            Action<int> onRemove,
+            Action<int> onUpdate,
+            Action<int> onAttack,
+            Action<int> onMiss,
+            Action<int> onHit,
+            Action<int> onHitMiss)
             : base(data, onUse, onCheck, onDrop, onSwitch, onEquip, onRemove, onUpdate)
         {
             _onAttackAction = onAttack;
@@ -305,8 +318,14 @@ namespace UCT.Control
     {
         private readonly Action<int> _onDamageTakenAction;
 
-        protected internal ArmorItem(ItemData data, Action<int> onUse, Action<int> onCheck, Action<int> onDrop,
-            Action<int> onSwitch, Action<int> onEquip, Action<int> onRemove, Action<int> onUpdate,
+        protected internal ArmorItem(ItemData data,
+            Action<int> onUse,
+            Action<int> onCheck,
+            Action<int> onDrop,
+            Action<int> onSwitch,
+            Action<int> onEquip,
+            Action<int> onRemove,
+            Action<int> onUpdate,
             Action<int> onDamageTaken)
             : base(data, onUse, onCheck, onDrop, onSwitch, onEquip, onRemove, onUpdate)
         {
@@ -391,7 +410,7 @@ namespace UCT.Control
                 .SetData("Serving", 5)
                 .Build();
             AddItem(serving);
-            
+
             AddItem(new ParentFoodItemBuilder(serving)
                 .SetData("TwoServings", 10)
                 .Build());

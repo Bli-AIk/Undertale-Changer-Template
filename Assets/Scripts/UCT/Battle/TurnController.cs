@@ -15,13 +15,13 @@ namespace UCT.Battle
     /// </summary>
     public class TurnController : MonoBehaviour
     {
-        public static TurnController Instance { get; private set; }
         public int turn;
         public bool isMyTurn;
 
         public List<int> poolCount;
 
         public List<ObjectPool> objectPools = new();
+        public static TurnController Instance { get; private set; }
 
         private void Awake()
         {
@@ -173,7 +173,7 @@ namespace UCT.Battle
                     yield return Timing.WaitForSeconds(0.5f);
 
                     break;
-                
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -186,7 +186,7 @@ namespace UCT.Battle
         public void YellowBullet(Vector3 soulsPosition)
         {
             var obj = objectPools[0].GetFromPool<BulletController>();
-            obj.SetBullet("YellowBullet","YellowBullet",soulsPosition);
+            obj.SetBullet("YellowBullet", "YellowBullet", soulsPosition);
             obj.transform.localPosition += Vector3.forward;
         }
 

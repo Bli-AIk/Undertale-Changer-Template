@@ -35,9 +35,9 @@ namespace UCT.Service
 
         private static bool GetKeyDownFrom(Dictionary<KeyBindingType, Dictionary<string, KeyCode>> keyCodes, int index)
         {
-            var result = keyCodes.Any(keyBinding 
+            var result = keyCodes.Any(keyBinding
                 => KeyBindings.GetInputEveryKeyCodeAtIndex(index, keyBinding, Input.GetKeyDown));
-            
+
             return result;
         }
 
@@ -65,7 +65,7 @@ namespace UCT.Service
 
         private static bool GetKeyFrom(Dictionary<KeyBindingType, Dictionary<string, KeyCode>> keyCodes, int index)
         {
-            var result = keyCodes.Any(keyBinding 
+            var result = keyCodes.Any(keyBinding
                 => KeyBindings.GetInputEveryKeyCodeAtIndex(index, keyBinding, Input.GetKey));
             return result;
         }
@@ -94,7 +94,7 @@ namespace UCT.Service
 
         private static bool GetKeyUpFrom(Dictionary<KeyBindingType, Dictionary<string, KeyCode>> keyCodes, int index)
         {
-            var result = keyCodes.Any(keyBinding 
+            var result = keyCodes.Any(keyBinding
                 => KeyBindings.GetInputEveryKeyCodeAtIndex(index, keyBinding, Input.GetKeyUp));
             return result;
         }

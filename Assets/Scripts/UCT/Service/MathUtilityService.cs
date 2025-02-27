@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -113,9 +112,9 @@ namespace UCT.Service
 
             return result;
         }
-        
+
         /// <summary>
-        /// 将 AudioMixer 的 dB 值（范围：-80 到 0）转换为归一化值（范围：0 到 1）。
+        ///     将 AudioMixer 的 dB 值（范围：-80 到 0）转换为归一化值（范围：0 到 1）。
         /// </summary>
         /// <param name="mixerDbValue">AudioMixer 的 dB 值（范围：-80 到 0）。</param>
         /// <returns>归一化的 0 到 1 的值。</returns>
@@ -125,7 +124,7 @@ namespace UCT.Service
         }
 
         /// <summary>
-        /// 将归一化值（范围：0 到 1）转换为 AudioMixer 的 dB 值（范围：-80 到 0）。
+        ///     将归一化值（范围：0 到 1）转换为 AudioMixer 的 dB 值（范围：-80 到 0）。
         /// </summary>
         /// <param name="normalizedValue">归一化的 0 到 1 的值。</param>
         /// <returns>对应的 dB 值（范围：-80 到 0）。</returns>

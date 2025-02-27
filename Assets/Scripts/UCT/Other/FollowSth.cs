@@ -6,6 +6,13 @@ namespace UCT.Other
 {
     public class FollowSth : MonoBehaviour
     {
+        public enum FollowTarget
+        {
+            Null,
+            Player,
+            MainCamera
+        }
+
         public FollowTarget followTarget;
         public GameObject sth;
         public bool followPosition;
@@ -14,13 +21,6 @@ namespace UCT.Other
         public Vector3 rotationAdd;
         public bool followLocalScale;
         public Vector3 localScaleAdd;
-
-        public enum FollowTarget
-        {
-            Null,
-            Player,
-            MainCamera
-        }
 
         private void Start()
         {
@@ -36,18 +36,6 @@ namespace UCT.Other
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
-            }
-        }
-
-        private void SetSth(GameObject item)
-        {
-            if (item)
-            {
-                sth = item;
-            }
-            else
-            {
-                throw new ArgumentNullException();
             }
         }
 
@@ -71,6 +59,18 @@ namespace UCT.Other
             if (followLocalScale)
             {
                 transform.localScale = sth.transform.localScale + localScaleAdd;
+            }
+        }
+
+        private void SetSth(GameObject item)
+        {
+            if (item)
+            {
+                sth = item;
+            }
+            else
+            {
+                throw new ArgumentNullException();
             }
         }
     }

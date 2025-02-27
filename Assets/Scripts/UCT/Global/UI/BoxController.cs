@@ -17,11 +17,11 @@ namespace UCT.Global.UI
             Sub
         }
 
-        public static BoxController Instance { get; private set; }
+        [Header("线宽")]
+        public float width = 0.15f;
 
-        [Header("线宽")] public float width = 0.15f;
-
-        [Header("起始时生成框，名字为空不生成")] public string startSummonName;
+        [Header("起始时生成框，名字为空不生成")]
+        public string startSummonName;
 
         public Vector3 startSummonPos;
 
@@ -31,6 +31,8 @@ namespace UCT.Global.UI
         public List<Vector2> pointsCrossSave, pointsOutCrossSave, pointsInCrossSave; //交点/非重合点/重合点
 
         private int _number;
+
+        public static BoxController Instance { get; private set; }
 
         private void Awake()
         {

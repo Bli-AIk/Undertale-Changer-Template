@@ -20,7 +20,8 @@ namespace UCT.Global.Settings
         /// <param name="layerName">层级名称</param>
         /// <param name="dataName">选项本身的数据名称</param>
         /// <param name="descriptionDataName">描述文本的数据名称</param>
-        void AddBackOptionForDisplay(string layerName, string dataName = "SettingBack",
+        void AddBackOptionForDisplay(string layerName,
+            string dataName = "SettingBack",
             string descriptionDataName = "SettingBackTip");
 
         void AddSwitchPageOptionForDisplay(string dataName = "PageUp", string changedValue = "PageDown");
@@ -50,7 +51,8 @@ namespace UCT.Global.Settings
         /// <param name="layerName">层级名称</param>
         /// <param name="dataName">选项本身的数据名称</param>
         /// <param name="descriptionDataName">描述文本的数据名称</param>
-        public void AddBackOptionForDisplay(string layerName, string dataName = "SettingBack",
+        public void AddBackOptionForDisplay(string layerName,
+            string dataName = "SettingBack",
             string descriptionDataName = "SettingBackTip")
         {
             DisplayedSettingsOptions.Add(new SettingsOption(layerName)
@@ -100,7 +102,9 @@ namespace UCT.Global.Settings
         /// <param name="dataName">选项本身的数据名称</param>
         /// <param name="descriptionDataName">描述文本的数据名称</param>
         /// <param name="newSelectedOption">进入层级后的选项索引</param>
-        protected void AddEnterLayerOption(string layerName, string dataName, string[] descriptionDataName,
+        protected void AddEnterLayerOption(string layerName,
+            string dataName,
+            string[] descriptionDataName,
             int newSelectedOption = 0)
         {
             AllSettingsOptions.Add(new SettingsOption(layerName)
@@ -540,8 +544,7 @@ namespace UCT.Global.Settings
     //TODO: 无障碍Layer
     //  TODO: 讲述人
     //  TODO: 色盲模式
-    
-    
+
 
     //TODO: 成就Layer
     //  TODO: 成就页面

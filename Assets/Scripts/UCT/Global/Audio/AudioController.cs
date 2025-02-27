@@ -12,8 +12,8 @@ namespace UCT.Global.Audio
     /// </summary>
     public class AudioController : ObjectPool
     {
-        public static AudioController Instance { get; private set; }
         public AudioSource audioSource;
+        public static AudioController Instance { get; private set; }
 
         private void Awake()
         {
@@ -173,10 +173,8 @@ namespace UCT.Global.Audio
                     return manager.fxValues[i];
                 }
             }
+
             return null;
         }
-
-
-
     }
 }

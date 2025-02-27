@@ -6,7 +6,8 @@ namespace UCT.Overworld
     {
         public int upLayer = 5, downLayer = -2;
 
-        [Header("跟随父父物体的层级变化而加上1")] public bool followParentPlus;
+        [Header("跟随父父物体的层级变化而加上1")]
+        public bool followParentPlus;
 
         private GameObject _player;
         private SpriteRenderer _spriteRenderer, _spriteRendererP;

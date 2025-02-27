@@ -11,10 +11,17 @@ namespace UCT.Service
     {
         private readonly Action<object[]> _method;
 
-        public MethodWrapper(Action<object[]> method) => _method = method;
+        public MethodWrapper(Action<object[]> method)
+        {
+            _method = method;
+        }
 
-        public void Invoke(params object[] args) => _method(args);
+        public void Invoke(params object[] args)
+        {
+            _method(args);
+        }
     }
+
     public interface IMethodWrapper<out TResult>
     {
         TResult Invoke(params object[] args);
@@ -24,9 +31,14 @@ namespace UCT.Service
     {
         private readonly Func<object[], TResult> _method;
 
-        public MethodWrapper(Func<object[], TResult> method) => _method = method;
+        public MethodWrapper(Func<object[], TResult> method)
+        {
+            _method = method;
+        }
 
-        public TResult Invoke(params object[] args) => _method(args);
-        
+        public TResult Invoke(params object[] args)
+        {
+            return _method(args);
+        }
     }
 }

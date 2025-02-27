@@ -21,7 +21,7 @@ namespace UCT.Global.UI
     }
 
     /// <summary>
-    /// Applies various dynamic effects to TextMeshPro text components.
+    ///     Applies various dynamic effects to TextMeshPro text components.
     /// </summary>
     public class DynamicTMP : MonoBehaviour
     {
@@ -29,12 +29,12 @@ namespace UCT.Global.UI
         private const float MaxShakeIntensity = 0.05f;
         private const float BaseFrequency = 2.5f;
 
-        [FormerlySerializedAs("dynamicMode")] 
-        public DynamicTMPType effectType = DynamicTMPType.None;
-        
-        private TMP_Text _textMeshPro;
+        [FormerlySerializedAs("dynamicMode")] public DynamicTMPType effectType = DynamicTMPType.None;
+
         private float _initialRandomOffset;
-        
+
+        private TMP_Text _textMeshPro;
+
         private void Start()
         {
             _textMeshPro = GetComponent<TMP_Text>();
@@ -157,10 +157,8 @@ namespace UCT.Global.UI
                 Random.Range(-MaxShakeIntensity, MaxShakeIntensity),
                 0);
 
-            ForEachVisibleCharacter(textInfo, (charInfo, vertices) =>
-            {
-                ApplyVertexOffset(charInfo, vertices, sharedOffset);
-            });
+            ForEachVisibleCharacter(textInfo,
+                (charInfo, vertices) => { ApplyVertexOffset(charInfo, vertices, sharedOffset); });
         }
 
         private static void ApplyCrazyShake(TMP_TextInfo textInfo)

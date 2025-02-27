@@ -49,7 +49,7 @@
     -unity-text-align: middle-center;
 }
 
-Label{
+Label {
     font-size: 14px;
-    
+
 }

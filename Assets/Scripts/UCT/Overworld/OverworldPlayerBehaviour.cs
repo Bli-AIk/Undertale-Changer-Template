@@ -8,24 +8,28 @@ using UnityEngine;
 using UnityEngine.Serialization;
 
 namespace UCT.Overworld
-{ 
+{
     [RequireComponent(typeof(OverworldPlayerAnimEventHelper))]
     public class OverworldPlayerBehaviour : FiniteStateMachine.FiniteStateMachine
     {
-        public float owTimer; 
+        public float owTimer;
         public Vector2 walkFxRange = new(0, 9);
         public StateType stateType;
-        
-        [Title("开启倒影")] 
-        public bool isShadow;
-        [FormerlySerializedAs("_spriteRenderer")] public SpriteRenderer spriteRenderer;
-        [FormerlySerializedAs("_shadowSpriteRenderer")] public SpriteRenderer shadowSpriteRenderer;
+
+        [Title("开启倒影")] public bool isShadow;
+
+        [FormerlySerializedAs("_spriteRenderer")]
+        public SpriteRenderer spriteRenderer;
+
+        [FormerlySerializedAs("_shadowSpriteRenderer")]
+        public SpriteRenderer shadowSpriteRenderer;
 
         private void Start()
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
             shadowSpriteRenderer = transform.Find("BottomAxis/Shadow").GetComponent<SpriteRenderer>();
         }
+
         private void Update()
         {
             if (!MainControl.Instance.isSceneSwitching)
@@ -47,7 +51,7 @@ namespace UCT.Overworld
 
                 return;
             }
-            
+
             InputPlayerMove();
             SetShadow();
         }
@@ -65,6 +69,7 @@ namespace UCT.Overworld
             States.Add(StateType.Spin, new SpinState(this, data));
             TransitionState(States[StateType.Idle]);
         }
+
         private void SetShadow()
         {
             shadowSpriteRenderer.transform.parent.gameObject.SetActive(isShadow);
@@ -93,8 +98,7 @@ namespace UCT.Overworld
 
         private bool ProcessInputDirection()
         {
-
-            SetKeyMap(out var directionMapping, 
+            SetKeyMap(out var directionMapping,
                 out var conflictingKeys);
 
             var keyValuePairs = from pair in directionMapping
@@ -115,7 +119,8 @@ namespace UCT.Overworld
             return isGetKey;
         }
 
-        private static void SetKeyMap(out Dictionary<KeyCode, Vector3> directionMapping, out List<(KeyCode, KeyCode)> conflictingKeys)
+        private static void SetKeyMap(out Dictionary<KeyCode, Vector3> directionMapping,
+            out List<(KeyCode, KeyCode)> conflictingKeys)
         {
             directionMapping = new Dictionary<KeyCode, Vector3>
             {
@@ -154,6 +159,7 @@ namespace UCT.Overworld
             {
                 stateType = StateType.Idle;
             }
+
             TransitionToStateIfNeeded(stateType);
         }
 

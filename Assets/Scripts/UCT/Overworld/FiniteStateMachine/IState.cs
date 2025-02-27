@@ -148,11 +148,11 @@ namespace UCT.Overworld.FiniteStateMachine
         private static readonly int MoveX = Animator.StringToHash("MoveX");
         private static readonly int MoveY = Animator.StringToHash("MoveY");
 
-        private readonly Vector2[] _directions = { Vector2.up, Vector2.left, Vector2.down, Vector2.right };
-        private int _currentIndex;
-
         private readonly FiniteStateMachineData _data;
+
+        private readonly Vector2[] _directions = { Vector2.up, Vector2.left, Vector2.down, Vector2.right };
         private readonly FiniteStateMachine _fsm;
+        private int _currentIndex;
         private float _timer;
 
         public SpinState(FiniteStateMachine fsm, FiniteStateMachineData data)

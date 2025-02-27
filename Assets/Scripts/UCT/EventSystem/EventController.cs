@@ -198,7 +198,9 @@ namespace UCT.EventSystem
             return eventEntry;
         }
 
-        public static EventEntry DetectionRule(EventEntry eventEntry, RuleEntry rule, out bool isTriggered,
+        public static EventEntry DetectionRule(EventEntry eventEntry,
+            RuleEntry rule,
+            out bool isTriggered,
             bool force = false)
         {
             isTriggered = false;
@@ -387,6 +389,7 @@ namespace UCT.EventSystem
             {
                 _overworldTypeWritter = BackpackBehaviour.Instance.typeWritter;
             }
+
             _overworldTypeWritter.overworldSpriteChanger.spriteExpressionCollection = null;
             _overworldTypeWritter.overworldSpriteChanger.UpdateSpriteDisplay();
 
@@ -419,7 +422,10 @@ namespace UCT.EventSystem
         /// <param name="sceneName">场景名</param>
         /// <param name="useEvent">是否联动event</param>
         /// <param name="eventName">联动的event名称</param>
-        private static void SwitchOverworldScene(string sceneName, bool isBgmMuted, Vector2 newPos, bool useEvent,
+        private static void SwitchOverworldScene(string sceneName,
+            bool isBgmMuted,
+            Vector2 newPos,
+            bool useEvent,
             string eventName)
         {
             Action action = null;
@@ -462,7 +468,10 @@ namespace UCT.EventSystem
             }
         }
 
-        private static void MoveMainCamera(Vector2 newPosition, float duration, Ease ease, bool useEvent,
+        private static void MoveMainCamera(Vector2 newPosition,
+            float duration,
+            Ease ease,
+            bool useEvent,
             string eventName)
         {
             if (duration < 0)
@@ -487,7 +496,9 @@ namespace UCT.EventSystem
             }
         }
 
-        private static void MoveMainCameraRelativeToPlayer(Vector2 newPosition, float duration, Ease ease,
+        private static void MoveMainCameraRelativeToPlayer(Vector2 newPosition,
+            float duration,
+            Ease ease,
             bool useEvent,
             string eventName)
         {
@@ -561,7 +572,10 @@ namespace UCT.EventSystem
             });
         }
 
-        private static void MovePlayerRelative(Vector2 newPosition, float duration, Ease ease, bool useEvent,
+        private static void MovePlayerRelative(Vector2 newPosition,
+            float duration,
+            Ease ease,
+            bool useEvent,
             string eventName)
         {
             MovePlayerAbsolute(
@@ -569,7 +583,10 @@ namespace UCT.EventSystem
                 ease, useEvent, eventName);
         }
 
-        private static void MovePlayerAbsolute(Vector2 newPosition, float duration, Ease ease, bool useEvent,
+        private static void MovePlayerAbsolute(Vector2 newPosition,
+            float duration,
+            Ease ease,
+            bool useEvent,
             string eventName)
         {
             if (duration <= 0)
@@ -714,8 +731,12 @@ namespace UCT.EventSystem
         /// <param name="parameter3">（可能的）传递的第三个参数</param>
         /// <param name="useEvent">是否联动event</param>
         /// <param name="eventName">联动的event名称</param>
-        private static void InvokeMethodByName(string methodName, string parameter1, string parameter2,
-            string parameter3, bool useEvent, string eventName)
+        private static void InvokeMethodByName(string methodName,
+            string parameter1,
+            string parameter2,
+            string parameter3,
+            bool useEvent,
+            string eventName)
 
         {
             var tag = methodName[..methodName.IndexOf(':')];

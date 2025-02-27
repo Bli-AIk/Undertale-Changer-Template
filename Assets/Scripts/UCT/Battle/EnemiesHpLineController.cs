@@ -6,8 +6,8 @@ namespace UCT.Battle
 {
     public class EnemiesHpLineController : MonoBehaviour
     {
-        [Header("对应怪物IDª")] [FormerlySerializedAs("number")]
-        public int enemyId;
+        [Header("对应怪物IDª")]
+        [FormerlySerializedAs("number")] public int enemyId;
 
         private SpriteRenderer _greenSprite;
 

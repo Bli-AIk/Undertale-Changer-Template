@@ -20,22 +20,27 @@ namespace UCT.Global.UI
         ///     它需要场景内存在BoxController，但它可以不是是它的父级。
         ///     单独存在的框不可以设为加减框。
         /// </summary>
-        [Header("是否是单独存在的框（常用于OW）")] public bool isIndividualBox;
+        [Header("是否是单独存在的框（常用于OW）")]
+        public bool isIndividualBox;
 
         public Vector3 localPosition;
 
-        [Header("使用这个旋转替代Transform的旋转")] public Quaternion rotation; // 获取当前物体的旋转
+        [Header("使用这个旋转替代Transform的旋转")]
+        public Quaternion rotation; // 获取当前物体的旋转
 
-        [Header("线宽")] public float width = 0.15f;
+        [Header("线宽")]
+        public float width = 0.15f;
 
         public List<Vector2> vertexPoints;
 
-        [Header("是否启用贝塞尔插值")] public bool isBessel;
+        [Header("是否启用贝塞尔插值")]
+        public bool isBessel;
 
         public List<Vector2> besselPoints;
         public int besselPointsNumber = 16;
 
-        [Header("真正组框所用的点")] public List<Vector2> realPoints; //真正的曲线插值，插入点数由besselPointsNumber决定
+        [Header("真正组框所用的点")]
+        public List<Vector2> realPoints; //真正的曲线插值，插入点数由besselPointsNumber决定
 
         public int besselInsertNumber = 2;
 
@@ -45,16 +50,20 @@ namespace UCT.Global.UI
         public EdgeCollider2D edgeCollider2D;
 
 
-        [Header("设置其是否为特殊框")] public BoxController.BoxType boxType;
+        [Header("设置其是否为特殊框")]
+        public BoxController.BoxType boxType;
 
-        [Header("当该Box为父级时，以此存储子级的相关计算后数据")] [Header("子级realPoints之和")]
-        public List<Vector2> pointsSonSum;
+        [Header("当该Box为父级时，以此存储子级的相关计算后数据")]
+        [Header("子级realPoints之和")] public List<Vector2> pointsSonSum;
 
-        [Header("交点")] public List<Vector2> pointsCross;
+        [Header("交点")]
+        public List<Vector2> pointsCross;
 
-        [Header("非重合点")] public List<Vector2> pointsOutCross;
+        [Header("非重合点")]
+        public List<Vector2> pointsOutCross;
 
-        [Header("重合点")] public List<Vector2> pointsInCross; //交点/非重合点/重合点
+        [Header("重合点")]
+        public List<Vector2> pointsInCross; //交点/非重合点/重合点
 
         public BoxDrawer parent; //此框的复合父级
         public List<BoxDrawer> sonBoxDrawer; //此框的子级
@@ -437,15 +446,17 @@ namespace UCT.Global.UI
             return result;
         }
 
-#if UNITY_EDITOR
-        [Header("给Editor用的")] public int regularEdge;
+        #if UNITY_EDITOR
+        [Header("给Editor用的")]
+        public int regularEdge;
 
         public float regularAngle;
-        [Header("是否展示Mesh（红线）")] public bool showMesh;
-#endif
+        [Header("是否展示Mesh（红线）")]
+        public bool showMesh;
+        #endif
 
 
-#if UNITY_EDITOR
+        #if UNITY_EDITOR
         public enum ShowGizmosPoint
         {
             Nope,
@@ -454,7 +465,8 @@ namespace UCT.Global.UI
             All
         }
 
-        [Header("展示哪些点的坐标")] public ShowGizmosPoint showGizmosPoint;
+        [Header("展示哪些点的坐标")]
+        public ShowGizmosPoint showGizmosPoint;
 
         public void OnDrawGizmos()
         {
@@ -549,10 +561,10 @@ namespace UCT.Global.UI
                 Gizmos.DrawSphere(transform.TransformPoint(new Vector3(point.x, point.y, 0)), 0.15f);
             }
         }
-#endif
+        #endif
     }
 
-#if UNITY_EDITOR
+    #if UNITY_EDITOR
 
 
     [CustomEditor(typeof(BoxDrawer))]
@@ -726,5 +738,5 @@ namespace UCT.Global.UI
             example.Update();
         }
     }
-#endif
+    #endif
 }

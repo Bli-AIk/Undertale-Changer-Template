@@ -9,7 +9,8 @@ namespace UCT.Battle
         public bool moveWithHeart;
         public Vector3 heartBasicPos = new(0, -1.5f);
 
-        [Header("moveExtent的Y轴对应摄像机Z轴")] public Vector2 moveExtent = new(0.5f, 0.5f);
+        [Header("moveExtent的Y轴对应摄像机Z轴")]
+        public Vector2 moveExtent = new(0.5f, 0.5f);
 
         private Tween _tweenMove, _tweenSpin;
         private Tween _tweenMoveBack;
@@ -41,8 +42,13 @@ namespace UCT.Battle
         ///     摄像机摇晃
         ///     loops会自动转换为偶数。
         /// </summary>
-        public void Shake(Vector3 v3Move, Vector3 v3Spin, int loops = 4, float shakeTime = 1f / 60f * 4f,
-            string getSon = "", Ease easeMove = Ease.OutCubic, Ease easeSpin = Ease.InOutCubic)
+        public void Shake(Vector3 v3Move,
+            Vector3 v3Spin,
+            int loops = 4,
+            float shakeTime = 1f / 60f * 4f,
+            string getSon = "",
+            Ease easeMove = Ease.OutCubic,
+            Ease easeSpin = Ease.InOutCubic)
         {
             Transform transformer;
             if (getSon == "")

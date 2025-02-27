@@ -22,7 +22,7 @@ namespace UCT.Global.Core
             }
 
             UsersData[data.name] = data;
-            
+
             var settings = new JsonSerializerSettings
             {
                 ReferenceLoopHandling = ReferenceLoopHandling.Ignore
@@ -42,11 +42,10 @@ namespace UCT.Global.Core
             }
 
             var jsonData = File.ReadAllText(path);
-            var userData = ScriptableObject.CreateInstance<PlayerControl>(); 
-            JsonConvert.PopulateObject(jsonData, userData); 
+            var userData = ScriptableObject.CreateInstance<PlayerControl>();
+            JsonConvert.PopulateObject(jsonData, userData);
             UsersData[dataName] = userData;
             return userData;
-
         }
 
         public static int GetDataNumber()

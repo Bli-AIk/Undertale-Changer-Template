@@ -99,7 +99,6 @@ namespace UCT.Overworld
                 {
                     throw new ArgumentOutOfRangeException($"Unexpected state value: {state}");
                 }
-
             }
 
             _spriteUpdateTimer = 0f;
@@ -184,7 +183,7 @@ namespace UCT.Overworld
                     break;
                 }
                 default:
-                {            
+                {
                     throw new ArgumentOutOfRangeException($"Unexpected state value: {state}");
                 }
             }

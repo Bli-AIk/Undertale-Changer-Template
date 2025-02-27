@@ -14,13 +14,13 @@ namespace UCT.Global.Scene
     /// </summary>
     public class StorySceneController : MonoBehaviour
     {
-        public static StorySceneController Instance { get; private set; }
         public List<Sprite> pics;
         public GameObject mask;
         private int _picNumber;
         private SpriteRenderer _spriteRenderer;
         private TextMeshPro _tmp;
         private TypeWritter _typeWritter;
+        public static StorySceneController Instance { get; private set; }
 
         private void Awake()
         {

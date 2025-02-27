@@ -46,7 +46,7 @@ namespace UCT.Global.Core
                     if (!script)
                     {
                         // 如果没有组件，自动添加
-                        script = newObj.AddComponent<T>(); 
+                        script = newObj.AddComponent<T>();
                     }
                 }
 

@@ -35,25 +35,31 @@ namespace UCT.Control
             Purple
         }
 
-        [Header("敌人OBJ")] [Header("物体名会识别为敌人名称")]
-        public List<GameObject> enemies; //敌方的Obj。
+        [Header("敌人OBJ")]
+        [Header("物体名会识别为敌人名称")] public List<GameObject> enemies; //敌方的Obj。
 
-        [Header("HP 偶为目前血量 奇为最大Max 下同")] public List<int> enemiesHp;
+        [Header("HP 偶为目前血量 奇为最大Max 下同")]
+        public List<int> enemiesHp;
 
         [FormerlySerializedAs("enemiesATK")] public List<int> enemiesAtk;
         [FormerlySerializedAs("enemiesDEF")] public List<int> enemiesDef;
 
-        [Header("战斗内UIText读取")] public string uiText;
+        [Header("战斗内UIText读取")]
+        public string uiText;
 
         public List<string> uiTextSave;
 
-        [Header("存储ACT选项和选择后文本")] public List<string> actSave; //4个一对应 根据enemies而排序
+        [Header("存储ACT选项和选择后文本")]
+        public List<string> actSave; //4个一对应 根据enemies而排序
 
-        [Header("存储MERCY选项和选择后文本")] public List<string> mercySave;
+        [Header("存储MERCY选项和选择后文本")]
+        public List<string> mercySave;
 
-        [Header("按回合存储旁白")] public List<string> turnTextSave;
+        [Header("按回合存储旁白")]
+        public List<string> turnTextSave;
 
-        [Header("存储敌人对话文件")] public List<string> turnDialogAsset; //直接在战斗场景内读取
+        [Header("存储敌人对话文件")]
+        public List<string> turnDialogAsset; //直接在战斗场景内读取
 
         public List<TextAsset> otherDialogAsset;
 
@@ -61,6 +67,7 @@ namespace UCT.Control
 
         public List<Color> playerColorList, playerMissColorList;
 
-        [Header("项目附加")] public int randomTurnDir;
+        [Header("项目附加")]
+        public int randomTurnDir;
     }
 }

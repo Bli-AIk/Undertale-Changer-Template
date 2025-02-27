@@ -26,7 +26,7 @@ namespace UCT.Service
         ///     设置16:9边框的Sprite
         /// </summary>
         /// <param name="framePic"></param>
-        public static void SetCanvasFrameSprite(int framePic = 2) 
+        public static void SetCanvasFrameSprite(int framePic = 2)
         {
             var frame = SettingsController.Instance.Frame;
             frame.sprite = framePic < 0 ? null : MainControl.Instance.overworldControl.frames[framePic];

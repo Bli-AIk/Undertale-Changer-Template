@@ -42,6 +42,7 @@ namespace UCT.Service
             {
                 jsonContent = File.ReadAllText(jsonFilePath);
             }
+
             return new Story(jsonContent);
         }
 

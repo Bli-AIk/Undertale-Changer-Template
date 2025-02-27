@@ -45,8 +45,6 @@ namespace UCT.EventSystem
 
         private void Update()
         {
-            
-            
             if (IsEventTriggerModeActive(EventTriggerMode.Interact) &&
                 InputService.GetKeyDown(KeyCode.Z) && _isInTrigger)
             {

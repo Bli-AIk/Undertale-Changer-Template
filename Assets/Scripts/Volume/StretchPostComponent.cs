@@ -12,7 +12,8 @@ namespace Volume
     {
         public BoolParameter isShow = new(false, true);
 
-        [Header("Settings")] public Vector2Parameter draw = new(new Vector2(), true);
+        [Header("Settings")]
+        public Vector2Parameter draw = new(new Vector2(), true);
 
         public bool IsActive()
         {

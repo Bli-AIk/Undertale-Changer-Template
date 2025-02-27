@@ -12,11 +12,8 @@ namespace UCT.Overworld
     /// </summary>
     public class BackpackBehaviour : MonoBehaviour
     {
-        public static int BoxZAxisVisible => 5;
-        public static int BoxZAxisInvisible => -50;
         private const float ItemBoxY = -8.9f;
         private const float InfoBoxY = -10.3f;
-        public static BackpackBehaviour Instance { get; private set; }
         public int select, sonSelect, sonUse;
 
         [HideInInspector] public TextMeshPro talkText;
@@ -32,11 +29,14 @@ namespace UCT.Overworld
         [HideInInspector] public TypeWritter typeWritter;
 
         private float _clock;
-        public SpriteRenderer Heart { get; private set; }
         private TextMeshPro _informationText, _overviewNameText, _overviewInfoText, _optionsText;
 
         private BoxDrawer _overviewBox, _informationBox;
         private int _sonSelectMax;
+        public static int BoxZAxisVisible => 5;
+        public static int BoxZAxisInvisible => -50;
+        public static BackpackBehaviour Instance { get; private set; }
+        public SpriteRenderer Heart { get; private set; }
         public bool IsOpenBackPack { get; private set; }
 
         private void Awake()

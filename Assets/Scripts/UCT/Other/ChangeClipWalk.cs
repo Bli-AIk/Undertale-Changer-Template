@@ -9,7 +9,8 @@ namespace UCT.Other
     /// </summary>
     public class ChangeClipWalk : MonoBehaviour
     {
-        [FormerlySerializedAs("range")] [Header("新范围")] public Vector2 walkFxRange;
+        [FormerlySerializedAs("range")] [Header("新范围")]
+        public Vector2 walkFxRange;
 
         private void OnTriggerStay2D(Collider2D collision)
         {

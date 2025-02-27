@@ -27,7 +27,6 @@ namespace UCT.Global.Settings
     {
         internal const float AnimSpeed = 0.25f;
         private const int SettingOptionsCount = 7;
-        public static SettingsController Instance { get; private set; }
         internal static readonly int Open = Animator.StringToHash("Open");
 
         [ShowInInspector] [ReadOnly] private static int _settingOptionsPage;
@@ -78,6 +77,7 @@ namespace UCT.Global.Settings
         private Image _settingSoul;
         private Tween _settingSoulTween;
         private int _startIndexCurrent;
+        public static SettingsController Instance { get; private set; }
 
         // 属性
         public Image Frame { get; private set; }
@@ -481,11 +481,11 @@ namespace UCT.Global.Settings
             }
 
             object value;
-            if (settingsOption.Type is OptionType.SelectionBasedFalse 
+            if (settingsOption.Type is OptionType.SelectionBasedFalse
                 or OptionType.SelectionBasedTrue
                 or OptionType.EnterLayer
-                or OptionType.EnterScene 
-                or OptionType.Back 
+                or OptionType.EnterScene
+                or OptionType.Back
                 or OptionType.SwitchPage)
             {
                 value = 0;
@@ -587,6 +587,7 @@ namespace UCT.Global.Settings
             _optionKeyText.text += BuildSettingText(settingsOptionsForSetting, GetOptionKeyText);
             _optionValueText.text += BuildSettingText(settingsOptionsForSetting, GetOptionValueText);
         }
+
         private static string BuildSettingText(List<SettingsOption> settingsOptions,
             Func<SettingsOption, string> textExtractor)
         {
@@ -661,7 +662,8 @@ namespace UCT.Global.Settings
                         MainControl.Instance.LanguagePackControl.settingTexts,
                         (option.SelectionBasedChangedValueGetter?.Invoke()!).ToString()) + "</color>";
                 default:
-                    throw new ArgumentOutOfRangeException($"Unexpected OptionDisplayMode value: {option.OptionDisplayMode}");
+                    throw new ArgumentOutOfRangeException(
+                        $"Unexpected OptionDisplayMode value: {option.OptionDisplayMode}");
             }
         }
 

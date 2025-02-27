@@ -35,7 +35,7 @@ namespace UCT.Global.Scene
                 MainControl.Instance.languagePackId);
             var lines = text.Split(new[] { '\n' }, StringSplitOptions.None);
             var messageText = lines.Last();
-            var noticeText = string.Join("\n", lines.Take(lines.Length - 1)); 
+            var noticeText = string.Join("\n", lines.Take(lines.Length - 1));
             _textNotice.text = noticeText;
             _textMessage.text = messageText;
 

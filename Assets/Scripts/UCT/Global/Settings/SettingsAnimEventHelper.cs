@@ -15,6 +15,7 @@ namespace UCT.Global.Settings
     public class SettingsAnimEventHelper : MonoBehaviour
     {
         private SettingsController _settingsController;
+
         private void Start()
         {
             _settingsController = GetComponent<SettingsController>();
@@ -43,14 +44,12 @@ namespace UCT.Global.Settings
         {
             AudioController.Instance.PlayFx(i, MainControl.Instance.AudioControl.fxClipUI);
         }
-        
+
         // 供Animator使用
         public void AnimSetHeartPos()
         {
             var uiPos = _settingsController.WorldPositionToUGUI(MainControl.Instance.playerControl.playerLastPos);
             transform.Find("Heart").GetComponent<RectTransform>().anchoredPosition = uiPos;
         }
-
     }
-
 }

@@ -34,7 +34,7 @@ namespace UCT.Global.Settings
         public static KeyBindingType KeyBindingType { get; set; } = KeyBindingType.Primary;
 
         public static TypingSpeed TypingSpeed { get; set; } = TypingSpeed.Medium;
-        
+
         public static Dictionary<string, SettingsLayerBase> CubismSettingsLayers { get; private set; } = new()
         {
             { "HomeSettingsLayer", new HomeSettingsLayer() },

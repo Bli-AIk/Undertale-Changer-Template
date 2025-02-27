@@ -30,7 +30,6 @@ namespace UCT.Global.Core
             Overworld,
             InBattle
         }
-        public static OverworldPlayerBehaviour OverworldPlayerBehaviour{ get; private set; }
 
         [Title("=== 场景状态设置 ===")] public SceneState sceneState;
 
@@ -92,6 +91,7 @@ namespace UCT.Global.Core
         public readonly ItemController ItemController = new();
 
         private DebugStringGradient _debugStringGradient = new("Debug");
+        public static OverworldPlayerBehaviour OverworldPlayerBehaviour { get; private set; }
 
         public static MainControl Instance { get; private set; }
 

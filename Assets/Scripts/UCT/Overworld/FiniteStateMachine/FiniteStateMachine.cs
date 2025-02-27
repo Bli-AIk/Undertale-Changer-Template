@@ -25,10 +25,10 @@ namespace UCT.Overworld.FiniteStateMachine
         protected internal readonly Dictionary<StateType, IState> States = new();
 
         private List<Vector2> _path;
+
+        private int _pathIndex;
         private List<Vector2> _traversed;
         protected IState CurrentState;
-        
-        private int _pathIndex;
 
         private void Awake()
         {
@@ -48,7 +48,7 @@ namespace UCT.Overworld.FiniteStateMachine
 
         private void OnDrawGizmos()
         {
-#if UNITY_EDITOR
+            #if UNITY_EDITOR
             if (_traversed != null)
             {
                 foreach (var traverse in _traversed)
@@ -75,7 +75,7 @@ namespace UCT.Overworld.FiniteStateMachine
                     Handles.DrawLine(_path[i], _path[i + 1]);
                 }
             }
-#endif
+            #endif
         }
 
         private void InitializeData()

@@ -161,7 +161,7 @@ namespace UCT.Global.Core
         /// <summary>
         ///     处理类似物品选择控制器的计算
         /// </summary>
-        public (int globalItemIndex,int visibleItemIndex) UpdateHandleItemInput(
+        public (int globalItemIndex, int visibleItemIndex) UpdateHandleItemInput(
             int globalItemIndex,
             int visibleItemIndex,
             int count,

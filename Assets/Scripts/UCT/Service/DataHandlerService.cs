@@ -66,6 +66,7 @@ namespace UCT.Service
 
             return "";
         }
+
         /// <summary>
         ///     从 string 加载并解析数据，返回新列表
         /// </summary>
@@ -102,6 +103,7 @@ namespace UCT.Service
 
             return resultList;
         }
+
         /// <summary>
         ///     转换单个字符串中的特殊字符
         /// </summary>
@@ -125,6 +127,7 @@ namespace UCT.Service
                             break;
                         }
                     }
+
                     j = k;
                 }
 

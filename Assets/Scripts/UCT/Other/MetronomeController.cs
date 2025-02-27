@@ -10,19 +10,25 @@ namespace UCT.Other
     /// </summary>
     public class MetronomeController : MonoBehaviour
     {
-        [Header("=== BPM相关设置 ===")] [Header("BGM BPM")]
-        public float bpm = 120;
+        [Header("=== BPM相关设置 ===")]
+        [Header("BGM BPM")] public float bpm = 120;
 
-        [Header("BGM BPM偏移")] public float bpmDeviation;
+        [Header("BGM BPM偏移")]
+        public float bpmDeviation;
 
-        [Header("每拍所在的秒数列表")] public List<float> beatSeconds;
+        [Header("每拍所在的秒数列表")]
+        public List<float> beatSeconds;
 
-        [Space] [Header("=== 节拍器 ===")] [Header("是否播放节拍器")]
+        [Space]
+        [Header("=== 节拍器 ===")]
+        [Header("是否播放节拍器")]
         public bool isPlayMetronome;
 
-        [Header("当前节拍数")] public int currentBeatIndex;
+        [Header("当前节拍数")]
+        public int currentBeatIndex;
 
-        [Header("下一节拍所在时间")] public float nextBeatSecond;
+        [Header("下一节拍所在时间")]
+        public float nextBeatSecond;
 
         private float _bpmBackup = 120;
         private float _bpmDeviationBackup;

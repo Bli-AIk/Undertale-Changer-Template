@@ -15,13 +15,17 @@ namespace UCT.Battle
     {
         private static readonly int Hit1 = Animator.StringToHash("Hit");
         private static readonly int MoveSpeed = Animator.StringToHash("MoveSpeed");
-        [Header("攻击造成的伤害")] public int hitDamage;
+
+        [Header("攻击造成的伤害")]
+        public int hitDamage;
 
         public GameObject hpBar;
 
-        [Header("父级传入")] public int select;
+        [Header("父级传入")]
+        public int select;
 
-        [Header("父级传入 要击打的怪物")] public EnemiesController hitMonster;
+        [Header("父级传入 要击打的怪物")]
+        public EnemiesController hitMonster;
 
         private Animator _anim;
         private GameObject _bar;
@@ -78,14 +82,16 @@ namespace UCT.Battle
             {
                 hitDamage = (int)
                     (2.2f / 13.2f * (14 - Mathf.Abs(_bar.transform.localPosition.x)) //准确度系数
-                                  * (MainControl.Instance.playerControl.atk + DataHandlerService.GetItemFormDataName(MainControl.Instance.playerControl.wearWeapon).Data.Value
+                                  * (MainControl.Instance.playerControl.atk + DataHandlerService
+                                          .GetItemFormDataName(MainControl.Instance.playerControl.wearWeapon).Data.Value
                                       - MainControl.Instance.BattleControl.enemiesDef[select] + Random.Range(0, 2)));
             }
             else
             {
                 hitDamage = (int)
                     (2.2f / 13.2f * (14 - 0.8f) //准确度系数
-                                  * (MainControl.Instance.playerControl.atk + DataHandlerService.GetItemFormDataName(MainControl.Instance.playerControl.wearWeapon).Data.Value
+                                  * (MainControl.Instance.playerControl.atk + DataHandlerService
+                                          .GetItemFormDataName(MainControl.Instance.playerControl.wearWeapon).Data.Value
                                       - MainControl.Instance.BattleControl.enemiesDef[select] + Random.Range(0, 2)));
             }
 

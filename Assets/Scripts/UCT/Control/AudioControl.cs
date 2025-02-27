@@ -9,10 +9,13 @@ namespace UCT.Control
     {
         public AudioMixer globalAudioMixer;
 
-        [Header("用于UI音效")] public List<AudioClip> fxClipUI;
+        [Header("用于UI音效")]
+        public List<AudioClip> fxClipUI;
 
-        [Header("用于战斗音效")] public List<AudioClip> fxClipBattle;
+        [Header("用于战斗音效")]
+        public List<AudioClip> fxClipBattle;
 
-        [Header("用于走路脚步音效")] public List<AudioClip> fxClipWalk;
+        [Header("用于走路脚步音效")]
+        public List<AudioClip> fxClipWalk;
     }
 }

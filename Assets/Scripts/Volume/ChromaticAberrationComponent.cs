@@ -12,7 +12,8 @@ namespace Volume
     {
         public BoolParameter isShow = new(false, true);
 
-        [Header("Settings")] public FloatParameter offset = new(0.02f, true);
+        [Header("Settings")]
+        public FloatParameter offset = new(0.02f, true);
 
         public FloatParameter speed = new(10, true);
         public FloatParameter height = new(0.15f, true);

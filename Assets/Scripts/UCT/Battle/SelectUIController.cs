@@ -74,6 +74,7 @@ namespace UCT.Battle
 
         [Header("HP条配色")]
         public Color hpColorUnder;
+
         public Color hpColorOn;
         public Color hpColorHit;
 
@@ -137,41 +138,6 @@ namespace UCT.Battle
             InTurn();
         }
 
-        private void GetComponent()
-        {
-            _target = transform.Find("Target").GetComponent<TargetController>();
-            _target.gameObject.SetActive(false);
-            _nameUI = transform.Find("Name UI").GetComponent<TextMeshPro>();
-            _hpUI = transform.Find("HP UI").GetComponent<TextMeshPro>();
-            _textUI = transform.Find("Text UI").GetComponent<TextMeshPro>();
-            _textUIBack = transform.Find("Text UI Back").GetComponent<TextMeshPro>();
-            _hpSpr = transform.Find("HP").GetComponent<SpriteRenderer>();
-            _itemScroller = transform.Find("ItemSelect").GetComponent<ItemScroller>();
-            _enemiesHpLine = transform.Find("EnemiesHpLine").gameObject;
-            _dialog = GameObject.Find("DialogBubble").GetComponent<DialogBubbleBehaviour>();
-            _dialog.gameObject.SetActive(false);
-            _typeWritter = GetComponent<TypeWritter>();
-            foreach (var t in new[] { "FIGHT", "ACT", "ITEM", "MERCY" })
-            {
-                buttons.Add(transform.Find(t).GetComponent<SpriteRenderer>());
-            }
-
-            for (var i = 0; i < MainControl.Instance.BattleControl.enemies.Count; i++)
-            {
-                var enemies = GameObject.Find(MainControl.Instance.BattleControl.enemies[i].name)
-                    .GetComponent<EnemiesController>();
-                if (!enemies)
-                {
-                    continue;
-                }
-
-                enemiesControllers.Add(enemies);
-                enemiesControllers[i].atk = MainControl.Instance.BattleControl.enemiesAtk[i];
-                enemiesControllers[i].def = MainControl.Instance.BattleControl.enemiesDef[i];
-            }
-            selectedButton = EnumService.GetMinEnumValue<SelectedButton>();
-        }
-
         private void Update()
         {
             if (GameUtilityService.IsGamePausedOrSetting())
@@ -216,6 +182,42 @@ namespace UCT.Battle
                 actSave = new List<string>();
                 selectedLayer = SelectedLayer.TurnLayer;
             }
+        }
+
+        private void GetComponent()
+        {
+            _target = transform.Find("Target").GetComponent<TargetController>();
+            _target.gameObject.SetActive(false);
+            _nameUI = transform.Find("Name UI").GetComponent<TextMeshPro>();
+            _hpUI = transform.Find("HP UI").GetComponent<TextMeshPro>();
+            _textUI = transform.Find("Text UI").GetComponent<TextMeshPro>();
+            _textUIBack = transform.Find("Text UI Back").GetComponent<TextMeshPro>();
+            _hpSpr = transform.Find("HP").GetComponent<SpriteRenderer>();
+            _itemScroller = transform.Find("ItemSelect").GetComponent<ItemScroller>();
+            _enemiesHpLine = transform.Find("EnemiesHpLine").gameObject;
+            _dialog = GameObject.Find("DialogBubble").GetComponent<DialogBubbleBehaviour>();
+            _dialog.gameObject.SetActive(false);
+            _typeWritter = GetComponent<TypeWritter>();
+            foreach (var t in new[] { "FIGHT", "ACT", "ITEM", "MERCY" })
+            {
+                buttons.Add(transform.Find(t).GetComponent<SpriteRenderer>());
+            }
+
+            for (var i = 0; i < MainControl.Instance.BattleControl.enemies.Count; i++)
+            {
+                var enemies = GameObject.Find(MainControl.Instance.BattleControl.enemies[i].name)
+                    .GetComponent<EnemiesController>();
+                if (!enemies)
+                {
+                    continue;
+                }
+
+                enemiesControllers.Add(enemies);
+                enemiesControllers[i].atk = MainControl.Instance.BattleControl.enemiesAtk[i];
+                enemiesControllers[i].def = MainControl.Instance.BattleControl.enemiesDef[i];
+            }
+
+            selectedButton = EnumService.GetMinEnumValue<SelectedButton>();
         }
 
         /// <summary>
@@ -911,7 +913,7 @@ namespace UCT.Battle
 
             _textUIBack.text = itemDataText0 + "\n" + itemDataText1 + "\n" + itemDataText2;
 
-            var updateHandleItemInput = 
+            var updateHandleItemInput =
                 _itemScroller.UpdateHandleItemInput(globalItemIndex, visibleItemIndex, myItemMax,
                     CommonItemNavigationLogic);
             globalItemIndex = updateHandleItemInput.globalItemIndex;

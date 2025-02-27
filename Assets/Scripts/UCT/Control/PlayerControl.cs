@@ -14,7 +14,8 @@ namespace UCT.Control
         public int hp, hpMax, lv, exp, gold, nextExp;
         public float missTime, missTimeMax;
 
-        [Header("OW背包内显示的AT和DF会-10")] public int atk;
+        [Header("OW背包内显示的AT和DF会-10")]
+        public int atk;
 
         public int def;
 
@@ -27,14 +28,19 @@ namespace UCT.Control
         public float gameTime;
 
 
-        [Header("玩家相关")] public Vector3 playerLastPos;
-        [Header("场景衔接存储")] public string lastScene;
+        [Header("玩家相关")]
+        public Vector3 playerLastPos;
+
+        [Header("场景衔接存储")]
+        public string lastScene;
 
         public string saveScene;
 
-        [Header("开启调试")] public bool isDebug;
+        [Header("开启调试")]
+        public bool isDebug;
 
-        [Header("--调试模式设定--")] [Header("锁血")] public bool invincible;
+        [Header("--调试模式设定--")]
+        [Header("锁血")] public bool invincible;
 
         public bool keepInvincible;
     }

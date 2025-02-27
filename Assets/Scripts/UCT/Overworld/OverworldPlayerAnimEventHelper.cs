@@ -11,6 +11,7 @@ namespace UCT.Overworld
     public class OverworldPlayerAnimEventHelper : MonoBehaviour
     {
         private OverworldPlayerBehaviour _overworldPlayerBehaviour;
+
         private void Start()
         {
             _overworldPlayerBehaviour = GetComponent<OverworldPlayerBehaviour>();

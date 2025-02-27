@@ -11,11 +11,11 @@ namespace UCT.Overworld
     /// </summary>
     public class TalkBoxController : MonoBehaviour
     {
-        public static TalkBoxController Instance { get; private set; }
         public BoxDrawer boxDrawer;
         public bool isUp;
         public bool haveHead;
         private TextMeshPro _typeMessage;
+        public static TalkBoxController Instance { get; private set; }
         public ItemScroller ItemScroller { get; private set; }
 
         private void Awake()

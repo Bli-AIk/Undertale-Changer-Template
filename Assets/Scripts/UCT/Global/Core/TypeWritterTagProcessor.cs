@@ -64,11 +64,12 @@ namespace UCT.Global.Core
                         fix = false;
                     }
                 }
-                
+
                 typeWritter.passTextString += spText.ToString();
 
 
-                index = TypeWritterExecuteHalfTag(typeWritter, tmpText, spText.ToString(), index, ref yieldNum, ref yieldString,
+                index = TypeWritterExecuteHalfTag(typeWritter, tmpText, spText.ToString(), index, ref yieldNum,
+                    ref yieldString,
                     ref startPassText);
 
                 if (index >= typeWritter.originString.Length)

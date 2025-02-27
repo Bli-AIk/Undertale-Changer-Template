@@ -20,8 +20,10 @@ namespace UCT.Control
 
         public List<Sprite> frames;
 
-        [Header("状态")] public bool isSetting;
+        [Header("状态")]
+        public bool isSetting;
 
-        [Header("--UI--")] [Header("字体存储")] public List<TMP_FontAsset> tmpFonts;
+        [Header("--UI--")]
+        [Header("字体存储")] public List<TMP_FontAsset> tmpFonts;
     }
 }

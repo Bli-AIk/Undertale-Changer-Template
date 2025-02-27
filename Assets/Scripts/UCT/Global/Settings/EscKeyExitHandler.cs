@@ -8,12 +8,10 @@ using UnityEngine.UI;
 namespace UCT.Global.Settings
 {
     /// <summary>
-    /// 处理长按ESC退出游戏的逻辑
+    ///     处理长按ESC退出游戏的逻辑
     /// </summary>
     public class EscKeyExitHandler : MonoBehaviour
     {
-        private List<Sprite> _exitImageSprites;
-
         private readonly List<Vector2> _exitImageSizes = new()
         {
             new Vector2(82, 14),
@@ -21,8 +19,10 @@ namespace UCT.Global.Settings
             new Vector2(90, 14)
         };
 
-        private float _exitImageClock;
         private Image _exitImage;
+
+        private float _exitImageClock;
+        private List<Sprite> _exitImageSprites;
         private Tween _exitImageTween;
 
         private void Awake()
@@ -54,12 +54,12 @@ namespace UCT.Global.Settings
             }
 
             _exitImageClock = 0;
-            _exitImageTween = _exitImage.DOColor(ColorEx.WhiteClear,0.5f);
+            _exitImageTween = _exitImage.DOColor(ColorEx.WhiteClear, 0.5f);
         }
-        
-        
+
+
         /// <summary>
-        /// 处理游戏退出的逻辑
+        ///     处理游戏退出的逻辑
         /// </summary>
         private void UpdateHandleExitInput()
         {
