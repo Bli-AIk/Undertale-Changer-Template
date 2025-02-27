@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using TMPro;
 using UCT.Control;
 using UCT.Global.Audio;
@@ -19,7 +20,6 @@ namespace UCT.Global.Scene
         private const int SelectMax = 5;
 
         public int saveNumber;
-        private OverworldControl _overworldControl;
 
         private int _select;
         private bool _setData;
@@ -40,7 +40,6 @@ namespace UCT.Global.Scene
         private void Start()
         {
             _setData = false;
-            _overworldControl = MainControl.Instance.overworldControl;
 
             if (MainControl.Instance.saveDataId < 0)
             {
@@ -55,22 +54,226 @@ namespace UCT.Global.Scene
 
         private void Update()
         {
-            if (!_textOptionsLeft.enabled)
+            EnableTextOptions();
+            
+            if (GameUtilityService.IsGamePausedOrSetting())
             {
-                _textOptionsLeft.enabled = true;
+                return;
             }
+            
+            UpdateInput();
 
-            if (!_textOptionsRight.enabled)
+            if (InputService.GetKeyDown(KeyCode.Z))
             {
-                _textOptionsRight.enabled = true;
+                if (!_setData)
+                {
+                    ExecuteMenuPage();
+                }
+                else
+                {
+                    ExecuteDataPage();
+                }
             }
+            else if (InputService.GetKeyDown(KeyCode.X))
+            {
+                CancelSetData();
+            }
+        }
 
-
-            if (_overworldControl.isSetting || SettingsStorage.Pause)
+        private void CancelSetData()
+        {
+            if (!_setData)
             {
                 return;
             }
 
+            _setData = false;
+            Flash();
+            AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
+        }
+
+        private void ExecuteDataPage()
+        {
+            switch (_select)
+            {
+                case 2:
+                {
+                    AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                    DataPageUp();
+                    break;
+                }
+
+                case 3:
+                {
+                    AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                    if (saveNumber == SaveController.GetDataNumber() - 1) //新建
+                    {
+                        DataCreate();
+                    }
+                    else //下页
+                    {
+                        DataPageDown();
+                    }
+
+                    break;
+                }
+
+                case 4:
+                {
+                    if (SaveController.GetDataNumber() - 1 <= 0)
+                    {
+                        DataConfirm();
+                        break;
+                    }
+
+                    DataCancel();
+                    break;
+                }
+
+                case 5:
+                {
+                    DataConfirm();
+                    break;
+                }
+                default:
+                {
+                    throw new ArgumentOutOfRangeException($"Unexpected Select value: {_select}");
+                }
+            }
+        }
+
+        private void ExecuteMenuPage()
+        {
+            switch (_select)
+            {
+                case 0:
+                {
+                    LoadSaveScene();
+                    break;
+                }
+
+                case 1:
+                {
+                    LoadRenameScene();
+                    break;
+                }
+
+                case 2:
+                {
+                    SettingsController.Instance.OpenSetting();
+                    break;
+                }
+
+                case 3:
+                {
+                    SettingsController.Instance.OpenSetting("SettingLanguagePackageLayer");
+                    break;
+                }
+                case 4:
+                {
+                    OpenDataPage();
+                    break;
+                }
+
+                case 5:
+                {
+                    Application.Quit();
+                    break;
+                }
+
+                default:
+                {
+                    throw new ArgumentOutOfRangeException($"Unexpected Select value: {_select}");
+                }
+            }
+        }
+
+        private void DataConfirm()
+        {
+            if (MainControl.Instance.saveDataId == saveNumber)
+            {
+                _setData = false;
+                Flash();
+                _textOptionsLeft.enabled = false;
+                _textOptionsRight.enabled = false;
+                AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                return;
+            }
+
+            MainControl.Instance.saveDataId = saveNumber;
+            AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+
+        private void DataCancel()
+        {
+            SaveController.DeleteData("Data" + saveNumber);
+            if (saveNumber > SaveController.GetDataNumber() - 1)
+            {
+                saveNumber = SaveController.GetDataNumber() - 1;
+            }
+
+            LoadLayer0();
+        }
+
+        private void DataCreate()
+        {
+            saveNumber++;
+            MainControl.Instance.saveDataId = saveNumber;
+            SaveController.SaveData(MainControl.Instance.playerControl,
+                "Data" + MainControl.Instance.saveDataId);
+            MainControl.Instance.playerControl =
+                DataHandlerService.SetPlayerControl(
+                    ScriptableObject.CreateInstance<PlayerControl>());
+            MainControl.Instance.playerControl.playerName = "";
+            GameUtilityService.FadeOutAndSwitchScene("Rename", Color.black);
+        }
+
+        private void DataPageDown()
+        {
+            saveNumber++;
+            LoadLayer0();
+        }
+
+        private void DataPageUp()
+        {
+            if (saveNumber > 0)
+            {
+                saveNumber--;
+            }
+
+            _select = 3;
+            LoadLayer0();
+        }
+
+        private void OpenDataPage()
+        {
+            _setData = true;
+            saveNumber = MainControl.Instance.saveDataId;
+            if (0 != SaveController.GetDataNumber() - 1)
+            {
+                _select = 5;
+            }
+
+            Flash();
+            _textOptionsLeft.enabled = false;
+            _textOptionsRight.enabled = false;
+            AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
+        }
+
+        private static void LoadRenameScene()
+        {
+            GameUtilityService.FadeOutAndSwitchScene("Rename", Color.black, null, true);
+        }
+
+        private static void LoadSaveScene()
+        {
+            GameUtilityService.FadeOutAndSwitchScene(MainControl.Instance.playerControl.saveScene,
+                Color.black, null, true);
+        }
+
+        private void UpdateInput()
+        {
             if (InputService.GetKeyDown(KeyCode.LeftArrow))
             {
                 _select--;
@@ -88,7 +291,20 @@ namespace UCT.Global.Scene
             {
                 _select += 2;
             }
+            
+            LimitSelectRange();
+            
+            if (InputService.GetKeyDown(KeyCode.UpArrow) ||
+                InputService.GetKeyDown(KeyCode.DownArrow) ||
+                InputService.GetKeyDown(KeyCode.LeftArrow) ||
+                InputService.GetKeyDown(KeyCode.RightArrow))
+            {
+                Flash();
+            }
+        }
 
+        private void LimitSelectRange()
+        {
             if (_select < 0 + 2 * Convert.ToInt32(_setData))
             {
                 if (_select % 2 != 0)
@@ -117,134 +333,18 @@ namespace UCT.Global.Scene
             {
                 _select = _select % 2 == 0 ? 3 : 4;
             }
+        }
 
-            if (InputService.GetKeyDown(KeyCode.UpArrow) ||
-                InputService.GetKeyDown(KeyCode.DownArrow) ||
-                InputService.GetKeyDown(KeyCode.LeftArrow) ||
-                InputService.GetKeyDown(KeyCode.RightArrow))
+        private void EnableTextOptions()
+        {
+            if (!_textOptionsLeft.enabled)
             {
-                Flash();
+                _textOptionsLeft.enabled = true;
             }
 
-            if (InputService.GetKeyDown(KeyCode.Z))
+            if (!_textOptionsRight.enabled)
             {
-                if (!_setData)
-                {
-                    switch (_select)
-                    {
-                        case 0:
-                            GameUtilityService.FadeOutAndSwitchScene(MainControl.Instance.playerControl.saveScene,
-                                Color.black, null, true);
-                            break;
-
-                        case 1:
-                            GameUtilityService.FadeOutAndSwitchScene("Rename", Color.black, null, true);
-                            break;
-
-                        case 2:
-                            SettingsController.Instance.OpenSetting();
-                            break;
-
-                        case 3:
-                            SettingsController.Instance.OpenSetting("SettingLanguagePackageLayer");
-                            break;
-                        case 4:
-                            _setData = true;
-                            saveNumber = MainControl.Instance.saveDataId;
-                            if (0 != SaveController.GetDataNumber() - 1)
-                            {
-                                _select = 5;
-                            }
-
-                            Flash();
-                            _textOptionsLeft.enabled = false;
-                            _textOptionsRight.enabled = false;
-                            AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
-                            break;
-
-                        case 5:
-                            Application.Quit();
-                            break;
-
-                        default:
-                            goto case 5;
-                    }
-                }
-                else
-                {
-                    switch (_select)
-                    {
-                        case 2:
-                            AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
-                            if (saveNumber > 0)
-                            {
-                                saveNumber--;
-                            }
-
-                            _select = 3;
-                            LoadLayer0();
-                            break;
-
-                        case 3:
-                            AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
-                            if (saveNumber == SaveController.GetDataNumber() - 1) //新建
-                            {
-                                saveNumber++;
-                                MainControl.Instance.saveDataId = saveNumber;
-                                SaveController.SaveData(MainControl.Instance.playerControl,
-                                    "Data" + MainControl.Instance.saveDataId);
-                                MainControl.Instance.playerControl =
-                                    DataHandlerService.SetPlayerControl(
-                                        ScriptableObject.CreateInstance<PlayerControl>());
-                                MainControl.Instance.playerControl.playerName = "";
-                                GameUtilityService.FadeOutAndSwitchScene("Rename", Color.black);
-                            }
-                            else //下页
-                            {
-                                saveNumber++;
-                                LoadLayer0();
-                            }
-
-                            break;
-
-                        case 4:
-                            if (SaveController.GetDataNumber() - 1 <= 0)
-                            {
-                                goto case 5;
-                            }
-
-                            SaveController.DeleteData("Data" + saveNumber);
-                            if (saveNumber > SaveController.GetDataNumber() - 1)
-                            {
-                                saveNumber = SaveController.GetDataNumber() - 1;
-                            }
-
-                            LoadLayer0();
-                            break;
-
-                        case 5:
-                            if (MainControl.Instance.saveDataId == saveNumber)
-                            {
-                                _setData = false;
-                                Flash();
-                                _textOptionsLeft.enabled = false;
-                                _textOptionsRight.enabled = false;
-                                AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
-                                break;
-                            }
-
-                            MainControl.Instance.saveDataId = saveNumber;
-                            AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
-                            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-                            break;
-                    }
-                }
-            }
-            else if (InputService.GetKeyDown(KeyCode.X) && _setData)
-            {
-                _setData = false;
-                Flash();
-                AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                _textOptionsRight.enabled = true;
             }
         }
 
@@ -298,51 +398,89 @@ namespace UCT.Global.Scene
                 }
             }
 
+            const string endColor = "</color>";
             if (!_setData)
             {
                 _textOptionsLeft.text =
-                    list[0] + TextProcessingService.GetFirstChildStringByPrefix(
-                        MainControl.Instance.LanguagePackControl.sceneTexts,
-                        "Menu0") + "</color>\n" +
-                    list[2] + TextProcessingService.GetFirstChildStringByPrefix(
-                        MainControl.Instance.LanguagePackControl.sceneTexts,
-                        "Menu2") + "</color>\n" +
-                    list[4] + TextProcessingService.GetFirstChildStringByPrefix(
-                        MainControl.Instance.LanguagePackControl.sceneTexts,
-                        "Menu4") + "</color>";
+                    new StringBuilder().Append((object)list[0])
+                        .Append(TextProcessingService.GetFirstChildStringByPrefix(
+                            MainControl.Instance.LanguagePackControl.sceneTexts,
+                            "Menu0"))
+                        .Append(endColor)
+                        .Append("\n")
+                        .Append((object)list[2])
+                        .Append(TextProcessingService.GetFirstChildStringByPrefix(
+                            MainControl.Instance.LanguagePackControl.sceneTexts,
+                            "Menu2"))
+                        .Append(endColor)
+                        .Append("\n")
+                        .Append((object)list[4])
+                        .Append(TextProcessingService.GetFirstChildStringByPrefix(
+                            MainControl.Instance.LanguagePackControl.sceneTexts,
+                            "Menu4"))
+                        .Append(endColor)
+                        .ToString();
 
                 _textOptionsRight.text =
-                    list[1] + TextProcessingService.GetFirstChildStringByPrefix(
-                        MainControl.Instance.LanguagePackControl.sceneTexts,
-                        "Menu1") + "</color>\n" +
-                    list[3] + TextProcessingService.GetFirstChildStringByPrefix(
-                        MainControl.Instance.LanguagePackControl.sceneTexts,
-                        "Menu3") + "</color>\n" +
-                    list[5] + TextProcessingService.GetFirstChildStringByPrefix(
-                        MainControl.Instance.LanguagePackControl.sceneTexts,
-                        "Menu5") + "</color>";
+                    new StringBuilder().Append((object)list[1])
+                        .Append(TextProcessingService.GetFirstChildStringByPrefix(
+                            MainControl.Instance.LanguagePackControl.sceneTexts,
+                            "Menu1"))
+                        .Append(endColor)
+                        .Append("\n")
+                        .Append((object)list[3])
+                        .Append(TextProcessingService.GetFirstChildStringByPrefix(
+                            MainControl.Instance.LanguagePackControl.sceneTexts,
+                            "Menu3"))
+                        .Append(endColor)
+                        .Append("\n")
+                        .Append((object)list[5])
+                        .Append(TextProcessingService.GetFirstChildStringByPrefix(
+                            MainControl.Instance.LanguagePackControl.sceneTexts,
+                            "Menu5"))
+                        .Append(endColor)
+                        .ToString();
             }
             else
             {
                 _textOptionsLeft.text =
-                    list[0] + TextProcessingService.GetFirstChildStringByPrefix(
-                        MainControl.Instance.LanguagePackControl.sceneTexts,
-                        "Menu12") + "</color>\n" +
-                    list[2] + TextProcessingService.GetFirstChildStringByPrefix(
-                        MainControl.Instance.LanguagePackControl.sceneTexts,
-                        "Menu6") + "</color>\n" +
-                    list[4] + TextProcessingService.GetFirstChildStringByPrefix(
-                        MainControl.Instance.LanguagePackControl.sceneTexts,
-                        0 == SaveController.GetDataNumber() - 1 ? "Menu8" : "Menu11") + "</color>";
+                    new StringBuilder().Append((object)list[0])
+                        .Append(TextProcessingService.GetFirstChildStringByPrefix(
+                            MainControl.Instance.LanguagePackControl.sceneTexts,
+                            "Menu12"))
+                        .Append(endColor)
+                        .Append("\n")
+                        .Append((object)list[2])
+                        .Append(TextProcessingService.GetFirstChildStringByPrefix(
+                            MainControl.Instance.LanguagePackControl.sceneTexts,
+                            "Menu6"))
+                        .Append(endColor)
+                        .Append("\n")
+                        .Append((object)list[4])
+                        .Append(TextProcessingService.GetFirstChildStringByPrefix(
+                            MainControl.Instance.LanguagePackControl.sceneTexts,
+                            0 == SaveController.GetDataNumber() - 1 ? "Menu8" : "Menu11"))
+                        .Append(endColor)
+                        .ToString();
 
                 _textOptionsRight.text =
-                    list[1] + "Data" + saveNumber + "</color>\n" +
-                    list[3] + TextProcessingService.GetFirstChildStringByPrefix(
-                        MainControl.Instance.LanguagePackControl.sceneTexts,
-                        saveNumber == SaveController.GetDataNumber() - 1 ? "Menu10" : "Menu7") + "</color>\n" +
-                    list[5] + TextProcessingService.GetFirstChildStringByPrefix(
-                        MainControl.Instance.LanguagePackControl.sceneTexts,
-                        "Menu9") + "</color>";
+                    new StringBuilder().Append((object)list[1])
+                        .Append("Data")
+                        .Append(saveNumber)
+                        .Append(endColor)
+                        .Append("\n")
+                        .Append((object)list[3])
+                        .Append(TextProcessingService.GetFirstChildStringByPrefix(
+                            MainControl.Instance.LanguagePackControl.sceneTexts,
+                            saveNumber == SaveController.GetDataNumber() - 1 ? "Menu10" : "Menu7"))
+                        .Append(endColor)
+                        .Append("\n")
+                        .Append((object)list[5])
+                        .Append(TextProcessingService.GetFirstChildStringByPrefix(
+                            MainControl.Instance.LanguagePackControl.sceneTexts,
+                            "Menu9"))
+                        .Append(endColor)
+                        .ToString();
             }
         }
     }
