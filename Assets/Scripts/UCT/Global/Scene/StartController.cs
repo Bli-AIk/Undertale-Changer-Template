@@ -34,11 +34,10 @@ namespace UCT.Global.Scene
             var text = DataHandlerService.LoadLanguageData($"Overworld\\{SceneManager.GetActiveScene().name}",
                 MainControl.Instance.languagePackId);
             var lines = text.Split(new[] { '\n' }, StringSplitOptions.None);
-            var messageText = lines.Last();
             var noticeText = string.Join("\n", lines.Take(lines.Length - 1));
             _textNotice.text = noticeText;
+            var messageText = lines[^1];
             _textMessage.text = messageText;
-
             SaveController.LoadData("Data" + MainControl.Instance.saveDataId);
         }
 
@@ -72,7 +71,7 @@ namespace UCT.Global.Scene
                             Color.black, null, false, 2f);
                         break;
                     default:
-                        throw new ArgumentOutOfRangeException();
+                        throw new ArgumentOutOfRangeException($"Unexpected Layer value: {_layer}");
                 }
             }
 
