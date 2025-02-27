@@ -223,8 +223,7 @@ namespace UCT.Global.Scene
             SaveController.SaveData(MainControl.Instance.playerControl,
                 "Data" + MainControl.Instance.saveDataId);
             MainControl.Instance.playerControl =
-                DataHandlerService.SetPlayerControl(
-                    ScriptableObject.CreateInstance<PlayerControl>());
+                DataHandlerService.SetPlayerControl(ScriptableObject.CreateInstance<PlayerControl>());
             MainControl.Instance.playerControl.playerName = "";
             GameUtilityService.FadeOutAndSwitchScene("Rename", Color.black);
         }
