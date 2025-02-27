@@ -16,9 +16,9 @@ namespace UCT.Global.Core
 
         public static void SaveData(PlayerControl data, string dataName)
         {
-            if (!Directory.Exists(Application.dataPath + "/Data"))
+            if (!Directory.Exists($"{Application.dataPath}/Data"))
             {
-                Directory.CreateDirectory(Application.dataPath + "/Data");
+                Directory.CreateDirectory($"{Application.dataPath}/Data");
             }
 
             UsersData[data.name] = data;
@@ -34,7 +34,6 @@ namespace UCT.Global.Core
 
         public static PlayerControl LoadData(string dataName)
         {
-
             SortAndRenameData();
             var path = Application.dataPath + $"/Data/{dataName}.json";
             if (!File.Exists(path))
@@ -52,15 +51,15 @@ namespace UCT.Global.Core
 
         public static int GetDataNumber()
         {
-            if (!Directory.Exists(Application.dataPath + "/Data"))
+            if (!Directory.Exists($"{Application.dataPath}/Data"))
             {
                 return 0;
             }
 
             var returnNumber = 0;
-            for (var i = 0; i < Directory.GetFiles(Application.dataPath + "/Data").Length; i++)
+            for (var i = 0; i < Directory.GetFiles($"{Application.dataPath}/Data").Length; i++)
             {
-                var text = Directory.GetFiles(Application.dataPath + "/Data")[i];
+                var text = Directory.GetFiles($"{Application.dataPath}/Data")[i];
                 if (text[^5..] == ".json")
                 {
                     returnNumber++;
@@ -91,7 +90,7 @@ namespace UCT.Global.Core
             SortAndRenameData();
         }
 
-        public static void SortAndRenameData()
+        private static void SortAndRenameData()
         {
             var dataPath = Application.dataPath + "/Data";
 

@@ -95,7 +95,7 @@ namespace UCT.Global.Core
         }
 
 
-        public static void SetupController<T>(T instance, Action existingSetup, Action nonexistentSetup)
+        private static void SetupController<T>(T instance, Action existingSetup, Action nonexistentSetup)
             where T : class
         {
             if (instance != null)

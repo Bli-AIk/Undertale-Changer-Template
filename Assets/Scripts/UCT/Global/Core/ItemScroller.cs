@@ -161,9 +161,9 @@ namespace UCT.Global.Core
         /// <summary>
         ///     处理类似物品选择控制器的计算
         /// </summary>
-        public void UpdateHandleItemInput(
-            ref int globalItemIndex,
-            ref int visibleItemIndex,
+        public (int globalItemIndex,int visibleItemIndex) UpdateHandleItemInput(
+            int globalItemIndex,
+            int visibleItemIndex,
             int count,
             Action<int> onKeyDown)
         {
@@ -192,6 +192,8 @@ namespace UCT.Global.Core
                 globalItemIndex++;
                 onKeyDown.Invoke(globalItemIndex);
             }
+
+            return (globalItemIndex, visibleItemIndex);
         }
 
 

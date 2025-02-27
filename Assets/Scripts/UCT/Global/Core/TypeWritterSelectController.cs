@@ -1,23 +1,24 @@
-﻿using Ink.Runtime;
+﻿using Ink;
+using Ink.Runtime;
 
 namespace UCT.Global.Core
 {
     /// <summary>
     ///     使用ink语言，控制对话中的选项。
     /// </summary>
-    
     public class TypeWritterSelectController
     {
         public Story Story { get; private set; }
-        public bool IsSelecting;
-        public int GlobalItemIndex;
-        public int VisibleItemIndex;
+        public bool IsSelecting { get; set; }
+        public int GlobalItemIndex { get; set; }
+        public int VisibleItemIndex { get; set; }
+
         public void SetStory(Story story)
         {
             Story = story;
             Story.onError += (msg, type) =>
             {
-                if (type == Ink.ErrorType.Warning)
+                if (type == ErrorType.Warning)
                 {
                     Other.Debug.LogWarning(msg);
                 }

@@ -154,8 +154,7 @@ namespace UCT.Global.Settings
 
                 if (_startIndexCurrent >= allSettingsOptionsCopy.Count)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(_settingOptionsPage),
-                        "Setting options page is out of range.");
+                    throw new ArgumentOutOfRangeException($"Value {_settingOptionsPage} is out of range.");
                 }
 
                 _settingsLayer.DisplayedSettingsOptions =
@@ -482,18 +481,19 @@ namespace UCT.Global.Settings
             }
 
             object value;
-            switch (settingsOption.Type)
+            if (settingsOption.Type is OptionType.SelectionBasedFalse 
+                or OptionType.SelectionBasedTrue
+                or OptionType.EnterLayer
+                or OptionType.EnterScene 
+                or OptionType.Back 
+                or OptionType.SwitchPage)
             {
-                case OptionType.SelectionBasedFalse or OptionType.SelectionBasedTrue or OptionType.EnterLayer
-                    or OptionType.EnterScene or OptionType.Back or OptionType.SwitchPage:
-                    value = 0;
-                    break;
-                case OptionType.SelectionToggle:
-                    goto default;
-                default:
-                    value = settingsOption.SelectionBasedChangedValueGetter?.Invoke();
-                    value = value is int or bool ? Convert.ToInt32(value) : 0;
-                    break;
+                value = 0;
+            }
+            else
+            {
+                value = settingsOption.SelectionBasedChangedValueGetter?.Invoke();
+                value = value is int or bool ? Convert.ToInt32(value) : 0;
             }
 
             var valueInt = (int)value;
@@ -661,7 +661,7 @@ namespace UCT.Global.Settings
                         MainControl.Instance.LanguagePackControl.settingTexts,
                         (option.SelectionBasedChangedValueGetter?.Invoke()!).ToString()) + "</color>";
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException($"Unexpected OptionDisplayMode value: {option.OptionDisplayMode}");
             }
         }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using Ink.Runtime;
 using MEC;
 using TMPro;
@@ -53,21 +54,21 @@ namespace UCT.Global.Core
 
             while (typeWritter.originString[index] == '<')
             {
-                var spText = "";
+                var spText = new StringBuilder();
                 while (fix || typeWritter.originString[index - 1] != '>')
                 {
-                    spText += typeWritter.originString[index];
+                    spText.Append(typeWritter.originString[index]);
                     index++;
                     if (fix)
                     {
                         fix = false;
                     }
                 }
+                
+                typeWritter.passTextString += spText.ToString();
 
-                typeWritter.passTextString += spText;
 
-
-                index = TypeWritterExecuteHalfTag(typeWritter, tmpText, spText, index, ref yieldNum, ref yieldString,
+                index = TypeWritterExecuteHalfTag(typeWritter, tmpText, spText.ToString(), index, ref yieldNum, ref yieldString,
                     ref startPassText);
 
                 if (index >= typeWritter.originString.Length)
@@ -255,20 +256,6 @@ namespace UCT.Global.Core
             }
 
             typeWritter.overworldSpriteChanger.UpdateSpriteDisplay();
-        }
-
-        private static string ConvertSkipText(TypeWritter typeWritter, string spText)
-        {
-            if (spText.Length >= 2 && spText[0] == '<' && spText[2] == '>')
-            {
-                spText = spText[1].ToString();
-            }
-            else if (spText.Length - 2 > 0 && spText[1] == '-' && spText[^2] == '-')
-            {
-                spText = SkipSomeText(typeWritter, spText);
-            }
-
-            return spText;
         }
 
         private static string SkipSomeText(TypeWritter typeWritter, string spText)

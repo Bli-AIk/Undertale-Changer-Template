@@ -74,7 +74,6 @@ namespace UCT.Battle
 
         [Header("HP条配色")]
         public Color hpColorUnder;
-
         public Color hpColorOn;
         public Color hpColorHit;
 
@@ -115,7 +114,6 @@ namespace UCT.Battle
         private DialogBubbleBehaviour _dialog;
         private GameObject _enemiesHpLine;
         private int _hpFood;
-
         private Tween _hpFoodTween;
         private SpriteRenderer _hpSpr;
 
@@ -131,6 +129,16 @@ namespace UCT.Battle
 
         private void Start()
         {
+            GetComponent();
+            TurnTextLoad(true);
+            _enemiesHpLine.SetActive(false);
+            UITextUpdate();
+            _hpFood = MainControl.Instance.playerControl.hp;
+            InTurn();
+        }
+
+        private void GetComponent()
+        {
             _target = transform.Find("Target").GetComponent<TargetController>();
             _target.gameObject.SetActive(false);
             _nameUI = transform.Find("Name UI").GetComponent<TextMeshPro>();
@@ -143,14 +151,7 @@ namespace UCT.Battle
             _dialog = GameObject.Find("DialogBubble").GetComponent<DialogBubbleBehaviour>();
             _dialog.gameObject.SetActive(false);
             _typeWritter = GetComponent<TypeWritter>();
-            string[] loadButton =
-            {
-                "FIGHT",
-                "ACT",
-                "ITEM",
-                "MERCY"
-            };
-            foreach (var t in loadButton)
+            foreach (var t in new[] { "FIGHT", "ACT", "ITEM", "MERCY" })
             {
                 buttons.Add(transform.Find(t).GetComponent<SpriteRenderer>());
             }
@@ -159,7 +160,7 @@ namespace UCT.Battle
             {
                 var enemies = GameObject.Find(MainControl.Instance.BattleControl.enemies[i].name)
                     .GetComponent<EnemiesController>();
-                if (enemies == null)
+                if (!enemies)
                 {
                     continue;
                 }
@@ -168,16 +169,7 @@ namespace UCT.Battle
                 enemiesControllers[i].atk = MainControl.Instance.BattleControl.enemiesAtk[i];
                 enemiesControllers[i].def = MainControl.Instance.BattleControl.enemiesDef[i];
             }
-
             selectedButton = EnumService.GetMinEnumValue<SelectedButton>();
-            TurnTextLoad(true);
-            _enemiesHpLine.SetActive(false);
-
-            UITextUpdate();
-
-            _hpFood = MainControl.Instance.playerControl.hp;
-
-            InTurn();
         }
 
         private void Update()
@@ -493,7 +485,8 @@ namespace UCT.Battle
 
                         case SelectedButton.Item: //ITEM：跳2
                         {
-                            _itemScroller.Open(ListManipulationService.FindFirstNullOrEmptyIndex(MainControl.Instance.playerControl
+                            _itemScroller.Open(ListManipulationService.FindFirstNullOrEmptyIndex(MainControl.Instance
+                                .playerControl
                                 .items), 0);
                             selectedLayer = SelectedLayer.OptionLayer;
 
@@ -882,7 +875,7 @@ namespace UCT.Battle
 
                 TypeWritterTagProcessor.SetItemDataName(dataName);
                 _typeWritter.StartTypeWritter(
-                    DataHandlerService.ItemDataNameGetLanguagePackUseText(dataName),  _textUI);
+                    DataHandlerService.ItemDataNameGetLanguagePackUseText(dataName), _textUI);
                 DataHandlerService.GetItemFormDataName(dataName).OnUse(globalItemIndex + 1);
 
                 SpriteChange();
@@ -899,9 +892,9 @@ namespace UCT.Battle
             var myItemMax = ListManipulationService.FindFirstNullOrEmptyIndex(
                 MainControl.Instance.playerControl.items);
 
-            var (itemLine0, itemDataText0) = 
+            var (itemLine0, itemDataText0) =
                 GenerateItemDisplayText(globalItemIndex - visibleItemIndex);
-                            
+
             var (itemLine1, itemDataText1) = myItemMax > 1
                 ? GenerateItemDisplayText(globalItemIndex - visibleItemIndex + 1)
                 : ("", "");
@@ -909,7 +902,7 @@ namespace UCT.Battle
             var (itemLine2, itemDataText2) = myItemMax > 2
                 ? GenerateItemDisplayText(globalItemIndex - visibleItemIndex + 2)
                 : ("", "");
-            
+
             MainControl.Instance.battlePlayerController.transform.position = new Vector3(-5.175f,
                 -0.96f - visibleItemIndex * 0.66f,
                 MainControl.Instance.battlePlayerController.transform.position.z);
@@ -918,7 +911,11 @@ namespace UCT.Battle
 
             _textUIBack.text = itemDataText0 + "\n" + itemDataText1 + "\n" + itemDataText2;
 
-            _itemScroller.UpdateHandleItemInput(ref globalItemIndex, ref visibleItemIndex, myItemMax, CommonItemNavigationLogic);
+            var updateHandleItemInput = 
+                _itemScroller.UpdateHandleItemInput(globalItemIndex, visibleItemIndex, myItemMax,
+                    CommonItemNavigationLogic);
+            globalItemIndex = updateHandleItemInput.globalItemIndex;
+            visibleItemIndex = updateHandleItemInput.visibleItemIndex;
 
             _hpUI.text = FormatWithLeadingZero(_hpFood) + " / " +
                          FormatWithLeadingZero(MainControl.Instance.playerControl.hpMax);
@@ -939,6 +936,7 @@ namespace UCT.Battle
                 UITextUpdate(UITextMode.Food);
             }
         }
+
         private void OpenDialogBubble(string textAsset)
         {
             MainControl.Instance.BattleControl.randomTurnDir = MathUtilityService.Get1Or_1();
@@ -963,7 +961,7 @@ namespace UCT.Battle
 
             _dialog.isBackRight = Convert.ToBoolean(save[3]);
             _dialog.backY = float.Parse(save[4]);
-            _dialog.typeWritter.StartTypeWritter(save[5],  _dialog.tmp);
+            _dialog.typeWritter.StartTypeWritter(save[5], _dialog.tmp);
             numberDialog++;
             _dialog.tmp.text = "";
             _dialog.PositionChange();

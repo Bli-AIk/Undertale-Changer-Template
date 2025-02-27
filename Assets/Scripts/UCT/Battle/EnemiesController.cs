@@ -6,10 +6,11 @@ namespace UCT.Battle
 {
     /// <summary>
     ///     怪物控制脚本
-    ///     主要用于动画控制和存储ATKDEF
+    ///     主要用于动画控制和存储ATK DEF
     /// </summary>
     public class EnemiesController : MonoBehaviour
     {
+        private static readonly int Hit = Animator.StringToHash("Hit");
         public Animator anim;
         public int atk, def;
 
@@ -20,11 +21,13 @@ namespace UCT.Battle
 
         private void AnimHit()
         {
-            if (anim.GetBool("Hit"))
+            if (!anim.GetBool(Hit))
             {
-                AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipBattle);
-                anim.SetBool("Hit", false);
+                return;
             }
+
+            AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipBattle);
+            anim.SetBool(Hit, false);
         }
     }
 }

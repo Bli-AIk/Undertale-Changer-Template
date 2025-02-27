@@ -268,7 +268,7 @@ namespace UCT.Global.Scene
         {
             var playerControl = SaveController.LoadData("Data" + saveNumber);
             _textName.text = playerControl.playerName;
-            _textLv.text = "LV " + playerControl.lv;
+            _textLv.text = $"LV {playerControl.lv}";
             _textPosition.text =
                 TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.LanguagePackControl.settingTexts,
                     playerControl.saveScene);

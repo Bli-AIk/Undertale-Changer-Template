@@ -14,8 +14,6 @@ using UCT.Service;
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Serialization;
-using Random = UnityEngine.Random;
-
 
 namespace UCT.Global.Core
 {
@@ -29,6 +27,8 @@ namespace UCT.Global.Core
             Default,
             IgnorePlayerInput
         }
+
+        private const string WaitForUpdate = "<waitForUpdate>";
 
         [TabGroup("TypeWritter", "Basic(ReadOnly)")] [ReadOnly]
         public string originString, endString, passTextString;
@@ -118,12 +118,16 @@ namespace UCT.Global.Core
 
             if (_itemScroller && SelectController.IsSelecting && SelectController.Story.currentChoices.Count > 0)
             {
-                _itemScroller.UpdateHandleItemInput(ref SelectController.GlobalItemIndex,
-                    ref SelectController.VisibleItemIndex, SelectController.Story.currentChoices.Count, _ =>
-                    {
-                        AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
-                        UpdateChoiceText();
-                    });
+                var updateHandleItemInput =
+                    _itemScroller.UpdateHandleItemInput(SelectController.GlobalItemIndex,
+                        SelectController.VisibleItemIndex,
+                        SelectController.Story.currentChoices.Count, _ =>
+                        {
+                            AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                            UpdateChoiceText();
+                        });
+                SelectController.GlobalItemIndex = updateHandleItemInput.globalItemIndex;
+                SelectController.VisibleItemIndex = updateHandleItemInput.visibleItemIndex;
             }
             else
             {
@@ -136,23 +140,21 @@ namespace UCT.Global.Core
             }
 
             if (!isRunning && !passText && !isTyping && InputService.GetKeyDown(KeyCode.Z) &&
-                typeMode != TypeMode.IgnorePlayerInput)
+                typeMode != TypeMode.IgnorePlayerInput &&
+                overworldSpriteChanger)
             {
-                if (overworldSpriteChanger)
-                {
-                    overworldSpriteChanger.spriteExpressionCollection = null;
-                    overworldSpriteChanger.UpdateSpriteDisplay();
-                }
+                overworldSpriteChanger.spriteExpressionCollection = null;
+                overworldSpriteChanger.UpdateSpriteDisplay();
             }
 
             if (passText && InputService.GetKeyDown(KeyCode.Z) && typeMode != TypeMode.IgnorePlayerInput)
             {
-                PassText("<waitForUpdate>");
+                PassText(WaitForUpdate);
             }
             else if (!(isSkip || isJumpingText) &&
                      !cantSkip && InputService.GetKeyDown(KeyCode.X) &&
                      typeMode != TypeMode.IgnorePlayerInput &&
-                     skipClock != 0 && clockTime <= 0)
+                     !Mathf.Approximately(skipClock, 0) && clockTime <= 0)
             {
                 isSkip = true;
             }
@@ -244,7 +246,7 @@ namespace UCT.Global.Core
             SetUpTypeWritter(text, tmpText);
 
             if (MainControl.Instance.sceneState == MainControl.SceneState.Overworld &&
-                originString.Length > "<waitForUpdate>".Length)
+                originString.Length > WaitForUpdate.Length)
             {
                 TalkBoxController.Instance.CleanText(this);
             }
@@ -300,10 +302,7 @@ namespace UCT.Global.Core
         {
             _isReadyToClose = false;
             isRunning = true;
-            if (overworldSpriteChanger)
-            {
-                overworldSpriteChanger.state = SpriteExpressionCollection.State.Speaking;
-            }
+            SetOverworldSpriteState(SpriteExpressionCollection.State.Speaking);
 
             for (var i = 0; i < originString.Length; i++)
             {
@@ -322,54 +321,16 @@ namespace UCT.Global.Core
                         continue;
                     }
 
-                    if (yieldNum != 0)
+                    for (var j = 0; j < yieldNum && !isSkip; j++)
                     {
-                        for (var j = 0; j < yieldNum; j++)
-                        {
-                            if (!string.IsNullOrEmpty(yieldString) && yieldString.Length > j)
-                            {
-                                endString += yieldString[j];
-                                UpdateTmpText(tmpText);
-                            }
-                            else if (overworldSpriteChanger)
-                            {
-                                overworldSpriteChanger.state = SpriteExpressionCollection.State.Default;
-                            }
-
-                            if (isSkip)
-                            {
-                                continue;
-                            }
-
-                            yield return TypeWritterTagProcessor.GetTypeWritterStopTime(this);
-
-                            if (overworldSpriteChanger)
-                            {
-                                overworldSpriteChanger.state = SpriteExpressionCollection.State.Speaking;
-                            }
-                        }
+                        ConvertYieldString(tmpText, yieldString, j);
+                        yield return TypeWritterTagProcessor.GetTypeWritterStopTime(this);
+                        SetOverworldSpriteState(SpriteExpressionCollection.State.Speaking);
                     }
                 }
 
-                var cantString = "* \n\r";
-                for (var j = 0; j < cantString.Length; j++)
-                {
-                    if (cantString[j] == originString[i])
-                    {
-                        cantString = "";
-                    }
-                }
-
-                if (cantString != "" && !(isSkip || isJumpingText) && !isUsedFx)
-                {
-                    TypeWritterTagProcessor.TypeWritterPlayFx(this);
-                }
-
-                if (!passText)
-                {
-                    endString += originString[i];
-                    passTextString += originString[i];
-                }
+                TypingPlayFx(i);
+                TypingAddText(i);
 
                 if (!(isSkip || isJumpingText))
                 {
@@ -378,25 +339,48 @@ namespace UCT.Global.Core
 
                 UpdateTmpText(tmpText);
 
-                if (!passText)
+                if (IsTypingPassText())
                 {
-                    isTyping = false;
-                }
-                else
-                {
-                    originString = originString[passTextString.Length..];
                     break;
                 }
 
                 cantSkip = false;
             }
 
-            if (overworldSpriteChanger)
+            SetOverworldSpriteState(SpriteExpressionCollection.State.Default);
+            CloseTyping();
+        }
+
+        private bool IsTypingPassText()
+        {
+            if (!passText)
             {
-                overworldSpriteChanger.state = SpriteExpressionCollection.State.Default;
+                isTyping = false;
+            }
+            else
+            {
+                originString = originString[passTextString.Length..];
+                return true;
             }
 
+            return false;
+        }
 
+        private void ConvertYieldString(TMP_Text tmpText, string yieldString, int j)
+        {
+            if (!string.IsNullOrEmpty(yieldString) && yieldString.Length > j)
+            {
+                endString += yieldString[j];
+                UpdateTmpText(tmpText);
+            }
+            else
+            {
+                SetOverworldSpriteState(SpriteExpressionCollection.State.Default);
+            }
+        }
+
+        private void CloseTyping()
+        {
             if (!passText)
             {
                 _isReadyToClose = true;
@@ -410,14 +394,51 @@ namespace UCT.Global.Core
             }
         }
 
+        private void TypingAddText(int i)
+        {
+            if (passText)
+            {
+                return;
+            }
+
+            endString += originString[i];
+            passTextString += originString[i];
+        }
+
+        private void TypingPlayFx(int i)
+        {
+            var excludedFxChars = "* \n\r";
+            for (var j = 0; j < excludedFxChars.Length; j++)
+            {
+                if (excludedFxChars[j] == originString[i])
+                {
+                    excludedFxChars = "";
+                }
+            }
+
+            if (excludedFxChars != "" && !(isSkip || isJumpingText) && !isUsedFx)
+            {
+                TypeWritterTagProcessor.TypeWritterPlayFx(this);
+            }
+        }
+
+        private void SetOverworldSpriteState(SpriteExpressionCollection.State state)
+        {
+            if (overworldSpriteChanger)
+            {
+                overworldSpriteChanger.state = state;
+            }
+        }
+
         private void UpdateTmpText(TMP_Text tmpText)
         {
             if (tmpText)
             {
                 tmpText.text = endString;
 
-                Timing.RunCoroutine(_Dynamic(endString.Length - 1, dynamicType));
-                
+                StartCoroutine(
+                    TypeWritterDynamicController.DynamicTmp(this, _tmpText, endString.Length - 1, dynamicType));
+
                 tmpText.font = MainControl.Instance.overworldControl.tmpFonts[fontIndex];
             }
             else
@@ -432,157 +453,6 @@ namespace UCT.Global.Core
                                          currentSpeed * 0.25f * Convert.ToInt32(!SettingsStorage.TextWidth));
         }
 
-        private IEnumerator<float> _Dynamic(int number, OverworldControl.DynamicType inputDynamicType)
-        {
-            if (inputDynamicType != OverworldControl.DynamicType.None) //动效相关
-            {
-                var textInfo = _tmpText.textInfo;
-
-                Vector3 orig;
-                TMP_CharacterInfo charInfo;
-                Vector3[] verts;
-
-                switch (inputDynamicType)
-                {
-                    case OverworldControl.DynamicType.Shake:
-                        for (var i = 0; i < 30; i++)
-                        {
-                            if (isSkip || isJumpingText)
-                            {
-                                break;
-                            }
-
-                            _tmpText.ForceMeshUpdate();
-
-                            var randomNumber = new Vector3(Random.Range(-0.05f, 0.05f), Random.Range(-0.05f, 0.05f), 0);
-
-                            charInfo = textInfo.characterInfo[number];
-
-                            if (!charInfo.isVisible)
-                            {
-                                break;
-                            }
-
-                            verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
-
-                            for (var j = 0; j < 4; j++)
-                            {
-                                orig = verts[charInfo.vertexIndex + j];
-                                //动画
-                                verts[charInfo.vertexIndex + j] = orig + randomNumber;
-                            }
-
-                            for (var k = 0; k < textInfo.meshInfo.Length; k++)
-                            {
-                                var meshInfo = textInfo.meshInfo[k];
-                                meshInfo.mesh.vertices = meshInfo.vertices;
-                                _tmpText.UpdateGeometry(meshInfo.mesh, k);
-                            }
-
-                            yield return 0;
-                        }
-
-
-                        break;
-                    case OverworldControl.DynamicType.Fade:
-
-                        const float fadeDuration = 0.1f; // 渐入时间
-
-                        _tmpText.ForceMeshUpdate();
-
-                        charInfo = textInfo.characterInfo[number];
-                        if (!charInfo.isVisible)
-                        {
-                            break;
-                        }
-
-                        var colors = textInfo.meshInfo[charInfo.materialReferenceIndex].colors32;
-                        var startColor = colors[charInfo.vertexIndex];
-                        var endColor = new Color32(startColor.r, startColor.g, startColor.b, 255);
-
-                        // 设置初始颜色为透明
-                        for (var j = 0; j < 4; j++)
-                        {
-                            colors[charInfo.vertexIndex + j] = new Color32(startColor.r, startColor.g, startColor.b, 0);
-                        }
-
-                        _tmpText.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
-
-                        var elapsedTime = 0f;
-                        while (elapsedTime < fadeDuration)
-                        {
-                            if (isSkip || isJumpingText)
-                            {
-                                break;
-                            }
-
-                            elapsedTime += Time.deltaTime;
-                            var alpha = Mathf.Clamp01(elapsedTime / fadeDuration);
-
-                            var currentColor = Color32.Lerp(new Color32(startColor.r, startColor.g, startColor.b, 0),
-                                endColor, alpha);
-
-                            for (var j = 0; j < 4; j++)
-                            {
-                                colors[charInfo.vertexIndex + j] = currentColor;
-                            }
-
-                            _tmpText.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
-
-                            yield return 0;
-                        }
-
-                        break;
-
-                    case OverworldControl.DynamicType.Up:
-
-                        for (var i = 0; i < 30; i++)
-                        {
-                            if (isSkip || isJumpingText)
-                            {
-                                break;
-                            }
-
-                            _tmpText.ForceMeshUpdate();
-
-                            var down = new Vector3(0, -0.1f);
-
-                            charInfo = textInfo.characterInfo[number];
-
-                            if (!charInfo.isVisible)
-                            {
-                                break;
-                            }
-
-                            verts = textInfo.meshInfo[charInfo.materialReferenceIndex].vertices;
-
-                            for (var j = 0; j < 4; j++)
-                            {
-                                orig = verts[charInfo.vertexIndex + j];
-
-                                verts[charInfo.vertexIndex + j] = orig + down * (1 - (float)i / 30);
-                            }
-
-                            for (var k = 0; k < textInfo.meshInfo.Length; k++)
-                            {
-                                var meshInfo = textInfo.meshInfo[k];
-                                meshInfo.mesh.vertices = meshInfo.vertices;
-                                _tmpText.UpdateGeometry(meshInfo.mesh, k);
-                            }
-
-                            yield return 0;
-                        }
-
-                        break;
-                    case OverworldControl.DynamicType.None:
-                    default:
-                        throw new ArgumentOutOfRangeException(nameof(inputDynamicType), inputDynamicType, null);
-                }
-            }
-
-            yield return 0;
-            _tmpText.ForceMeshUpdate();
-        }
 
         private void PassText(string inputPassText)
         {
@@ -615,11 +485,11 @@ namespace UCT.Global.Core
             Timer.Register(delayInSeconds, () => PassText(inputText));
         }
 
-        private string ExtractPassTextPrefix(string input)
+        private static string ExtractPassTextPrefix(string input)
         {
-            if (input.StartsWith("<waitForUpdate>", StringComparison.Ordinal))
+            if (input.StartsWith(WaitForUpdate, StringComparison.Ordinal))
             {
-                return "<waitForUpdate>";
+                return WaitForUpdate;
             }
 
             if (!input.StartsWith("<waitForTime=", StringComparison.Ordinal))
