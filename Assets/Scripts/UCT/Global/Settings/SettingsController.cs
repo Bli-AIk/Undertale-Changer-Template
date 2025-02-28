@@ -29,10 +29,6 @@ namespace UCT.Global.Settings
         private const int SettingOptionsCount = 7;
         internal static readonly int Open = Animator.StringToHash("Open");
 
-        [ShowInInspector] [ReadOnly] private static int _settingOptionsPage;
-
-        [ShowInInspector] [ReadOnly] private static int _settingOptionsPageMax;
-
         // 主要控件
         public OverworldControl overworldControl;
 
@@ -77,6 +73,10 @@ namespace UCT.Global.Settings
         private Image _settingSoul;
         private Tween _settingSoulTween;
         private int _startIndexCurrent;
+
+        [ShowInInspector] [ReadOnly] private static int SettingOptionsPage { get; set; }
+
+        [ShowInInspector] [ReadOnly] private static int SettingOptionsPageMax { get; set; }
         public static SettingsController Instance { get; private set; }
 
         // 属性
@@ -138,23 +138,23 @@ namespace UCT.Global.Settings
 
                 _settingSelectedOptionMax = new List<int>();
 
-                _settingOptionsPageMax =
+                SettingOptionsPageMax =
                     Mathf.CeilToInt((float)allSettingsOptionsCopy.Count / settingOptionsCountModified) - 1;
 
-                for (var page = 0; page <= _settingOptionsPageMax; page++)
+                for (var page = 0; page <= SettingOptionsPageMax; page++)
                 {
                     var startIndex = page * settingOptionsCountModified;
                     var endIndex = Mathf.Min(startIndex + settingOptionsCountModified, allSettingsOptionsCopy.Count);
                     _settingSelectedOptionMax.Add(endIndex - startIndex + 1);
                 }
 
-                _startIndexCurrent = _settingOptionsPage * settingOptionsCountModified;
+                _startIndexCurrent = SettingOptionsPage * settingOptionsCountModified;
                 _endIndexCurrent = Mathf.Min(_startIndexCurrent + settingOptionsCountModified,
                     allSettingsOptionsCopy.Count);
 
                 if (_startIndexCurrent >= allSettingsOptionsCopy.Count)
                 {
-                    throw new ArgumentOutOfRangeException($"Value {_settingOptionsPage} is out of range.");
+                    throw new ArgumentOutOfRangeException($"Value {SettingOptionsPage} is out of range.");
                 }
 
                 _settingsLayer.DisplayedSettingsOptions =
@@ -192,7 +192,7 @@ namespace UCT.Global.Settings
             }
 
             _settingSoul.rectTransform.anchoredPosition = new Vector2(-225f, 147.5f);
-            _settingOptionsPage = 0;
+            SettingOptionsPage = 0;
             _languagePackIdStorage = MainControl.Instance.languagePackId;
         }
 
@@ -268,12 +268,9 @@ namespace UCT.Global.Settings
                 ReturnToPreviousLayer(layer);
             }
 
-            if (layer is SettingsLayerBase)
+            if (layer is SettingsLayerBase && UpdateLayerBase(layer, option))
             {
-                if (UpdateLayerBase(layer, option))
-                {
-                    return;
-                }
+                return;
             }
 
             if (layer.DisplayedSettingsOptions[option].Type != OptionType.SelectionBasedTrue)
@@ -305,114 +302,143 @@ namespace UCT.Global.Settings
                     {
                         return true;
                     }
-
                     break;
                 case OptionType.EnterScene:
-                    if (InputService.GetKeyDown(KeyCode.Z))
+                    if (GetKeyDownToEnterScene(layer, option))
                     {
-                        if (SceneManager.GetActiveScene().name == "Rename")
-                        {
-                            return true;
-                        }
-
-                        var sceneName = (string)layer.DisplayedSettingsOptions[option].GetValue();
-                        if (SceneManager.GetActiveScene().name == sceneName)
-                        {
-                            goto case OptionType.Back;
-                        }
-
-                        ReturnToScene(sceneName);
+                        return true;
                     }
-
                     break;
                 case OptionType.Back:
-                    if (InputService.GetKeyDown(KeyCode.Z))
-                    {
-                        ReturnToPreviousLayer(layer);
-                    }
-
+                    GetKeyDownToBack(layer);
                     break;
                 case OptionType.ConfigurableKeyFalse:
-                    if (InputService.GetKeyDown(KeyCode.Z))
-                    {
-                        AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
-                        settingsOption.Type = OptionType.ConfigurableKeyTrue;
-                        _isSettingKey = true;
-                        _selectedSettingsOption = settingsOption;
-                    }
-
-                    if (InputService.GetKeyDown(KeyCode.C))
-                    {
-                        SettingsStorage.KeyBindingType = EnumService.IncrementEnum(SettingsStorage.KeyBindingType);
-                    }
-
+                    GetKeyDownToConfigurableKeyFalse(settingsOption);
                     break;
                 case OptionType.ConfigurableKeyTrue:
                     //  无事发生
                     break;
                 case OptionType.KeyBindingsReset:
-                    if (InputService.GetKeyDown(KeyCode.Z))
-                    {
-                        AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
-                        KeyBindings.ResetDictionary();
-                    }
-
+                    GetKeyDownToKeyBindingsReset();
                     break;
                 case OptionType.SwitchPage:
-                    if (InputService.GetKeyDown(KeyCode.LeftArrow) || InputService.GetKeyDown(KeyCode.RightArrow))
-                    {
-                        AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
-                        _isPageUp = !_isPageUp;
-                        MoveSettingSoul();
-                    }
-
-                    if (InputService.GetKeyDown(KeyCode.UpArrow) || InputService.GetKeyDown(KeyCode.DownArrow))
-                    {
-                        _isPageUp = false;
-                    }
-
-                    if (InputService.GetKeyDown(KeyCode.Z))
-                    {
-                        AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
-                        if (!_isPageUp) //  PageDown
-                        {
-                            if (_settingOptionsPage == 0)
-                            {
-                                break;
-                            }
-
-                            _settingOptionsPage--;
-                        }
-                        else
-                        {
-                            if (_settingOptionsPage == _settingOptionsPageMax)
-                            {
-                                break;
-                            }
-
-                            _settingOptionsPage++;
-                        }
-
-                        _isPageUp = !_isPageUp;
-                        MoveSettingSoul();
-                        _settingSelectedOption = _settingSelectedOptionMax[_settingOptionsPage] - 1;
-                    }
-
+                    GetKeyDownToSwitchPage();
                     break;
                 case OptionType.LanguagePackage:
-                    if (InputService.GetKeyDown(KeyCode.Z))
-                    {
-                        AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
-                        MainControl.Instance.languagePackId = _settingSelectedOption;
-                        MainControl.Instance.Initialization(_settingSelectedOption + _startIndexCurrent);
-                    }
-
+                    GetKeyDownToLanguagePackage();
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException($"Unexpected type value: {settingsOption.Type}");
             }
 
             return false;
+        }
+
+        private void GetKeyDownToLanguagePackage()
+        {
+            if (InputService.GetKeyDown(KeyCode.Z))
+            {
+                AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                MainControl.Instance.languagePackId = _settingSelectedOption;
+                MainControl.Instance.Initialization(_settingSelectedOption + _startIndexCurrent);
+            }
+        }
+
+        private void GetKeyDownToSwitchPage()
+        {
+            if (InputService.GetKeyDown(KeyCode.LeftArrow) || InputService.GetKeyDown(KeyCode.RightArrow))
+            {
+                AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                _isPageUp = !_isPageUp;
+                MoveSettingSoul();
+            }
+
+            if (InputService.GetKeyDown(KeyCode.UpArrow) || InputService.GetKeyDown(KeyCode.DownArrow))
+            {
+                _isPageUp = false;
+            }
+
+            if (InputService.GetKeyDown(KeyCode.Z))
+            {
+                AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                if (!_isPageUp) //  PageDown
+                {
+                    if (SettingOptionsPage == 0)
+                    {
+                        return;
+                    }
+
+                    SettingOptionsPage--;
+                }
+                else
+                {
+                    if (SettingOptionsPage == SettingOptionsPageMax)
+                    {
+                        return;
+                    }
+
+                    SettingOptionsPage++;
+                }
+
+                _isPageUp = !_isPageUp;
+                MoveSettingSoul();
+                _settingSelectedOption = _settingSelectedOptionMax[SettingOptionsPage] - 1;
+            }
+        }
+
+        private static void GetKeyDownToKeyBindingsReset()
+        {
+            if (InputService.GetKeyDown(KeyCode.Z))
+            {
+                AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                KeyBindings.ResetDictionary();
+            }
+        }
+
+        private void GetKeyDownToConfigurableKeyFalse(SettingsOption settingsOption)
+        {
+            if (InputService.GetKeyDown(KeyCode.Z))
+            {
+                AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
+                settingsOption.Type = OptionType.ConfigurableKeyTrue;
+                _isSettingKey = true;
+                _selectedSettingsOption = settingsOption;
+            }
+
+            if (InputService.GetKeyDown(KeyCode.C))
+            {
+                SettingsStorage.KeyBindingType = EnumService.IncrementEnum(SettingsStorage.KeyBindingType);
+            }
+        }
+
+        private bool GetKeyDownToEnterScene(ISettingsLayer layer, int option)
+        {
+            if (InputService.GetKeyDown(KeyCode.Z))
+            {
+                if (SceneManager.GetActiveScene().name == "Rename")
+                {
+                    return true;
+                }
+
+                var sceneName = (string)layer.DisplayedSettingsOptions[option].GetValue();
+                if (SceneManager.GetActiveScene().name == sceneName)
+                {
+                    GetKeyDownToBack(layer);
+                    return false;
+                }
+
+                ReturnToScene(sceneName);
+            }
+
+            return false;
+        }
+
+        private void GetKeyDownToBack(ISettingsLayer layer)
+        {
+            if (InputService.GetKeyDown(KeyCode.Z))
+            {
+                ReturnToPreviousLayer(layer);
+            }
         }
 
         private bool GetKeyDownToEnterLayer(ISettingsLayer layer, int option)
@@ -447,24 +473,6 @@ namespace UCT.Global.Settings
             _saveSelectionBasedValue = Convert.ToSingle(settingsOption.GetValue());
         }
 
-        private void ReturnToPreviousLayer(ISettingsLayer layer)
-        {
-            _isPageUp = false;
-            _settingOptionsPage = 0;
-
-            if (layer is SettingLanguagePackageLayer && _languagePackIdStorage != MainControl.Instance.languagePackId)
-            {
-                _languagePackIdStorage = MainControl.Instance.languagePackId;
-                ReturnToPreviousLayer(null, false);
-                GameUtilityService.RefreshTheScene();
-            }
-
-            ReturnToPreviousLayer(_settingsPreviousLayers.Count > 0 ? _settingsPreviousLayers[^1] : null, false);
-            if (_settingsPreviousLayers.Count > 0)
-            {
-                _settingsPreviousLayers.RemoveAt(_settingsPreviousLayers.Count - 1);
-            }
-        }
 
         private static string GetOptionTipTextWith(SettingsOption settingsOption)
         {
@@ -524,36 +532,8 @@ namespace UCT.Global.Settings
             var unit = InputService.GetKey(KeyCode.C)
                 ? settingsOption.SelectionBasedChangedUnitWhenGetC
                 : settingsOption.SelectionBasedChangedUnit;
-            if (InputService.GetKey(KeyCode.LeftArrow) || InputService.GetKeyDown(KeyCode.DownArrow))
-            {
-                if (Convert.ToSingle(settingsOption.GetValue()) > settingsOption.SelectionBasedChangedMin)
-                {
-                    AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
-                    var newValue = (float)settingsOption.GetValue() - unit;
-                    settingsOption.SetValue(newValue);
-                    if (Convert.ToSingle(settingsOption.GetValue()) < settingsOption.SelectionBasedChangedMin)
-                    {
-                        settingsOption.SetValue(settingsOption.SelectionBasedChangedMin);
-                    }
-
-                    settingsOption.SelectionBasedChangedValueSetter(Convert.ToSingle(settingsOption.GetValue()));
-                }
-            }
-            else if (InputService.GetKey(KeyCode.RightArrow) || InputService.GetKeyDown(KeyCode.UpArrow))
-            {
-                if (Convert.ToSingle(settingsOption.GetValue()) < settingsOption.SelectionBasedChangedMax)
-                {
-                    AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
-                    var newValue = Convert.ToSingle(settingsOption.GetValue()) + unit;
-                    settingsOption.SetValue(newValue);
-                    if (Convert.ToSingle(settingsOption.GetValue()) > settingsOption.SelectionBasedChangedMax)
-                    {
-                        settingsOption.SetValue(settingsOption.SelectionBasedChangedMax);
-                    }
-
-                    settingsOption.SelectionBasedChangedValueSetter(Convert.ToSingle(settingsOption.GetValue()));
-                }
-            }
+            
+            ChangeSelectionBasedValue(settingsOption, unit);
 
             if (InputService.GetKeyDown(KeyCode.Z))
             {
@@ -565,6 +545,39 @@ namespace UCT.Global.Settings
                 settingsOption.SetValue(_saveSelectionBasedValue);
                 settingsOption.SelectionBasedChangedValueSetter(_saveSelectionBasedValue);
                 settingsOption.Type = OptionType.SelectionBasedFalse;
+            }
+        }
+
+        private static void ChangeSelectionBasedValue(SettingsOption settingsOption, float unit)
+        {
+            if (InputService.GetKey(KeyCode.LeftArrow) || InputService.GetKeyDown(KeyCode.DownArrow))
+            {
+                if (Convert.ToSingle(settingsOption.GetValue()) <= settingsOption.SelectionBasedChangedMin)
+                {
+                    return;
+                }
+
+                AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                var newValue = (float)settingsOption.GetValue() - unit;
+                settingsOption.SetValue(newValue);
+                if (Convert.ToSingle(settingsOption.GetValue()) < settingsOption.SelectionBasedChangedMin)
+                {
+                    settingsOption.SetValue(settingsOption.SelectionBasedChangedMin);
+                }
+
+                settingsOption.SelectionBasedChangedValueSetter(Convert.ToSingle(settingsOption.GetValue()));
+            }
+            else if ((InputService.GetKey(KeyCode.RightArrow) || InputService.GetKeyDown(KeyCode.UpArrow)) && Convert.ToSingle(settingsOption.GetValue()) < settingsOption.SelectionBasedChangedMax)
+            {
+                AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                var newValue = Convert.ToSingle(settingsOption.GetValue()) + unit;
+                settingsOption.SetValue(newValue);
+                if (Convert.ToSingle(settingsOption.GetValue()) > settingsOption.SelectionBasedChangedMax)
+                {
+                    settingsOption.SetValue(settingsOption.SelectionBasedChangedMax);
+                }
+
+                settingsOption.SelectionBasedChangedValueSetter(Convert.ToSingle(settingsOption.GetValue()));
             }
         }
 
@@ -624,7 +637,7 @@ namespace UCT.Global.Settings
 
             var dataName = option != null ? option.DataName : "Setting";
             var result = "";
-            if (dataName == "PageUp" && _settingOptionsPage == 0)
+            if (dataName == "PageUp" && SettingOptionsPage == 0)
             {
                 result += "<color=#808080>";
             }
@@ -653,7 +666,7 @@ namespace UCT.Global.Settings
                     return resolution.x + "×" + resolution.y;
                 case OptionDisplayMode.DataName:
                     var result = "";
-                    if (_settingOptionsPage == _settingOptionsPageMax)
+                    if (SettingOptionsPage == SettingOptionsPageMax)
                     {
                         result += "<color=#808080>";
                     }
@@ -694,7 +707,7 @@ namespace UCT.Global.Settings
             TypeWritter.TypePause(false);
             _isPauseCanvas = true;
             _isPageUp = false;
-            _settingOptionsPage = 0;
+            SettingOptionsPage = 0;
         }
 
         private static int GetKeyDownToUpdateSelectedOption(int selectedOption, int selectedOptionMax)
@@ -955,6 +968,28 @@ namespace UCT.Global.Settings
                 TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.LanguagePackControl.settingTexts,
                     "ControlCommonDescriptionText");
             UpdateLayerDisplay(_settingsLayer.DisplayedSettingsOptions);
+        }
+
+        /// <summary>
+        ///     退出设置页面
+        /// </summary>
+        private void ReturnToPreviousLayer(ISettingsLayer layer)
+        {
+            _isPageUp = false;
+            SettingOptionsPage = 0;
+
+            if (layer is SettingLanguagePackageLayer && _languagePackIdStorage != MainControl.Instance.languagePackId)
+            {
+                _languagePackIdStorage = MainControl.Instance.languagePackId;
+                ReturnToPreviousLayer(null, false);
+                GameUtilityService.RefreshTheScene();
+            }
+
+            ReturnToPreviousLayer(_settingsPreviousLayers.Count > 0 ? _settingsPreviousLayers[^1] : null, false);
+            if (_settingsPreviousLayers.Count > 0)
+            {
+                _settingsPreviousLayers.RemoveAt(_settingsPreviousLayers.Count - 1);
+            }
         }
 
         /// <summary>

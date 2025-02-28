@@ -40,7 +40,7 @@ namespace UCT.Global.Settings
                 });
         }
 
-        public void AnimPlayFX(int i)
+        public static void AnimPlayFX(int i)
         {
             AudioController.Instance.PlayFx(i, MainControl.Instance.AudioControl.fxClipUI);
         }

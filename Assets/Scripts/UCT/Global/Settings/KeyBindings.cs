@@ -14,57 +14,70 @@ namespace UCT.Global.Settings
 
     public static class KeyBindings
     {
+        private const string MoveDown = "MoveDown";
+        private const string MoveRight = "MoveRight";
+        private const string MoveUp = "MoveUp";
+        private const string MoveLeft = "MoveLeft";
+        private const string Confirm = "Confirm";
+        private const string Cancel = "Cancel";
+        private const string Backpack = "Backpack";
+        private const string Settings = "Settings";
+        private const string Fullscreen = "FullScreen";
+        private const string Resolution = "Resolution";
+        private const string Sfx = "Sfx";
+        private const string ExitGame = "ExitGame";
+
         private static Dictionary<KeyBindingType, Dictionary<string, KeyCode>> _keyBindings = new()
         {
             {
                 KeyBindingType.Primary, new Dictionary<string, KeyCode>
                 {
-                    { "MoveDown", KeyCode.DownArrow },
-                    { "MoveRight", KeyCode.RightArrow },
-                    { "MoveUp", KeyCode.UpArrow },
-                    { "MoveLeft", KeyCode.LeftArrow },
-                    { "Confirm", KeyCode.Z },
-                    { "Cancel", KeyCode.X },
-                    { "Backpack", KeyCode.C },
-                    { "Settings", KeyCode.V },
-                    { "FullScreen", KeyCode.F4 },
-                    { "Resolution", KeyCode.None },
-                    { "Sfx", KeyCode.None },
-                    { "ExitGame", KeyCode.Escape }
+                    { MoveDown, KeyCode.DownArrow },
+                    { MoveRight, KeyCode.RightArrow },
+                    { MoveUp, KeyCode.UpArrow },
+                    { MoveLeft, KeyCode.LeftArrow },
+                    { Confirm, KeyCode.Z },
+                    { Cancel, KeyCode.X },
+                    { Backpack, KeyCode.C },
+                    { Settings, KeyCode.V },
+                    { Fullscreen, KeyCode.F4 },
+                    { Resolution, KeyCode.None },
+                    { Sfx, KeyCode.None },
+                    { ExitGame, KeyCode.Escape }
                 }
             },
             {
                 KeyBindingType.SecondaryA, new Dictionary<string, KeyCode>
                 {
-                    { "MoveDown", KeyCode.S },
-                    { "MoveRight", KeyCode.D },
-                    { "MoveUp", KeyCode.W },
-                    { "MoveLeft", KeyCode.A },
-                    { "Confirm", KeyCode.Return },
-                    { "Cancel", KeyCode.RightShift },
-                    { "Backpack", KeyCode.RightControl },
-                    { "Settings", KeyCode.None },
-                    { "FullScreen", KeyCode.None },
-                    { "Resolution", KeyCode.None },
-                    { "Sfx", KeyCode.None },
-                    { "ExitGame", KeyCode.None }
+                    { MoveDown, KeyCode.S },
+                    { MoveRight, KeyCode.D },
+                    { MoveUp, KeyCode.W },
+                    { MoveLeft, KeyCode.A },
+                    { Confirm, KeyCode.Return },
+                    { Cancel, KeyCode.RightShift },
+                    { Backpack, KeyCode.RightControl },
+                    { Settings, KeyCode.None },
+                    { Fullscreen, KeyCode.None },
+                    { Resolution, KeyCode.None },
+                    { Sfx, KeyCode.None },
+                    { ExitGame, KeyCode.None }
                 }
             },
             {
                 KeyBindingType.SecondaryB, new Dictionary<string, KeyCode>
                 {
-                    { "MoveDown", KeyCode.None },
-                    { "MoveRight", KeyCode.None },
-                    { "MoveUp", KeyCode.None },
-                    { "MoveLeft", KeyCode.None },
-                    { "Confirm", KeyCode.None },
-                    { "Cancel", KeyCode.LeftShift },
-                    { "Backpack", KeyCode.LeftControl },
-                    { "Settings", KeyCode.None },
-                    { "FullScreen", KeyCode.None },
-                    { "Resolution", KeyCode.None },
-                    { "Sfx", KeyCode.None },
-                    { "ExitGame", KeyCode.None }
+                    { MoveDown, KeyCode.None },
+                    { MoveRight, KeyCode.None },
+                    { MoveUp, KeyCode.None },
+                    { MoveLeft, KeyCode.None },
+                    { Confirm, KeyCode.None },
+                    { Cancel, KeyCode.LeftShift },
+                    { Backpack, KeyCode.LeftControl },
+                    { Settings, KeyCode.None },
+                    { Fullscreen, KeyCode.None },
+                    { Resolution, KeyCode.None },
+                    { Sfx, KeyCode.None },
+                    { ExitGame, KeyCode.None }
                 }
             }
         };
@@ -130,52 +143,52 @@ namespace UCT.Global.Settings
                 {
                     KeyBindingType.Primary, new Dictionary<string, KeyCode>
                     {
-                        { "MoveDown", KeyCode.DownArrow },
-                        { "MoveRight", KeyCode.RightArrow },
-                        { "MoveUp", KeyCode.UpArrow },
-                        { "MoveLeft", KeyCode.LeftArrow },
-                        { "Confirm", KeyCode.Z },
-                        { "Cancel", KeyCode.X },
-                        { "Backpack", KeyCode.C },
-                        { "Settings", KeyCode.V },
-                        { "FullScreen", KeyCode.F4 },
-                        { "Resolution", KeyCode.None },
-                        { "Sfx", KeyCode.None },
-                        { "ExitGame", KeyCode.Escape }
+                        { MoveDown, KeyCode.DownArrow },
+                        { MoveRight, KeyCode.RightArrow },
+                        { MoveUp, KeyCode.UpArrow },
+                        { MoveLeft, KeyCode.LeftArrow },
+                        { Confirm, KeyCode.Z },
+                        { Cancel, KeyCode.X },
+                        { Backpack, KeyCode.C },
+                        { Settings, KeyCode.V },
+                        { Fullscreen, KeyCode.F4 },
+                        { Resolution, KeyCode.None },
+                        { Sfx, KeyCode.None },
+                        { ExitGame, KeyCode.Escape }
                     }
                 },
                 {
                     KeyBindingType.SecondaryA, new Dictionary<string, KeyCode>
                     {
-                        { "MoveDown", KeyCode.S },
-                        { "MoveRight", KeyCode.D },
-                        { "MoveUp", KeyCode.W },
-                        { "MoveLeft", KeyCode.A },
-                        { "Confirm", KeyCode.Return },
-                        { "Cancel", KeyCode.RightShift },
-                        { "Backpack", KeyCode.RightControl },
-                        { "Settings", KeyCode.None },
-                        { "FullScreen", KeyCode.None },
-                        { "Resolution", KeyCode.None },
-                        { "Sfx", KeyCode.None },
-                        { "ExitGame", KeyCode.None }
+                        { MoveDown, KeyCode.S },
+                        { MoveRight, KeyCode.D },
+                        { MoveUp, KeyCode.W },
+                        { MoveLeft, KeyCode.A },
+                        { Confirm, KeyCode.Return },
+                        { Cancel, KeyCode.RightShift },
+                        { Backpack, KeyCode.RightControl },
+                        { Settings, KeyCode.None },
+                        { Fullscreen, KeyCode.None },
+                        { Resolution, KeyCode.None },
+                        { Sfx, KeyCode.None },
+                        { ExitGame, KeyCode.None }
                     }
                 },
                 {
                     KeyBindingType.SecondaryB, new Dictionary<string, KeyCode>
                     {
-                        { "MoveDown", KeyCode.None },
-                        { "MoveRight", KeyCode.None },
-                        { "MoveUp", KeyCode.None },
-                        { "MoveLeft", KeyCode.None },
-                        { "Confirm", KeyCode.None },
-                        { "Cancel", KeyCode.LeftShift },
-                        { "Backpack", KeyCode.LeftControl },
-                        { "Settings", KeyCode.None },
-                        { "FullScreen", KeyCode.None },
-                        { "Resolution", KeyCode.None },
-                        { "Sfx", KeyCode.None },
-                        { "ExitGame", KeyCode.None }
+                        { MoveDown, KeyCode.None },
+                        { MoveRight, KeyCode.None },
+                        { MoveUp, KeyCode.None },
+                        { MoveLeft, KeyCode.None },
+                        { Confirm, KeyCode.None },
+                        { Cancel, KeyCode.LeftShift },
+                        { Backpack, KeyCode.LeftControl },
+                        { Settings, KeyCode.None },
+                        { Fullscreen, KeyCode.None },
+                        { Resolution, KeyCode.None },
+                        { Sfx, KeyCode.None },
+                        { ExitGame, KeyCode.None }
                     }
                 }
             };

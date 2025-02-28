@@ -16,13 +16,13 @@ namespace UCT.Global.Settings
         /// <summary>
         ///     当该选项的int值与词典内的int值相同时，会在选项值文本上显示对应的dataName。
         /// </summary>
-        public Dictionary<int, string> GetSpDataNameWithIndex;
+        public Dictionary<int, string> GetSpDataNameWithIndex { get; set; }
 
         /// <summary>
         ///     进入新层级时的选项索引。
         ///     如果该索引是负数，那么会视为倒数第X位。
         /// </summary>
-        public int NewSelectedOption = 0;
+        public int NewSelectedOption { get; set; }
 
         /// <summary>
         ///     设置页面的选项类，可配置初始值。
