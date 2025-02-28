@@ -20,111 +20,118 @@ namespace UCT.EventSystem
     /// </summary>
     public class EventController : MonoBehaviour
     {
-        public static readonly Dictionary<MethodNameData, IMethodWrapper> MethodDictionary = new()
+        private const string Global = "Global";
+        private const string Scene = "Scene";
+        private const string Position = "Position";
+        private const string Special = "Special";
+        private const string Audio = "Audio";
+
+
+        private static TypeWritter _overworldTypeWritter;
+        private static readonly int Open = Animator.StringToHash("Open");
+
+        public static Dictionary<MethodNameData, IMethodWrapper> MethodDictionary { get; } = new()
         {
             {
-                new MethodNameData("string:StartOverworldTypeWritter", "Global"),
+                new MethodNameData("string:StartOverworldTypeWritter", Global),
                 new MethodWrapper(args =>
                     StartOverworldTypeWritter((string)args[0], (bool)args[1], (string)args[2]))
             },
             {
-                new MethodNameData("null:OpenSaveBox", "Global"),
+                new MethodNameData("null:OpenSaveBox", Global),
                 new MethodWrapper(args =>
                     OpenSaveBox((bool)args[0], (string)args[1]))
             },
             {
-                new MethodNameData("bool:MainCameraIsFollow", "Global"),
+                new MethodNameData("bool:MainCameraIsFollow", Global),
                 new MethodWrapper(args =>
                     MainCameraIsFollow((bool)args[0], (bool)args[1], (string)args[2]))
             },
             {
-                new MethodNameData("bool:PlayerCanMove", "Global"),
+                new MethodNameData("bool:PlayerCanMove", Global),
                 new MethodWrapper(args =>
                     PlayerCanMove((bool)args[0], (bool)args[1], (string)args[2]))
             },
             {
-                new MethodNameData("null:EnterBattleScene", "Global"),
+                new MethodNameData("null:EnterBattleScene", Global),
                 new MethodWrapper(args =>
                     EnterBattleScene((bool)args[0], (string)args[1]))
             },
             {
-                new MethodNameData("float:WaitingForSecond", "Global"),
+                new MethodNameData("float:WaitingForSecond", Global),
                 new MethodWrapper(args =>
                     WaitingForSecond((float)args[0], (bool)args[1], (string)args[2]))
             },
             {
-                new MethodNameData("float:LockPlayerForSecond", "Global"),
+                new MethodNameData("float:LockPlayerForSecond", Global),
                 new MethodWrapper(args =>
                     LockPlayerForSecond((float)args[0], (bool)args[1], (string)args[2]))
             },
             {
-                new MethodNameData("scene:SwitchOverworldScene", "Scene"),
+                new MethodNameData("scene:SwitchOverworldScene", Scene),
                 new MethodWrapper(args =>
                     SwitchOverworldScene((string)args[0], (bool)args[1], (Vector2)args[2], (bool)args[3],
                         (string)args[4]))
             },
             {
-                new MethodNameData("Vector2:TeleportPlayer", "Position"),
+                new MethodNameData("Vector2:TeleportPlayer", Position),
                 new MethodWrapper(args =>
                     TeleportPlayer((Vector2)args[0], (bool)args[1], (string)args[2]))
             },
             {
-                new MethodNameData("Vector2Ease:MoveMainCamera", "Position"),
+                new MethodNameData("Vector2Ease:MoveMainCamera", Position),
                 new MethodWrapper(args =>
                     MoveMainCamera((Vector2)args[0], (float)args[1], (Ease)args[2], (bool)args[3], (string)args[4]))
             },
             {
-                new MethodNameData("Vector2Ease:MoveMainCameraRelativeToPlayer", "Position"),
+                new MethodNameData("Vector2Ease:MoveMainCameraRelativeToPlayer", Position),
                 new MethodWrapper(args =>
                     MoveMainCameraRelativeToPlayer((Vector2)args[0], (float)args[1], (Ease)args[2], (bool)args[3],
                         (string)args[4]))
             },
             {
-                new MethodNameData("float:MakePlayerTranslucent", "Position"),
+                new MethodNameData("float:MakePlayerTranslucent", Position),
                 new MethodWrapper(args =>
                     MakePlayerTranslucent((float)args[0], (bool)args[1], (string)args[2]))
             },
             {
-                new MethodNameData("Vector2Ease:MovePlayerRelative", "Position"),
+                new MethodNameData("Vector2Ease:MovePlayerRelative", Position),
                 new MethodWrapper(args =>
                     MovePlayerRelative((Vector2)args[0], (float)args[1], (Ease)args[2], (bool)args[3], (string)args[4]))
             },
             {
-                new MethodNameData("float:SwingMainCamera", "Position"),
+                new MethodNameData("float:SwingMainCamera", Position),
                 new MethodWrapper(args =>
                     SwingMainCamera((float)args[0], (bool)args[1], (string)args[2]))
             },
             {
-                new MethodNameData("float:MakePlayerSpin", "Special"),
+                new MethodNameData("float:MakePlayerSpin", Special),
                 new MethodWrapper(args =>
                     MakePlayerSpin((float)args[0], (bool)args[1], (string)args[2]))
             },
             {
-                new MethodNameData("null:GetPooledObjectAtPlayer", "Special"),
+                new MethodNameData("null:GetPooledObjectAtPlayer", Special),
                 new MethodWrapper(args =>
                     GetPooledObjectAtPlayer((bool)args[0], (string)args[1]))
             },
             {
-                new MethodNameData("float:BannedBGM", "Audio"),
+                new MethodNameData("float:BannedBGM", Audio),
                 new MethodWrapper(args =>
                     BannedBGM((float)args[0], (bool)args[1], (string)args[2]))
             },
             {
-                new MethodNameData("int:PlayUIFx", "Audio"),
+                new MethodNameData("int:PlayUIFx", Audio),
                 new MethodWrapper(args =>
                     PlayUIFx((int)args[0], (bool)args[1], (string)args[2]))
             }
         };
 
-
-        private static TypeWritter _overworldTypeWritter;
-        public static EventTable eventTable;
-        public static FactTable factTable;
-        public static RuleTable ruleTable;
-        public static EventTable globalEventTable;
-        public static FactTable globalFactTable;
-        public static RuleTable globalRuleTable;
-        private static readonly int Open = Animator.StringToHash("Open");
+        public static EventTable eventTable { get; private set; }
+        public static FactTable factTable { get; private set; }
+        private static RuleTable ruleTable { get; set; }
+        public static EventTable globalEventTable { get; private set; }
+        public static FactTable globalFactTable { get; private set; }
+        private static RuleTable globalRuleTable { get; set; }
 
         private void Start()
         {
@@ -180,7 +187,6 @@ namespace UCT.EventSystem
         {
             var rules = ruleTable.rules.Concat(globalRuleTable.rules).ToList();
 
-            // ReSharper disable once ForCanBeConvertedToForeach
             for (var j = 0; j < rules.Count; j++)
             {
                 var rule = rules[j];
@@ -231,94 +237,101 @@ namespace UCT.EventSystem
                     SetTriggering(newTrigger);
                 }
 
-                for (var k = 0; k < rule.methodNames.Count; k++)
-                {
-                    if (rule.firstStringParams.Count <= k)
-                    {
-                        rule.firstStringParams.AddRange(Enumerable.Repeat<string>(null,
-                            k + 1 - rule.firstStringParams.Count));
-                    }
-
-                    if (rule.secondStringParams.Count <= k)
-                    {
-                        rule.secondStringParams.AddRange(Enumerable.Repeat<string>(null,
-                            k + 1 - rule.secondStringParams.Count));
-                    }
-
-                    if (rule.thirdStringParams.Count <= k)
-                    {
-                        rule.thirdStringParams.AddRange(Enumerable.Repeat<string>(null,
-                            k + 1 - rule.thirdStringParams.Count));
-                    }
-
-                    if (rule.useMethodEvents.Count <= k)
-                    {
-                        rule.useMethodEvents.AddRange(Enumerable.Repeat(false, k + 1 - rule.useMethodEvents.Count));
-                    }
-
-                    if (rule.methodEvents.Count <= k)
-                    {
-                        rule.methodEvents.AddRange(Enumerable.Repeat<string>(null, k + 1 - rule.methodEvents.Count));
-                    }
-
-                    InvokeMethodByName(rule.methodNames[k], rule.firstStringParams[k], rule.secondStringParams[k],
-                        rule.thirdStringParams[k], rule.useMethodEvents[k], rule.methodEvents[k]);
-                }
-
-
-                for (var index = 0; index < rule.factModifications.Count; index++)
-                {
-                    var item = rule.factModifications[index];
-                    var number = item.fact.value;
-                    var newNum = item.number;
-                    switch (item.operation)
-                    {
-                        case FactModification.Operation.Change:
-                            number = newNum;
-                            break;
-                        case FactModification.Operation.Add:
-                            number += newNum;
-                            break;
-                        case FactModification.Operation.Subtract:
-                            number -= newNum;
-                            break;
-                        case FactModification.Operation.Multiply:
-                            number *= newNum;
-                            break;
-                        case FactModification.Operation.Divide:
-                            if (newNum != 0)
-                            {
-                                number /= newNum;
-                            }
-                            else
-                            {
-                                Other.Debug.LogError("不可除以0.");
-                            }
-
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
-
-                    item.fact.value = number;
-                    rule.factModifications[index] = item;
-                    // ReSharper disable once ForCanBeConvertedToForeach
-                    var isGlobalFactModification = rule.isGlobalFactModifications[index];
-
-                    if (!isGlobalFactModification)
-                    {
-                        factTable = SetFactEntry(factTable, item, number);
-                    }
-                    else
-                    {
-                        globalFactTable = SetFactEntry(globalFactTable, item, number);
-                    }
-                }
+                InvokeRuleMethod(rule);
+                SetFact(rule);
 
                 break;
             }
 
             return eventEntry;
+        }
+
+        private static void SetFact(RuleEntry rule)
+        {
+            for (var index = 0; index < rule.factModifications.Count; index++)
+            {
+                var item = rule.factModifications[index];
+                var number = item.fact.value;
+                var newNum = item.number;
+                switch (item.operation)
+                {
+                    case FactModification.Operation.Change:
+                        number = newNum;
+                        break;
+                    case FactModification.Operation.Add:
+                        number += newNum;
+                        break;
+                    case FactModification.Operation.Subtract:
+                        number -= newNum;
+                        break;
+                    case FactModification.Operation.Multiply:
+                        number *= newNum;
+                        break;
+                    case FactModification.Operation.Divide:
+                        if (newNum != 0)
+                        {
+                            number /= newNum;
+                        }
+                        else
+                        {
+                            Other.Debug.LogError("不可除以0.");
+                        }
+
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException($"Unexpected operation value: {item.operation}");
+                }
+
+                item.fact.value = number;
+                rule.factModifications[index] = item;
+                var isGlobalFactModification = rule.isGlobalFactModifications[index];
+
+                if (!isGlobalFactModification)
+                {
+                    factTable = SetFactEntry(factTable, item, number);
+                }
+                else
+                {
+                    globalFactTable = SetFactEntry(globalFactTable, item, number);
+                }
+            }
+        }
+
+        private static void InvokeRuleMethod(RuleEntry rule)
+        {
+            for (var k = 0; k < rule.methodNames.Count; k++)
+            {
+                if (rule.firstStringParams.Count <= k)
+                {
+                    rule.firstStringParams.AddRange(Enumerable.Repeat<string>(null,
+                        k + 1 - rule.firstStringParams.Count));
+                }
+
+                if (rule.secondStringParams.Count <= k)
+                {
+                    rule.secondStringParams.AddRange(Enumerable.Repeat<string>(null,
+                        k + 1 - rule.secondStringParams.Count));
+                }
+
+                if (rule.thirdStringParams.Count <= k)
+                {
+                    rule.thirdStringParams.AddRange(Enumerable.Repeat<string>(null,
+                        k + 1 - rule.thirdStringParams.Count));
+                }
+
+                if (rule.useMethodEvents.Count <= k)
+                {
+                    rule.useMethodEvents.AddRange(Enumerable.Repeat(false, k + 1 - rule.useMethodEvents.Count));
+                }
+
+                if (rule.methodEvents.Count <= k)
+                {
+                    rule.methodEvents.AddRange(Enumerable.Repeat<string>(null, k + 1 - rule.methodEvents.Count));
+                }
+
+                InvokeMethodByName(rule.methodNames[k], rule.firstStringParams[k], rule.secondStringParams[k],
+                    rule.thirdStringParams[k], rule.useMethodEvents[k], rule.methodEvents[k]);
+            }
         }
 
         private static FactTable SetFactEntry(FactTable inputFactTable, FactModification item, int number)
@@ -419,9 +432,6 @@ namespace UCT.EventSystem
         /// <summary>
         ///     在保持BGM的同时切换场景
         /// </summary>
-        /// <param name="sceneName">场景名</param>
-        /// <param name="useEvent">是否联动event</param>
-        /// <param name="eventName">联动的event名称</param>
         private static void SwitchOverworldScene(string sceneName,
             bool isBgmMuted,
             Vector2 newPos,

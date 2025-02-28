@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 
+// ReSharper disable UnusedMember.Global
+
 namespace UCT.Extensions
 {
     /// <summary>

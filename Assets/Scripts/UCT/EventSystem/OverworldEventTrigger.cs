@@ -140,75 +140,99 @@ namespace UCT.EventSystem
         /// </summary>
         public void TriggerEvent()
         {
-            if (GameUtilityService.IsGamePausedOrSetting())
-            {
-                return;
-            }
-
-            if (BackpackBehaviour.Instance && BackpackBehaviour.Instance.IsOpenBackPack)
+            if (CanNotTriggerEvent())
             {
                 return;
             }
 
             if (!useSimpleRules)
             {
-                for (var i = 0; i < eventNames.Count; i++)
-                {
-                    var localName = eventNames[i];
-                    // ReSharper disable once ForCanBeConvertedToForeach
-                    var eventTables = new[] { EventController.eventTable, EventController.globalEventTable };
-                    for (var eventTableIndex = 0; eventTableIndex < eventTables.Length; eventTableIndex++)
-                    {
-                        var eventTable = eventTables[eventTableIndex];
-                        for (var j = 0; j < eventTable.events.Count; j++)
-                        {
-                            var eventEntry = eventTable.events[j];
-
-                            if (eventEntry.name != localName)
-                            {
-                                continue;
-                            }
-
-                            if (eventEntry.closeTime >= 0)
-                            {
-                                var index = j;
-                                Timer.Register(eventEntry.closeTime, () =>
-                                {
-                                    if (!eventTable.events[index].isTriggering)
-                                    {
-                                        return;
-                                    }
-
-                                    var falseEntry = eventEntry;
-
-                                    eventEntry.isTriggering = false;
-                                    eventNames[index] = localName;
-                                    eventTable.events[index] = falseEntry;
-                                });
-                            }
-
-                            eventEntry.isTriggering = true;
-                            eventNames[i] = localName;
-                            eventTable.events[j] = eventEntry;
-                        }
-
-                        eventTables[eventTableIndex] = eventTable;
-                    }
-                }
+                TriggerEventWithoutSimpleRules();
             }
             else
             {
-                foreach (var rule in simpleRules)
-                {
-                    EventController.DetectionRule(new EventEntry(), rule, out var isTriggered, true);
-                    if (isTriggered && !isExecuteAllRules)
-                    {
-                        break;
-                    }
-                }
+                TriggerEventWithSimpleRules();
             }
 
             OnTriggerEvent?.Invoke();
+        }
+
+        private void TriggerEventWithSimpleRules()
+        {
+            foreach (var rule in simpleRules)
+            {
+                EventController.DetectionRule(new EventEntry(), rule, out var isTriggered, true);
+                if (isTriggered && !isExecuteAllRules)
+                {
+                    break;
+                }
+            }
+        }
+
+        private void TriggerEventWithoutSimpleRules()
+        {
+            for (var i = 0; i < eventNames.Count; i++)
+            {
+                var localName = eventNames[i];
+                var eventTables = new[] { EventController.eventTable, EventController.globalEventTable };
+                for (var eventTableIndex = 0; eventTableIndex < eventTables.Length; eventTableIndex++)
+                {
+                    var eventTable = eventTables[eventTableIndex];
+                    eventTables[eventTableIndex] = ConvertEventTable(eventTable, localName, i);
+                }
+            }
+        }
+
+        private EventTable ConvertEventTable(EventTable eventTable, string localName, int i)
+        {
+            for (var j = 0; j < eventTable.events.Count; j++)
+            {
+                var eventEntry = eventTable.events[j];
+
+                if (eventEntry.name != localName)
+                {
+                    continue;
+                }
+
+                if (eventEntry.closeTime >= 0)
+                {
+                    var index = j;
+                    Timer.Register(eventEntry.closeTime, () =>
+                    {
+                        if (!eventTable.events[index].isTriggering)
+                        {
+                            return;
+                        }
+
+                        var falseEntry = eventEntry;
+
+                        eventEntry.isTriggering = false;
+                        eventNames[index] = localName;
+                        eventTable.events[index] = falseEntry;
+                    });
+                }
+
+                eventEntry.isTriggering = true;
+                eventNames[i] = localName;
+                eventTable.events[j] = eventEntry;
+            }
+
+            return eventTable;
+        }
+
+        private static bool CanNotTriggerEvent()
+        {
+            if (GameUtilityService.IsGamePausedOrSetting())
+            {
+                return true;
+            }
+
+            if (BackpackBehaviour.Instance && BackpackBehaviour.Instance.IsOpenBackPack)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 

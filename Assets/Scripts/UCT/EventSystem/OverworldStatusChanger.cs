@@ -33,25 +33,7 @@ namespace UCT.EventSystem
             var maxCount = Mathf.Max(ruleCriteria.Count, methodTypes.Count, targetSprites.Count, targetEnables.Count);
             for (var i = 0; i < maxCount; i++)
             {
-                if (i >= ruleCriteria.Count)
-                {
-                    ruleCriteria.Add(default);
-                }
-
-                if (i >= methodTypes.Count)
-                {
-                    methodTypes.Add(default);
-                }
-
-                if (i >= targetSprites.Count)
-                {
-                    targetSprites.Add(null);
-                }
-
-                if (i >= targetEnables.Count)
-                {
-                    targetEnables.Add(false);
-                }
+                AddToCount(i);
 
                 var ruleCriterion = ruleCriteria[i];
                 var methodType = methodTypes[i];
@@ -63,6 +45,7 @@ namespace UCT.EventSystem
                     switch (methodType)
                     {
                         case MethodType.ChangeSprite:
+                        {
                             if (!_spriteRenderer)
                             {
                                 break;
@@ -70,13 +53,41 @@ namespace UCT.EventSystem
 
                             _spriteRenderer.sprite = targetSprite;
                             break;
+                        }
                         case MethodType.SetColliderEnable:
+                        {
                             SetCollidersEnabled(gameObject, targetEnabled);
                             break;
+                        }
                         default:
-                            throw new ArgumentOutOfRangeException();
+                        {
+                            throw new ArgumentOutOfRangeException($"Unexpected methodType value: {methodType}");
+                        }
                     }
                 }
+            }
+        }
+
+        private void AddToCount(int i)
+        {
+            if (i >= ruleCriteria.Count)
+            {
+                ruleCriteria.Add(default);
+            }
+
+            if (i >= methodTypes.Count)
+            {
+                methodTypes.Add(default);
+            }
+
+            if (i >= targetSprites.Count)
+            {
+                targetSprites.Add(null);
+            }
+
+            if (i >= targetEnables.Count)
+            {
+                targetEnables.Add(false);
             }
         }
 

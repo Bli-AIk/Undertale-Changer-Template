@@ -241,7 +241,8 @@ namespace UCT.EventSystem
                     CriteriaCompare.NotEqual => fact.value != detection,
                     CriteriaCompare.LessThanOrEqual => fact.value <= detection,
                     CriteriaCompare.LessThan => fact.value < detection,
-                    _ => throw new ArgumentOutOfRangeException()
+                    _ => throw new ArgumentOutOfRangeException($"Unexpected compare value: {compare}")
+
                 };
 
                 return isResultReversed ? !result : result;
@@ -270,8 +271,14 @@ namespace UCT.EventSystem
                         finalResult = finalResult || results[i];
                         break;
                     }
-                    case RuleLogicalOperation.None: break;
-                    default: throw new ArgumentOutOfRangeException();
+                    case RuleLogicalOperation.None:
+                    {
+                        break;
+                    }
+                    default:
+                    {
+                        throw new ArgumentOutOfRangeException($"Unexpected operations value: {operations[i - 1]}");
+                    }
                 }
 
                 if (operations[i - 1] == RuleLogicalOperation.None)
@@ -291,8 +298,14 @@ namespace UCT.EventSystem
                         InvalidOperationLogError(i, "Or");
                         break;
                     }
-                    case RuleLogicalOperation.None: break;
-                    default: throw new ArgumentOutOfRangeException();
+                    case RuleLogicalOperation.None:
+                    {
+                        break;
+                    }
+                    default:
+                    {
+                        throw new ArgumentOutOfRangeException($"Unexpected operations value: {operations[^1]}");
+                    }
                 }
             }
 
