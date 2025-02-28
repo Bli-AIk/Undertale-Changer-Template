@@ -35,7 +35,7 @@ namespace UCT.Other
                     SetSth(MainControl.Instance.mainCamera.gameObject);
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException($"Unexpected followTarget value: {followTarget}");
             }
         }
 
@@ -69,8 +69,8 @@ namespace UCT.Other
                 sth = item;
             }
             else
-            {
-                throw new ArgumentNullException();
+            {                 
+                throw new ArgumentOutOfRangeException($"Unexpected item value: {item}");
             }
         }
     }

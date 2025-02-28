@@ -28,17 +28,16 @@ namespace UCT.Other
                 return;
             }
 
-            // 获取所有光源组件的引用
             var lights = FindObjectsOfType<Light2D>();
 
-            foreach (var light in lights)
+            foreach (var item in lights)
             {
-                if (light.lightType == Light2D.LightType.Global)
+                if (item.lightType == Light2D.LightType.Global)
                 {
                     return;
                 }
 
-                light.enabled = Vector3.Distance(light.transform.position, _mainCamera.transform.position) <=
+                item.enabled = Vector3.Distance(item.transform.position, _mainCamera.transform.position) <=
                                 viewDistance;
             }
         }

@@ -55,7 +55,7 @@ namespace UCT.Other
         /// </summary>
         private static List<float> MusicBpmCount(float inputBpm, float inputBpmDeviation, float musicDuration = 0)
         {
-            if (AudioController.Instance.audioSource.clip == null)
+            if (!AudioController.Instance.audioSource.clip)
             {
                 return new List<float>();
             }

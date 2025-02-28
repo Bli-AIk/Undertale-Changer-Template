@@ -1,4 +1,5 @@
 using UnityEngine;
+// ReSharper disable UnusedMember.Global
 
 namespace UCT.Other
 {
@@ -7,11 +8,10 @@ namespace UCT.Other
     /// </summary>
     public static class Debug
     {
-        // ReSharper disable Unity.PerformanceAnalysis
         public static void Log(object content, string color = "#FFFFFF")
         {
             #if UNITY_EDITOR
-            var text = "<color=" + color + ">" + content + "</color>";
+            var text = $"<color={color}>{content}</color>";
             UnityEngine.Debug.Log(text);
             #endif
         }
@@ -19,7 +19,7 @@ namespace UCT.Other
         public static void Log(object content, Object context, string color = "#FFFFFF")
         {
             #if UNITY_EDITOR
-            var text = "<color=" + color + ">" + content + "</color>";
+            var text = $"<color={color}>{content}</color>";
             UnityEngine.Debug.Log(text, context);
             #endif
         }
@@ -28,7 +28,7 @@ namespace UCT.Other
         public static void LogWarning(object content, string color = "#FFFF00")
         {
             #if UNITY_EDITOR
-            var text = "<color=" + color + ">" + content + "</color>";
+            var text = $"<color={color}>{content}</color>";
             UnityEngine.Debug.LogWarning(text);
             #endif
         }
@@ -36,7 +36,7 @@ namespace UCT.Other
         public static void LogWarning(object content, Object context, string color = "#FFFF00")
         {
             #if UNITY_EDITOR
-            var text = "<color=" + color + ">" + content + "</color>";
+            var text = $"<color={color}>{content}</color>";
             UnityEngine.Debug.LogWarning(text, context);
             #endif
         }
@@ -45,7 +45,7 @@ namespace UCT.Other
         public static void LogError(object content, string color = "#FF6666")
         {
             #if UNITY_EDITOR
-            var text = "<color=" + color + ">" + content + "</color>";
+            var text = $"<color={color}>{content}</color>";
             UnityEngine.Debug.LogError(text);
             #endif
         }
@@ -53,7 +53,7 @@ namespace UCT.Other
         public static void LogError(object content, Object context, string color = "#FF6666")
         {
             #if UNITY_EDITOR
-            var text = "<color=" + color + ">" + content + "</color>";
+            var text = $"<color={color}>{content}</color>";
             UnityEngine.Debug.LogError(text, context);
             #endif
         }

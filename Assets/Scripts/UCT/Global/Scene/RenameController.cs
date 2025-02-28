@@ -283,7 +283,7 @@ namespace UCT.Global.Scene
                 return;
             }
 
-            TMPDynamicFontController.Instance.SimsunClear(new List<TMP_Text>
+            TmpDynamicFontController.Instance.SimsunClear(new List<TMP_Text>
             {
                 _titleText,
                 _nameText,

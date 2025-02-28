@@ -7,11 +7,11 @@ namespace UCT.Other
     /// <summary>
     ///     用于TMP动态类型字体的控制
     /// </summary>
-    public class TMPDynamicFontController : MonoBehaviour
+    public class TmpDynamicFontController : MonoBehaviour
     {
         private const string SonFonts = "Fonts/SonFonts/";
         private TMP_FontAsset _simsun;
-        public static TMPDynamicFontController Instance { get; private set; }
+        public static TmpDynamicFontController Instance { get; private set; }
 
         private void Awake()
         {
