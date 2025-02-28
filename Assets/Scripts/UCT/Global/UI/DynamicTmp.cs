@@ -6,7 +6,7 @@ using Random = UnityEngine.Random;
 
 namespace UCT.Global.UI
 {
-    public enum DynamicTMPType
+    public enum DynamicTmpType
     {
         None,
         RandomShake,
@@ -23,13 +23,13 @@ namespace UCT.Global.UI
     /// <summary>
     ///     Applies various dynamic effects to TextMeshPro text components.
     /// </summary>
-    public class DynamicTMP : MonoBehaviour
+    public class DynamicTmp : MonoBehaviour
     {
         private const int SingleShakeProbability = 120;
         private const float MaxShakeIntensity = 0.05f;
         private const float BaseFrequency = 2.5f;
 
-        [FormerlySerializedAs("dynamicMode")] public DynamicTMPType effectType = DynamicTMPType.None;
+        [FormerlySerializedAs("dynamicMode")] public DynamicTmpType effectType = DynamicTmpType.None;
 
         private float _initialRandomOffset;
 
@@ -43,7 +43,7 @@ namespace UCT.Global.UI
 
         private void FixedUpdate()
         {
-            if (effectType == DynamicTMPType.None)
+            if (effectType == DynamicTmpType.None)
             {
                 return;
             }
@@ -53,37 +53,37 @@ namespace UCT.Global.UI
 
             switch (effectType)
             {
-                case DynamicTMPType.RandomShake:
+                case DynamicTmpType.RandomShake:
                     ApplyRandomShake(textInfo);
                     break;
-                case DynamicTMPType.RandomShakeSingle:
+                case DynamicTmpType.RandomShakeSingle:
                     ApplyRandomSingleShake(textInfo);
                     break;
-                case DynamicTMPType.RandomShakeAll:
+                case DynamicTmpType.RandomShakeAll:
                     ApplyRandomShakeAll(textInfo);
                     break;
-                case DynamicTMPType.CrazyShake:
+                case DynamicTmpType.CrazyShake:
                     ApplyCrazyShake(textInfo);
                     break;
-                case DynamicTMPType.NapShake:
+                case DynamicTmpType.NapShake:
                     ApplyNapShake(textInfo);
                     break;
-                case DynamicTMPType.NapFloat:
+                case DynamicTmpType.NapFloat:
                     ApplyNapFloat(textInfo);
                     break;
-                case DynamicTMPType.Wave:
+                case DynamicTmpType.Wave:
                     ApplyWaveEffect(textInfo);
                     break;
-                case DynamicTMPType.Explode:
+                case DynamicTmpType.Explode:
                     ApplyExplodeEffect(textInfo);
                     break;
-                case DynamicTMPType.Bounce:
+                case DynamicTmpType.Bounce:
                     ApplyBounceEffect(textInfo);
                     break;
-                case DynamicTMPType.None:
+                case DynamicTmpType.None:
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException($"Unexpected EffectType value: {effectType}");
             }
 
             UpdateAllMeshes(textInfo);

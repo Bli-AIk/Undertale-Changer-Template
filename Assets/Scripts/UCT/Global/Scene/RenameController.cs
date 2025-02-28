@@ -348,7 +348,7 @@ namespace UCT.Global.Scene
                     _animScale.Kill();
                     _nameText.transform.localPosition = new Vector3(0, 0.6f);
                     _nameText.transform.localScale = Vector3.one;
-                    _nameText.GetComponent<DynamicTMP>().effectType = 0;
+                    _nameText.GetComponent<DynamicTmp>().effectType = 0;
                     _selectText.text =
                         TextProcessingService.GetFirstChildStringByPrefix(
                             MainControl.Instance.LanguagePackControl.sceneTexts, "Quit") +
@@ -390,7 +390,7 @@ namespace UCT.Global.Scene
                 _animScale.Kill();
                 _nameText.transform.localPosition = new Vector3(0, 0.6f);
                 _nameText.transform.localScale = Vector3.one;
-                _nameText.GetComponent<DynamicTMP>().effectType = 0;
+                _nameText.GetComponent<DynamicTmp>().effectType = 0;
                 _selectText.text =
                     TextProcessingService.GetFirstChildStringByPrefix(
                         MainControl.Instance.LanguagePackControl.sceneTexts, "Quit") +
@@ -849,8 +849,8 @@ namespace UCT.Global.Scene
             _animScale = DOTween.To(() => _nameText.transform.localScale,
                     x => _nameText.transform.localScale = x, Vector3.one * 3, 5)
                 .SetEase(Ease.Linear);
-            _nameText.GetComponent<DynamicTMP>().effectType =
-                DynamicTMPType.RandomShakeAll;
+            _nameText.GetComponent<DynamicTmp>().effectType =
+                DynamicTmpType.RandomShakeAll;
             _characterText.text = "";
             _teachText.text = "";
             _textMessage.text = "";

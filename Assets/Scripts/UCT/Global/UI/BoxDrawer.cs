@@ -256,7 +256,6 @@ namespace UCT.Global.UI
                 parent.ExitParent();
             }
 
-            //SubListsWhenExitParent(GetRealPoints());
             if (BoxController.Instance.boxes.Find(x => x == this))
             {
                 BoxController.Instance.boxes.Remove(this);
@@ -475,55 +474,14 @@ namespace UCT.Global.UI
                 return;
             }
 
-            if (meshFilter != null && showMesh)
+            if (meshFilter && showMesh)
             {
                 Gizmos.color = Color.red;
                 Gizmos.DrawWireMesh(meshFilter.sharedMesh, 0, transform.position);
             }
 
-            if (showGizmosPoint == ShowGizmosPoint.All && isBessel)
+            if (BesselGizmos())
             {
-                Gizmos.color = Color.yellow;
-                foreach (var point in realPoints)
-                {
-                    Gizmos.DrawSphere(transform.TransformPoint(rotation * new Vector3(point.x, point.y, 0)),
-                        0.1f / 2);
-                }
-            }
-
-            if (isBessel)
-            {
-                for (var i = 0; i < besselPoints.Count; i++)
-                {
-                    var point = besselPoints[i];
-                    if (i % (besselInsertNumber + 1) != 0)
-                    {
-                        if (showGizmosPoint == ShowGizmosPoint.JustVertexBessel ||
-                            showGizmosPoint == ShowGizmosPoint.All)
-                        {
-                            Gizmos.color = Color.cyan;
-                        }
-                        else
-                        {
-                            continue;
-                        }
-                    }
-                    else
-                    {
-                        if (showGizmosPoint != ShowGizmosPoint.Nope)
-                        {
-                            Gizmos.color = Color.white;
-                        }
-                        else
-                        {
-                            continue;
-                        }
-                    }
-
-                    Gizmos.DrawSphere(
-                        transform.TransformPoint(rotation * new Vector3(point.x, point.y, 0)), 0.1f);
-                }
-
                 return;
             }
 
@@ -531,8 +489,11 @@ namespace UCT.Global.UI
             {
                 return;
             }
+            DrawGizmosPoints();
+        }
 
-
+        private void DrawGizmosPoints()
+        {
             Gizmos.color = Color.blue;
             foreach (var point in pointsCross)
             {
@@ -559,6 +520,64 @@ namespace UCT.Global.UI
             foreach (var point in pointsInCross)
             {
                 Gizmos.DrawSphere(transform.TransformPoint(new Vector3(point.x, point.y, 0)), 0.15f);
+            }
+        }
+
+        private bool BesselGizmos()
+        {
+            if (!isBessel)
+            {
+                return false;
+            }
+            
+            if (showGizmosPoint == ShowGizmosPoint.All)
+            {
+                Gizmos.color = Color.yellow;
+                foreach (var point in realPoints)
+                {
+                    Gizmos.DrawSphere(transform.TransformPoint(rotation * new Vector3(point.x, point.y, 0)),
+                        0.1f / 2);
+                }
+            }
+
+
+            DrawBesselGizmosPoints();
+
+            return true;
+
+        }
+
+        private void DrawBesselGizmosPoints()
+        {
+            for (var i = 0; i < besselPoints.Count; i++)
+            {
+                var point = besselPoints[i];
+                if (i % (besselInsertNumber + 1) != 0)
+                {
+                    if (showGizmosPoint == ShowGizmosPoint.JustVertexBessel ||
+                        showGizmosPoint == ShowGizmosPoint.All)
+                    {
+                        Gizmos.color = Color.cyan;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+                else
+                {
+                    if (showGizmosPoint != ShowGizmosPoint.Nope)
+                    {
+                        Gizmos.color = Color.white;
+                    }
+                    else
+                    {
+                        continue;
+                    }
+                }
+
+                Gizmos.DrawSphere(
+                    transform.TransformPoint(rotation * new Vector3(point.x, point.y, 0)), 0.1f);
             }
         }
         #endif
@@ -610,42 +629,7 @@ namespace UCT.Global.UI
                 rotation = new Quaternion(0, 0, 0, 1);
             }
 
-            for (var i = 0; i < vertices.Count; i++)
-            {
-                EditorGUI.BeginChangeCheck();
-
-                var newVertexPoints =
-                    Quaternion.Inverse(rotation) * Handles.PositionHandle(
-                        example.transform.parent.localPosition + example.localPosition + rotation * vertices[i],
-                        rotation) -
-                    example.transform.parent.localPosition;
-
-                if (!EditorGUI.EndChangeCheck())
-                {
-                    continue;
-                }
-
-                example.GetComponents();
-                Undo.RecordObject(example, "Changed point " + i);
-                vertices[i] = newVertexPoints;
-                if (example.isBessel)
-                {
-                    if (i % (example.besselInsertNumber + 1) == 0)
-                    {
-                        example.vertexPoints[i / (example.besselInsertNumber + 1)] = newVertexPoints;
-                    }
-                }
-
-                example.Update();
-                if (_isUndoRedoPerformed)
-                {
-                    continue;
-                }
-
-                Undo.undoRedoPerformed += example.Update;
-                _isUndoRedoPerformed = true;
-            }
-
+            DrawPositionHandle(vertices, rotation, example);
 
             EditorGUI.BeginChangeCheck();
             var gameObjectPos =
@@ -666,11 +650,47 @@ namespace UCT.Global.UI
             }
         }
 
+        private void DrawPositionHandle(List<Vector2> vertices, Quaternion rotation, BoxDrawer example)
+        {
+            for (var i = 0; i < vertices.Count; i++)
+            {
+                EditorGUI.BeginChangeCheck();
+
+                var newVertexPoints =
+                    Quaternion.Inverse(rotation) * Handles.PositionHandle(
+                        example.transform.parent.localPosition + example.localPosition + rotation * vertices[i],
+                        rotation) -
+                    example.transform.parent.localPosition;
+
+                if (!EditorGUI.EndChangeCheck())
+                {
+                    continue;
+                }
+
+                example.GetComponents();
+                Undo.RecordObject(example, "Changed point " + i);
+                vertices[i] = newVertexPoints;
+                if (example.isBessel && i % (example.besselInsertNumber + 1) == 0)
+                {
+                    example.vertexPoints[i / (example.besselInsertNumber + 1)] = newVertexPoints;
+                }
+
+                example.Update();
+                if (_isUndoRedoPerformed)
+                {
+                    continue;
+                }
+
+                Undo.undoRedoPerformed += example.Update;
+                _isUndoRedoPerformed = true;
+            }
+        }
+
         public override void OnInspectorGUI()
         {
             var example = (BoxDrawer)target;
 
-            base.OnInspectorGUI(); //绘制一次GUI。
+            base.OnInspectorGUI();
             if (GUILayout.Button("切分(不强制刷新)"))
             {
                 example.GetComponents();
