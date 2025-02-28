@@ -7,7 +7,7 @@ namespace UCT.Global.Settings
     ///     用于监视游戏内的FPS。
     ///     它可被输出在脚本挂载物体的文本上。
     /// </summary>
-    public class FPSMonitor : MonoBehaviour
+    public class FpsMonitor : MonoBehaviour
     {
         private const float MUpdateShowDeltaTime = 0.2f;
         private TMP_Text _fps;

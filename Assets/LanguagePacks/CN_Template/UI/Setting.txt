@@ -52,7 +52,7 @@ LockFrameRate\最大帧率;
 GraphicSettingsLayer\图形设置;
 InputSettingsLayer\输入设置;
 SettingLanguagePackageLayer\语言设置;
-SubtitleSettingsLayer\字幕设置;
+SubtitleSettingsLayer\文本设置;
 
 SettingVSync\垂直同步;
 
@@ -79,7 +79,7 @@ HalfSync\一半;
 GraphicSettingsLayerTip\调整图形设置。;
 InputSettingsLayerTip\调整输入设置。;
 SettingLanguagePackageLayerTip\调整语言设置。;
-SubtitleSettingsLayerTip\调整字幕设置。;
+SubtitleSettingsLayerTip\调整文本设置。;
 Slow\慢;
 Medium\正常;
 Fast\快;
