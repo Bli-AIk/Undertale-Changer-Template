@@ -29,12 +29,9 @@ namespace UCT.Service
                 throw new ArgumentException("输入字符串的长度应为 2 或 3");
             }
 
-            if (syllable[0] == '√')
+            if (syllable[0] == '√' && syllable[1] != '√')
             {
-                if (syllable[1] != '√')
-                {
-                    return syllable[1];
-                }
+                return syllable[1];
             }
 
             if (syllable[1] == '√' && syllable[0] != '√')

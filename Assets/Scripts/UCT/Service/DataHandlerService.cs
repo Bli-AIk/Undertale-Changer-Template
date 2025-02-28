@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using UCT.Control;
 using UCT.Global.Core;
 using UCT.Global.Settings;
@@ -73,35 +74,69 @@ namespace UCT.Service
         public static List<string> LoadItemData(string inputText)
         {
             var resultList = new List<string>();
-            var text = "";
-            for (var i = 0; i < inputText.Length; i++)
+            var text = new StringBuilder();
+            var i = 0;
+            while (i < inputText.Length)
             {
-                if (inputText[i] == '/' && inputText[i + 1] == '*')
+                if (i < inputText.Length - 1 && inputText[i] == '/' && inputText[i + 1] == '*')
                 {
-                    i++;
-                    while (!(inputText[i] == '/' && inputText[i - 1] == '*'))
+                    i += 2;
+                    while (i < inputText.Length - 1 && !(inputText[i] == '*' && inputText[i + 1] == '/'))
                     {
                         i++;
                     }
 
                     i += 2;
-                }
-
-                if (inputText[i] != '\n' && inputText[i] != '\r' && inputText[i] != ';')
-                {
-                    text += inputText[i];
-                }
-
-                if (inputText[i] != ';')
-                {
                     continue;
                 }
 
-                resultList.Add(text + ";");
-                text = "";
+                if (i < inputText.Length && inputText[i] != '\n' && inputText[i] != '\r' && inputText[i] != ';')
+                {
+                    text.Append(inputText[i]);
+                }
+
+                if (i < inputText.Length && inputText[i] == ';')
+                {
+                    resultList.Add($"{text};");
+                    text.Clear();
+                }
+
+                i++;
             }
 
             return resultList;
+        }
+
+
+        private static int ChangeItemRichText(string input,
+            bool isData,
+            List<string> ex,
+            int j,
+            StringBuilder empty,
+            ref StringBuilder text)
+        {
+            var isLoopSpecialCharsRequired = false;
+            while (j < input.Length && input[j] == '<')
+            {
+                var inputText = new StringBuilder();
+                while ((j != 0 && input[j - 1] != '>' && !isLoopSpecialCharsRequired) || isLoopSpecialCharsRequired)
+                {
+                    inputText.Append(input[j]);
+                    j++;
+                    if (j >= input.Length)
+                    {
+                        break;
+                    }
+
+                    isLoopSpecialCharsRequired = false;
+                }
+
+                isLoopSpecialCharsRequired = true;
+                text = new StringBuilder(TypeWritterTagProcessor.ConvertStaticTagHandlers(text.ToString(),
+                    inputText.ToString(), isData, empty.ToString(), ex));
+            }
+
+            return j;
         }
 
         /// <summary>
@@ -109,62 +144,37 @@ namespace UCT.Service
         /// </summary>
         public static string ChangeItemData(string input, bool isData, List<string> ex)
         {
-            var text = "";
-            var empty = "";
-            var isLoopSpecialCharsRequired = false;
+            var text = new StringBuilder();
+            var empty = new StringBuilder();
+            var j = 0;
 
-            for (var j = 0; j < input.Length; j++)
+            while (j < input.Length)
             {
-                if (empty == "" && !isData)
+                if (empty.Length == 0 && !isData)
                 {
                     var k = j;
-                    while (input[j] != '\\')
+                    while (j < input.Length && input[j] != '\\')
                     {
-                        empty += input[j];
+                        empty.Append(input[j]);
                         j++;
-                        if (j >= input.Length)
-                        {
-                            break;
-                        }
                     }
 
                     j = k;
                 }
 
-                while (input[j] == '<')
+                j = ChangeItemRichText(input, isData, ex, j, empty, ref text);
+
+
+                if (j < input.Length)
                 {
-                    var inputText = "";
-                    while ((j != 0 && input[j - 1] != '>' && !isLoopSpecialCharsRequired) || isLoopSpecialCharsRequired)
-                    {
-                        inputText += input[j];
-                        j++;
-                        if (j >= input.Length)
-                        {
-                            break;
-                        }
-
-                        isLoopSpecialCharsRequired = false;
-                    }
-
-                    isLoopSpecialCharsRequired = true;
-                    text = TypeWritterTagProcessor.ConvertStaticTagHandlers(text, inputText, isData, empty, ex);
+                    text.Append(input[j] == ';' ? ';' : input[j]);
                 }
 
-                isLoopSpecialCharsRequired = false;
-
-                if (input[j] == ';')
-                {
-                    text += ";";
-                }
-                else
-                {
-                    text += input[j];
-                }
+                j++;
             }
 
-            return text;
+            return text.ToString();
         }
-
 
         /// <summary>
         ///     转换特殊字符
@@ -172,64 +182,93 @@ namespace UCT.Service
         public static List<string> ChangeItemData(List<string> list, bool isData, List<string> ex)
         {
             var result = new List<string>();
-            var text = "";
-            var isLoopSpecialCharsRequired = false;
 
             foreach (var t in list)
             {
-                var empty = "";
-                for (var j = 0; j < t.Length; j++)
-                {
-                    if (empty == "" && !isData)
-                    {
-                        var k = j;
-                        while (t[j] != '\\')
-                        {
-                            empty += t[j];
-                            j++;
-                            if (j >= t.Length)
-                            {
-                                break;
-                            }
-                        }
-
-                        j = k;
-                    }
-
-                    while (t[j] == '<')
-                    {
-                        var inputText = "";
-                        while ((j != 0 && t[j - 1] != '>' && !isLoopSpecialCharsRequired) || isLoopSpecialCharsRequired)
-                        {
-                            inputText += t[j];
-                            j++;
-                            if (j >= t.Length)
-                            {
-                                break;
-                            }
-
-                            isLoopSpecialCharsRequired = false;
-                        }
-
-                        isLoopSpecialCharsRequired = true;
-                        text = TypeWritterTagProcessor.ConvertStaticTagHandlers(text, inputText, isData, empty, ex);
-                    }
-
-                    isLoopSpecialCharsRequired = false;
-
-                    if (t[j] == ';')
-                    {
-                        result.Add(text + ";");
-                        text = "";
-                    }
-                    else
-                    {
-                        text += t[j];
-                    }
-                }
+                result.AddRange(ProcessString(t, isData, ex));
             }
 
             return result;
+        }
+
+        private static List<string> ProcessString(string t, bool isData, List<string> ex)
+        {
+            var text = new StringBuilder();
+            var empty = new StringBuilder();
+            var isLoopSpecialCharsRequired = false;
+            var result = new List<string>();
+            var j = 0;
+
+            while (j < t.Length)
+            {
+                ExtractEmptyString(t, ref j, isData, empty);
+                ProcessSpecialTags(t, ref j, ref text, ref isLoopSpecialCharsRequired, isData, empty, ex);
+
+                if (j < t.Length)
+                {
+                    if (t[j] == ';')
+                    {
+                        result.Add(text + ";");
+                        text.Clear();
+                    }
+                    else
+                    {
+                        text.Append(t[j]);
+                    }
+                }
+
+                j++;
+            }
+
+            return result;
+        }
+
+        private static void ExtractEmptyString(string t, ref int j, bool isData, StringBuilder empty)
+        {
+            if (empty.Length != 0 || isData)
+            {
+                return;
+            }
+
+            var k = j;
+            while (j < t.Length && t[j] != '\\')
+            {
+                empty.Append(t[j]);
+                j++;
+            }
+
+            j = k;
+        }
+
+        private static void ProcessSpecialTags(string t,
+            ref int j,
+            ref StringBuilder text,
+            ref bool isLoopSpecialCharsRequired,
+            bool isData,
+            StringBuilder empty,
+            List<string> ex)
+        {
+            while (j < t.Length && t[j] == '<')
+            {
+                var inputText = new StringBuilder();
+                while ((j != 0 && t[j - 1] != '>' && !isLoopSpecialCharsRequired) || isLoopSpecialCharsRequired)
+                {
+                    inputText.Append(t[j]);
+                    j++;
+                    if (j >= t.Length)
+                    {
+                        break;
+                    }
+
+                    isLoopSpecialCharsRequired = false;
+                }
+
+                isLoopSpecialCharsRequired = true;
+                text = new StringBuilder(TypeWritterTagProcessor.ConvertStaticTagHandlers(text.ToString(),
+                    inputText.ToString(), isData, empty.ToString(), ex));
+            }
+
+            isLoopSpecialCharsRequired = false;
         }
 
         /// <summary>

@@ -259,7 +259,7 @@ namespace UCT.Service
             // 计算线性方程的参数
             var denominator = (linePointB.x - linePointA.x) * (linePointD.y - linePointC.y) -
                               (linePointB.y - linePointA.y) * (linePointD.x - linePointC.x);
-            if (denominator == 0)
+            if (Mathf.Approximately(denominator, 0))
             {
                 return null; // 线段平行或共线
             }

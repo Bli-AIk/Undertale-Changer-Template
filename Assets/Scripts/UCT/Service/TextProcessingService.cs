@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 using UCT.Global.Core;
 using UnityEngine;
 
@@ -29,17 +30,17 @@ namespace UCT.Service
             char delimiter)
         {
             sonList.Clear();
-            var text = "";
+            var text = new StringBuilder();
             foreach (var t1 in parentList.SelectMany(t => t))
             {
                 if (t1 == delimiter || t1 == ';')
                 {
-                    sonList.Add(text);
-                    text = "";
+                    sonList.Add(text.ToString());
+                    text .Clear();
                 }
                 else
                 {
-                    text += t1;
+                    text.Append(t1);
                 }
             }
         }
@@ -62,18 +63,18 @@ namespace UCT.Service
         public static void SplitStringToListWithDelimiter(string parentString, List<string> sonList, char delimiter)
         {
             sonList.Clear();
-            var text = "";
+            var text = new StringBuilder();
 
             foreach (var t in parentString)
             {
                 if (t == delimiter || t == ';')
                 {
-                    sonList.Add(text);
-                    text = "";
+                    sonList.Add(text.ToString());
+                    text.Clear();
                 }
                 else
                 {
-                    text += t;
+                    text.Append(t);
                 }
             }
         }
@@ -83,12 +84,12 @@ namespace UCT.Service
         /// </summary>
         private static string SplitFirstStringWithDelimiter(string input, char delimiter = '\\')
         {
-            var result = "";
+            var result = new StringBuilder();
             foreach (var t in input)
             {
                 if (t != delimiter)
                 {
-                    result += t;
+                    result.Append(t);
                 }
                 else
                 {
@@ -96,9 +97,19 @@ namespace UCT.Service
                 }
             }
 
-            return result;
+            return result.ToString();
         }
 
+
+        /// <summary>
+        ///     检测list的前几个字符是否与传入的string screen相同。
+        ///     若相同则分割文本到子List
+        /// </summary>
+        public static void GetFirstChildStringByPrefix(List<string> parentList, List<string> sonList, string screen)
+        {
+            sonList.Clear();
+            sonList.AddRange(from t in parentList where t[..screen.Length] == screen select t[screen.Length..]);
+        }
         /// <summary>
         ///     用于游戏内文本读取
         ///     传入数据名称返回文本包文本
@@ -112,7 +123,10 @@ namespace UCT.Service
                      into str
                      select str[..^1])
             {
-                return result;
+                if (result != null)
+                {
+                    return result;
+                }
             }
 
             var nullText = $"<color=yellow><color=#FF6666>{screen}</color> is null!</color>";
@@ -134,15 +148,6 @@ namespace UCT.Service
             return result;
         }
 
-        /// <summary>
-        ///     检测list的前几个字符是否与传入的string screen相同。
-        ///     若相同则分割文本到子List
-        /// </summary>
-        public static void GetFirstChildStringByPrefix(List<string> parentList, List<string> sonList, string screen)
-        {
-            sonList.Clear();
-            sonList.AddRange(from t in parentList where t[..screen.Length] == screen select t[screen.Length..]);
-        }
 
         /// <summary>
         ///     再分配文本包
@@ -225,14 +230,14 @@ namespace UCT.Service
         public static string RandomString(int length = 6,
             string alphabet = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM")
         {
-            var text = "";
+            var text = new StringBuilder();
 
             for (var i = 0; i < length; i++)
             {
-                text += alphabet[Random.Range(0, alphabet.Length)];
+                text.Append(alphabet[Random.Range(0, alphabet.Length)]);
             }
 
-            return text;
+            return text.ToString();
         }
 
         /// <summary>
@@ -252,14 +257,14 @@ namespace UCT.Service
         // ReSharper disable once MemberCanBePrivate.Global
         public static string RandomStringColor()
         {
-            var text = "<color=#";
+            var builder = new StringBuilder("<color=#");
             for (var i = 0; i < 6; i++)
             {
-                text += $"{Random.Range(0, 16):X}";
+                builder.AppendFormat("{0:X}", Random.Range(0, 16));
             }
 
-            text += "FF>";
-            return text;
+            builder.Append("FF>");
+            return builder.ToString();
         }
 
         /// <summary>
@@ -303,49 +308,24 @@ namespace UCT.Service
             var plus = plusSave;
             while (true)
             {
-                var isHaveR = false;
-                var save = "";
+                var save = new StringBuilder();
                 if (text[0] != 'O' && text[0] != 'o' && text[0] != 'P' && text[0] != 'p')
                 {
                     float x1 = 0;
-                    foreach (var t in text)
-                    {
-                        switch (t)
-                        {
-                            case 'r' or 'R' when !isHaveR:
-                                x1 = float.Parse(save);
-                                save = "";
-                                isHaveR = true;
-                                break;
-                            case '+':
-                                plus = float.Parse(save);
-                                save = "";
-                                break;
-                            default:
-                                save += t;
-                                break;
-                        }
-                    }
+                    var isHaveR = IsParseFloatHaveR(text, save, ref x1, ref plus);
 
                     if (!isHaveR)
                     {
                         return plus + float.Parse(text);
                     }
 
-                    var x2 = float.Parse(save);
+                    var x2 = float.Parse(save.ToString());
                     return plus + Random.Range(x1, x2);
                 }
 
-                if (text is "P" or "p")
+                if (IsParseFloatHaveOther(text, origin, isY, out var floatWithSpecialCharacters))
                 {
-                    return isY
-                        ? MainControl.Instance.battlePlayerController.transform.position.y
-                        : MainControl.Instance.battlePlayerController.transform.position.x;
-                }
-
-                if (text.Length <= 1 || (text[0] != 'O' && text[0] != 'o') || text[1] != '+')
-                {
-                    return origin;
+                    return floatWithSpecialCharacters;
                 }
 
                 text = text[2..];
@@ -353,6 +333,59 @@ namespace UCT.Service
             }
         }
 
+        private static bool IsParseFloatHaveOther(string text, float origin, bool isY, out float floatWithSpecialCharacters)
+        {
+            floatWithSpecialCharacters = 0;
+            if (text is "P" or "p")
+            {
+                floatWithSpecialCharacters = isY
+                    ? MainControl.Instance.battlePlayerController.transform.position.y
+                    : MainControl.Instance.battlePlayerController.transform.position.x;
+                return true;
+            }
+
+            if (text.Length > 1 && (text[0] == 'O' || text[0] == 'o') && text[1] == '+')
+            {
+                return false;
+            }
+
+            floatWithSpecialCharacters = origin;
+            return true;
+
+        }
+
+        private static bool IsParseFloatHaveR(string text, StringBuilder save, ref float x1, ref float plus)
+        {
+            var isHaveR = false;
+            foreach (var t in text)
+            {
+                switch (t)
+                {
+                    case 'r' or 'R' when !isHaveR:
+                        x1 = float.Parse(save.ToString());
+                        save.Clear();
+                        isHaveR = true;
+                        break;
+                    case '+':
+                        plus = float.Parse(save.ToString());
+                        save.Clear();
+                        break;
+                    default:
+                        save.Append(t);
+                        break;
+                }
+            }
+
+            return isHaveR;
+        }
+
+        /// <summary>
+        ///     将 Vector2 转换为形如 (x,y) 的字符串表示
+        /// </summary>
+        public static string RealVector2ToStringVector2(Vector2 vector2)
+        {
+            return $"({vector2.x},{vector2.y})";
+        }
         /// <summary>
         ///     输入形如(x,y)的字符串向量，返回Vector2
         /// </summary>
@@ -373,14 +406,6 @@ namespace UCT.Service
         }
 
         /// <summary>
-        ///     将 Vector2 转换为形如 (x,y) 的字符串表示
-        /// </summary>
-        public static string RealVector2ToStringVector2(Vector2 vector2)
-        {
-            return $"({vector2.x},{vector2.y})";
-        }
-
-        /// <summary>
         ///     输入形如(x,y)的字符串向量，返回Vector2
         ///     使用ParseFloatWithSpecialCharacters进行转换。
         /// </summary>
@@ -388,7 +413,7 @@ namespace UCT.Service
         {
             stringVector2 = stringVector2.Substring(1, stringVector2.Length - 2) + ",";
             var realVector2 = Vector2.zero;
-            var save = "";
+            var save = new StringBuilder();
             var isSetX = false;
             foreach (var t in stringVector2)
             {
@@ -396,19 +421,19 @@ namespace UCT.Service
                 {
                     if (!isSetX)
                     {
-                        realVector2.x = ParseFloatWithSpecialCharacters(save, origin.x);
+                        realVector2.x = ParseFloatWithSpecialCharacters(save.ToString(), origin.x);
                         isSetX = true;
-                        save = "";
+                        save.Clear();
                     }
                     else
                     {
-                        realVector2.y = ParseFloatWithSpecialCharacters(save, origin.y, true);
+                        realVector2.y = ParseFloatWithSpecialCharacters(save.ToString(), origin.y, true);
                         break;
                     }
                 }
                 else
                 {
-                    save += t;
+                    save.Append(t);
                 }
             }
 

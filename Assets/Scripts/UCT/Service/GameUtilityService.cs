@@ -37,74 +37,15 @@ namespace UCT.Service
         /// </summary>
         public static void SetResolution(int resolution)
         {
-            if (!MainControl.Instance.cameraMainInBattle)
-            {
-                if (!MainControl.Instance.cameraShake)
-                {
-                    var mainCamera = Camera.main;
-                    if (mainCamera)
-                    {
-                        MainControl.Instance.cameraShake = mainCamera.GetComponent<CameraShake>();
-                    }
-                }
-                else
-                {
-                    MainControl.Instance.cameraMainInBattle = MainControl.Instance.cameraShake.GetComponent<Camera>();
-                }
-            }
+            ResolutionSetCamera();
 
             if (!SettingsStorage.IsUsingHdFrame)
             {
-                if (SettingsStorage.ResolutionLevel > 4)
-                {
-                    SettingsStorage.ResolutionLevel = 0;
-                }
-
-                if (MainControl.Instance.mainCamera)
-                {
-                    MainControl.Instance.mainCamera.rect = new Rect(0, 0, 1, 1);
-                }
-
-                if (MainControl.Instance.sceneState == MainControl.SceneState.InBattle)
-                {
-                    if (MainControl.Instance.cameraMainInBattle)
-                    {
-                        MainControl.Instance.cameraMainInBattle.rect = new Rect(0, 0, 1, 1);
-                    }
-                }
-
-                SettingsController.Instance.DOKill();
-                SettingsController.Instance.Frame.color = ColorEx.WhiteClear;
+                SetResolutionWithoutHdFrame();
             }
             else
             {
-                if (SettingsStorage.ResolutionLevel < 5)
-                {
-                    SettingsStorage.ResolutionLevel = 5;
-                }
-
-                if (MainControl.Instance.mainCamera)
-                {
-                    MainControl.Instance.mainCamera.rect = new Rect(0, 0.056f, 1, 0.888f);
-                }
-
-                if (MainControl.Instance.sceneState == MainControl.SceneState.InBattle)
-                {
-                    if (MainControl.Instance.cameraMainInBattle)
-                    {
-                        MainControl.Instance.cameraMainInBattle.rect = new Rect(0, 0.056f, 1, 0.888f);
-                    }
-                }
-
-                SettingsController.Instance.DOKill();
-
-                if (SettingsController.Instance.frameSpriteIndex < 0)
-                {
-                    SettingsController.Instance.Frame.color = Color.black;
-                }
-
-                SettingsController.Instance.Frame.DOColor(
-                    Color.white * Convert.ToInt32(SettingsController.Instance.frameSpriteIndex >= 0), 1f);
+                SetResolutionWithHdFrame();
             }
 
             var resolutionHeights = new List<int> { 480, 768, 864, 960, 1080, 540, 1080 };
@@ -117,6 +58,76 @@ namespace UCT.Service
                 SettingsStorage.FullScreen);
             SettingsStorage.Resolution =
                 new Vector2(currentResolutionWidth, currentResolutionHeight);
+        }
+
+        private static void SetResolutionWithHdFrame()
+        {
+            if (SettingsStorage.ResolutionLevel < 5)
+            {
+                SettingsStorage.ResolutionLevel = 5;
+            }
+
+            if (MainControl.Instance.mainCamera)
+            {
+                MainControl.Instance.mainCamera.rect = new Rect(0, 0.056f, 1, 0.888f);
+            }
+
+            if (MainControl.Instance.sceneState == MainControl.SceneState.InBattle && MainControl.Instance.cameraMainInBattle)
+            {
+                MainControl.Instance.cameraMainInBattle.rect = new Rect(0, 0.056f, 1, 0.888f);
+            }
+
+            SettingsController.Instance.DOKill();
+
+            if (SettingsController.Instance.frameSpriteIndex < 0)
+            {
+                SettingsController.Instance.Frame.color = Color.black;
+            }
+
+            SettingsController.Instance.Frame.DOColor(
+                Color.white * Convert.ToInt32(SettingsController.Instance.frameSpriteIndex >= 0), 1f);
+        }
+
+        private static void SetResolutionWithoutHdFrame()
+        {
+            if (SettingsStorage.ResolutionLevel > 4)
+            {
+                SettingsStorage.ResolutionLevel = 0;
+            }
+
+            if (MainControl.Instance.mainCamera)
+            {
+                MainControl.Instance.mainCamera.rect = new Rect(0, 0, 1, 1);
+            }
+
+            if (MainControl.Instance.sceneState == MainControl.SceneState.InBattle && MainControl.Instance.cameraMainInBattle)
+            {
+                MainControl.Instance.cameraMainInBattle.rect = new Rect(0, 0, 1, 1);
+            }
+
+            SettingsController.Instance.DOKill();
+            SettingsController.Instance.Frame.color = ColorEx.WhiteClear;
+        }
+
+        private static void ResolutionSetCamera()
+        {
+            if (MainControl.Instance.cameraMainInBattle)
+            {
+                return;
+            }
+
+            if (!MainControl.Instance.cameraShake)
+            {
+                var mainCamera = Camera.main;
+                if (mainCamera)
+                {
+                    MainControl.Instance.cameraShake = mainCamera.GetComponent<CameraShake>();
+                }
+            }
+            else
+            {
+                MainControl.Instance.cameraMainInBattle = MainControl.Instance.cameraShake.GetComponent<Camera>();
+            }
         }
 
         /// <summary>
@@ -293,7 +304,7 @@ namespace UCT.Service
 
         public static Color GetRandomColor()
         {
-            lock (Rng) // 确保线程安全
+            lock (Rng) 
             {
                 return new Color(
                     (float)Rng.NextDouble(),

@@ -29,7 +29,7 @@ namespace UCT.Service
                 KeyCode.Tab => GetKeyDownFrom(keyCodes, 9),
                 KeyCode.Semicolon => GetKeyDownFrom(keyCodes, 10),
                 KeyCode.Escape => GetKeyDownFrom(keyCodes, 11),
-                _ => throw new ArgumentNullException()
+                _ => throw new ArgumentNullException($"Unknown {key}")
             };
         }
 
@@ -59,7 +59,7 @@ namespace UCT.Service
                 KeyCode.Tab => GetKeyFrom(keyCodes, 9),
                 KeyCode.Semicolon => GetKeyFrom(keyCodes, 10),
                 KeyCode.Escape => GetKeyFrom(keyCodes, 11),
-                _ => throw new ArgumentNullException()
+                _ => throw new ArgumentNullException($"Unknown {key}")
             };
         }
 
@@ -88,7 +88,7 @@ namespace UCT.Service
                 KeyCode.Tab => GetKeyUpFrom(keyCodes, 9),
                 KeyCode.Semicolon => GetKeyUpFrom(keyCodes, 10),
                 KeyCode.Escape => GetKeyUpFrom(keyCodes, 11),
-                _ => throw new ArgumentNullException()
+                _ => throw new ArgumentNullException($"Unknown {key}")
             };
         }
 

@@ -12,8 +12,6 @@ namespace UCT.Service
     /// </summary>
     public static class InkService
     {
-        private static Story _story;
-
         /// <summary>
         ///     从指定路径读取ink文件生成的json文件中包含的Story。
         ///     如果没有json文件或json文件旧于ink文件，会生成新的json文件。
