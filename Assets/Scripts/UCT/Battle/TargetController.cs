@@ -63,7 +63,7 @@ namespace UCT.Battle
 
         private void OnEnable()
         {
-            if (_anim == null)
+            if (!_anim)
             {
                 _anim = GetComponent<Animator>();
             }
@@ -78,21 +78,24 @@ namespace UCT.Battle
         /// </summary>
         private void Hit()
         {
+            //TODO: 目前的算法不是原作的算法。需要修改。
             if (Mathf.Abs(_bar.transform.localPosition.x) > 0.8f)
             {
                 hitDamage = (int)
                     (2.2f / 13.2f * (14 - Mathf.Abs(_bar.transform.localPosition.x)) //准确度系数
                                   * (MainControl.Instance.playerControl.atk + DataHandlerService
-                                          .GetItemFormDataName(MainControl.Instance.playerControl.wearWeapon).Data.Value
-                                      - MainControl.Instance.BattleControl.enemiesDef[select] + Random.Range(0, 2)));
+                                         .GetItemFormDataName(MainControl.Instance.playerControl.wearWeapon).Data.Value
+                                     - MainControl.Instance.selectUIController.enemiesControllers[select].def +
+                                     Random.Range(0, 2)));
             }
             else
             {
                 hitDamage = (int)
                     (2.2f / 13.2f * (14 - 0.8f) //准确度系数
                                   * (MainControl.Instance.playerControl.atk + DataHandlerService
-                                          .GetItemFormDataName(MainControl.Instance.playerControl.wearWeapon).Data.Value
-                                      - MainControl.Instance.BattleControl.enemiesDef[select] + Random.Range(0, 2)));
+                                         .GetItemFormDataName(MainControl.Instance.playerControl.wearWeapon).Data.Value
+                                     - MainControl.Instance.selectUIController.enemiesControllers[select].def +
+                                     Random.Range(0, 2)));
             }
 
             if (hitDamage <= 0)
@@ -115,13 +118,14 @@ namespace UCT.Battle
             hitMonster.anim.SetBool(Hit1, true);
             hpBar.transform.localScale =
                 new Vector3(
-                    (float)MainControl.Instance.BattleControl.enemiesHp[select * 2] /
-                    MainControl.Instance.BattleControl.enemiesHp[select * 2 + 1], 1);
-            MainControl.Instance.BattleControl.enemiesHp[select * 2] -= hitDamage;
+                    MainControl.Instance.selectUIController.enemiesControllers[select].hp /
+                    (float)MainControl.Instance.selectUIController.enemiesControllers[select].hpMax, 1);
+            MainControl.Instance.selectUIController.enemiesControllers[select].hp -= hitDamage;
             DOTween.To(() => hpBar.transform.localScale, x => hpBar.transform.localScale = x,
                 new Vector3(
-                    (float)MainControl.Instance.BattleControl.enemiesHp[select * 2] /
-                    MainControl.Instance.BattleControl.enemiesHp[select * 2 + 1], 1),
+                    Mathf.Clamp(MainControl.Instance.selectUIController.enemiesControllers[select].hp /
+                                (float)MainControl.Instance.selectUIController.enemiesControllers[select].hpMax, 0,
+                        Mathf.Infinity), 1),
                 0.75f).SetEase(Ease.OutSine);
         }
 

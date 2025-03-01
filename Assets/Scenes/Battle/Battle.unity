@@ -2136,6 +2136,8 @@ MonoBehaviour:
   anim: {fileID: 0}
   atk: 114
   def: 514
+  hp: 100
+  hpMax: 100
 --- !u!4 &546735740
 Transform:
   m_ObjectHideFlags: 0
@@ -2338,8 +2340,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 0}
-  atk: 0
-  def: 0
+  atk: 2
+  def: 2
+  hp: 10
+  hpMax: 10
 --- !u!4 &676457025
 Transform:
   m_ObjectHideFlags: 0

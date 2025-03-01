@@ -13,6 +13,7 @@ namespace UCT.Battle
         private static readonly int Hit = Animator.StringToHash("Hit");
         public Animator anim;
         public int atk, def;
+        public int hp, hpMax;
 
         private void Start()
         {

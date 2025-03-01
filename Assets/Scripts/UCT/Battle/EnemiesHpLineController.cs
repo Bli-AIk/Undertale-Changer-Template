@@ -26,7 +26,7 @@ namespace UCT.Battle
                 return;
             }
 
-            if (MainControl.Instance.BattleControl.enemiesHp.Count - 1 < enemyId * 2)
+            if (MainControl.Instance.selectUIController.enemiesControllers.Count - 1 < enemyId)
             {
                 transform.localScale = Vector2.zero;
             }
@@ -35,8 +35,8 @@ namespace UCT.Battle
                 transform.localScale = new Vector3(42, 7.25f, 1);
                 _greenSprite.transform.localScale =
                     new Vector3(
-                        (float)MainControl.Instance.BattleControl.enemiesHp[enemyId * 2] /
-                        MainControl.Instance.BattleControl.enemiesHp[enemyId * 2 + 1],
+                        (float)MainControl.Instance.selectUIController.enemiesControllers[enemyId].hp /
+                        MainControl.Instance.selectUIController.enemiesControllers[enemyId].hpMax,
                         _greenSprite.transform.localScale.y);
             }
         }

@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace UCT.Control
 {
@@ -37,12 +36,6 @@ namespace UCT.Control
 
         [Header("敌人OBJ")]
         [Header("物体名会识别为敌人名称")] public List<GameObject> enemies; //敌方的Obj。
-
-        [Header("HP 偶为目前血量 奇为最大Max 下同")]
-        public List<int> enemiesHp;
-
-        [FormerlySerializedAs("enemiesATK")] public List<int> enemiesAtk;
-        [FormerlySerializedAs("enemiesDEF")] public List<int> enemiesDef;
 
         [Header("战斗内UIText读取")]
         public string uiText;

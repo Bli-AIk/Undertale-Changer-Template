@@ -205,18 +205,10 @@ namespace UCT.Battle
                 buttons.Add(transform.Find(t).GetComponent<SpriteRenderer>());
             }
 
-            for (var i = 0; i < MainControl.Instance.BattleControl.enemies.Count; i++)
+            foreach (var enemies in MainControl.Instance.BattleControl.enemies.Select(t => GameObject.Find(t.name)
+                         .GetComponent<EnemiesController>()).Where(enemies => enemies))
             {
-                var enemies = GameObject.Find(MainControl.Instance.BattleControl.enemies[i].name)
-                    .GetComponent<EnemiesController>();
-                if (!enemies)
-                {
-                    continue;
-                }
-
                 enemiesControllers.Add(enemies);
-                enemiesControllers[i].atk = MainControl.Instance.BattleControl.enemiesAtk[i];
-                enemiesControllers[i].def = MainControl.Instance.BattleControl.enemiesDef[i];
             }
 
             selectedButton = EnumService.GetMinEnumValue<SelectedButton>();
