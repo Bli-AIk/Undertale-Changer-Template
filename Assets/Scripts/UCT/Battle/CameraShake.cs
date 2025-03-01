@@ -50,15 +50,7 @@ namespace UCT.Battle
             Ease easeMove = Ease.OutCubic,
             Ease easeSpin = Ease.InOutCubic)
         {
-            Transform transformer;
-            if (getSon == "")
-            {
-                transformer = transform;
-            }
-            else
-            {
-                transformer = transform.Find(getSon);
-            }
+            var transformer = getSon == "" ? transform : transform.Find(getSon);
 
             _tweenMove.Kill(true);
             _tweenSpin.Kill(true);

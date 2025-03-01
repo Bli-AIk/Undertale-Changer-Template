@@ -263,32 +263,34 @@ namespace UCT.Battle
 
         private void HitPlayer(int i)
         {
-            if (MainControl.Instance.playerControl.missTime < 0)
+            if (MainControl.Instance.playerControl.missTime >= 0)
             {
-                MainControl.Instance.playerControl.hp -= boxHitList[i];
-                MainControl.Instance.playerControl.missTime = MainControl.Instance.playerControl.missTimeMax;
-                AudioController.Instance.PlayFx(5, MainControl.Instance.AudioControl.fxClipUI);
+                return;
+            }
 
-                MainControl.Instance.selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
+            MainControl.Instance.playerControl.hp -= boxHitList[i];
+            MainControl.Instance.playerControl.missTime = MainControl.Instance.playerControl.missTimeMax;
+            AudioController.Instance.PlayFx(5, MainControl.Instance.AudioControl.fxClipUI);
 
-                var r = Random.Range(0, 0.025f);
-                var v3Spin = MathUtilityService.RandomPointOnSphereSurface(2.5f, new Vector3());
-                MainControl.Instance.cameraShake.Shake(
-                    new Vector3(r * MathUtilityService.GetRandomUnit(), r * MathUtilityService.GetRandomUnit(), 0),
-                    new Vector3(0, 0, v3Spin.z), 4, 1f / 60f * 4f * 1.5f, "", Ease.OutElastic);
-                MainControl.Instance.cameraShake3D.Shake(
-                    new Vector3(r * MathUtilityService.GetRandomUnit(), 0, r * MathUtilityService.GetRandomUnit()), v3Spin, 4,
-                    1f / 60f * 4f * 1.5f, "3D CameraPoint", Ease.OutElastic);
-                if (MainControl.Instance.playerControl.hp <= 0)
-                {
-                    MainControl.Instance.battlePlayerController.KillPlayer(MainControl.Instance);
-                }
+            MainControl.Instance.selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
+
+            var r = Random.Range(0, 0.025f);
+            var v3Spin = MathUtilityService.RandomPointOnSphereSurface(2.5f, new Vector3());
+            MainControl.Instance.cameraShake.Shake(
+                new Vector3(r * MathUtilityService.GetRandomUnit(), r * MathUtilityService.GetRandomUnit(), 0),
+                new Vector3(0, 0, v3Spin.z), 4, 1f / 60f * 4f * 1.5f, "", Ease.OutElastic);
+            MainControl.Instance.cameraShake3D.Shake(
+                new Vector3(r * MathUtilityService.GetRandomUnit(), 0, r * MathUtilityService.GetRandomUnit()), v3Spin, 4,
+                1f / 60f * 4f * 1.5f, "3D CameraPoint", Ease.OutElastic);
+            if (MainControl.Instance.playerControl.hp <= 0)
+            {
+                MainControl.Instance.battlePlayerController.KillPlayer(MainControl.Instance);
+            }
 
 
-                if (!SettingsStorage.IsSimplifySfx)
-                {
-                    MainControl.Instance.battlePlayerController.hitVolume.weight = 1;
-                }
+            if (!SettingsStorage.IsSimplifySfx)
+            {
+                MainControl.Instance.battlePlayerController.hitVolume.weight = 1;
             }
         }
 

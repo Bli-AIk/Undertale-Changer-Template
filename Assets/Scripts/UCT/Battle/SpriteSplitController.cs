@@ -8,7 +8,7 @@ namespace UCT.Battle
     ///     内含Pool。
     ///     实现精灵的碎片化效果。
     ///     一行一行自上而下。
-    ///     启 用 本 脚 本 后 立 刻 生 效
+    ///     启用本脚本后立刻生效。
     /// </summary>
     public class SpriteSplitController : MonoBehaviour
     {
@@ -28,7 +28,7 @@ namespace UCT.Battle
 
         private void OnEnable()
         {
-            startPos = new Vector2(-_map.width / 2 * 0.05f, _map.height / 2 * 0.05f);
+            startPos = new Vector2(-_map.width / 2f * 0.05f, _map.height / 2f * 0.05f);
             if (_map.width % 2 == 0)
             {
                 startPos += new Vector2(0.025f, 0);
@@ -50,16 +50,8 @@ namespace UCT.Battle
             {
                 for (var x = 0; x < _map.width; x++)
                 {
-                    var skip = false;
                     var color = _map.GetPixel(x, y);
-                    for (var i = 0; i < colorExclude.Count; i++)
-                    {
-                        if (color == colorExclude[i])
-                        {
-                            skip = true;
-                            break;
-                        }
-                    }
+                    var skip = colorExclude.Contains(color);
 
                     if (skip)
                     {
@@ -83,7 +75,7 @@ namespace UCT.Battle
         /// <summary>
         ///     初始化/填充对象池
         /// </summary>
-        public void FillPool()
+        private void FillPool()
         {
             for (var i = 0; i < poolCount; i++)
             {
@@ -95,17 +87,17 @@ namespace UCT.Battle
         /// <summary>
         ///     返回对象池
         /// </summary>
-        public void ReturnPool(GameObject gameObject)
+        public void ReturnPool(GameObject inputObject)
         {
-            gameObject.SetActive(false);
-            gameObject.transform.SetParent(transform);
-            _available.Enqueue(gameObject);
+            inputObject.SetActive(false);
+            inputObject.transform.SetParent(transform);
+            _available.Enqueue(inputObject);
         }
 
         /// <summary>
-        ///     喜提对象 square)
+        ///     获取 square 对象
         /// </summary>
-        public GameObject GetFromPool()
+        private GameObject GetFromPool()
         {
             if (_available.Count == 0)
             {

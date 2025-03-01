@@ -176,7 +176,7 @@ namespace UCT.Battle
                     _spriteRenderer.color = Color.red;
                     MainControl.Instance.playerControl.playerLastPos = transform.position - (Vector3)sceneDrift;
                     SettingsStorage.Pause = true;
-                    TurnController.Instance.KillIEnumerator();
+                    TurnController.KillIEnumerator();
                     GameUtilityService.SwitchScene("GameOver", false);
                 }
                 else
@@ -1344,7 +1344,7 @@ namespace UCT.Battle
             {
                 mainControl.playerControl.playerLastPos = transform.position - (Vector3)sceneDrift;
                 SettingsStorage.Pause = true;
-                TurnController.Instance.KillIEnumerator();
+                TurnController.KillIEnumerator();
                 GameUtilityService.SwitchScene("GameOver", false);
             }
             else
