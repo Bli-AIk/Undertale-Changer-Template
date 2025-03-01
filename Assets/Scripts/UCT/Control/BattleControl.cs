@@ -61,13 +61,8 @@ namespace UCT.Control
         [Header("存储敌人对话文件")]
         public List<string> turnDialogAsset; //直接在战斗场景内读取
 
-        public List<TextAsset> otherDialogAsset;
-
         public List<Color> bulletColorList;
 
         public List<Color> playerColorList, playerMissColorList;
-
-        [Header("项目附加")]
-        public int randomTurnDir;
     }
 }

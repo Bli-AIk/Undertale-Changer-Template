@@ -6,48 +6,48 @@ using static UCT.Battle.BulletController;
 namespace UCT.Control
 {
     /// <summary>
-    ///     ��Ļ�ļ�
+    ///     弹幕文件
     /// </summary>
     [CreateAssetMenu(fileName = "BulletControl", menuName = "UCT/BulletControl")]
     public class BulletControl : ScriptableObject
     {
-        [Header("��Ļ����������")]
+        [Header("弹幕类型名称")]
         public string typeName;
 
-        [Header("��ĻĬ�ϵ�Obj����")]
+        [Header("弹幕默认Obj名称")]
         public string objName;
 
-        [Header("���Ϊ100��ս�����ԵΪ50���ɲο�")]
+        [Header("图层")]
         public int layer;
 
-        [Header("����")]
+        [Header("精灵")]
         public Sprite sprite;
 
-        [Header("�ж����С")]
+        [Header("触发器尺寸")]
         public List<Vector2> triggerSize = new() { new Vector2(1, 1) };
 
-        [Header("�ж����˺�")]
-        public List<int> triggerHit = new() { 1 };
-
-        [Header("�ж���ƫ��")]
+        [Header("触发器偏移")]
         public List<Vector2> triggerOffset = new() { new Vector2() };
 
-        [Header("��ʼ�������")]
+        [Header("触发器伤害")]
+        public List<int> triggerHit = new() { 1 };
+
+        [Header("初始位置")]
         public Vector3 startPosition;
 
-        [Header("��ʼ��ת�Ƕ�")]
+        [Header("初始旋转角度")]
         public Vector3 startRotation;
 
-        [Header("��ʼ����")]
+        [Header("初始缩放")]
         public Vector3 startScale = new(1, 1, 1);
 
-        [Header("������ɫ����")]
+        [Header("弹幕属性颜色")]
         public BulletColor bulletColor = BulletColor.White;
 
-        [Header("Sprite����ģʽ")]
+        [Header("Sprite遮罩模式")]
         public SpriteMaskInteraction startMask = SpriteMaskInteraction.None;
 
-        [Header("��ײ������ģʽ")]
+        [Header("触发后跟随模式")]
         public FollowMode triggerFollowMode = FollowMode.NoFollow;
     }
 }

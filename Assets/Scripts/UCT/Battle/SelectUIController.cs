@@ -941,7 +941,7 @@ namespace UCT.Battle
 
         private void OpenDialogBubble(string textAsset)
         {
-            MainControl.Instance.BattleControl.randomTurnDir = MathUtilityService.GetRandomUnit();
+            MathUtilityService.GetRandomUnit();
             actSave = DataHandlerService.LoadItemData(textAsset);
             actSave = DataHandlerService.ChangeItemData(actSave, true, new List<string>());
             isDialog = true;

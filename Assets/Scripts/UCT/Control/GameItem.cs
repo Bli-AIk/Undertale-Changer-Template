@@ -169,7 +169,7 @@ namespace UCT.Control
             return new GameItemImpl(Data, OnUse, OnCheck, OnDrop);
         }
 
-        private class GameItemImpl : GameItem
+        private sealed class GameItemImpl : GameItem
         {
             public GameItemImpl(ItemData data, Action<int> onUse, Action<int> onCheck, Action<int> onDrop)
                 : base(data, onUse, onCheck, onDrop) { }
@@ -402,7 +402,7 @@ namespace UCT.Control
 
     public class ItemController
     {
-        public readonly Dictionary<string, GameItem> ItemDictionary = new();
+        public Dictionary<string, GameItem> ItemDictionary { get; } = new();
 
         public void InitializeItems()
         {

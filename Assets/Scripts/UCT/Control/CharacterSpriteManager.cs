@@ -46,7 +46,7 @@ namespace UCT.Control
             ref CharacterSpriteManager characterSpriteManager,
             CharacterSpriteManager[] characterSpriteManagers)
         {
-            if (!Regex.IsMatch(key, @"^<[^,]+>$")) // <xxx>
+            if (!Regex.IsMatch(key, "^<[^,]+>$")) // <xxx>
             {
                 return key;
             }
@@ -114,6 +114,23 @@ namespace UCT.Control
                 characterSpriteManager.spriteKeys.Any(spriteKey => secondPart == spriteKey.ToLower());
             var isMatchingFxKey = characterSpriteManager.fxKeys.Any(fxKey => secondPart == fxKey.ToLower());
 
+            if (IsMatchBinary(ref key, out result, isMatchingSpriteKey, isMatchingFxKey, firstPart, secondPart))
+            {
+                return true;
+            }
+
+            Other.Debug.LogError($"Invalid key second part format: {key}");
+            result = string.Empty;
+            return true;
+        }
+
+        private static bool IsMatchBinary(ref string key,
+            out string result,
+            bool isMatchingSpriteKey,
+            bool isMatchingFxKey,
+            string firstPart,
+            string secondPart)
+        {
             if (isMatchingSpriteKey && isMatchingFxKey)
             {
                 key = $"<{firstPart}, {secondPart}, {secondPart}>";
@@ -131,15 +148,15 @@ namespace UCT.Control
                 }
             }
 
-            if (isMatchingSpriteKey || isMatchingFxKey)
+            if (!isMatchingSpriteKey && !isMatchingFxKey)
             {
-                result = key;
-                return true;
+                result = null;
+                return false;
             }
 
-            Other.Debug.LogError($"Invalid key second part format: {key}");
-            result = string.Empty;
+            result = key;
             return true;
+
         }
 
         private static string CharacterKeyEscapeBinaryTernary(string key,
