@@ -32,7 +32,7 @@ namespace Volume
     [Serializable]
     public class GlitchArtPass : ScriptableRenderPass
     {
-        private static readonly string RenderTag = "GlitchArt Effects";
+        private const string RenderTag = "GlitchArt Effects";
         private static readonly int MainTexId = Shader.PropertyToID("_MainTex");
         private static readonly int TempTargetId = Shader.PropertyToID("_TempTargetColorTint");
         private static readonly int AnalogGlitchMode = Shader.PropertyToID("_AnalogGlitchMode");
@@ -51,7 +51,7 @@ namespace Volume
         public GlitchArtPass(RenderPassEvent passEvent, Shader glitchArtShader)
         {
             renderPassEvent = passEvent;
-            if (glitchArtShader == null)
+            if (!glitchArtShader)
             {
                 UCT.Other.Debug.Log("Shader不存在");
                 return;
@@ -67,7 +67,7 @@ namespace Volume
 
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
-            if (_mat == null)
+            if (!_mat)
             {
                 return;
             }
@@ -79,12 +79,12 @@ namespace Volume
 
             var stack = VolumeManager.instance.stack;
             _glitchArtVolume = stack.GetComponent<GlitchArtComponent>();
-            if (_glitchArtVolume == null)
+            if (!_glitchArtVolume)
             {
                 return;
             }
 
-            if (_glitchArtVolume.isShow.value == false)
+            if (!_glitchArtVolume.isShow.value)
             {
                 return;
             }
@@ -98,7 +98,6 @@ namespace Volume
         private void Render(CommandBuffer cmd, ref RenderingData renderingData)
         {
             ref var cameraData = ref renderingData.cameraData;
-            var camera = cameraData.camera;
             var source = _currentTarget;
             var destination = TempTargetId;
 

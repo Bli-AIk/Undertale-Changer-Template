@@ -5,7 +5,7 @@ using UnityEngine.Rendering.Universal;
 
 namespace Volume
 {
-    public class CRTScreenRendererFeature : ScriptableRendererFeature
+    public class CrtScreenRendererFeature : ScriptableRendererFeature
     {
         public Settings settings = new();
         private CrtScreenPass _pass;
@@ -39,14 +39,14 @@ namespace Volume
         private static readonly int PixelScanlineBrightness = Shader.PropertyToID("_PixelScanlineBrightness");
         private static readonly int Speed = Shader.PropertyToID("_Speed");
 
-        private CRTScreenComponent _crtScreenVolume;
+        private CrtScreenComponent _crtScreenVolume;
         private RenderTargetIdentifier _currentTarget;
         private Material _mat;
 
         public CrtScreenPass(RenderPassEvent passEvent, Shader crtScreenShader)
         {
             renderPassEvent = passEvent;
-            if (crtScreenShader == null)
+            if (!crtScreenShader)
             {
                 UCT.Other.Debug.Log("Shader不存在");
                 return;
@@ -62,7 +62,7 @@ namespace Volume
 
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
-            if (_mat == null)
+            if (!_mat)
             {
                 return;
             }
@@ -73,13 +73,13 @@ namespace Volume
             }
 
             var stack = VolumeManager.instance.stack;
-            _crtScreenVolume = stack.GetComponent<CRTScreenComponent>();
-            if (_crtScreenVolume == null)
+            _crtScreenVolume = stack.GetComponent<CrtScreenComponent>();
+            if (!_crtScreenVolume)
             {
                 return;
             }
 
-            if (_crtScreenVolume.isShow.value == false)
+            if (!_crtScreenVolume.isShow.value)
             {
                 return;
             }
@@ -93,7 +93,6 @@ namespace Volume
         private void Render(CommandBuffer cmd, ref RenderingData renderingData)
         {
             ref var cameraData = ref renderingData.cameraData;
-            var camera = cameraData.camera;
             var source = _currentTarget;
             var destination = TempTargetId;
 

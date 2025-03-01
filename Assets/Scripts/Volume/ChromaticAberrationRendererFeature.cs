@@ -63,7 +63,7 @@ namespace Volume
 
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
-            if (_mat == null)
+            if (!_mat)
             {
                 return;
             }
@@ -75,12 +75,12 @@ namespace Volume
 
             var stack = VolumeManager.instance.stack;
             _chromaticAberrationVolume = stack.GetComponent<ChromaticAberrationComponent>();
-            if (_chromaticAberrationVolume == null)
+            if (!_chromaticAberrationVolume)
             {
                 return;
             }
 
-            if (_chromaticAberrationVolume.isShow.value == false)
+            if (!_chromaticAberrationVolume.isShow.value)
             {
                 return;
             }
@@ -94,7 +94,6 @@ namespace Volume
         private void Render(CommandBuffer cmd, ref RenderingData renderingData)
         {
             ref var cameraData = ref renderingData.cameraData;
-            var camera = cameraData.camera;
             var source = _currentTarget;
             var destination = TempTargetId;
 

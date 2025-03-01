@@ -8,7 +8,7 @@ namespace Volume
     ///     VolumeComponent，显示在添加列表内
     /// </summary>
     [VolumeComponentMenuForRenderPipeline("Custom/CRT Screen", typeof(UniversalRenderPipeline))]
-    public class CRTScreenComponent : VolumeComponent, IPostProcessComponent
+    public class CrtScreenComponent : VolumeComponent, IPostProcessComponent
     {
         public BoolParameter isShow = new(false, true);
 

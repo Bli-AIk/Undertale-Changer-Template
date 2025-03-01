@@ -60,7 +60,7 @@ namespace Volume
 
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
-            if (_mat == null)
+            if (!_mat)
             {
                 return;
             }
@@ -72,12 +72,12 @@ namespace Volume
 
             var stack = VolumeManager.instance.stack;
             _stretchPostVolume = stack.GetComponent<StretchPostComponent>();
-            if (_stretchPostVolume == null)
+            if (!_stretchPostVolume)
             {
                 return;
             }
 
-            if (_stretchPostVolume.isShow.value == false)
+            if (!_stretchPostVolume.isShow.value)
             {
                 return;
             }
@@ -91,7 +91,6 @@ namespace Volume
         private void Render(CommandBuffer cmd, ref RenderingData renderingData)
         {
             ref var cameraData = ref renderingData.cameraData;
-            var camera = cameraData.camera;
             var source = _currentTarget;
             var destination = TempTargetId;
 
