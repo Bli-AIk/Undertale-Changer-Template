@@ -124,7 +124,7 @@ namespace UCT.Battle
                     Other.Debug.Log("简单嵌套弹幕编写示例");
                     for (var i = 0; i < 5 * 20; i++)
                     {
-                        Timing.RunCoroutine(_TurnNest(Nest.SimpleNestBullet));
+                        Timing.RunCoroutine(_SimpleNestBullet());
                         yield return Timing.WaitForSeconds(0.2f);
                     }
 
@@ -156,11 +156,11 @@ namespace UCT.Battle
 
                     var obj = objectPools[0].GetFromPool<BulletController>();
                     const string cupCake = "CupCake";
-                    obj.SetBullet(cupCake, cupCake, new Vector3(1, -1.6f),
+                    obj.SetBullet(cupCake, cupCake, new InitialTransform(new Vector3(1, -1.6f)),
                         (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
 
                     var obj2 = objectPools[0].GetFromPool<BulletController>();
-                    obj2.SetBullet(cupCake, cupCake, new Vector3(-1, -1.6f),
+                    obj2.SetBullet(cupCake, cupCake, new InitialTransform(new Vector3(-1, -1.6f)),
                         (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
 
 
@@ -187,26 +187,16 @@ namespace UCT.Battle
         public void YellowBullet(Vector3 soulsPosition)
         {
             var obj = objectPools[0].GetFromPool<BulletController>();
-            obj.SetBullet("YellowBullet", "YellowBullet", soulsPosition);
+            obj.SetBullet("YellowBullet", "YellowBullet", new InitialTransform(soulsPosition));
             obj.transform.localPosition += Vector3.forward;
         }
 
-        /// <summary>
-        ///     回合嵌套
-        ///     首先在枚举Nest中定义嵌套名称，然后在此编写嵌套内容
-        ///     用于重复复杂弹幕的嵌套使用
-        /// </summary>
-        private IEnumerator<float> _TurnNest(Nest nest)
+        private IEnumerator<float> _SimpleNestBullet()
         {
-            if (nest != Nest.SimpleNestBullet)
-            {
-                yield break;
-            }
-
             var obj = objectPools[0].GetFromPool<BulletController>();
             const string cupCake = "CupCake";
 
-            obj.SetBullet(cupCake, cupCake, new Vector3(0, -3.35f),
+            obj.SetBullet(cupCake, cupCake, new InitialTransform(new Vector3(0, -3.35f)),
                 (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
 
             obj.transform.localPosition += new Vector3(Random.Range(-0.5f, 0.5f), 0);
@@ -229,9 +219,5 @@ namespace UCT.Battle
             objectPools[0].ReturnPool(obj.gameObject, obj);
         }
 
-        private enum Nest
-        {
-            SimpleNestBullet
-        }
     }
 }

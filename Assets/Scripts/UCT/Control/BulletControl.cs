@@ -32,22 +32,13 @@ namespace UCT.Control
         [Header("触发器伤害")]
         public List<int> triggerHit = new() { 1 };
 
-        [Header("初始位置")]
-        public Vector3 startPosition;
-
-        [Header("初始旋转角度")]
-        public Vector3 startRotation;
-
-        [Header("初始缩放")]
-        public Vector3 startScale = new(1, 1, 1);
-
         [Header("弹幕属性颜色")]
         public BulletColor bulletColor = BulletColor.White;
 
         [Header("Sprite遮罩模式")]
         public SpriteMaskInteraction startMask = SpriteMaskInteraction.None;
 
-        [Header("触发后跟随模式")]
+        [Header("跟随模式")]
         public FollowMode triggerFollowMode = FollowMode.NoFollow;
     }
 }

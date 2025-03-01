@@ -63,7 +63,7 @@ namespace UCT.Battle
                     case FollowMode.NoFollow:
                         break;
                     default:
-                        throw new ArgumentOutOfRangeException();
+                        throw new ArgumentOutOfRangeException($"Unexpected followMode value: {followMode}");
                 }
             }
         }
@@ -103,129 +103,81 @@ namespace UCT.Battle
 
         public void SetBullet(string bulletPathName,
             string objName = null,
-            Vector3 startPosition = default,
-            BattleControl.BulletColor inputBulletColor = default,
-            SpriteMaskInteraction startMask = default,
-            Vector3 startRotation = default,
-            Vector3 startScale = default)
+            InitialTransform? initialTransform = null,
+            BattleControl.BulletColor? inputBulletColor = null,
+            SpriteMaskInteraction? initialMask = null)
         {
-            var path = "Assets/Bullets/" + bulletPathName;
+            var bullet = BulletResourceManager.LoadBullet(bulletPathName);
+            if (!bullet)
+            {
+                return;
+            }
 
-            SetBullet((BulletControl)Resources.Load(path), objName, startPosition, inputBulletColor, startMask,
-                startRotation, startScale);
+            SetBullet(bullet, objName, initialTransform, inputBulletColor, initialMask);
         }
+
 
         private void SetBullet(BulletControl bulletControl,
             string objName = null,
-            Vector3 startPosition = default,
-            BattleControl.BulletColor inputBulletColor = default,
-            SpriteMaskInteraction startMask = default,
-            Vector3 startRotation = default,
-            Vector3 startScale = default)
+            InitialTransform? initialTransform = null,
+            BattleControl.BulletColor? inputBulletColor = null,
+            SpriteMaskInteraction? initialMask = null)
         {
             objName ??= bulletControl.objName;
 
-            if (startPosition == default)
+            var startPosition = new Vector3();
+            var startRotation = new Quaternion();
+            var startScale = new Vector3();
+            if (initialTransform != null)
             {
-                startPosition = bulletControl.startPosition;
+                var notNullInitialTransform = initialTransform.Value;
+
+                if (notNullInitialTransform.Position != null)
+                {
+                    startPosition = notNullInitialTransform.Position.Value;
+                }
+
+                if (notNullInitialTransform.Rotation != null)
+                {
+                    startRotation = notNullInitialTransform.Rotation.Value;
+                }
+
+                if (notNullInitialTransform.Scale != null)
+                {
+                    startScale = notNullInitialTransform.Scale.Value;
+                }
             }
 
-            if (inputBulletColor == default)
-            {
-                inputBulletColor = bulletControl.bulletColor;
-            }
+            inputBulletColor ??= bulletControl.bulletColor;
 
-            if (startMask == default)
-            {
-                startMask = bulletControl.startMask;
-            }
+            initialMask ??= bulletControl.startMask;
 
-            if (startRotation == default)
-            {
-                startRotation = bulletControl.startRotation;
-            }
-
-            if (startScale == default)
-            {
-                startScale = bulletControl.startScale;
-            }
-
-            SetBullet(objName,
-                bulletControl.typeName,
-                bulletControl.layer,
-                bulletControl.sprite,
-                bulletControl.triggerSize,
-                bulletControl.triggerHit,
-                bulletControl.triggerOffset,
-                startPosition,
-                inputBulletColor,
-                startMask,
-                startRotation,
-                startScale,
-                bulletControl.triggerFollowMode);
-        }
-
-        /// <summary>
-        ///     初始化弹幕（循环生成盒状碰撞模式）。
-        /// </summary>
-        /// <param name="objName">设置弹幕的Obj的名称，以便查找。</param>
-        /// <param name="inputTypeName">设置弹幕的种类名称，如果种类名称与当前的弹幕一致，则保留原有的碰撞相关参数，反之清空。</param>
-        /// <param name="layer">玩家为100，战斗框边缘为50。可参考。</param>
-        /// <param name="sprite">一般在Resources内导入。</param>
-        /// <param name="triggerSizes">设置判定箱大小，可设定多个List，但多数情况下需要避免其重叠。（NoFollow情况下设为(0,0)，会自动与sprite大小同步）</param>
-        /// <param name="triggerHits">设定碰撞箱伤害，List大小必须与sizes相等。</param>
-        /// <param name="triggerOffsets">设定判定箱偏移，List大小必须与sizes相等。</param>
-        /// <param name="triggerFollowMode">设置碰撞箱跟随SpriteRenderer缩放的模式。</param>
-        /// <param name="startMask">设置Sprite遮罩模式。</param>
-        /// <param name="inputBulletColor">设置弹幕属性颜色数据</param>
-        /// <param name="startPosition">设置起始位置（相对坐标）。</param>
-        /// <param name="startRotation">设置旋转角度，一般只需更改Z轴。</param>
-        /// <param name="startScale">若弹幕不需拉伸，StartScale一般设置(1,1,1)。检测到Z为0时会归位到(1,1,1)。</param>
-        private void SetBullet(
-            string objName,
-            string inputTypeName,
-            int layer,
-            Sprite sprite,
-            List<Vector2> triggerSizes,
-            List<int> triggerHits,
-            List<Vector2> triggerOffsets,
-            Vector3 startPosition = new(),
-            BattleControl.BulletColor inputBulletColor = BattleControl.BulletColor.White,
-            SpriteMaskInteraction startMask = SpriteMaskInteraction.None,
-            Vector3 startRotation = new(),
-            Vector3 startScale = new(),
-            FollowMode triggerFollowMode = FollowMode.NoFollow
-        )
-        {
             gameObject.name = objName;
-
-            spriteRenderer.sortingOrder = layer;
-
-            bulletColor = inputBulletColor;
+            spriteRenderer.sortingOrder = bulletControl.layer;
+            bulletColor = inputBulletColor.Value;
             spriteRenderer.color = MainControl.Instance.BattleControl.bulletColorList[(int)bulletColor];
-
             transform.localPosition = startPosition;
+            transform.rotation = startRotation;
 
-            transform.rotation = Quaternion.Euler(startRotation);
-
-            if (startScale.z == 0)
+            if (Mathf.Approximately(startScale.z, 0))
             {
                 startScale = Vector3.one;
             }
 
             transform.localScale = startScale;
 
-            SetMask(startMask);
-            spriteRenderer.sprite = sprite;
+            SetMask(initialMask.Value);
+            spriteRenderer.sprite = bulletControl.sprite;
 
-            if (typeName != inputTypeName)
+            if (typeName != bulletControl.typeName)
             {
-                typeName = inputTypeName;
+                typeName = bulletControl.typeName;
             }
             else
             {
                 return;
             }
+
 
             for (var i = 0; i < boxColliderList.Count; i++)
             {
@@ -236,13 +188,13 @@ namespace UCT.Battle
             boxColliderSizes.Clear();
             boxHitList.Clear();
 
-            boxColliderSizes = triggerSizes;
-            boxHitList = triggerHits;
+            boxColliderSizes = bulletControl.triggerSize;
+            boxHitList = bulletControl.triggerHit;
 
-            followMode = triggerFollowMode;
+            followMode = bulletControl.triggerFollowMode;
 
             //循环生成box碰撞
-            for (var i = 0; i < triggerSizes.Count; i++)
+            for (var i = 0; i < bulletControl.triggerSize.Count; i++)
             {
                 var save = gameObject.AddComponent<BoxCollider2D>();
                 save.isTrigger = true;
@@ -255,7 +207,7 @@ namespace UCT.Battle
                     save.size = boxColliderList[i].transform.GetComponent<SpriteRenderer>().size - boxColliderSizes[i];
                 }
 
-                save.offset = triggerOffsets[i];
+                save.offset = bulletControl.triggerOffset[i];
 
                 boxColliderList.Add(save);
             }
@@ -280,7 +232,8 @@ namespace UCT.Battle
                 new Vector3(r * MathUtilityService.GetRandomUnit(), r * MathUtilityService.GetRandomUnit(), 0),
                 new Vector3(0, 0, v3Spin.z), 4, 1f / 60f * 4f * 1.5f, "", Ease.OutElastic);
             MainControl.Instance.cameraShake3D.Shake(
-                new Vector3(r * MathUtilityService.GetRandomUnit(), 0, r * MathUtilityService.GetRandomUnit()), v3Spin, 4,
+                new Vector3(r * MathUtilityService.GetRandomUnit(), 0, r * MathUtilityService.GetRandomUnit()), v3Spin,
+                4,
                 1f / 60f * 4f * 1.5f, "3D CameraPoint", Ease.OutElastic);
             if (MainControl.Instance.playerControl.hp <= 0)
             {
@@ -314,6 +267,82 @@ namespace UCT.Battle
                 default:
                     throw new ArgumentOutOfRangeException(nameof(spriteMaskInteraction), spriteMaskInteraction, null);
             }
+        }
+    }
+    public static class BulletResourceManager
+    {
+        private static readonly Dictionary<string, BulletControl> BulletCache = new();
+
+        public static BulletControl LoadBullet(string bulletPathName)
+        {
+            if (BulletCache.TryGetValue(bulletPathName, out var bullet))
+            {
+                return bullet;
+            }
+
+            var path = "Assets/Bullets/" + bulletPathName;
+            bullet = Resources.Load<BulletControl>(path);
+        
+            if (bullet)
+            {
+                BulletCache[bulletPathName] = bullet;
+            }
+            else
+            {
+                Other.Debug.LogError($"Bullet resource not found: {path}");
+            }
+
+            return bullet;
+        }
+    }
+
+    public readonly struct InitialTransform : IEquatable<InitialTransform>
+    {
+        public Vector3? Position { get; }
+        public Quaternion? Rotation { get; }
+        public Vector3? Scale { get; }
+
+        public InitialTransform(Vector3 position)
+        {
+            Position = position;
+            Rotation = null;
+            Scale = null;
+        }
+
+        public InitialTransform(Vector3 position, Quaternion rotation)
+        {
+            Position = position;
+            Rotation = rotation;
+            Scale = null;
+        }
+
+        public InitialTransform(Vector3 position, Vector3 scale)
+        {
+            Position = position;
+            Rotation = null;
+            Scale = scale;
+        }
+
+        public InitialTransform(Vector3 position, Quaternion rotation, Vector3 scale)
+        {
+            Position = position;
+            Rotation = rotation;
+            Scale = scale;
+        }
+
+        public bool Equals(InitialTransform other)
+        {
+            return Position.Equals(other.Position) && Rotation.Equals(other.Rotation) && Scale.Equals(other.Scale);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is InitialTransform other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Position, Rotation, Scale);
         }
     }
 }
