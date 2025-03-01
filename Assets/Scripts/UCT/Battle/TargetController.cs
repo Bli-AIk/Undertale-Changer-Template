@@ -13,7 +13,7 @@ namespace UCT.Battle
     /// </summary>
     public class TargetController : MonoBehaviour
     {
-        private static readonly int Hit1 = Animator.StringToHash("Hit");
+        private static readonly int Hit = Animator.StringToHash("Hit");
         private static readonly int MoveSpeed = Animator.StringToHash("MoveSpeed");
 
         [Header("攻击造成的伤害")]
@@ -55,10 +55,10 @@ namespace UCT.Battle
             }
 
             _pressZ = true;
-            _anim.SetBool(Hit1, true);
+            _anim.SetBool(Hit, true);
             _anim.SetFloat(MoveSpeed, 0);
             AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipBattle);
-            Hit();
+            HitEnemy();
         }
 
         private void OnEnable()
@@ -68,7 +68,7 @@ namespace UCT.Battle
                 _anim = GetComponent<Animator>();
             }
 
-            _anim.SetBool(Hit1, false);
+            _anim.SetBool(Hit, false);
             _anim.SetFloat(MoveSpeed, 1);
             _pressZ = true;
         }
@@ -76,7 +76,7 @@ namespace UCT.Battle
         /// <summary>
         ///     攻击敌人时进行的计算
         /// </summary>
-        private void Hit()
+        private void HitEnemy()
         {
             //TODO: 目前的算法不是原作的算法。需要修改。
             if (Mathf.Abs(_bar.transform.localPosition.x) > 0.8f)
@@ -115,11 +115,12 @@ namespace UCT.Battle
         //以下皆用于anim
         private void HitAnim()
         {
-            hitMonster.anim.SetBool(Hit1, true);
+            hitMonster.anim.SetBool(Hit, true);
             hpBar.transform.localScale =
                 new Vector3(
-                    MainControl.Instance.selectUIController.enemiesControllers[select].hp /
-                    (float)MainControl.Instance.selectUIController.enemiesControllers[select].hpMax, 1);
+                    Mathf.Clamp(MainControl.Instance.selectUIController.enemiesControllers[select].hp /
+                                (float)MainControl.Instance.selectUIController.enemiesControllers[select].hpMax, 0,
+                        Mathf.Infinity), 1);
             MainControl.Instance.selectUIController.enemiesControllers[select].hp -= hitDamage;
             DOTween.To(() => hpBar.transform.localScale, x => hpBar.transform.localScale = x,
                 new Vector3(

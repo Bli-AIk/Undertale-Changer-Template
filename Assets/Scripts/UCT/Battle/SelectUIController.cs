@@ -107,7 +107,7 @@ namespace UCT.Battle
         [Header("暂存ACT选项以便调用")]
         public List<string> actSave;
 
-        [Header("自动寻找战斗总控的怪物 需保证名称一致")]
+        [Header("怪物清单")]
         public List<EnemiesController> enemiesControllers;
 
         [Header("首次进入回合的时候播放自定义的回合文本")]
@@ -205,10 +205,11 @@ namespace UCT.Battle
                 buttons.Add(transform.Find(t).GetComponent<SpriteRenderer>());
             }
 
-            foreach (var enemies in MainControl.Instance.BattleControl.enemies.Select(t => GameObject.Find(t.name)
-                         .GetComponent<EnemiesController>()).Where(enemies => enemies))
+            foreach (var enemy in MainControl.Instance.BattleControl.enemies)
             {
-                enemiesControllers.Add(enemies);
+                var obj = Instantiate(enemy);
+                obj.name = enemy.name;
+                enemiesControllers.Add(obj.transform.GetComponent<EnemiesController>());
             }
 
             selectedButton = EnumService.GetMinEnumValue<SelectedButton>();
@@ -608,24 +609,24 @@ namespace UCT.Battle
 
         private bool NameLayerCancel()
         {
-            if (InputService.GetKeyDown(KeyCode.X))
+            if (!InputService.GetKeyDown(KeyCode.X))
             {
-                selectedLayer = SelectedLayer.ButtonLayer;
-                nameLayerIndex = 0;
-                if (!firstIn)
-                {
-                    TurnTextLoad();
-                }
-                else
-                {
-                    TurnTextLoad(true, firstInDiy);
-                }
-
-                _enemiesHpLine.SetActive(false);
-                return true;
+                return false;
             }
 
-            return false;
+            selectedLayer = SelectedLayer.ButtonLayer;
+            nameLayerIndex = 0;
+            if (!firstIn)
+            {
+                TurnTextLoad();
+            }
+            else
+            {
+                TurnTextLoad(true, firstInDiy);
+            }
+
+            _enemiesHpLine.SetActive(false);
+            return true;
         }
 
         private void UpdateOptionLayer()

@@ -1,13 +1,12 @@
 using UCT.Global.Core;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace UCT.Battle
 {
     public class EnemiesHpLineController : MonoBehaviour
     {
         [Header("对应怪物IDª")]
-        [FormerlySerializedAs("number")] public int enemyId;
+        public int enemyId;
 
         private SpriteRenderer _greenSprite;
 
@@ -35,8 +34,9 @@ namespace UCT.Battle
                 transform.localScale = new Vector3(42, 7.25f, 1);
                 _greenSprite.transform.localScale =
                     new Vector3(
-                        (float)MainControl.Instance.selectUIController.enemiesControllers[enemyId].hp /
-                        MainControl.Instance.selectUIController.enemiesControllers[enemyId].hpMax,
+                        Mathf.Clamp((float)MainControl.Instance.selectUIController.enemiesControllers[enemyId].hp /
+                                    MainControl.Instance.selectUIController.enemiesControllers[enemyId].hpMax, 0,
+                            Mathf.Infinity),
                         _greenSprite.transform.localScale.y);
             }
         }
