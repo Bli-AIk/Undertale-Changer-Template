@@ -36,7 +36,7 @@ namespace UCT.Service
                 if (t1 == delimiter || t1 == ';')
                 {
                     sonList.Add(text.ToString());
-                    text .Clear();
+                    text.Clear();
                 }
                 else
                 {
@@ -105,11 +105,15 @@ namespace UCT.Service
         ///     检测list的前几个字符是否与传入的string screen相同。
         ///     若相同则分割文本到子List
         /// </summary>
-        public static void GetFirstChildStringByPrefix(List<string> parentList, List<string> sonList, string screen)
+        public static List<string> GetFirstChildStringByPrefix(List<string> parentList,
+            List<string> sonList,
+            string screen)
         {
             sonList.Clear();
             sonList.AddRange(from t in parentList where t[..screen.Length] == screen select t[screen.Length..]);
+            return sonList;
         }
+
         /// <summary>
         ///     用于游戏内文本读取
         ///     传入数据名称返回文本包文本
@@ -333,7 +337,10 @@ namespace UCT.Service
             }
         }
 
-        private static bool IsParseFloatHaveOther(string text, float origin, bool isY, out float floatWithSpecialCharacters)
+        private static bool IsParseFloatHaveOther(string text,
+            float origin,
+            bool isY,
+            out float floatWithSpecialCharacters)
         {
             floatWithSpecialCharacters = 0;
             if (text is "P" or "p")
@@ -351,7 +358,6 @@ namespace UCT.Service
 
             floatWithSpecialCharacters = origin;
             return true;
-
         }
 
         private static bool IsParseFloatHaveR(string text, StringBuilder save, ref float x1, ref float plus)
@@ -386,6 +392,7 @@ namespace UCT.Service
         {
             return $"({vector2.x},{vector2.y})";
         }
+
         /// <summary>
         ///     输入形如(x,y)的字符串向量，返回Vector2
         /// </summary>

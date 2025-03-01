@@ -465,7 +465,7 @@ namespace UCT.Battle
             }
 
             var save = new List<string>();
-            TextProcessingService.GetFirstChildStringByPrefix(
+            save = TextProcessingService.GetFirstChildStringByPrefix(
                 MainControl.Instance.BattleControl.mercySave, save,
                 MainControl.Instance.BattleControl.enemies[nameLayerIndex].name + "\\");
             TextProcessingService.SplitStringToListWithDelimiter(save, actSave);
@@ -516,7 +516,7 @@ namespace UCT.Battle
             }
 
             var save = new List<string>();
-            TextProcessingService.GetFirstChildStringByPrefix(
+            save = TextProcessingService.GetFirstChildStringByPrefix(
                 MainControl.Instance.BattleControl.actSave, save,
                 MainControl.Instance.BattleControl.enemies[nameLayerIndex].name + "\\");
             TextProcessingService.SplitStringToListWithDelimiter(save, actSave);

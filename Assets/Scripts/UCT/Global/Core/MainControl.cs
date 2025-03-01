@@ -360,7 +360,7 @@ namespace UCT.Global.Core
 
             BattleControl.turnDialogAsset = new List<string>();
 
-            BattleControl.uiText = DataHandlerService.LoadLanguageData("Battle\\UIBattleText", languagePackId);
+            var uiText = DataHandlerService.LoadLanguageData("Battle\\UIBattleText", languagePackId);
 
             string[] turnSave;
             if (languagePackId < LanguagePackageInternalNumber)
@@ -392,11 +392,15 @@ namespace UCT.Global.Core
                 }
             }
 
-            BattleControl.uiTextSave = DataHandlerService.LoadItemData(BattleControl.uiText);
-            TextProcessingService.GetFirstChildStringByPrefix(BattleControl.uiTextSave, BattleControl.actSave, "Act\\");
-            TextProcessingService.GetFirstChildStringByPrefix(BattleControl.uiTextSave, BattleControl.mercySave,
+            var uiTextSave = DataHandlerService.LoadItemData(uiText);
+            BattleControl.actSave =
+                TextProcessingService.GetFirstChildStringByPrefix(uiTextSave, BattleControl.actSave,
+                    "Act\\");
+            BattleControl.mercySave = TextProcessingService.GetFirstChildStringByPrefix(uiTextSave,
+                BattleControl.mercySave,
                 "Mercy\\");
-            TextProcessingService.GetFirstChildStringByPrefix(BattleControl.uiTextSave, BattleControl.turnTextSave,
+            BattleControl.turnTextSave = TextProcessingService.GetFirstChildStringByPrefix(uiTextSave,
+                BattleControl.turnTextSave,
                 "Turn\\");
 
             BattleControl.turnTextSave =

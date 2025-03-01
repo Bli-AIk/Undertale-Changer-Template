@@ -37,11 +37,6 @@ namespace UCT.Control
         [Header("敌人OBJ")]
         [Header("物体名会识别为敌人名称")] public List<GameObject> enemies; //敌方的Obj。
 
-        [Header("战斗内UIText读取")]
-        public string uiText;
-
-        public List<string> uiTextSave;
-
         [Header("存储ACT选项和选择后文本")]
         public List<string> actSave; //4个一对应 根据enemies而排序
 
