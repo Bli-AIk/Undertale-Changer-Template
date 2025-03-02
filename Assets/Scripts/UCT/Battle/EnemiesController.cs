@@ -1,3 +1,5 @@
+using System;
+using JetBrains.Annotations;
 using UCT.Global.Audio;
 using UCT.Global.Core;
 using UnityEngine;
@@ -14,12 +16,23 @@ namespace UCT.Battle
         public Animator anim;
         public int atk, def;
         public int hp, hpMax;
+        [CanBeNull] public Action[] OnOptions;
 
         private void Start()
         {
             anim = GetComponent<Animator>();
-        }
 
+            var optionsProvider = GetComponent<IEnemyOptions>();
+            if (optionsProvider == null)
+            {
+                Other.Debug.LogError("optionsProvider 不应为空！");
+            }
+            else
+            {
+                OnOptions = optionsProvider.GetOptions();
+            }
+        }
+        
         private void AnimHit()
         {
             if (!anim.GetBool(Hit))
@@ -30,5 +43,10 @@ namespace UCT.Battle
             AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipBattle);
             anim.SetBool(Hit, false);
         }
+    }
+
+    public interface IEnemyOptions
+    {
+        Action[] GetOptions();
     }
 }

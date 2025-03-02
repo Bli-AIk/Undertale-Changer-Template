@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using DG.Tweening;
 using TMPro;
 using UCT.Control;
@@ -522,22 +523,68 @@ namespace UCT.Battle
                 MainControl.Instance.BattleControl.enemies[nameLayerIndex].name + "\\");
             TextProcessingService.SplitStringToListWithDelimiter(save, actSave);
 
-            _textUI.text = UITextPrefix + actSave[0];
-            _textUIBack.text = "";
-            if (actSave.Count > MainControl.Instance.BattleControl.enemies.Count)
+            var options = enemiesControllers[nameLayerIndex].OnOptions;
+
+
+            const string noLanguagePack = "No Language Pack!";
+            if (options is { Length: > 0 })
             {
-                _textUIBack.text += "* " + actSave[2];
+                if (actSave.Count > 0)
+                {
+                    _textUI.text = new StringBuilder().Append(UITextPrefix).Append((object)actSave[0]).ToString();
+                }
+                else
+                {
+                    _textUI.text = noLanguagePack;
+                    while (actSave.Count < 2)
+                    {
+                        actSave.Add(noLanguagePack);
+                    }
+                }
+                _textUIBack.text = "";
             }
 
-            if (actSave.Count > 2 * MainControl.Instance.BattleControl.enemies.Count)
+            var enemyCount = MainControl.Instance.BattleControl.enemies.Count;
+
+            if (actSave.Count > enemyCount && options is { Length: > 1 })
             {
-                _textUI.text += "\n<indent=10></indent>* " + actSave[4];
+                _textUIBack.text += $"* {actSave[2]}";
+            }
+            else
+            {
+                _textUIBack.text += noLanguagePack;
+                while (actSave.Count <= 4)
+                {
+                    actSave.Add(noLanguagePack);
+                }
             }
 
-            if (actSave.Count > 3 * MainControl.Instance.BattleControl.enemies.Count)
+            if (actSave.Count > 2 * enemyCount && options is { Length: > 2 })
+            {
+                _textUI.text += $"\n{UITextPrefix}{actSave[4]}";
+            }
+            else
+            {
+                _textUI.text += $"\n{UITextPrefix}{noLanguagePack}";
+                while (actSave.Count <= 6)
+                {
+                    actSave.Add(noLanguagePack);
+                }
+            }
+
+            if (actSave.Count > 3 * enemyCount && options is { Length: > 3 })
             {
                 _textUIBack.text += "\n* " + actSave[6];
             }
+            else
+            {
+                _textUIBack.text += $"\n{noLanguagePack}";
+                while (actSave.Count <= 8)
+                {
+                    actSave.Add(noLanguagePack);
+                }
+            }
+
 
             for (var i = 0; i < actSave.Count; i++)
             {
@@ -745,101 +792,12 @@ namespace UCT.Battle
         }
 
         /// <summary>
-        ///     在这里ACT对应选项触发的内容
+        ///     ACT触发选项
         /// </summary>
         private void ActOptionLayerOptions()
         {
-            //TODO 重构这个方法
-            switch (nameLayerIndex)
-            {
-                case 0: //怪物0
-                {
-                    switch (optionLayerIndex) //选项
-                    {
-                        case 0:
-                        {
-                            break;
-                        }
-
-                        case 1:
-                        {
-                            Other.Debug.Log(1);
-                            AudioController.Instance.PlayFx(3,
-                                MainControl.Instance.AudioControl.fxClipBattle);
-
-                            break;
-                        }
-
-                        case 2:
-                        {
-                            break;
-                        }
-
-                        case 3:
-                        {
-                            break;
-                        }
-                    }
-
-                    break;
-                }
-
-                case 1: //怪物1
-                {
-                    switch (optionLayerIndex) //选项
-                    {
-                        case 0:
-                        {
-                            break;
-                        }
-
-                        case 1:
-                        {
-                            break;
-                        }
-
-                        case 2:
-                        {
-                            break;
-                        }
-
-                        case 3:
-                        {
-                            break;
-                        }
-                    }
-
-                    break;
-                }
-
-                case 2: //怪物2
-                {
-                    switch (optionLayerIndex) //选项
-                    {
-                        case 0:
-                        {
-                            break;
-                        }
-
-                        case 1:
-                        {
-                            break;
-                        }
-
-                        case 2:
-                        {
-                            break;
-                        }
-
-                        case 3:
-                        {
-                            break;
-                        }
-                    }
-
-                    break;
-                }
-            }
+            var options = enemiesControllers[nameLayerIndex].OnOptions;
+            options?[optionLayerIndex]();
         }
 
         private void ActOptionLayerSelect()
