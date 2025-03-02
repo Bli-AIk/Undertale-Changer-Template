@@ -535,15 +535,42 @@ namespace UCT.Battle
                 }
                 else
                 {
-                    _textUI.text = noLanguagePack;
+                    _textUI.text = new StringBuilder().Append(UITextPrefix).Append(noLanguagePack).ToString();
                     while (actSave.Count < 2)
                     {
                         actSave.Add(noLanguagePack);
                     }
                 }
+
                 _textUIBack.text = "";
             }
 
+            SetActTexts(options, noLanguagePack);
+
+            for (var i = 0; i < actSave.Count; i++)
+            {
+                actSave[i] += ';';
+            }
+
+            actSave = DataHandlerService.ChangeItemData(actSave, false,
+                new List<string>
+                {
+                    enemiesControllers[nameLayerIndex].name,
+                    enemiesControllers[nameLayerIndex].atk.ToString(),
+                    enemiesControllers[nameLayerIndex].def.ToString()
+                });
+
+            for (var i = 0; i < actSave.Count; i++)
+            {
+                actSave[i] = actSave[i][..(actSave[i].Length - 1)];
+            }
+
+            _textUIBack.rectTransform.anchoredPosition = new Vector2(10.75f, -3.3f);
+            _textUIBack.alignment = TextAlignmentOptions.TopLeft;
+        }
+
+        private void SetActTexts(Action[] options, string noLanguagePack)
+        {
             var enemyCount = MainControl.Instance.BattleControl.enemies.Count;
 
             if (actSave.Count > enemyCount && options is { Length: > 1 })
@@ -552,7 +579,7 @@ namespace UCT.Battle
             }
             else
             {
-                _textUIBack.text += noLanguagePack;
+                _textUIBack.text += $"* {noLanguagePack}";
                 while (actSave.Count <= 4)
                 {
                     actSave.Add(noLanguagePack);
@@ -578,34 +605,12 @@ namespace UCT.Battle
             }
             else
             {
-                _textUIBack.text += $"\n{noLanguagePack}";
+                _textUIBack.text += $"\n* {noLanguagePack}";
                 while (actSave.Count <= 8)
                 {
                     actSave.Add(noLanguagePack);
                 }
             }
-
-
-            for (var i = 0; i < actSave.Count; i++)
-            {
-                actSave[i] += ';';
-            }
-
-            actSave = DataHandlerService.ChangeItemData(actSave, false,
-                new List<string>
-                {
-                    enemiesControllers[nameLayerIndex].name,
-                    enemiesControllers[nameLayerIndex].atk.ToString(),
-                    enemiesControllers[nameLayerIndex].def.ToString()
-                });
-
-            for (var i = 0; i < actSave.Count; i++)
-            {
-                actSave[i] = actSave[i][..(actSave[i].Length - 1)];
-            }
-
-            _textUIBack.rectTransform.anchoredPosition = new Vector2(10.75f, -3.3f);
-            _textUIBack.alignment = TextAlignmentOptions.TopLeft;
         }
 
         /// <summary>
