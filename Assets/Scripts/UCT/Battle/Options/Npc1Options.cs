@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace UCT.Battle
+namespace UCT.Battle.Options
 {
     public class Npc1Options : MonoBehaviour, IEnemyOptions
     {

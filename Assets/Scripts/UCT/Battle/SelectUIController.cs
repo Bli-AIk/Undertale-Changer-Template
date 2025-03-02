@@ -523,29 +523,7 @@ namespace UCT.Battle
                 MainControl.Instance.BattleControl.enemies[nameLayerIndex].name + "\\");
             TextProcessingService.SplitStringToListWithDelimiter(save, actSave);
 
-            var options = enemiesControllers[nameLayerIndex].OnOptions;
-
-
-            const string noLanguagePack = "No Language Pack!";
-            if (options is { Length: > 0 })
-            {
-                if (actSave.Count > 0)
-                {
-                    _textUI.text = new StringBuilder().Append(UITextPrefix).Append((object)actSave[0]).ToString();
-                }
-                else
-                {
-                    _textUI.text = new StringBuilder().Append(UITextPrefix).Append(noLanguagePack).ToString();
-                    while (actSave.Count < 2)
-                    {
-                        actSave.Add(noLanguagePack);
-                    }
-                }
-
-                _textUIBack.text = "";
-            }
-
-            SetActTexts(options, noLanguagePack);
+            SetActTexts();
 
             for (var i = 0; i < actSave.Count; i++)
             {
@@ -569,49 +547,59 @@ namespace UCT.Battle
             _textUIBack.alignment = TextAlignmentOptions.TopLeft;
         }
 
-        private void SetActTexts(Action[] options, string noLanguagePack)
+        private void SetActTexts()
         {
-            var enemyCount = MainControl.Instance.BattleControl.enemies.Count;
-
-            if (actSave.Count > enemyCount && options is { Length: > 1 })
+            var options = enemiesControllers[nameLayerIndex].OnOptions;
+            const string noLanguagePack = "No L-Pack!";
+            int enemyCount = MainControl.Instance.BattleControl.enemies.Count;
+    
+            if (options == null || options.Length == 0)
             {
-                _textUIBack.text += $"* {actSave[2]}";
+                return;
             }
-            else
+    
+            EnsureActSaveSize(2, noLanguagePack);
+            _textUI.text = new StringBuilder().Append(UITextPrefix).Append(actSave[0]).ToString();
+            _textUIBack.text = "";
+    
+            for (int i = 0; i < options.Length; i++)
             {
-                _textUIBack.text += $"* {noLanguagePack}";
-                while (actSave.Count <= 4)
+                int index = i * 2;
+                EnsureActSaveSize(index + 2, noLanguagePack);
+        
+                if (actSave.Count > i * enemyCount)
                 {
-                    actSave.Add(noLanguagePack);
+                    if (i % 2 == 1)
+                    {
+                        _textUIBack.text += $"* {actSave[index]}\n";
+                    }
+                    else
+                    {
+                        _textUI.text += $"{UITextPrefix}{actSave[index]}\n";
+                    }
                 }
-            }
-
-            if (actSave.Count > 2 * enemyCount && options is { Length: > 2 })
-            {
-                _textUI.text += $"\n{UITextPrefix}{actSave[4]}";
-            }
-            else
-            {
-                _textUI.text += $"\n{UITextPrefix}{noLanguagePack}";
-                while (actSave.Count <= 6)
+                else
                 {
-                    actSave.Add(noLanguagePack);
-                }
-            }
-
-            if (actSave.Count > 3 * enemyCount && options is { Length: > 3 })
-            {
-                _textUIBack.text += "\n* " + actSave[6];
-            }
-            else
-            {
-                _textUIBack.text += $"\n* {noLanguagePack}";
-                while (actSave.Count <= 8)
-                {
-                    actSave.Add(noLanguagePack);
+                    if (i % 2 == 1)
+                    {
+                        _textUIBack.text += $"* {noLanguagePack}\n";
+                    }
+                    else
+                    {
+                        _textUI.text += $"{UITextPrefix}{noLanguagePack}\n";
+                    }
                 }
             }
         }
+
+        private void EnsureActSaveSize(int size, string defaultValue)
+        {
+            while (actSave.Count < size)
+            {
+                actSave.Add(defaultValue);
+            }
+        }
+
 
         /// <summary>
         ///     FIGHT：选择敌人
