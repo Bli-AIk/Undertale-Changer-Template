@@ -1,9 +1,10 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace UCT.Battle.Options
 {
-    public class Npc2Options : MonoBehaviour, IEnemyOptions
+    public class Npc2Enemy : MonoBehaviour, IEnemy
     {
         public Action[] GetOptions()
         {
@@ -14,6 +15,11 @@ namespace UCT.Battle.Options
                 () => Other.Debug.Log("NPC2选项3"),
                 //() => Other.Debug.Log("NPC2选项4"),
             };
+        }
+
+        public IEnumerator<float> EnemyTurns(int index)
+        {
+            throw new NotImplementedException();
         }
     }
 }

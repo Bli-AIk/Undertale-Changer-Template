@@ -22,7 +22,7 @@ namespace UCT.Battle
         {
             anim = GetComponent<Animator>();
 
-            var optionsProvider = GetComponent<IEnemyOptions>();
+            var optionsProvider = GetComponent<IEnemy>();
             if (optionsProvider == null)
             {
                 Other.Debug.LogError("optionsProvider 不应为空！");
@@ -43,10 +43,5 @@ namespace UCT.Battle
             AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipBattle);
             anim.SetBool(Hit, false);
         }
-    }
-
-    public interface IEnemyOptions
-    {
-        Action[] GetOptions();
     }
 }

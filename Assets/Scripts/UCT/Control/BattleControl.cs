@@ -34,25 +34,20 @@ namespace UCT.Control
             Purple
         }
 
-        [Header("敌人OBJ")]
-        [Header("物体名会识别为敌人名称")] public List<GameObject> enemies; //敌方的Obj。
-
-        [Header("存储ACT选项和选择后文本")]
-        public List<string> actSave; //4个一对应 根据enemies而排序
-
-        [Header("存储MERCY选项和选择后文本")]
-        public List<string> mercySave;
-
-        public List<string> enemiesNameSave;
-
-        [Header("按回合存储旁白")]
-        public List<string> turnTextSave;
-
-        [Header("存储敌人对话文件")]
-        public List<string> turnDialogAsset; //直接在战斗场景内读取
+        public List<GameObject> enemies; 
 
         public List<Color> bulletColorList;
 
         public List<Color> playerColorList, playerMissColorList;
+
+        [HideInInspector] public List<string> actSave;
+
+        [HideInInspector] public List<string> mercySave;
+
+        [HideInInspector] public List<string> enemiesNameSave;
+
+        [HideInInspector] public List<string> turnTextSave;
+
+        [HideInInspector] public List<string> turnDialogAsset; 
     }
 }
