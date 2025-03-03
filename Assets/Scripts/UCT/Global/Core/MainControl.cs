@@ -394,15 +394,15 @@ namespace UCT.Global.Core
 
             var uiTextSave = DataHandlerService.LoadItemData(uiText);
             BattleControl.actSave =
-                TextProcessingService.GetFirstChildStringByPrefix(uiTextSave, BattleControl.actSave,
+                TextProcessingService.BatchGetFirstChildStringByPrefix(uiTextSave, 
                     "Act\\");
-            BattleControl.mercySave = TextProcessingService.GetFirstChildStringByPrefix(uiTextSave,
-                BattleControl.mercySave,
+            BattleControl.mercySave = TextProcessingService.BatchGetFirstChildStringByPrefix(uiTextSave,
                 "Mercy\\");
-            BattleControl.turnTextSave = TextProcessingService.GetFirstChildStringByPrefix(uiTextSave,
-                BattleControl.turnTextSave,
+            BattleControl.turnTextSave = TextProcessingService.BatchGetFirstChildStringByPrefix(uiTextSave,
                 "Turn\\");
-
+            BattleControl.enemiesNameSave =
+                TextProcessingService.BatchGetFirstChildStringByPrefix(uiTextSave, 
+                    "Enemy\\");
             BattleControl.turnTextSave =
                 DataHandlerService.ChangeItemData(BattleControl.turnTextSave, true, new List<string>());
             //--------------------------------------------------------------------------------

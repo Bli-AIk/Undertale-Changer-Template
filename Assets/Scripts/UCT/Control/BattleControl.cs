@@ -43,6 +43,8 @@ namespace UCT.Control
         [Header("存储MERCY选项和选择后文本")]
         public List<string> mercySave;
 
+        public List<string> enemiesNameSave;
+
         [Header("按回合存储旁白")]
         public List<string> turnTextSave;
 

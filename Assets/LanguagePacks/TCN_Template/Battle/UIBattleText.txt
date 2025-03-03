@@ -79,3 +79,6 @@ Mercy\NPC1\逃跑\<markPoint>你跑不了。;
 Mercy\NPC2\饒恕\Null;
 Mercy\NPC2\逃跑\<markPoint>你跑不了。;
 Mercy\NPC2\讓它走\<markPoint>你想得美。;
+
+Enemy\NPC1\敵人1;
+Enemy\NPC2\敵人2;

@@ -386,10 +386,7 @@ namespace UCT.Battle
 
             if (selectedButton != SelectedButton.Item)
             {
-                foreach (var t in MainControl.Instance.BattleControl.enemies)
-                {
-                    _textUI.text += UITextPrefix + t.name + "\n";
-                }
+                SetEnemiesName();
             }
             else
             {
@@ -411,6 +408,16 @@ namespace UCT.Battle
                 selectedButton == SelectedButton.Item)
             {
                 selectedLayer = SelectedLayer.ButtonLayer;
+            }
+        }
+
+        private void SetEnemiesName()
+        {
+            foreach (var save in MainControl.Instance.BattleControl.enemies.Select(enemy =>
+                         TextProcessingService.GetFirstChildStringByPrefix(
+                             MainControl.Instance.BattleControl.enemiesNameSave, enemy.name)))
+            {
+                _textUI.text += UITextPrefix + save + "\n";
             }
         }
 
@@ -466,9 +473,8 @@ namespace UCT.Battle
                 return;
             }
 
-            var save = new List<string>();
-            save = TextProcessingService.GetFirstChildStringByPrefix(
-                MainControl.Instance.BattleControl.mercySave, save,
+            var save = TextProcessingService.BatchGetFirstChildStringByPrefix(
+                MainControl.Instance.BattleControl.mercySave, 
                 MainControl.Instance.BattleControl.enemies[nameLayerIndex].name + "\\");
             TextProcessingService.SplitStringToListWithDelimiter(save, actSave);
 
@@ -517,12 +523,10 @@ namespace UCT.Battle
                 return;
             }
 
-            var save = new List<string>();
-            save = TextProcessingService.GetFirstChildStringByPrefix(
-                MainControl.Instance.BattleControl.actSave, save,
+            var save = TextProcessingService.BatchGetFirstChildStringByPrefix(
+                MainControl.Instance.BattleControl.actSave,
                 MainControl.Instance.BattleControl.enemies[nameLayerIndex].name + "\\");
             TextProcessingService.SplitStringToListWithDelimiter(save, actSave);
-
             SetActTexts();
 
             for (var i = 0; i < actSave.Count; i++)
@@ -550,23 +554,24 @@ namespace UCT.Battle
         private void SetActTexts()
         {
             var options = enemiesControllers[nameLayerIndex].OnOptions;
-            const string noLanguagePack = "No L-Pack!";
-            int enemyCount = MainControl.Instance.BattleControl.enemies.Count;
-    
+            var enemyCount = MainControl.Instance.BattleControl.enemies.Count;
+
             if (options == null || options.Length == 0)
             {
                 return;
             }
-    
-            EnsureActSaveSize(2, noLanguagePack);
+
+            const string noLPack = "No L-Pack!";
+            const string noLanguagePack = "No Language Pack!";
+            EnsureActSaveSize(2, noLPack);
             _textUI.text = new StringBuilder().Append(UITextPrefix).Append(actSave[0]).ToString();
             _textUIBack.text = "";
-    
-            for (int i = 0; i < options.Length; i++)
+
+            for (var i = 0; i < options.Length; i++)
             {
-                int index = i * 2;
-                EnsureActSaveSize(index + 2, noLanguagePack);
-        
+                var index = i * 2;
+                EnsureActSaveSize(index + 2, noLPack);
+
                 if (actSave.Count > i * enemyCount)
                 {
                     if (i % 2 == 1)
@@ -582,12 +587,14 @@ namespace UCT.Battle
                 {
                     if (i % 2 == 1)
                     {
-                        _textUIBack.text += $"* {noLanguagePack}\n";
+                        _textUIBack.text += $"* {noLPack}\n";
                     }
                     else
                     {
-                        _textUI.text += $"{UITextPrefix}{noLanguagePack}\n";
+                        _textUI.text += $"{UITextPrefix}{noLPack}\n";
                     }
+
+                    Other.Debug.LogError(noLanguagePack);
                 }
             }
         }
@@ -711,10 +718,7 @@ namespace UCT.Battle
                 selectedLayer = SelectedLayer.NameLayer;
                 optionLayerIndex = 0;
                 _textUI.text = "";
-                foreach (var t in MainControl.Instance.BattleControl.enemies)
-                {
-                    _textUI.text += UITextPrefix + t.name + "\n";
-                }
+                SetEnemiesName();
             }
             else if (InputService.GetKeyDown(KeyCode.Z))
             {
@@ -764,10 +768,7 @@ namespace UCT.Battle
                 optionLayerIndex = 0;
                 _textUI.text = "";
                 _textUIBack.text = "";
-                foreach (var t in MainControl.Instance.BattleControl.enemies)
-                {
-                    _textUI.text += UITextPrefix + t.name + "\n";
-                }
+                SetEnemiesName();
             }
             else if (InputService.GetKeyDown(KeyCode.Z))
             {
@@ -795,13 +796,15 @@ namespace UCT.Battle
 
         private void ActOptionLayerSelect()
         {
+            var count = ActOptionLayerGetCount();
+
             if (InputService.GetKeyDown(KeyCode.UpArrow) && optionLayerIndex - 2 >= 0)
             {
                 AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
                 optionLayerIndex -= 2;
             }
             else if (InputService.GetKeyDown(KeyCode.DownArrow) &&
-                     optionLayerIndex + 2 <= actSave.Count / 2 - 1)
+                     optionLayerIndex + 2 <= count)
             {
                 AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
                 optionLayerIndex += 2;
@@ -814,7 +817,7 @@ namespace UCT.Battle
                 optionLayerIndex--;
             }
             else if (InputService.GetKeyDown(KeyCode.RightArrow) &&
-                     optionLayerIndex + 1 <= actSave.Count / 2 - 1)
+                     optionLayerIndex + 1 <= count)
             {
                 AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
                 optionLayerIndex++;
@@ -841,6 +844,25 @@ namespace UCT.Battle
 
             MainControl.Instance.battlePlayerController.transform.position = new Vector3(playerPosX,
                 playerPosY, MainControl.Instance.battlePlayerController.transform.position.z);
+        }
+
+        private int ActOptionLayerGetCount()
+        {
+            var count = actSave.Count / 2 - 1;
+            var options = enemiesControllers[nameLayerIndex].OnOptions;
+            if (options != null)
+            {
+                if (count > options.Length - 1)
+                {
+                    count = options.Length - 1;
+                }
+            }
+            else
+            {
+                throw new ArgumentNullException($"No {enemiesControllers[nameLayerIndex].OnOptions}!");
+            }
+
+            return count;
         }
 
 
@@ -1007,22 +1029,62 @@ namespace UCT.Battle
         {
             var save = new List<string>();
             TextProcessingService.SplitStringToListWithDelimiter(actSave[numberDialog], save);
-            var enemyController = enemiesControllers.FirstOrDefault(t => save[2] == t.name);
+
+            var size = save[0];
+            var position = save[1];
+            var character = save[2];
+            var direction = save[3];
+            var arrowY = save[4];
+            var text = save[5];
+
+            var enemyController = enemiesControllers.FirstOrDefault(t => character == t.name);
             if (enemyController)
             {
                 _dialog.transform.SetParent(enemyController.transform);
             }
+            else
+            {
+                Other.Debug.LogError("enemyController is empty!");
+            }
 
+            _dialog.size = TextProcessingService.StringVector2ToRealVector2(size, _dialog.size);
+            _dialog.position = TextProcessingService.StringVector2ToRealVector2(position, _dialog.position);
 
-            _dialog.size = TextProcessingService.StringVector2ToRealVector2(save[0], _dialog.size);
-            _dialog.position = TextProcessingService.StringVector2ToRealVector2(save[1], _dialog.position);
+            if (TryParseDirection(direction, out var resultDirection))
+            {
+                _dialog.isBackRight = resultDirection;
+            }
 
-            _dialog.isBackRight = Convert.ToBoolean(save[3]);
-            _dialog.backY = float.Parse(save[4]);
-            _dialog.typeWritter.StartTypeWritter(save[5], _dialog.tmp);
+            if (!float.TryParse(arrowY, out _dialog.backY))
+            {
+                Other.Debug.LogError($"Failed to parse arrowY: {arrowY}");
+            }
+
+            _dialog.typeWritter.StartTypeWritter(text, _dialog.tmp);
             numberDialog++;
             _dialog.tmp.text = "";
             _dialog.PositionChange();
+        }
+
+        private static bool TryParseDirection(string direction, out bool result)
+        {
+            if (string.Equals(direction, "right", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(direction, "true", StringComparison.OrdinalIgnoreCase))
+            {
+                result = true;
+                return true;
+            }
+
+            if (string.Equals(direction, "left", StringComparison.OrdinalIgnoreCase) ||
+                string.Equals(direction, "false", StringComparison.OrdinalIgnoreCase))
+            {
+                result = false;
+                return true;
+            }
+
+            Other.Debug.LogError($"Invalid direction value: {direction}");
+            result = false;
+            return false;
         }
 
         private void TurnTextLoad(bool isDiy = false, int diy = 0)

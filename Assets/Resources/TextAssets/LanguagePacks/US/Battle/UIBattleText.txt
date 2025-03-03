@@ -79,3 +79,6 @@ Mercy\NPC1\Flee\* You can't run away.;
 Mercy\NPC2\Spare\Null;
 Mercy\NPC2\Flee\* You can't run away.;
 Mercy\NPC2\Let It Go\* You wish.;
+
+Enemy\NPC1\Enemy1;
+Enemy\NPC2\Enemy2;

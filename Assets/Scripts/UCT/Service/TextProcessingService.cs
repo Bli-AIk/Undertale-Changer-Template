@@ -105,13 +105,12 @@ namespace UCT.Service
         ///     检测list的前几个字符是否与传入的string screen相同。
         ///     若相同则分割文本到子List
         /// </summary>
-        public static List<string> GetFirstChildStringByPrefix(List<string> parentList,
-            List<string> sonList,
+        public static List<string> BatchGetFirstChildStringByPrefix(List<string> parentList,
             string screen)
         {
-            sonList.Clear();
-            sonList.AddRange(from t in parentList where t[..screen.Length] == screen select t[screen.Length..]);
-            return sonList;
+            var result = new List<string>();
+            result.AddRange(from t in parentList where t[..screen.Length] == screen select t[screen.Length..]);
+            return result;
         }
 
         /// <summary>

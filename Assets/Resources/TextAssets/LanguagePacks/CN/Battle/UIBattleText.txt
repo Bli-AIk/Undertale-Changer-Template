@@ -79,3 +79,6 @@ Mercy\NPC1\逃跑\* 你跑不了。;
 Mercy\NPC2\饶恕\Null;
 Mercy\NPC2\逃跑\* 你跑不了。;
 Mercy\NPC2\让它走\* 你想得美。;
+
+Enemy\NPC1\敌人1;
+Enemy\NPC2\敌人2;
