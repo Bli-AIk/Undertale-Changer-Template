@@ -239,23 +239,62 @@ namespace UCT.Battle
         /// </summary>
         private void LayerOneSet()
         {
-            MainControl.Instance.battlePlayerController.transform.position = new Vector3(-5.175f,
-                -0.96f - nameLayerIndex * 0.66f, MainControl.Instance.battlePlayerController.transform.position.z);
-            if (InputService.GetKeyDown(KeyCode.DownArrow) &&
-                nameLayerIndex < MainControl.Instance.BattleControl.enemies.Count - 1)
+            while (nameLayerIndex < enemiesControllers.Count - 1 && nameLayerIndex + 1 < enemiesControllers.Count &&
+                   enemiesControllers[nameLayerIndex].Enemy.state != EnemyState.Default &&
+                   enemiesControllers[nameLayerIndex + 1].Enemy.state == EnemyState.Default)
             {
                 nameLayerIndex++;
-                AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
             }
-
-            if (!InputService.GetKeyDown(KeyCode.UpArrow) || nameLayerIndex <= 0)
+            
+            if (InputService.GetKeyDown(KeyCode.DownArrow))
             {
-                return;
+                LayerOneSetKeyDown();
             }
 
-            nameLayerIndex--;
-            AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
+            if (InputService.GetKeyDown(KeyCode.UpArrow))
+            {
+                LayerOneSetKeyUp();
+            }
+
+            MainControl.Instance.battlePlayerController.transform.position = new Vector3(
+                -5.175f, -0.96f - nameLayerIndex * 0.66f,
+                MainControl.Instance.battlePlayerController.transform.position.z);
         }
+
+        private void LayerOneSetKeyUp()
+        {
+            var isPlayFx = false;
+            while (nameLayerIndex > 0 &&
+                   enemiesControllers[nameLayerIndex - 1].Enemy.state == EnemyState.Default)
+            {
+                nameLayerIndex--;
+                if (isPlayFx)
+                {
+                    continue;
+                }
+
+                AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                isPlayFx = true;
+            }
+        }
+
+        private void LayerOneSetKeyDown()
+        {
+            var isPlayFx = false;
+            while (nameLayerIndex < enemiesControllers.Count - 1 && nameLayerIndex + 1 < enemiesControllers.Count &&
+                   enemiesControllers[nameLayerIndex + 1].Enemy.state == EnemyState.Default)
+            {
+                nameLayerIndex++;
+                if (isPlayFx)
+                {
+                    continue;
+                }
+
+                AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                isPlayFx = true;
+            }
+        }
+
 
         /// <summary>
         ///     进我方回合
@@ -413,10 +452,16 @@ namespace UCT.Battle
 
         private void SetEnemiesName()
         {
-            foreach (var save in MainControl.Instance.BattleControl.enemies.Select(enemy =>
-                         TextProcessingService.GetFirstChildStringByPrefix(
-                             MainControl.Instance.BattleControl.enemiesNameSave, enemy.name)))
+            foreach (var enemy in enemiesControllers)
             {
+                if (enemy.Enemy.state != EnemyState.Default)
+                {
+                    _textUI.text += "\n";
+                    continue;
+                }
+
+                var save = TextProcessingService.GetFirstChildStringByPrefix(
+                    MainControl.Instance.BattleControl.enemiesNameSave, enemy.gameObject.name);
                 _textUI.text += UITextPrefix + save + "\n";
             }
         }
@@ -474,7 +519,7 @@ namespace UCT.Battle
             }
 
             var save = TextProcessingService.BatchGetFirstChildStringByPrefix(
-                MainControl.Instance.BattleControl.mercySave, 
+                MainControl.Instance.BattleControl.mercySave,
                 MainControl.Instance.BattleControl.enemies[nameLayerIndex].name + "\\");
             TextProcessingService.SplitStringToListWithDelimiter(save, actSave);
 
@@ -1018,7 +1063,6 @@ namespace UCT.Battle
 
         private void OpenDialogBubble(string textAsset)
         {
-            MathUtilityService.GetRandomUnit();
             actSave = DataHandlerService.LoadItemData(textAsset);
             actSave = DataHandlerService.ChangeItemData(actSave, true, new List<string>());
             isDialog = true;
@@ -1027,6 +1071,8 @@ namespace UCT.Battle
 
         private void KeepDialogBubble()
         {
+            //TODO: 对话应当有多种情况，如固定对话或者随机对话
+            //TODO: 死亡怪物应不会说话
             var save = new List<string>();
             TextProcessingService.SplitStringToListWithDelimiter(actSave[numberDialog], save);
 

@@ -31,6 +31,11 @@ namespace UCT.Battle.Options
 
         public IEnumerator<float> _EnemyTurns(List<ObjectPool> objectPools)
         {
+            if (state != EnemyState.Default)
+            {
+                yield break;
+            }
+            
             var index = TurnGenerator.GetNextValue();
             switch (index)
             {
@@ -68,5 +73,7 @@ namespace UCT.Battle.Options
                 }
             }
         }
+
+        public EnemyState state { get; set; }
     }
 }

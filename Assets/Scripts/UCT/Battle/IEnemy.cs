@@ -11,5 +11,6 @@ namespace UCT.Battle
         Action[] GetOptions();
 
         IEnumerator<float> _EnemyTurns(List<ObjectPool> objectPools);
+        public EnemyState state { get; set; }
     }
 }

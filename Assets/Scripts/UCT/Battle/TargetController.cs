@@ -107,7 +107,7 @@ namespace UCT.Battle
             }
             else
             {
-                _hitUI.text = "<color=red>" + hitDamage;
+                _hitUI.text = $"<color=red>{hitDamage}";
                 _hitUIb.text = hitDamage.ToString();
             }
         }
@@ -116,18 +116,23 @@ namespace UCT.Battle
         private void HitAnim()
         {
             hitMonster.anim.SetBool(Hit, true);
+            var enemiesController = MainControl.Instance.selectUIController.enemiesControllers[select];
             hpBar.transform.localScale =
                 new Vector3(
-                    Mathf.Clamp(MainControl.Instance.selectUIController.enemiesControllers[select].hp /
-                                (float)MainControl.Instance.selectUIController.enemiesControllers[select].hpMax, 0,
-                        Mathf.Infinity), 1);
-            MainControl.Instance.selectUIController.enemiesControllers[select].hp -= hitDamage;
+                    Mathf.Clamp(enemiesController.hp / (float)enemiesController.hpMax, 0, Mathf.Infinity), 1);
+            
+            enemiesController.hp -= hitDamage;
+            
             DOTween.To(() => hpBar.transform.localScale, x => hpBar.transform.localScale = x,
-                new Vector3(
-                    Mathf.Clamp(MainControl.Instance.selectUIController.enemiesControllers[select].hp /
-                                (float)MainControl.Instance.selectUIController.enemiesControllers[select].hpMax, 0,
-                        Mathf.Infinity), 1),
-                0.75f).SetEase(Ease.OutSine);
+                new Vector3(Mathf.Clamp(enemiesController.hp / (float)enemiesController.hpMax, 0, Mathf.Infinity), 1), 0.75f)
+                .SetEase(Ease.OutSine);
+
+            if (enemiesController.hp < 0)
+            {
+                enemiesController.Enemy.state = EnemyState.Dead;
+                enemiesController.spriteSplitController.enabled = true;
+
+            }
         }
 
         private void OpenPressZ()
