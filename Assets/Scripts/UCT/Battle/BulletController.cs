@@ -200,11 +200,11 @@ namespace UCT.Battle
                 save.isTrigger = true;
                 if (followMode == FollowMode.NoFollow)
                 {
-                    save.size = boxColliderSizes[i];
+                    save.size = boxColliderSizes[i] * spriteRenderer.size;
                 }
                 else
                 {
-                    save.size = boxColliderList[i].transform.GetComponent<SpriteRenderer>().size - boxColliderSizes[i];
+                    save.size = spriteRenderer.size - boxColliderSizes[i];
                 }
 
                 save.offset = bulletControl.triggerOffset[i];

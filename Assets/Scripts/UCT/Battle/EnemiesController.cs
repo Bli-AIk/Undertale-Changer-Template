@@ -17,19 +17,19 @@ namespace UCT.Battle
         public int atk, def;
         public int hp, hpMax;
         [CanBeNull] public Action[] OnOptions;
+        public IEnemy Enemy { get; private set; }
 
         private void Start()
         {
             anim = GetComponent<Animator>();
-
-            var optionsProvider = GetComponent<IEnemy>();
-            if (optionsProvider == null)
+            Enemy = GetComponent<IEnemy>();
+            if (Enemy == null)
             {
-                Other.Debug.LogError("optionsProvider 不应为空！");
+                Other.Debug.LogError("_enemy 不应为空！");
             }
             else
             {
-                OnOptions = optionsProvider.GetOptions();
+                OnOptions = Enemy.GetOptions();
             }
         }
         

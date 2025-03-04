@@ -15,6 +15,7 @@ namespace UCT.Battle
     public class TurnController : MonoBehaviour
     {
         public int turn;
+        private readonly HashSet<int> _overlapTurns = new() { 0, 1 };
         public bool isMyTurn;
 
         public List<int> poolCount;
@@ -71,6 +72,32 @@ namespace UCT.Battle
         /// </summary>
         private IEnumerator<float> _TurnExecute(int turnNumber)
         {
+            if (_overlapTurns.Contains(turnNumber))
+            {
+                if (MainControl.Instance.selectUIController.enemiesControllers.Count == 1)
+                {
+                    Timing.RunCoroutine(MainControl.Instance.selectUIController.enemiesControllers[0].Enemy
+                        ._EnemyTurns(objectPools));
+                }
+                else
+                {
+                    //TODO: 检测是否有重叠定义
+                    foreach (var item in MainControl.Instance.selectUIController.enemiesControllers)
+                    {
+                        //测试s
+                        Timing.RunCoroutine(item.Enemy._EnemyTurns(objectPools));
+                    }
+                }
+            }
+
+            yield return Timing.WaitUntilDone(Timing.RunCoroutine(_FixedTurn(turnNumber)));
+
+            turn++;
+            MainControl.Instance.selectUIController.InTurn();
+        }
+
+        private IEnumerator<float> _FixedTurn(int turnNumber)
+        {
             switch (turnNumber)
             {
                 case 0: //示例回合
@@ -122,12 +149,18 @@ namespace UCT.Battle
                     }
 
                     Other.Debug.Log("简单嵌套弹幕编写示例");
-                    for (var i = 0; i < 5 * 20; i++)
+                    for (var i = 0; i < 25; i++)
                     {
                         Timing.RunCoroutine(_SimpleNestBullet());
                         yield return Timing.WaitForSeconds(0.2f);
                     }
-
+                    yield return Timing.WaitForSeconds(2f);
+                    
+                    Other.Debug.Log("等待嵌套播放完毕的嵌套弹幕编写示例");
+                    for (var i = 0; i < 3; i++)
+                    {
+                        yield return Timing.WaitUntilDone(Timing.RunCoroutine(_SimpleNestBullet()));
+                    }
                     Other.Debug.Log("战斗框缩放回初始坐标以结束回合");
                     yield return Timing.WaitForSeconds(1f);
                     DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[0],
@@ -152,10 +185,10 @@ namespace UCT.Battle
                 }
                 case 1:
                 {
-                    Other.Debug.Log("这是个摆烂回合……也许吧。");
+                    Other.Debug.Log("这是个测试回合。");
+                    const string cupCake = "CupCake";
 
                     var obj = objectPools[0].GetFromPool<BulletController>();
-                    const string cupCake = "CupCake";
                     obj.SetBullet(cupCake, cupCake, new InitialTransform(new Vector3(1, -1.6f)),
                         (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
 
@@ -166,7 +199,11 @@ namespace UCT.Battle
 
                     for (var i = 600; i > 0; i--)
                     {
-                        Other.Debug.Log($"你先别急，先摆{TextProcessingService.RandomStringColor(i.ToString())}秒");
+                        if (i % 5 == 0) 
+                        {
+                            Other.Debug.Log($"{TextProcessingService.RandomStringColor(i.ToString())}秒后结束本回合");
+                        }
+
                         yield return Timing.WaitForSeconds(1f);
                     }
 
@@ -178,10 +215,6 @@ namespace UCT.Battle
                 default:
                     break;
             }
-
-            turn++;
-            MainControl.Instance.selectUIController.InTurn();
-            yield return 0;
         }
 
         public void YellowBullet(Vector3 soulsPosition)

@@ -28,7 +28,7 @@ namespace UCT.Battle
         /// 初始化 <see cref="WeightedRandomTurnNumber"/> 类，默认所有值的权重为 1。
         /// </summary>
         /// <param name="values">可能的回合数列表。</param>
-        public WeightedRandomTurnNumber(List<int> values)
+        public WeightedRandomTurnNumber(HashSet<int> values)
         {
             _weights = values.ToDictionary(v => v, _ => 1);
         }

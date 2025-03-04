@@ -18,12 +18,9 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: a55224a9007c69a4e97f55b16a124d64, type: 3}
   triggerSize:
   - {x: 1, y: 1}
-  triggerHit: 01000000
   triggerOffset:
   - {x: 0, y: 0}
-  startPosition: {x: 1, y: -1.6, z: 0}
-  startRotation: {x: 0, y: 0, z: 0}
-  startScale: {x: 0, y: 0, z: 0}
+  triggerHit: 01000000
   bulletColor: 0
   startMask: 0
   triggerFollowMode: 1
