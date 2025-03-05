@@ -701,67 +701,101 @@ namespace UCT.Battle
             RaycastHit2D info,
             bool isVertical)
         {
+            UpdateJumpRayDistance(jumpKey);
+            TryStartJump(jumpKey, isGravityPositive, isVertical);
+            TryStopJump(jumpKey, infoF, isGravityPositive, isVertical);
+            ApplyJumpAcceleration(isGravityPositive, isVertical);
+            CheckJumpCollision(info);
+            ResetJump(isVertical);
+        }
+
+        private void UpdateJumpRayDistance(KeyCode jumpKey)
+        {
             if (!InputService.GetKey(jumpKey))
             {
                 jumpRayDistanceForBoard =
                     InputService.GetKey(KeyCode.RightArrow) || InputService.GetKey(KeyCode.LeftArrow) ? 0 : 0.2f;
             }
+        }
 
-            if (InputService.GetKey(jumpKey) && !isJump && Mathf.Approximately(isVertical ? moving.y : moving.x, 0))
+        private void TryStartJump(KeyCode jumpKey, bool isGravityPositive, bool isVertical)
+        {
+            if (!InputService.GetKey(jumpKey) || isJump || !Mathf.Approximately(isVertical ? moving.y : moving.x, 0))
             {
-                if (isVertical)
-                {
-                    moving.y = isGravityPositive ? -2.15f : 2.15f;
-                }
-                else
-                {
-                    moving.x = isGravityPositive ? 2.15f : -2.15f;
-                }
-
-                isJump = true;
-                jumpRayDistance = 0.2f;
-                jumpRayDistanceForBoard = 0;
+                return;
             }
 
-            if (isJump &&
-                (!InputService.GetKey(jumpKey) || (infoF.collider && infoF.collider.gameObject.CompareTag("Box"))) &&
-                ((isGravityPositive && (isVertical ? moving.y < 0 : moving.x > 0)) ||
-                 (!isGravityPositive && (isVertical ? moving.y > 0 : moving.x < 0))) &&
-                infoF.collider && Mathf.Approximately(infoF.transform.position.z, transform.position.z))
+            if (isVertical)
             {
-                jumpRayDistanceForBoard = 0.2f;
-                if (isVertical)
-                {
-                    moving.y = 0;
-                }
-                else
-                {
-                    moving.x = 0;
-                }
-            }
-
-            if (isJump)
-            {
-                if (info.collider && Mathf.Approximately(info.transform.position.z, transform.position.z))
-                {
-                    var obj = info.collider.gameObject;
-                    if (obj.transform.CompareTag("Box"))
-                    {
-                        BlueJumpReady();
-                    }
-                }
-
-                var delta = Time.deltaTime * (float)Math.Pow(3, jumpAcceleration);
-                if (isVertical)
-                {
-                    moving.y += isGravityPositive ? delta : -delta;
-                }
-                else
-                {
-                    moving.x += isGravityPositive ? -delta : delta;
-                }
+                moving.y = isGravityPositive ? -2.15f : 2.15f;
             }
             else
+            {
+                moving.x = isGravityPositive ? 2.15f : -2.15f;
+            }
+
+            isJump = true;
+            jumpRayDistance = 0.2f;
+            jumpRayDistanceForBoard = 0;
+        }
+
+        private void TryStopJump(KeyCode jumpKey, RaycastHit2D infoF, bool isGravityPositive, bool isVertical)
+        {
+            if (!isJump || (InputService.GetKey(jumpKey) &&
+                            (!infoF.collider || !infoF.collider.gameObject.CompareTag("Box"))) ||
+                ((!isGravityPositive || (isVertical ? moving.y >= 0 : moving.x <= 0)) &&
+                 (isGravityPositive || (isVertical ? moving.y <= 0 : moving.x >= 0))) ||
+                !infoF.collider || !Mathf.Approximately(infoF.transform.position.z, transform.position.z))
+            {
+                return;
+            }
+
+            jumpRayDistanceForBoard = 0.2f;
+            if (isVertical)
+            {
+                moving.y = 0;
+            }
+            else
+            {
+                moving.x = 0;
+            }
+        }
+
+        private void ApplyJumpAcceleration(bool isGravityPositive, bool isVertical)
+        {
+            if (!isJump)
+            {
+                return;
+            }
+
+            var delta = Time.deltaTime * (float)Math.Pow(3, jumpAcceleration);
+            if (isVertical)
+            {
+                moving.y += isGravityPositive ? delta : -delta;
+            }
+            else
+            {
+                moving.x += isGravityPositive ? -delta : delta;
+            }
+        }
+
+        private void CheckJumpCollision(RaycastHit2D info)
+        {
+            if (!isJump || !info.collider || !Mathf.Approximately(info.transform.position.z, transform.position.z))
+            {
+                return;
+            }
+
+            var obj = info.collider.gameObject;
+            if (obj.transform.CompareTag("Box"))
+            {
+                BlueJumpReady();
+            }
+        }
+
+        private void ResetJump(bool isVertical)
+        {
+            if (!isJump)
             {
                 jumpAcceleration = 1.25f;
                 if (isVertical)
