@@ -16,8 +16,8 @@ namespace UCT.Battle
         public int poolCount;
         public List<Color> colorExclude;
         public Vector2 startPos;
-        public float speed; 
-        private readonly Queue<GameObject> _available = new(); 
+        public float speed;
+        private readonly Queue<GameObject> _available = new();
         private Texture2D _map;
         private GameObject _mask;
         private SpriteRenderer _spriteRenderer;
@@ -46,6 +46,11 @@ namespace UCT.Battle
 
             _mask.transform.localScale = new Vector2(_map.width, _map.height);
             _mask.transform.localPosition = new Vector3(0, 0.05f * _map.height);
+
+            _spriteRenderer.sprite = Sprite.Create(_map,
+                new Rect(0, 0, _map.width, _map.height),
+                new Vector2(0.5f, 0.5f),
+                _spriteRenderer.sprite.pixelsPerUnit);
             StartCoroutine(_SummonPixel());
         }
 
@@ -83,10 +88,7 @@ namespace UCT.Battle
                     obj.transform.localPosition = startPos + new Vector2(x * 0.05f, -(_map.height - y - 1) * 0.05f);
                 }
 
-                if (y != 0)
-                {
-                    _mask.transform.localPosition -= new Vector3(0, 0.05f);
-                }
+                _mask.transform.localPosition -= new Vector3(0, 0.05f);
 
                 yield return new WaitForSeconds(speed);
             }
@@ -109,8 +111,9 @@ namespace UCT.Battle
             var newTexture = new Texture2D((int)rect.width, (int)rect.height);
             newTexture.SetPixels(readableTexture.GetPixels(
                 (int)rect.x, (int)rect.y, (int)rect.width, (int)rect.height));
+            newTexture.filterMode = FilterMode.Point;
+            newTexture.wrapMode = TextureWrapMode.Clamp;
             newTexture.Apply();
-
             return newTexture;
         }
 

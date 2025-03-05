@@ -3,7 +3,6 @@ using JetBrains.Annotations;
 using UCT.Global.Audio;
 using UCT.Global.Core;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace UCT.Battle
 {
@@ -17,16 +16,17 @@ namespace UCT.Battle
         public Animator anim;
         public int atk, def;
         public int hp, hpMax;
+
+        [HideInInspector] public SpriteSplitController spriteSplitController;
+
         [CanBeNull] public Action[] OnOptions;
         public IEnemy Enemy { get; private set; }
 
-        [HideInInspector]
-        public SpriteSplitController spriteSplitController;
         private void Start()
         {
             anim = GetComponent<Animator>();
             Enemy = GetComponent<IEnemy>();
-            
+
             if (Enemy == null)
             {
                 Other.Debug.LogError("_enemy 不应为空！");
@@ -35,12 +35,12 @@ namespace UCT.Battle
             {
                 OnOptions = Enemy.GetOptions();
             }
-            
+
             spriteSplitController = transform.GetChild(0).GetComponent<SpriteSplitController>();
             spriteSplitController.enabled = false;
         }
-        
-        private void AnimHit()
+
+        private void AnimCheckHit()
         {
             if (!anim.GetBool(Hit))
             {
@@ -50,8 +50,19 @@ namespace UCT.Battle
             AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipBattle);
             anim.SetBool(Hit, false);
         }
+
+        private void AnimCheckDeath()
+        {
+            if (hp >= 0)
+            {
+                return;
+            }
+
+            Enemy.state = EnemyState.Dead;
+            spriteSplitController.enabled = true;
+        }
     }
-    
+
 
     public enum EnemyState
     {

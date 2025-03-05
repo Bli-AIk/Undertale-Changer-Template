@@ -18,7 +18,7 @@ namespace UCT.Battle
     /// </summary>
     public class BattlePlayerController : MonoBehaviour
     {
-        public enum PlayerDirEnum
+        public enum PlayerDirection
         {
             Up,
             Down,
@@ -28,6 +28,7 @@ namespace UCT.Battle
         }
 
         private const float SpeedWeight = 0.5f;
+        private const string Board = "board";
 
         [Header("心变色时的ding动画速度，0为关")]
         public float dingTime;
@@ -66,7 +67,7 @@ namespace UCT.Battle
         /// <summary>
         ///     玩家方向
         /// </summary>
-        public PlayerDirEnum playerDir;
+        public PlayerDirection playerDir;
 
         /// <summary>
         ///     玩家移动方向，用于橙心和绿心判断
@@ -147,7 +148,7 @@ namespace UCT.Battle
             jumpRayDistanceForBoard = 0.2f;
             jumpAcceleration = 1.25f;
             playerColor = BattleControl.PlayerColor.Red;
-            playerDir = PlayerDirEnum.Down;
+            playerDir = PlayerDirection.Down;
             _rigidBody = GetComponent<Rigidbody2D>();
             collideCollider = GetComponent<CircleCollider2D>();
             _spriteRenderer = GetComponent<SpriteRenderer>();
@@ -162,27 +163,11 @@ namespace UCT.Battle
 
         private void Update()
         {
-            if (!SettingsStorage.IsSimplifySfx && hitVolume.weight > 0)
-            {
-                hitVolume.weight -= Time.deltaTime;
-            }
+            UpdateHitVolume();
 
             if (MainControl.Instance.playerControl.hp <= 0)
             {
-                MainControl.Instance.playerControl.hp = MainControl.Instance.playerControl.hpMax;
-
-                if (!(MainControl.Instance.playerControl.isDebug && MainControl.Instance.playerControl.invincible))
-                {
-                    _spriteRenderer.color = Color.red;
-                    MainControl.Instance.playerControl.playerLastPos = transform.position - (Vector3)sceneDrift;
-                    SettingsStorage.Pause = true;
-                    TurnController.KillIEnumerator();
-                    GameUtilityService.SwitchScene("GameOver", false);
-                }
-                else
-                {
-                    MainControl.Instance.selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
-                }
+                PlayerDead();
             }
 
             if (GameUtilityService.IsGamePausedOrSetting())
@@ -190,6 +175,16 @@ namespace UCT.Battle
                 return;
             }
 
+            UpdatePlayerMissTime();
+
+            if (MainControl.Instance.playerControl.isDebug)
+            {
+                DebugInput();
+            }
+        }
+
+        private void UpdatePlayerMissTime()
+        {
             if (MainControl.Instance.playerControl.missTime >= 0)
             {
                 MainControl.Instance.playerControl.missTime -= Time.deltaTime;
@@ -202,18 +197,40 @@ namespace UCT.Battle
             }
             else
             {
-                if (_missAnim != null)
+                if (_missAnim == null)
                 {
-                    _missAnim.Kill();
-                    _missAnim = null;
-                    _spriteRenderer.color = MainControl.Instance.BattleControl.playerColorList[(int)playerColor];
+                    return;
                 }
-            }
 
-            //Debug
-            if (MainControl.Instance.playerControl.isDebug)
+                _missAnim.Kill();
+                _missAnim = null;
+                _spriteRenderer.color = MainControl.Instance.BattleControl.playerColorList[(int)playerColor];
+            }
+        }
+
+        private void PlayerDead()
+        {
+            MainControl.Instance.playerControl.hp = MainControl.Instance.playerControl.hpMax;
+
+            if (!(MainControl.Instance.playerControl.isDebug && MainControl.Instance.playerControl.invincible))
             {
-                DebugInput();
+                _spriteRenderer.color = Color.red;
+                MainControl.Instance.playerControl.playerLastPos = transform.position - (Vector3)sceneDrift;
+                SettingsStorage.Pause = true;
+                TurnController.KillIEnumerator();
+                GameUtilityService.SwitchScene("GameOver", false);
+            }
+            else
+            {
+                MainControl.Instance.selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
+            }
+        }
+
+        private void UpdateHitVolume()
+        {
+            if (!SettingsStorage.IsSimplifySfx && hitVolume.weight > 0)
+            {
+                hitVolume.weight -= Time.deltaTime;
             }
         }
 
@@ -233,7 +250,7 @@ namespace UCT.Battle
         private void OnCollisionEnter2D(Collision2D collision)
         {
             //蓝心碰板子确保再次可以跳
-            if (collision.transform.CompareTag("board") &&
+            if (collision.transform.CompareTag(Board) &&
                 collision.transform.GetComponent<EdgeCollider2D>().IsTouching(collideCollider) &&
                 playerColor == BattleControl.PlayerColor.Blue)
             {
@@ -247,7 +264,7 @@ namespace UCT.Battle
         /// </summary>
         private void OnCollisionExit2D(Collision2D collision)
         {
-            if (collision.transform.CompareTag("board") && playerColor == BattleControl.PlayerColor.Blue &&
+            if (collision.transform.CompareTag(Board) && playerColor == BattleControl.PlayerColor.Blue &&
                 !isJump)
             {
                 BlueDown();
@@ -274,12 +291,14 @@ namespace UCT.Battle
 
             var isCtrlPressed = Input.GetKey(KeyCode.Tab);
 
-            foreach (var kvp in keyMappings.Where(kvp => Input.GetKeyDown(kvp.Key))
-                         .Where(kvp => kvp.Key.ToString().StartsWith("Keypad") || isCtrlPressed))
+            foreach (var value in keyMappings
+                         .Where(kvp => Input.GetKeyDown(kvp.Key))
+                         .Where(kvp => kvp.Key.ToString().StartsWith("Keypad") || isCtrlPressed)
+                         .Select(kvp => kvp.Value))
             {
                 ChangePlayerColor(
-                    MainControl.Instance.BattleControl.playerColorList[kvp.Value],
-                    (BattleControl.PlayerColor)kvp.Value);
+                    MainControl.Instance.BattleControl.playerColorList[value],
+                    (BattleControl.PlayerColor)value);
             }
 
 
@@ -291,17 +310,17 @@ namespace UCT.Battle
             else if (Input.GetKeyDown(KeyCode.K))
             {
                 ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[5],
-                    (BattleControl.PlayerColor)5, 2.5f, (PlayerDirEnum)1);
+                    (BattleControl.PlayerColor)5, 2.5f, (PlayerDirection)1);
             }
             else if (Input.GetKeyDown(KeyCode.J))
             {
                 ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[5],
-                    (BattleControl.PlayerColor)5, 2.5f, (PlayerDirEnum)2);
+                    (BattleControl.PlayerColor)5, 2.5f, (PlayerDirection)2);
             }
             else if (Input.GetKeyDown(KeyCode.L))
             {
                 ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[5],
-                    (BattleControl.PlayerColor)5, 2.5f, (PlayerDirEnum)3);
+                    (BattleControl.PlayerColor)5, 2.5f, (PlayerDirection)3);
             }
 
             if (Input.GetKeyDown(KeyCode.P))
@@ -314,10 +333,10 @@ namespace UCT.Battle
         {
             var dirReal = playerDir switch
             {
-                PlayerDirEnum.Up => Vector2.up,
-                PlayerDirEnum.Down => Vector2.down,
-                PlayerDirEnum.Left => Vector2.left,
-                PlayerDirEnum.Right => Vector2.right,
+                PlayerDirection.Up => Vector2.up,
+                PlayerDirection.Down => Vector2.down,
+                PlayerDirection.Left => Vector2.left,
+                PlayerDirection.Right => Vector2.right,
                 _ => new Vector2()
             };
 
@@ -330,549 +349,7 @@ namespace UCT.Battle
             var infoF = Physics2D.Raycast(transform.position, dirReal * -1, jumpRayDistance); //反向检测(顶头)
 
             //------------------------移动------------------------
-            switch (playerColor)
-            {
-                case BattleControl.PlayerColor.Red:
-                    SoulsMove();
-                    break;
-
-                case BattleControl.PlayerColor.Orange:
-                    if (InputService.GetKey(KeyCode.X))
-                    {
-                        speedWeightX = SpeedWeight;
-                        speedWeightY = SpeedWeight;
-                    }
-                    else
-                    {
-                        speedWeightX = 1;
-                        speedWeightY = 1;
-                    }
-
-                    if (InputService.GetKey(KeyCode.UpArrow) && InputService.GetKey(KeyCode.LeftArrow))
-                    {
-                        angle = 45;
-                    }
-                    else if (InputService.GetKey(KeyCode.UpArrow) && InputService.GetKey(KeyCode.RightArrow))
-                    {
-                        angle = -45;
-                    }
-                    else if (InputService.GetKey(KeyCode.DownArrow) && InputService.GetKey(KeyCode.LeftArrow))
-                    {
-                        angle = 135;
-                    }
-                    else if (InputService.GetKey(KeyCode.DownArrow) && InputService.GetKey(KeyCode.RightArrow))
-                    {
-                        angle = -135;
-                    }
-                    else if (InputService.GetKey(KeyCode.UpArrow))
-                    {
-                        angle = 0;
-                    }
-                    else if (InputService.GetKey(KeyCode.DownArrow))
-                    {
-                        angle = 180;
-                    }
-                    else if (InputService.GetKey(KeyCode.RightArrow))
-                    {
-                        angle = -90;
-                    }
-                    else if (InputService.GetKey(KeyCode.LeftArrow))
-                    {
-                        angle = 90;
-                    }
-
-                    moving = Quaternion.Euler(0, 0, angle) * transform.up;
-                    break;
-
-                case BattleControl.PlayerColor.Yellow:
-                    SoulsMove();
-                    transform.rotation = Quaternion.Euler(0, 0, 180);
-                    if (InputService.GetKey(KeyCode.Z))
-                    {
-                        TurnController.Instance.YellowBullet(transform.position);
-                    }
-
-                    break;
-                case BattleControl.PlayerColor.Green:
-                {
-                    arrowPosition.GetComponent<SpriteRenderer>().enabled = true;
-                    if (InputService.GetKeyDown(KeyCode.UpArrow))
-                    {
-                        angle = 0;
-                        isRotate = true;
-                    }
-
-                    if (InputService.GetKeyDown(KeyCode.DownArrow))
-                    {
-                        angle = 90;
-                        isRotate = true;
-                    }
-
-                    if (InputService.GetKeyDown(KeyCode.LeftArrow))
-                    {
-                        angle = 180;
-                        isRotate = true;
-                    }
-
-                    if (InputService.GetKeyDown(KeyCode.RightArrow))
-                    {
-                        angle = 270;
-                        isRotate = true;
-                    }
-
-                    if (isRotate)
-                    {
-                        var step = Mathf.Min(90f * Time.deltaTime, angle - currentAngle);
-                        arrowPosition.RotateAround(transform.position, Vector3.forward, step);
-                        currentAngle += step;
-                        if (currentAngle >= angle)
-                        {
-                            isRotate = false;
-                        }
-                    }
-                }
-
-                    break;
-
-                case BattleControl.PlayerColor.Cyan:
-                    break;
-
-                case BattleControl.PlayerColor.Blue:
-                    var infoForBoard = Physics2D.Raycast(transform.position, dirReal, jumpRayDistanceForBoard);
-                    if (infoForBoard.collider != null)
-                    {
-                        var obj = infoForBoard.collider.gameObject;
-                        if (obj.transform.CompareTag(tag))
-                        {
-                            if (!isJump && moving == Vector3.zero)
-                            {
-                                BlueDown(0, playerDir);
-                            }
-                        }
-
-                        if (obj.transform.CompareTag("board"))
-                        {
-                            var board = obj.transform.GetComponent<BoardController>();
-                            if (!infoForBoard.collider.isTrigger && infoForBoard.collider is EdgeCollider2D &&
-                                board.canMove)
-                            {
-                                BlueJumpReady();
-                                transform.SetParent(infoForBoard.transform);
-                            }
-                        }
-                        else
-                        {
-                            transform.SetParent(null);
-                        }
-                    }
-                    else
-                    {
-                        transform.SetParent(null);
-                    }
-
-                    switch (playerDir)
-                    {
-                        case PlayerDirEnum.Up:
-                            if (InputService.GetKey(KeyCode.X))
-                            {
-                                speedWeightX = SpeedWeight;
-                            }
-                            else
-                            {
-                                speedWeightX = 1;
-                            }
-
-                            transform.rotation = Quaternion.Euler(0, 0, 180);
-                            Physics2D.gravity = new Vector2(0, 9.8f);
-                            if (InputService.GetKey(KeyCode.RightArrow))
-                            {
-                                moving = new Vector3(1, moving.y);
-                            }
-                            else if (InputService.GetKey(KeyCode.LeftArrow))
-                            {
-                                moving = new Vector3(-1, moving.y);
-                            }
-                            else
-                            {
-                                moving = new Vector3(0, moving.y);
-                            }
-
-                            if (InputService.GetKey(KeyCode.RightArrow) &&
-                                InputService.GetKey(KeyCode.LeftArrow))
-                            {
-                                moving = new Vector3(0, moving.y);
-                            }
-
-                            if (!InputService.GetKey(KeyCode.DownArrow))
-                            {
-                                if (!InputService.GetKey(KeyCode.RightArrow) ||
-                                    !InputService.GetKey(KeyCode.LeftArrow))
-                                {
-                                    jumpRayDistanceForBoard = 0.2f;
-                                }
-
-                                if (InputService.GetKey(KeyCode.RightArrow) ||
-                                    InputService.GetKey(KeyCode.LeftArrow))
-                                {
-                                    jumpRayDistanceForBoard = 0;
-                                }
-                            }
-
-                            if (InputService.GetKey(KeyCode.DownArrow) && !isJump && moving.y == 0)
-                            {
-                                moving = new Vector3(moving.x, -2.15f);
-                                isJump = true;
-                                jumpRayDistance = 0.2f;
-                                jumpRayDistanceForBoard = 0;
-                            }
-
-                            if (isJump && (!InputService.GetKey(KeyCode.DownArrow) ||
-                                           (infoF.collider && infoF.collider.gameObject.CompareTag("Box"))) &&
-                                moving.y < -0)
-                            {
-                                if (infoF.collider &&
-                                    Mathf.Approximately(infoF.transform.position.z, transform.position.z))
-                                {
-                                    jumpRayDistanceForBoard = 0.2f;
-                                    moving = new Vector3(moving.x, -0);
-                                }
-                            }
-
-                            if (isJump)
-                            {
-                                if (info.collider &&
-                                    Mathf.Approximately(info.transform.position.z, transform.position.z))
-                                {
-                                    var obj = info.collider.gameObject;
-                                    if (obj.transform.CompareTag("Box"))
-                                    {
-                                        BlueJumpReady();
-                                    }
-                                }
-
-                                moving.y += Time.deltaTime * (float)Math.Pow(3, jumpAcceleration);
-                            }
-                            else
-                            {
-                                jumpAcceleration = 1.25f;
-                                moving.y = 0;
-                            }
-
-                            jumpAcceleration += Time.deltaTime * timeInterpolation;
-                            break;
-
-                        case PlayerDirEnum.Down: ////////////////////////////////////////////////
-                            if (InputService.GetKey(KeyCode.X))
-                            {
-                                speedWeightX = SpeedWeight;
-                            }
-                            else
-                            {
-                                speedWeightX = 1;
-                            }
-
-                            transform.rotation = Quaternion.Euler(0, 0, 0);
-                            Physics2D.gravity = new Vector2(0, -9.8f);
-                            if (InputService.GetKey(KeyCode.RightArrow))
-                            {
-                                moving = new Vector3(1, moving.y);
-                            }
-                            else if (InputService.GetKey(KeyCode.LeftArrow))
-                            {
-                                moving = new Vector3(-1, moving.y);
-                            }
-                            else
-                            {
-                                moving = new Vector3(0, moving.y);
-                            }
-
-                            if (InputService.GetKey(KeyCode.RightArrow) &&
-                                InputService.GetKey(KeyCode.LeftArrow))
-                            {
-                                moving = new Vector3(0, moving.y);
-                            }
-
-                            if (!InputService.GetKey(KeyCode.UpArrow))
-                            {
-                                if (!InputService.GetKey(KeyCode.RightArrow) ||
-                                    !InputService.GetKey(KeyCode.LeftArrow))
-                                {
-                                    jumpRayDistanceForBoard = 0.2f;
-                                }
-
-                                if (InputService.GetKey(KeyCode.RightArrow) ||
-                                    InputService.GetKey(KeyCode.LeftArrow))
-                                {
-                                    jumpRayDistanceForBoard = 0;
-                                }
-                            }
-
-
-                            if (InputService.GetKey(KeyCode.UpArrow) && !isJump && moving.y == 0)
-                            {
-                                moving = new Vector3(moving.x, 2.15f);
-                                isJump = true;
-                                jumpRayDistance = 0.2f;
-                                jumpRayDistanceForBoard = 0;
-                            }
-
-                            if (isJump && (!InputService.GetKey(KeyCode.UpArrow) ||
-                                           (infoF.collider != null && infoF.collider.gameObject.CompareTag("Box"))) &&
-                                moving.y > 0)
-                            {
-                                if (infoF.collider &&
-                                    Mathf.Approximately(infoF.transform.position.z, transform.position.z))
-                                {
-                                    jumpRayDistanceForBoard = 0.2f;
-                                    moving = new Vector3(moving.x, 0);
-                                }
-                            }
-
-                            if (isJump)
-                            {
-                                if (info.collider &&
-                                    Mathf.Approximately(info.transform.position.z, transform.position.z))
-                                {
-                                    var obj = info.collider.gameObject;
-                                    if (obj.transform.CompareTag("Box"))
-                                    {
-                                        BlueJumpReady();
-                                    }
-                                }
-
-                                moving.y -= Time.deltaTime * (float)Math.Pow(3, jumpAcceleration);
-                            }
-                            else
-                            {
-                                jumpAcceleration = 1.25f;
-                                moving.y = 0;
-                            }
-
-                            jumpAcceleration += Time.deltaTime * timeInterpolation;
-                            break;
-
-                        case PlayerDirEnum.Left: ////////////////////////////////////////////////
-                            if (InputService.GetKey(KeyCode.X))
-                            {
-                                speedWeightY = SpeedWeight;
-                            }
-                            else
-                            {
-                                speedWeightY = 1;
-                            }
-
-                            transform.rotation = Quaternion.Euler(0, 0, 270);
-                            Physics2D.gravity = new Vector2(-9.8f, 0);
-                            if (InputService.GetKey(KeyCode.UpArrow))
-                            {
-                                moving = new Vector3(moving.x, 1);
-                            }
-                            else if (InputService.GetKey(KeyCode.DownArrow))
-                            {
-                                moving = new Vector3(moving.x, -1);
-                            }
-                            else
-                            {
-                                moving = new Vector3(moving.x, 0);
-                            }
-
-                            if (InputService.GetKey(KeyCode.UpArrow) &&
-                                InputService.GetKey(KeyCode.DownArrow))
-                            {
-                                moving = new Vector3(moving.x, 0);
-                            }
-
-                            if (!InputService.GetKey(KeyCode.RightArrow))
-                            {
-                                if (!InputService.GetKey(KeyCode.UpArrow) ||
-                                    !InputService.GetKey(KeyCode.DownArrow))
-                                {
-                                    jumpRayDistanceForBoard = 0.2f;
-                                }
-
-                                if (InputService.GetKey(KeyCode.UpArrow) ||
-                                    InputService.GetKey(KeyCode.DownArrow))
-                                {
-                                    jumpRayDistanceForBoard = 0;
-                                }
-                            }
-
-                            if (InputService.GetKey(KeyCode.RightArrow) && !isJump && moving.x == 0)
-                            {
-                                moving = new Vector3(2.15f, moving.y);
-                                isJump = true;
-                                jumpRayDistance = 0.2f;
-                                jumpRayDistanceForBoard = 0;
-                            }
-
-                            if (isJump && (!InputService.GetKey(KeyCode.RightArrow) ||
-                                           (infoF.collider && infoF.collider.gameObject.CompareTag("Box"))) &&
-                                moving.x > 0)
-                            {
-                                if (infoF.collider &&
-                                    Mathf.Approximately(infoF.transform.position.z, transform.position.z))
-                                {
-                                    jumpRayDistanceForBoard = 0.2f;
-                                    moving = new Vector3(0, moving.y);
-                                }
-                            }
-
-                            if (isJump)
-                            {
-                                if (info.collider &&
-                                    Mathf.Approximately(info.transform.position.z, transform.position.z))
-                                {
-                                    var obj = info.collider.gameObject;
-                                    if (obj.transform.CompareTag("Box"))
-                                    {
-                                        BlueJumpReady();
-                                    }
-                                }
-
-                                moving.x -= Time.deltaTime * (float)Math.Pow(3, jumpAcceleration);
-                            }
-                            else
-                            {
-                                jumpAcceleration = 1.25f;
-                                moving.x = 0;
-                            }
-
-                            jumpAcceleration += Time.deltaTime * timeInterpolation;
-                            break;
-
-                        case PlayerDirEnum.Right:
-                            if (InputService.GetKey(KeyCode.X))
-                            {
-                                speedWeightY = SpeedWeight;
-                            }
-                            else
-                            {
-                                speedWeightY = 1;
-                            }
-
-                            transform.rotation = Quaternion.Euler(0, 0, 90);
-                            Physics2D.gravity = new Vector2(9.8f, 0);
-                            if (InputService.GetKey(KeyCode.UpArrow))
-                            {
-                                moving = new Vector3(moving.x, 1);
-                            }
-                            else if (InputService.GetKey(KeyCode.DownArrow))
-                            {
-                                moving = new Vector3(moving.x, -1);
-                            }
-                            else
-                            {
-                                moving = new Vector3(moving.x, 0);
-                            }
-
-                            if (InputService.GetKey(KeyCode.UpArrow) &&
-                                InputService.GetKey(KeyCode.DownArrow))
-                            {
-                                moving = new Vector3(moving.x, 0);
-                            }
-
-                            if (!InputService.GetKey(KeyCode.LeftArrow))
-                            {
-                                if (!InputService.GetKey(KeyCode.UpArrow) ||
-                                    !InputService.GetKey(KeyCode.DownArrow))
-                                {
-                                    jumpRayDistanceForBoard = 0.2f;
-                                }
-
-                                if (InputService.GetKey(KeyCode.UpArrow) ||
-                                    InputService.GetKey(KeyCode.DownArrow))
-                                {
-                                    jumpRayDistanceForBoard = 0;
-                                }
-                            }
-
-                            if (InputService.GetKey(KeyCode.LeftArrow) && !isJump && moving.x == 0)
-                            {
-                                moving = new Vector3(-2.15f, moving.y);
-                                isJump = true;
-                                jumpRayDistance = 0.2f;
-                                jumpRayDistanceForBoard = 0;
-                            }
-
-                            if (isJump && (!InputService.GetKey(KeyCode.LeftArrow) ||
-                                           (infoF.collider && infoF.collider.gameObject.CompareTag("Box"))) &&
-                                moving.x < -0)
-                            {
-                                if (infoF.collider &&
-                                    Mathf.Approximately(infoF.transform.position.z, transform.position.z))
-                                {
-                                    jumpRayDistanceForBoard = 0.2f;
-                                    moving = new Vector3(-0, moving.y);
-                                }
-                            }
-
-                            if (isJump)
-                            {
-                                if (info.collider &&
-                                    Mathf.Approximately(info.transform.position.z, transform.position.z))
-                                {
-                                    var obj = info.collider.gameObject;
-                                    if (obj.transform.CompareTag("Box"))
-                                    {
-                                        BlueJumpReady();
-                                    }
-                                }
-
-                                moving.x += Time.deltaTime * (float)Math.Pow(3, jumpAcceleration);
-                            }
-                            else
-                            {
-                                jumpAcceleration = 1.25f;
-                                moving.x = 0;
-                            }
-
-                            jumpAcceleration += Time.deltaTime * timeInterpolation;
-                            break;
-                        case PlayerDirEnum.NullDir:
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
-
-                    break;
-
-                case BattleControl.PlayerColor.Purple:
-                    if (InputService.GetKey(KeyCode.RightArrow))
-                    {
-                        moving = new Vector3(1, moving.y);
-                    }
-                    else if (InputService.GetKey(KeyCode.LeftArrow))
-                    {
-                        moving = new Vector3(-1, moving.y);
-                    }
-                    else
-                    {
-                        moving = new Vector3(0, moving.y);
-                    }
-
-                    if (InputService.GetKey(KeyCode.RightArrow) &&
-                        InputService.GetKey(KeyCode.LeftArrow))
-                    {
-                        moving = new Vector3(0, moving.y);
-                    }
-
-                    if (InputService.GetKeyDown(KeyCode.UpArrow) && currentLine > 1)
-                    {
-                        currentLine -= 1;
-                        ChangeLine();
-                    }
-
-                    if (InputService.GetKeyDown(KeyCode.DownArrow) && currentLine < 3)
-                    {
-                        currentLine += 1;
-                        ChangeLine();
-                    }
-
-
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
+            PlayerColorMoving(dirReal, infoF, info);
 
 
             //蓝橙骨所用的是否移动判定
@@ -921,19 +398,19 @@ namespace UCT.Battle
             var infoMoveY = Physics2D.Raycast(transform.position, dirMoveY, 0.2f);
 
             if (isMoveX && infoMoveX.collider && (infoMoveX.collider.gameObject.CompareTag("Box") ||
-                                                  infoMoveX.collider.gameObject.CompareTag("board")))
+                                                  infoMoveX.collider.gameObject.CompareTag(Board)))
             {
                 isMoving = false;
             }
 
             if (isMoveX || isMoveY)
             {
-                var x = (isMoveX || isMoveY) && infoMoveX.collider != null &&
+                var x = infoMoveX.collider &&
                         (infoMoveX.collider.gameObject.CompareTag("Box") ||
-                         infoMoveX.collider.gameObject.CompareTag("board"));
-                var y = (isMoveX || isMoveY) && infoMoveY.collider != null &&
+                         infoMoveX.collider.gameObject.CompareTag(Board));
+                var y = infoMoveY.collider &&
                         (infoMoveY.collider.gameObject.CompareTag("Box") ||
-                         infoMoveY.collider.gameObject.CompareTag("board"));
+                         infoMoveY.collider.gameObject.CompareTag(Board));
                 if (x && !y && (InputService.GetKey(KeyCode.UpArrow) ||
                                 InputService.GetKey(KeyCode.DownArrow)))
                 {
@@ -959,10 +436,10 @@ namespace UCT.Battle
             {
                 movingSave = playerDir switch
                 {
-                    PlayerDirEnum.Up => moving.y,
-                    PlayerDirEnum.Down => moving.y,
-                    PlayerDirEnum.Left => moving.x,
-                    PlayerDirEnum.Right => moving.x,
+                    PlayerDirection.Up => moving.y,
+                    PlayerDirection.Down => moving.y,
+                    PlayerDirection.Left => moving.x,
+                    PlayerDirection.Right => moving.x,
                     _ => movingSave
                 };
             }
@@ -973,7 +450,7 @@ namespace UCT.Battle
             moving.y = MathUtilityService.GetSmallerNumber(moving.y, 5);
 
             var newPos = transform.position + new Vector3(speedWeightX * speed * moving.x * Time.deltaTime,
-                speedWeightY * speed * moving.y * Time.deltaTime); //速度参考：3
+                speedWeightY * speed * moving.y * Time.deltaTime);
 
             var checkPos = CheckPoint(newPos, displacement + BoxController.Instance.width / 2);
 
@@ -991,6 +468,571 @@ namespace UCT.Battle
             {
                 moving.y = movingSave;
             }
+        }
+
+        private void PlayerColorMoving(Vector2 dirReal, RaycastHit2D infoF, RaycastHit2D info)
+        {
+            switch (playerColor)
+            {
+                case BattleControl.PlayerColor.Red:
+                {
+                    PlayerCommonMove();
+                    break;
+                }
+
+                case BattleControl.PlayerColor.Orange:
+                {
+                    PlayerContinuouslyMove();
+                    break;
+                }
+
+                case BattleControl.PlayerColor.Yellow:
+                {
+                    PlayerCommonMove();
+                    transform.rotation = Quaternion.Euler(0, 0, 180);
+                    if (InputService.GetKey(KeyCode.Z))
+                    {
+                        TurnController.Instance.YellowBullet(transform.position);
+                    }
+
+                    break;
+                }
+                case BattleControl.PlayerColor.Green:
+                {
+                    arrowPosition.GetComponent<SpriteRenderer>().enabled = true;
+                    if (InputService.GetKeyDown(KeyCode.UpArrow))
+                    {
+                        angle = 0;
+                        isRotate = true;
+                    }
+
+                    if (InputService.GetKeyDown(KeyCode.DownArrow))
+                    {
+                        angle = 90;
+                        isRotate = true;
+                    }
+
+                    if (InputService.GetKeyDown(KeyCode.LeftArrow))
+                    {
+                        angle = 180;
+                        isRotate = true;
+                    }
+
+                    if (InputService.GetKeyDown(KeyCode.RightArrow))
+                    {
+                        angle = 270;
+                        isRotate = true;
+                    }
+
+                    if (isRotate)
+                    {
+                        var step = Mathf.Min(90f * Time.deltaTime, angle - currentAngle);
+                        arrowPosition.RotateAround(transform.position, Vector3.forward, step);
+                        currentAngle += step;
+                        if (currentAngle >= angle)
+                        {
+                            isRotate = false;
+                        }
+                    }
+                }
+
+                    break;
+
+                case BattleControl.PlayerColor.Cyan:
+                {
+                    break;
+                }
+
+                case BattleControl.PlayerColor.Blue:
+                {
+                    PlayerWithGravity(dirReal, infoF, info);
+                    break;
+                }
+
+                case BattleControl.PlayerColor.Purple:
+                {
+                    PlayerMoveWithLine();
+                    break;
+                }
+                default:
+                {
+                    throw new ArgumentOutOfRangeException($"Unexpected playerColor value: {playerColor}");
+                }
+            }
+        }
+
+        private void PlayerWithGravity(Vector2 dirReal, RaycastHit2D infoF, RaycastHit2D info)
+        {
+            var infoForBoard = Physics2D.Raycast(transform.position, dirReal, jumpRayDistanceForBoard);
+            if (infoForBoard.collider)
+            {
+                var obj = infoForBoard.collider.gameObject;
+                if (obj.transform.CompareTag(tag) && !isJump && moving == Vector3.zero)
+                {
+                    BlueDown(0, playerDir);
+                }
+
+                if (obj.transform.CompareTag(Board))
+                {
+                    var board = obj.transform.GetComponent<BoardController>();
+                    if (!infoForBoard.collider.isTrigger && infoForBoard.collider is EdgeCollider2D &&
+                        board.canMove)
+                    {
+                        BlueJumpReady();
+                        transform.SetParent(infoForBoard.transform);
+                    }
+                }
+                else
+                {
+                    transform.SetParent(null);
+                }
+            }
+            else
+            {
+                transform.SetParent(null);
+            }
+
+            switch (playerDir)
+            {
+                case PlayerDirection.Up:
+                {
+                    if (InputService.GetKey(KeyCode.X))
+                    {
+                        speedWeightX = SpeedWeight;
+                    }
+                    else
+                    {
+                        speedWeightX = 1;
+                    }
+
+                    transform.rotation = Quaternion.Euler(0, 0, 180);
+                    Physics2D.gravity = new Vector2(0, 9.8f);
+                    if (InputService.GetKey(KeyCode.RightArrow))
+                    {
+                        moving = new Vector3(1, moving.y);
+                    }
+                    else if (InputService.GetKey(KeyCode.LeftArrow))
+                    {
+                        moving = new Vector3(-1, moving.y);
+                    }
+                    else
+                    {
+                        moving = new Vector3(0, moving.y);
+                    }
+
+                    if (InputService.GetKey(KeyCode.RightArrow) &&
+                        InputService.GetKey(KeyCode.LeftArrow))
+                    {
+                        moving = new Vector3(0, moving.y);
+                    }
+
+                    if (!InputService.GetKey(KeyCode.DownArrow))
+                    {
+                        if (!InputService.GetKey(KeyCode.RightArrow) ||
+                            !InputService.GetKey(KeyCode.LeftArrow))
+                        {
+                            jumpRayDistanceForBoard = 0.2f;
+                        }
+
+                        if (InputService.GetKey(KeyCode.RightArrow) ||
+                            InputService.GetKey(KeyCode.LeftArrow))
+                        {
+                            jumpRayDistanceForBoard = 0;
+                        }
+                    }
+
+                    if (InputService.GetKey(KeyCode.DownArrow) && !isJump && moving.y == 0)
+                    {
+                        moving = new Vector3(moving.x, -2.15f);
+                        isJump = true;
+                        jumpRayDistance = 0.2f;
+                        jumpRayDistanceForBoard = 0;
+                    }
+
+                    if (isJump && (!InputService.GetKey(KeyCode.DownArrow) ||
+                                   (infoF.collider && infoF.collider.gameObject.CompareTag("Box"))) &&
+                        moving.y < -0 &&
+                        infoF.collider &&
+                        Mathf.Approximately(infoF.transform.position.z, transform.position.z))
+                    {
+                        jumpRayDistanceForBoard = 0.2f;
+                        moving = new Vector3(moving.x, -0);
+                    }
+
+                    if (isJump)
+                    {
+                        if (info.collider &&
+                            Mathf.Approximately(info.transform.position.z, transform.position.z))
+                        {
+                            var obj = info.collider.gameObject;
+                            if (obj.transform.CompareTag("Box"))
+                            {
+                                BlueJumpReady();
+                            }
+                        }
+
+                        moving.y += Time.deltaTime * (float)Math.Pow(3, jumpAcceleration);
+                    }
+                    else
+                    {
+                        jumpAcceleration = 1.25f;
+                        moving.y = 0;
+                    }
+
+                    jumpAcceleration += Time.deltaTime * timeInterpolation;
+                    break;
+                }
+
+                case PlayerDirection.Down:
+                {
+                    if (InputService.GetKey(KeyCode.X))
+                    {
+                        speedWeightX = SpeedWeight;
+                    }
+                    else
+                    {
+                        speedWeightX = 1;
+                    }
+
+                    transform.rotation = Quaternion.Euler(0, 0, 0);
+                    Physics2D.gravity = new Vector2(0, -9.8f);
+                    if (InputService.GetKey(KeyCode.RightArrow))
+                    {
+                        moving = new Vector3(1, moving.y);
+                    }
+                    else if (InputService.GetKey(KeyCode.LeftArrow))
+                    {
+                        moving = new Vector3(-1, moving.y);
+                    }
+                    else
+                    {
+                        moving = new Vector3(0, moving.y);
+                    }
+
+                    if (InputService.GetKey(KeyCode.RightArrow) &&
+                        InputService.GetKey(KeyCode.LeftArrow))
+                    {
+                        moving = new Vector3(0, moving.y);
+                    }
+
+                    if (!InputService.GetKey(KeyCode.UpArrow))
+                    {
+                        if (!InputService.GetKey(KeyCode.RightArrow) ||
+                            !InputService.GetKey(KeyCode.LeftArrow))
+                        {
+                            jumpRayDistanceForBoard = 0.2f;
+                        }
+
+                        if (InputService.GetKey(KeyCode.RightArrow) ||
+                            InputService.GetKey(KeyCode.LeftArrow))
+                        {
+                            jumpRayDistanceForBoard = 0;
+                        }
+                    }
+
+
+                    if (InputService.GetKey(KeyCode.UpArrow) && !isJump && moving.y == 0)
+                    {
+                        moving = new Vector3(moving.x, 2.15f);
+                        isJump = true;
+                        jumpRayDistance = 0.2f;
+                        jumpRayDistanceForBoard = 0;
+                    }
+
+                    if (isJump && (!InputService.GetKey(KeyCode.UpArrow) ||
+                                   (infoF.collider && infoF.collider.gameObject.CompareTag("Box"))) &&
+                        moving.y > 0 &&
+                        infoF.collider &&
+                        Mathf.Approximately(infoF.transform.position.z, transform.position.z))
+                    {
+                        jumpRayDistanceForBoard = 0.2f;
+                        moving = new Vector3(moving.x, 0);
+                    }
+
+                    if (isJump)
+                    {
+                        if (info.collider &&
+                            Mathf.Approximately(info.transform.position.z, transform.position.z))
+                        {
+                            var obj = info.collider.gameObject;
+                            if (obj.transform.CompareTag("Box"))
+                            {
+                                BlueJumpReady();
+                            }
+                        }
+
+                        moving.y -= Time.deltaTime * (float)Math.Pow(3, jumpAcceleration);
+                    }
+                    else
+                    {
+                        jumpAcceleration = 1.25f;
+                        moving.y = 0;
+                    }
+
+                    jumpAcceleration += Time.deltaTime * timeInterpolation;
+                    break;
+                }
+
+                case PlayerDirection.Left: 
+                {
+                    if (InputService.GetKey(KeyCode.X))
+                    {
+                        speedWeightY = SpeedWeight;
+                    }
+                    else
+                    {
+                        speedWeightY = 1;
+                    }
+
+                    transform.rotation = Quaternion.Euler(0, 0, 270);
+                    Physics2D.gravity = new Vector2(-9.8f, 0);
+                    if (InputService.GetKey(KeyCode.UpArrow))
+                    {
+                        moving = new Vector3(moving.x, 1);
+                    }
+                    else if (InputService.GetKey(KeyCode.DownArrow))
+                    {
+                        moving = new Vector3(moving.x, -1);
+                    }
+                    else
+                    {
+                        moving = new Vector3(moving.x, 0);
+                    }
+
+                    if (InputService.GetKey(KeyCode.UpArrow) &&
+                        InputService.GetKey(KeyCode.DownArrow))
+                    {
+                        moving = new Vector3(moving.x, 0);
+                    }
+
+                    if (!InputService.GetKey(KeyCode.RightArrow))
+                    {
+                        if (!InputService.GetKey(KeyCode.UpArrow) ||
+                            !InputService.GetKey(KeyCode.DownArrow))
+                        {
+                            jumpRayDistanceForBoard = 0.2f;
+                        }
+
+                        if (InputService.GetKey(KeyCode.UpArrow) ||
+                            InputService.GetKey(KeyCode.DownArrow))
+                        {
+                            jumpRayDistanceForBoard = 0;
+                        }
+                    }
+
+                    if (InputService.GetKey(KeyCode.RightArrow) && !isJump && moving.x == 0)
+                    {
+                        moving = new Vector3(2.15f, moving.y);
+                        isJump = true;
+                        jumpRayDistance = 0.2f;
+                        jumpRayDistanceForBoard = 0;
+                    }
+
+                    if (isJump && (!InputService.GetKey(KeyCode.RightArrow) ||
+                                   (infoF.collider && infoF.collider.gameObject.CompareTag("Box"))) &&
+                        moving.x > 0 &&
+                        infoF.collider &&
+                        Mathf.Approximately(infoF.transform.position.z, transform.position.z))
+                    {
+                        jumpRayDistanceForBoard = 0.2f;
+                        moving = new Vector3(0, moving.y);
+                    }
+
+                    if (isJump)
+                    {
+                        if (info.collider &&
+                            Mathf.Approximately(info.transform.position.z, transform.position.z))
+                        {
+                            var obj = info.collider.gameObject;
+                            if (obj.transform.CompareTag("Box"))
+                            {
+                                BlueJumpReady();
+                            }
+                        }
+
+                        moving.x -= Time.deltaTime * (float)Math.Pow(3, jumpAcceleration);
+                    }
+                    else
+                    {
+                        jumpAcceleration = 1.25f;
+                        moving.x = 0;
+                    }
+
+                    jumpAcceleration += Time.deltaTime * timeInterpolation;
+                    break;
+                }
+
+                case PlayerDirection.Right:
+                {
+                    if (InputService.GetKey(KeyCode.X))
+                    {
+                        speedWeightY = SpeedWeight;
+                    }
+                    else
+                    {
+                        speedWeightY = 1;
+                    }
+
+                    transform.rotation = Quaternion.Euler(0, 0, 90);
+                    Physics2D.gravity = new Vector2(9.8f, 0);
+                    if (InputService.GetKey(KeyCode.UpArrow))
+                    {
+                        moving = new Vector3(moving.x, 1);
+                    }
+                    else if (InputService.GetKey(KeyCode.DownArrow))
+                    {
+                        moving = new Vector3(moving.x, -1);
+                    }
+                    else
+                    {
+                        moving = new Vector3(moving.x, 0);
+                    }
+
+                    if (InputService.GetKey(KeyCode.UpArrow) &&
+                        InputService.GetKey(KeyCode.DownArrow))
+                    {
+                        moving = new Vector3(moving.x, 0);
+                    }
+
+                    if (!InputService.GetKey(KeyCode.LeftArrow))
+                    {
+                        if (!InputService.GetKey(KeyCode.UpArrow) ||
+                            !InputService.GetKey(KeyCode.DownArrow))
+                        {
+                            jumpRayDistanceForBoard = 0.2f;
+                        }
+
+                        if (InputService.GetKey(KeyCode.UpArrow) ||
+                            InputService.GetKey(KeyCode.DownArrow))
+                        {
+                            jumpRayDistanceForBoard = 0;
+                        }
+                    }
+
+                    if (InputService.GetKey(KeyCode.LeftArrow) && !isJump && moving.x == 0)
+                    {
+                        moving = new Vector3(-2.15f, moving.y);
+                        isJump = true;
+                        jumpRayDistance = 0.2f;
+                        jumpRayDistanceForBoard = 0;
+                    }
+
+                    if (isJump && (!InputService.GetKey(KeyCode.LeftArrow) ||
+                                   (infoF.collider && infoF.collider.gameObject.CompareTag("Box"))) &&
+                        moving.x < -0 &&
+                        infoF.collider &&
+                        Mathf.Approximately(infoF.transform.position.z, transform.position.z))
+                    {
+                        jumpRayDistanceForBoard = 0.2f;
+                        moving = new Vector3(-0, moving.y);
+                    }
+
+                    if (isJump)
+                    {
+                        if (info.collider &&
+                            Mathf.Approximately(info.transform.position.z, transform.position.z))
+                        {
+                            var obj = info.collider.gameObject;
+                            if (obj.transform.CompareTag("Box"))
+                            {
+                                BlueJumpReady();
+                            }
+                        }
+
+                        moving.x += Time.deltaTime * (float)Math.Pow(3, jumpAcceleration);
+                    }
+                    else
+                    {
+                        jumpAcceleration = 1.25f;
+                        moving.x = 0;
+                    }
+
+                    jumpAcceleration += Time.deltaTime * timeInterpolation;
+                    break;
+                }
+                case PlayerDirection.NullDir:
+                {
+                    break;
+                }
+                default:
+                {
+                    throw new ArgumentOutOfRangeException($"Unexpected playerDir value: {playerDir}");
+                }
+            }
+        }
+
+        private void PlayerMoveWithLine()
+        {
+            if (InputService.GetKey(KeyCode.RightArrow))
+            {
+                moving = new Vector3(1, moving.y);
+            }
+            else if (InputService.GetKey(KeyCode.LeftArrow))
+            {
+                moving = new Vector3(-1, moving.y);
+            }
+            else
+            {
+                moving = new Vector3(0, moving.y);
+            }
+
+            if (InputService.GetKey(KeyCode.RightArrow) &&
+                InputService.GetKey(KeyCode.LeftArrow))
+            {
+                moving = new Vector3(0, moving.y);
+            }
+
+            if (InputService.GetKeyDown(KeyCode.UpArrow) && currentLine > 1)
+            {
+                currentLine -= 1;
+                ChangeLine();
+            }
+
+            if (InputService.GetKeyDown(KeyCode.DownArrow) && currentLine < 3)
+            {
+                currentLine += 1;
+                ChangeLine();
+            }
+        }
+
+        private void PlayerContinuouslyMove()
+        {
+            UpdateSpeedWeight();
+            UpdateMovementDirection();
+        }
+
+        private void UpdateSpeedWeight()
+        {
+            var isBoosting = InputService.GetKey(KeyCode.X);
+            speedWeightX = isBoosting ? SpeedWeight : 1;
+            speedWeightY = isBoosting ? SpeedWeight : 1;
+        }
+
+        private void UpdateMovementDirection()
+        {
+            Dictionary<(bool, bool, bool, bool), float> directionMap = new()
+            {
+                { (true, false, true, false), 45 },   
+                { (true, false, false, true), -45 }, 
+                { (false, true, true, false), 135 }, 
+                { (false, true, false, true), -135 },
+                { (true, false, false, false), 0 },  
+                { (false, true, false, false), 180 }, 
+                { (false, false, false, true), -90 }, 
+                { (false, false, true, false), 90 }   
+            };
+
+            var up = InputService.GetKey(KeyCode.UpArrow);
+            var down = InputService.GetKey(KeyCode.DownArrow);
+            var left = InputService.GetKey(KeyCode.LeftArrow);
+            var right = InputService.GetKey(KeyCode.RightArrow);
+
+            if (directionMap.TryGetValue((up, down, left, right), out var newAngle))
+            {
+                angle = newAngle;
+            }
+
+            moving = Quaternion.Euler(0, 0, angle) * transform.up;
         }
 
         private void BlueJumpReady()
@@ -1012,7 +1054,7 @@ namespace UCT.Battle
         public void ChangePlayerColor(Color aimColor,
             BattleControl.PlayerColor aimPlayerColor,
             float startForce = 0,
-            PlayerDirEnum dir = PlayerDirEnum.NullDir,
+            PlayerDirection dir = PlayerDirection.NullDir,
             float inputGradientTime = -1,
             float inputDingTime = -1,
             int fx = 2)
@@ -1094,9 +1136,9 @@ namespace UCT.Battle
         /// <summary>
         ///     让蓝心坠落
         /// </summary>
-        private void BlueDown(float startForce = 0, PlayerDirEnum dir = PlayerDirEnum.NullDir)
+        private void BlueDown(float startForce = 0, PlayerDirection dir = PlayerDirection.NullDir)
         {
-            if (dir != PlayerDirEnum.NullDir)
+            if (dir != PlayerDirection.NullDir)
             {
                 playerDir = dir;
             }
@@ -1105,154 +1147,38 @@ namespace UCT.Battle
             isJump = true;
             switch (playerDir)
             {
-                case PlayerDirEnum.Up:
+                case PlayerDirection.Up:
                     moving = new Vector3(moving.x, startForce);
                     break;
 
-                case PlayerDirEnum.Down:
+                case PlayerDirection.Down:
                     moving = new Vector3(moving.x, -startForce);
                     break;
 
-                case PlayerDirEnum.Left:
+                case PlayerDirection.Left:
                     moving = new Vector3(-startForce, moving.y);
                     break;
 
-                case PlayerDirEnum.Right:
+                case PlayerDirection.Right:
                     moving = new Vector3(startForce, moving.y);
                     break;
             }
         }
 
-        /////////////////////////////////////////判定相关
-        //定义用于判断点是否在多边形内的方法
-        private bool IsPointInPolygon(Vector2 point, List<Vector2> polygon)
-        {
-            var isInside = false; //初始化点是否在多边形内的标志为false
-            //遍历多边形的每一条边，使用射线法判断点是否在多边形内
-            for (int i = 0, j = polygon.Count - 1; i < polygon.Count; j = i++)
-                //如果点与当前边的两个端点之一在Y轴的两侧，并且在X轴的左侧，则反转内部标志
-            {
-                if (polygon[i].y > point.y != polygon[j].y > point.y &&
-                    point.x < (polygon[j].x - polygon[i].x) * (point.y - polygon[i].y) / (polygon[j].y - polygon[i].y) +
-                    polygon[i].x)
-                {
-                    isInside = !isInside;
-                }
-            }
-
-            return isInside; //返回点是否在多边形内的最终结果
-        }
-
-        //定义计算点到线段最近点的方法（计算垂足）
-        private static Vector2 GetNearestPointOnLine(Vector2 point, Vector2 start, Vector2 end)
-        {
-            var line = end - start; //计算线段的向量
-            var len = line.magnitude; //获取线段长度
-            line.Normalize(); //标准化线段向量
-
-            var v = point - start; //计算点到线段起点的向量
-            var d = Vector2.Dot(v, line); //计算点在线段向量上的投影长度
-            d = Mathf.Clamp(d, 0f, len); //限制投影长度在0到线段长度之间
-            return start + line * d; //计算并返回最近点的坐标
-        }
-
-        //定义计算位移后垂点位置的方法
-        private static Vector2 CalculateDisplacedPoint(Vector2 nearestPoint,
-            Vector2 lineStart,
-            Vector2 lineEnd,
-            float displacement)
-        {
-            var lineDirection = (lineEnd - lineStart).normalized; //计算线段方向向量
-            Vector2 perpendicularDirection = new(-lineDirection.y, lineDirection.x); //计算垂直方向向量（逆时针旋转90度）
-
-            return nearestPoint + perpendicularDirection * -displacement; //计算并返回位移后的垂点位置
-        }
-
-        //定义计算内缩多边形顶点的方法
-        private List<Vector2> CalculateInwardOffset(List<Vector2> vertices, float offset)
-        {
-            if (vertices == null || vertices.Count < 3)
-            {
-                return null; //如果顶点列表为空或少于3个，返回null
-            }
-
-            List<Vector2> offsetVertices = new(); //初始化存储位移后顶点的列表
-            List<Vector2> intersectionPoints = new(); //初始化存储交点的列表
-
-            var count = vertices.Count; //获取顶点数量
-            for (var i = 0; i < count; i++)
-            {
-                var currentVertex = vertices[i]; //获取当前顶点
-                var nextVertex = vertices[(i + 1) % count]; //获取下一个顶点（环形列表）
-
-                var edgeDirection = (nextVertex - currentVertex).normalized; //计算边的方向向量
-                Vector2 perpendicularDirection = new(-edgeDirection.y, edgeDirection.x); //计算垂直方向向量
-
-                var offsetCurrentVertex = currentVertex + perpendicularDirection * offset; //计算当前顶点的位移
-                var offsetNextVertex = nextVertex + perpendicularDirection * offset; //计算下一个顶点的位移
-
-                offsetVertices.Add(offsetCurrentVertex); //添加位移后的当前顶点到列表
-                offsetVertices.Add(offsetNextVertex); //添加位移后的下一个顶点到列表
-
-                if (i <= 0)
-                {
-                    continue; //从第二条边开始计算交点
-                }
-
-                var foundIntersection = LineLineIntersection(out var intersection, offsetVertices[i * 2 - 2],
-                    offsetVertices[i * 2 - 1], offsetCurrentVertex, offsetNextVertex);
-                if (foundIntersection)
-                {
-                    intersectionPoints.Add(intersection); //如果找到交点，添加到交点列表
-                }
-            }
-
-            //计算首尾两条边的交点
-            var foundFinalIntersection = LineLineIntersection(out var finalIntersection, offsetVertices[^2],
-                offsetVertices[^1], offsetVertices[0], offsetVertices[1]);
-            if (foundFinalIntersection)
-            {
-                intersectionPoints.Add(finalIntersection); //如果找到交点，添加到交点列表
-            }
-
-            return intersectionPoints; //返回交点列表，即内缩多边形的顶点
-        }
-
-        //定义线线交点计算的方法
-        private static bool LineLineIntersection(out Vector2 intersection,
-            Vector2 point1,
-            Vector2 point2,
-            Vector2 point3,
-            Vector2 point4)
-        {
-            intersection = new Vector2(); //初始化交点坐标
-
-            var d = (point1.x - point2.x) * (point3.y - point4.y) -
-                    (point1.y - point2.y) * (point3.x - point4.x); //计算分母
-            if (d == 0)
-            {
-                return false; //如果分母为0，则线段平行或重合，无交点
-            }
-
-            float pre = point1.x * point2.y - point1.y * point2.x, post = point3.x * point4.y - point3.y * point4.x;
-            intersection.x = (pre * (point3.x - point4.x) - (point1.x - point2.x) * post) / d; //计算交点X坐标
-            intersection.y = (pre * (point3.y - point4.y) - (point1.y - point2.y) * post) / d; //计算交点Y坐标
-
-            return true; //返回true，表示找到交点
-        }
-
-        // 定义根据位移检查并调整点位置的方法
+        /// <summary>
+        /// 根据位移检查并调整点位置的方法
+        /// </summary>
         private Vector3 CheckPoint(Vector3 point,
             float inputDisplacement,
             int maxDepth = 10,
             int currentDepth = 0,
             bool isInitialCall = true)
         {
-            Vector2 originalPoint = point; //保存原始点位置
+            Vector2 originalPoint = point; 
             var z = point.z;
-            if (currentDepth >= maxDepth) //检查是否达到递归次数限制
+            if (currentDepth >= maxDepth) 
             {
-                return point; //如果达到最大次数，返回当前点
+                return point; 
             }
 
             foreach (var box in BoxController.Instance.boxes.Where(box => Mathf.Approximately(box.localPosition.z, z)))
@@ -1267,73 +1193,39 @@ namespace UCT.Battle
                     rDis = inputDisplacement;
                 }
 
-                var movedVertices = CalculateInwardOffset(box.GetRealPoints(false), -rDis); //计算缩放后的多边形顶点
+                var movedVertices = MathUtilityService.CalculateInwardOffset(box.GetRealPoints(false), -rDis); //计算缩放后的多边形顶点
 
-                if (IsPointInPolygon(point, movedVertices)) //如果点 在 调整后的多边形内
+                if (MathUtilityService.IsPointInPolygon(point, movedVertices)) 
                 {
-                    return point; //返回原始坐标
-                }
-            }
-            //如果点 不在 调整后的多边形内
-
-            var nearestPoint = Vector2.zero; //最近点
-            var lineStart = Vector2.zero;
-            var lineEnd = Vector2.zero;
-            var nearestDistance = float.MaxValue; //最近距离设为最大值
-            var isParent = false; //确定框是否为复合的框，如果是，需要额外调整移动距离
-
-            foreach (var box in BoxController.Instance.boxes.Where(box => Mathf.Approximately(box.localPosition.z, z)))
-            {
-                for (int i = 0, j = box.GetRealPoints(false).Count - 1;
-                     i < box.GetRealPoints(false).Count;
-                     j = i++) //遍历框的所有边
-                {
-                    var tempNearestPoint =
-                        GetNearestPointOnLine(point, box.GetRealPoints(false)[i],
-                            box.GetRealPoints(false)[j]); //计算到当前边的最近点
-                    var tempDistance = Vector2.Distance(point, tempNearestPoint); //计算距离
-                    if (tempDistance >= nearestDistance)
-                    {
-                        continue;
-                    }
-
-                    //如果距离更短
-                    nearestPoint = tempNearestPoint; //更新最近点
-                    lineStart = box.GetRealPoints(false)[i]; //更新线段起点
-                    lineEnd = box.GetRealPoints(false)[j]; //更新线段终点
-                    nearestDistance = tempDistance; //更新最近距离
-                    isParent = box.sonBoxDrawer.Count > 0;
+                    return point; 
                 }
             }
 
-            if (nearestDistance >= float.MaxValue)
+
+            if (MathUtilityService.CheckPointBeyondPolygon(point, z, out var nearestPoint, out var lineStart, out var lineEnd,
+                    out var isParent, out var checkPoint)) 
             {
-                return point; //如果没有找到更近的点，返回原点
+                return checkPoint;
             }
 
-            //如果找到最近点
             if (isParent)
             {
                 inputDisplacement -= 0.05f;
             }
 
-            var moved = (Vector3)CalculateDisplacedPoint(nearestPoint, lineStart, lineEnd, -inputDisplacement) +
-                        new Vector3(0, 0, z); //计算位移后的点位置
+            var moved = (Vector3)MathUtilityService.CalculateDisplacedPoint(nearestPoint, lineStart, lineEnd, -inputDisplacement) +
+                        new Vector3(0, 0, z);
 
             if (!isInitialCall && (Vector2)moved == originalPoint)
             {
-                return point; //如果没有找到更近的点，返回原点
+                return point; 
             }
 
-            //如果是初次调用或移动后的点不等于原点
             var newCheck = (Vector3)(Vector2)CheckPoint(moved, inputDisplacement, maxDepth, currentDepth + 1, false) +
-                           new Vector3(0, 0, z); //递归调用，增加递归深度
+                           new Vector3(0, 0, z);
             return newCheck != moved
-                ? //如果移动后的点未通过检测
-                //因为已经在递归中处理递归深度，所以这里不需要再次调用CheckPoint
-                newCheck
-                : //返回新检查点
-                moved; //返回移动后的点
+                ? newCheck
+                : moved;
         }
 
         public void KillPlayer(MainControl mainControl)
@@ -1350,11 +1242,11 @@ namespace UCT.Battle
             else
             {
                 mainControl.selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
-                Other.Debug.Log("Debug无敌模式已将您的血量恢复", "#FF0000");
+                Other.Debug.Log("Debug无敌模式已将血量恢复", "#FF0000");
             }
         }
 
-        private void SoulsMove()
+        private void PlayerCommonMove()
         {
             if (InputService.GetKey(KeyCode.X))
             {

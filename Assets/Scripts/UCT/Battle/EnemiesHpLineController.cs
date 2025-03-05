@@ -1,3 +1,4 @@
+using System;
 using UCT.Global.Core;
 using UnityEngine;
 
@@ -10,32 +11,35 @@ namespace UCT.Battle
 
         private SpriteRenderer _redSprite, _greenSprite;
 
-        private void Start()
+        private void Initialization()
         {
             transform.localScale = Vector2.zero;
             _redSprite = GetComponent<SpriteRenderer>();
             _greenSprite = transform.GetChild(0).GetComponent<SpriteRenderer>();
         }
 
-        private void Update()
+        private void OnEnable()
         {
-            
-            if (MainControl.Instance.selectUIController.selectedButton != SelectUIController.SelectedButton.Fight ||
-                MainControl.Instance.selectUIController.selectedLayer !=
-                SelectUIController.SelectedLayer.NameLayer)
+            if(!_redSprite || !_greenSprite)
             {
-                return;
+                Initialization();
             }
 
             var isShowThis = enemyId < MainControl.Instance.selectUIController.enemiesControllers.Count &&
                              MainControl.Instance.selectUIController.enemiesControllers[enemyId].Enemy.state == EnemyState.Default;
             _redSprite.enabled = isShowThis;
             _greenSprite.enabled = isShowThis;
+        }
+
+        private void Update()
+        {
             
-            if (!isShowThis)
+            if (MainControl.Instance.selectUIController.selectedButton != SelectUIController.SelectedButton.Fight ||
+                MainControl.Instance.selectUIController.selectedLayer != SelectUIController.SelectedLayer.NameLayer ||
+                !_redSprite.enabled)
             {
                 return;
-            } 
+            }
             
             if (MainControl.Instance.selectUIController.enemiesControllers.Count - 1 < enemyId)
             {

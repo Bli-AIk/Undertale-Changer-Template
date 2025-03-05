@@ -555,6 +555,7 @@ MonoBehaviour:
   def: 2
   hp: 10
   hpMax: 10
+  spriteSplitController: {fileID: 0}
 --- !u!95 &8696685702531877075
 Animator:
   serializedVersion: 4
@@ -677,7 +678,7 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_MaskInteraction: 0
+  m_MaskInteraction: 2
   m_SpriteSortPoint: 0
 --- !u!114 &2273899448223808119
 MonoBehaviour:

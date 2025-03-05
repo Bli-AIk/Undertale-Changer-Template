@@ -127,12 +127,19 @@ namespace UCT.Battle
                 new Vector3(Mathf.Clamp(enemiesController.hp / (float)enemiesController.hpMax, 0, Mathf.Infinity), 1), 0.75f)
                 .SetEase(Ease.OutSine);
 
-            if (enemiesController.hp < 0)
-            {
-                enemiesController.Enemy.state = EnemyState.Dead;
-                enemiesController.spriteSplitController.enabled = true;
+            
+        }
 
+        private void CheckDeath()
+        {
+            var enemiesController = MainControl.Instance.selectUIController.enemiesControllers[select];
+            if (enemiesController.hp >= 0)
+            {
+                return;
             }
+
+            enemiesController.Enemy.state = EnemyState.Dead;
+            enemiesController.spriteSplitController.enabled = true;
         }
 
         private void OpenPressZ()
