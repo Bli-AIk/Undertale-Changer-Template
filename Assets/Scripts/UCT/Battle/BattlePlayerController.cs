@@ -243,7 +243,7 @@ namespace UCT.Battle
 
             if (!TurnController.Instance.isMyTurn)
             {
-                Moving();
+                PlayerMoving();
             }
         }
 
@@ -329,7 +329,7 @@ namespace UCT.Battle
             }
         }
 
-        private void Moving()
+        private void PlayerMoving()
         {
             var dirReal = playerDir switch
             {
@@ -352,84 +352,7 @@ namespace UCT.Battle
             PlayerColorMoving(dirReal, infoF, info);
 
 
-            //蓝橙骨所用的是否移动判定
-            Vector2 dirMoveX = new();
-            Vector2 dirMoveY = new();
-            bool isMoveX = false, isMoveY = false;
-            if (InputService.GetKey(KeyCode.UpArrow))
-            {
-                dirMoveY = Vector2.up;
-                isMoveY = true;
-            }
-            else if (InputService.GetKey(KeyCode.DownArrow))
-            {
-                dirMoveY = Vector2.down;
-                isMoveY = true;
-            }
-
-            if (InputService.GetKey(KeyCode.UpArrow) &&
-                InputService.GetKey(KeyCode.DownArrow))
-            {
-                isMoveY = false;
-            }
-
-            if (InputService.GetKey(KeyCode.LeftArrow))
-            {
-                dirMoveX = Vector2.left;
-                isMoveX = true;
-            }
-            else if (InputService.GetKey(KeyCode.RightArrow))
-            {
-                dirMoveX = Vector2.right;
-                isMoveX = true;
-            }
-
-            if (InputService.GetKey(KeyCode.LeftArrow) &&
-                InputService.GetKey(KeyCode.RightArrow))
-            {
-                isMoveX = false;
-            }
-
-            Ray2D rayMoveX = new(transform.position, dirMoveX);
-            Other.Debug.DrawRay(rayMoveX.origin, rayMoveX.direction, Color.green);
-            var infoMoveX = Physics2D.Raycast(transform.position, dirMoveX, 0.2f);
-            Ray2D rayMoveY = new(transform.position, dirMoveY);
-            Other.Debug.DrawRay(rayMoveY.origin, rayMoveY.direction, new Color(0, 0.5f, 0, 1));
-            var infoMoveY = Physics2D.Raycast(transform.position, dirMoveY, 0.2f);
-
-            if (isMoveX && infoMoveX.collider && (infoMoveX.collider.gameObject.CompareTag("Box") ||
-                                                  infoMoveX.collider.gameObject.CompareTag(Board)))
-            {
-                isMoving = false;
-            }
-
-            if (isMoveX || isMoveY)
-            {
-                var x = infoMoveX.collider &&
-                        (infoMoveX.collider.gameObject.CompareTag("Box") ||
-                         infoMoveX.collider.gameObject.CompareTag(Board));
-                var y = infoMoveY.collider &&
-                        (infoMoveY.collider.gameObject.CompareTag("Box") ||
-                         infoMoveY.collider.gameObject.CompareTag(Board));
-                if (x && !y && (InputService.GetKey(KeyCode.UpArrow) ||
-                                InputService.GetKey(KeyCode.DownArrow)))
-                {
-                    x = y;
-                }
-
-                if (y && !x && (InputService.GetKey(KeyCode.LeftArrow) ||
-                                InputService.GetKey(KeyCode.RightArrow)))
-                {
-                    y = x;
-                }
-
-                isMoving = !(x || y);
-            }
-            else
-            {
-                isMoving = playerColor == BattleControl.PlayerColor.Blue &&
-                           !Mathf.Approximately(jumpRayDistance, 0);
-            }
+            isMoving = IsReallyMoving();
 
             float movingSave = 0;
             if (playerColor == BattleControl.PlayerColor.Blue && isJump)
@@ -470,6 +393,102 @@ namespace UCT.Battle
             }
         }
 
+        private bool IsReallyMoving()
+        {
+            bool isMove;
+            Vector2 dirMoveX = new();
+            Vector2 dirMoveY = new();
+            bool isMoveX, isMoveY;
+            (dirMoveY, isMoveY, dirMoveX, isMoveX) = GetMovingXy(dirMoveY, false, dirMoveX, false);
+
+            Ray2D rayMoveX = new(transform.position, dirMoveX);
+            Other.Debug.DrawRay(rayMoveX.origin, rayMoveX.direction, Color.green);
+            var infoMoveX = Physics2D.Raycast(transform.position, dirMoveX, 0.2f);
+            Ray2D rayMoveY = new(transform.position, dirMoveY);
+            Other.Debug.DrawRay(rayMoveY.origin, rayMoveY.direction, new Color(0, 0.5f, 0, 1));
+            var infoMoveY = Physics2D.Raycast(transform.position, dirMoveY, 0.2f);
+            
+
+            if (isMoveX || isMoveY)
+            {
+                var (x, y) = GetXy(infoMoveX, infoMoveY);
+
+                isMove = !(x || y);
+            }
+            else
+            {
+                isMove = playerColor == BattleControl.PlayerColor.Blue &&
+                           !Mathf.Approximately(jumpRayDistance, 0);
+            }
+
+            return isMove;
+        }
+
+        private static (bool x, bool y) GetXy(RaycastHit2D infoMoveX, RaycastHit2D infoMoveY)
+        {
+            var x = infoMoveX.collider &&
+                    (infoMoveX.collider.gameObject.CompareTag("Box") ||
+                     infoMoveX.collider.gameObject.CompareTag(Board));
+            var y = infoMoveY.collider &&
+                    (infoMoveY.collider.gameObject.CompareTag("Box") ||
+                     infoMoveY.collider.gameObject.CompareTag(Board));
+            if (x && !y && (InputService.GetKey(KeyCode.UpArrow) ||
+                            InputService.GetKey(KeyCode.DownArrow)))
+            {
+                x = false;
+            }
+
+            if (y && !x && (InputService.GetKey(KeyCode.LeftArrow) ||
+                            InputService.GetKey(KeyCode.RightArrow)))
+            {
+                y = false;
+            }
+
+            return (x, y);
+        }
+
+        private static (Vector2 dirMoveY, bool isMoveY, Vector2 dirMoveX, bool isMoveX) GetMovingXy(Vector2 dirMoveY,
+            bool isMoveY,
+            Vector2 dirMoveX,
+            bool isMoveX)
+        {
+            if (InputService.GetKey(KeyCode.UpArrow))
+            {
+                dirMoveY = Vector2.up;
+                isMoveY = true;
+            }
+            else if (InputService.GetKey(KeyCode.DownArrow))
+            {
+                dirMoveY = Vector2.down;
+                isMoveY = true;
+            }
+
+            if (InputService.GetKey(KeyCode.UpArrow) &&
+                InputService.GetKey(KeyCode.DownArrow))
+            {
+                isMoveY = false;
+            }
+
+            if (InputService.GetKey(KeyCode.LeftArrow))
+            {
+                dirMoveX = Vector2.left;
+                isMoveX = true;
+            }
+            else if (InputService.GetKey(KeyCode.RightArrow))
+            {
+                dirMoveX = Vector2.right;
+                isMoveX = true;
+            }
+
+            if (InputService.GetKey(KeyCode.LeftArrow) &&
+                InputService.GetKey(KeyCode.RightArrow))
+            {
+                isMoveX = false;
+            }
+
+            return (dirMoveY, isMoveY, dirMoveX, isMoveX);
+        }
+
         private void PlayerColorMoving(Vector2 dirReal, RaycastHit2D infoF, RaycastHit2D info)
         {
             switch (playerColor)
@@ -497,47 +516,13 @@ namespace UCT.Battle
 
                     break;
                 }
+                
                 case BattleControl.PlayerColor.Green:
                 {
-                    arrowPosition.GetComponent<SpriteRenderer>().enabled = true;
-                    if (InputService.GetKeyDown(KeyCode.UpArrow))
-                    {
-                        angle = 0;
-                        isRotate = true;
-                    }
-
-                    if (InputService.GetKeyDown(KeyCode.DownArrow))
-                    {
-                        angle = 90;
-                        isRotate = true;
-                    }
-
-                    if (InputService.GetKeyDown(KeyCode.LeftArrow))
-                    {
-                        angle = 180;
-                        isRotate = true;
-                    }
-
-                    if (InputService.GetKeyDown(KeyCode.RightArrow))
-                    {
-                        angle = 270;
-                        isRotate = true;
-                    }
-
-                    if (isRotate)
-                    {
-                        var step = Mathf.Min(90f * Time.deltaTime, angle - currentAngle);
-                        arrowPosition.RotateAround(transform.position, Vector3.forward, step);
-                        currentAngle += step;
-                        if (currentAngle >= angle)
-                        {
-                            isRotate = false;
-                        }
-                    }
-                }
-
+                    PlayerFixedDefense();
                     break;
-
+                }
+                
                 case BattleControl.PlayerColor.Cyan:
                 {
                     break;
@@ -558,6 +543,47 @@ namespace UCT.Battle
                 {
                     throw new ArgumentOutOfRangeException($"Unexpected playerColor value: {playerColor}");
                 }
+            }
+        }
+
+        private void PlayerFixedDefense()
+        {
+            arrowPosition.GetComponent<SpriteRenderer>().enabled = true;
+            if (InputService.GetKeyDown(KeyCode.UpArrow))
+            {
+                angle = 0;
+                isRotate = true;
+            }
+
+            if (InputService.GetKeyDown(KeyCode.DownArrow))
+            {
+                angle = 90;
+                isRotate = true;
+            }
+
+            if (InputService.GetKeyDown(KeyCode.LeftArrow))
+            {
+                angle = 180;
+                isRotate = true;
+            }
+
+            if (InputService.GetKeyDown(KeyCode.RightArrow))
+            {
+                angle = 270;
+                isRotate = true;
+            }
+
+            if (!isRotate)
+            {
+                return;
+            }
+
+            var step = Mathf.Min(90f * Time.deltaTime, angle - currentAngle);
+            arrowPosition.RotateAround(transform.position, Vector3.forward, step);
+            currentAngle += step;
+            if (currentAngle >= angle)
+            {
+                isRotate = false;
             }
         }
 
