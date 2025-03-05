@@ -1,6 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UCT.Control;
+using UCT.Global.Audio;
+using UCT.Global.Core;
 using UnityEngine;
 
 namespace UCT.Battle
@@ -51,6 +54,8 @@ namespace UCT.Battle
                 new Rect(0, 0, _map.width, _map.height),
                 new Vector2(0.5f, 0.5f),
                 _spriteRenderer.sprite.pixelsPerUnit);
+
+            AudioController.Instance.PlayFx(5, MainControl.Instance.AudioControl.fxClipBattle);
             StartCoroutine(_SummonPixel());
         }
 

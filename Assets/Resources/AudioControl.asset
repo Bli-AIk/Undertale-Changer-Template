@@ -31,18 +31,13 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 23b25bfcaf7895a4790f91ba378cab18, type: 3}
   - {fileID: 8300000, guid: 965262274a3d03d4e92cb85e5288ff9d, type: 3}
   - {fileID: 8300000, guid: ca8c9d657401902498893d7c1887f2c0, type: 3}
-  fxClipType:
-  - {fileID: 8300000, guid: c07dbf7b874d8fd4eb8e857020e37bfb, type: 3}
-  - {fileID: 8300000, guid: 9fac4480efb59c149b9b251a63a6b7ee, type: 3}
-  - {fileID: 8300000, guid: e6a0b5e03a41eeb4dab8ecefc62011e1, type: 3}
-  - {fileID: 8300000, guid: 4561a7744d07e9e468e457a91a5f6c71, type: 3}
-  - {fileID: 8300000, guid: 4cd9d27e6dad99846855d74020e7e403, type: 3}
   fxClipBattle:
   - {fileID: 8300000, guid: c2bda3de4be27a5498bea48914f9d986, type: 3}
   - {fileID: 8300000, guid: 34872d7e24d412642aa30edb230c5483, type: 3}
   - {fileID: 8300000, guid: 7bc8bb004e7e9e04c8c715f2e9ffd829, type: 3}
   - {fileID: 8300000, guid: 8a4e197853bbe1044ad726deabaae190, type: 3}
   - {fileID: 8300000, guid: 75d4eda6b288a7343879acd468101d2a, type: 3}
+  - {fileID: 8300000, guid: f2091c73cc312604aa897c561739a302, type: 3}
   fxClipWalk:
   - {fileID: 8300000, guid: 1f0199a4c6005ec4abbb302f71bc036d, type: 3}
   - {fileID: 8300000, guid: 53e2adf2ac488ef46bb2b4074de9e363, type: 3}

@@ -183,6 +183,43 @@ namespace UCT.Battle
             }
         }
 
+        private void FixedUpdate()
+        {
+            if (GameUtilityService.IsGamePausedOrSetting())
+            {
+                return;
+            }
+
+            if (!TurnController.Instance.isMyTurn)
+            {
+                PlayerMoving();
+            }
+        }
+
+        private void OnCollisionEnter2D(Collision2D collision)
+        {
+            //蓝心碰板子确保再次可以跳
+            if (collision.transform.CompareTag(Board) &&
+                collision.transform.GetComponent<EdgeCollider2D>().IsTouching(collideCollider) &&
+                playerColor == BattleControl.PlayerColor.Blue)
+            {
+                BlueJumpReady();
+            }
+        }
+
+
+        /// <summary>
+        ///     掉出
+        /// </summary>
+        private void OnCollisionExit2D(Collision2D collision)
+        {
+            if (collision.transform.CompareTag(Board) && playerColor == BattleControl.PlayerColor.Blue &&
+                !isJump)
+            {
+                BlueDown();
+            }
+        }
+
         private void UpdatePlayerMissTime()
         {
             if (MainControl.Instance.playerControl.missTime >= 0)
@@ -231,43 +268,6 @@ namespace UCT.Battle
             if (!SettingsStorage.IsSimplifySfx && hitVolume.weight > 0)
             {
                 hitVolume.weight -= Time.deltaTime;
-            }
-        }
-
-        private void FixedUpdate()
-        {
-            if (GameUtilityService.IsGamePausedOrSetting())
-            {
-                return;
-            }
-
-            if (!TurnController.Instance.isMyTurn)
-            {
-                PlayerMoving();
-            }
-        }
-
-        private void OnCollisionEnter2D(Collision2D collision)
-        {
-            //蓝心碰板子确保再次可以跳
-            if (collision.transform.CompareTag(Board) &&
-                collision.transform.GetComponent<EdgeCollider2D>().IsTouching(collideCollider) &&
-                playerColor == BattleControl.PlayerColor.Blue)
-            {
-                BlueJumpReady();
-            }
-        }
-
-
-        /// <summary>
-        ///     掉出
-        /// </summary>
-        private void OnCollisionExit2D(Collision2D collision)
-        {
-            if (collision.transform.CompareTag(Board) && playerColor == BattleControl.PlayerColor.Blue &&
-                !isJump)
-            {
-                BlueDown();
             }
         }
 
@@ -407,7 +407,7 @@ namespace UCT.Battle
             Ray2D rayMoveY = new(transform.position, dirMoveY);
             Other.Debug.DrawRay(rayMoveY.origin, rayMoveY.direction, new Color(0, 0.5f, 0, 1));
             var infoMoveY = Physics2D.Raycast(transform.position, dirMoveY, 0.2f);
-            
+
 
             if (isMoveX || isMoveY)
             {
@@ -418,7 +418,7 @@ namespace UCT.Battle
             else
             {
                 isMove = playerColor == BattleControl.PlayerColor.Blue &&
-                           !Mathf.Approximately(jumpRayDistance, 0);
+                         !Mathf.Approximately(jumpRayDistance, 0);
             }
 
             return isMove;
@@ -516,13 +516,13 @@ namespace UCT.Battle
 
                     break;
                 }
-                
+
                 case BattleControl.PlayerColor.Green:
                 {
                     PlayerFixedDefense();
                     break;
                 }
-                
+
                 case BattleControl.PlayerColor.Cyan:
                 {
                     break;
@@ -589,6 +589,34 @@ namespace UCT.Battle
 
         private void PlayerWithGravity(Vector2 dirReal, RaycastHit2D infoF, RaycastHit2D info)
         {
+            HandleBoardInteraction(dirReal);
+
+            switch (playerDir)
+            {
+                case PlayerDirection.Up:
+                    ProcessVerticalMovement(true, infoF, info);
+                    break;
+                case PlayerDirection.Down:
+                    ProcessVerticalMovement(false, infoF, info);
+                    break;
+                case PlayerDirection.Left:
+                    ProcessHorizontalMovement(true, infoF, info);
+                    break;
+                case PlayerDirection.Right:
+                    ProcessHorizontalMovement(false, infoF, info);
+                    break;
+                case PlayerDirection.NullDir:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException($"Unexpected playerDir value: {playerDir}");
+            }
+        }
+
+        /// <summary>
+        ///     处理与板子（Board）的碰撞和父物体设置逻辑
+        /// </summary>
+        private void HandleBoardInteraction(Vector2 dirReal)
+        {
             var infoForBoard = Physics2D.Raycast(transform.position, dirReal, jumpRayDistanceForBoard);
             if (infoForBoard.collider)
             {
@@ -601,391 +629,154 @@ namespace UCT.Battle
                 if (obj.transform.CompareTag(Board))
                 {
                     var board = obj.transform.GetComponent<BoardController>();
-                    if (!infoForBoard.collider.isTrigger && infoForBoard.collider is EdgeCollider2D &&
+                    if (!infoForBoard.collider.isTrigger &&
+                        infoForBoard.collider is EdgeCollider2D &&
                         board.canMove)
                     {
                         BlueJumpReady();
                         transform.SetParent(infoForBoard.transform);
+                        return;
                     }
+                }
+            }
+
+            transform.SetParent(null);
+        }
+
+        private void ProcessVerticalMovement(bool isGravityUp, RaycastHit2D infoF, RaycastHit2D info)
+        {
+            speedWeightX = InputService.GetKey(KeyCode.X) ? SpeedWeight : 1;
+            SetGravityAndRotation(isGravityUp, true);
+            var moveX = GetMoveAxis(KeyCode.RightArrow, KeyCode.LeftArrow);
+            moving = new Vector3(moveX, moving.y, moving.z);
+            HandleJump(isGravityUp ? KeyCode.DownArrow : KeyCode.UpArrow, isGravityUp, infoF, info, true);
+        }
+
+        private void ProcessHorizontalMovement(bool isGravityLeft, RaycastHit2D infoF, RaycastHit2D info)
+        {
+            speedWeightY = InputService.GetKey(KeyCode.X) ? SpeedWeight : 1;
+            SetGravityAndRotation(isGravityLeft, false);
+            var moveY = GetMoveAxis(KeyCode.UpArrow, KeyCode.DownArrow);
+            moving = new Vector3(moving.x, moveY, moving.z);
+            HandleJump(isGravityLeft ? KeyCode.RightArrow : KeyCode.LeftArrow, isGravityLeft, infoF, info, false);
+        }
+
+        private void SetGravityAndRotation(bool isGravityPositive, bool isVertical)
+        {
+            if (isVertical)
+            {
+                transform.rotation = Quaternion.Euler(0, 0, isGravityPositive ? 180 : 0);
+                Physics2D.gravity = new Vector2(0, isGravityPositive ? 9.8f : -9.8f);
+            }
+            else
+            {
+                transform.rotation = Quaternion.Euler(0, 0, isGravityPositive ? 270 : 90);
+                Physics2D.gravity = new Vector2(isGravityPositive ? -9.8f : 9.8f, 0);
+            }
+        }
+
+        private static float GetMoveAxis(KeyCode positiveKey, KeyCode negativeKey)
+        {
+            if (InputService.GetKey(positiveKey) && InputService.GetKey(negativeKey))
+            {
+                return 0;
+            }
+
+            if (InputService.GetKey(positiveKey))
+            {
+                return 1;
+            }
+
+            if (InputService.GetKey(negativeKey))
+            {
+                return -1;
+            }
+
+            return 0;
+        }
+
+        private void HandleJump(KeyCode jumpKey,
+            bool isGravityPositive,
+            RaycastHit2D infoF,
+            RaycastHit2D info,
+            bool isVertical)
+        {
+            if (!InputService.GetKey(jumpKey))
+            {
+                jumpRayDistanceForBoard =
+                    InputService.GetKey(KeyCode.RightArrow) || InputService.GetKey(KeyCode.LeftArrow) ? 0 : 0.2f;
+            }
+
+            if (InputService.GetKey(jumpKey) && !isJump && Mathf.Approximately(isVertical ? moving.y : moving.x, 0))
+            {
+                if (isVertical)
+                {
+                    moving.y = isGravityPositive ? -2.15f : 2.15f;
                 }
                 else
                 {
-                    transform.SetParent(null);
+                    moving.x = isGravityPositive ? 2.15f : -2.15f;
+                }
+
+                isJump = true;
+                jumpRayDistance = 0.2f;
+                jumpRayDistanceForBoard = 0;
+            }
+
+            if (isJump &&
+                (!InputService.GetKey(jumpKey) || (infoF.collider && infoF.collider.gameObject.CompareTag("Box"))) &&
+                ((isGravityPositive && (isVertical ? moving.y < 0 : moving.x > 0)) ||
+                 (!isGravityPositive && (isVertical ? moving.y > 0 : moving.x < 0))) &&
+                infoF.collider && Mathf.Approximately(infoF.transform.position.z, transform.position.z))
+            {
+                jumpRayDistanceForBoard = 0.2f;
+                if (isVertical)
+                {
+                    moving.y = 0;
+                }
+                else
+                {
+                    moving.x = 0;
+                }
+            }
+
+            if (isJump)
+            {
+                if (info.collider && Mathf.Approximately(info.transform.position.z, transform.position.z))
+                {
+                    var obj = info.collider.gameObject;
+                    if (obj.transform.CompareTag("Box"))
+                    {
+                        BlueJumpReady();
+                    }
+                }
+
+                var delta = Time.deltaTime * (float)Math.Pow(3, jumpAcceleration);
+                if (isVertical)
+                {
+                    moving.y += isGravityPositive ? delta : -delta;
+                }
+                else
+                {
+                    moving.x += isGravityPositive ? -delta : delta;
                 }
             }
             else
             {
-                transform.SetParent(null);
-            }
-
-            switch (playerDir)
-            {
-                case PlayerDirection.Up:
+                jumpAcceleration = 1.25f;
+                if (isVertical)
                 {
-                    if (InputService.GetKey(KeyCode.X))
-                    {
-                        speedWeightX = SpeedWeight;
-                    }
-                    else
-                    {
-                        speedWeightX = 1;
-                    }
-
-                    transform.rotation = Quaternion.Euler(0, 0, 180);
-                    Physics2D.gravity = new Vector2(0, 9.8f);
-                    if (InputService.GetKey(KeyCode.RightArrow))
-                    {
-                        moving = new Vector3(1, moving.y);
-                    }
-                    else if (InputService.GetKey(KeyCode.LeftArrow))
-                    {
-                        moving = new Vector3(-1, moving.y);
-                    }
-                    else
-                    {
-                        moving = new Vector3(0, moving.y);
-                    }
-
-                    if (InputService.GetKey(KeyCode.RightArrow) &&
-                        InputService.GetKey(KeyCode.LeftArrow))
-                    {
-                        moving = new Vector3(0, moving.y);
-                    }
-
-                    if (!InputService.GetKey(KeyCode.DownArrow))
-                    {
-                        if (!InputService.GetKey(KeyCode.RightArrow) ||
-                            !InputService.GetKey(KeyCode.LeftArrow))
-                        {
-                            jumpRayDistanceForBoard = 0.2f;
-                        }
-
-                        if (InputService.GetKey(KeyCode.RightArrow) ||
-                            InputService.GetKey(KeyCode.LeftArrow))
-                        {
-                            jumpRayDistanceForBoard = 0;
-                        }
-                    }
-
-                    if (InputService.GetKey(KeyCode.DownArrow) && !isJump && moving.y == 0)
-                    {
-                        moving = new Vector3(moving.x, -2.15f);
-                        isJump = true;
-                        jumpRayDistance = 0.2f;
-                        jumpRayDistanceForBoard = 0;
-                    }
-
-                    if (isJump && (!InputService.GetKey(KeyCode.DownArrow) ||
-                                   (infoF.collider && infoF.collider.gameObject.CompareTag("Box"))) &&
-                        moving.y < -0 &&
-                        infoF.collider &&
-                        Mathf.Approximately(infoF.transform.position.z, transform.position.z))
-                    {
-                        jumpRayDistanceForBoard = 0.2f;
-                        moving = new Vector3(moving.x, -0);
-                    }
-
-                    if (isJump)
-                    {
-                        if (info.collider &&
-                            Mathf.Approximately(info.transform.position.z, transform.position.z))
-                        {
-                            var obj = info.collider.gameObject;
-                            if (obj.transform.CompareTag("Box"))
-                            {
-                                BlueJumpReady();
-                            }
-                        }
-
-                        moving.y += Time.deltaTime * (float)Math.Pow(3, jumpAcceleration);
-                    }
-                    else
-                    {
-                        jumpAcceleration = 1.25f;
-                        moving.y = 0;
-                    }
-
-                    jumpAcceleration += Time.deltaTime * timeInterpolation;
-                    break;
+                    moving.y = 0;
                 }
-
-                case PlayerDirection.Down:
+                else
                 {
-                    if (InputService.GetKey(KeyCode.X))
-                    {
-                        speedWeightX = SpeedWeight;
-                    }
-                    else
-                    {
-                        speedWeightX = 1;
-                    }
-
-                    transform.rotation = Quaternion.Euler(0, 0, 0);
-                    Physics2D.gravity = new Vector2(0, -9.8f);
-                    if (InputService.GetKey(KeyCode.RightArrow))
-                    {
-                        moving = new Vector3(1, moving.y);
-                    }
-                    else if (InputService.GetKey(KeyCode.LeftArrow))
-                    {
-                        moving = new Vector3(-1, moving.y);
-                    }
-                    else
-                    {
-                        moving = new Vector3(0, moving.y);
-                    }
-
-                    if (InputService.GetKey(KeyCode.RightArrow) &&
-                        InputService.GetKey(KeyCode.LeftArrow))
-                    {
-                        moving = new Vector3(0, moving.y);
-                    }
-
-                    if (!InputService.GetKey(KeyCode.UpArrow))
-                    {
-                        if (!InputService.GetKey(KeyCode.RightArrow) ||
-                            !InputService.GetKey(KeyCode.LeftArrow))
-                        {
-                            jumpRayDistanceForBoard = 0.2f;
-                        }
-
-                        if (InputService.GetKey(KeyCode.RightArrow) ||
-                            InputService.GetKey(KeyCode.LeftArrow))
-                        {
-                            jumpRayDistanceForBoard = 0;
-                        }
-                    }
-
-
-                    if (InputService.GetKey(KeyCode.UpArrow) && !isJump && moving.y == 0)
-                    {
-                        moving = new Vector3(moving.x, 2.15f);
-                        isJump = true;
-                        jumpRayDistance = 0.2f;
-                        jumpRayDistanceForBoard = 0;
-                    }
-
-                    if (isJump && (!InputService.GetKey(KeyCode.UpArrow) ||
-                                   (infoF.collider && infoF.collider.gameObject.CompareTag("Box"))) &&
-                        moving.y > 0 &&
-                        infoF.collider &&
-                        Mathf.Approximately(infoF.transform.position.z, transform.position.z))
-                    {
-                        jumpRayDistanceForBoard = 0.2f;
-                        moving = new Vector3(moving.x, 0);
-                    }
-
-                    if (isJump)
-                    {
-                        if (info.collider &&
-                            Mathf.Approximately(info.transform.position.z, transform.position.z))
-                        {
-                            var obj = info.collider.gameObject;
-                            if (obj.transform.CompareTag("Box"))
-                            {
-                                BlueJumpReady();
-                            }
-                        }
-
-                        moving.y -= Time.deltaTime * (float)Math.Pow(3, jumpAcceleration);
-                    }
-                    else
-                    {
-                        jumpAcceleration = 1.25f;
-                        moving.y = 0;
-                    }
-
-                    jumpAcceleration += Time.deltaTime * timeInterpolation;
-                    break;
-                }
-
-                case PlayerDirection.Left: 
-                {
-                    if (InputService.GetKey(KeyCode.X))
-                    {
-                        speedWeightY = SpeedWeight;
-                    }
-                    else
-                    {
-                        speedWeightY = 1;
-                    }
-
-                    transform.rotation = Quaternion.Euler(0, 0, 270);
-                    Physics2D.gravity = new Vector2(-9.8f, 0);
-                    if (InputService.GetKey(KeyCode.UpArrow))
-                    {
-                        moving = new Vector3(moving.x, 1);
-                    }
-                    else if (InputService.GetKey(KeyCode.DownArrow))
-                    {
-                        moving = new Vector3(moving.x, -1);
-                    }
-                    else
-                    {
-                        moving = new Vector3(moving.x, 0);
-                    }
-
-                    if (InputService.GetKey(KeyCode.UpArrow) &&
-                        InputService.GetKey(KeyCode.DownArrow))
-                    {
-                        moving = new Vector3(moving.x, 0);
-                    }
-
-                    if (!InputService.GetKey(KeyCode.RightArrow))
-                    {
-                        if (!InputService.GetKey(KeyCode.UpArrow) ||
-                            !InputService.GetKey(KeyCode.DownArrow))
-                        {
-                            jumpRayDistanceForBoard = 0.2f;
-                        }
-
-                        if (InputService.GetKey(KeyCode.UpArrow) ||
-                            InputService.GetKey(KeyCode.DownArrow))
-                        {
-                            jumpRayDistanceForBoard = 0;
-                        }
-                    }
-
-                    if (InputService.GetKey(KeyCode.RightArrow) && !isJump && moving.x == 0)
-                    {
-                        moving = new Vector3(2.15f, moving.y);
-                        isJump = true;
-                        jumpRayDistance = 0.2f;
-                        jumpRayDistanceForBoard = 0;
-                    }
-
-                    if (isJump && (!InputService.GetKey(KeyCode.RightArrow) ||
-                                   (infoF.collider && infoF.collider.gameObject.CompareTag("Box"))) &&
-                        moving.x > 0 &&
-                        infoF.collider &&
-                        Mathf.Approximately(infoF.transform.position.z, transform.position.z))
-                    {
-                        jumpRayDistanceForBoard = 0.2f;
-                        moving = new Vector3(0, moving.y);
-                    }
-
-                    if (isJump)
-                    {
-                        if (info.collider &&
-                            Mathf.Approximately(info.transform.position.z, transform.position.z))
-                        {
-                            var obj = info.collider.gameObject;
-                            if (obj.transform.CompareTag("Box"))
-                            {
-                                BlueJumpReady();
-                            }
-                        }
-
-                        moving.x -= Time.deltaTime * (float)Math.Pow(3, jumpAcceleration);
-                    }
-                    else
-                    {
-                        jumpAcceleration = 1.25f;
-                        moving.x = 0;
-                    }
-
-                    jumpAcceleration += Time.deltaTime * timeInterpolation;
-                    break;
-                }
-
-                case PlayerDirection.Right:
-                {
-                    if (InputService.GetKey(KeyCode.X))
-                    {
-                        speedWeightY = SpeedWeight;
-                    }
-                    else
-                    {
-                        speedWeightY = 1;
-                    }
-
-                    transform.rotation = Quaternion.Euler(0, 0, 90);
-                    Physics2D.gravity = new Vector2(9.8f, 0);
-                    if (InputService.GetKey(KeyCode.UpArrow))
-                    {
-                        moving = new Vector3(moving.x, 1);
-                    }
-                    else if (InputService.GetKey(KeyCode.DownArrow))
-                    {
-                        moving = new Vector3(moving.x, -1);
-                    }
-                    else
-                    {
-                        moving = new Vector3(moving.x, 0);
-                    }
-
-                    if (InputService.GetKey(KeyCode.UpArrow) &&
-                        InputService.GetKey(KeyCode.DownArrow))
-                    {
-                        moving = new Vector3(moving.x, 0);
-                    }
-
-                    if (!InputService.GetKey(KeyCode.LeftArrow))
-                    {
-                        if (!InputService.GetKey(KeyCode.UpArrow) ||
-                            !InputService.GetKey(KeyCode.DownArrow))
-                        {
-                            jumpRayDistanceForBoard = 0.2f;
-                        }
-
-                        if (InputService.GetKey(KeyCode.UpArrow) ||
-                            InputService.GetKey(KeyCode.DownArrow))
-                        {
-                            jumpRayDistanceForBoard = 0;
-                        }
-                    }
-
-                    if (InputService.GetKey(KeyCode.LeftArrow) && !isJump && moving.x == 0)
-                    {
-                        moving = new Vector3(-2.15f, moving.y);
-                        isJump = true;
-                        jumpRayDistance = 0.2f;
-                        jumpRayDistanceForBoard = 0;
-                    }
-
-                    if (isJump && (!InputService.GetKey(KeyCode.LeftArrow) ||
-                                   (infoF.collider && infoF.collider.gameObject.CompareTag("Box"))) &&
-                        moving.x < -0 &&
-                        infoF.collider &&
-                        Mathf.Approximately(infoF.transform.position.z, transform.position.z))
-                    {
-                        jumpRayDistanceForBoard = 0.2f;
-                        moving = new Vector3(-0, moving.y);
-                    }
-
-                    if (isJump)
-                    {
-                        if (info.collider &&
-                            Mathf.Approximately(info.transform.position.z, transform.position.z))
-                        {
-                            var obj = info.collider.gameObject;
-                            if (obj.transform.CompareTag("Box"))
-                            {
-                                BlueJumpReady();
-                            }
-                        }
-
-                        moving.x += Time.deltaTime * (float)Math.Pow(3, jumpAcceleration);
-                    }
-                    else
-                    {
-                        jumpAcceleration = 1.25f;
-                        moving.x = 0;
-                    }
-
-                    jumpAcceleration += Time.deltaTime * timeInterpolation;
-                    break;
-                }
-                case PlayerDirection.NullDir:
-                {
-                    break;
-                }
-                default:
-                {
-                    throw new ArgumentOutOfRangeException($"Unexpected playerDir value: {playerDir}");
+                    moving.x = 0;
                 }
             }
+
+            jumpAcceleration += Time.deltaTime * timeInterpolation;
         }
+
 
         private void PlayerMoveWithLine()
         {
@@ -1038,14 +829,14 @@ namespace UCT.Battle
         {
             Dictionary<(bool, bool, bool, bool), float> directionMap = new()
             {
-                { (true, false, true, false), 45 },   
-                { (true, false, false, true), -45 }, 
-                { (false, true, true, false), 135 }, 
+                { (true, false, true, false), 45 },
+                { (true, false, false, true), -45 },
+                { (false, true, true, false), 135 },
                 { (false, true, false, true), -135 },
-                { (true, false, false, false), 0 },  
-                { (false, true, false, false), 180 }, 
-                { (false, false, false, true), -90 }, 
-                { (false, false, true, false), 90 }   
+                { (true, false, false, false), 0 },
+                { (false, true, false, false), 180 },
+                { (false, false, false, true), -90 },
+                { (false, false, true, false), 90 }
             };
 
             var up = InputService.GetKey(KeyCode.UpArrow);
@@ -1192,7 +983,7 @@ namespace UCT.Battle
         }
 
         /// <summary>
-        /// 根据位移检查并调整点位置的方法
+        ///     根据位移检查并调整点位置的方法
         /// </summary>
         private Vector3 CheckPoint(Vector3 point,
             float inputDisplacement,
@@ -1200,11 +991,11 @@ namespace UCT.Battle
             int currentDepth = 0,
             bool isInitialCall = true)
         {
-            Vector2 originalPoint = point; 
+            Vector2 originalPoint = point;
             var z = point.z;
-            if (currentDepth >= maxDepth) 
+            if (currentDepth >= maxDepth)
             {
-                return point; 
+                return point;
             }
 
             foreach (var box in BoxController.Instance.boxes.Where(box => Mathf.Approximately(box.localPosition.z, z)))
@@ -1219,17 +1010,19 @@ namespace UCT.Battle
                     rDis = inputDisplacement;
                 }
 
-                var movedVertices = MathUtilityService.CalculateInwardOffset(box.GetRealPoints(false), -rDis); //计算缩放后的多边形顶点
+                var movedVertices =
+                    MathUtilityService.CalculateInwardOffset(box.GetRealPoints(false), -rDis); //计算缩放后的多边形顶点
 
-                if (MathUtilityService.IsPointInPolygon(point, movedVertices)) 
+                if (MathUtilityService.IsPointInPolygon(point, movedVertices))
                 {
-                    return point; 
+                    return point;
                 }
             }
 
 
-            if (MathUtilityService.CheckPointBeyondPolygon(point, z, out var nearestPoint, out var lineStart, out var lineEnd,
-                    out var isParent, out var checkPoint)) 
+            if (MathUtilityService.CheckPointBeyondPolygon(point, z, out var nearestPoint, out var lineStart,
+                    out var lineEnd,
+                    out var isParent, out var checkPoint))
             {
                 return checkPoint;
             }
@@ -1239,12 +1032,13 @@ namespace UCT.Battle
                 inputDisplacement -= 0.05f;
             }
 
-            var moved = (Vector3)MathUtilityService.CalculateDisplacedPoint(nearestPoint, lineStart, lineEnd, -inputDisplacement) +
+            var moved = (Vector3)MathUtilityService.CalculateDisplacedPoint(nearestPoint, lineStart, lineEnd,
+                            -inputDisplacement) +
                         new Vector3(0, 0, z);
 
             if (!isInitialCall && (Vector2)moved == originalPoint)
             {
-                return point; 
+                return point;
             }
 
             var newCheck = (Vector3)(Vector2)CheckPoint(moved, inputDisplacement, maxDepth, currentDepth + 1, false) +
