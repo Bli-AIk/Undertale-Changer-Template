@@ -138,7 +138,7 @@ namespace UCT.Battle
             _enemiesHpLine.SetActive(false);
             UITextUpdate();
             _hpFood = MainControl.Instance.playerControl.hp;
-            InTurn();
+            EnterPlayerTurn();
         }
 
         private void Update()
@@ -158,6 +158,11 @@ namespace UCT.Battle
                 PlayerTurn();
             }
 
+            UpdateDialog();
+        }
+
+        private void UpdateDialog()
+        {
             _dialog.gameObject.SetActive(isDialog);
 
             if (!isDialog)
@@ -171,20 +176,34 @@ namespace UCT.Battle
                 return;
             }
 
-            if (numberDialog < actSave.Count)
-            {
-                KeepDialogBubble();
-            }
-            else //开敌方回合
-            {
-                isDialog = false;
+            var isEndBattle = MainControl.Instance.selectUIController.enemiesControllers.All(enemiesController =>
+                enemiesController.Enemy.state is not (EnemyState.Default or EnemyState.CanSpace));
 
-                TurnController.Instance.OutYourTurn();
-
-                _itemScroller.gameObject.SetActive(false);
-                actSave = new List<string>();
-                selectedLayer = SelectedLayer.TurnLayer;
+            if (!isEndBattle)
+            {
+                if (numberDialog < actSave.Count)
+                {
+                    KeepDialogBubble();
+                }
+                else
+                {
+                    EnterTurnLayer();
+                    TurnController.Instance.EnterEnemyTurn();
+                }
             }
+            else
+            {
+                EnterTurnLayer();
+                Other.Debug.Log("该结束了！");
+            }
+        }
+
+        private void EnterTurnLayer()
+        {
+            isDialog = false;
+            _itemScroller.gameObject.SetActive(false);
+            actSave = new List<string>();
+            selectedLayer = SelectedLayer.TurnLayer;
         }
 
         private void GetComponent()
@@ -240,8 +259,8 @@ namespace UCT.Battle
         private void LayerOneSet()
         {
             while (nameLayerIndex < enemiesControllers.Count - 1 && nameLayerIndex + 1 < enemiesControllers.Count &&
-                   enemiesControllers[nameLayerIndex].Enemy.state != EnemyState.Default &&
-                   enemiesControllers[nameLayerIndex + 1].Enemy.state == EnemyState.Default)
+                   enemiesControllers[nameLayerIndex].Enemy.state is not (EnemyState.Default or EnemyState.CanSpace) &&
+                   enemiesControllers[nameLayerIndex + 1].Enemy.state is EnemyState.Default or EnemyState.CanSpace)
             {
                 nameLayerIndex++;
             }
@@ -265,7 +284,7 @@ namespace UCT.Battle
         {
             var isPlayFx = false;
             while (nameLayerIndex > 0 &&
-                   enemiesControllers[nameLayerIndex - 1].Enemy.state == EnemyState.Default)
+                   enemiesControllers[nameLayerIndex - 1].Enemy.state is EnemyState.Default or EnemyState.CanSpace)
             {
                 nameLayerIndex--;
                 if (isPlayFx)
@@ -282,7 +301,7 @@ namespace UCT.Battle
         {
             var isPlayFx = false;
             while (nameLayerIndex < enemiesControllers.Count - 1 && nameLayerIndex + 1 < enemiesControllers.Count &&
-                   enemiesControllers[nameLayerIndex + 1].Enemy.state == EnemyState.Default)
+                   enemiesControllers[nameLayerIndex + 1].Enemy.state is EnemyState.Default or EnemyState.CanSpace)
             {
                 nameLayerIndex++;
                 if (isPlayFx)
@@ -299,7 +318,7 @@ namespace UCT.Battle
         /// <summary>
         ///     进我方回合
         /// </summary>
-        public void InTurn()
+        public void EnterPlayerTurn()
         {
             TurnController.Instance.isMyTurn = true;
             selectedLayer = SelectedLayer.ButtonLayer;
@@ -454,7 +473,7 @@ namespace UCT.Battle
         {
             foreach (var enemy in enemiesControllers)
             {
-                if (enemy.Enemy.state != EnemyState.Default)
+                if (enemy.Enemy.state is not (EnemyState.Default or EnemyState.CanSpace))
                 {
                     _textUI.text += "\n";
                     continue;
@@ -462,7 +481,12 @@ namespace UCT.Battle
 
                 var save = TextProcessingService.GetFirstChildStringByPrefix(
                     MainControl.Instance.BattleControl.enemiesNameSave, enemy.gameObject.name);
-                _textUI.text += UITextPrefix + save + "\n";
+                if (enemy.Enemy.state == EnemyState.CanSpace)
+                {
+                    _textUI.text += "<color=yellow>";
+                }
+
+                _textUI.text += $"{UITextPrefix}{save}\n</color>";
             }
         }
 

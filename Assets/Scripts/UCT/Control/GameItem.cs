@@ -417,7 +417,7 @@ namespace UCT.Control
 
 
             AddItem(new WeaponItemBuilder()
-                .SetData("TKnife", 1)
+                .SetData("TKnife", 20)
                 .Build());
 
             AddItem(new WeaponItemBuilder()

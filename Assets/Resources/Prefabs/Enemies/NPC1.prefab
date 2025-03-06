@@ -176,10 +176,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   anim: {fileID: 0}
-  atk: 114
-  def: 514
-  hp: 100
-  hpMax: 100
+  atk: 8
+  def: -3
+  hp: 95
+  hpMax: 95
+  spriteSplitController: {fileID: 0}
 --- !u!95 &1300579301403261385
 Animator:
   serializedVersion: 4

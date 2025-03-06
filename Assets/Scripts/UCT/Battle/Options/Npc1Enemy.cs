@@ -31,7 +31,7 @@ namespace UCT.Battle.Options
 
         public IEnumerator<float> _EnemyTurns(List<ObjectPool> objectPools)
         {
-            if (state != EnemyState.Default)
+            if (state is not (EnemyState.Default or EnemyState.CanSpace))
             {
                 yield break;
             }

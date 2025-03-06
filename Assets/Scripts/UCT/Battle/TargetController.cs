@@ -78,25 +78,15 @@ namespace UCT.Battle
         /// </summary>
         private void HitEnemy()
         {
-            //TODO: 目前的算法不是原作的算法。需要修改。
-            if (Mathf.Abs(_bar.transform.localPosition.x) > 0.8f)
-            {
-                hitDamage = (int)
-                    (2.2f / 13.2f * (14 - Mathf.Abs(_bar.transform.localPosition.x)) //准确度系数
-                                  * (MainControl.Instance.playerControl.atk + DataHandlerService
-                                         .GetItemFormDataName(MainControl.Instance.playerControl.wearWeapon).Data.Value
-                                     - MainControl.Instance.selectUIController.enemiesControllers[select].def +
-                                     Random.Range(0, 2)));
-            }
-            else
-            {
-                hitDamage = (int)
-                    (2.2f / 13.2f * (14 - 0.8f) //准确度系数
-                                  * (MainControl.Instance.playerControl.atk + DataHandlerService
-                                         .GetItemFormDataName(MainControl.Instance.playerControl.wearWeapon).Data.Value
-                                     - MainControl.Instance.selectUIController.enemiesControllers[select].def +
-                                     Random.Range(0, 2)));
-            }
+            var accuracyFactor = 2.2f / 13.2f * (14 - Mathf.Abs(_bar.transform.localPosition.x));
+            hitDamage = Mathf.FloorToInt(accuracyFactor *
+                                         (MainControl.Instance.playerControl.atk + DataHandlerService
+                                              .GetItemFormDataName(MainControl.Instance.playerControl
+                                                  .wearWeapon).Data.Value
+                                          - MainControl.Instance.selectUIController
+                                              .enemiesControllers[select].def +
+                                          Random.Range(0, 2)));
+
 
             if (hitDamage <= 0)
             {

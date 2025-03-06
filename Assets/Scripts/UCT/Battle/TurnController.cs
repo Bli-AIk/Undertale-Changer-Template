@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using MEC;
 using UCT.Control;
@@ -60,10 +61,12 @@ namespace UCT.Battle
         /// <summary>
         ///     进入敌方回合
         /// </summary>
-        public void OutYourTurn()
+        /// <param name="isEndBattle"></param>
+        public void EnterEnemyTurn()
         {
             isMyTurn = false;
             Timing.RunCoroutine(_TurnExecute(turn));
+
         }
 
         /// <summary>
@@ -93,7 +96,7 @@ namespace UCT.Battle
             yield return Timing.WaitUntilDone(Timing.RunCoroutine(_FixedTurn(turnNumber)));
 
             turn++;
-            MainControl.Instance.selectUIController.InTurn();
+            MainControl.Instance.selectUIController.EnterPlayerTurn();
         }
 
         private IEnumerator<float> _FixedTurn(int turnNumber)

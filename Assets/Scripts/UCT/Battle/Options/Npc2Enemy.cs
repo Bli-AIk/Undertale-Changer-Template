@@ -24,18 +24,22 @@ namespace UCT.Battle.Options
             {
                 () => Other.Debug.Log("NPC2选项1"),
                 () => Other.Debug.Log("NPC2选项2"),
-                () => Other.Debug.Log("NPC2选项3"),
+                () =>
+                {
+                    Other.Debug.Log("NPC2选项3");
+                    state = EnemyState.CanSpace;
+                },
                 () => Other.Debug.Log("NPC2选项4")
             };
         }
 
         public IEnumerator<float> _EnemyTurns(List<ObjectPool> objectPools)
         {
-            if (state != EnemyState.Default)
+            if (state is not (EnemyState.Default or EnemyState.CanSpace))
             {
                 yield break;
             }
-            
+
             var index = TurnGenerator.GetNextValue();
             switch (index)
             {
@@ -63,12 +67,13 @@ namespace UCT.Battle.Options
 
                         obj.spriteRenderer.DOColor(Color.clear, 0.2f).OnKill(
                             () => objectPools[0].ReturnPool(obj.gameObject, obj));
-                        
+
                         obj2.spriteRenderer.DOColor(Color.clear, 0.2f).OnKill(
                             () => objectPools[0].ReturnPool(obj2.gameObject, obj2));
 
                         yield return Timing.WaitForSeconds(Random.Range(0.5f, 1.5f));
                     }
+
                     break;
                 }
             }
