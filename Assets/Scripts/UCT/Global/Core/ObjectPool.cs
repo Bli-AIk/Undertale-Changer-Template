@@ -70,6 +70,11 @@ namespace UCT.Global.Core
             _availableObj.Enqueue((inputGameObject, script));
         }
 
+        public void ReturnPool<T>(T script) where T : Component
+        {
+            ReturnPool(script.gameObject, script);
+        }
+
         /// <summary>
         ///     获取对象池中的物体或脚本
         /// </summary>

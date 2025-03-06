@@ -29,6 +29,7 @@ namespace UCT.Battle
 
         private const float SpeedWeight = 0.5f;
         private const string Board = "board";
+        private const float YellowTimerMax = 0.5f;
 
         [Header("心变色时的ding动画速度，0为关")]
         public float dingTime;
@@ -139,6 +140,7 @@ namespace UCT.Battle
 
         private Rigidbody2D _rigidBody;
         private SpriteRenderer _spriteRenderer, _dingSpriteRenderer;
+        private float _yellowTimer;
 
         private void Start()
         {
@@ -509,10 +511,12 @@ namespace UCT.Battle
                 {
                     PlayerCommonMove();
                     transform.rotation = Quaternion.Euler(0, 0, 180);
-                    if (InputService.GetKey(KeyCode.Z))
+                    if (_yellowTimer < 0 && InputService.GetKey(KeyCode.Z))
                     {
-                        TurnController.Instance.YellowBullet(transform.position);
+                        _yellowTimer = YellowTimerMax;
+                        TurnController.Instance.GetYellowBullet(transform.position);
                     }
+                    _yellowTimer -= Time.deltaTime;
 
                     break;
                 }

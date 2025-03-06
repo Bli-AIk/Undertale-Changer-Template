@@ -91,7 +91,7 @@ namespace UCT.Battle
 
         [Header("暂存未使用的Sprite")]
         public List<Sprite> spriteUI;
-
+        [HideInInspector]
         public List<SpriteRenderer> buttons;
         public List<Vector2> playerUIPos;
 
@@ -209,30 +209,32 @@ namespace UCT.Battle
 
             EnterTurnLayer();
             _isEndBattle = true;
-            Timer.Register(1, () =>
-            {
-                AudioController.Instance.audioSource.DOFade(0, 0.5f);
-                var exp = 0;
-                var gold = 0;
-                foreach (var enemy in enemiesControllers.Select(enemiesController => enemiesController.Enemy))
-                {
-                    if (enemy.state is EnemyState.Dead)
-                    {
-                        exp += enemy.exp;
-                    }
+            Timer.Register(1, ExitBattleScene);
+        }
 
-                    gold += enemy.gold;
+        private void ExitBattleScene()
+        {
+            AudioController.Instance.audioSource.DOFade(0, 0.5f);
+            var exp = 0;
+            var gold = 0;
+            foreach (var enemy in enemiesControllers.Select(enemiesController => enemiesController.Enemy))
+            {
+                if (enemy.state is EnemyState.Dead)
+                {
+                    exp += enemy.exp;
                 }
 
-                StartTypeWritter(string.Format(TextProcessingService.GetFirstChildStringByPrefix(
-                    MainControl.Instance.LanguagePackControl.sceneTexts,
-                    "Won"), exp, gold));
-                _typeWritter.OnClose = () =>
-                {
-                    GameUtilityService.FadeOutAndSwitchScene(MainControl.Instance.playerControl.lastScene,
-                        Color.black);
-                };
-            });
+                gold += enemy.gold;
+            }
+
+            StartTypeWritter(string.Format(TextProcessingService.GetFirstChildStringByPrefix(
+                MainControl.Instance.LanguagePackControl.sceneTexts,
+                "Won"), exp, gold));
+            _typeWritter.OnClose = () =>
+            {
+                GameUtilityService.FadeOutAndSwitchScene(MainControl.Instance.playerControl.lastScene,
+                    Color.black);
+            };
         }
 
         private void EnterTurnLayer()
@@ -856,8 +858,7 @@ namespace UCT.Battle
                     MainControl.Instance.battlePlayerController.transform.position =
                         (Vector3)MainControl.Instance.battlePlayerController.sceneDrift + new Vector3(0,
                             0, MainControl.Instance.battlePlayerController.transform.position.z);
-                    OpenDialogBubble(
-                        MainControl.Instance.BattleControl.turnDialogAsset[TurnController.Instance.turn]);
+                    TryOpenDialogBubble();
                 }
 
                 SpriteChange();
@@ -903,6 +904,12 @@ namespace UCT.Battle
                             child.gameObject.SetActive(false);
                         }
                         AudioController.Instance.PlayFx(5, MainControl.Instance.AudioControl.fxClipBattle);
+
+
+                        if (enemiesControllers.All(item => item.Enemy.state is EnemyState.Spaced or EnemyState.Dead)) 
+                        {
+                            ExitBattleScene();
+                        }
                     }
                     break;
                 }
@@ -1044,40 +1051,57 @@ namespace UCT.Battle
                 MainControl.Instance.battlePlayerController.transform.position =
                     (Vector3)MainControl.Instance.battlePlayerController.sceneDrift + new Vector3(0, 0,
                         MainControl.Instance.battlePlayerController.transform.position.z);
-                OpenDialogBubble(
-                    MainControl.Instance.BattleControl.turnDialogAsset[TurnController.Instance.turn]);
+                TryOpenDialogBubble();
             }
             else if (InputService.GetKeyDown(KeyCode.Z))
             {
-                MainControl.Instance.battlePlayerController.collideCollider.enabled = true;
-                if (isDialog)
-                {
-                    return;
-                }
+                ContinueNarratorLayer();
+            }
+        }
 
-                if (selectedButton != SelectedButton.Fight && _textUI.text == "")
-                {
-                    OpenDialogBubble(
-                        MainControl.Instance.BattleControl.turnDialogAsset[TurnController.Instance.turn]);
-                    MainControl.Instance.battlePlayerController.transform.position =
-                        (Vector3)MainControl.Instance.battlePlayerController.sceneDrift + new Vector3(0, 0,
-                            MainControl.Instance.battlePlayerController.transform.position.z);
-                    return;
-                }
+        private void ContinueNarratorLayer()
+        {
+            MainControl.Instance.battlePlayerController.collideCollider.enabled = true;
+            if (isDialog)
+            {
+                return;
+            }
 
-                if (selectedButton == SelectedButton.Fight || _typeWritter.isTyping ||
-                    !InputService.GetKeyDown(KeyCode.Z))
-                {
-                    return;
-                }
-
-                _textUI.text = "";
-                MainControl.Instance.battlePlayerController.transform.position =
-                    (Vector3)MainControl.Instance.battlePlayerController.sceneDrift + new Vector3(0,
-                        0, MainControl.Instance.battlePlayerController.transform.position.z);
+            if (selectedButton != SelectedButton.Fight && _textUI.text == "")
+            {
                 OpenDialogBubble(
-                    MainControl.Instance.BattleControl.turnDialogAsset
-                        [TurnController.Instance.turn]);
+                    MainControl.Instance.BattleControl.turnDialogAsset[TurnController.Instance.turn]);
+                MainControl.Instance.battlePlayerController.transform.position =
+                    (Vector3)MainControl.Instance.battlePlayerController.sceneDrift + new Vector3(0, 0,
+                        MainControl.Instance.battlePlayerController.transform.position.z);
+                return;
+            }
+
+            if (selectedButton == SelectedButton.Fight || _typeWritter.isTyping ||
+                !InputService.GetKeyDown(KeyCode.Z))
+            {
+                return;
+            }
+
+            _textUI.text = "";
+            MainControl.Instance.battlePlayerController.transform.position =
+                (Vector3)MainControl.Instance.battlePlayerController.sceneDrift + new Vector3(0,
+                    0, MainControl.Instance.battlePlayerController.transform.position.z);
+
+            TryOpenDialogBubble();
+        }
+
+        private void TryOpenDialogBubble()
+        {
+            if (TurnController.Instance.turn < MainControl.Instance.BattleControl.turnDialogAsset.Count)
+            {
+                OpenDialogBubble(
+                    MainControl.Instance.BattleControl.turnDialogAsset[TurnController.Instance.turn]);
+            }
+            else
+            {
+                EnterTurnLayer();
+                TurnController.Instance.EnterEnemyTurn();
             }
         }
 
@@ -1251,15 +1275,15 @@ namespace UCT.Battle
             return false;
         }
 
-        private void TurnTextLoad(bool isDiy = false, int diy = 0)
+        private void TurnTextLoad(bool useTurn = false, int turn = 0)
         {
             if (TurnController.Instance.turn != _saveTurn || _saveTurnText == "")
             {
                 List<string> load;
                 _saveTurn = TurnController.Instance.turn;
-                if (isDiy)
+                if (useTurn)
                 {
-                    load = TurnTextLoad(MainControl.Instance.BattleControl.turnTextSave, diy);
+                    load = TurnTextLoad(MainControl.Instance.BattleControl.turnTextSave, turn);
                     firstIn = false;
                 }
                 else

@@ -11,8 +11,6 @@ GameObject:
   - component: {fileID: 2831849831906952725}
   - component: {fileID: 6271160276309532520}
   - component: {fileID: 6302394348852764241}
-  - component: {fileID: 2826469566562876296}
-  - component: {fileID: 1164650112173494681}
   m_Layer: 0
   m_Name: YellowBullet Template
   m_TagString: Untagged
@@ -107,28 +105,3 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &2826469566562876296
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 479965561098895579}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 269750190afdfd44e839a48018d7902c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  spriteRenderer: {fileID: 0}
---- !u!114 &1164650112173494681
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 479965561098895579}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0ab0ccf84302814c95fe0feb2247a96, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

@@ -218,11 +218,11 @@ namespace UCT.Battle
             }
         }
 
-        public void YellowBullet(Vector3 soulsPosition)
+        public void GetYellowBullet(Vector3 playerPosition)
         {
-            var obj = objectPools[0].GetFromPool<BulletController>();
-            obj.SetBullet("YellowBullet", "YellowBullet", new InitialTransform(soulsPosition));
-            obj.transform.localPosition += Vector3.forward;
+            var obj = objectPools[2].GetFromPool<YellowBulletController>();
+            obj.transform.position = playerPosition + Vector3.up * 0.25f;
+            obj.OnKill = () => objectPools[2].ReturnPool(obj);
         }
 
         private IEnumerator<float> _SimpleNestBullet()

@@ -205,28 +205,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1589927}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &8847045 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 833677141888568882, guid: 85a3edc090f79fb4780a6e2f72de7957,
-    type: 3}
-  m_PrefabInstance: {fileID: 535070883}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8847048
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8847045}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e55ffc523e67d2428dfffbed12b31a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  turn: 0
-  isMyTurn: 0
-  poolCount: 1900000005000000
-  objectPools: []
 --- !u!1 &14899176
 GameObject:
   m_ObjectHideFlags: 0
@@ -3006,6 +2984,54 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &987698777
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 987698778}
+  - component: {fileID: 987698779}
+  m_Layer: 0
+  m_Name: TurnController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &987698778
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 987698777}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 24
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &987698779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 987698777}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e55ffc523e67d2428dfffbed12b31a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  turn: 0
+  isMyTurn: 0
+  poolCount: 190000000500000005000000
+  objectPools: []
 --- !u!1 &999867826
 GameObject:
   m_ObjectHideFlags: 0
@@ -6738,7 +6764,7 @@ MonoBehaviour:
   selectedLayer: 0
   nameLayerIndex: 0
   optionLayerIndex: 0
-  actSave: []
+  optionsSave: []
   enemiesControllers: []
   firstIn: 0
   firstInDiy: -1

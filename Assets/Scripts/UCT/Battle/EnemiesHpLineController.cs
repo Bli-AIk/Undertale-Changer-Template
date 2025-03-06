@@ -25,7 +25,8 @@ namespace UCT.Battle
             }
 
             var isShowThis = enemyId < MainControl.Instance.selectUIController.enemiesControllers.Count &&
-                             MainControl.Instance.selectUIController.enemiesControllers[enemyId].Enemy.state == EnemyState.Default;
+                             MainControl.Instance.selectUIController.enemiesControllers[enemyId].Enemy.state is
+                                 EnemyState.Default or EnemyState.CanSpace;
             _redSprite.enabled = isShowThis;
             _greenSprite.enabled = isShowThis;
         }

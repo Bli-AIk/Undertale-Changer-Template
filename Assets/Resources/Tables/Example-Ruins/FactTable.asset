@@ -14,12 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   facts:
   - name: Button1
-    scope: 0
-    value: 1
+    value: 0
     area: 0
     scene: 
   - name: Button2
-    scope: 0
-    value: 1
+    value: 0
     area: 0
     scene: 

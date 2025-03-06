@@ -31,21 +31,14 @@ namespace UCT.Global.Core
             InBattle
         }
 
-        [Title("=== 场景状态设置 ===")] public SceneState sceneState;
-
-        [Space]
-        [Title("=== 语言包相关设置 ===")]
-        [Header("语言包ID")]
-        [FormerlySerializedAs("languagePack")]
+        [Title("=== 状态 ===")] 
+        [ReadOnly]
+        public SceneState sceneState;
+        [ReadOnly]
         public int languagePackId;
-
-        [Space]
-        [Title("=== 存档相关设置 ===")]
-        [Header("存档id")]
-        [FormerlySerializedAs("dataNumber")]
+        [ReadOnly]
         public int saveDataId;
 
-        [FormerlySerializedAs("isSceneSwitchingFadeTransitionEnabled")]
         [Space]
         [Title("=== 场景切换相关设置 ===")]
         [Header("当前场景是否启用渐入渐出")]
