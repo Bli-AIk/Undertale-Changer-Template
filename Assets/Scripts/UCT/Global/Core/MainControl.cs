@@ -312,7 +312,7 @@ namespace UCT.Global.Core
             //--------------------------------------------------------------------------------
         }
 
-        public void InitializationOverworld()
+        public void InitializationScene()
         {
             languagePackId = DataHandlerService.LanguagePackDetection(languagePackId);
 
@@ -325,11 +325,6 @@ namespace UCT.Global.Core
 
             var settingAsset = DataHandlerService.LoadLanguageData("UI\\Setting", languagePackId);
             LanguagePackControl.settingTexts = DataHandlerService.LoadItemData(settingAsset);
-
-            if (sceneState == SceneState.InBattle)
-            {
-                return;
-            }
 
             if (SceneManager.GetActiveScene().name != "Start")
             {

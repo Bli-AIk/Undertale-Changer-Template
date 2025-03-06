@@ -1,0 +1,1 @@
+Won\<markPoint>你胜利了！<stop><markEnter>你获得了 {0} XP 和 {1} 金钱。;

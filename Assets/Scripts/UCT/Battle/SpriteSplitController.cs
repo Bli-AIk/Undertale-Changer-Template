@@ -1,10 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UCT.Control;
 using UCT.Global.Audio;
 using UCT.Global.Core;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UCT.Battle
 {
@@ -23,19 +23,19 @@ namespace UCT.Battle
         private readonly Queue<GameObject> _available = new();
         private Texture2D _map;
         private GameObject _mask;
-        private SpriteRenderer _spriteRenderer;
+        public SpriteRenderer spriteRenderer { get; private set; }
 
         private void Awake()
         {
-            _spriteRenderer = GetComponent<SpriteRenderer>();
-            _map = ExtractSpriteTexture(_spriteRenderer.sprite);
+            spriteRenderer = GetComponent<SpriteRenderer>();
+            _map = ExtractSpriteTexture(spriteRenderer.sprite);
             _mask = transform.Find("Mask").gameObject;
         }
 
         private void OnEnable()
         {
             DisableAllChildrenExceptMask();
-            _spriteRenderer.color = Color.white;
+            spriteRenderer.color = Color.white;
             startPos = new Vector2(-_map.width / 2f * 0.05f, _map.height / 2f * 0.05f);
             if (_map.width % 2 == 0)
             {
@@ -50,10 +50,10 @@ namespace UCT.Battle
             _mask.transform.localScale = new Vector2(_map.width, _map.height);
             _mask.transform.localPosition = new Vector3(0, 0.05f * _map.height);
 
-            _spriteRenderer.sprite = Sprite.Create(_map,
+            spriteRenderer.sprite = Sprite.Create(_map,
                 new Rect(0, 0, _map.width, _map.height),
                 new Vector2(0.5f, 0.5f),
-                _spriteRenderer.sprite.pixelsPerUnit);
+                spriteRenderer.sprite.pixelsPerUnit);
 
             AudioController.Instance.PlayFx(5, MainControl.Instance.AudioControl.fxClipBattle);
             StartCoroutine(_SummonPixel());
@@ -88,7 +88,7 @@ namespace UCT.Battle
                     var spriteRenderer = obj.GetComponent<SpriteRenderer>();
                     spriteRenderer.color = color;
 
-                    spriteRenderer.sortingOrder = _spriteRenderer.sortingOrder + 1;
+                    spriteRenderer.sortingOrder = this.spriteRenderer.sortingOrder + 1;
 
                     obj.transform.localPosition = startPos + new Vector2(x * 0.05f, -(_map.height - y - 1) * 0.05f);
                 }

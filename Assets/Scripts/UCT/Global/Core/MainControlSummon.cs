@@ -242,7 +242,7 @@ namespace UCT.Global.Core
             mainControl.isFadeTransitionEnabled = isFadeTransitionEnabled;
             mainControl.isFadeInDisabled = isFadeInDisabled;
             mainControl.isFadeInUnpaused = isFadeInUnpaused;
-            mainControl.InitializationOverworld();
+            mainControl.InitializationScene();
             mainControl.mainCamera = Camera.main;
             GameUtilityService.SetResolution(SettingsStorage.ResolutionLevel);
         }

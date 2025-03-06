@@ -18,7 +18,7 @@ namespace UCT.Battle.Options
 
         public IEnemyTurnNumber TurnGenerator { get; set; }
 
-        public Action[] GetOptions()
+        public Action[] GetActOptions()
         {
             return new Action[]
             {
@@ -33,6 +33,13 @@ namespace UCT.Battle.Options
             };
         }
 
+        public MercyType[] MercyTypes => new[] { MercyType.Mercy, MercyType.Flee };
+
+    
+        public Action[] GetActLikeOptions()
+        {
+            return Array.Empty<Action>();
+        }
         public IEnumerator<float> _EnemyTurns(List<ObjectPool> objectPools)
         {
             if (state is not (EnemyState.Default or EnemyState.CanSpace))
@@ -80,5 +87,7 @@ namespace UCT.Battle.Options
         }
 
         public EnemyState state { get; set; }
+        public int exp => 130;
+        public int gold => 85;
     }
 }

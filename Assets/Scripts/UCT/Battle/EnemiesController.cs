@@ -33,7 +33,7 @@ namespace UCT.Battle
             }
             else
             {
-                OnOptions = Enemy.GetOptions();
+                OnOptions = Enemy.GetActOptions();
             }
 
             spriteSplitController = transform.GetChild(0).GetComponent<SpriteSplitController>();

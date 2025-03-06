@@ -1,0 +1,1 @@
+Won\<markPoint>YOU WON!<stop><markEnter>You earned {0} EXP and {1} gold.;

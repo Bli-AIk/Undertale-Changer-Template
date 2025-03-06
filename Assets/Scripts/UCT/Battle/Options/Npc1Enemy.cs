@@ -18,7 +18,7 @@ namespace UCT.Battle.Options
             TurnGenerator = new CyclicTurnNumber(new List<int> { 0, 1, 2 });
         }
 
-        public Action[] GetOptions()
+        public Action[] GetActOptions()
         {
             return new Action[]
             {
@@ -27,6 +27,13 @@ namespace UCT.Battle.Options
                 () => Other.Debug.Log("NPC1选项3"),
                 () => Other.Debug.Log("NPC1选项4"),
             };
+        }
+
+        public MercyType[] MercyTypes => new[] { MercyType.Mercy, MercyType.Flee };
+
+        public Action[] GetActLikeOptions()
+        {
+            return Array.Empty<Action>();
         }
 
         public IEnumerator<float> _EnemyTurns(List<ObjectPool> objectPools)
@@ -75,5 +82,7 @@ namespace UCT.Battle.Options
         }
 
         public EnemyState state { get; set; }
+        public int exp => 110;
+        public int gold => 80;
     }
 }

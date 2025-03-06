@@ -9,7 +9,9 @@ using UCT.Global.Audio;
 using UCT.Global.Core;
 using UCT.Service;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
+using Timer = Plugins.Timer.Source.Timer;
 
 namespace UCT.Battle
 {
@@ -105,8 +107,8 @@ namespace UCT.Battle
         [Header("选择的选项")]
         public int optionLayerIndex;
 
-        [Header("暂存ACT选项以便调用")]
-        public List<string> actSave;
+        [FormerlySerializedAs("actSave")] [Header("暂存ACT选项以便调用")]
+        public List<string> optionsSave;
 
         [Header("怪物清单")]
         public List<EnemiesController> enemiesControllers;
@@ -130,6 +132,7 @@ namespace UCT.Battle
 
         private TargetController _target;
         private TypeWritter _typeWritter;
+        private bool _isEndBattle;
 
         private void Start()
         {
@@ -164,24 +167,24 @@ namespace UCT.Battle
         private void UpdateDialog()
         {
             _dialog.gameObject.SetActive(isDialog);
-
-            if (!isDialog)
-            {
-                return;
-            }
-
-            if ((_dialog.typeWritter.isTyping || !InputService.GetKeyDown(KeyCode.Z)) &&
-                ((selectedButton != SelectedButton.Fight && _textUI.text != "") || numberDialog != 0))
-            {
-                return;
-            }
-
-            var isEndBattle = MainControl.Instance.selectUIController.enemiesControllers.All(enemiesController =>
+            
+            var canEndBattle = MainControl.Instance.selectUIController.enemiesControllers.All(enemiesController =>
                 enemiesController.Enemy.state is not (EnemyState.Default or EnemyState.CanSpace));
 
-            if (!isEndBattle)
+            if (!canEndBattle)
             {
-                if (numberDialog < actSave.Count)
+                if (!isDialog)
+                {
+                    return;
+                }
+
+                if ((_dialog.typeWritter.isTyping || !InputService.GetKeyDown(KeyCode.Z)) &&
+                    ((selectedButton != SelectedButton.Fight && _textUI.text != "") || numberDialog != 0))
+                {
+                    return;
+                }
+
+                if (numberDialog < optionsSave.Count)
                 {
                     KeepDialogBubble();
                 }
@@ -193,16 +196,49 @@ namespace UCT.Battle
             }
             else
             {
-                EnterTurnLayer();
-                Other.Debug.Log("该结束了！");
+                EndBattle();
             }
+        }
+
+        private void EndBattle()
+        {
+            if (_isEndBattle)
+            {
+                return;
+            }
+
+            EnterTurnLayer();
+            _isEndBattle = true;
+            Timer.Register(1, () =>
+            {
+                var exp = 0;
+                var gold = 0;
+                foreach (var enemy in enemiesControllers.Select(enemiesController => enemiesController.Enemy))
+                {
+                    if (enemy.state is EnemyState.Dead)
+                    {
+                        exp += enemy.exp;
+                    }
+
+                    gold += enemy.gold;
+                }
+
+                StartTypeWritter(string.Format(TextProcessingService.GetFirstChildStringByPrefix(
+                    MainControl.Instance.LanguagePackControl.sceneTexts,
+                    "Won"), exp, gold));
+                _typeWritter.OnClose = () =>
+                {
+                    GameUtilityService.FadeOutAndSwitchScene(MainControl.Instance.playerControl.lastScene,
+                        Color.black);
+                };
+            });
         }
 
         private void EnterTurnLayer()
         {
             isDialog = false;
             _itemScroller.gameObject.SetActive(false);
-            actSave = new List<string>();
+            optionsSave = new List<string>();
             selectedLayer = SelectedLayer.TurnLayer;
         }
 
@@ -238,7 +274,7 @@ namespace UCT.Battle
         /// <summary>
         ///     UI打字 打字完成后不会强制控死文本
         /// </summary>
-        private void Type(string text)
+        private void StartTypeWritter(string text)
         {
             _typeWritter.StartTypeWritter(text, _textUI);
         }
@@ -264,7 +300,7 @@ namespace UCT.Battle
             {
                 nameLayerIndex++;
             }
-            
+
             if (InputService.GetKeyDown(KeyCode.DownArrow))
             {
                 LayerOneSetKeyDown();
@@ -545,18 +581,32 @@ namespace UCT.Battle
             var save = TextProcessingService.BatchGetFirstChildStringByPrefix(
                 MainControl.Instance.BattleControl.mercySave,
                 MainControl.Instance.BattleControl.enemies[nameLayerIndex].name + "\\");
-            TextProcessingService.SplitStringToListWithDelimiter(save, actSave);
+            TextProcessingService.SplitStringToListWithDelimiter(save, optionsSave);
+            
+            _textUI.text = NameLayerSetMercyText(0);
+            _textUI.text += NameLayerSetMercyText(1);
+            _textUI.text += NameLayerSetMercyText(2);
+        }
 
-            _textUI.text = UITextPrefix + actSave[0];
-            if (actSave.Count > MainControl.Instance.BattleControl.enemies.Count)
+        private string NameLayerSetMercyText(int index)
+        {
+            var result = new StringBuilder();
+            if (enemiesControllers[nameLayerIndex].Enemy.state == EnemyState.CanSpace &&
+                index < enemiesControllers[nameLayerIndex].Enemy.MercyTypes.Length &&
+                enemiesControllers[nameLayerIndex].Enemy.MercyTypes[index] == MercyType.Mercy)
             {
-                _textUI.text += "\n<indent=10></indent>* " + actSave[2];
+                result.Append("<color=yellow>");
             }
 
-            if (actSave.Count > 4 * MainControl.Instance.BattleControl.enemies.Count)
+            index *= 2;
+            if (optionsSave.Count <= index)
             {
-                _textUI.text += "\n<indent=10></indent>* " + actSave[4];
+                return null;
             }
+
+            result.Append($"{UITextPrefix}{optionsSave[index]}</color>\n");
+            return result.ToString();
+
         }
 
         /// <summary>
@@ -595,15 +645,15 @@ namespace UCT.Battle
             var save = TextProcessingService.BatchGetFirstChildStringByPrefix(
                 MainControl.Instance.BattleControl.actSave,
                 MainControl.Instance.BattleControl.enemies[nameLayerIndex].name + "\\");
-            TextProcessingService.SplitStringToListWithDelimiter(save, actSave);
+            TextProcessingService.SplitStringToListWithDelimiter(save, optionsSave);
             SetActTexts();
 
-            for (var i = 0; i < actSave.Count; i++)
+            for (var i = 0; i < optionsSave.Count; i++)
             {
-                actSave[i] += ';';
+                optionsSave[i] += ';';
             }
 
-            actSave = DataHandlerService.ChangeItemData(actSave, false,
+            optionsSave = DataHandlerService.ChangeItemData(optionsSave, false,
                 new List<string>
                 {
                     enemiesControllers[nameLayerIndex].name,
@@ -611,9 +661,9 @@ namespace UCT.Battle
                     enemiesControllers[nameLayerIndex].def.ToString()
                 });
 
-            for (var i = 0; i < actSave.Count; i++)
+            for (var i = 0; i < optionsSave.Count; i++)
             {
-                actSave[i] = actSave[i][..(actSave[i].Length - 1)];
+                optionsSave[i] = optionsSave[i][..(optionsSave[i].Length - 1)];
             }
 
             _textUIBack.rectTransform.anchoredPosition = new Vector2(10.75f, -3.3f);
@@ -633,7 +683,7 @@ namespace UCT.Battle
             const string noLPack = "No L-Pack!";
             const string noLanguagePack = "No Language Pack!";
             EnsureActSaveSize(2, noLPack);
-            _textUI.text = new StringBuilder().Append(UITextPrefix).Append(actSave[0]).ToString();
+            _textUI.text = new StringBuilder().Append(UITextPrefix).Append(optionsSave[0]).ToString();
             _textUIBack.text = "";
 
             for (var i = 0; i < options.Length; i++)
@@ -641,15 +691,15 @@ namespace UCT.Battle
                 var index = i * 2;
                 EnsureActSaveSize(index + 2, noLPack);
 
-                if (actSave.Count > i * enemyCount)
+                if (optionsSave.Count > i * enemyCount)
                 {
                     if (i % 2 == 1)
                     {
-                        _textUIBack.text += $"* {actSave[index]}\n";
+                        _textUIBack.text += $"* {optionsSave[index]}\n";
                     }
                     else
                     {
-                        _textUI.text += $"{UITextPrefix}{actSave[index]}\n";
+                        _textUI.text += $"{UITextPrefix}{optionsSave[index]}\n";
                     }
                 }
                 else
@@ -670,9 +720,9 @@ namespace UCT.Battle
 
         private void EnsureActSaveSize(int size, string defaultValue)
         {
-            while (actSave.Count < size)
+            while (optionsSave.Count < size)
             {
-                actSave.Add(defaultValue);
+                optionsSave.Add(defaultValue);
             }
         }
 
@@ -795,9 +845,9 @@ namespace UCT.Battle
                 MainControl.Instance.battlePlayerController.transform.position =
                     (Vector3)(Vector2.one * 10000) + new Vector3(0, 0,
                         MainControl.Instance.battlePlayerController.transform.position.z);
-                if (actSave[2 * optionLayerIndex - 3] != "Null")
+                if (optionsSave[2 * (optionLayerIndex + 1) - 1] != "Null")
                 {
-                    Type(actSave[2 * optionLayerIndex - 3]);
+                    StartTypeWritter(optionsSave[2 * (optionLayerIndex + 1) - 1]);
                 }
                 else
                 {
@@ -806,12 +856,14 @@ namespace UCT.Battle
                         (Vector3)MainControl.Instance.battlePlayerController.sceneDrift + new Vector3(0,
                             0, MainControl.Instance.battlePlayerController.transform.position.z);
                     OpenDialogBubble(
-                        MainControl.Instance.BattleControl.turnDialogAsset
-                            [TurnController.Instance.turn]);
+                        MainControl.Instance.BattleControl.turnDialogAsset[TurnController.Instance.turn]);
                 }
 
                 SpriteChange();
                 _itemScroller.Close();
+
+                ExecuteMercy();
+                
             }
 
             if (InputService.GetKeyDown(KeyCode.UpArrow) && optionLayerIndex - 1 >= 0)
@@ -820,10 +872,51 @@ namespace UCT.Battle
                 optionLayerIndex--;
             }
             else if (InputService.GetKeyDown(KeyCode.DownArrow) &&
-                     optionLayerIndex + 1 <= actSave.Count / 2 - 1)
+                     optionLayerIndex + 1 <= optionsSave.Count / 2 - 1)
             {
                 AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
                 optionLayerIndex++;
+            }
+        }
+
+        private void ExecuteMercy()
+        {
+            var enemiesController = enemiesControllers[nameLayerIndex];
+            var enemy = enemiesController.Enemy;
+            var enemyMercyType = enemy.MercyTypes[optionLayerIndex];
+            switch (enemyMercyType)
+            {
+                case MercyType.Null:
+                {
+                    break;
+                }
+                case MercyType.Mercy:
+                {
+                    if (enemy.state == EnemyState.CanSpace)
+                    {
+                        enemy.state = EnemyState.Spaced;
+                        enemiesController.spriteSplitController.spriteRenderer.color = Color.gray;
+                        
+                        foreach (Transform child in enemiesController.spriteSplitController.transform)
+                        {
+                            child.gameObject.SetActive(false);
+                        }
+                        AudioController.Instance.PlayFx(5, MainControl.Instance.AudioControl.fxClipBattle);
+                    }
+                    break;
+                }
+                case MercyType.Flee:
+                {
+                    break;
+                }
+                case MercyType.ActLike:
+                {
+                    break;
+                }
+                default:
+                {
+                    throw new ArgumentOutOfRangeException($"Unexpected enemyMercyType value: {enemyMercyType}");
+                }
             }
         }
 
@@ -848,7 +941,7 @@ namespace UCT.Battle
                 MainControl.Instance.battlePlayerController.transform.position =
                     (Vector3)(Vector2.one * 10000) + new Vector3(0, 0,
                         MainControl.Instance.battlePlayerController.transform.position.z);
-                Type(actSave[2 * (optionLayerIndex + 1) - 1]);
+                StartTypeWritter(optionsSave[2 * (optionLayerIndex + 1) - 1]);
                 SpriteChange();
                 _itemScroller.Close();
             }
@@ -917,7 +1010,7 @@ namespace UCT.Battle
 
         private int ActOptionLayerGetCount()
         {
-            var count = actSave.Count / 2 - 1;
+            var count = optionsSave.Count / 2 - 1;
             var options = enemiesControllers[nameLayerIndex].OnOptions;
             if (options != null)
             {
@@ -1087,8 +1180,8 @@ namespace UCT.Battle
 
         private void OpenDialogBubble(string textAsset)
         {
-            actSave = DataHandlerService.LoadItemData(textAsset);
-            actSave = DataHandlerService.ChangeItemData(actSave, true, new List<string>());
+            optionsSave = DataHandlerService.LoadItemData(textAsset);
+            optionsSave = DataHandlerService.ChangeItemData(optionsSave, true, new List<string>());
             isDialog = true;
             numberDialog = 0;
         }
@@ -1098,7 +1191,7 @@ namespace UCT.Battle
             //TODO: 对话应当有多种情况，如固定对话或者随机对话
             //TODO: 死亡怪物应不会说话
             var save = new List<string>();
-            TextProcessingService.SplitStringToListWithDelimiter(actSave[numberDialog], save);
+            TextProcessingService.SplitStringToListWithDelimiter(optionsSave[numberDialog], save);
 
             var size = save[0];
             var position = save[1];
@@ -1176,7 +1269,7 @@ namespace UCT.Battle
                 _saveTurnText = load[Random.Range(0, load.Count)];
             }
 
-            Type(_saveTurnText);
+            StartTypeWritter(_saveTurnText);
         }
 
         private static List<string> TurnTextLoad(List<string> turnTextSave, int turn)
