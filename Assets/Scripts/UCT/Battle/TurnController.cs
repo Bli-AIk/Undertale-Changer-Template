@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using DG.Tweening;
 using MEC;
 using UCT.Control;
@@ -61,7 +60,6 @@ namespace UCT.Battle
         /// <summary>
         ///     进入敌方回合
         /// </summary>
-        /// <param name="isEndBattle"></param>
         public void EnterEnemyTurn()
         {
             isMyTurn = false;
@@ -200,7 +198,7 @@ namespace UCT.Battle
                         (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
 
 
-                    for (var i = 600; i > 0; i--)
+                    for (var i = 10; i > 0; i--)
                     {
                         if (i % 5 == 0) 
                         {

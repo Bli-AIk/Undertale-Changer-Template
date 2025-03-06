@@ -211,6 +211,7 @@ namespace UCT.Battle
             _isEndBattle = true;
             Timer.Register(1, () =>
             {
+                AudioController.Instance.audioSource.DOFade(0, 0.5f);
                 var exp = 0;
                 var gold = 0;
                 foreach (var enemy in enemiesControllers.Select(enemiesController => enemiesController.Enemy))
@@ -1266,7 +1267,9 @@ namespace UCT.Battle
                     load = TurnTextLoad(MainControl.Instance.BattleControl.turnTextSave, _saveTurn);
                 }
 
-                _saveTurnText = load[Random.Range(0, load.Count)];
+                _saveTurnText = load != null && load.Count != 0
+                    ? load[Random.Range(0, load.Count)]
+                    : "* No Language Pack.";
             }
 
             StartTypeWritter(_saveTurnText);

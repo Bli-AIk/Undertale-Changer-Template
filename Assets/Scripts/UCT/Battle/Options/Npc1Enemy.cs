@@ -23,7 +23,11 @@ namespace UCT.Battle.Options
             return new Action[]
             {
                 () => Other.Debug.Log("NPC1选项1"),
-                () => Other.Debug.Log("NPC1选项2"),
+                () =>
+                {
+                    Other.Debug.Log("NPC2选项2");
+                    state = EnemyState.CanSpace;
+                },
                 () => Other.Debug.Log("NPC1选项3"),
                 () => Other.Debug.Log("NPC1选项4"),
             };

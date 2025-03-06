@@ -252,7 +252,7 @@ namespace UCT.Battle
             if (!(MainControl.Instance.playerControl.isDebug && MainControl.Instance.playerControl.invincible))
             {
                 _spriteRenderer.color = Color.red;
-                MainControl.Instance.playerControl.playerLastPos = transform.position - (Vector3)sceneDrift;
+                MainControl.Instance.playerControl.playerLastPosInBattle = transform.position - (Vector3)sceneDrift;
                 SettingsStorage.Pause = true;
                 TurnController.KillIEnumerator();
                 GameUtilityService.SwitchScene("GameOver", false);
@@ -1019,7 +1019,7 @@ namespace UCT.Battle
         /// <summary>
         ///     根据位移检查并调整点位置的方法
         /// </summary>
-        private Vector3 CheckPoint(Vector3 point,
+        private static Vector3 CheckPoint(Vector3 point,
             float inputDisplacement,
             int maxDepth = 10,
             int currentDepth = 0,
@@ -1088,7 +1088,7 @@ namespace UCT.Battle
 
             if (!(mainControl.playerControl.isDebug && mainControl.playerControl.invincible))
             {
-                mainControl.playerControl.playerLastPos = transform.position - (Vector3)sceneDrift;
+                mainControl.playerControl.playerLastPosInBattle = transform.position - (Vector3)sceneDrift;
                 SettingsStorage.Pause = true;
                 TurnController.KillIEnumerator();
                 GameUtilityService.SwitchScene("GameOver", false);

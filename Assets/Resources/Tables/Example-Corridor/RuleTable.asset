@@ -30,10 +30,10 @@ MonoBehaviour:
     thirdStringParams:
     - 
     - 
-    isGlobalMethodEvents: 0101
+    isGlobalMethodEvents: 0001
     useMethodEvents: 010101
     methodEvents:
-    - InBattle
+    - InBattleLocal
     - SaveGame
     - TestEvent
     useRuleCriterion: 0
@@ -42,7 +42,6 @@ MonoBehaviour:
       isGlobal: 0
       fact:
         name: 
-        scope: 0
         value: 0
         area: 0
         scene: 
@@ -53,8 +52,7 @@ MonoBehaviour:
       - isResultReversed: 0
         isGlobal: 0
         fact:
-          name: Button1
-          scope: 0
+          name: canBattle
           value: 0
           area: 0
           scene: 
@@ -64,3 +62,59 @@ MonoBehaviour:
         criteria: []
     isGlobalFactModifications: 
     factModifications: []
+  - name: InBattleLocal
+    isGlobalTriggeredBy: 0
+    triggeredBy:
+    - InBattleLocal
+    isGlobalTriggers: 0
+    triggers: []
+    rulePriority: 0
+    methodNames:
+    - null:EnterBattleScene
+    firstStringParams:
+    - Plot
+    secondStringParams:
+    - 
+    - 
+    thirdStringParams:
+    - 
+    - 
+    isGlobalMethodEvents: 0101
+    useMethodEvents: 000101
+    methodEvents:
+    - SaveGame
+    - SaveGame
+    - TestEvent
+    useRuleCriterion: 0
+    ruleCriterion:
+      isResultReversed: 0
+      isGlobal: 0
+      fact:
+        name: 
+        value: 0
+        area: 0
+        scene: 
+      compare: 0
+      detection: 0
+      operation: 1
+      criteria:
+      - isResultReversed: 0
+        isGlobal: 0
+        fact:
+          name: canBattle
+          value: 0
+          area: 0
+          scene: 
+        compare: 2
+        detection: 0
+        operation: 0
+        criteria: []
+    isGlobalFactModifications: 00
+    factModifications:
+    - fact:
+        name: canBattle
+        value: 0
+        area: 0
+        scene: 
+      operation: 0
+      number: 1

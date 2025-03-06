@@ -16,3 +16,6 @@ MonoBehaviour:
   - name: Plot
     isTriggering: 0
     closeTime: 0.1
+  - name: InBattleLocal
+    isTriggering: 0
+    closeTime: 0.1

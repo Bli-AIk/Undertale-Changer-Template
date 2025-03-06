@@ -39,9 +39,9 @@ namespace UCT.Battle
             _bgmSource.clip = clips[Convert.ToInt32(_foolDay)];
 
             var player = _mParticleSystem.transform.parent.gameObject;
-            player.transform.position = MainControl.Instance.playerControl.playerLastPos;
+            player.transform.position = MainControl.Instance.playerControl.playerLastPosInBattle;
 
-            _mParticleSystem.transform.position = MainControl.Instance.playerControl.playerLastPos;
+            _mParticleSystem.transform.position = MainControl.Instance.playerControl.playerLastPosInBattle;
             _mParticleSystem.Pause();
             _mParticleSystem.gameObject.SetActive(false);
         }
@@ -80,7 +80,7 @@ namespace UCT.Battle
 
         public void StartParticleSystem()
         {
-            _mParticleSystem.transform.position = MainControl.Instance.playerControl.playerLastPos;
+            _mParticleSystem.transform.position = MainControl.Instance.playerControl.playerLastPosInBattle;
             _mParticleSystem.gameObject.SetActive(true);
             _mParticleSystem.Play();
         }
