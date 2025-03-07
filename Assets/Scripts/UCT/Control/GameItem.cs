@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UCT.Global.Audio;
 using UCT.Global.Core;
+// ReSharper disable UnusedMember.Global
+// ReSharper disable UnusedType.Global
 
 namespace UCT.Control
 {
@@ -437,6 +439,17 @@ namespace UCT.Control
         private void AddItem(GameItem item)
         {
             ItemDictionary.Add(item.Data.DataName, item);
+        }
+
+        public static void UseItem(GameItem item, int index)
+        {
+            item.OnUse(index + 1);
+            if (item is EquipmentItem equipmentItem)
+            {
+                equipmentItem.OnSwitch(index + 1);
+                equipmentItem.OnEquip(index + 1);
+            }
+            //TODO: 增加remove和Update
         }
     }
 }

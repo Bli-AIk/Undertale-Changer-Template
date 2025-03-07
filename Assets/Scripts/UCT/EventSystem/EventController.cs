@@ -447,7 +447,6 @@ namespace UCT.EventSystem
 
             GameUtilityService.FadeOutAndSwitchScene(sceneName, Color.black, action, isBgmMuted);
         }
-        //TODO: 给场景的BGM加一个渐入
 
         /// <summary>
         ///     传送玩家

@@ -22,7 +22,7 @@ MonoBehaviour:
   missTimeMax: 1
   atk: 10
   def: 10
-  playerName: <color=#A19D9DFF>D</color><color=#A19D9DFF>e</color><color=#A29F9FFF>b</color><color=#A8A8A8FF>u</color><color=#A9A9A9FF>g</color>
+  playerName: <color=#EFFD7FFF>D</color><color=#DBF37EFF>e</color><color=#C0E57DFF>b</color><color=#C0E57DFF>u</color><color=#C0E57DFF>g</color>
   items:
   - Serving
   - Serving
@@ -35,9 +35,10 @@ MonoBehaviour:
   wearWeapon: PSword
   wearArmor: TPS
   canMove: 1
-  gameTime: 8601.834
+  gameTime: 8753.349
   playerLastPos: {x: 0, y: 0, z: 0}
-  lastScene: Battle
+  playerLastPosInBattle: {x: 0, y: 0, z: 0}
+  lastScene: Example-Ruins
   saveScene: Example-Corridor
   isDebug: 1
   invincible: 1

@@ -1,5 +1,6 @@
 using System;
 using Alchemy.Inspector;
+using DG.Tweening;
 using UCT.Global.Audio;
 using UCT.Global.Settings;
 using UCT.Overworld;
@@ -60,6 +61,8 @@ namespace UCT.Global.Core
 
         [TabGroup("OtherLayer", "BGMControl")] [Title("BGM循环播放初始状态")]
         public bool loop = true;
+        [TabGroup("OtherLayer", "BGMControl")] [Title("渐入")]
+        public bool fadeIn;
 
         // ---------------------------------------------------
 
@@ -209,7 +212,6 @@ namespace UCT.Global.Core
         {
             var audioSource = bgm.GetComponent<AudioSource>();
             audioSource.pitch = pitch;
-            audioSource.volume = volume;
             audioSource.loop = loop;
             if (audioSource.clip == bgmClip)
             {
@@ -218,6 +220,15 @@ namespace UCT.Global.Core
 
             audioSource.clip = bgmClip;
             audioSource.Play();
+            if (fadeIn)
+            {
+                audioSource.volume = 0;
+                audioSource.DOFade(volume, 0.5f);
+            }
+            else
+            {
+                audioSource.volume = volume;
+            }
         }
 
 
