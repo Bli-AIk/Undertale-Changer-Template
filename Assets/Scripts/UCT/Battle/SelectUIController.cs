@@ -583,7 +583,7 @@ namespace UCT.Battle
 
             var save = TextProcessingService.BatchGetFirstChildStringByPrefix(
                 MainControl.Instance.BattleControl.mercySave,
-                MainControl.Instance.BattleControl.enemies[nameLayerIndex].name + "\\");
+                enemiesControllers[nameLayerIndex].name + "\\");
             TextProcessingService.SplitStringToListWithDelimiter(save, optionsSave);
             
             _textUI.text = NameLayerSetMercyText(0);
@@ -647,7 +647,7 @@ namespace UCT.Battle
 
             var save = TextProcessingService.BatchGetFirstChildStringByPrefix(
                 MainControl.Instance.BattleControl.actSave,
-                MainControl.Instance.BattleControl.enemies[nameLayerIndex].name + "\\");
+                enemiesControllers[nameLayerIndex].name + "\\");
             TextProcessingService.SplitStringToListWithDelimiter(save, optionsSave);
             SetActTexts();
 
@@ -676,7 +676,7 @@ namespace UCT.Battle
         private void SetActTexts()
         {
             var options = enemiesControllers[nameLayerIndex].OnOptions;
-            var enemyCount = MainControl.Instance.BattleControl.enemies.Count;
+            var enemyCount = enemiesControllers.Count;
 
             if (options == null || options.Length == 0)
             {
@@ -745,9 +745,12 @@ namespace UCT.Battle
             _enemiesHpLine.SetActive(false);
             _target.gameObject.SetActive(true);
             _target.select = nameLayerIndex;
-            _target.transform.Find("Move").transform.position = new Vector3(
-                MainControl.Instance.BattleControl.enemies[nameLayerIndex].transform.position.x,
-                _target.transform.Find("Move").transform.position.y);
+
+            var move = _target.transform.Find("Move");
+            move.transform.position = new Vector3(
+                enemiesControllers[nameLayerIndex].transform.position.x,
+                move.transform.position.y);
+            
             _target.hitMonster = enemiesControllers[nameLayerIndex];
             MainControl.Instance.battlePlayerController.transform.position =
                 (Vector3)(Vector2.one * 10000) + new Vector3(0, 0,
