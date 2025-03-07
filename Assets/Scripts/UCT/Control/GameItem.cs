@@ -224,6 +224,7 @@ namespace UCT.Control
 
     public class EquipmentItemBuilder<T> : GameItemBuilder<T> where T : EquipmentItemBuilder<T>
     {
+        //TODO: 在对应区域调用这些Action
         protected Action<int> OnSwitch, OnEquip, OnRemove, OnUpdate;
 
         public T SetOnSwitch(Action<int> action)

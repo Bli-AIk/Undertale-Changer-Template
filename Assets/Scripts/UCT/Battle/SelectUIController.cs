@@ -145,7 +145,7 @@ namespace UCT.Battle
 
         private void Update()
         {
-            if (GameUtilityService.IsGamePausedOrSetting())
+            if (GameUtilityService.IsGamePausedOrSetting() || _isEndBattle)
             {
                 return;
             }
@@ -213,6 +213,7 @@ namespace UCT.Battle
 
         private void ExitBattleScene()
         {
+            _isEndBattle = true;
             AudioController.Instance.audioSource.DOFade(0, 0.5f);
             var exp = 0;
             var gold = 0;
@@ -849,6 +850,15 @@ namespace UCT.Battle
                 MainControl.Instance.battlePlayerController.transform.position =
                     (Vector3)(Vector2.one * 10000) + new Vector3(0, 0,
                         MainControl.Instance.battlePlayerController.transform.position.z);
+                
+                SpriteChange();
+                _itemScroller.Close();
+
+                if (ExecuteMercy())
+                {
+                    return;
+                }
+                
                 if (optionsSave[2 * (optionLayerIndex + 1) - 1] != "Null")
                 {
                     StartTypeWritter(optionsSave[2 * (optionLayerIndex + 1) - 1]);
@@ -862,10 +872,7 @@ namespace UCT.Battle
                     TryOpenDialogBubble();
                 }
 
-                SpriteChange();
-                _itemScroller.Close();
 
-                ExecuteMercy();
             }
 
             if (InputService.GetKeyDown(KeyCode.UpArrow) && optionLayerIndex - 1 >= 0)
@@ -881,7 +888,7 @@ namespace UCT.Battle
             }
         }
 
-        private void ExecuteMercy()
+        private bool ExecuteMercy()
         {
             var enemiesController = enemiesControllers[nameLayerIndex];
             var enemy = enemiesController.Enemy;
@@ -910,6 +917,7 @@ namespace UCT.Battle
                         if (enemiesControllers.All(item => item.Enemy.state is EnemyState.Spaced or EnemyState.Dead))
                         {
                             ExitBattleScene();
+                            return true;
                         }
                     }
 
@@ -928,6 +936,8 @@ namespace UCT.Battle
                     throw new ArgumentOutOfRangeException($"Unexpected enemyMercyType value: {enemyMercyType}");
                 }
             }
+
+            return false;
         }
 
         private void ActOptionLayer()

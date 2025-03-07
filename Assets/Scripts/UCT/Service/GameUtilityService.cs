@@ -139,12 +139,7 @@ namespace UCT.Service
         public static void SwitchScene(string sceneName, bool isAsync = true)
         {
             SetCanvasFrameSprite();
-            if (SceneManager.GetActiveScene().name != "Menu" && SceneManager.GetActiveScene().name != "Rename" &&
-                SceneManager.GetActiveScene().name != "Story" && SceneManager.GetActiveScene().name != "Start" &&
-                SceneManager.GetActiveScene().name != "GameOver")
-            {
-                MainControl.Instance.playerControl.lastScene = SceneManager.GetActiveScene().name;
-            }
+            SetLastScene();
 
             if (isAsync)
             {
@@ -158,6 +153,21 @@ namespace UCT.Service
             SetResolution(SettingsStorage.ResolutionLevel);
             MainControl.Instance.isSceneSwitching = false;
         }
+
+        private static readonly HashSet<string> ExcludedScenes = new()
+        {
+            "Menu", "Rename", "Story", "Start", "Battle", "GameOver"
+        };
+
+        private static void SetLastScene()
+        {
+            var currentScene = SceneManager.GetActiveScene().name;
+            if (!ExcludedScenes.Contains(currentScene))
+            {
+                MainControl.Instance.playerControl.lastScene = currentScene;
+            }
+        }
+
 
         public static void FadeOutToWhiteAndSwitchScene(string scene)
         {

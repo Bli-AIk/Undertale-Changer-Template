@@ -65,25 +65,8 @@ namespace UCT.Overworld
                 return;
             }
 
-            if (TalkBoxController.Instance)
-            {
-                TalkBoxController.Instance.isUp = MainControl.OverworldPlayerBehaviour.transform.position.y <
-                                                  transform.position.y - 1.25f;
-            }
-            else
-            {
-                Other.Debug.LogWarning("TalkBoxPositionChanger instance is missing!");
-            }
-
-
-            if (_clock > 0)
-            {
-                _clock -= Time.deltaTime;
-            }
-            else if (select > 0)
-            {
-                IsOpenBackPack = true;
-            }
+            SetTalkBoxPositionChangerIsUp();
+            CheckIsOpenBackPack();
 
             if (sonUse != 4)
             {
@@ -416,6 +399,31 @@ namespace UCT.Overworld
                 case 4:
                     Heart.transform.localPosition = Vector3.one * 10000;
                     break;
+            }
+        }
+
+        private void CheckIsOpenBackPack()
+        {
+            if (_clock > 0)
+            {
+                _clock -= Time.deltaTime;
+            }
+            else if (select > 0)
+            {
+                IsOpenBackPack = true;
+            }
+        }
+
+        private void SetTalkBoxPositionChangerIsUp()
+        {
+            if (TalkBoxController.Instance)
+            {
+                TalkBoxController.Instance.isUp = MainControl.OverworldPlayerBehaviour.transform.position.y <
+                                                  transform.position.y - 1.25f;
+            }
+            else
+            {
+                Other.Debug.LogWarning("TalkBoxPositionChanger instance is missing!");
             }
         }
 
