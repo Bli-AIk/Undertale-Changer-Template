@@ -1,4 +1,5 @@
 using UnityEngine;
+
 // ReSharper disable UnusedMember.Global
 
 namespace UCT.Other
@@ -22,9 +23,7 @@ namespace UCT.Other
             var text = $"<color={color}>{content}</color>";
             UnityEngine.Debug.Log(text, context);
             #endif
-        }
-
-        // ReSharper disable Unity.PerformanceAnalysis
+        } // ReSharper disable Unity.PerformanceAnalysis
         public static void LogWarning(object content, string color = "#FFFF00")
         {
             #if UNITY_EDITOR

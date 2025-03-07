@@ -156,7 +156,6 @@ namespace UCT.Control
 
             result = key;
             return true;
-
         }
 
         private static string CharacterKeyEscapeBinaryTernary(string key,

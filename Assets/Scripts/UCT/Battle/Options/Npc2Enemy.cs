@@ -35,12 +35,13 @@ namespace UCT.Battle.Options
 
         public MercyType[] MercyTypes => new[] { MercyType.Mercy, MercyType.Flee };
 
-    
+
         public Action[] GetActLikeOptions()
         {
             return Array.Empty<Action>();
         }
-        public IEnumerator<float> _EnemyTurns(List<ObjectPool> objectPools)
+
+        public IEnumerator<float> _EnemyTurns(ObjectPool bulletPool, ObjectPool boardPool)
         {
             if (state is not (EnemyState.Default or EnemyState.CanSpace))
             {
@@ -57,13 +58,13 @@ namespace UCT.Battle.Options
                     {
                         const string cupCake = "CupCake";
 
-                        var obj = objectPools[0].GetFromPool<BulletController>();
+                        var obj = bulletPool.GetFromPool<BulletController>();
                         obj.SetBullet(cupCake, cupCake, new InitialTransform(new Vector3(1, -1.6f)),
                             (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
                         obj.spriteRenderer.color = Color.clear;
                         obj.spriteRenderer.DOColor(Color.white, 0.2f);
 
-                        var obj2 = objectPools[0].GetFromPool<BulletController>();
+                        var obj2 = bulletPool.GetFromPool<BulletController>();
                         obj2.SetBullet(cupCake, cupCake, new InitialTransform(new Vector3(-1, -1.6f)),
                             (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
                         obj2.spriteRenderer.color = Color.clear;
@@ -73,10 +74,10 @@ namespace UCT.Battle.Options
                         yield return Timing.WaitForSeconds(Random.Range(0.5f, 1.5f));
 
                         obj.spriteRenderer.DOColor(Color.clear, 0.2f).OnKill(
-                            () => objectPools[0].ReturnPool(obj.gameObject, obj));
+                            () => bulletPool.ReturnPool(obj.gameObject, obj));
 
                         obj2.spriteRenderer.DOColor(Color.clear, 0.2f).OnKill(
-                            () => objectPools[0].ReturnPool(obj2.gameObject, obj2));
+                            () => bulletPool.ReturnPool(obj2.gameObject, obj2));
 
                         yield return Timing.WaitForSeconds(Random.Range(0.5f, 1.5f));
                     }

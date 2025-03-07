@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using UCT.Global.Audio;
 using UCT.Global.Core;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace UCT.Battle
 {

@@ -15,12 +15,18 @@ namespace UCT.Battle
     public class TurnController : MonoBehaviour
     {
         public int turn;
-        private readonly HashSet<int> _overlapTurns = new() { 0, 1 };
         public bool isMyTurn;
 
-        public List<int> poolCount;
+        [SerializeField] private int bulletPoolCount = 25;
 
-        public List<ObjectPool> objectPools = new();
+        [SerializeField] private int boardPoolCount = 5;
+
+        [SerializeField] private int yellowBulletPoolCount = 5;
+        private readonly HashSet<int> _overlapTurns = new() { 0, 1 };
+
+        private ObjectPool _boardPool;
+        private ObjectPool _bulletPool;
+        private ObjectPool _yellowBulletPool;
         public static TurnController Instance { get; private set; }
 
         private void Awake()
@@ -31,30 +37,29 @@ namespace UCT.Battle
         private void Start()
         {
             var saveBullet = GameObject.Find("SaveBullet");
-            //弹幕
-            objectPools.Add(gameObject.AddComponent<ObjectPool>());
-            objectPools[^1].parent = saveBullet.transform;
-            objectPools[^1].count = poolCount[0];
-            objectPools[^1].poolObject = Resources.Load<GameObject>("Template/Bullet Template");
-            objectPools[^1].FillPool<BulletController>();
 
-            //挡板
-            objectPools.Add(gameObject.AddComponent<ObjectPool>());
-            objectPools[^1].parent = saveBullet.transform;
-            objectPools[^1].count = poolCount[1];
-            objectPools[^1].poolObject = Resources.Load<GameObject>("Template/Board Template");
-            objectPools[^1].FillPool<BoardController>();
-
-            //子弹(黄魂)
-            objectPools.Add(gameObject.AddComponent<ObjectPool>());
-            objectPools[^1].parent = saveBullet.transform;
-            objectPools[^1].count = poolCount[1];
-            objectPools[^1].poolObject = Resources.Load<GameObject>("Template/YellowBullet Template");
+            SetUpObjectPools(saveBullet);
         }
 
-        public static void KillIEnumerator()
+        private void SetUpObjectPools(GameObject saveBullet)
         {
-            Timing.KillCoroutines();
+            _bulletPool = gameObject.AddComponent<ObjectPool>();
+            _bulletPool.parent = saveBullet.transform;
+            _bulletPool.count = bulletPoolCount;
+            _bulletPool.poolObject = Resources.Load<GameObject>("Template/Bullet Template");
+            _bulletPool.FillPool<BulletController>();
+
+            _boardPool = gameObject.AddComponent<ObjectPool>();
+            _boardPool.parent = saveBullet.transform;
+            _boardPool.count = boardPoolCount;
+            _boardPool.poolObject = Resources.Load<GameObject>("Template/Board Template");
+            _boardPool.FillPool<BoardController>();
+
+            _yellowBulletPool = gameObject.AddComponent<ObjectPool>();
+            _yellowBulletPool.parent = saveBullet.transform;
+            _yellowBulletPool.count = yellowBulletPoolCount;
+            _yellowBulletPool.poolObject = Resources.Load<GameObject>("Template/YellowBullet Template");
+            _yellowBulletPool.FillPool<BoardController>();
         }
 
         /// <summary>
@@ -64,7 +69,6 @@ namespace UCT.Battle
         {
             isMyTurn = false;
             Timing.RunCoroutine(_TurnExecute(turn));
-
         }
 
         /// <summary>
@@ -78,7 +82,7 @@ namespace UCT.Battle
                 if (MainControl.Instance.selectUIController.enemiesControllers.Count == 1)
                 {
                     Timing.RunCoroutine(MainControl.Instance.selectUIController.enemiesControllers[0].Enemy
-                        ._EnemyTurns(objectPools));
+                        ._EnemyTurns(_bulletPool, _boardPool));
                 }
                 else
                 {
@@ -86,7 +90,7 @@ namespace UCT.Battle
                     foreach (var item in MainControl.Instance.selectUIController.enemiesControllers)
                     {
                         //测试s
-                        Timing.RunCoroutine(item.Enemy._EnemyTurns(objectPools));
+                        Timing.RunCoroutine(item.Enemy._EnemyTurns(_bulletPool, _boardPool));
                     }
                 }
             }
@@ -155,13 +159,15 @@ namespace UCT.Battle
                         Timing.RunCoroutine(_SimpleNestBullet());
                         yield return Timing.WaitForSeconds(0.2f);
                     }
+
                     yield return Timing.WaitForSeconds(2f);
-                    
+
                     Other.Debug.Log("等待嵌套播放完毕的嵌套弹幕编写示例");
                     for (var i = 0; i < 3; i++)
                     {
                         yield return Timing.WaitUntilDone(Timing.RunCoroutine(_SimpleNestBullet()));
                     }
+
                     Other.Debug.Log("战斗框缩放回初始坐标以结束回合");
                     yield return Timing.WaitForSeconds(1f);
                     DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[0],
@@ -189,18 +195,18 @@ namespace UCT.Battle
                     Other.Debug.Log("这是个测试回合。");
                     const string cupCake = "CupCake";
 
-                    var obj = objectPools[0].GetFromPool<BulletController>();
+                    var obj = _bulletPool.GetFromPool<BulletController>();
                     obj.SetBullet(cupCake, cupCake, new InitialTransform(new Vector3(1, -1.6f)),
                         (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
 
-                    var obj2 = objectPools[0].GetFromPool<BulletController>();
+                    var obj2 = _bulletPool.GetFromPool<BulletController>();
                     obj2.SetBullet(cupCake, cupCake, new InitialTransform(new Vector3(-1, -1.6f)),
                         (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
 
 
                     for (var i = 10; i > 0; i--)
                     {
-                        if (i % 5 == 0) 
+                        if (i % 5 == 0)
                         {
                             Other.Debug.Log($"{TextProcessingService.RandomStringColor(i.ToString())}秒后结束本回合");
                         }
@@ -208,9 +214,9 @@ namespace UCT.Battle
                         yield return Timing.WaitForSeconds(1f);
                     }
 
-                    objectPools[0].ReturnPool(obj.gameObject, obj);
+                    _bulletPool.ReturnPool(obj.gameObject, obj);
 
-                    objectPools[0].ReturnPool(obj2.gameObject, obj2);
+                    _bulletPool.ReturnPool(obj2.gameObject, obj2);
                     break;
                 }
                 default:
@@ -220,14 +226,14 @@ namespace UCT.Battle
 
         public void GetYellowBullet(Vector3 playerPosition)
         {
-            var obj = objectPools[2].GetFromPool<YellowBulletController>();
+            var obj = _yellowBulletPool.GetFromPool<YellowBulletController>();
             obj.transform.position = playerPosition + Vector3.up * 0.25f;
-            obj.OnKill = () => objectPools[2].ReturnPool(obj);
+            obj.OnKill = () => _yellowBulletPool.ReturnPool(obj);
         }
 
         private IEnumerator<float> _SimpleNestBullet()
         {
-            var obj = objectPools[0].GetFromPool<BulletController>();
+            var obj = _bulletPool.GetFromPool<BulletController>();
             const string cupCake = "CupCake";
 
             obj.SetBullet(cupCake, cupCake, new InitialTransform(new Vector3(0, -3.35f)),
@@ -250,8 +256,7 @@ namespace UCT.Battle
 
             yield return Timing.WaitForSeconds(1f);
 
-            objectPools[0].ReturnPool(obj.gameObject, obj);
+            _bulletPool.ReturnPool(obj.gameObject, obj);
         }
-
     }
 }

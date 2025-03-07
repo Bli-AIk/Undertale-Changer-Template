@@ -14,6 +14,15 @@ namespace UCT.Global.Settings
         private object _value;
 
         /// <summary>
+        ///     设置页面的选项类，可配置初始值。
+        /// </summary>
+        /// <param name="value">初始值</param>
+        public SettingsOption(object value)
+        {
+            _value = value;
+        }
+
+        /// <summary>
         ///     当该选项的int值与词典内的int值相同时，会在选项值文本上显示对应的dataName。
         /// </summary>
         public Dictionary<int, string> GetSpDataNameWithIndex { get; set; }
@@ -23,15 +32,6 @@ namespace UCT.Global.Settings
         ///     如果该索引是负数，那么会视为倒数第X位。
         /// </summary>
         public int NewSelectedOption { get; set; }
-
-        /// <summary>
-        ///     设置页面的选项类，可配置初始值。
-        /// </summary>
-        /// <param name="value">初始值</param>
-        public SettingsOption(object value)
-        {
-            _value = value;
-        }
 
         /// <summary>
         ///     该选项自身的语言包数据名称。

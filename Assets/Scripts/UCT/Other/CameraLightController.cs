@@ -38,7 +38,7 @@ namespace UCT.Other
                 }
 
                 item.enabled = Vector3.Distance(item.transform.position, _mainCamera.transform.position) <=
-                                viewDistance;
+                               viewDistance;
             }
         }
     }

@@ -34,7 +34,7 @@ namespace UCT.Control
             Purple
         }
 
-        public List<GameObject> enemies; 
+        public List<GameObject> enemies;
 
         public List<Color> bulletColorList;
 
@@ -48,6 +48,6 @@ namespace UCT.Control
 
         [HideInInspector] public List<string> turnTextSave;
 
-        [HideInInspector] public List<string> turnDialogAsset; 
+        [HideInInspector] public List<string> turnDialogAsset;
     }
 }

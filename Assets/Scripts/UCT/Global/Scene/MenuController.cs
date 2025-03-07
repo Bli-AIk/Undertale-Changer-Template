@@ -55,12 +55,12 @@ namespace UCT.Global.Scene
         private void Update()
         {
             EnableTextOptions();
-            
+
             if (GameUtilityService.IsGamePausedOrSetting())
             {
                 return;
             }
-            
+
             UpdateInput();
 
             if (InputService.GetKeyDown(KeyCode.Z))
@@ -78,6 +78,11 @@ namespace UCT.Global.Scene
             {
                 CancelSetData();
             }
+        }
+
+        private void FixedUpdate()
+        {
+            _textTime.text = TextProcessingService.GetRealTime((int)MainControl.Instance.playerControl.gameTime);
         }
 
         private void CancelSetData()
@@ -290,9 +295,9 @@ namespace UCT.Global.Scene
             {
                 _select += 2;
             }
-            
+
             LimitSelectRange();
-            
+
             if (InputService.GetKeyDown(KeyCode.UpArrow) ||
                 InputService.GetKeyDown(KeyCode.DownArrow) ||
                 InputService.GetKeyDown(KeyCode.LeftArrow) ||
@@ -345,11 +350,6 @@ namespace UCT.Global.Scene
             {
                 _textOptionsRight.enabled = true;
             }
-        }
-
-        private void FixedUpdate()
-        {
-            _textTime.text = TextProcessingService.GetRealTime((int)MainControl.Instance.playerControl.gameTime);
         }
 
         private void AssignReferences()

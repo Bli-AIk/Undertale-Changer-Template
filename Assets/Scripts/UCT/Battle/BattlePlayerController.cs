@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
+using MEC;
 using UCT.Control;
 using UCT.Extensions;
 using UCT.Global.Audio;
@@ -256,7 +257,7 @@ namespace UCT.Battle
                 _spriteRenderer.color = Color.red;
                 MainControl.Instance.playerControl.playerLastPosInBattle = transform.position - (Vector3)sceneDrift;
                 SettingsStorage.Pause = true;
-                TurnController.KillIEnumerator();
+                Timing.KillCoroutines();
                 GameUtilityService.SwitchScene("GameOver", false);
             }
             else
@@ -516,6 +517,7 @@ namespace UCT.Battle
                         _yellowTimer = YellowTimerMax;
                         TurnController.Instance.GetYellowBullet(transform.position);
                     }
+
                     _yellowTimer -= Time.deltaTime;
 
                     break;
@@ -1094,7 +1096,7 @@ namespace UCT.Battle
             {
                 mainControl.playerControl.playerLastPosInBattle = transform.position - (Vector3)sceneDrift;
                 SettingsStorage.Pause = true;
-                TurnController.KillIEnumerator();
+                Timing.KillCoroutines();
                 GameUtilityService.SwitchScene("GameOver", false);
             }
             else

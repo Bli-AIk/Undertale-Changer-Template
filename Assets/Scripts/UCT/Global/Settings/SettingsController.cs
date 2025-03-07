@@ -302,12 +302,14 @@ namespace UCT.Global.Settings
                     {
                         return true;
                     }
+
                     break;
                 case OptionType.EnterScene:
                     if (GetKeyDownToEnterScene(layer, option))
                     {
                         return true;
                     }
+
                     break;
                 case OptionType.Back:
                     GetKeyDownToBack(layer);
@@ -532,7 +534,7 @@ namespace UCT.Global.Settings
             var unit = InputService.GetKey(KeyCode.C)
                 ? settingsOption.SelectionBasedChangedUnitWhenGetC
                 : settingsOption.SelectionBasedChangedUnit;
-            
+
             ChangeSelectionBasedValue(settingsOption, unit);
 
             if (InputService.GetKeyDown(KeyCode.Z))
@@ -567,7 +569,8 @@ namespace UCT.Global.Settings
 
                 settingsOption.SelectionBasedChangedValueSetter(Convert.ToSingle(settingsOption.GetValue()));
             }
-            else if ((InputService.GetKey(KeyCode.RightArrow) || InputService.GetKeyDown(KeyCode.UpArrow)) && Convert.ToSingle(settingsOption.GetValue()) < settingsOption.SelectionBasedChangedMax)
+            else if ((InputService.GetKey(KeyCode.RightArrow) || InputService.GetKeyDown(KeyCode.UpArrow)) &&
+                     Convert.ToSingle(settingsOption.GetValue()) < settingsOption.SelectionBasedChangedMax)
             {
                 AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
                 var newValue = Convert.ToSingle(settingsOption.GetValue()) + unit;

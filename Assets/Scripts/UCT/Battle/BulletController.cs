@@ -269,6 +269,7 @@ namespace UCT.Battle
             }
         }
     }
+
     public static class BulletResourceManager
     {
         private static readonly Dictionary<string, BulletControl> BulletCache = new();
@@ -282,7 +283,7 @@ namespace UCT.Battle
 
             var path = "Assets/Bullets/" + bulletPathName;
             bullet = Resources.Load<BulletControl>(path);
-        
+
             if (bullet)
             {
                 BulletCache[bulletPathName] = bullet;

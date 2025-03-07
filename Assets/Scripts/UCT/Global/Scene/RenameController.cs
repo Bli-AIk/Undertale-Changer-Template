@@ -21,7 +21,6 @@ namespace UCT.Global.Scene
 {
     public class RenameController : MonoBehaviour
     {
-        private const string ColorYellow = "<color=yellow>";
         public enum SceneState
         {
             Instruction,
@@ -30,14 +29,14 @@ namespace UCT.Global.Scene
             SwitchScene
         }
 
+        private const string ColorYellow = "<color=yellow>";
+
         private const float RandomSetNameTimeMax = 1.5f;
         private const float BackspaceTimeMax = 0.5f;
         private const int MaxCharactersPerLine = 7;
 
         private const int MaxSetNameLength = 6;
         private const string EndColor = "</color>";
-        private static string PinYin { get; set; }= "";
-        private static int PinYinNum { get; set; }
 
         private static readonly List<string> AlphabetCapital = new()
         {
@@ -91,18 +90,20 @@ namespace UCT.Global.Scene
             ""
         };
 
-        private static List<string> CutHanZiString { get; set; } = new() { "" };
-
-        private static SelectedAlphabet AlphabetNum { get; set; }
-        private static bool IsSwitchedAlphabetNum { get; set; }
         public int selectedCharactersId;
         public bool isSelectedDone;
         public string setName;
 
         public SceneState sceneState;
+        private string _alphabetCapital;
+        private int _alphabetLength;
+        private string _alphabetLowercase;
         private Tween _animMove, _animScale;
 
         private float _backspaceTime;
+        private int _lowercaseRemainder;
+        private int _maxLowercaseCharactersPerLine;
+        private int _maxUppercaseCharactersPerLine;
 
         private float _randomSetNameTime;
 
@@ -117,12 +118,13 @@ namespace UCT.Global.Scene
             _randomNameTip;
 
         private int _uppercaseRemainder;
-        private int _lowercaseRemainder;
-        private int _maxUppercaseCharactersPerLine;
-        private int _maxLowercaseCharactersPerLine;
-        private int _alphabetLength;
-        private string _alphabetLowercase;
-        private string _alphabetCapital;
+        private static string PinYin { get; set; } = "";
+        private static int PinYinNum { get; set; }
+
+        private static List<string> CutHanZiString { get; set; } = new() { "" };
+
+        private static SelectedAlphabet AlphabetNum { get; set; }
+        private static bool IsSwitchedAlphabetNum { get; set; }
 
         private void Start()
         {
@@ -303,22 +305,23 @@ namespace UCT.Global.Scene
             {
                 return;
             }
+
             ConfirmUpdateText();
         }
 
         private void ConfirmUpdateText()
         {
-            string noText = TextProcessingService.GetFirstChildStringByPrefix(
+            var noText = TextProcessingService.GetFirstChildStringByPrefix(
                 MainControl.Instance.LanguagePackControl.sceneTexts, "No");
-            string yesText = TextProcessingService.GetFirstChildStringByPrefix(
+            var yesText = TextProcessingService.GetFirstChildStringByPrefix(
                 MainControl.Instance.LanguagePackControl.sceneTexts, "Yes");
 
             if (selectedCharactersId == 0)
             {
                 selectedCharactersId = 1;
 
-                string formattedText = SettingsStorage.TextWidth 
-                    ? $"{noText}    {ColorYellow}{yesText}{EndColor}" 
+                var formattedText = SettingsStorage.TextWidth
+                    ? $"{noText}    {ColorYellow}{yesText}{EndColor}"
                     : $"{noText}    <indent=85>{ColorYellow}{yesText}{EndColor}";
 
                 _selectText.text = formattedText;
@@ -327,7 +330,7 @@ namespace UCT.Global.Scene
             {
                 selectedCharactersId = 0;
 
-                string formattedText = SettingsStorage.TextWidth 
+                var formattedText = SettingsStorage.TextWidth
                     ? $"{ColorYellow}{noText}{EndColor}    <color=white>{yesText}"
                     : $"{ColorYellow}{noText}{EndColor}    <indent=85>{yesText}";
 
@@ -402,7 +405,7 @@ namespace UCT.Global.Scene
                         MainControl.Instance.LanguagePackControl.sceneTexts, "Done");
             }
 
-            if (!isSelectedDone || 
+            if (!isSelectedDone ||
                 (!InputService.GetKeyDown(KeyCode.LeftArrow) && !InputService.GetKeyDown(KeyCode.RightArrow)))
             {
                 return true;
@@ -492,8 +495,8 @@ namespace UCT.Global.Scene
             {
                 AddAlphabetNum();
             }
-            
-            
+
+
             if (!InputService.GetKey(KeyCode.C))
             {
                 _randomSetNameTime = _randomSetNameTime > 0 ? _randomSetNameTime - Time.deltaTime : 0;
@@ -561,7 +564,7 @@ namespace UCT.Global.Scene
         private void ReduceSelectedCharactersId(int alphabetLowercaseFix)
         {
             ReduceIdTop();
-            
+
             if (ReduceIdCommon(alphabetLowercaseFix))
             {
                 return;
@@ -589,7 +592,8 @@ namespace UCT.Global.Scene
                 lowercaseRemainderFix += _uppercaseRemainder;
             }
 
-            if (_alphabetLowercase.Length > 0 && (_lowercaseRemainder == 0 || selectedCharactersId < _alphabetLength - _lowercaseRemainder))
+            if (_alphabetLowercase.Length > 0 && (_lowercaseRemainder == 0 ||
+                                                  selectedCharactersId < _alphabetLength - _lowercaseRemainder))
             {
                 lowercaseRemainderFix += MaxCharactersPerLine;
             }
@@ -659,7 +663,6 @@ namespace UCT.Global.Scene
                 ? _maxLowercaseCharactersPerLine
                 : MaxCharactersPerLine;
             return true;
-
         }
 
         private void ReduceIdTop()
@@ -720,7 +723,6 @@ namespace UCT.Global.Scene
             };
             idTop = id;
             return true;
-
         }
 
         private bool IncreaseIdBottom(int id, out int idBottom)
@@ -747,16 +749,19 @@ namespace UCT.Global.Scene
 
         private int IncreaseGetPossibleId(int id, int lowercaseRemainderFix)
         {
-            if (id == _alphabetLength && _alphabetLowercase.Length == 0 && lowercaseRemainderFix == MaxCharactersPerLine)
+            if (id == _alphabetLength && _alphabetLowercase.Length == 0 &&
+                lowercaseRemainderFix == MaxCharactersPerLine)
             {
                 lowercaseRemainderFix = _uppercaseRemainder;
             }
+
             var baseIdOffset = id > _alphabetLength ? (id - _alphabetLength) * 2 : 0;
             var possibleId = _alphabetLength - lowercaseRemainderFix + baseIdOffset + 1;
             if (_alphabetLowercase.Length < (id - _alphabetLength) * 2 + 3)
             {
                 possibleId += MaxCharactersPerLine - _uppercaseRemainder;
             }
+
             return possibleId;
         }
 
@@ -788,7 +793,6 @@ namespace UCT.Global.Scene
             id -= _maxLowercaseCharactersPerLine;
             idCommon = id;
             return true;
-
         }
 
         private bool AddChar()
@@ -833,13 +837,13 @@ namespace UCT.Global.Scene
             isSelectedDone = true;
             selectedCharactersId = 0;
             sceneState = SceneState.ConfirmName;
-            
+
             _titleText.text =
                 TextProcessingService.GetFirstChildStringByPrefix(
                     MainControl.Instance.LanguagePackControl.sceneTexts, "DefaultQuestion");
             SetConfirmSelectText();
 
-            
+
             ConvertSpecialNames();
 
             _animMove = DOTween.To(() => _nameText.transform.localPosition,
@@ -869,7 +873,7 @@ namespace UCT.Global.Scene
                 var canRename = lister[1];
                 var isCaseSensitive = lister[2];
                 var narration = lister[3];
-                
+
                 if ((specialName != TextProcessingService.ConvertLettersCase(setName, true) ||
                      bool.Parse(isCaseSensitive)) &&
                     (specialName != setName || !bool.Parse(isCaseSensitive)))
@@ -1164,7 +1168,7 @@ namespace UCT.Global.Scene
                 .Append(GenerateCharacterTextFrom(AlphabetCapital[(int)AlphabetNum]))
                 .Append("\n")
                 .Append(GenerateCharacterTextFrom(AlphabetLowercase[(int)AlphabetNum]));
-    
+
             var alphabet = alphabetBuilder.ToString();
             var finalBuilder = new StringBuilder();
 

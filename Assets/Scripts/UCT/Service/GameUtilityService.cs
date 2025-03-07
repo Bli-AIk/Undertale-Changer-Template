@@ -72,7 +72,8 @@ namespace UCT.Service
                 MainControl.Instance.mainCamera.rect = new Rect(0, 0.056f, 1, 0.888f);
             }
 
-            if (MainControl.Instance.sceneState == MainControl.SceneState.InBattle && MainControl.Instance.cameraMainInBattle)
+            if (MainControl.Instance.sceneState == MainControl.SceneState.InBattle &&
+                MainControl.Instance.cameraMainInBattle)
             {
                 MainControl.Instance.cameraMainInBattle.rect = new Rect(0, 0.056f, 1, 0.888f);
             }
@@ -100,7 +101,8 @@ namespace UCT.Service
                 MainControl.Instance.mainCamera.rect = new Rect(0, 0, 1, 1);
             }
 
-            if (MainControl.Instance.sceneState == MainControl.SceneState.InBattle && MainControl.Instance.cameraMainInBattle)
+            if (MainControl.Instance.sceneState == MainControl.SceneState.InBattle &&
+                MainControl.Instance.cameraMainInBattle)
             {
                 MainControl.Instance.cameraMainInBattle.rect = new Rect(0, 0, 1, 1);
             }
@@ -304,7 +306,7 @@ namespace UCT.Service
 
         public static Color GetRandomColor()
         {
-            lock (Rng) 
+            lock (Rng)
             {
                 return new Color(
                     (float)Rng.NextDouble(),

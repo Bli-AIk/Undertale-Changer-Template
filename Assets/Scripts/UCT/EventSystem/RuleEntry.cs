@@ -242,7 +242,6 @@ namespace UCT.EventSystem
                     CriteriaCompare.LessThanOrEqual => fact.value <= detection,
                     CriteriaCompare.LessThan => fact.value < detection,
                     _ => throw new ArgumentOutOfRangeException($"Unexpected compare value: {compare}")
-
                 };
 
                 return isResultReversed ? !result : result;

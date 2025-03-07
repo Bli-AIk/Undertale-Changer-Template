@@ -489,6 +489,7 @@ namespace UCT.Global.UI
             {
                 return;
             }
+
             DrawGizmosPoints();
         }
 
@@ -529,7 +530,7 @@ namespace UCT.Global.UI
             {
                 return false;
             }
-            
+
             if (showGizmosPoint == ShowGizmosPoint.All)
             {
                 Gizmos.color = Color.yellow;
@@ -544,7 +545,6 @@ namespace UCT.Global.UI
             DrawBesselGizmosPoints();
 
             return true;
-
         }
 
         private void DrawBesselGizmosPoints()

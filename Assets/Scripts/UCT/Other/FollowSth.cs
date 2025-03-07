@@ -69,7 +69,7 @@ namespace UCT.Other
                 sth = item;
             }
             else
-            {                 
+            {
                 throw new ArgumentOutOfRangeException($"Unexpected item value: {item}");
             }
         }

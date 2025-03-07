@@ -110,14 +110,13 @@ namespace UCT.Battle
             hpBar.transform.localScale =
                 new Vector3(
                     Mathf.Clamp(enemiesController.hp / (float)enemiesController.hpMax, 0, Mathf.Infinity), 1);
-            
-            enemiesController.hp -= hitDamage;
-            
-            DOTween.To(() => hpBar.transform.localScale, x => hpBar.transform.localScale = x,
-                new Vector3(Mathf.Clamp(enemiesController.hp / (float)enemiesController.hpMax, 0, Mathf.Infinity), 1), 0.75f)
-                .SetEase(Ease.OutSine);
 
-            
+            enemiesController.hp -= hitDamage;
+
+            DOTween.To(() => hpBar.transform.localScale, x => hpBar.transform.localScale = x,
+                    new Vector3(Mathf.Clamp(enemiesController.hp / (float)enemiesController.hpMax, 0, Mathf.Infinity),
+                        1), 0.75f)
+                .SetEase(Ease.OutSine);
         }
 
         private void CheckDeath()

@@ -31,13 +31,11 @@ namespace UCT.Global.Core
             InBattle
         }
 
-        [Title("=== 状态 ===")] 
-        [ReadOnly]
-        public SceneState sceneState;
-        [ReadOnly]
-        public int languagePackId;
-        [ReadOnly]
-        public int saveDataId;
+        [Title("=== 状态 ===")] [ReadOnly] public SceneState sceneState;
+
+        [ReadOnly] public int languagePackId;
+
+        [ReadOnly] public int saveDataId;
 
         [Space]
         [Title("=== 场景切换相关设置 ===")]
@@ -382,14 +380,14 @@ namespace UCT.Global.Core
 
             var uiTextSave = DataHandlerService.LoadItemData(uiText);
             BattleControl.actSave =
-                TextProcessingService.BatchGetFirstChildStringByPrefix(uiTextSave, 
+                TextProcessingService.BatchGetFirstChildStringByPrefix(uiTextSave,
                     "Act\\");
             BattleControl.mercySave = TextProcessingService.BatchGetFirstChildStringByPrefix(uiTextSave,
                 "Mercy\\");
             BattleControl.turnTextSave = TextProcessingService.BatchGetFirstChildStringByPrefix(uiTextSave,
                 "Turn\\");
             BattleControl.enemiesNameSave =
-                TextProcessingService.BatchGetFirstChildStringByPrefix(uiTextSave, 
+                TextProcessingService.BatchGetFirstChildStringByPrefix(uiTextSave,
                     "Enemy\\");
             BattleControl.turnTextSave =
                 DataHandlerService.ChangeItemData(BattleControl.turnTextSave, true, new List<string>());

@@ -60,7 +60,6 @@ namespace UCT.Battle
             TurnLayer
         }
 
-
         public enum UITextMode
         {
             None,
@@ -84,15 +83,15 @@ namespace UCT.Battle
         public Color hpColorHit;
 
         [Header("对话气泡载入数")]
-        //载入actSave
         public int numberDialog;
 
         public bool isDialog;
 
         [Header("暂存未使用的Sprite")]
         public List<Sprite> spriteUI;
-        [HideInInspector]
-        public List<SpriteRenderer> buttons;
+
+        [HideInInspector] public List<SpriteRenderer> buttons;
+
         public List<Vector2> playerUIPos;
 
         [Header("选择的按钮")]
@@ -122,6 +121,7 @@ namespace UCT.Battle
         private int _hpFood;
         private Tween _hpFoodTween;
         private SpriteRenderer _hpSpr;
+        private bool _isEndBattle;
 
         private ItemScroller _itemScroller;
 
@@ -132,7 +132,6 @@ namespace UCT.Battle
 
         private TargetController _target;
         private TypeWritter _typeWritter;
-        private bool _isEndBattle;
 
         private void Start()
         {
@@ -167,7 +166,7 @@ namespace UCT.Battle
         private void UpdateDialog()
         {
             _dialog.gameObject.SetActive(isDialog);
-            
+
             var canEndBattle = MainControl.Instance.selectUIController.enemiesControllers.All(enemiesController =>
                 enemiesController.Enemy.state is not (EnemyState.Default or EnemyState.CanSpace));
 
@@ -585,7 +584,7 @@ namespace UCT.Battle
                 MainControl.Instance.BattleControl.mercySave,
                 enemiesControllers[nameLayerIndex].name + "\\");
             TextProcessingService.SplitStringToListWithDelimiter(save, optionsSave);
-            
+
             _textUI.text = NameLayerSetMercyText(0);
             _textUI.text += NameLayerSetMercyText(1);
             _textUI.text += NameLayerSetMercyText(2);
@@ -609,7 +608,6 @@ namespace UCT.Battle
 
             result.Append($"{UITextPrefix}{optionsSave[index]}</color>\n");
             return result.ToString();
-
         }
 
         /// <summary>
@@ -750,7 +748,7 @@ namespace UCT.Battle
             move.transform.position = new Vector3(
                 enemiesControllers[nameLayerIndex].transform.position.x,
                 move.transform.position.y);
-            
+
             _target.hitMonster = enemiesControllers[nameLayerIndex];
             MainControl.Instance.battlePlayerController.transform.position =
                 (Vector3)(Vector2.one * 10000) + new Vector3(0, 0,
@@ -868,7 +866,6 @@ namespace UCT.Battle
                 _itemScroller.Close();
 
                 ExecuteMercy();
-                
             }
 
             if (InputService.GetKeyDown(KeyCode.UpArrow) && optionLayerIndex - 1 >= 0)
@@ -901,19 +898,21 @@ namespace UCT.Battle
                     {
                         enemy.state = EnemyState.Spaced;
                         enemiesController.spriteSplitController.spriteRenderer.color = Color.gray;
-                        
+
                         foreach (Transform child in enemiesController.spriteSplitController.transform)
                         {
                             child.gameObject.SetActive(false);
                         }
+
                         AudioController.Instance.PlayFx(5, MainControl.Instance.AudioControl.fxClipBattle);
 
 
-                        if (enemiesControllers.All(item => item.Enemy.state is EnemyState.Spaced or EnemyState.Dead)) 
+                        if (enemiesControllers.All(item => item.Enemy.state is EnemyState.Spaced or EnemyState.Dead))
                         {
                             ExitBattleScene();
                         }
                     }
+
                     break;
                 }
                 case MercyType.Flee:

@@ -101,7 +101,10 @@ namespace UCT.Global.UI
             return boxes[i].transform.parent != transform || boxes[j].transform.parent != transform;
         }
 
-        private void MergeBoxes(BoxDrawer box0, BoxDrawer box1, List<Vector2> realPointsBack0, List<Vector2> realPointsBack1)
+        private void MergeBoxes(BoxDrawer box0,
+            BoxDrawer box1,
+            List<Vector2> realPointsBack0,
+            List<Vector2> realPointsBack1)
         {
             var boxParent = GetFromThePool();
 

@@ -99,11 +99,11 @@ namespace UCT.Service
         }
 
         /// <summary>
-        /// 判断点是否在多边形内
+        ///     判断点是否在多边形内
         /// </summary>
         public static bool IsPointInPolygon(Vector2 point, List<Vector2> polygon)
         {
-            var isInside = false; 
+            var isInside = false;
             for (int i = 0, j = polygon.Count - 1; i < polygon.Count; j = i++)
             {
                 if (polygon[i].y > point.y != polygon[j].y > point.y &&
@@ -118,36 +118,36 @@ namespace UCT.Service
         }
 
         /// <summary>
-        /// 计算点到线段最近点（计算垂足）
+        ///     计算点到线段最近点（计算垂足）
         /// </summary>
         private static Vector2 GetNearestPointOnLine(Vector2 point, Vector2 start, Vector2 end)
         {
             var line = end - start;
-            var len = line.magnitude; 
+            var len = line.magnitude;
             line.Normalize();
 
-            var v = point - start; 
+            var v = point - start;
             var d = Vector2.Dot(v, line);
             d = Mathf.Clamp(d, 0f, len);
-            return start + line * d; 
+            return start + line * d;
         }
 
         /// <summary>
-        /// 计算位移后垂点位置
+        ///     计算位移后垂点位置
         /// </summary>
         public static Vector2 CalculateDisplacedPoint(Vector2 nearestPoint,
             Vector2 lineStart,
             Vector2 lineEnd,
             float displacement)
         {
-            var lineDirection = (lineEnd - lineStart).normalized; 
-            var perpendicularDirection = new Vector2(-lineDirection.y, lineDirection.x); 
+            var lineDirection = (lineEnd - lineStart).normalized;
+            var perpendicularDirection = new Vector2(-lineDirection.y, lineDirection.x);
 
             return nearestPoint + perpendicularDirection * -displacement;
         }
 
         /// <summary>
-        /// 计算内缩多边形顶点
+        ///     计算内缩多边形顶点
         /// </summary>
         public static List<Vector2> CalculateInwardOffset(List<Vector2> vertices, float offset)
         {
@@ -157,7 +157,7 @@ namespace UCT.Service
             }
 
             List<Vector2> offsetVertices = new();
-            List<Vector2> intersectionPoints = new(); 
+            List<Vector2> intersectionPoints = new();
 
             var count = vertices.Count;
             for (var i = 0; i < count; i++)
@@ -165,14 +165,14 @@ namespace UCT.Service
                 var currentVertex = vertices[i];
                 var nextVertex = vertices[(i + 1) % count];
 
-                var edgeDirection = (nextVertex - currentVertex).normalized; 
+                var edgeDirection = (nextVertex - currentVertex).normalized;
                 var perpendicularDirection = new Vector2(-edgeDirection.y, edgeDirection.x);
 
                 var offsetCurrentVertex = currentVertex + perpendicularDirection * offset;
-                var offsetNextVertex = nextVertex + perpendicularDirection * offset; 
+                var offsetNextVertex = nextVertex + perpendicularDirection * offset;
 
-                offsetVertices.Add(offsetCurrentVertex); 
-                offsetVertices.Add(offsetNextVertex); 
+                offsetVertices.Add(offsetCurrentVertex);
+                offsetVertices.Add(offsetNextVertex);
 
                 if (i <= 0)
                 {
@@ -183,7 +183,7 @@ namespace UCT.Service
                     offsetVertices[i * 2 - 1], offsetCurrentVertex, offsetNextVertex);
                 if (foundIntersection)
                 {
-                    intersectionPoints.Add(intersection); 
+                    intersectionPoints.Add(intersection);
                 }
             }
 
@@ -191,14 +191,14 @@ namespace UCT.Service
                 offsetVertices[^1], offsetVertices[0], offsetVertices[1]);
             if (foundFinalIntersection)
             {
-                intersectionPoints.Add(finalIntersection); 
+                intersectionPoints.Add(finalIntersection);
             }
 
-            return intersectionPoints; 
+            return intersectionPoints;
         }
 
         /// <summary>
-        /// 线线交点计算
+        ///     线线交点计算
         /// </summary>
         private static bool LineLineIntersection(out Vector2 intersection,
             Vector2 point1,
@@ -234,27 +234,27 @@ namespace UCT.Service
             nearestPoint = Vector2.zero;
             lineStart = Vector2.zero;
             lineEnd = Vector2.zero;
-            var nearestDistance = float.MaxValue; 
+            var nearestDistance = float.MaxValue;
             isParent = false;
 
             foreach (var box in BoxController.Instance.boxes.Where(box => Mathf.Approximately(box.localPosition.z, z)))
             {
                 for (int i = 0, j = box.GetRealPoints(false).Count - 1;
                      i < box.GetRealPoints(false).Count;
-                     j = i++) 
+                     j = i++)
                 {
                     var tempNearestPoint = GetNearestPointOnLine(point, box.GetRealPoints(false)[i],
-                            box.GetRealPoints(false)[j]); 
-                    var tempDistance = Vector2.Distance(point, tempNearestPoint); 
+                        box.GetRealPoints(false)[j]);
+                    var tempDistance = Vector2.Distance(point, tempNearestPoint);
                     if (tempDistance >= nearestDistance)
                     {
                         continue;
                     }
 
-                    nearestPoint = tempNearestPoint; 
-                    lineStart = box.GetRealPoints(false)[i]; 
-                    lineEnd = box.GetRealPoints(false)[j]; 
-                    nearestDistance = tempDistance; 
+                    nearestPoint = tempNearestPoint;
+                    lineStart = box.GetRealPoints(false)[i];
+                    lineEnd = box.GetRealPoints(false)[j];
+                    nearestDistance = tempDistance;
                     isParent = box.sonBoxDrawer.Count > 0;
                 }
             }
@@ -266,7 +266,6 @@ namespace UCT.Service
 
             checkPoint = point;
             return true;
-
         }
     }
 }
