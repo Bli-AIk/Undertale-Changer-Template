@@ -421,6 +421,7 @@ namespace UCT.EventSystem
                 {
                     MainControl.Instance.playerControl.canMove = true;
                     SettingsStorage.Pause = false;
+                    _overworldTypeWritter.OnClose = null;
                     if (useEvent)
                     {
                         SetTriggering(eventName);

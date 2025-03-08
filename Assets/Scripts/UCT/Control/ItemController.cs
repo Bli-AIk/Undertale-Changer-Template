@@ -46,8 +46,5 @@ namespace UCT.Control
         {
             ItemDictionary.Add(item.Data.DataName, item);
         }
-        
-        //TODO: fix bug 查看物品不显示HP ATK DEF 按X键时出现这个问题
-        //TODO: fix bug 点了save然后不保存然后开背包看信息会再蹦出save
     }
 }

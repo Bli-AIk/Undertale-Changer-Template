@@ -321,11 +321,9 @@ namespace UCT.Global.Core
                         continue;
                     }
 
-                    for (var j = 0; j < yieldNum && !isSkip; j++)
+                    if (yieldNum > 0)
                     {
-                        ConvertYieldString(tmpText, yieldString, j);
-                        yield return TypeWritterTagProcessor.GetTypeWritterStopTime(this);
-                        SetOverworldSpriteState(SpriteExpressionCollection.State.Speaking);
+                        yield return Timing.WaitUntilDone(Timing.RunCoroutine(_YieldText(tmpText, yieldNum, yieldString)));
                     }
                 }
 
@@ -349,6 +347,21 @@ namespace UCT.Global.Core
 
             SetOverworldSpriteState(SpriteExpressionCollection.State.Default);
             CloseTyping();
+        }
+
+        private IEnumerator<float> _YieldText(TMP_Text tmpText, int yieldNum, string yieldString)
+        {
+            for (var j = 0; j < yieldNum; j++)
+            {
+                ConvertYieldString(tmpText, yieldString, j);
+                if (isSkip)
+                {
+                    continue;
+                }
+
+                yield return TypeWritterTagProcessor.GetTypeWritterStopTime(this);
+                SetOverworldSpriteState(SpriteExpressionCollection.State.Speaking);
+            }
         }
 
         private bool IsTypingPassText()
