@@ -220,10 +220,6 @@ namespace UCT.Battle
                 return;
             }
 
-            MainControl.Instance.playerControl.hp -= boxHitList[i];
-            MainControl.Instance.playerControl.missTime = MainControl.Instance.playerControl.missTimeMax;
-            AudioController.Instance.PlayFx(5, MainControl.Instance.AudioControl.fxClipUI);
-
             MainControl.Instance.selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
 
             var r = Random.Range(0, 0.025f);
@@ -235,12 +231,14 @@ namespace UCT.Battle
                 new Vector3(r * MathUtilityService.GetRandomUnit(), 0, r * MathUtilityService.GetRandomUnit()), v3Spin,
                 4,
                 1f / 60f * 4f * 1.5f, "3D CameraPoint", Ease.OutElastic);
+            
+            AudioController.Instance.PlayFx(5, MainControl.Instance.AudioControl.fxClipUI);
+            MainControl.HitPlayer(boxHitList[i]);
+
             if (MainControl.Instance.playerControl.hp <= 0)
             {
                 MainControl.Instance.battlePlayerController.KillPlayer(MainControl.Instance);
             }
-
-
             if (!SettingsStorage.IsSimplifySfx)
             {
                 MainControl.Instance.battlePlayerController.hitVolume.weight = 1;

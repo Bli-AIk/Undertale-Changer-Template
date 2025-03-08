@@ -1,5 +1,6 @@
 using DG.Tweening;
 using TMPro;
+using UCT.Control;
 using UCT.Global.Audio;
 using UCT.Global.Core;
 using UCT.Service;
@@ -87,6 +88,12 @@ namespace UCT.Battle
                                               .enemiesControllers[select].def +
                                           Random.Range(0, 2)));
 
+            WeaponItem weaponItem = null;
+            if (DataHandlerService.GetItemFormDataName(MainControl.Instance.playerControl.wearArmor) is WeaponItem weapon)
+            {
+                weaponItem = weapon;
+                weaponItem.OnAttack(0);
+            }
 
             if (hitDamage <= 0)
             {
@@ -94,11 +101,13 @@ namespace UCT.Battle
 
                 _hitUI.text = "<color=grey>MISS";
                 _hitUIb.text = "MISS";
+                weaponItem?.OnMiss(0);
             }
             else
             {
                 _hitUI.text = $"<color=red>{hitDamage}";
                 _hitUIb.text = hitDamage.ToString();
+                weaponItem?.OnHit(0);
             }
         }
 

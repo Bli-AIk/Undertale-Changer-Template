@@ -1155,7 +1155,7 @@ namespace UCT.Battle
                 _typeWritter.StartTypeWritter(
                     DataHandlerService.ItemDataNameGetLanguagePackUseText(dataName), _textUI);
                 var item = DataHandlerService.GetItemFormDataName(dataName);
-                ItemController.UseItem(item, globalItemIndex + 1);
+                item.OnUse(globalItemIndex + 1);
 
                 SpriteChange();
                 _itemScroller.Close();

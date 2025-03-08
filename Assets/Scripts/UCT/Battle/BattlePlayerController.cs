@@ -325,11 +325,6 @@ namespace UCT.Battle
                 ChangePlayerColor(MainControl.Instance.BattleControl.playerColorList[5],
                     (BattleControl.PlayerColor)5, 2.5f, (PlayerDirection)3);
             }
-
-            if (Input.GetKeyDown(KeyCode.P))
-            {
-                MainControl.Instance.playerControl.hp = 0;
-            }
         }
 
         private void PlayerMoving()

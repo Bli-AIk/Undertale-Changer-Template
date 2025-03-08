@@ -1,7 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using UCT.Global.Audio;
 using UCT.Global.Core;
+using UCT.Service;
+// ReSharper disable UnusedMemberInSuper.Global
+
 // ReSharper disable UnusedMember.Global
 // ReSharper disable UnusedType.Global
 
@@ -50,16 +52,25 @@ namespace UCT.Control
 
         public ItemData Data { get; }
 
+        /// <summary>
+        /// 使用了物品
+        /// </summary>
         public void OnUse(int index)
         {
             OnUseAction?.Invoke(index);
         }
 
+        /// <summary>
+        /// 查看了物品
+        /// </summary>
         public void OnCheck(int index)
         {
             _onCheckAction?.Invoke(index);
         }
 
+        /// <summary>
+        /// 丢弃了物品
+        /// </summary>
         public void OnDrop(int index)
         {
             _onDropAction?.Invoke(index);
@@ -99,6 +110,9 @@ namespace UCT.Control
             OnUseAction += ConsumeFoodAndSpawnChild;
         }
 
+        /// <summary>
+        /// 消耗食物并生成子物品
+        /// </summary>
         private void ConsumeFoodAndSpawnChild(int index)
         {
             MainControl.Instance.playerControl.hp += Data.Value;
@@ -142,24 +156,33 @@ namespace UCT.Control
         protected ItemData Data;
         protected Action<int> OnUse, OnCheck, OnDrop;
 
-        public virtual T SetData(string dataName, int value)
+        public T SetData(string dataName, int value)
         {
             Data = new ItemData(dataName, value);
             return (T)this;
         }
 
+        /// <summary>
+        /// 设置使用物品事件
+        /// </summary>
         public T SetOnUse(Action<int> action)
         {
             OnUse += action;
             return (T)this;
         }
 
+        /// <summary>
+        /// 设置检查物品事件
+        /// </summary>
         public T SetOnCheck(Action<int> action)
         {
             OnCheck += action;
             return (T)this;
         }
 
+        /// <summary>
+        /// 设置丢弃物品事件
+        /// </summary>
         public T SetOnDrop(Action<int> action)
         {
             OnDrop += action;
@@ -226,7 +249,6 @@ namespace UCT.Control
 
     public class EquipmentItemBuilder<T> : GameItemBuilder<T> where T : EquipmentItemBuilder<T>
     {
-        //TODO: 在对应区域调用这些Action
         protected Action<int> OnSwitch, OnEquip, OnRemove, OnUpdate;
 
         public T SetOnSwitch(Action<int> action)
@@ -263,7 +285,6 @@ namespace UCT.Control
     {
         private readonly Action<int> _onAttackAction;
         private readonly Action<int> _onHitAction;
-        private readonly Action<int> _onHitMissAction;
         private readonly Action<int> _onMissAction;
 
         protected internal WeaponItem(ItemData data,
@@ -276,44 +297,60 @@ namespace UCT.Control
             Action<int> onUpdate,
             Action<int> onAttack,
             Action<int> onMiss,
-            Action<int> onHit,
-            Action<int> onHitMiss)
+            Action<int> onHit)
             : base(data, onUse, onCheck, onDrop, onSwitch, onEquip, onRemove, onUpdate)
         {
             _onAttackAction = onAttack;
             _onMissAction = onMiss;
             _onHitAction = onHit;
-            _onHitMissAction = onHitMiss;
 
             OnUseAction += EquipWeapon;
         }
 
-        private static void EquipWeapon(int index)
+        private void EquipWeapon(int index)
         {
-            (MainControl.Instance.playerControl.wearWeapon, MainControl.Instance.playerControl.items[index]) = (
-                MainControl.Instance.playerControl.items[index], MainControl.Instance.playerControl.wearWeapon);
+            OnSwitch(index);
+            OnEquip(index);
+
+            (MainControl.Instance.playerControl.wearWeapon, MainControl.Instance.playerControl.items[index]) =
+                (MainControl.Instance.playerControl.items[index], MainControl.Instance.playerControl.wearWeapon);
             AudioController.Instance.PlayFx(3, MainControl.Instance.AudioControl.fxClipUI);
+
+            if (DataHandlerService.GetItemFormDataName(MainControl.Instance.playerControl.items[index]) is not
+                EquipmentItem
+                unEquippedItem)
+            {
+                return;
+            }
+
+            unEquippedItem.OnSwitch(index);
+            unEquippedItem.OnRemove(index);
         }
 
 
+        
+        /// <summary>
+        /// 武器攻击敌人时触发（无论是否击中）
+        /// </summary>
         public void OnAttack(int index)
         {
             _onAttackAction?.Invoke(index);
         }
 
+        /// <summary>
+        /// 武器未击中敌人时触发
+        /// </summary>
         public void OnMiss(int index)
         {
             _onMissAction?.Invoke(index);
         }
 
+        /// <summary>
+        /// 武器击中敌人时触发
+        /// </summary>
         public void OnHit(int index)
         {
             _onHitAction?.Invoke(index);
-        }
-
-        public void OnHitMiss(int index)
-        {
-            _onHitMissAction?.Invoke(index);
         }
     }
 
@@ -337,11 +374,23 @@ namespace UCT.Control
             OnUseAction += EquipArmor;
         }
 
-        private static void EquipArmor(int index)
+        private void EquipArmor(int index)
         {
+            OnSwitch(index);
+            OnEquip(index);
             (MainControl.Instance.playerControl.wearArmor, MainControl.Instance.playerControl.items[index]) = (
                 MainControl.Instance.playerControl.items[index], MainControl.Instance.playerControl.wearArmor);
             AudioController.Instance.PlayFx(3, MainControl.Instance.AudioControl.fxClipUI);
+
+            if (DataHandlerService.GetItemFormDataName(MainControl.Instance.playerControl.items[index]) is not
+                EquipmentItem
+                unEquippedItem)
+            {
+                return;
+            }
+
+            unEquippedItem.OnSwitch(index);
+            unEquippedItem.OnRemove(index);
         }
 
         public void OnDamageTaken(int index)
@@ -352,7 +401,7 @@ namespace UCT.Control
 
     public class WeaponItemBuilder : EquipmentItemBuilder<WeaponItemBuilder>
     {
-        private Action<int> _onAttack, _onMiss, _onHit, _onHitMiss;
+        private Action<int> _onAttack, _onMiss, _onHit;
 
         public WeaponItemBuilder SetOnAttack(Action<int> action)
         {
@@ -372,16 +421,10 @@ namespace UCT.Control
             return this;
         }
 
-        public WeaponItemBuilder SetOnHitMiss(Action<int> action)
-        {
-            _onHitMiss += action;
-            return this;
-        }
-
         public override GameItem Build()
         {
             return new WeaponItem(Data, OnUse, OnCheck, OnDrop, OnSwitch, OnEquip, OnRemove, OnUpdate,
-                _onAttack, _onMiss, _onHit, _onHitMiss);
+                _onAttack, _onMiss, _onHit);
         }
     }
 
@@ -400,56 +443,6 @@ namespace UCT.Control
         {
             return new ArmorItem(Data, OnUse, OnCheck, OnDrop, OnSwitch, OnEquip, OnRemove, OnUpdate,
                 _onDamageTaken);
-        }
-    }
-
-    public class ItemController
-    {
-        public Dictionary<string, GameItem> ItemDictionary { get; } = new();
-
-        public void InitializeItems()
-        {
-            var serving = new FoodItemBuilder()
-                .SetData("Serving", 5)
-                .Build();
-            AddItem(serving);
-
-            AddItem(new ParentFoodItemBuilder(serving)
-                .SetData("TwoServings", 10)
-                .Build());
-
-
-            AddItem(new WeaponItemBuilder()
-                .SetData("TKnife", 20)
-                .Build());
-
-            AddItem(new WeaponItemBuilder()
-                .SetData("PSword", 999)
-                .Build());
-
-            AddItem(new ArmorItemBuilder()
-                .SetData("TPS", 123)
-                .Build());
-
-            AddItem(new ArmorItemBuilder()
-                .SetData("WearableSth", 456)
-                .Build());
-        }
-
-        private void AddItem(GameItem item)
-        {
-            ItemDictionary.Add(item.Data.DataName, item);
-        }
-
-        public static void UseItem(GameItem item, int index)
-        {
-            item.OnUse(index + 1);
-            if (item is EquipmentItem equipmentItem)
-            {
-                equipmentItem.OnSwitch(index + 1);
-                equipmentItem.OnEquip(index + 1);
-            }
-            //TODO: 增加remove和Update
         }
     }
 }

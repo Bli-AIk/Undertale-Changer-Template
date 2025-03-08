@@ -216,6 +216,16 @@ namespace UCT.Global.Core
             }
 
             SettingsShortcuts();
+
+            if (DataHandlerService.GetItemFormDataName(playerControl.wearWeapon) is EquipmentItem weapon)
+            {
+                weapon.OnUpdate(0);
+            }
+
+            if (DataHandlerService.GetItemFormDataName(playerControl.wearArmor) is EquipmentItem armor)
+            {
+                armor.OnUpdate(0);
+            }
         }
 
         public static void SetLanguagePackageExternalNumber(int value)
@@ -463,6 +473,18 @@ namespace UCT.Global.Core
             {
                 SettingsStorage.FullScreen = !SettingsStorage.FullScreen;
                 GameUtilityService.SetResolution(SettingsStorage.ResolutionLevel);
+            }
+        }
+
+        public static void HitPlayer(int damage)
+        {
+            Instance.playerControl.hp -= damage;
+            Instance.playerControl.missTime = Instance.playerControl.missTimeMax;
+           
+            
+            if (DataHandlerService.GetItemFormDataName(Instance.playerControl.wearArmor) is ArmorItem armor)
+            {
+                armor.OnDamageTaken(0);
             }
         }
     }

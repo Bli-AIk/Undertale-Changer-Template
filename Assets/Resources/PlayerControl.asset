@@ -22,21 +22,21 @@ MonoBehaviour:
   missTimeMax: 1
   atk: 10
   def: 10
-  playerName: <color=#EFFD7FFF>D</color><color=#DBF37EFF>e</color><color=#C0E57DFF>b</color><color=#C0E57DFF>u</color><color=#C0E57DFF>g</color>
+  playerName: <color=#5C324DFF>D</color><color=#5C324DFF>e</color><color=#5C324DFF>b</color><color=#5D324DFF>u</color><color=#693656FF>g</color>
   items:
   - Serving
   - Serving
   - Serving
   - Serving
   - TwoServings
-  - 
+  - TKnife
   - 
   - 
   wearWeapon: PSword
   wearArmor: TPS
   canMove: 1
-  gameTime: 8753.349
-  playerLastPos: {x: 0, y: 0, z: 0}
+  gameTime: 8852.374
+  playerLastPos: {x: 9.299984, y: -2.0350032, z: 0}
   playerLastPosInBattle: {x: 0, y: 0, z: 0}
   lastScene: Example-Ruins
   saveScene: Example-Corridor

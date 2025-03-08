@@ -267,7 +267,7 @@ namespace UCT.Overworld
                                                  $"HP {MainControl.Instance.playerControl.hp}/" +
                                                  $"{MainControl.Instance.playerControl.hpMax}\n" +
                                                  $"G<indent=9.25>{MainControl.Instance.playerControl.gold}";
-                        ItemController.UseItem(item, index);
+                        item.OnUse(index);
                         SelectedItem();
                         break;
                     }
