@@ -95,13 +95,13 @@ namespace UCT.Battle
                 }
             }
 
-            yield return Timing.WaitUntilDone(Timing.RunCoroutine(_FixedTurn(turnNumber)));
+            yield return Timing.WaitUntilDone(Timing.RunCoroutine(_TestTurns0(turnNumber)));
 
             turn++;
             MainControl.Instance.selectUIController.EnterPlayerTurn();
         }
 
-        private IEnumerator<float> _FixedTurn(int turnNumber)
+        private IEnumerator<float> _TestTurns0(int turnNumber)
         {
             switch (turnNumber)
             {
