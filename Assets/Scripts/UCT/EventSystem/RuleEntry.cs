@@ -35,12 +35,6 @@ namespace UCT.EventSystem
         public List<string> triggers;
 
         /// <summary>
-        ///     该Rule的优先级
-        /// </summary>
-        public RulePriority rulePriority;
-        //TODO:实装优先级
-
-        /// <summary>
         ///     该Rule执行的方法名
         /// </summary>
         public List<string> methodNames;
@@ -99,7 +93,7 @@ namespace UCT.EventSystem
         {
             return name == other.name && isGlobalTriggeredBy == other.isGlobalTriggeredBy &&
                    Equals(triggeredBy, other.triggeredBy) && isGlobalTriggers == other.isGlobalTriggers &&
-                   Equals(triggers, other.triggers) && rulePriority == other.rulePriority &&
+                   Equals(triggers, other.triggers) &&
                    Equals(methodNames, other.methodNames) && Equals(firstStringParams, other.firstStringParams) &&
                    Equals(secondStringParams, other.secondStringParams) &&
                    Equals(thirdStringParams, other.thirdStringParams) &&
@@ -123,7 +117,6 @@ namespace UCT.EventSystem
             hashCode.Add(triggeredBy);
             hashCode.Add(isGlobalTriggers);
             hashCode.Add(triggers);
-            hashCode.Add((int)rulePriority);
             hashCode.Add(methodNames);
             hashCode.Add(firstStringParams);
             hashCode.Add(secondStringParams);
@@ -370,13 +363,5 @@ namespace UCT.EventSystem
         None,
         And,
         Or
-    }
-
-    [Serializable]
-    public enum RulePriority
-    {
-        Low,
-        Medium,
-        High
     }
 }

@@ -133,14 +133,11 @@ namespace Editor.Inspector.EventSystem
                     var fieldWidth = rect.width / 4 - 10;
 
                     //  line 1
-                    var nameLabelRect = new Rect(rect.x, rect.y, fieldWidth, EditorGUIUtility.singleLineHeight);
-                    var nameFieldRect =
-                        new Rect(rect.x + fieldWidth + 5, rect.y, fieldWidth, EditorGUIUtility.singleLineHeight);
 
-                    var priorityLabelRect = new Rect(rect.x + 2 * (fieldWidth + 5), rect.y, fieldWidth,
-                        EditorGUIUtility.singleLineHeight);
-                    var priorityFieldRect = new Rect(rect.x + 3 * (fieldWidth + 5), rect.y, fieldWidth,
-                        EditorGUIUtility.singleLineHeight);
+                    var nameLabelRect = new Rect(rect.x, rect.y, fieldWidth * 2, EditorGUIUtility.singleLineHeight);
+                    var nameFieldRect =
+                        new Rect(rect.x + fieldWidth * 2 + 10, rect.y, fieldWidth * 2,
+                            EditorGUIUtility.singleLineHeight);
 
                     GUI.Label(nameLabelRect, "Name");
                     var nameProperty = element.FindPropertyRelative("name");
@@ -155,36 +152,6 @@ namespace Editor.Inspector.EventSystem
                     {
                         RenameDetection(nameProperty);
                     }
-
-                    GUI.Label(priorityLabelRect, "Priority");
-                    var rulePriorityProperty = element.FindPropertyRelative("rulePriority");
-                    var rulePriority = (RulePriority)rulePriorityProperty.enumValueIndex;
-                    var defaultColor = GUI.color;
-
-                    GUI.color = rulePriority switch
-                    {
-                        RulePriority.Low => Color.green,
-                        RulePriority.Medium => Color.yellow,
-                        RulePriority.High => Color.red,
-                        _ => throw new ArgumentOutOfRangeException()
-                    };
-
-                    var rulePriorityStyle = new GUIStyle(EditorStyles.popup)
-                    {
-                        fontStyle = FontStyle.Bold,
-                        alignment = TextAnchor.MiddleCenter
-                    };
-
-                    var rulePriorityOptions = Enum.GetNames(typeof(RulePriority));
-
-                    rulePriorityProperty.enumValueIndex = EditorGUI.Popup(
-                        priorityFieldRect,
-                        rulePriorityProperty.enumValueIndex,
-                        rulePriorityOptions,
-                        rulePriorityStyle
-                    );
-
-                    GUI.color = defaultColor;
 
                     //  line 2
                     var triggeredByLabelRect =
@@ -433,7 +400,7 @@ namespace Editor.Inspector.EventSystem
 
                             var item = factModifications.GetArrayElementAtIndex(i);
                             var fact = item.FindPropertyRelative("fact");
-                            
+
                             if (i >= isGlobalFactModifications.arraySize)
                             {
                                 isGlobalFactModifications.arraySize = i + 1;
@@ -547,7 +514,9 @@ namespace Editor.Inspector.EventSystem
                             for (var j = 0; j < methodTypeKeys.Length; j++)
                             {
                                 var popupKey = methodTypeKeys[j];
-                                popupKey = !string.IsNullOrEmpty(popupKey) ? $"{methodTypeKeys[j]}/{methodKeys[j]}" : methodKeys[j];
+                                popupKey = !string.IsNullOrEmpty(popupKey)
+                                    ? $"{methodTypeKeys[j]}/{methodKeys[j]}"
+                                    : methodKeys[j];
 
                                 popupKeys.Add(popupKey);
                             }
@@ -728,14 +697,14 @@ namespace Editor.Inspector.EventSystem
                                         new GUIStyle(GUI.skin.label) { normal = { textColor = Color.gray } });
                                     break;
                                 }
-                                
+
                                 case "scene":
                                 {
                                     methodNameRect.width /= 3;
                                     itemFirstString.stringValue =
                                         EditorGUI.TextField(methodNameRect, itemFirstString.stringValue);
                                     methodNameRect.x += methodNameRect.width + 2.5f;
-                                    
+
                                     if (!bool.TryParse(itemSecondString.stringValue, out var boolValue))
                                     {
                                         boolValue = false;
@@ -743,16 +712,16 @@ namespace Editor.Inspector.EventSystem
 
                                     itemSecondString.stringValue =
                                         EditorGUI.ToggleLeft(methodNameRect, "Is Mute BGM", boolValue).ToString();
-                                    
+
                                     methodNameRect.x += methodNameRect.width + 2.5f;
-                                    
+
                                     var value = TextProcessingService
                                         .StringVector2ToRealVector2(itemThirdString.stringValue);
                                     itemThirdString.stringValue = TextProcessingService.RealVector2ToStringVector2
                                         (EditorGUI.Vector2Field(methodNameRect, new GUIContent(), value));
                                     break;
                                 }
-                                
+
                                 default:
                                 {
                                     if (tag != "  ")

@@ -497,9 +497,9 @@ namespace Editor.Inspector.EventSystem
 
             #region line 1
 
-            var nameLabelRect = new Rect(rect.x, rect.y, fieldWidth, EditorGUIUtility.singleLineHeight);
+            var nameLabelRect = new Rect(rect.x, rect.y, fieldWidth * 2, EditorGUIUtility.singleLineHeight);
             var nameFieldRect =
-                new Rect(rect.x + fieldWidth + 5, rect.y, fieldWidth, EditorGUIUtility.singleLineHeight);
+                new Rect(rect.x + fieldWidth * 2 + 10, rect.y, fieldWidth * 2, EditorGUIUtility.singleLineHeight);
 
             var priorityLabelRect = new Rect(rect.x + 2 * (fieldWidth + 5), rect.y, fieldWidth,
                 EditorGUIUtility.singleLineHeight);
@@ -519,36 +519,6 @@ namespace Editor.Inspector.EventSystem
             {
                 RenameDetection(element);
             }
-
-            GUI.Label(priorityLabelRect, "Priority");
-            var rulePriorityProperty = element.FindPropertyRelative("rulePriority");
-            var rulePriority = (RulePriority)rulePriorityProperty.enumValueIndex;
-            var defaultColor = GUI.color;
-
-            GUI.color = rulePriority switch
-            {
-                RulePriority.Low => Color.green,
-                RulePriority.Medium => Color.yellow,
-                RulePriority.High => Color.red,
-                _ => throw new ArgumentOutOfRangeException()
-            };
-
-            var rulePriorityStyle = new GUIStyle(EditorStyles.popup)
-            {
-                fontStyle = FontStyle.Bold,
-                alignment = TextAnchor.MiddleCenter
-            };
-
-            var rulePriorityOptions = Enum.GetNames(typeof(RulePriority));
-
-            rulePriorityProperty.enumValueIndex = EditorGUI.Popup(
-                priorityFieldRect,
-                rulePriorityProperty.enumValueIndex,
-                rulePriorityOptions,
-                rulePriorityStyle
-            );
-
-            GUI.color = defaultColor;
 
             #endregion
 
