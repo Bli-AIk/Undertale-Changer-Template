@@ -87,6 +87,13 @@ namespace UCT.Control
             OnUseAction = onUse;
             _onCheckAction = onCheck;
             _onDropAction = onDrop;
+
+            _onDropAction += DeleteItem;
+        }
+
+        private static void DeleteItem(int index)
+        {
+            MainControl.Instance.playerControl.items[index] = null;
         }
 
         /// <summary>
