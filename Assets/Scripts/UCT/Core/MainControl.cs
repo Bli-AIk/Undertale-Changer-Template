@@ -333,7 +333,7 @@ namespace UCT.Core
             if (SceneManager.GetActiveScene().name != "Start")
             {
                 var sceneTextsAsset =
-                    DataHandlerService.LoadLanguageData($"Overworld\\{SceneManager.GetActiveScene().name}",
+                    DataHandlerService.LoadLanguageData($"Scene\\{SceneManager.GetActiveScene().name}",
                         languagePackId);
                 LanguagePackControl.sceneTexts = DataHandlerService.LoadItemData(sceneTextsAsset);
                 LanguagePackControl.sceneTexts =

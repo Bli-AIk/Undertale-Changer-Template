@@ -31,7 +31,7 @@ namespace UCT.Scene
             _textMessage.color = Color.clear;
             AudioController.Instance.PlayFx(11, MainControl.Instance.AudioControl.fxClipUI);
 
-            var text = DataHandlerService.LoadLanguageData($"Overworld\\{SceneManager.GetActiveScene().name}",
+            var text = DataHandlerService.LoadLanguageData($"Scene\\{SceneManager.GetActiveScene().name}",
                 MainControl.Instance.languagePackId);
             var lines = text.Split(new[] { '\n' }, StringSplitOptions.None);
             var noticeText = string.Join("\n", lines.Take(lines.Length - 1));
