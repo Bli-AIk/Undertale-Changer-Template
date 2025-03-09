@@ -939,10 +939,15 @@ namespace UCT.Battle
                 }
                 case MercyType.Flee:
                 {
+                    //TODO:补全
                     break;
                 }
                 case MercyType.ActLike:
                 {
+                    var realIndex = enemy.MercyTypes.TakeWhile((t, index) => index != optionLayerIndex)
+                        .Count(mercyType => mercyType == MercyType.ActLike);
+                    var options = enemy.GetActLikeOptions();
+                    options[realIndex]?.Invoke();
                     break;
                 }
                 default:

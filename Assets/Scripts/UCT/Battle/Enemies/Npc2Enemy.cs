@@ -33,12 +33,16 @@ namespace UCT.Battle.Enemies
             };
         }
 
-        public MercyType[] MercyTypes => new[] { MercyType.Mercy, MercyType.Flee };
+        public MercyType[] MercyTypes => new[] { MercyType.Mercy, MercyType.Flee, MercyType.ActLike };
 
 
         public Action[] GetActLikeOptions()
         {
-            return Array.Empty<Action>();
+            
+            return new Action[]
+            {
+                () => Debug.Log("NPC2类Mercy选项1")
+            };
         }
 
         public IEnumerator<float> _EnemyTurns(ObjectPool bulletPool, ObjectPool boardPool)
