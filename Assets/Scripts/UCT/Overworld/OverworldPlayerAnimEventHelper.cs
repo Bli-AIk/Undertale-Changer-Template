@@ -1,5 +1,5 @@
-﻿using UCT.Global.Audio;
-using UCT.Global.Core;
+﻿using UCT.Audio;
+using UCT.Core;
 using UnityEngine;
 using Random = UnityEngine.Random;
 

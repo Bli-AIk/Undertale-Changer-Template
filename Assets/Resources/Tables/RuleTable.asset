@@ -19,7 +19,6 @@ MonoBehaviour:
     - SaveGame
     isGlobalTriggers: 0
     triggers: []
-    rulePriority: 0
     methodNames:
     - null:OpenSaveBox
     firstStringParams:
@@ -28,57 +27,12 @@ MonoBehaviour:
     - 
     thirdStringParams:
     - 
+    objectParams:
+    - {fileID: 0}
     isGlobalMethodEvents: 00
     useMethodEvents: 000101
     methodEvents:
     - SaveGame
-    - TestEvent
-    - TestEvent
-    useRuleCriterion: 0
-    ruleCriterion:
-      isResultReversed: 0
-      isGlobal: 0
-      fact:
-        name: 
-        value: 0
-        area: 0
-        scene: 
-      compare: 0
-      detection: 0
-      operation: 1
-      criteria:
-      - isResultReversed: 0
-        isGlobal: 0
-        fact:
-          name: Fact1
-          value: 0
-          area: 0
-          scene: 
-        compare: 2
-        detection: 0
-        operation: 0
-        criteria: []
-    isGlobalFactModifications: 
-    factModifications: []
-  - name: InBattle
-    isGlobalTriggeredBy: 1
-    triggeredBy:
-    - InBattle
-    isGlobalTriggers: 0
-    triggers: []
-    rulePriority: 0
-    methodNames:
-    - null:EnterBattleScene
-    firstStringParams:
-    - Plot
-    secondStringParams:
-    - 
-    thirdStringParams:
-    - 
-    isGlobalMethodEvents: 00
-    useMethodEvents: 000101
-    methodEvents:
-    - InBattle
     - TestEvent
     - TestEvent
     useRuleCriterion: 0

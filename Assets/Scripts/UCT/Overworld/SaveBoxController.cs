@@ -1,12 +1,12 @@
 ﻿using System;
 using Plugins.Timer.Source;
 using TMPro;
+using UCT.Audio;
 using UCT.Control;
-using UCT.Global.Audio;
-using UCT.Global.Core;
-using UCT.Global.Settings;
-using UCT.Global.UI;
+using UCT.Core;
 using UCT.Service;
+using UCT.Settings;
+using UCT.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 

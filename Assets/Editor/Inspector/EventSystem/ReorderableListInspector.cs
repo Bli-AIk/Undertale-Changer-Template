@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using DG.Tweening;
+using UCT.Battle.BattleConfigs;
 using UCT.EventSystem;
 using UCT.Service;
 using UnityEditor;
@@ -26,7 +28,10 @@ namespace Editor.Inspector.EventSystem
         private void OnEnable()
         {
             InitializeReorderableList();
+            OnEnableAdd();
         }
+
+        protected abstract void OnEnableAdd();
 
         protected abstract void DrawElement(Rect rect, SerializedProperty element, int index);
 
@@ -58,7 +63,7 @@ namespace Editor.Inspector.EventSystem
             var path = GetAssetPath(serializedObject);
             if (!path.StartsWith(basePath))
             {
-                UCT.Other.Debug.LogError("错误：路径不在 Assets/Resources/Tables 内");
+                UCT.Debug.LogError("错误：路径不在 Assets/Resources/Tables 内");
                 return "";
             }
 
@@ -72,7 +77,7 @@ namespace Editor.Inspector.EventSystem
             }
 
 
-            UCT.Other.Debug.LogError("错误：路径是 Assets/Resources/Tables 本身，而不是其中的文件或子文件夹");
+            UCT.Debug.LogError("错误：路径是 Assets/Resources/Tables 本身，而不是其中的文件或子文件夹");
             return "";
         }
 
@@ -155,7 +160,7 @@ namespace Editor.Inspector.EventSystem
         {
             if (string.IsNullOrEmpty(IconPath))
             {
-                UCT.Other.Debug.Log($"{IconPath} is Empty!");
+                UCT.Debug.Log($"{IconPath} is Empty!");
                 return base.RenderStaticPreview(assetPath, subAssets, width, height);
             }
 
@@ -177,6 +182,8 @@ namespace Editor.Inspector.EventSystem
     {
         protected override string PropertyName => "facts";
         protected override string IconPath => "Icons/EventSystem/Inventory.png";
+
+        protected override void OnEnableAdd() { }
 
         protected override void DrawElement(Rect rect, SerializedProperty element, int index)
         {
@@ -248,6 +255,7 @@ namespace Editor.Inspector.EventSystem
     {
         protected override string PropertyName => "events";
         protected override string IconPath => "Icons/EventSystem/Bolt.png";
+        protected override void OnEnableAdd() { }
 
         protected override void DrawElement(Rect rect, SerializedProperty element, int index)
         {
@@ -390,8 +398,29 @@ namespace Editor.Inspector.EventSystem
             { CriteriaCompare.LessThan, "<" }
         };
 
+        private string[] _battleConfigClassNames;
+        private int _selectedIndex;
+
         protected override string PropertyName => "rules";
         protected override string IconPath => "Icons/EventSystem/Rule.png";
+
+        protected override void OnEnableAdd()
+        {
+            _battleConfigClassNames = GetBattleConfigClassNames();
+        }
+
+        public static string[] GetBattleConfigClassNames()
+        {
+            var interfaceType = typeof(IBattleConfig);
+            var assembly = Assembly.Load("Assembly-CSharp");
+
+            var classNames = assembly.GetTypes()
+                .Where(type => interfaceType.IsAssignableFrom(type) && !type.IsInterface && !type.IsAbstract)
+                .Select(type => type.Name)
+                .ToList();
+
+            return classNames.ToArray();
+        }
 
         public static int CalculateCriteriaSize(SerializedProperty criteria, int maxDepth = 5)
         {
@@ -444,6 +473,7 @@ namespace Editor.Inspector.EventSystem
             var firstStringParams = element.FindPropertyRelative("firstStringParams");
             var secondStringParams = element.FindPropertyRelative("secondStringParams");
             var thirdStringParams = element.FindPropertyRelative("thirdStringParams");
+            var objectParams = element.FindPropertyRelative("objectParams");
             var useMethodEvents = element.FindPropertyRelative("useMethodEvents");
             var isGlobalMethodEvents = element.FindPropertyRelative("isGlobalMethodEvents");
             var methodEvents = element.FindPropertyRelative("methodEvents");
@@ -975,6 +1005,14 @@ namespace Editor.Inspector.EventSystem
                     var itemThirdString = thirdStringParams.GetArrayElementAtIndex(i);
 
 
+                    if (i >= objectParams.arraySize)
+                    {
+                        objectParams.arraySize = i + 1;
+                    }
+
+                    var objectParam = objectParams.GetArrayElementAtIndex(i);
+
+
                     switch (tag)
                     {
                         case "Vector2Ease":
@@ -1104,6 +1142,22 @@ namespace Editor.Inspector.EventSystem
                             break;
                         }
 
+                        case "IBattleConfig":
+                        {
+                            _selectedIndex = Array.IndexOf(_battleConfigClassNames,
+                                itemFirstString.stringValue);
+                            if (_selectedIndex < 0 || _selectedIndex >= _battleConfigClassNames.Length)
+                            {
+                                _selectedIndex = 0;
+                            }
+
+                            _selectedIndex = EditorGUI.Popup(methodNameRect, _selectedIndex,
+                                _battleConfigClassNames);
+
+                            itemFirstString.stringValue = _battleConfigClassNames[_selectedIndex];
+                            break;
+                        }
+
                         default:
                         {
                             if (tag != "  ")
@@ -1111,7 +1165,9 @@ namespace Editor.Inspector.EventSystem
                                 UnityEngine.Debug.Log($"Case {tag} is not defined");
                             }
 
-                            goto case "string";
+                            itemFirstString.stringValue =
+                                EditorGUI.TextField(methodNameRect, itemFirstString.stringValue);
+                            break;
                         }
                     }
 
@@ -1139,7 +1195,7 @@ namespace Editor.Inspector.EventSystem
             var eventEntries = EntrySaver.GetEventEntry(true, sceneName);
             if (triggeredByList == null || eventEntries == null || eventEntries.Length == 0)
             {
-                UCT.Other.Debug.LogError("triggeredBy列表或EntrySaver.events为空，无法保证唯一性。");
+                UCT.Debug.LogError("triggeredBy列表或EntrySaver.events为空，无法保证唯一性。");
                 return;
             }
 
@@ -1587,7 +1643,7 @@ namespace Editor.Inspector.EventSystem
 
             if (currentDepth >= maxDepth)
             {
-                UCT.Other.Debug.LogWarning("Reached maximum depth of criteria parsing. Skipping deeper levels.");
+                UCT.Debug.LogWarning("Reached maximum depth of criteria parsing. Skipping deeper levels.");
                 return criteriaList;
             }
 

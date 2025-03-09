@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using UCT.Global.UI;
+using UCT.UI;
 using UnityEngine;
 using Random = UnityEngine.Random;
 

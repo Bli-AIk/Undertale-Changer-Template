@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Alchemy.Inspector;
-using UCT.Global.Core;
+using UCT.Core;
 using UCT.Overworld.FiniteStateMachine;
 using UCT.Service;
 using UnityEngine;

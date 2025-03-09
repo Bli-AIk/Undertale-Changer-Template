@@ -277,7 +277,7 @@ namespace UCT.Overworld.FiniteStateMachine
                 return Vector3.Distance(transform.position, target.position);
             }
 
-            Other.Debug.LogError("目标物体为空。");
+            Debug.LogError("目标物体为空。");
             return 0f;
         }
 
@@ -298,7 +298,7 @@ namespace UCT.Overworld.FiniteStateMachine
                 return Mathf.Abs(angle);
             }
 
-            Other.Debug.LogError("目标物体为空。");
+            Debug.LogError("目标物体为空。");
             return 0f;
         }
     }

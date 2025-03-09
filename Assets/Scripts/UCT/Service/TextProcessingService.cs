@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using UCT.Global.Core;
+using UCT.Core;
 using UnityEngine;
 
 namespace UCT.Service
@@ -133,7 +133,7 @@ namespace UCT.Service
             }
 
             var nullText = $"<color=yellow><color=#FF6666>{screen}</color> is null!</color>";
-            Other.Debug.LogError(nullText);
+            Debug.LogError(nullText);
             return nullText;
         }
 
@@ -217,7 +217,7 @@ namespace UCT.Service
         {
             if (startIndex < 0 || endIndex >= inputString.Length || startIndex > endIndex)
             {
-                Other.Debug.Log("无效的起始和结束位置");
+                Debug.Log("无效的起始和结束位置");
                 return inputString;
             }
 
@@ -407,7 +407,7 @@ namespace UCT.Service
                 return new Vector2(x, y);
             }
 
-            Other.Debug.LogWarning($"输入的字符串 \"{stringVector2}\" 格式不正确，应形如 (x,y)。");
+            Debug.LogWarning($"输入的字符串 \"{stringVector2}\" 格式不正确，应形如 (x,y)。");
             return new Vector2();
         }
 

@@ -29,6 +29,4 @@ namespace UCT.EventSystem
             return HashCode.Combine(name, isTriggering, closeTime);
         }
     }
-
-    //TODO:可能的触发事件的方式: OWTrigger, 特定时间触发, 角色状态（数据检测）触发, 对话中触发, 使用/检查/丢弃特定物品触发, etc.
 }

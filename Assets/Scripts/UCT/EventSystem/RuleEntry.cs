@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Object = UnityEngine.Object;
 
 namespace UCT.EventSystem
 {
@@ -53,6 +54,11 @@ namespace UCT.EventSystem
         ///     该Rule执行的方法传入的第三个字符串形参
         /// </summary>
         public List<string> thirdStringParams;
+
+        /// <summary>
+        ///     该Rule执行的方法传入的Unity Object形参
+        /// </summary>
+        public List<Object> objectParams;
 
         /// <summary>
         ///     是否让useMethodEvents使用全局的EventTable
@@ -323,7 +329,7 @@ namespace UCT.EventSystem
 
         private static void InvalidOperationLogError(int i, string name)
         {
-            Other.Debug.LogWarning(
+            Debug.LogWarning(
                 $"Invalid operation '{name}' at index {i - 1}. This will cause calculation anomalies.");
         }
 

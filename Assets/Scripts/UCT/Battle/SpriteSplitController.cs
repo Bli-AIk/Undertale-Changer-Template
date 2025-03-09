@@ -1,8 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UCT.Global.Audio;
-using UCT.Global.Core;
+using UCT.Audio;
+using UCT.Core;
 using UnityEngine;
 
 namespace UCT.Battle

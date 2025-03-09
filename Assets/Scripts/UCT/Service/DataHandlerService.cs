@@ -3,9 +3,9 @@ using System.Globalization;
 using System.IO;
 using System.Text;
 using UCT.Control;
-using UCT.Global.Core;
-using UCT.Global.Settings;
-using UCT.Global.UI;
+using UCT.Core;
+using UCT.Settings;
+using UCT.UI;
 using UnityEngine;
 
 namespace UCT.Service

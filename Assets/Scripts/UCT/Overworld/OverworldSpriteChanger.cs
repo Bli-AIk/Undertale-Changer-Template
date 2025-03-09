@@ -1,7 +1,7 @@
 using System;
 using Alchemy.Inspector;
 using UCT.Control;
-using UCT.Global.Core;
+using UCT.Core;
 using UnityEngine;
 using Random = UnityEngine.Random;
 

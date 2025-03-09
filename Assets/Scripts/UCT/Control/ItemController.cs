@@ -24,17 +24,17 @@ namespace UCT.Control
 
             AddItem(new WeaponItemBuilder()
                 .SetData("PSword", 999)
-                .SetOnSwitch(_ => Other.Debug.Log("切换了PSword"))
-                .SetOnEquip(_ => Other.Debug.Log("装备了PSword"))
-                .SetOnRemove(_ => Other.Debug.Log("卸下了PSword"))
-                .SetOnAttack(_ => Other.Debug.Log("用PSword攻击了"))
-                .SetOnHit(_ => Other.Debug.Log("用PSword打中了"))
-                .SetOnMiss(_ => Other.Debug.Log("用PSword没打中"))
+                .SetOnSwitch(_ => Debug.Log("切换了PSword"))
+                .SetOnEquip(_ => Debug.Log("装备了PSword"))
+                .SetOnRemove(_ => Debug.Log("卸下了PSword"))
+                .SetOnAttack(_ => Debug.Log("用PSword攻击了"))
+                .SetOnHit(_ => Debug.Log("用PSword打中了"))
+                .SetOnMiss(_ => Debug.Log("用PSword没打中"))
                 .Build());
 
             AddItem(new ArmorItemBuilder()
                 .SetData("TPS", 123)
-                .SetOnDamageTaken(_ => Other.Debug.Log("击中了TPS"))
+                .SetOnDamageTaken(_ => Debug.Log("击中了TPS"))
                 .Build());
 
             AddItem(new ArmorItemBuilder()

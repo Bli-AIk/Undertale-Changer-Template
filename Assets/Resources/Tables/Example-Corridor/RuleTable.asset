@@ -19,7 +19,6 @@ MonoBehaviour:
     - Plot
     isGlobalTriggers: 0
     triggers: []
-    rulePriority: 0
     methodNames:
     - string:StartOverworldTypeWritter
     firstStringParams:
@@ -30,10 +29,12 @@ MonoBehaviour:
     thirdStringParams:
     - 
     - 
+    objectParams:
+    - {fileID: 0}
     isGlobalMethodEvents: 0001
     useMethodEvents: 010101
     methodEvents:
-    - InBattleLocal
+    - InBattle
     - SaveGame
     - TestEvent
     useRuleCriterion: 0
@@ -62,27 +63,28 @@ MonoBehaviour:
         criteria: []
     isGlobalFactModifications: 
     factModifications: []
-  - name: InBattleLocal
+  - name: InBattle
     isGlobalTriggeredBy: 0
     triggeredBy:
-    - InBattleLocal
+    - InBattle
     isGlobalTriggers: 0
     triggers: []
-    rulePriority: 0
     methodNames:
-    - null:EnterBattleScene
+    - IBattleConfig:EnterBattleScene
     firstStringParams:
-    - Plot
+    - DemoBattle
     secondStringParams:
-    - 
+    - 0.5
     - 
     thirdStringParams:
+    - 0.5
     - 
-    - 
-    isGlobalMethodEvents: 0101
+    objectParams:
+    - {fileID: 8300000, guid: 1c53cff84e1c2cd4197f0a6c123bfc34, type: 3}
+    isGlobalMethodEvents: 0001
     useMethodEvents: 000101
     methodEvents:
-    - SaveGame
+    - Plot
     - SaveGame
     - TestEvent
     useRuleCriterion: 0

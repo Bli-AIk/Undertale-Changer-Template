@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using UCT.Global.Core;
+using UCT.Core;
 
 namespace UCT.Service
 {

@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using MEC;
+using UCT.Audio;
 using UCT.Control;
-using UCT.Extensions;
-using UCT.Global.Audio;
-using UCT.Global.Core;
-using UCT.Global.Settings;
-using UCT.Global.UI;
+using UCT.Core;
 using UCT.Service;
+using UCT.Settings;
+using UCT.UI;
 using UnityEngine;
 
 namespace UCT.Battle
@@ -339,11 +338,11 @@ namespace UCT.Battle
             };
 
             Ray2D ray = new(transform.position, dirReal);
-            Other.Debug.DrawRay(ray.origin, ray.direction, Color.blue);
+            Debug.DrawRay(ray.origin, ray.direction, Color.blue);
             var info = Physics2D.Raycast(transform.position, dirReal, jumpRayDistance);
 
             Ray2D rayF = new(transform.position, dirReal * -1);
-            Other.Debug.DrawRay(rayF.origin, rayF.direction, Color.red);
+            Debug.DrawRay(rayF.origin, rayF.direction, Color.red);
             var infoF = Physics2D.Raycast(transform.position, dirReal * -1, jumpRayDistance); //反向检测(顶头)
 
             //------------------------移动------------------------
@@ -400,10 +399,10 @@ namespace UCT.Battle
             (dirMoveY, isMoveY, dirMoveX, isMoveX) = GetMovingXy(dirMoveY, false, dirMoveX, false);
 
             Ray2D rayMoveX = new(transform.position, dirMoveX);
-            Other.Debug.DrawRay(rayMoveX.origin, rayMoveX.direction, Color.green);
+            Debug.DrawRay(rayMoveX.origin, rayMoveX.direction, Color.green);
             var infoMoveX = Physics2D.Raycast(transform.position, dirMoveX, 0.2f);
             Ray2D rayMoveY = new(transform.position, dirMoveY);
-            Other.Debug.DrawRay(rayMoveY.origin, rayMoveY.direction, new Color(0, 0.5f, 0, 1));
+            Debug.DrawRay(rayMoveY.origin, rayMoveY.direction, new Color(0, 0.5f, 0, 1));
             var infoMoveY = Physics2D.Raycast(transform.position, dirMoveY, 0.2f);
 
 
@@ -1097,7 +1096,7 @@ namespace UCT.Battle
             else
             {
                 mainControl.selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
-                Other.Debug.Log("Debug无敌模式已将血量恢复", "#FF0000");
+                Debug.Log("Debug无敌模式已将血量恢复", "#FF0000");
             }
         }
 

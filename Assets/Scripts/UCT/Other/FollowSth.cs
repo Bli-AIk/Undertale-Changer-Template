@@ -1,8 +1,8 @@
 using System;
-using UCT.Global.Core;
+using UCT.Core;
 using UnityEngine;
 
-namespace UCT.Other
+namespace UCT
 {
     public class FollowSth : MonoBehaviour
     {

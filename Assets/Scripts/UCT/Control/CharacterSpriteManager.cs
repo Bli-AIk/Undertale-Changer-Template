@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
-using UCT.Global.Core;
+using UCT.Core;
 using UnityEngine;
 
 namespace UCT.Control
@@ -29,7 +29,7 @@ namespace UCT.Control
             CharacterSpriteManager characterSpriteManager = null;
             if (string.IsNullOrWhiteSpace(key))
             {
-                Other.Debug.LogError("Key is null or empty");
+                Debug.LogError("Key is null or empty");
                 return (string.Empty, null);
             }
 
@@ -80,7 +80,7 @@ namespace UCT.Control
             var matchBinary = Regex.Match(key, @"^<([^,]+),\s*([^,]+)>$");
             if (!matchBinary.Success)
             {
-                Other.Debug.LogError($"Invalid key format: {key}");
+                Debug.LogError($"Invalid key format: {key}");
                 result = string.Empty;
                 return false;
             }
@@ -104,7 +104,7 @@ namespace UCT.Control
 
                 if (isUnknownGroup)
                 {
-                    Other.Debug.LogError($"Invalid key first part format: {key}");
+                    Debug.LogError($"Invalid key first part format: {key}");
                     result = string.Empty;
                     return true;
                 }
@@ -119,7 +119,7 @@ namespace UCT.Control
                 return true;
             }
 
-            Other.Debug.LogError($"Invalid key second part format: {key}");
+            Debug.LogError($"Invalid key second part format: {key}");
             result = string.Empty;
             return true;
         }
@@ -168,7 +168,7 @@ namespace UCT.Control
             var thirdPart = matchTernary.Groups[3].Value.Trim();
             if (!matchTernary.Success)
             {
-                Other.Debug.LogError($"Invalid key format: {key}");
+                Debug.LogError($"Invalid key format: {key}");
                 return string.Empty;
             }
 
@@ -189,7 +189,7 @@ namespace UCT.Control
 
                 if (isUnknownGroup)
                 {
-                    Other.Debug.LogError($"Invalid key first part format: {key}");
+                    Debug.LogError($"Invalid key first part format: {key}");
                     return string.Empty;
                 }
             }
@@ -199,7 +199,7 @@ namespace UCT.Control
                 characterSpriteManager.spriteKeys.Any(spriteKey => secondPart == spriteKey.ToLower());
             if (!isMatchingSpriteKey)
             {
-                Other.Debug.LogError($"Invalid key second part format: {key}");
+                Debug.LogError($"Invalid key second part format: {key}");
                 return string.Empty;
             }
 
@@ -209,7 +209,7 @@ namespace UCT.Control
                 return key;
             }
 
-            Other.Debug.LogError($"Invalid key third part format: {key}");
+            Debug.LogError($"Invalid key third part format: {key}");
             return string.Empty;
         }
 

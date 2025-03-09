@@ -17,7 +17,9 @@ namespace Editor.Inspector.EventSystem
     public class OverworldEventTriggerEditor : UnityEditor.Editor
     {
         public List<float> elementHeight;
+        private string[] _battleConfigClassNames;
         private ReorderableList _eventList;
+        private int _selectedIndex;
         private ReorderableList _simpleRulesList;
         private ReorderableList _tagList;
         private ReorderableList _triggerModeList;
@@ -25,6 +27,7 @@ namespace Editor.Inspector.EventSystem
         private void OnEnable()
         {
             InitializeReorderableList();
+            _battleConfigClassNames = RuleTableInspector.GetBattleConfigClassNames();
         }
 
         private static string GetSceneName()
@@ -80,6 +83,7 @@ namespace Editor.Inspector.EventSystem
                     var firstStringParams = element.FindPropertyRelative("firstStringParams");
                     var secondStringParams = element.FindPropertyRelative("secondStringParams");
                     var thirdStringParams = element.FindPropertyRelative("thirdStringParams");
+                    var objectParams = element.FindPropertyRelative("objectParams");
                     var useMethodEvents = element.FindPropertyRelative("useMethodEvents");
                     var isGlobalMethodEvents = element.FindPropertyRelative("isGlobalMethodEvents");
                     var methodEvents = element.FindPropertyRelative("methodEvents");
@@ -592,6 +596,12 @@ namespace Editor.Inspector.EventSystem
 
                             var itemThirdString = thirdStringParams.GetArrayElementAtIndex(i);
 
+                            if (i >= objectParams.arraySize)
+                            {
+                                objectParams.arraySize = i + 1;
+                            }
+
+                            var objectParam = objectParams.GetArrayElementAtIndex(i);
 
                             switch (tag)
                             {
@@ -722,6 +732,23 @@ namespace Editor.Inspector.EventSystem
                                     break;
                                 }
 
+                                case "IBattleConfig":
+                                {
+                                    _selectedIndex = Array.IndexOf(_battleConfigClassNames,
+                                        itemFirstString.stringValue);
+                                    if (_selectedIndex < 0 || _selectedIndex >= _battleConfigClassNames.Length)
+                                    {
+                                        _selectedIndex = 0;
+                                    }
+
+                                    _selectedIndex = EditorGUI.Popup(methodNameRect, _selectedIndex,
+                                        _battleConfigClassNames);
+
+                                    itemFirstString.stringValue = _battleConfigClassNames[_selectedIndex];
+                                    break;
+                                }
+
+
                                 default:
                                 {
                                     if (tag != "  ")
@@ -729,7 +756,9 @@ namespace Editor.Inspector.EventSystem
                                         UnityEngine.Debug.Log($"Case {tag} is not defined");
                                     }
 
-                                    goto case "string";
+                                    itemFirstString.stringValue =
+                                        EditorGUI.TextField(methodNameRect, itemFirstString.stringValue);
+                                    break;
                                 }
                             }
 

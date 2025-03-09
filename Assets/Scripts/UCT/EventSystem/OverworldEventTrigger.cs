@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Plugins.Timer.Source;
-using UCT.Global.Core;
+using UCT.Core;
 using UCT.Overworld;
 using UCT.Overworld.FiniteStateMachine;
 using UCT.Service;
@@ -227,12 +227,7 @@ namespace UCT.EventSystem
                 return true;
             }
 
-            if (BackpackBehaviour.Instance && BackpackBehaviour.Instance.IsOpenBackPack)
-            {
-                return true;
-            }
-
-            return false;
+            return BackpackBehaviour.Instance && BackpackBehaviour.Instance.IsOpenBackPack;
         }
     }
 

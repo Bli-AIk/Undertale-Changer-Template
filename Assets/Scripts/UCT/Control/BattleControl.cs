@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UCT.Battle.BattleConfigs;
 using UnityEngine;
 
 namespace UCT.Control
@@ -33,6 +34,8 @@ namespace UCT.Control
             Blue,
             Purple
         }
+
+        public IBattleConfig BattleConfig;
 
         public List<GameObject> enemies;
 

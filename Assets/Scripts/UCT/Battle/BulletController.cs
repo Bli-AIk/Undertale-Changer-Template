@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using DG.Tweening;
+using UCT.Audio;
 using UCT.Control;
-using UCT.Global.Audio;
-using UCT.Global.Core;
-using UCT.Global.Settings;
+using UCT.Core;
 using UCT.Service;
+using UCT.Settings;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -231,7 +231,7 @@ namespace UCT.Battle
                 new Vector3(r * MathUtilityService.GetRandomUnit(), 0, r * MathUtilityService.GetRandomUnit()), v3Spin,
                 4,
                 1f / 60f * 4f * 1.5f, "3D CameraPoint", Ease.OutElastic);
-            
+
             AudioController.Instance.PlayFx(5, MainControl.Instance.AudioControl.fxClipUI);
             MainControl.HitPlayer(boxHitList[i]);
 
@@ -239,6 +239,7 @@ namespace UCT.Battle
             {
                 MainControl.Instance.battlePlayerController.KillPlayer(MainControl.Instance);
             }
+
             if (!SettingsStorage.IsSimplifySfx)
             {
                 MainControl.Instance.battlePlayerController.hitVolume.weight = 1;
@@ -288,7 +289,7 @@ namespace UCT.Battle
             }
             else
             {
-                Other.Debug.LogError($"Bullet resource not found: {path}");
+                Debug.LogError($"Bullet resource not found: {path}");
             }
 
             return bullet;

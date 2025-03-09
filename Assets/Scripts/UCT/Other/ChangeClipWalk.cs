@@ -1,8 +1,8 @@
-using UCT.Global.Core;
+using UCT.Core;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-namespace UCT.Other
+namespace UCT
 {
     /// <summary>
     ///     玩家触发后更改移动范围

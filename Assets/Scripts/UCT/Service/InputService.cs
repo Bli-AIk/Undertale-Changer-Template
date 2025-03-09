@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using UCT.Global.Settings;
+using UCT.Settings;
 using UnityEngine;
 
 namespace UCT.Service

@@ -26,12 +26,12 @@ namespace UCT.Overworld.FiniteStateMachine
                 _triggerCollider = triggerTransform.GetComponent<BoxCollider2D>();
                 if (!_triggerCollider)
                 {
-                    Other.Debug.LogError("Trigger object must have a BoxCollider2D component.");
+                    Debug.LogError("Trigger object must have a BoxCollider2D component.");
                 }
             }
             else
             {
-                Other.Debug.LogError("No child object named 'Trigger' found.");
+                Debug.LogError("No child object named 'Trigger' found.");
             }
         }
 

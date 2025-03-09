@@ -48,7 +48,7 @@ namespace Volume
             renderPassEvent = passEvent;
             if (!crtScreenShader)
             {
-                UCT.Other.Debug.Log("Shader不存在");
+                UCT.Debug.Log("Shader不存在");
                 return;
             }
 

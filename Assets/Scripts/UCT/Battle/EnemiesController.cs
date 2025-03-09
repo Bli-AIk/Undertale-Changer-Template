@@ -1,7 +1,8 @@
 using System;
 using JetBrains.Annotations;
-using UCT.Global.Audio;
-using UCT.Global.Core;
+using UCT.Audio;
+using UCT.Battle.Enemies;
+using UCT.Core;
 using UnityEngine;
 
 namespace UCT.Battle
@@ -29,7 +30,7 @@ namespace UCT.Battle
 
             if (Enemy == null)
             {
-                Other.Debug.LogError("_enemy 不应为空！");
+                Debug.LogError("_enemy 不应为空！");
             }
             else
             {

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using UCT.Global.Audio;
-using UCT.Global.Core;
+using UCT.Audio;
+using UCT.Core;
 using UnityEngine;
 
-namespace UCT.Other
+namespace UCT
 {
     /// <summary>
     ///     节拍器控制器

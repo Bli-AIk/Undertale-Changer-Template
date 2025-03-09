@@ -1,10 +1,9 @@
 using System;
 using TMPro;
-using UCT.Control;
-using UCT.Global.Audio;
-using UCT.Global.Core;
-using UCT.Global.UI;
+using UCT.Audio;
+using UCT.Core;
 using UCT.Service;
+using UCT.UI;
 using UnityEngine;
 
 namespace UCT.Overworld
@@ -61,6 +60,7 @@ namespace UCT.Overworld
             {
                 return;
             }
+
             SetTalkBoxPositionChangerIsUp();
             CheckIsOpenBackPack();
             UpdateTalkBoxAndBackpackState();
@@ -461,7 +461,6 @@ namespace UCT.Overworld
             }
 
             return true;
-
         }
 
         private void UpdateHeartPosition(int index)
@@ -497,7 +496,7 @@ namespace UCT.Overworld
                     Heart.transform.localPosition = Vector3.one * 10000;
                     break;
                 }
-                
+
                 default:
                 {
                     throw new ArgumentOutOfRangeException($"Unexpected sonUse value: {sonUse}");
@@ -554,7 +553,7 @@ namespace UCT.Overworld
             }
             else
             {
-                Other.Debug.LogWarning("TalkBoxPositionChanger instance is missing!");
+                Debug.LogWarning("TalkBoxPositionChanger instance is missing!");
             }
         }
 

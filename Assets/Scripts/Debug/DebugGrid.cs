@@ -1,6 +1,6 @@
 using System.Globalization;
 using TMPro;
-using UCT.Global.Core;
+using UCT.Core;
 using UnityEngine;
 
 namespace Debug

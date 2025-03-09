@@ -1,6 +1,6 @@
 ﻿using System;
-using UCT.Global.Audio;
-using UCT.Global.Core;
+using UCT.Audio;
+using UCT.Core;
 using UCT.Service;
 
 // ReSharper disable UnusedMemberInSuper.Global
@@ -91,15 +91,15 @@ namespace UCT.Control
             _onDropAction += DeleteItem;
         }
 
-        private static void DeleteItem(int index)
-        {
-            MainControl.Instance.playerControl.items[index] = null;
-        }
-
         /// <summary>
         ///     获取物品数据
         /// </summary>
         public ItemData Data { get; }
+
+        private static void DeleteItem(int index)
+        {
+            MainControl.Instance.playerControl.items[index] = null;
+        }
 
         /// <summary>
         ///     使用了物品

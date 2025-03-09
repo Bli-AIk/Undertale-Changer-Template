@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using DG.Tweening;
 using TMPro;
+using UCT.Audio;
+using UCT.Battle.Enemies;
 using UCT.Control;
-using UCT.Global.Audio;
-using UCT.Global.Core;
+using UCT.Core;
 using UCT.Service;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -715,7 +716,7 @@ namespace UCT.Battle
                         _textUI.text += $"{UITextPrefix}{noLPack}\n";
                     }
 
-                    Other.Debug.LogError(noLanguagePack);
+                    Debug.LogError(noLanguagePack);
                 }
             }
         }
@@ -850,7 +851,7 @@ namespace UCT.Battle
                 MainControl.Instance.battlePlayerController.transform.position =
                     (Vector3)(Vector2.one * 10000) + new Vector3(0, 0,
                         MainControl.Instance.battlePlayerController.transform.position.z);
-                
+
                 SpriteChange();
                 _itemScroller.Close();
 
@@ -858,7 +859,7 @@ namespace UCT.Battle
                 {
                     return;
                 }
-                
+
                 if (optionsSave[2 * (optionLayerIndex + 1) - 1] != "Null")
                 {
                     StartTypeWritter(optionsSave[2 * (optionLayerIndex + 1) - 1]);
@@ -871,8 +872,6 @@ namespace UCT.Battle
                             0, MainControl.Instance.battlePlayerController.transform.position.z);
                     TryOpenDialogBubble();
                 }
-
-
             }
 
             if (InputService.GetKeyDown(KeyCode.UpArrow) && optionLayerIndex - 1 >= 0)
@@ -1245,7 +1244,7 @@ namespace UCT.Battle
             }
             else
             {
-                Other.Debug.LogError("enemyController is empty!");
+                Debug.LogError("enemyController is empty!");
             }
 
             _dialog.size = TextProcessingService.StringVector2ToRealVector2(size, _dialog.size);
@@ -1258,7 +1257,7 @@ namespace UCT.Battle
 
             if (!float.TryParse(arrowY, out _dialog.backY))
             {
-                Other.Debug.LogError($"Failed to parse arrowY: {arrowY}");
+                Debug.LogError($"Failed to parse arrowY: {arrowY}");
             }
 
             _dialog.typeWritter.StartTypeWritter(text, _dialog.tmp);
@@ -1283,7 +1282,7 @@ namespace UCT.Battle
                 return true;
             }
 
-            Other.Debug.LogError($"Invalid direction value: {direction}");
+            Debug.LogError($"Invalid direction value: {direction}");
             result = false;
             return false;
         }

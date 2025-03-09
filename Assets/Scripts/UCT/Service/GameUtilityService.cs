@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using DG.Tweening;
+using UCT.Audio;
 using UCT.Battle;
-using UCT.Extensions;
-using UCT.Global.Audio;
-using UCT.Global.Core;
-using UCT.Global.Settings;
+using UCT.Core;
+using UCT.Settings;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
@@ -21,6 +20,11 @@ namespace UCT.Service
         private static readonly Random Rng = new();
 
         private static readonly Random ColorGenerator = new();
+
+        private static readonly HashSet<string> ExcludedScenes = new()
+        {
+            "Menu", "Rename", "Story", "Start", "Battle", "GameOver"
+        };
 
         /// <summary>
         ///     设置16:9边框的Sprite
@@ -153,11 +157,6 @@ namespace UCT.Service
             SetResolution(SettingsStorage.ResolutionLevel);
             MainControl.Instance.isSceneSwitching = false;
         }
-
-        private static readonly HashSet<string> ExcludedScenes = new()
-        {
-            "Menu", "Rename", "Story", "Start", "Battle", "GameOver"
-        };
 
         private static void SetLastScene()
         {

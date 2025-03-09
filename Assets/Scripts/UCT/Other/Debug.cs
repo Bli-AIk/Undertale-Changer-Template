@@ -2,7 +2,7 @@ using UnityEngine;
 
 // ReSharper disable UnusedMember.Global
 
-namespace UCT.Other
+namespace UCT
 {
     /// <summary>
     ///     Debug控制器

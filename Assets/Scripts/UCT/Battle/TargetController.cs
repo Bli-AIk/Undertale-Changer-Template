@@ -1,8 +1,8 @@
 using DG.Tweening;
 using TMPro;
+using UCT.Audio;
 using UCT.Control;
-using UCT.Global.Audio;
-using UCT.Global.Core;
+using UCT.Core;
 using UCT.Service;
 using UnityEngine;
 using DataHandlerService = UCT.Service.DataHandlerService;
@@ -89,7 +89,8 @@ namespace UCT.Battle
                                           Random.Range(0, 2)));
 
             WeaponItem weaponItem = null;
-            if (DataHandlerService.GetItemFormDataName(MainControl.Instance.playerControl.wearArmor) is WeaponItem weapon)
+            if (DataHandlerService.GetItemFormDataName(MainControl.Instance.playerControl.wearArmor) is WeaponItem
+                weapon)
             {
                 weaponItem = weapon;
                 weaponItem.OnAttack(0);

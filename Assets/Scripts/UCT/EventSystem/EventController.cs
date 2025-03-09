@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using DG.Tweening;
 using Plugins.Timer.Source;
-using UCT.Extensions;
-using UCT.Global.Audio;
-using UCT.Global.Core;
-using UCT.Global.Settings;
+using UCT.Audio;
+using UCT.Battle.BattleConfigs;
+using UCT.Core;
 using UCT.Overworld;
 using UCT.Overworld.FiniteStateMachine;
 using UCT.Service;
+using UCT.Settings;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Object = UnityEngine.Object;
 
 namespace UCT.EventSystem
 {
@@ -53,9 +55,8 @@ namespace UCT.EventSystem
                     PlayerCanMove((bool)args[0], (bool)args[1], (string)args[2]))
             },
             {
-                new MethodNameData("null:EnterBattleScene", Global),
-                new MethodWrapper(args =>
-                    EnterBattleScene((bool)args[0], (string)args[1]))
+                new MethodNameData("IBattleConfig:EnterBattleScene", Global),
+                new MethodWrapper(args => EnterBattleScene(GetIBattleConfig((string)args[0]), (bool)args[1], (string)args[2]))
             },
             {
                 new MethodNameData("float:WaitingForSecond", Global),
@@ -147,6 +148,20 @@ namespace UCT.EventSystem
 
             UpdateEvent(globalEventTable);
             UpdateEvent(eventTable);
+        }
+
+        private static IBattleConfig GetIBattleConfig(string className)
+        {
+            var assembly = Assembly.Load("Assembly-CSharp");
+            var type = assembly.GetTypes()
+                .FirstOrDefault(t => t.Name == className && typeof(IBattleConfig).IsAssignableFrom(t));
+
+            if (type == null)
+            {
+                throw new ArgumentNullException($"No class inherited from IBattleConfig found: {className}");
+            }
+
+            return Activator.CreateInstance(type) as IBattleConfig;
         }
 
         public static bool LoadTables(bool force = false)
@@ -274,7 +289,7 @@ namespace UCT.EventSystem
                         }
                         else
                         {
-                            Other.Debug.LogError("不可除以0.");
+                            Debug.LogError("不可除以0.");
                         }
 
                         break;
@@ -327,10 +342,15 @@ namespace UCT.EventSystem
                 if (rule.methodEvents.Count <= k)
                 {
                     rule.methodEvents.AddRange(Enumerable.Repeat<string>(null, k + 1 - rule.methodEvents.Count));
+                }  
+                
+                if (rule.objectParams.Count <= k)
+                {
+                    rule.objectParams.AddRange(Enumerable.Repeat<Object>(null, k + 1 - rule.objectParams.Count));
                 }
-
+                
                 InvokeMethodByName(rule.methodNames[k], rule.firstStringParams[k], rule.secondStringParams[k],
-                    rule.thirdStringParams[k], rule.useMethodEvents[k], rule.methodEvents[k]);
+                    rule.thirdStringParams[k], rule.useMethodEvents[k], rule.methodEvents[k], rule.objectParams[k]);
             }
         }
 
@@ -540,8 +560,9 @@ namespace UCT.EventSystem
         }
 
         //TODO:多战斗补全
-        private static void EnterBattleScene(bool useEvent, string eventName)
+        private static void EnterBattleScene(IBattleConfig battleConfig, bool useEvent, string eventName)
         {
+            MainControl.Instance.BattleControl.BattleConfig = battleConfig;
             SettingsController.Instance.Animator.SetBool(Open, true);
             if (useEvent)
             {
@@ -741,12 +762,14 @@ namespace UCT.EventSystem
         /// <param name="parameter3">（可能的）传递的第三个参数</param>
         /// <param name="useEvent">是否联动event</param>
         /// <param name="eventName">联动的event名称</param>
+        /// <param name="unityObj">（可能的）传递的Obj参数</param>
         private static void InvokeMethodByName(string methodName,
             string parameter1,
             string parameter2,
             string parameter3,
             bool useEvent,
-            string eventName)
+            string eventName,
+            Object unityObj)
 
         {
             var tag = methodName[..methodName.IndexOf(':')];

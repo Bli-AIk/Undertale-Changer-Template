@@ -1,8 +1,8 @@
-using UCT.Global.Settings;
+using UCT.Settings;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-namespace UCT.Other
+namespace UCT
 {
     public class CameraLightController : MonoBehaviour
     {

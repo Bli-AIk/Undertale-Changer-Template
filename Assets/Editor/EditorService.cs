@@ -31,7 +31,7 @@ namespace Editor
                     targetProperty.objectReferenceValue = sourceProperty.objectReferenceValue;
                     break;
                 default:
-                    UCT.Other.Debug.LogWarning($"Unsupported property type: {sourceProperty.propertyType}");
+                    UCT.Debug.LogWarning($"Unsupported property type: {sourceProperty.propertyType}");
                     break;
             }
         }
@@ -82,7 +82,7 @@ namespace Editor
                     break;
 
                 default:
-                    UCT.Other.Debug.LogWarning($"Unsupported property type: {targetProperty.propertyType}");
+                    UCT.Debug.LogWarning($"Unsupported property type: {targetProperty.propertyType}");
                     break;
             }
         }

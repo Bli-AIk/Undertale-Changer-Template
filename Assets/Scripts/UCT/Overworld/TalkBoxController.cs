@@ -1,7 +1,7 @@
 using System;
 using TMPro;
-using UCT.Global.Core;
-using UCT.Global.UI;
+using UCT.Core;
+using UCT.UI;
 using UnityEngine;
 
 namespace UCT.Overworld

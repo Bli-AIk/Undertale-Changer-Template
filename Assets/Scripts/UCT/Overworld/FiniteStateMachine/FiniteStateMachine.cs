@@ -119,7 +119,7 @@ namespace UCT.Overworld.FiniteStateMachine
 
                     if (_path.Count == 0)
                     {
-                        Other.Debug.LogError($"{transform.name} 尝试移动到 {targetPosition}，但路径过长或无可用路径");
+                        Debug.LogError($"{transform.name} 尝试移动到 {targetPosition}，但路径过长或无可用路径");
                         return;
                     }
                 }
