@@ -3747,6 +3747,7 @@ GameObject:
   - component: {fileID: 1570390500}
   - component: {fileID: 1570390498}
   - component: {fileID: 1570390502}
+  - component: {fileID: 1570390503}
   m_Layer: 0
   m_Name: BattlePlayer
   m_TagString: Player
@@ -3915,6 +3916,26 @@ MonoBehaviour:
   blendDistance: 0
   weight: 0
   sharedProfile: {fileID: 11400000, guid: 89fe337953681774cb00b35f53380799, type: 2}
+--- !u!95 &1570390503
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1570390495}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 00e93cb1518e41a4e8a3debfe50e649b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1575928552
 GameObject:
   m_ObjectHideFlags: 0

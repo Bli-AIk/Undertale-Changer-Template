@@ -11,6 +11,21 @@ namespace UCT.Service
     /// </summary>
     public static class MathUtilityService
     {
+        
+        /// <summary>
+        /// 根据给定的权重（0到1之间）随机返回true或false。
+        /// </summary>
+        /// <param name="weight">0到1之间的浮点数，表示返回true的概率</param>
+        /// <returns>根据权重随机返回true或false</returns>
+        public static bool WeightedRandom(float weight)
+        {
+            return weight switch
+            {
+                <= 0 => false,
+                >= 1 => true,
+                _ => Random.value < weight
+            };
+        }
         /// <summary>
         ///     随机获取-1或1
         /// </summary>

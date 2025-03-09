@@ -61,7 +61,7 @@ namespace UCT.Battle
         public float timeInterpolation = -0.225f;
 
         /// <summary>
-        ///     场景漂移
+        ///     场景偏移
         /// </summary>
         public Vector2 sceneDrift = new(-1000, 0);
 
@@ -128,13 +128,17 @@ namespace UCT.Battle
         /// <summary>
         ///     圆形碰撞体
         /// </summary>
+        [HideInInspector]
         public CircleCollider2D collideCollider;
+
+        [HideInInspector] public Animator animator;
 
         /// <summary>
         ///     含有属性的颜色，读取 <see cref="BattleControl.PlayerColor" />，颜色变换通过具体变换的函数来执行
         /// </summary>
         public BattleControl.PlayerColor playerColor;
 
+        [HideInInspector]
         public UnityEngine.Rendering.Volume hitVolume;
         private Tween _missAnim, _changeColor, _changeDingColor, _changeDingScale;
 
@@ -154,6 +158,7 @@ namespace UCT.Battle
             _rigidBody = GetComponent<Rigidbody2D>();
             collideCollider = GetComponent<CircleCollider2D>();
             _spriteRenderer = GetComponent<SpriteRenderer>();
+            animator = GetComponent<Animator>();
             _dingSpriteRenderer = transform.Find("Ding").GetComponent<SpriteRenderer>();
             _dingSpriteRenderer.color = Color.clear;
             hitVolume = GetComponent<UnityEngine.Rendering.Volume>();

@@ -1,1 +1,13 @@
 Won\<markPoint>YOU WON!<stop><markEnter>You earned {0} EXP and {1} gold.;
+
+Flee\* I'm outta here.;
+Flee\* I've got better to do.;
+Flee\* Escaped...;
+Flee\* Don't slow me down.;
+
+Flee\* Get busy living.;
+Flee\* Let's get out of dodge--;
+Flee\* Run, <PlayerName>, run!;
+Flee\* Move! Move! Move!;
+
+FleeWithSpoil\* Ran away with<enter>  {0} EXP and {1} GOLD.;

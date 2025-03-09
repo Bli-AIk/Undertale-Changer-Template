@@ -114,22 +114,21 @@ namespace UCT.Service
         }
 
         /// <summary>
-        ///     用于游戏内文本读取
         ///     传入数据名称返回文本包文本
-        ///     给第一个 返第二个
         /// </summary>
         public static string GetFirstChildStringByPrefix(List<string> parentList, string screen)
         {
-            foreach (var result in from t in parentList
-                     where t.Length > screen.Length && SplitFirstStringWithDelimiter(t) == screen
-                     select t[(screen.Length + 1)..]
-                     into str
-                     select str[..^1])
+            // 收集所有以"screen\"开头的匹配项，并做相应的截取处理
+            var matches = (from t in parentList
+                where t.Length > screen.Length && SplitFirstStringWithDelimiter(t) == screen
+                select t[(screen.Length + 1)..] into str
+                select str[..^1]).ToList();
+
+            if (matches.Count > 0)
             {
-                if (result != null)
-                {
-                    return result;
-                }
+                var random = new System.Random();
+                var randomIndex = random.Next(matches.Count);
+                return matches[randomIndex];
             }
 
             var nullText = $"<color=yellow><color=#FF6666>{screen}</color> is null!</color>";

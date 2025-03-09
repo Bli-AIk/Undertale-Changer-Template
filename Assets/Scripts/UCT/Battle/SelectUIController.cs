@@ -77,6 +77,7 @@ namespace UCT.Battle
         private static readonly int ColorUnder = Shader.PropertyToID("_ColorUnder");
         private static readonly int Crop = Shader.PropertyToID("_Crop");
         private static readonly int Flash = Shader.PropertyToID("_Flash");
+        private static readonly int IsFlee = Animator.StringToHash("IsFlee");
 
         [Header("HP条配色")]
         public Color hpColorUnder;
@@ -217,17 +218,7 @@ namespace UCT.Battle
         {
             _isEndBattle = true;
             AudioController.Instance.audioSource.DOFade(0, 0.5f);
-            var exp = 0;
-            var gold = 0;
-            foreach (var enemy in enemiesControllers.Select(enemiesController => enemiesController.Enemy))
-            {
-                if (enemy.state is EnemyState.Dead)
-                {
-                    exp += enemy.exp;
-                }
-
-                gold += enemy.gold;
-            }
+            var (exp, gold) = GetEnemiesExpAndGold();
 
             StartTypeWritter(string.Format(TextProcessingService.GetFirstChildStringByPrefix(
                 MainControl.Instance.LanguagePackControl.sceneTexts,
@@ -239,6 +230,26 @@ namespace UCT.Battle
                 GameUtilityService.FadeOutAndSwitchScene(MainControl.Instance.playerControl.lastScene,
                     Color.black);
             };
+        }
+
+        private (int exp, int gold) GetEnemiesExpAndGold()
+        {
+            var exp = 0;
+            var gold = 0;
+            foreach (var enemy in enemiesControllers.Select(enemiesController => enemiesController.Enemy))
+            {
+                if (enemy.state is EnemyState.Dead)
+                {
+                    exp += enemy.exp;
+                }
+
+                if (enemy.state is EnemyState.Dead or EnemyState.Spaced)
+                {
+                    gold += enemy.gold;
+                }
+            }
+
+            return (exp, gold);
         }
 
         private void EnterTurnLayer()
@@ -862,9 +873,6 @@ namespace UCT.Battle
             else if (InputService.GetKeyDown(KeyCode.Z))
             {
                 selectedLayer = SelectedLayer.NarratorLayer;
-                MainControl.Instance.battlePlayerController.transform.position =
-                    (Vector3)(Vector2.one * 10000) + new Vector3(0, 0,
-                        MainControl.Instance.battlePlayerController.transform.position.z);
 
                 SpriteChange();
                 _itemScroller.Close();
@@ -873,6 +881,10 @@ namespace UCT.Battle
                 {
                     return;
                 }
+
+                MainControl.Instance.battlePlayerController.transform.position =
+                    (Vector3)(Vector2.one * 10000) + new Vector3(0, 0,
+                        MainControl.Instance.battlePlayerController.transform.position.z);
 
                 if (optionsSave[2 * (optionLayerIndex + 1) - 1] != "Null")
                 {
@@ -914,32 +926,18 @@ namespace UCT.Battle
                 }
                 case MercyType.Mercy:
                 {
-                    if (enemy.state == EnemyState.CanSpace)
+                    if (Mercy(enemy, enemiesController))
                     {
-                        //TODO: 怪物饶恕特效
-                        enemy.state = EnemyState.Spaced;
-                        enemiesController.spriteSplitController.spriteRenderer.color = Color.gray;
-
-                        foreach (Transform child in enemiesController.spriteSplitController.transform)
-                        {
-                            child.gameObject.SetActive(false);
-                        }
-
-                        AudioController.Instance.PlayFx(5, MainControl.Instance.AudioControl.fxClipBattle);
-
-
-                        if (enemiesControllers.All(item => item.Enemy.state is EnemyState.Spaced or EnemyState.Dead))
-                        {
-                            ExitBattleScene();
-                            return true;
-                        }
+                        return true;
                     }
-
                     break;
                 }
                 case MercyType.Flee:
                 {
-                    //TODO:补全
+                    if (Flee())
+                    {
+                        return true;
+                    }
                     break;
                 }
                 case MercyType.ActLike:
@@ -957,6 +955,70 @@ namespace UCT.Battle
             }
 
             return false;
+        }
+
+        private bool Mercy(IEnemy enemy, EnemiesController enemiesController)
+        {
+            if (enemy.state == EnemyState.CanSpace)
+            {
+                //TODO: 怪物饶恕特效
+                enemy.state = EnemyState.Spaced;
+                enemiesController.spriteSplitController.spriteRenderer.color = Color.gray;
+
+                foreach (Transform child in enemiesController.spriteSplitController.transform)
+                {
+                    child.gameObject.SetActive(false);
+                }
+
+                AudioController.Instance.PlayFx(5, MainControl.Instance.AudioControl.fxClipBattle);
+
+
+                if (enemiesControllers.All(item => item.Enemy.state is EnemyState.Spaced or EnemyState.Dead))
+                {
+                    MainControl.Instance.battlePlayerController.transform.position =
+                        (Vector3)(Vector2.one * 10000) + new Vector3(0, 0,
+                            MainControl.Instance.battlePlayerController.transform.position.z);
+                    ExitBattleScene();
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool Flee()
+        {
+            var isFlee = MathUtilityService.WeightedRandom(0.5f);
+
+            if (!isFlee)
+            {
+                return false;
+            }
+
+            MainControl.Instance.battlePlayerController.animator.SetBool(IsFlee, true);
+            MainControl.Instance.battlePlayerController.transform.DOMoveX(
+                    MainControl.Instance.battlePlayerController.transform.position.x - 5, 3.75f)
+                .SetEase(Ease.Linear);
+
+            var (exp, gold) = GetEnemiesExpAndGold();
+            if (exp == 0 && gold == 0)
+            {
+                _textUI.text = TextProcessingService.GetFirstChildStringByPrefix(
+                    MainControl.Instance.LanguagePackControl.sceneTexts, "Flee");
+            }
+            else
+            {
+                _textUI.text = string.Format(TextProcessingService.GetFirstChildStringByPrefix(
+                    MainControl.Instance.LanguagePackControl.sceneTexts, "FleeWithSpoil"), exp, gold);
+            }
+
+            MainControl.Instance.playerControl.exp += exp;
+            MainControl.Instance.playerControl.gold += gold;
+
+            GameUtilityService.FadeOutAndSwitchScene(MainControl.Instance.playerControl.lastScene,
+                Color.black, null, true, 2);
+            return true;
+
         }
 
         private void ActOptionLayer()
