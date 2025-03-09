@@ -5,6 +5,7 @@ using System.Text;
 using DG.Tweening;
 using TMPro;
 using UCT.Audio;
+using UCT.Battle.BattleConfigs;
 using UCT.Battle.Enemies;
 using UCT.Control;
 using UCT.Core;
@@ -265,7 +266,12 @@ namespace UCT.Battle
                 buttons.Add(transform.Find(t).GetComponent<SpriteRenderer>());
             }
 
-            foreach (var enemy in MainControl.Instance.BattleControl.BattleConfig.enemies)
+            SetBattleConfig(MainControl.Instance.BattleControl.BattleConfig);
+        }
+
+        private void SetBattleConfig(IBattleConfig config)
+        {
+            foreach (var enemy in config.enemies)
             {
                 var obj = Instantiate(enemy);
                 obj.name = enemy.name;
@@ -273,6 +279,12 @@ namespace UCT.Battle
             }
 
             selectedButton = EnumService.GetMinEnumValue<SelectedButton>();
+
+            Instantiate(config.backGroundModel);
+            RenderSettings.skybox = config.skyBox;
+
+            var volume = GameObject.Find("Global Volume").GetComponent<UnityEngine.Rendering.Volume>();
+            volume.profile = config.volumeProfile;
         }
 
         /// <summary>

@@ -213,8 +213,10 @@ namespace UCT.Core
         {
             var audioSource = bgm.GetComponent<AudioSource>();
 
-
-            if (sceneState == MainControl.SceneState.Battle)
+            if (sceneState == MainControl.SceneState.Battle &&
+                MainControl.Instance &&
+                MainControl.Instance.BattleControl &&
+                MainControl.Instance.BattleControl.BattleConfig != null)
             {
                 var config = MainControl.Instance.BattleControl.BattleConfig;
                 pitch = config.pitch;

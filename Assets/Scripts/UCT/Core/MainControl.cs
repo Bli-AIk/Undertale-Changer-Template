@@ -4,7 +4,9 @@ using System.IO;
 using Alchemy.Inspector;
 using Debug;
 using DG.Tweening;
+using UCT.Audio;
 using UCT.Battle;
+using UCT.Battle.BattleConfigs;
 using UCT.Control;
 using UCT.EventSystem;
 using UCT.Overworld;
@@ -348,6 +350,16 @@ namespace UCT.Core
 
         private void InitializationBattle()
         {
+            if (BattleControl.BattleConfig == null)
+            {
+                Debug.LogWarning("战斗场景配置类尚未加载，已使用默认的配置类 DemoBattle");
+                BattleControl.BattleConfig = new DemoBattle();
+                AudioController.Instance.audioSource.clip = BattleControl.BattleConfig.bgmClip;
+                AudioController.Instance.audioSource.volume = BattleControl.BattleConfig.volume;
+                AudioController.Instance.audioSource.pitch = BattleControl.BattleConfig.pitch;
+                AudioController.Instance.audioSource.Play();
+            }
+
             //BattleControl加载
             //--------------------------------------------------------------------------------
             BattleControl.turnDialogAsset = new List<string>();

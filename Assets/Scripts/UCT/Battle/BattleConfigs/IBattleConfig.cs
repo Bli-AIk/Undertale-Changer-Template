@@ -5,6 +5,7 @@ using UCT.Control;
 using UCT.Core;
 using UCT.Service;
 using UnityEngine;
+using UnityEngine.Rendering;
 using Random = UnityEngine.Random;
 
 namespace UCT.Battle.BattleConfigs
@@ -15,6 +16,9 @@ namespace UCT.Battle.BattleConfigs
     public interface IBattleConfig
     {
         GameObject[] enemies { get; }
+        GameObject backGroundModel { get; }
+        Material skyBox { get; }
+        VolumeProfile volumeProfile { get; }
         AudioClip bgmClip { get; }
         float volume { get; }
         float pitch { get; }
@@ -29,6 +33,12 @@ namespace UCT.Battle.BattleConfigs
             Resources.Load<GameObject>("Prefabs/Enemies/NPC2")
         };
 
+        public GameObject backGroundModel => Resources.Load<GameObject>("Prefabs/BackGround/Vaporwave");
+
+        public Material skyBox => Resources.Load<Material>("SkyBox/Vaporwave");
+
+        public VolumeProfile volumeProfile =>
+            Resources.Load<VolumeProfile>("Volume/Vaporwave3DVolume");
 
         public AudioClip bgmClip => Resources.Load<AudioClip>("Audios/stranger-things-124008");
         public float volume => 0.5f;
