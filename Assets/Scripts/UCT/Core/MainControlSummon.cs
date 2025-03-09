@@ -212,6 +212,16 @@ namespace UCT.Core
         private void AudioSetup(GameObject bgm)
         {
             var audioSource = bgm.GetComponent<AudioSource>();
+
+
+            if (sceneState == MainControl.SceneState.Battle)
+            {
+                var config = MainControl.Instance.BattleControl.BattleConfig;
+                pitch = config.pitch;
+                volume = config.volume;
+                bgmClip = config.bgmClip;
+            }
+
             audioSource.pitch = pitch;
             audioSource.loop = loop;
             if (audioSource.clip == bgmClip)

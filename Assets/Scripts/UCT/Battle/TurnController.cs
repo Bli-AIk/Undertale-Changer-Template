@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using MEC;
-using UCT.Battle.BattleConfigs;
 using UCT.Core;
 using UnityEngine;
 
@@ -23,7 +22,6 @@ namespace UCT.Battle
 
         private ObjectPool _boardPool;
         private ObjectPool _bulletPool;
-        private IBattleConfig _config;
         private ObjectPool _yellowBulletPool;
         public static TurnController Instance { get; private set; }
 
@@ -37,8 +35,6 @@ namespace UCT.Battle
             var saveBullet = GameObject.Find("SaveBullet");
 
             SetUpObjectPools(saveBullet);
-
-            _config = new DemoBattle();
         }
 
         private void SetUpObjectPools(GameObject saveBullet)
@@ -89,13 +85,13 @@ namespace UCT.Battle
                     //TODO: 检测是否有重叠定义
                     foreach (var item in MainControl.Instance.selectUIController.enemiesControllers)
                     {
-                        //测试s
                         Timing.RunCoroutine(item.Enemy._EnemyTurns(_bulletPool, _boardPool));
                     }
                 }
             }
 
-            yield return Timing.WaitUntilDone(Timing.RunCoroutine(_config.Turn(turnNumber, _bulletPool)));
+            yield return Timing.WaitUntilDone(
+                Timing.RunCoroutine(MainControl.Instance.BattleControl.BattleConfig.Turn(turnNumber, _bulletPool)));
 
             turn++;
             MainControl.Instance.selectUIController.EnterPlayerTurn();

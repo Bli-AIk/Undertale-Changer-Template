@@ -27,7 +27,7 @@ namespace UCT.Core
         {
             Normal,
             Overworld,
-            InBattle
+            Battle
         }
 
         [Title("=== 状态 ===")] [ReadOnly] public SceneState sceneState;
@@ -157,7 +157,7 @@ namespace UCT.Core
                     OverworldPlayerBehaviour.transform.position = playerControl.playerLastPos;
                     break;
                 }
-                case SceneState.InBattle:
+                case SceneState.Battle:
                     InitializationBattle();
                     break;
                 default:

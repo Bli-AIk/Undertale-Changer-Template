@@ -787,7 +787,7 @@ namespace UCT.Settings
 
         private static bool IsInBattleAndNotMyTurn()
         {
-            var isInBattle = MainControl.Instance.sceneState == MainControl.SceneState.InBattle;
+            var isInBattle = MainControl.Instance.sceneState == MainControl.SceneState.Battle;
             var isInMyTurn = TurnController.Instance && TurnController.Instance.isMyTurn;
             return isInBattle && !isInMyTurn;
         }

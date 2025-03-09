@@ -265,7 +265,7 @@ namespace UCT.Battle
                 buttons.Add(transform.Find(t).GetComponent<SpriteRenderer>());
             }
 
-            foreach (var enemy in MainControl.Instance.BattleControl.enemies)
+            foreach (var enemy in MainControl.Instance.BattleControl.BattleConfig.enemies)
             {
                 var obj = Instantiate(enemy);
                 obj.name = enemy.name;

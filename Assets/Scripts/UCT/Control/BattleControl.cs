@@ -35,10 +35,6 @@ namespace UCT.Control
             Purple
         }
 
-        public IBattleConfig BattleConfig;
-
-        public List<GameObject> enemies;
-
         public List<Color> bulletColorList;
 
         public List<Color> playerColorList, playerMissColorList;
@@ -52,5 +48,7 @@ namespace UCT.Control
         [HideInInspector] public List<string> turnTextSave;
 
         [HideInInspector] public List<string> turnDialogAsset;
+
+        public IBattleConfig BattleConfig;
     }
 }

@@ -15,7 +15,7 @@ namespace UCT.Battle.BattleConfigs
     public interface IBattleConfig
     {
         GameObject[] enemies { get; }
-        AudioClip bgm { get; }
+        AudioClip bgmClip { get; }
         float volume { get; }
         float pitch { get; }
         IEnumerator<float> Turn(int turnNumber, ObjectPool bulletPool);
@@ -30,7 +30,7 @@ namespace UCT.Battle.BattleConfigs
         };
 
 
-        public AudioClip bgm { get; }
+        public AudioClip bgmClip => Resources.Load<AudioClip>("Audios/stranger-things-124008");
         public float volume => 0.5f;
         public float pitch => 0.5f;
 

@@ -76,7 +76,7 @@ namespace UCT.Service
                 MainControl.Instance.mainCamera.rect = new Rect(0, 0.056f, 1, 0.888f);
             }
 
-            if (MainControl.Instance.sceneState == MainControl.SceneState.InBattle &&
+            if (MainControl.Instance.sceneState == MainControl.SceneState.Battle &&
                 MainControl.Instance.cameraMainInBattle)
             {
                 MainControl.Instance.cameraMainInBattle.rect = new Rect(0, 0.056f, 1, 0.888f);
@@ -105,7 +105,7 @@ namespace UCT.Service
                 MainControl.Instance.mainCamera.rect = new Rect(0, 0, 1, 1);
             }
 
-            if (MainControl.Instance.sceneState == MainControl.SceneState.InBattle &&
+            if (MainControl.Instance.sceneState == MainControl.SceneState.Battle &&
                 MainControl.Instance.cameraMainInBattle)
             {
                 MainControl.Instance.cameraMainInBattle.rect = new Rect(0, 0, 1, 1);
@@ -295,7 +295,7 @@ namespace UCT.Service
                 MainControl.Instance.mainCamera.GetUniversalAdditionalCameraData().renderPostProcessing = !isClose;
             }
 
-            if (MainControl.Instance.sceneState != MainControl.SceneState.InBattle)
+            if (MainControl.Instance.sceneState != MainControl.SceneState.Battle)
             {
                 return;
             }
