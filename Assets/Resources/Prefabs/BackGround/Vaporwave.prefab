@@ -159,7 +159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1578228f98898b742aa8849753da5013, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  followTarget: 0
+  followTarget: 2
   sth: {fileID: 0}
   followPosition: 1
   positionAdd: {x: 0, y: 3.9, z: 123.5}

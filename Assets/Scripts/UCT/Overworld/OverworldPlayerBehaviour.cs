@@ -32,6 +32,12 @@ namespace UCT.Overworld
 
         private void Update()
         {
+            spriteRenderer.enabled = MainControl.Instance.sceneState == MainControl.SceneState.Overworld;
+            if (!spriteRenderer.enabled)
+            {
+                return;
+            }
+
             if (!MainControl.Instance.isSceneSwitching)
             {
                 MainControl.Instance.playerControl.playerLastPos = transform.position;

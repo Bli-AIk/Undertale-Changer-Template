@@ -232,6 +232,8 @@ namespace UCT.Battle
             StartTypeWritter(string.Format(TextProcessingService.GetFirstChildStringByPrefix(
                 MainControl.Instance.LanguagePackControl.sceneTexts,
                 "Won"), exp, gold));
+            MainControl.Instance.playerControl.exp += exp;
+            MainControl.Instance.playerControl.gold += gold;
             _typeWritter.OnClose = () =>
             {
                 GameUtilityService.FadeOutAndSwitchScene(MainControl.Instance.playerControl.lastScene,
@@ -914,6 +916,7 @@ namespace UCT.Battle
                 {
                     if (enemy.state == EnemyState.CanSpace)
                     {
+                        //TODO: 怪物饶恕特效
                         enemy.state = EnemyState.Spaced;
                         enemiesController.spriteSplitController.spriteRenderer.color = Color.gray;
 
@@ -1238,6 +1241,7 @@ namespace UCT.Battle
         private void KeepDialogBubble()
         {
             //TODO: 对话应当有多种情况，如固定对话或者随机对话
+            //TODO: 针对多战斗写对话
             //TODO: 死亡怪物应不会说话
             var save = new List<string>();
             TextProcessingService.SplitStringToListWithDelimiter(optionsSave[numberDialog], save);

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Alchemy.Inspector;
+using UCT.Core;
 using UCT.EventSystem;
 using UnityEngine;
 
@@ -40,6 +41,11 @@ namespace UCT.Overworld.FiniteStateMachine
         private void Update()
         {
             if (!fsm)
+            {
+                return;
+            }
+
+            if (MainControl.Instance.sceneState != MainControl.SceneState.Overworld)
             {
                 return;
             }
@@ -203,7 +209,7 @@ namespace UCT.Overworld.FiniteStateMachine
         {
             foreach (var item in _visibleColliders.ToList())
             {
-                if (_currentColliders.Contains(item) ||
+                if (_currentColliders.Count == 0 || !item || _currentColliders.Contains(item) ||
                     !item.TryGetComponent<OverworldEventTrigger>(out var trigger))
                 {
                     continue;
