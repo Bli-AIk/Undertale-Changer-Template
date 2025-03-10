@@ -364,7 +364,6 @@ namespace UCT.Core
             //--------------------------------------------------------------------------------
             BattleControl.turnDialogAsset = new List<string>();
 
-            var uiText = DataHandlerService.LoadLanguageData("Battle\\UIBattleText", languagePackId);
 
             string[] turnSave;
             if (languagePackId < LanguagePackageInternalNumber)
@@ -396,19 +395,29 @@ namespace UCT.Core
                 }
             }
 
-            var uiTextSave = DataHandlerService.LoadItemData(uiText);
-            BattleControl.actSave =
-                TextProcessingService.BatchGetFirstChildStringByPrefix(uiTextSave,
-                    "Act\\");
-            BattleControl.mercySave = TextProcessingService.BatchGetFirstChildStringByPrefix(uiTextSave,
-                "Mercy\\");
-            BattleControl.turnTextSave = TextProcessingService.BatchGetFirstChildStringByPrefix(uiTextSave,
+            var battleText =
+                DataHandlerService.LoadLanguageData($"Battle\\{BattleControl.BattleConfig.GetType().Name}",
+                    languagePackId);
+            var battleTextSave = DataHandlerService.LoadItemData(battleText);
+            BattleControl.turnTextSave = TextProcessingService.BatchGetFirstChildStringByPrefix(battleTextSave,
                 "Turn\\");
-            BattleControl.enemiesNameSave =
-                TextProcessingService.BatchGetFirstChildStringByPrefix(uiTextSave,
-                    "Enemy\\");
             BattleControl.turnTextSave =
                 DataHandlerService.ChangeItemData(BattleControl.turnTextSave, true, new List<string>());
+
+            
+            var enemiesInfo =
+                DataHandlerService.LoadLanguageData("Battle\\EnemiesInfo", languagePackId);
+            var enemiesInfoSave = DataHandlerService.LoadItemData(enemiesInfo);
+            
+            BattleControl.actSave =
+                TextProcessingService.BatchGetFirstChildStringByPrefix(enemiesInfoSave,
+                    "Act\\");
+            BattleControl.mercySave = TextProcessingService.BatchGetFirstChildStringByPrefix(enemiesInfoSave,
+                "Mercy\\");
+            BattleControl.enemiesNameSave =
+                TextProcessingService.BatchGetFirstChildStringByPrefix(enemiesInfoSave,
+                    "Enemy\\");
+          
             //--------------------------------------------------------------------------------
             battlePlayerController = GameObject.Find("BattlePlayer").GetComponent<BattlePlayerController>();
             selectUIController = GameObject.Find("SelectUI").GetComponent<SelectUIController>();
