@@ -305,8 +305,6 @@ namespace UCT.Service
         /// </summary>
         public static string LoadLanguageData(string path, int id)
         {
-            Debug.Log(path);
-            Debug.Log($"TextAssets/LanguagePacks/{GetLanguageInsideId(id)}/{path}");
             return id < MainControl.LanguagePackageInternalNumber
                 ? Resources.Load<TextAsset>($"TextAssets/LanguagePacks/{GetLanguageInsideId(id)}/{path}").text
                 : File.ReadAllText(

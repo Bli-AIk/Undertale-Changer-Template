@@ -168,7 +168,12 @@ namespace UCT.Battle
 
         private void UpdateDialog()
         {
+            if (MainControl.Instance.selectUIController.enemiesControllers == null)
+            {
+                return;
+            }
             _dialog.gameObject.SetActive(isDialog);
+
 
             var canEndBattle = MainControl.Instance.selectUIController.enemiesControllers.All(enemiesController =>
                 enemiesController.Enemy.state is not (EnemyState.Default or EnemyState.CanSpace));
@@ -942,7 +947,7 @@ namespace UCT.Battle
                 }
                 case MercyType.ActLike:
                 {
-                    var realIndex = enemy.MercyTypes.TakeWhile((t, index) => index != optionLayerIndex)
+                    var realIndex = enemy.MercyTypes.TakeWhile((_, index) => index != optionLayerIndex)
                         .Count(mercyType => mercyType == MercyType.ActLike);
                     var options = enemy.GetActLikeOptions();
                     options[realIndex]?.Invoke();
