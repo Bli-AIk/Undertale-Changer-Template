@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Alchemy.Inspector;
 using Debug;
 using DG.Tweening;
@@ -369,8 +370,10 @@ namespace UCT.Core
             if (languagePackId < LanguagePackageInternalNumber)
             {
                 var textAssets = Resources.LoadAll<TextAsset>(
-                    $"TextAssets/LanguagePacks/{DataHandlerService.GetLanguageInsideId(languagePackId)}/Battle/Turn");
+                    $"TextAssets/LanguagePacks/{DataHandlerService.GetLanguageInsideId(languagePackId)}/Battle/{BattleControl.BattleConfig.GetType().Name}");
 
+                textAssets = textAssets.Where(asset => asset.name != BattleControl.BattleConfig.GetType().Name).ToArray();
+                
                 turnSave = new string[textAssets.Length];
                 for (var i = 0; i < textAssets.Length; i++)
                 {
@@ -380,7 +383,7 @@ namespace UCT.Core
             else
             {
                 turnSave = Directory.GetFiles(
-                    $@"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[languagePackId - LanguagePackageInternalNumber]}\Battle\Turn");
+                    $@"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[languagePackId - LanguagePackageInternalNumber]}\Battle\{BattleControl.BattleConfig.GetType().Name}");
             }
 
             foreach (var t in turnSave)
@@ -404,11 +407,11 @@ namespace UCT.Core
             BattleControl.turnTextSave =
                 DataHandlerService.ChangeItemData(BattleControl.turnTextSave, true, new List<string>());
 
-            
+
             var enemiesInfo =
                 DataHandlerService.LoadLanguageData("Battle\\EnemiesInfo", languagePackId);
             var enemiesInfoSave = DataHandlerService.LoadItemData(enemiesInfo);
-            
+
             BattleControl.actSave =
                 TextProcessingService.BatchGetFirstChildStringByPrefix(enemiesInfoSave,
                     "Act\\");
@@ -417,7 +420,7 @@ namespace UCT.Core
             BattleControl.enemiesNameSave =
                 TextProcessingService.BatchGetFirstChildStringByPrefix(enemiesInfoSave,
                     "Enemy\\");
-          
+
             //--------------------------------------------------------------------------------
             battlePlayerController = GameObject.Find("BattlePlayer").GetComponent<BattlePlayerController>();
             selectUIController = GameObject.Find("SelectUI").GetComponent<SelectUIController>();
