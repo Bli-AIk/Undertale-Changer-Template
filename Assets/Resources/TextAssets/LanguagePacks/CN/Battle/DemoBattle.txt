@@ -61,4 +61,4 @@ Item相关选项必须在Item文本处配置。
 
 Turn\0\<markPoint>回合0.;
 Turn\0\<markPoint>回合0<stop><stop......>的另一种版本。;
-Turn\1\* 欢迎来到回合1<stop><stop...><markEnter>当然。;
+Turn\1\<markPoint>欢迎来到回合1<stop><stop...><markEnter>当然。;

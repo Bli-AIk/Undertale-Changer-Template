@@ -121,6 +121,7 @@ namespace UCT.Battle
         public int firstInDiy = -1;
         private DialogBubbleBehaviour _dialog;
         private GameObject _enemiesHpLine;
+        private bool _haveRandomTurnDialog;
         private int _hpFood;
         private Tween _hpFoodTween;
         private SpriteRenderer _hpSpr;
@@ -144,6 +145,16 @@ namespace UCT.Battle
             UITextUpdate();
             _hpFood = MainControl.Instance.playerControl.hp;
             EnterPlayerTurn();
+            GetHaveRandomTurnDialog();
+        }
+
+        private void GetHaveRandomTurnDialog()
+        {
+            var textAssets = MainControl.Instance.BattleControl.turnDialogAsset;
+            var types = textAssets.Select(DataHandlerService.LoadItemData)
+                .Select(save => TextProcessingService.GetFirstChildStringByPrefix(save, "Type", true))
+                .ToList();
+            _haveRandomTurnDialog = !(types.Any(t => t.StartsWith("Fixed")) && !types.Contains("Random"));
         }
 
         private void Update()
@@ -172,6 +183,7 @@ namespace UCT.Battle
             {
                 return;
             }
+
             _dialog.gameObject.SetActive(isDialog);
 
 
@@ -935,6 +947,7 @@ namespace UCT.Battle
                     {
                         return true;
                     }
+
                     break;
                 }
                 case MercyType.Flee:
@@ -943,6 +956,7 @@ namespace UCT.Battle
                     {
                         return true;
                     }
+
                     break;
                 }
                 case MercyType.ActLike:
@@ -1023,7 +1037,6 @@ namespace UCT.Battle
             GameUtilityService.FadeOutAndSwitchScene(MainControl.Instance.playerControl.lastScene,
                 Color.black, null, true, 2);
             return true;
-
         }
 
         private void ActOptionLayer()
@@ -1167,8 +1180,7 @@ namespace UCT.Battle
 
             if (selectedButton != SelectedButton.Fight && _textUI.text == "")
             {
-                OpenDialogBubble(
-                    MainControl.Instance.BattleControl.turnDialogAsset[TurnController.Instance.turn]);
+                OpenDialogBubble();
                 MainControl.Instance.battlePlayerController.transform.position =
                     (Vector3)MainControl.Instance.battlePlayerController.sceneDrift + new Vector3(0, 0,
                         MainControl.Instance.battlePlayerController.transform.position.z);
@@ -1191,10 +1203,10 @@ namespace UCT.Battle
 
         private void TryOpenDialogBubble()
         {
-            if (TurnController.Instance.turn < MainControl.Instance.BattleControl.turnDialogAsset.Count)
+            if (TurnController.Instance.turn < MainControl.Instance.BattleControl.turnDialogAsset.Count ||
+                _haveRandomTurnDialog)
             {
-                OpenDialogBubble(
-                    MainControl.Instance.BattleControl.turnDialogAsset[TurnController.Instance.turn]);
+                OpenDialogBubble();
             }
             else
             {
@@ -1302,8 +1314,54 @@ namespace UCT.Battle
             }
         }
 
-        private void OpenDialogBubble(string textAsset)
+        private void OpenDialogBubble()
         {
+            string textAsset = null;
+            var textAssets = MainControl.Instance.BattleControl.turnDialogAsset;
+            var fixedList = new List<bool>();
+            var types = textAssets.Select(DataHandlerService.LoadItemData)
+                .Select(save => TextProcessingService.GetFirstChildStringByPrefix(save, "Type", true))
+                .ToList();
+            
+
+
+            foreach (var type in types)
+            {
+                if (type == null)
+                {
+                    continue;
+                }
+
+                var isFixed = type[..5] == "Fixed";
+                fixedList.Add(isFixed);
+
+                if (!isFixed || !int.TryParse(type[6..], out var turn) || turn != TurnController.Instance.turn)
+                {
+                    continue;
+                }
+
+                textAsset = textAssets[turn];
+                break;
+            }
+
+            if (string.IsNullOrEmpty(textAsset))
+            {
+                if (fixedList.Count > 0 && fixedList.All(f => f))
+                {
+                    optionsSave = null;
+                    isDialog = true;
+                    numberDialog = 0;
+                    return;
+                }
+
+                var filteredTextAssets = textAssets
+                    .Where((_, index) => index >= fixedList.Count || !fixedList[index])
+                    .ToList();
+
+
+                textAsset = filteredTextAssets[Random.Range(0, filteredTextAssets.Count)];
+            }
+
             optionsSave = DataHandlerService.LoadItemData(textAsset);
             optionsSave = DataHandlerService.ChangeItemData(optionsSave, true, new List<string>());
             isDialog = true;
@@ -1312,10 +1370,13 @@ namespace UCT.Battle
 
         private void KeepDialogBubble()
         {
-            //TODO: 对话应当有多种情况，如固定对话或者随机对话
-            //TODO: 针对多战斗写对话
             //TODO: 死亡怪物应不会说话
             var save = new List<string>();
+            if (optionsSave[numberDialog][..4] == "Type")
+            {
+                numberDialog++;
+            }
+
             TextProcessingService.SplitStringToListWithDelimiter(optionsSave[numberDialog], save);
 
             var size = save[0];

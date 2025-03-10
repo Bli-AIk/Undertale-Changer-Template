@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using UCT.Core;
 using UnityEngine;
+using Random = System.Random;
 
 namespace UCT.Service
 {
@@ -116,19 +117,27 @@ namespace UCT.Service
         /// <summary>
         ///     传入数据名称返回文本包文本
         /// </summary>
-        public static string GetFirstChildStringByPrefix(List<string> parentList, string screen)
+        public static string GetFirstChildStringByPrefix(List<string> parentList,
+            string screen,
+            bool isIgnoreMiss = false)
         {
             // 收集所有以"screen\"开头的匹配项，并做相应的截取处理
             var matches = (from t in parentList
                 where t.Length > screen.Length && SplitFirstStringWithDelimiter(t) == screen
-                select t[(screen.Length + 1)..] into str
+                select t[(screen.Length + 1)..]
+                into str
                 select str[..^1]).ToList();
 
             if (matches.Count > 0)
             {
-                var random = new System.Random();
+                var random = new Random();
                 var randomIndex = random.Next(matches.Count);
                 return matches[randomIndex];
+            }
+
+            if (isIgnoreMiss)
+            {
+                return null;
             }
 
             var nullText = $"<color=yellow><color=#FF6666>{screen}</color> is null!</color>";
@@ -236,7 +245,7 @@ namespace UCT.Service
 
             for (var i = 0; i < length; i++)
             {
-                text.Append(alphabet[Random.Range(0, alphabet.Length)]);
+                text.Append(alphabet[UnityEngine.Random.Range(0, alphabet.Length)]);
             }
 
             return text.ToString();
@@ -262,7 +271,7 @@ namespace UCT.Service
             var builder = new StringBuilder("<color=#");
             for (var i = 0; i < 6; i++)
             {
-                builder.AppendFormat("{0:X}", Random.Range(0, 16));
+                builder.AppendFormat("{0:X}", UnityEngine.Random.Range(0, 16));
             }
 
             builder.Append("FF>");
@@ -322,7 +331,7 @@ namespace UCT.Service
                     }
 
                     var x2 = float.Parse(save.ToString());
-                    return plus + Random.Range(x1, x2);
+                    return plus + UnityEngine.Random.Range(x1, x2);
                 }
 
                 if (IsParseFloatHaveOther(text, origin, isY, out var floatWithSpecialCharacters))
