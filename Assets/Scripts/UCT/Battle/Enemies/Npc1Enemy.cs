@@ -40,14 +40,12 @@ namespace UCT.Battle.Enemies
             return Array.Empty<Action>();
         }
 
-        public IEnumerator<float> _EnemyTurns(ObjectPool bulletPool, ObjectPool boardPool)
+        public IEnumerator<float> _EnemyTurns(int index, ObjectPool bulletPool, ObjectPool boardPool)
         {
             if (state is not (EnemyState.Default or EnemyState.CanSpace))
             {
                 yield break;
             }
-
-            var index = TurnGenerator.GetNextValue();
             switch (index)
             {
                 default:

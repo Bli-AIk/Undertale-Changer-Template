@@ -1,5 +1,8 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using MEC;
+using UCT.Battle.MultiEnemiesConfigs;
 using UCT.Core;
 using UnityEngine;
 
@@ -77,16 +80,13 @@ namespace UCT.Battle
             {
                 if (MainControl.Instance.selectUIController.enemiesControllers.Count == 1)
                 {
-                    Timing.RunCoroutine(MainControl.Instance.selectUIController.enemiesControllers[0].Enemy
-                        ._EnemyTurns(_bulletPool, _boardPool));
+                    var enemy = MainControl.Instance.selectUIController.enemiesControllers[0].Enemy;
+                    Timing.RunCoroutine(enemy
+                        ._EnemyTurns(enemy.TurnGenerator.GetNextValue(), _bulletPool, _boardPool));
                 }
                 else
                 {
-                    //TODO: 检测是否有重叠定义
-                    foreach (var item in MainControl.Instance.selectUIController.enemiesControllers)
-                    {
-                        Timing.RunCoroutine(item.Enemy._EnemyTurns(_bulletPool, _boardPool));
-                    }
+                    GetEnemiesTurn();
                 }
             }
 
@@ -95,6 +95,57 @@ namespace UCT.Battle
 
             turn++;
             MainControl.Instance.selectUIController.EnterPlayerTurn();
+        }
+
+        private void GetEnemiesTurn()
+        {
+            var multiEnemiesConfigs = GetAllImplementationsOf<IMultiEnemiesConfig>();
+            var enemyNames = MainControl.Instance.selectUIController.enemiesControllers
+                .Select(item => item.name).ToArray();
+            foreach (var item in MainControl.Instance.selectUIController.enemiesControllers)
+            {
+                item.Enemy.TurnGenerator.GetNextValue();
+            }
+
+            var isMultiEnemiesTurn = false;
+            foreach (var enemiesConfig in from config in multiEnemiesConfigs
+                     where typeof(IMultiEnemiesConfig).IsAssignableFrom(config)
+                     select (IMultiEnemiesConfig)Activator.CreateInstance(config))
+            {
+                var allContained = enemiesConfig.EnemyNames.All(enemyNames.Contains);
+                if (!allContained)
+                {
+                    continue;
+                }
+
+                var indices = MainControl.Instance.selectUIController.enemiesControllers
+                    .Select(item => item.Enemy.TurnGenerator.value).ToArray();
+
+                if (enemiesConfig.validIndicesList.Any(arr => arr.SequenceEqual(indices)))
+                {
+                    Timing.RunCoroutine(enemiesConfig._EnemyTurns(indices, _bulletPool, _boardPool));
+                    isMultiEnemiesTurn = true;
+                }
+
+                break;
+            }
+
+            if (!isMultiEnemiesTurn)
+            {
+                MainControl.Instance.selectUIController.enemiesControllers
+                    .ToList()
+                    .ForEach(item =>
+                        Timing.RunCoroutine(item.Enemy._EnemyTurns(item.Enemy.TurnGenerator.value,
+                            _bulletPool, _boardPool)));
+            }
+        }
+
+        private static List<Type> GetAllImplementationsOf<T>()
+        {
+            return AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(assembly => assembly.GetTypes())
+                .Where(type => typeof(T).IsAssignableFrom(type) && !type.IsInterface && !type.IsAbstract)
+                .ToList();
         }
 
         public void GetYellowBullet(Vector3 playerPosition)

@@ -14,6 +14,8 @@ namespace UCT.Battle.Enemies
         /// </summary>
         /// <returns>返回下一个回合数。</returns>
         int GetNextValue();
+
+        int value { get; }
     }
 
     /// <summary>
@@ -23,6 +25,7 @@ namespace UCT.Battle.Enemies
     {
         private readonly Random _random = new();
         private readonly Dictionary<int, int> _weights;
+        public int value { get; private set; }
 
         /// <summary>
         ///     初始化 <see cref="WeightedRandomTurnNumber" /> 类，默认所有值的权重为 1。
@@ -55,14 +58,19 @@ namespace UCT.Battle.Enemies
             foreach (var pair in _weights)
             {
                 sum += pair.Value;
-                if (roll < sum)
+                if (roll >= sum)
                 {
-                    return pair.Key;
+                    continue;
                 }
+
+                value = pair.Key;
+                return value;
             }
 
-            return _weights.Keys.Last();
+            value= _weights.Keys.Last();
+            return value;
         }
+
     }
 
     /// <summary>
@@ -72,6 +80,7 @@ namespace UCT.Battle.Enemies
     {
         private readonly List<int> _values;
         private int _index;
+        public int value { get; private set; }
 
         /// <summary>
         ///     初始化 <see cref="CyclicTurnNumber" /> 类。
@@ -88,8 +97,9 @@ namespace UCT.Battle.Enemies
         /// <returns>返回下一个回合数。</returns>
         public int GetNextValue()
         {
-            var value = _values[_index];
+            var result = _values[_index];
             _index = (_index + 1) % _values.Count;
+            value = result;
             return value;
         }
     }
@@ -99,7 +109,7 @@ namespace UCT.Battle.Enemies
     /// </summary>
     public class FixedTurnNumber : IEnemyTurnNumber
     {
-        private int _value;
+        public int value { get; private set; }
 
         /// <summary>
         ///     初始化 <see cref="FixedTurnNumber" /> 类。
@@ -107,7 +117,7 @@ namespace UCT.Battle.Enemies
         /// <param name="value">固定的回合数值。</param>
         public FixedTurnNumber(int value)
         {
-            _value = value;
+            this.value = value;
         }
 
         /// <summary>
@@ -116,16 +126,16 @@ namespace UCT.Battle.Enemies
         /// <returns>返回固定的回合数。</returns>
         public int GetNextValue()
         {
-            return _value;
+            return value;
         }
 
         /// <summary>
         ///     设置固定的回合数值。
         /// </summary>
-        /// <param name="value">要设置的回合数值。</param>
-        public void SetValue(int value)
+        /// <param name="inputValue">要设置的回合数值。</param>
+        public void SetValue(int inputValue)
         {
-            _value = value;
+            value = inputValue;
         }
     }
 }

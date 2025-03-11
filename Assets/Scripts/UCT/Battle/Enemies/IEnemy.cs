@@ -16,7 +16,7 @@ namespace UCT.Battle.Enemies
         Action[] GetActOptions();
         Action[] GetActLikeOptions();
 
-        IEnumerator<float> _EnemyTurns(ObjectPool bulletPool, ObjectPool boardPool);
+        IEnumerator<float> _EnemyTurns(int index, ObjectPool bulletPool, ObjectPool boardPool);
     }
 
     /// <summary>
