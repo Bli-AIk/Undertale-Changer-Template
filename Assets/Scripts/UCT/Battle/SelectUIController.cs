@@ -1370,18 +1370,32 @@ namespace UCT.Battle
 
         private void KeepDialogBubble()
         {
-            //TODO: 死亡怪物应不会说话
+            //TODO: 允许怪物同时说话
             var save = new List<string>();
             if (optionsSave[numberDialog][..4] == "Type")
             {
                 numberDialog++;
             }
 
-            TextProcessingService.SplitStringToListWithDelimiter(optionsSave[numberDialog], save);
+            while (numberDialog < optionsSave.Count)
+            {
+                TextProcessingService.SplitStringToListWithDelimiter(optionsSave[numberDialog], save);
+
+                if (enemiesControllers.Any(enemiesController =>
+                        enemiesController.name == save[2] && enemiesController.Enemy.state != EnemyState.Dead &&
+                        enemiesController.Enemy.state != EnemyState.Spaced)) 
+                {
+                    break;
+                }
+
+                numberDialog++;
+            }
 
             var size = save[0];
             var position = save[1];
             var character = save[2];
+
+            
             var direction = save[3];
             var arrowY = save[4];
             var text = save[5];
