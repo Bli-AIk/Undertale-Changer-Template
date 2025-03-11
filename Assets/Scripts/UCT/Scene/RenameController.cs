@@ -865,8 +865,7 @@ namespace UCT.Scene
                 MainControl.Instance.LanguagePackControl.sceneTexts, "RenameSp");
             foreach (var item in list)
             {
-                var lister = new List<string>();
-                TextProcessingService.SplitStringToListWithDelimiter($"{item}|", lister, '|');
+                var lister = TextProcessingService.SplitStringToListWithDelimiter($"{item}|", '|');
 
                 var specialName = lister[0];
                 var canRename = lister[1];

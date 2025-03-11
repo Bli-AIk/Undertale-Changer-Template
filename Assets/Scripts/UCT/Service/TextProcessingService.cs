@@ -51,26 +51,16 @@ namespace UCT.Service
         ///     检测 '\'字符然后分割文本到子List
         ///     传入一个string
         /// </summary>
-        public static void SplitStringToListWithDelimiter(string parentString,
-            List<string> sonList)
+        public static List<string> SplitStringToListWithDelimiter(string parentString, char delimiter = '\\')
         {
-            SplitStringToListWithDelimiter(parentString, sonList, '\\');
-        }
-
-        /// <summary>
-        ///     检测 '\'字符然后分割文本到子List
-        ///     传入一个string
-        /// </summary>
-        public static void SplitStringToListWithDelimiter(string parentString, List<string> sonList, char delimiter)
-        {
-            sonList.Clear();
+            var result = new List<string>();
             var text = new StringBuilder();
 
             foreach (var t in parentString)
             {
                 if (t == delimiter || t == ';')
                 {
-                    sonList.Add(text.ToString());
+                    result.Add(text.ToString());
                     text.Clear();
                 }
                 else
@@ -78,6 +68,8 @@ namespace UCT.Service
                     text.Append(t);
                 }
             }
+
+            return result;
         }
 
         /// <summary>

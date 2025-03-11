@@ -978,31 +978,34 @@ namespace UCT.Battle
 
         private bool Mercy(IEnemy enemy, EnemiesController enemiesController)
         {
-            if (enemy.state == EnemyState.CanSpace)
+            if (enemy.state != EnemyState.CanSpace)
             {
-                //TODO: 怪物饶恕特效
-                enemy.state = EnemyState.Spaced;
-                enemiesController.spriteSplitController.spriteRenderer.color = Color.gray;
-
-                foreach (Transform child in enemiesController.spriteSplitController.transform)
-                {
-                    child.gameObject.SetActive(false);
-                }
-
-                AudioController.Instance.PlayFx(5, MainControl.Instance.AudioControl.fxClipBattle);
-
-
-                if (enemiesControllers.All(item => item.Enemy.state is EnemyState.Spaced or EnemyState.Dead))
-                {
-                    MainControl.Instance.battlePlayerController.transform.position =
-                        (Vector3)(Vector2.one * 10000) + new Vector3(0, 0,
-                            MainControl.Instance.battlePlayerController.transform.position.z);
-                    ExitBattleScene();
-                    return true;
-                }
+                return false;
             }
 
-            return false;
+            enemy.state = EnemyState.Spaced;
+            enemiesController.dustCloud.SetActive(true);
+            enemiesController.spriteSplitController.spriteRenderer.color = Color.gray;
+
+            foreach (Transform child in enemiesController.spriteSplitController.transform)
+            {
+                child.gameObject.SetActive(false);
+            }
+
+            AudioController.Instance.PlayFx(5, MainControl.Instance.AudioControl.fxClipBattle);
+
+
+            if (!enemiesControllers.All(item => item.Enemy.state is EnemyState.Spaced or EnemyState.Dead))
+            {
+                return false;
+            }
+
+            MainControl.Instance.battlePlayerController.transform.position =
+                (Vector3)(Vector2.one * 10000) + new Vector3(0, 0,
+                    MainControl.Instance.battlePlayerController.transform.position.z);
+            ExitBattleScene();
+            return true;
+
         }
 
         private bool Flee()
@@ -1379,16 +1382,24 @@ namespace UCT.Battle
 
             while (numberDialog < optionsSave.Count)
             {
-                TextProcessingService.SplitStringToListWithDelimiter(optionsSave[numberDialog], save);
+                save = TextProcessingService.SplitStringToListWithDelimiter(optionsSave[numberDialog]);
 
-                if (enemiesControllers.Any(enemiesController =>
-                        enemiesController.name == save[2] && enemiesController.Enemy.state != EnemyState.Dead &&
-                        enemiesController.Enemy.state != EnemyState.Spaced)) 
+                var isBreak = !enemiesControllers.Any(enemiesController =>
+                    enemiesController.name == save[2] && enemiesController.Enemy.state is EnemyState.Dead or EnemyState.Spaced);
+                if (isBreak) 
                 {
                     break;
                 }
 
                 numberDialog++;
+                if (numberDialog < optionsSave.Count)
+                {
+                    continue;
+                }
+
+                EnterTurnLayer();
+                TurnController.Instance.EnterEnemyTurn();
+                return;
             }
 
             var size = save[0];

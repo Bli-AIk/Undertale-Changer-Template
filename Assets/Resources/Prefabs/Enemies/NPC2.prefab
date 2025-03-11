@@ -555,6 +555,7 @@ MonoBehaviour:
   def: -2
   hp: 120
   hpMax: 120
+  dustCloud: {fileID: 0}
   spriteSplitController: {fileID: 0}
 --- !u!95 &8696685702531877075
 Animator:

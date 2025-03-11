@@ -3897,6 +3897,7 @@ MonoBehaviour:
   jumpRayDistance: 0
   jumpRayDistanceForBoard: 0
   collideCollider: {fileID: 0}
+  animator: {fileID: 0}
   playerColor: 0
   hitVolume: {fileID: 0}
 --- !u!114 &1570390502

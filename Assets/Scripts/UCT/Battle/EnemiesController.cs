@@ -17,6 +17,7 @@ namespace UCT.Battle
         public Animator anim;
         public int atk, def;
         public int hp, hpMax;
+        public GameObject dustCloud;
 
         [HideInInspector] public SpriteSplitController spriteSplitController;
 
@@ -39,6 +40,10 @@ namespace UCT.Battle
 
             spriteSplitController = transform.GetChild(0).GetComponent<SpriteSplitController>();
             spriteSplitController.enabled = false;
+
+            dustCloud = Instantiate(Resources.Load<GameObject>("Prefabs/DustCloud"), transform, true);
+            dustCloud.transform.localPosition = Vector3.zero;
+            dustCloud.SetActive(false);
         }
 
         private void AnimCheckHit()
