@@ -4,10 +4,14 @@ Shader "Custom/PolygonMask"
     {
         _MainTex ("Texture", 2D) = "white" {}
         _VerticesTex ("Vertices Texture", 2D) = "white" {}
+        [KeywordEnum(None, Visible Inside Mask, Visible Outside Mask)] _Mode ("Mask Interaction", Float) = 0
     }
     SubShader
     {
-        Tags { "RenderType"="Transparent" }
+        Tags
+        {
+            "RenderType"="Transparent"
+        }
         LOD 100
 
         Pass
@@ -23,6 +27,7 @@ Shader "Custom/PolygonMask"
 
             sampler2D _MainTex;
             sampler2D _VerticesTex;
+            float _Mode;
 
             struct appdata_t
             {
@@ -37,7 +42,7 @@ Shader "Custom/PolygonMask"
                 float2 worldPos : TEXCOORD1;
             };
 
-            v2f vert (appdata_t v)
+            v2f vert(appdata_t v)
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
@@ -48,33 +53,46 @@ Shader "Custom/PolygonMask"
 
             bool PointInPolygon(float2 p)
             {
-                // 读取顶点数量
-                float vertexCount = tex2D(_VerticesTex, float2(0, 0)).r;
+                float polygonCount = tex2D(_VerticesTex, float2(0, 0)).g;
                 int count = 0;
-                
-                for (int i = 0; i < (int)vertexCount; i++)
+                bool isInside = false;
+                for (int i = 0; i < (int)polygonCount; i++)
                 {
-                    // 计算顶点位置索引
-                    float2 v1 = tex2D(_VerticesTex, float2((i + 1) / (vertexCount + 1), 0)).xy;
-                    int nextIndex = (i + 1) % (int)vertexCount;
-                    float2 v2 = tex2D(_VerticesTex, float2((nextIndex + 1) / (vertexCount + 1), 0)).xy;
+                    float vertexCount = tex2D(_VerticesTex, float2(0, i / polygonCount)).r;
 
-                    if ((v1.y > p.y) != (v2.y > p.y))
+                    for (int j = 0; j < (int)vertexCount; j++)
                     {
-                        float intersectX = (v2.x - v1.x) * (p.y - v1.y) / (v2.y - v1.y) + v1.x;
-                        if (p.x < intersectX)
+                        float2 v1 = tex2D(_VerticesTex, float2((j + 1) / (vertexCount + 1), i / polygonCount)).xy;
+                        int nextIndex = (j + 1) % (int)vertexCount;
+                        float2 v2 = tex2D(_VerticesTex,
+                                          float2((nextIndex + 1) / (vertexCount + 1), i / polygonCount)).xy;
+
+                        if (v1.y > p.y != v2.y > p.y)
                         {
-                            count++;
+                            float intersectX = (v2.x - v1.x) * (p.y - v1.y) / (v2.y - v1.y) + v1.x;
+                            if (p.x < intersectX)
+                            {
+                                count++;
+                            }
                         }
                     }
+
+                    if (count % 2 == 1)
+                    {
+                        isInside = true;
+                    }
                 }
-                return (count % 2) == 1;
+                return isInside;
             }
 
             fixed4 frag(v2f i) : SV_Target
             {
                 float2 p = i.worldPos;
-                if (!PointInPolygon(p)) discard;
+                bool inside = PointInPolygon(p);
+
+                if ((inside && _Mode == 2) || (!inside && _Mode == 1))
+                    discard;
+
                 return tex2D(_MainTex, i.uv);
             }
             ENDCG

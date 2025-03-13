@@ -1,12 +1,19 @@
+using System.Linq;
 using UnityEngine;
 
 namespace UCT
 {
+    [System.Serializable]
+    public class Polygon
+    {
+        public Vector2[] vertices;
+    }
+
     public class PolygonMask : MonoBehaviour
     {
         private static readonly int VerticesTex = Shader.PropertyToID("_VerticesTex");
-        public Vector2[] polygonVertices;
         private Material _material;
+        public Polygon[] polygons;
 
         private void Start()
         {
@@ -21,27 +28,35 @@ namespace UCT
 
         private void UpdateVertexTexture()
         {
-            int textureWidth = polygonVertices.Length + 1;
-            var vertexTexture = new Texture2D(textureWidth, 1, TextureFormat.RGFloat, false)
+            if (polygons.Length == 0)
+            {
+                return;
+            }
+
+            var textureWidth = polygons.Max(p => p.vertices.Length) + 1; 
+            var textureHeight = polygons.Length; 
+
+            var vertexTexture = new Texture2D(textureWidth, textureHeight, TextureFormat.RGFloat, false)
             {
                 filterMode = FilterMode.Point,
                 wrapMode = TextureWrapMode.Clamp
             };
 
-            Color[] colors = new Color[textureWidth];
-            
-            // 第一个像素存储顶点数量
-            colors[0] = new Color(polygonVertices.Length, 0f, 0f, 1f);
-            
-            // 后续像素存储顶点坐标
-            for (int i = 0; i < polygonVertices.Length; i++)
+            for (var y = 0; y < polygons.Length; y++)
             {
-                colors[i + 1] = new Color(polygonVertices[i].x, polygonVertices[i].y, 0f, 1f);
+                var polygon = polygons[y];
+
+                vertexTexture.SetPixel(0, y, new Color(polygon.vertices.Length, polygons.Length, 0f, 1f));
+
+                for (var x = 0; x < polygon.vertices.Length; x++)
+                {
+                    vertexTexture.SetPixel(x + 1, y, new Color(polygon.vertices[x].x, polygon.vertices[x].y, 0f, 1f));
+                }
             }
 
-            vertexTexture.SetPixels(colors);
-            vertexTexture.Apply();
+            vertexTexture.Apply(); 
             _material.SetTexture(VerticesTex, vertexTexture);
         }
+
     }
 }

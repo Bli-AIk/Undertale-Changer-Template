@@ -10,7 +10,8 @@ Material:
   m_Name: PolygonMask
   m_Shader: {fileID: 4800000, guid: 87c2d15bc1590584dade653140808df6, type: 3}
   m_ValidKeywords: []
-  m_InvalidKeywords: []
+  m_InvalidKeywords:
+  - _MODE_NONE
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -30,6 +31,8 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _Mode: 0
+    - _UseEffect: 0
     - _VertexCount: 0
     m_Colors: []
   m_BuildTextureStacks: []
