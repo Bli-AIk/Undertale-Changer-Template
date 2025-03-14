@@ -38,7 +38,7 @@ namespace UCT.UI
         public int besselPointsNumber = 16;
 
         [Header("真正组框所用的点")]
-        public List<Vector2> realPoints; //真正的曲线插值，插入点数由besselPointsNumber决定
+        public List<Vector2> realPoints; 
 
         public int besselInsertNumber = 2;
 

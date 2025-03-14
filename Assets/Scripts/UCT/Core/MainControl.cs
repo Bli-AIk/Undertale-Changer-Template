@@ -429,7 +429,7 @@ namespace UCT.Core
                 cameraShake = GameObject.Find("Main Camera").GetComponent<CameraShake>();
             }
 
-            cameraShake3D = GameObject.Find("3D CameraP").GetComponent<CameraShake>();
+            cameraShake3D = GameObject.Find("3D CameraParent").GetComponent<CameraShake>();
             if (!cameraMainInBattle)
             {
                 cameraMainInBattle = cameraShake.GetComponent<Camera>();

@@ -5,21 +5,18 @@ Shader "Custom/PolygonMask"
         _MainTex ("Texture", 2D) = "white" {}
         _VerticesTex ("Vertices Texture", 2D) = "white" {}
         [KeywordEnum(None, Visible Inside Mask, Visible Outside Mask)] _Mode ("Mask Interaction", Float) = 0
+        _Color ("Tint Color", Color) = (1,1,1,1)
     }
     SubShader
     {
         Tags
         {
-            "RenderType"="Transparent"
+            "Queue"="Transparent"
         }
-        LOD 100
+        Blend SrcAlpha OneMinusSrcAlpha
 
         Pass
         {
-            Cull Off
-            ZWrite Off
-            Blend SrcAlpha OneMinusSrcAlpha
-
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
@@ -28,11 +25,14 @@ Shader "Custom/PolygonMask"
             sampler2D _MainTex;
             sampler2D _VerticesTex;
             float _Mode;
+            fixed4 _Color;
+
 
             struct appdata_t
             {
                 float4 vertex : POSITION;
                 float2 uv : TEXCOORD0;
+                fixed4 color : COLOR; // 添加颜色通道
             };
 
             struct v2f
@@ -40,6 +40,7 @@ Shader "Custom/PolygonMask"
                 float2 uv : TEXCOORD0;
                 float4 vertex : SV_POSITION;
                 float2 worldPos : TEXCOORD1;
+                fixed4 color : COLOR; // 添加颜色传递
             };
 
             v2f vert(appdata_t v)
@@ -48,8 +49,10 @@ Shader "Custom/PolygonMask"
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = v.uv;
                 o.worldPos = mul(unity_ObjectToWorld, v.vertex).xy;
+                o.color = v.color; // 传递颜色数据
                 return o;
             }
+
 
             bool PointInPolygon(float2 p)
             {
@@ -65,7 +68,7 @@ Shader "Custom/PolygonMask"
                         float2 v1 = tex2D(_VerticesTex, float2((j + 1) / (vertexCount + 1), i / polygonCount)).xy;
                         int nextIndex = (j + 1) % (int)vertexCount;
                         float2 v2 = tex2D(_VerticesTex,
-                                          float2((nextIndex + 1) / (vertexCount + 1), i / polygonCount)).xy;
+                  float2((nextIndex + 1) / (vertexCount + 1), i / polygonCount)).xy;
 
                         if (v1.y > p.y != v2.y > p.y)
                         {
@@ -93,7 +96,9 @@ Shader "Custom/PolygonMask"
                 if ((inside && _Mode == 2) || (!inside && _Mode == 1))
                     discard;
 
-                return tex2D(_MainTex, i.uv);
+                fixed4 col = tex2D(_MainTex, i.uv);
+                col *= i.color * _Color; // 添加颜色乘算
+                return col;
             }
             ENDCG
         }

@@ -119,6 +119,9 @@ namespace UCT.Battle
         public bool firstIn;
 
         public int firstInDiy = -1;
+
+        [HideInInspector] public GameObject projectionBoxes;
+
         private DialogBubbleBehaviour _dialog;
         private GameObject _enemiesHpLine;
         private bool _haveRandomTurnDialog;
@@ -137,6 +140,11 @@ namespace UCT.Battle
         private TargetController _target;
         private TypeWritter _typeWritter;
 
+        private void Awake()
+        {
+            projectionBoxes = GameObject.Find("ProjectionBoxes");
+        }
+
         private void Start()
         {
             GetComponent();
@@ -146,15 +154,6 @@ namespace UCT.Battle
             _hpFood = MainControl.Instance.playerControl.hp;
             EnterPlayerTurn();
             GetHaveRandomTurnDialog();
-        }
-
-        private void GetHaveRandomTurnDialog()
-        {
-            var textAssets = MainControl.Instance.BattleControl.turnDialogAsset;
-            var types = textAssets.Select(DataHandlerService.LoadItemData)
-                .Select(save => TextProcessingService.GetFirstChildStringByPrefix(save, "Type", true))
-                .ToList();
-            _haveRandomTurnDialog = !(types.Any(t => t.StartsWith("Fixed")) && !types.Contains("Random"));
         }
 
         private void Update()
@@ -175,6 +174,15 @@ namespace UCT.Battle
             }
 
             UpdateDialog();
+        }
+
+        private void GetHaveRandomTurnDialog()
+        {
+            var textAssets = MainControl.Instance.BattleControl.turnDialogAsset;
+            var types = textAssets.Select(DataHandlerService.LoadItemData)
+                .Select(save => TextProcessingService.GetFirstChildStringByPrefix(save, "Type", true))
+                .ToList();
+            _haveRandomTurnDialog = !(types.Any(t => t.StartsWith("Fixed")) && !types.Contains("Random"));
         }
 
         private void UpdateDialog()
@@ -1005,7 +1013,6 @@ namespace UCT.Battle
                     MainControl.Instance.battlePlayerController.transform.position.z);
             ExitBattleScene();
             return true;
-
         }
 
         private bool Flee()
@@ -1325,7 +1332,6 @@ namespace UCT.Battle
             var types = textAssets.Select(DataHandlerService.LoadItemData)
                 .Select(save => TextProcessingService.GetFirstChildStringByPrefix(save, "Type", true))
                 .ToList();
-            
 
 
             foreach (var type in types)
@@ -1385,8 +1391,9 @@ namespace UCT.Battle
                 save = TextProcessingService.SplitStringToListWithDelimiter(optionsSave[numberDialog]);
 
                 var isBreak = !enemiesControllers.Any(enemiesController =>
-                    enemiesController.name == save[2] && enemiesController.Enemy.state is EnemyState.Dead or EnemyState.Spaced);
-                if (isBreak) 
+                    enemiesController.name == save[2] &&
+                    enemiesController.Enemy.state is EnemyState.Dead or EnemyState.Spaced);
+                if (isBreak)
                 {
                     break;
                 }
@@ -1406,7 +1413,7 @@ namespace UCT.Battle
             var position = save[1];
             var character = save[2];
 
-            
+
             var direction = save[3];
             var arrowY = save[4];
             var text = save[5];

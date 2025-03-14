@@ -13,17 +13,17 @@ namespace UCT.Battle
         private readonly List<GameObject> _checkColliders = new();
 
         private readonly List<GameObject> _sets = new();
-        private GameObject _canvasBoxProjectionSet;
+        private GameObject _projectionBoxes;
 
         // Start is called before the first frame update
         private void Start()
         {
-            _canvasBoxProjectionSet = GameObject.Find("CanvasBoxProjectionSet");
+            _projectionBoxes = MainControl.Instance.selectUIController.projectionBoxes;
 
             poolObject = (GameObject)Resources.Load("Prefabs/CheckCollider");
-            for (var i = 0; i < _canvasBoxProjectionSet.transform.childCount; i++)
+            for (var i = 0; i < _projectionBoxes.transform.childCount; i++)
             {
-                _sets.Add(_canvasBoxProjectionSet.transform.GetChild(i).gameObject);
+                _sets.Add(_projectionBoxes.transform.GetChild(i).gameObject);
                 var obj = GetFromPool<Transform>();
                 _checkColliders.Add(obj.gameObject);
             }
@@ -42,7 +42,7 @@ namespace UCT.Battle
             for (var i = 0; i < _sets.Count; i++)
             {
                 var convert = _sets[i].transform.position + _sets[i].transform.rotation * relative;
-                _checkColliders[i].transform.position = convert - _canvasBoxProjectionSet.transform.position;
+                _checkColliders[i].transform.position = convert - _projectionBoxes.transform.position;
                 _checkColliders[i].transform.rotation = _sets[i].transform.rotation;
             }
         }

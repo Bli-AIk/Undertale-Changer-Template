@@ -162,7 +162,7 @@ namespace UCT.Service
         }
 
         /// <summary>
-        ///     计算内缩多边形顶点
+        ///     计算缩放多边形顶点
         /// </summary>
         public static List<Vector2> CalculateInwardOffset(List<Vector2> vertices, float offset)
         {

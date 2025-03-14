@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using DG.Tweening;
+using Plugins.Timer.Source;
 using UCT.Audio;
 using UCT.Control;
 using UCT.Core;
@@ -27,8 +28,7 @@ namespace UCT.Battle
             NoFollow
         }
 
-        private static readonly int OpenMask = Shader.PropertyToID("_OpenMask");
-        private static readonly int OutSide = Shader.PropertyToID("_OutSide");
+        private static readonly int Mode = Shader.PropertyToID("_Mode");
 
         public string typeName;
 
@@ -70,7 +70,7 @@ namespace UCT.Battle
 
         private void OnDisable()
         {
-            name = "Bullet";
+            gameObject.name = "Bullet";
         }
 
         private void OnTriggerStay2D(Collider2D collision)
@@ -167,6 +167,7 @@ namespace UCT.Battle
             transform.localScale = startScale;
 
             SetMask(initialMask.Value);
+            
             spriteRenderer.sprite = bulletControl.sprite;
 
             if (typeName != bulletControl.typeName)
@@ -211,6 +212,7 @@ namespace UCT.Battle
 
                 boxColliderList.Add(save);
             }
+
         }
 
         private void HitPlayer(int i)
@@ -248,101 +250,7 @@ namespace UCT.Battle
 
         public void SetMask(SpriteMaskInteraction spriteMaskInteraction)
         {
-            switch (spriteMaskInteraction)
-            {
-                case SpriteMaskInteraction.None:
-                    spriteRenderer.material.SetFloat(OpenMask, 0);
-                    break;
-
-                case SpriteMaskInteraction.VisibleInsideMask:
-                    spriteRenderer.material.SetFloat(OpenMask, 1);
-                    spriteRenderer.material.SetFloat(OutSide, 0);
-                    break;
-
-                case SpriteMaskInteraction.VisibleOutsideMask:
-                    spriteRenderer.material.SetFloat(OpenMask, 1);
-                    spriteRenderer.material.SetFloat(OutSide, 1);
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(spriteMaskInteraction), spriteMaskInteraction, null);
-            }
-        }
-    }
-
-    public static class BulletResourceManager
-    {
-        private static readonly Dictionary<string, BulletControl> BulletCache = new();
-
-        public static BulletControl LoadBullet(string bulletPathName)
-        {
-            if (BulletCache.TryGetValue(bulletPathName, out var bullet))
-            {
-                return bullet;
-            }
-
-            var path = "Assets/Bullets/" + bulletPathName;
-            bullet = Resources.Load<BulletControl>(path);
-
-            if (bullet)
-            {
-                BulletCache[bulletPathName] = bullet;
-            }
-            else
-            {
-                Debug.LogError($"Bullet resource not found: {path}");
-            }
-
-            return bullet;
-        }
-    }
-
-    public readonly struct InitialTransform : IEquatable<InitialTransform>
-    {
-        public Vector3? Position { get; }
-        public Quaternion? Rotation { get; }
-        public Vector3? Scale { get; }
-
-        public InitialTransform(Vector3 position)
-        {
-            Position = position;
-            Rotation = null;
-            Scale = null;
-        }
-
-        public InitialTransform(Vector3 position, Quaternion rotation)
-        {
-            Position = position;
-            Rotation = rotation;
-            Scale = null;
-        }
-
-        public InitialTransform(Vector3 position, Vector3 scale)
-        {
-            Position = position;
-            Rotation = null;
-            Scale = scale;
-        }
-
-        public InitialTransform(Vector3 position, Quaternion rotation, Vector3 scale)
-        {
-            Position = position;
-            Rotation = rotation;
-            Scale = scale;
-        }
-
-        public bool Equals(InitialTransform other)
-        {
-            return Position.Equals(other.Position) && Rotation.Equals(other.Rotation) && Scale.Equals(other.Scale);
-        }
-
-        public override bool Equals(object obj)
-        {
-            return obj is InitialTransform other && Equals(other);
-        }
-
-        public override int GetHashCode()
-        {
-            return HashCode.Combine(Position, Rotation, Scale);
+            spriteRenderer.material.SetFloat(Mode, (int)spriteMaskInteraction);
         }
     }
 }
