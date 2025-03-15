@@ -82,7 +82,7 @@ namespace UCT.Scene
 
         private void FixedUpdate()
         {
-            _textTime.text = TextProcessingService.GetRealTime((int)MainControl.Instance.playerControl.gameTime);
+            _textTime.text = TextProcessingService.FormatTimeToHoursMinutes((int)MainControl.Instance.playerControl.gameTime);
         }
 
         private void CancelSetData()

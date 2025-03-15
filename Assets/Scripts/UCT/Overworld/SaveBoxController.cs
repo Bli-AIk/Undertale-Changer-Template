@@ -94,7 +94,7 @@ namespace UCT.Overworld
         private static string BuildSaveSummaryText(string playerName)
         {
             return $"{playerName}<indent=35></indent>LV{PlayerControl.lv}"
-                   + $"<indent=72></indent>{TextProcessingService.GetRealTime((int)PlayerControl.gameTime)}\n"
+                   + $"<indent=72></indent>{TextProcessingService.FormatTimeToHoursMinutes((int)PlayerControl.gameTime)}\n"
                    + $"{TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.LanguagePackControl.settingTexts, SceneManager.GetActiveScene().name)}\n"
                    + "<line-height=1.5>\n</line-height>";
         }

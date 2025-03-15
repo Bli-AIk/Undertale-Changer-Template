@@ -190,9 +190,11 @@ namespace UCT.Service
 
 
         /// <summary>
-        ///     换算时间
+        ///     将给定的秒数转换为 "hh:mm" 格式的时间字符串。
         /// </summary>
-        public static string GetRealTime(int totalSeconds)
+        /// <param name="totalSeconds">总秒数，将被转换为小时和分钟。</param>
+        /// <returns>格式化的时间字符串，格式为 "hh:mm"。</returns>
+        public static string FormatTimeToHoursMinutes(int totalSeconds)
         {
             if (totalSeconds < 0)
             {
@@ -209,6 +211,24 @@ namespace UCT.Service
             var result = $"{hoursString}:{minutesString}";
             return result;
         }
+        /// <summary>
+        ///     将给定的秒数转换为 "mm:ss" 格式的时间字符串。
+        /// </summary>
+        /// <param name="totalSeconds">总秒数，将被转换为分钟和秒。</param>
+        /// <returns>格式化的时间字符串，格式为 "mm:ss"。</returns>
+        public static string FormatTimeToMinutesSeconds(int totalSeconds)
+        {
+            if (totalSeconds < 0)
+            {
+                totalSeconds = 0;
+            }
+
+            int minutes = totalSeconds / 60;
+            int seconds = totalSeconds % 60;
+
+            return $"{minutes:D2}:{seconds:D2}";
+        }
+
 
         /// <summary>
         ///     从字符串中移除指定位置的子字符串。
