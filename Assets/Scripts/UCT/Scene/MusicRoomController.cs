@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using Alchemy.Inspector;
@@ -153,6 +154,11 @@ namespace UCT.Scene
                 shouldUpdateSortText = true;
             }
 
+            if (InputService.GetKeyDown(KeyCode.C) || InputService.GetKeyDown(KeyCode.X))
+            {
+                OutSettingMusic();
+            }
+            
             if (!InputService.GetKeyDown(KeyCode.Z))
             {
                 return shouldUpdateSortText;
@@ -185,10 +191,12 @@ namespace UCT.Scene
                     return shouldUpdateSortText;
                 }
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    throw new ArgumentOutOfRangeException($"Unexpected sortIndex value: {sortIndex}");
+
             }
 
             SortList();
+            
 
             return shouldUpdateSortText;
         }
@@ -212,14 +220,14 @@ namespace UCT.Scene
 
             if (stringSelector == null && floatSelector == null)
             {
-                throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException($"{_sortMode} unexpected stringSelector value and floatSelector value");
             }
 
             var indexedItems = musicData
                 .Select((data, index) => new
                 {
                     Index = index,
-                    Value = stringSelector != null ? stringSelector(data) : floatSelector(data).ToString()
+                    Value = stringSelector != null ? stringSelector(data) : floatSelector?.Invoke(data).ToString(CultureInfo.InvariantCulture)
                 })
                 .OrderBy(item => item.Value, StringComparer.OrdinalIgnoreCase)
                 .Select(item => item.Index)
@@ -338,48 +346,69 @@ namespace UCT.Scene
             {
                 var distance = i - musicDataIndex;
                 var newY = -distance * MusicDataTmpSpacing;
-                if (!Mathf.Approximately(_musicDataTmpList[i].transform.position.y, newY))
-                {
-                    if (_musicDataTmpTweenList[i] != null)
-                    {
-                        _musicDataTmpTweenList[i].Kill();
-                    }
+                TmpTween(i, newY);
 
-                    _musicDataTmpTweenList[i] = _musicDataTmpList[i].transform.DOMoveY(newY, 0.25f)
-                        .SetEase(Ease.InOutSine);
-                }
-
-                var factor = Mathf.Pow(Mathf.Abs(distance / 5f), 0.5f); // 0.5f 控制曲线形状
-                var newA = Mathf.Clamp01(1 - factor);
-
-                var currentBlueValue = i == currentMusicDataIndex ? 0 : 1;
-                if (!Mathf.Approximately(_musicDataTmpList[i].color.a, newA) ||
-                    !Mathf.Approximately(_musicDataTmpList[i].color.b, currentBlueValue))
-                {
-                    if (_musicDataColorTweenList[i] != null)
-                    {
-                        _musicDataColorTweenList[i].Kill();
-                    }
-
-                    _musicDataColorTweenList[i] = _musicDataTmpList[i]
-                        .DOColor(new Color(1, 1, currentBlueValue, newA), 0.25f)
-                        .SetEase(Ease.InOutSine);
-                }
+                ColorTween(i, distance);
 
                 var currentXValue = i == currentMusicDataIndex ? 0.25f : 0;
 
 
-                if (!Mathf.Approximately(_musicDataTmpList[i].transform.position.x, currentXValue))
+                if (Mathf.Approximately(_musicDataTmpList[i].transform.position.x, currentXValue))
                 {
-                    if (_musicDataIndentTmpTweenList[i] != null)
-                    {
-                        _musicDataIndentTmpTweenList[i].Kill();
-                    }
-
-                    _musicDataIndentTmpTweenList[i] = _musicDataTmpList[i].transform.DOMoveX(currentXValue, 0.25f)
-                        .SetEase(Ease.InOutSine);
+                    continue;
                 }
+
+                IndentTween(i, currentXValue);
             }
+        }
+
+        private void TmpTween(int i, float newY)
+        {
+            if (Mathf.Approximately(_musicDataTmpList[i].transform.position.y, newY))
+            {
+                return;
+            }
+
+            if (_musicDataTmpTweenList[i] != null)
+            {
+                _musicDataTmpTweenList[i].Kill();
+            }
+
+            _musicDataTmpTweenList[i] = _musicDataTmpList[i].transform.DOMoveY(newY, 0.25f)
+                .SetEase(Ease.InOutSine);
+        }
+
+        private void ColorTween(int i, int distance)
+        {
+            var factor = Mathf.Pow(Mathf.Abs(distance / 5f), 0.5f);
+            var newA = Mathf.Clamp01(1 - factor);
+
+            var currentBlueValue = i == currentMusicDataIndex ? 0 : 1;
+            if (Mathf.Approximately(_musicDataTmpList[i].color.a, newA) &&
+                Mathf.Approximately(_musicDataTmpList[i].color.b, currentBlueValue))
+            {
+                return;
+            }
+
+            if (_musicDataColorTweenList[i] != null)
+            {
+                _musicDataColorTweenList[i].Kill();
+            }
+
+            _musicDataColorTweenList[i] = _musicDataTmpList[i]
+                .DOColor(new Color(1, 1, currentBlueValue, newA), 0.25f)
+                .SetEase(Ease.InOutSine);
+        }
+
+        private void IndentTween(int i, float currentXValue)
+        {
+            if (_musicDataIndentTmpTweenList[i] != null)
+            {
+                _musicDataIndentTmpTweenList[i].Kill();
+            }
+
+            _musicDataIndentTmpTweenList[i] = _musicDataTmpList[i].transform.DOMoveX(currentXValue, 0.25f)
+                .SetEase(Ease.InOutSine);
         }
 
         private void SpawnMusicData()
@@ -686,6 +715,7 @@ namespace UCT.Scene
 
         private enum OrderMode
         {
+            // ReSharper disable once UnusedMember.Local
             Ascending,
             Descending
         }
