@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using UCT.Audio;
-using UCT.Service;
 using UnityEngine;
 
 namespace UCT.Scene
@@ -61,42 +60,47 @@ namespace UCT.Scene
             var audioSource = AudioController.Instance.audioSource;
             if (!audioSource.isPlaying)
             {
-                return;
+                for (var i = 0; i < objectCount; i++)
+                {
+                    _waveData[i] = Mathf.Lerp(_waveData[i], 1f, Time.deltaTime * 5f);
+                }
             }
-
-            audioSource.GetSpectrumData(_spectrumData, 0, FFTWindow.BlackmanHarris);
-
-            var sum = _spectrumData.Sum();
-            var average = sum / _spectrumData.Length;
-            var newHeight = average * scaleMultiplier * 10000f + 1f;
-
-            for (var i = _leftEnd; i > 0; i--)
+            else
             {
-                var t = (float)i / _leftEnd;
-                var factor = Mathf.Lerp(1f, decayFactor, t);
-                _waveData[i] = Mathf.Max(_waveData[i - 1] * factor, 1f);
+                audioSource.GetSpectrumData(_spectrumData, 0, FFTWindow.BlackmanHarris);
+
+                var sum = _spectrumData.Sum();
+                var average = sum / _spectrumData.Length;
+                var newHeight = average * scaleMultiplier * 10000f + 1f;
+
+                for (var i = _leftEnd; i > 0; i--)
+                {
+                    var t = (float)i / _leftEnd;
+                    var factor = Mathf.Lerp(1f, decayFactor, t);
+                    _waveData[i] = Mathf.Max(_waveData[i - 1] * factor, 1f);
+                }
+
+                _waveData[0] = newHeight;
+
+                for (var i = _rightStart; i < objectCount - 1; i++)
+                {
+                    var t = (float)(objectCount - 1 - i) / (objectCount - 1 - _rightStart);
+                    var factor = Mathf.Lerp(1f, decayFactor, t);
+                    _waveData[i] = Mathf.Max(_waveData[i + 1] * factor, 1f);
+                }
+
+                _waveData[objectCount - 1] = newHeight;
             }
 
-            _waveData[0] = newHeight;
-
-            for (var i = _rightStart; i < objectCount - 1; i++)
-            {
-                var t = (float)(objectCount - 1 - i) / (objectCount - 1 - _rightStart);
-                var factor = Mathf.Lerp(1f, decayFactor, t);
-                _waveData[i] = Mathf.Max(_waveData[i + 1] * factor, 1f);
-            }
-
-            _waveData[objectCount - 1] = newHeight;
 
             for (var i = 0; i < objectCount; i++)
             {
                 var currentScale = _spriteRenderers[i].transform.localScale;
                 currentScale.y = Mathf.Lerp(currentScale.y, _waveData[i], Time.deltaTime * 20f);
                 _spriteRenderers[i].transform.localScale = currentScale;
-                var t = 1 - scaleMultiplier / currentScale.y; 
+                var t = 1 - scaleMultiplier / currentScale.y;
                 var alpha = Mathf.SmoothStep(0.5f, 1f, t);
                 _spriteRenderers[i].color = new Color(1, 1, 1, alpha);
-
             }
         }
     }
