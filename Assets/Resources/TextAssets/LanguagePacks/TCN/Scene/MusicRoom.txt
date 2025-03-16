@@ -1,0 +1,36 @@
+SortBy\排序方式：;
+Title\按標題;
+Author\按作者;
+Length\按時長;
+Order\順序：;
+Ascending\正序;
+Descending\倒序;
+Back\返回;
+
+NowPlaying\正在播放;
+NothingIsPlaying\未播放;
+Paused\暫停;
+
+MusicUnlimited\Music Unlimited;
+
+StrangerThings\Stranger Things;
+StrangerThingsInfo\本音樂來自 pixabay.com, 在DemoBattle中使用。 <enter>
+不管怎麼樣，這首曲子找的還是非常適合的。 <enter>給了我一種需要的那種感覺－迷幻感。;
+
+FarAway\Far Away;
+FarAwayInfo\本音樂來自 pixabay.com, 在DemoBattle2中使用。 <enter>
+我只是想找到些輕鬆的感覺，正如我剛做完多戰鬥重構時所感受到的。;
+
+TobyFox\Toby fox;
+
+StartMenu\Start Menu;
+StartMenuInfo\選單頁面的音樂。 <enter>
+簡潔、輕快，配上熟悉的旋律。 <enter>
+極簡主義的作風，也許有人會喜歡。;
+
+AIk\AIk;
+
+GoodNews\Good News;
+GoodNewsInfo\愚人節時播放的Gameover音樂。 <enter>
+我本來尋思用《春節序曲》的，<enter>但防止侵權，自己糊了一個曲子。 <enter>
+這玩意兒是套midi整的，別問了。小孩子不懂事做著玩的。;

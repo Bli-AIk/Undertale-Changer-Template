@@ -1,0 +1,37 @@
+SortBy\Sort by: ;
+Title\Title;
+Author\Author;
+Length\Length;
+Order\Order: ;
+Ascending\Ascending;
+Descending\Descending;
+Back\Back;
+
+NowPlaying\Now Playing;
+NothingIsPlaying\Nothing is Playing;
+Paused\Paused;
+
+MusicUnlimited\Music Unlimited;
+
+StrangerThings\Stranger Things;
+StrangerThingsInfo\Music from pixabay.com, Used for DemoBattle.<enter>
+No matter what, this track is really well-chosen.<enter>
+It gives me the exact feeling I need — a dreamy vibe.;
+
+FarAway\Far Away;
+FarAwayInfo\Music from pixabay.com, Used for DemoBattle2.<enter>
+I just want to find some sense of relaxation, just like what I felt after finishing the multi-battle refactor.;
+
+TobyFox\Toby fox;
+
+StartMenu\Start Menu;
+StartMenuInfo\The music of the menu.<enter>
+Simple and light, accompanied by a familiar melody.<enter>
+A minimalist style — perhaps some will like it.;
+
+AIk\AIk;
+
+GoodNews\Good News;
+GoodNewsInfo\The Game Over music for April Fools' Day.<enter>
+I originally thought about using Spring Festival Overture, but to avoid copyright issues, I threw together my own track.<enter>
+Just a quick MIDI edit, don’t ask. It’s just for fun.;
