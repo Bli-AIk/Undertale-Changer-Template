@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,11 +10,24 @@ using UCT.Control;
 using UCT.Core;
 using UCT.Service;
 using UnityEngine;
+using ArgumentOutOfRangeException = System.ArgumentOutOfRangeException;
 
 namespace UCT.Scene
 {
     public class MusicRoomController : MonoBehaviour
     {
+        private enum SortMode
+        {
+            Title,
+            Author,
+            Length,
+        }
+        private enum OrderMode
+        {
+            Ascending,
+            Descending,
+        }
+        
         private const float MusicDataTmpSpacing = 0.75f;
         private static readonly int Crop = Shader.PropertyToID("_Crop");
         private static readonly int IsPause = Animator.StringToHash("isPause");
@@ -21,16 +35,19 @@ namespace UCT.Scene
         [SerializeField] [ReadOnly] private int currentMusicDataIndex = -1;
 
         [SerializeField] [ReadOnly] private int musicDataIndex;
+        [SerializeField] [ReadOnly] private SortOption sortIndex;
 
         [SerializeField] [ReadOnly] private List<MusicData> musicData;
-
+        private SortMode _sortMode;
+        private OrderMode _orderMode;
         private TextMeshPro _information;
 
         private bool _isSettingMusic = true;
-
+        private bool _isSettingSort;
         private bool _isSwitching;
         private SpriteRenderer _musicCover;
         private List<Tween> _musicDataColorTweenList;
+        private List<Tween> _musicDataIndentTmpTweenList;
         private List<TextMeshPro> _musicDataTmpList;
         private List<Tween> _musicDataTmpTweenList;
         private TextMeshPro _musicTimeText;
@@ -39,12 +56,12 @@ namespace UCT.Scene
 
         private SpriteRenderer _progressBar;
         private Animator _progressBarPoint;
+        private TextMeshPro _settingMusicBack;
 
         private SpriteRenderer _settingMusicGradient;
         private GameObject _settingMusicNames;
 
         private TextMeshPro _settingMusicSettings;
-
 
         private void Start()
         {
@@ -61,37 +78,30 @@ namespace UCT.Scene
 
             _settingMusicGradient = transform.Find("MusicNames/Background/Gradient").GetComponent<SpriteRenderer>();
             _settingMusicSettings = transform.Find("MusicNames/MusicSettings").GetComponent<TextMeshPro>();
+            _settingMusicBack = transform.Find("MusicNames/MusicBack").GetComponent<TextMeshPro>();
             _settingMusicNames = transform.Find("MusicNames/MusicNames").gameObject;
 
-            _settingMusicSettings.text = new StringBuilder()
-                .Append(TextProcessingService.GetFirstChildStringByPrefix(
-                    MainControl.Instance.LanguagePackControl.sceneTexts, "SortBy"))
-                .Append(TextProcessingService.GetFirstChildStringByPrefix(
-                    MainControl.Instance.LanguagePackControl.sceneTexts, "Title"))
-                .Append("\n")
-                .Append(TextProcessingService.GetFirstChildStringByPrefix(
-                    MainControl.Instance.LanguagePackControl.sceneTexts, "Order"))
-                .Append(TextProcessingService.GetFirstChildStringByPrefix(
-                    MainControl.Instance.LanguagePackControl.sceneTexts, "Ascending"))
-                .Append("\n\n")
-                .Append(TextProcessingService.GetFirstChildStringByPrefix(
-                    MainControl.Instance.LanguagePackControl.sceneTexts, "Back"))
-                .ToString();
+            UpdateSortText();
+
             SpawnMusicData();
 
             var audioSource = AudioController.Instance.audioSource;
             SetMusic(audioSource.isPlaying);
+            audioSource.Play();
 
             _musicDataTmpTweenList = new List<Tween>();
             _musicDataColorTweenList = new List<Tween>();
+            _musicDataIndentTmpTweenList = new List<Tween>();
 
-            MoveMusicDataTmp();
+            UpdateMusicDataTween();
         }
 
         private void Update()
         {
             var audioSource = AudioController.Instance.audioSource;
 
+            SetMusicProgressUI(audioSource);
+            ScrollText(_information);
             if (_isSwitching)
             {
                 return;
@@ -100,53 +110,180 @@ namespace UCT.Scene
             if (!_isSettingMusic)
             {
                 MusicPlayingInput(audioSource);
-                SetMusicProgressUI(audioSource);
             }
             else
             {
-                var prevIndex = musicDataIndex;
-
-                if (InputService.GetKeyDown(KeyCode.UpArrow))
+                var shouldUpdateSortText = false;
+                if (InputService.GetKeyDown(KeyCode.LeftArrow) || InputService.GetKeyDown(KeyCode.RightArrow))
                 {
-                    musicDataIndex = Mathf.Clamp(musicDataIndex - 1, 0, musicData.Count - 1);
+                    _isSettingSort = !_isSettingSort;
+                    shouldUpdateSortText = true;
                 }
 
-                if (InputService.GetKeyDown(KeyCode.DownArrow))
+                if (!_isSettingSort)
                 {
-                    musicDataIndex = Mathf.Clamp(musicDataIndex + 1, 0, musicData.Count - 1);
+                    SettingMusicInput(audioSource);
+                }
+                else
+                {
+                    shouldUpdateSortText = SettingSortInput(shouldUpdateSortText);
                 }
 
-                if (prevIndex != musicDataIndex)
+                if (shouldUpdateSortText)
                 {
-                    AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
-                    MoveMusicDataTmp();
-                }
-
-                if (InputService.GetKeyDown(KeyCode.Z))
-                {
-                    AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
-
-                    if (musicDataIndex == currentMusicDataIndex)
-                    {
-                        currentMusicDataIndex = -1;
-                    }
-                    else
-                    {
-                        currentMusicDataIndex = musicDataIndex;
-                    }
-
-                    SetMusic(true);
-                }
-
-
-                if (InputService.GetKeyDown(KeyCode.C) || InputService.GetKeyDown(KeyCode.X))
-                {
-                    OutSettingMusic();
+                    UpdateSortText();
                 }
             }
         }
 
-        private void MoveMusicDataTmp()
+        private bool SettingSortInput(bool shouldUpdateSortText)
+        {
+            var optionCount = Enum.GetValues(typeof(SortOption)).Length;
+
+            if (InputService.GetKeyDown(KeyCode.DownArrow))
+            {
+                sortIndex = (SortOption)(((int)sortIndex + 1 + optionCount) % optionCount);
+                shouldUpdateSortText = true;
+            }
+
+            if (InputService.GetKeyDown(KeyCode.UpArrow))
+            {
+                sortIndex = (SortOption)(((int)sortIndex - 1 + optionCount) % optionCount);
+                shouldUpdateSortText = true;
+            }
+
+            if (InputService.GetKeyDown(KeyCode.Z))
+            {
+                switch (sortIndex)
+                {
+                    case SortOption.Sort:
+                    {
+                        _sortMode++;
+                        if ((int)_sortMode >= Enum.GetValues(typeof(SortMode)).Length)
+                        {
+                            _sortMode = 0;
+                        }
+                        break;
+                    }
+                    case SortOption.Order:
+                    {
+                        _orderMode++;
+                        if ((int)_orderMode >= Enum.GetValues(typeof(OrderMode)).Length)
+                        {
+                            _orderMode = 0;
+                        }
+                        break;
+                    }
+                    case SortOption.Back:
+                    {
+                        
+                        return shouldUpdateSortText;
+                    }
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+
+                SortList();
+            }
+
+            return shouldUpdateSortText;
+        }
+
+        private void SortList()
+        {
+            switch (_sortMode)
+            {
+                case SortMode.Title:
+                    break;
+                case SortMode.Author:
+                    break;
+                case SortMode.Length:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        private void UpdateSortText()
+        {
+            _settingMusicSettings.text = new StringBuilder()
+                .Append(sortIndex == SortOption.Sort && _isSettingSort ? "<color=yellow>" : "")
+                .Append(TextProcessingService.GetFirstChildStringByPrefix(
+                    MainControl.Instance.LanguagePackControl.sceneTexts, "SortBy"))
+                .Append(TextProcessingService.GetFirstChildStringByPrefix(
+                    MainControl.Instance.LanguagePackControl.sceneTexts, _sortMode.ToString()))
+                .Append("</color>\n")
+                .Append(sortIndex == SortOption.Order && _isSettingSort ? "<color=yellow>" : "")
+                .Append(TextProcessingService.GetFirstChildStringByPrefix(
+                    MainControl.Instance.LanguagePackControl.sceneTexts, "Order"))
+                .Append(TextProcessingService.GetFirstChildStringByPrefix(
+                    MainControl.Instance.LanguagePackControl.sceneTexts, _orderMode.ToString()))
+                .Append("</color>")
+                .ToString();
+            _settingMusicBack.text = new StringBuilder()
+                .Append(sortIndex == SortOption.Back && _isSettingSort ? "<color=yellow>" : "")
+                .Append(TextProcessingService.GetFirstChildStringByPrefix(
+                    MainControl.Instance.LanguagePackControl.sceneTexts, "Back"))
+                .Append("</color>")
+                .ToString();
+        }
+
+        private void SettingMusicInput(AudioSource audioSource)
+        {
+            var prevIndex = musicDataIndex;
+
+            if (InputService.GetKeyDown(KeyCode.UpArrow))
+            {
+                musicDataIndex = (musicDataIndex - 1 + musicData.Count) % musicData.Count;
+            }
+
+            if (InputService.GetKeyDown(KeyCode.DownArrow))
+            {
+                musicDataIndex = (musicDataIndex + 1) % musicData.Count;
+            }
+
+            if (prevIndex != musicDataIndex)
+            {
+                AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                UpdateMusicDataTween();
+            }
+
+            if (InputService.GetKeyDown(KeyCode.Z))
+            {
+                AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
+
+                if (musicDataIndex == currentMusicDataIndex)
+                {
+                    currentMusicDataIndex = -1;
+                }
+                else
+                {
+                    currentMusicDataIndex = musicDataIndex;
+                }
+
+                UpdateMusicDataTween();
+                SetMusic(true);
+
+                if (musicDataIndex == currentMusicDataIndex)
+                {
+                    audioSource.Play();
+                }
+                else
+                {
+                    audioSource.Pause();
+                }
+
+                audioSource.time = 0;
+            }
+
+
+            if (InputService.GetKeyDown(KeyCode.C) || InputService.GetKeyDown(KeyCode.X))
+            {
+                OutSettingMusic();
+            }
+        }
+
+        private void UpdateMusicDataTween()
         {
             for (var i = 0; i < _musicDataTmpList.Count; i++)
             {
@@ -158,6 +295,11 @@ namespace UCT.Scene
                 while (_musicDataColorTweenList.Count < _musicDataTmpList.Count)
                 {
                     _musicDataColorTweenList.Add(null);
+                }
+
+                while (_musicDataIndentTmpTweenList.Count < _musicDataTmpList.Count)
+                {
+                    _musicDataIndentTmpTweenList.Add(null);
                 }
 
                 var distance = i - musicDataIndex;
@@ -173,16 +315,35 @@ namespace UCT.Scene
                         .SetEase(Ease.InOutSine);
                 }
 
-                var newV = Mathf.Clamp01(1 - Mathf.Abs(distance / 5f));
-                Color.RGBToHSV(_musicDataTmpList[i].color, out _, out _, out var v);
-                if (!Mathf.Approximately(v, newV))
+                var factor = Mathf.Pow(Mathf.Abs(distance / 5f), 0.5f); // 0.5f 控制曲线形状
+                var newA = Mathf.Clamp01(1 - factor);
+                
+                var currentBlueValue = i == currentMusicDataIndex ? 0 : 1;
+                if (!Mathf.Approximately(_musicDataTmpList[i].color.a, newA) ||
+                    !Mathf.Approximately(_musicDataTmpList[i].color.b, currentBlueValue))
                 {
                     if (_musicDataColorTweenList[i] != null)
                     {
                         _musicDataColorTweenList[i].Kill();
                     }
 
-                    _musicDataColorTweenList[i] = _musicDataTmpList[i].DOColor(Color.HSVToRGB(0, 0, newV), 0.25f);
+                    _musicDataColorTweenList[i] = _musicDataTmpList[i]
+                        .DOColor(new Color(1, 1, currentBlueValue, newA), 0.25f)
+                        .SetEase(Ease.InOutSine);
+                }
+
+                var currentXValue = i == currentMusicDataIndex ? 0.25f : 0;
+
+
+                if (!Mathf.Approximately(_musicDataTmpList[i].transform.position.x, currentXValue))
+                {
+                    if (_musicDataIndentTmpTweenList[i] != null)
+                    {
+                        _musicDataIndentTmpTweenList[i].Kill();
+                    }
+
+                    _musicDataIndentTmpTweenList[i] = _musicDataTmpList[i].transform.DOMoveX(currentXValue, 0.25f)
+                        .SetEase(Ease.InOutSine);
                 }
             }
         }
@@ -203,6 +364,7 @@ namespace UCT.Scene
                 musicNameTmp.alignment = TextAlignmentOptions.MidlineLeft;
                 musicNameTmp.sortingLayerID = SortingLayer.NameToID("UI");
                 musicNameTmp.sortingOrder = 1;
+                musicNameTmp.extraPadding = true;
                 musicNameTmp.text = new StringBuilder()
                     .Append(TextProcessingService.GetFirstChildStringByPrefix(
                         MainControl.Instance.LanguagePackControl.sceneTexts, data.musicDataName))
@@ -228,6 +390,8 @@ namespace UCT.Scene
                 .SetEase(Ease.InOutCubic);
             _settingMusicNames.transform.DOMoveX(0, 0.5f)
                 .SetEase(Ease.OutCubic);
+            _settingMusicBack.transform.DOMoveX(0, 0.5f)
+                .SetEase(Ease.OutCubic);
             _settingMusicSettings.transform.DOMoveX(0, 0.5f)
                 .SetEase(Ease.OutCubic).OnKill(() =>
                 {
@@ -242,6 +406,8 @@ namespace UCT.Scene
             _settingMusicGradient.DOColor(Color.clear, 0.5f)
                 .SetEase(Ease.InOutCubic);
             _settingMusicNames.transform.DOMoveX(-20, 0.5f)
+                .SetEase(Ease.InCubic);
+            _settingMusicBack.transform.DOMoveX(20, 0.5f)
                 .SetEase(Ease.InCubic);
             _settingMusicSettings.transform.DOMoveX(20, 0.5f)
                 .SetEase(Ease.InCubic).OnKill(() =>
@@ -282,7 +448,6 @@ namespace UCT.Scene
 
             if (InputService.GetKeyDown(KeyCode.Z))
             {
-                _progressBarPoint.SetBool(IsPause, audioSource.isPlaying);
                 if (audioSource.isPlaying)
                 {
                     audioSource.Pause();
@@ -296,7 +461,7 @@ namespace UCT.Scene
             }
         }
 
-        private void SetMusic(bool isPlaying)
+        private void SetMusic(bool showPlayingText)
         {
             var audioSource = AudioController.Instance.audioSource;
             if (currentMusicDataIndex < 0 || currentMusicDataIndex >= musicData.Count)
@@ -313,11 +478,10 @@ namespace UCT.Scene
             }
 
             audioSource.clip = data.clip;
-            audioSource.Play();
 
             _musicUI.text = new StringBuilder().Append("<size=9>")
                 .Append(TextProcessingService.GetFirstChildStringByPrefix(
-                    MainControl.Instance.LanguagePackControl.sceneTexts, isPlaying ? "NowPlaying" : "Paused"))
+                    MainControl.Instance.LanguagePackControl.sceneTexts, showPlayingText ? "NowPlaying" : "Paused"))
                 .Append("</size>\n")
                 .Append(TextProcessingService.GetFirstChildStringByPrefix(
                     MainControl.Instance.LanguagePackControl.sceneTexts, data.musicDataName))
@@ -352,6 +516,8 @@ namespace UCT.Scene
                 return;
             }
 
+            _progressBarPoint.SetBool(IsPause, !audioSource.isPlaying);
+
             _musicTimeText.text = new StringBuilder()
                 .Append(TextProcessingService.FormatTimeToMinutesSeconds((int)audioSource.time))
                 .Append(" / ")
@@ -361,6 +527,124 @@ namespace UCT.Scene
             var mappedPosition = Mathf.Lerp(-4.375f, 4.375f, normalizedTime);
             _progressBar.material.SetFloat(Crop, normalizedTime);
             _progressBarPoint.transform.localPosition = new Vector2(mappedPosition, -4.5f);
+        }
+
+        private static void ScrollText(TextMeshPro text, int maxVisibleLines = 3, float scrollSpeed = 0.5f)
+        {
+            if (!text)
+            {
+                return;
+            }
+
+            text.ForceMeshUpdate();
+
+            if (text.textInfo.lineCount <= maxVisibleLines)
+            {
+                ResetTextPosition(text);
+                return;
+            }
+
+            UpdateTextPosition(text, maxVisibleLines, scrollSpeed);
+            ApplyLineTransparency(text);
+        }
+
+        private static void ResetTextPosition(TextMeshPro text)
+        {
+            text.transform.position = new Vector3(text.transform.position.x, -6.5f, text.transform.position.z);
+        }
+
+        private static void UpdateTextPosition(TextMeshPro text, int maxVisibleLines, float scrollSpeed)
+        {
+            var lineHeight = 0.5f * (text.textInfo.lineCount + maxVisibleLines * 1.5f);
+            var currentOffset = -Mathf.Repeat(Time.time * scrollSpeed, lineHeight) + 6.5f + maxVisibleLines / 2f;
+            text.transform.position = new Vector3(text.transform.position.x, -currentOffset, text.transform.position.z);
+        }
+
+        private static void ApplyLineTransparency(TextMeshPro text)
+        {
+            var vertices = text.textInfo.meshInfo[0].vertices;
+            var colors = text.textInfo.meshInfo[0].colors32;
+
+            for (var lineIndex = 0; lineIndex < text.textInfo.lineCount; lineIndex++)
+            {
+                var lineInfo = text.textInfo.lineInfo[lineIndex];
+                var firstVisibleCharIndex =
+                    GetFirstVisibleCharIndex(text, lineInfo.firstCharacterIndex, lineInfo.lastCharacterIndex);
+                if (firstVisibleCharIndex == -1)
+                {
+                    continue;
+                }
+
+                var worldY = GetCharacterWorldY(text, firstVisibleCharIndex, vertices);
+                var alpha = CalculateAlpha(worldY);
+                var newColor = new Color32(255, 255, 255, (byte)(alpha * 255));
+
+                ApplyColorToLine(text, lineInfo.firstCharacterIndex, lineInfo.lastCharacterIndex, colors, newColor);
+            }
+
+            text.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
+        }
+
+        private static int GetFirstVisibleCharIndex(TextMeshPro text, int firstCharIndex, int lastCharIndex)
+        {
+            for (var i = firstCharIndex; i <= lastCharIndex; i++)
+            {
+                if (text.textInfo.characterInfo[i].isVisible)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        private static float GetCharacterWorldY(TextMeshPro text, int charIndex, Vector3[] vertices)
+        {
+            var firstCharVerts = text.textInfo.characterInfo[charIndex].vertexIndex;
+            var avgY = (vertices[firstCharVerts].y + vertices[firstCharVerts + 1].y +
+                        vertices[firstCharVerts + 2].y + vertices[firstCharVerts + 3].y) / 4f;
+            return text.transform.TransformPoint(new Vector3(0, avgY, 0)).y;
+        }
+
+        private static float CalculateAlpha(float worldY)
+        {
+            const float fadeRange = 0.1f;
+            return worldY switch
+            {
+                < -4 - fadeRange => 0f,
+                < -4 => Mathf.SmoothStep(0f, 1f, (worldY + 4 + fadeRange) / fadeRange),
+                > -2.5f + fadeRange => 0f,
+                > -2.5f => Mathf.SmoothStep(1f, 0f, (worldY + 2.5f) / fadeRange),
+                _ => 1f
+            };
+        }
+
+        private static void ApplyColorToLine(TextMeshPro text,
+            int firstCharIndex,
+            int lastCharIndex,
+            Color32[] colors,
+            Color32 newColor)
+        {
+            for (var i = firstCharIndex; i <= lastCharIndex; i++)
+            {
+                if (!text.textInfo.characterInfo[i].isVisible)
+                {
+                    continue;
+                }
+
+                var charVerts = text.textInfo.characterInfo[i].vertexIndex;
+                colors[charVerts] = newColor;
+                colors[charVerts + 1] = newColor;
+                colors[charVerts + 2] = newColor;
+                colors[charVerts + 3] = newColor;
+            }
+        }
+
+        private enum SortOption
+        {
+            Sort,
+            Order,
+            Back
         }
     }
 }

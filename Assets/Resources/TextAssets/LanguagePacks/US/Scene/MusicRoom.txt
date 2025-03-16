@@ -1,7 +1,6 @@
 SortBy\Sort by: ;
 Title\Title;
 Author\Author;
-Genre\Genre;
 Length\Length;
 Order\Order: ;
 Ascending\Ascending;
@@ -29,3 +28,10 @@ StartMenu\Start Menu;
 StartMenuInfo\The music of the menu.<enter>
 Simple and light, accompanied by a familiar melody.<enter>
 A minimalist style — perhaps some will like it.;
+
+AIk\AIk;
+
+GoodNews\Good News;
+GoodNewsInfo\The Game Over music for April Fools' Day.<enter>
+I originally thought about using Spring Festival Overture, but to avoid copyright issues, I threw together my own track.<enter>
+Just a quick MIDI edit, don’t ask. It’s just for fun.;
