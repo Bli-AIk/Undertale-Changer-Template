@@ -1131,6 +1131,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   currentMusicDataIndex: -1
   musicDataIndex: 0
+  sortIndex: 0
   musicData: []
 --- !u!1001 &1287682342
 PrefabInstance:

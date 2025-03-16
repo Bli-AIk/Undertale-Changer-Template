@@ -153,40 +153,42 @@ namespace UCT.Scene
                 shouldUpdateSortText = true;
             }
 
-            if (InputService.GetKeyDown(KeyCode.Z))
+            if (!InputService.GetKeyDown(KeyCode.Z))
             {
-                switch (sortIndex)
-                {
-                    case SortOption.Sort:
-                    {
-                        _sortMode++;
-                        if ((int)_sortMode >= Enum.GetValues(typeof(SortMode)).Length)
-                        {
-                            _sortMode = 0;
-                        }
-
-                        break;
-                    }
-                    case SortOption.Order:
-                    {
-                        _orderMode++;
-                        if ((int)_orderMode >= Enum.GetValues(typeof(OrderMode)).Length)
-                        {
-                            _orderMode = 0;
-                        }
-
-                        break;
-                    }
-                    case SortOption.Back:
-                    {
-                        return shouldUpdateSortText;
-                    }
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-
-                SortList();
+                return shouldUpdateSortText;
             }
+
+            switch (sortIndex)
+            {
+                case SortOption.Sort:
+                {
+                    _sortMode++;
+                    if ((int)_sortMode >= Enum.GetValues(typeof(SortMode)).Length)
+                    {
+                        _sortMode = 0;
+                    }
+
+                    break;
+                }
+                case SortOption.Order:
+                {
+                    _orderMode++;
+                    if ((int)_orderMode >= Enum.GetValues(typeof(OrderMode)).Length)
+                    {
+                        _orderMode = 0;
+                    }
+
+                    break;
+                }
+                case SortOption.Back:
+                {
+                    return shouldUpdateSortText;
+                }
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            SortList();
 
             return shouldUpdateSortText;
         }
@@ -213,7 +215,6 @@ namespace UCT.Scene
                 throw new ArgumentOutOfRangeException();
             }
 
-            // 生成索引排序列表
             var indexedItems = musicData
                 .Select((data, index) => new
                 {
@@ -224,7 +225,6 @@ namespace UCT.Scene
                 .Select(item => item.Index)
                 .ToList();
 
-            // 根据排序模式倒序
             if (_orderMode == OrderMode.Descending)
             {
                 indexedItems.Reverse();
@@ -235,14 +235,12 @@ namespace UCT.Scene
 
         private void ApplySortedIndices(List<int> sortedIndices)
         {
-            // 更新索引
             musicDataIndex = sortedIndices.IndexOf(musicDataIndex);
             if (currentMusicDataIndex >= 0)
             {
                 currentMusicDataIndex = sortedIndices.IndexOf(currentMusicDataIndex);
             }
 
-            // 重新排序所有相关列表
             musicData = sortedIndices.Select(i => musicData[i]).ToList();
             _musicDataColorTweenList = sortedIndices.Select(i => _musicDataColorTweenList[i]).ToList();
             _musicDataIndentTmpTweenList = sortedIndices.Select(i => _musicDataIndentTmpTweenList[i]).ToList();
@@ -305,6 +303,7 @@ namespace UCT.Scene
                 if (musicDataIndex == currentMusicDataIndex)
                 {
                     currentMusicDataIndex = -1;
+                    audioSource.clip = null;
                 }
                 else
                 {
@@ -548,6 +547,11 @@ namespace UCT.Scene
             {
                 _progressBarPoint.SetBool(IsPause, true);
                 _progressBar.material.SetFloat(Crop, 0);
+                _musicTimeText.text = new StringBuilder()
+                    .Append(TextProcessingService.FormatTimeToMinutesSeconds(0))
+                    .Append(" / ")
+                    .Append(TextProcessingService.FormatTimeToMinutesSeconds(0))
+                    .ToString();
                 return;
             }
 
@@ -565,103 +569,112 @@ namespace UCT.Scene
         }
 
         private static void ScrollText(TextMeshPro text, int maxVisibleLines = 3, float scrollSpeed = 0.5f)
-{
-    if (!text)
-    {
-        return;
-    }
-    text.ForceMeshUpdate();
-    if (text.textInfo.lineCount <= maxVisibleLines)
-    {
-        ResetTextPosition(text);
-        return;
-    }
-    UpdateTextPosition(text, maxVisibleLines, scrollSpeed);
-    ApplyLineTransparency(text);
-}
-
-private static void ResetTextPosition(TextMeshPro text)
-{
-    text.transform.position = new Vector3(text.transform.position.x, -6.5f, text.transform.position.z);
-}
-
-private static void UpdateTextPosition(TextMeshPro text, int maxVisibleLines, float scrollSpeed)
-{
-    var lineHeight = 0.5f * (text.textInfo.lineCount + maxVisibleLines * 1.5f);
-    var currentOffset = -Mathf.Repeat(Time.time * scrollSpeed, lineHeight) + 6.5f + maxVisibleLines / 2f;
-    text.transform.position = new Vector3(text.transform.position.x, -currentOffset, text.transform.position.z);
-}
-
-private static void ApplyLineTransparency(TextMeshPro text)
-{
-    for (int lineIndex = 0; lineIndex < text.textInfo.lineCount; lineIndex++)
-    {
-        var lineInfo = text.textInfo.lineInfo[lineIndex];
-        int firstVisibleCharIndex = GetFirstVisibleCharIndex(text, lineInfo.firstCharacterIndex, lineInfo.lastCharacterIndex);
-        if (firstVisibleCharIndex == -1)
         {
-            continue;
-        }
-        var firstCharInfo = text.textInfo.characterInfo[firstVisibleCharIndex];
-        var worldY = GetCharacterWorldY(text, firstCharInfo);
-        var alpha = CalculateAlpha(worldY);
-        var newColor = new Color32(255, 255, 255, (byte)(alpha * 255));
-        for (int i = lineInfo.firstCharacterIndex; i <= lineInfo.lastCharacterIndex; i++)
-        {
-            if (!text.textInfo.characterInfo[i].isVisible)
+            if (!text)
             {
-                continue;
+                return;
             }
-            var charInfo = text.textInfo.characterInfo[i];
-            int matIndex = charInfo.materialReferenceIndex;
-            int vertexIndex = charInfo.vertexIndex;
-            var colors = text.textInfo.meshInfo[matIndex].colors32;
-            colors[vertexIndex] = newColor;
-            colors[vertexIndex + 1] = newColor;
-            colors[vertexIndex + 2] = newColor;
-            colors[vertexIndex + 3] = newColor;
-        }
-    }
-    text.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
-}
 
-private static int GetFirstVisibleCharIndex(TextMeshPro text, int firstCharIndex, int lastCharIndex)
-{
-    for (var i = firstCharIndex; i <= lastCharIndex; i++)
-    {
-        if (text.textInfo.characterInfo[i].isVisible)
+            text.ForceMeshUpdate();
+            if (text.textInfo.lineCount <= maxVisibleLines)
+            {
+                ResetTextPosition(text);
+                return;
+            }
+
+            UpdateTextPosition(text, maxVisibleLines, scrollSpeed);
+            ApplyLineTransparency(text);
+        }
+
+        private static void ResetTextPosition(TextMeshPro text)
         {
-            return i;
+            text.transform.position = new Vector3(text.transform.position.x, -6.5f, text.transform.position.z);
         }
-    }
-    return -1;
-}
 
-private static float GetCharacterWorldY(TextMeshPro text, TMP_CharacterInfo charInfo)
-{
-    int matIndex = charInfo.materialReferenceIndex;
-    int vertexIndex = charInfo.vertexIndex;
-    var vertices = text.textInfo.meshInfo[matIndex].vertices;
-    if (vertexIndex + 3 >= vertices.Length)
-    {
-        return text.transform.TransformPoint(Vector3.zero).y;
-    }
-    var avgY = (vertices[vertexIndex].y + vertices[vertexIndex + 1].y + vertices[vertexIndex + 2].y + vertices[vertexIndex + 3].y) / 4f;
-    return text.transform.TransformPoint(new Vector3(0, avgY, 0)).y;
-}
+        private static void UpdateTextPosition(TextMeshPro text, int maxVisibleLines, float scrollSpeed)
+        {
+            var lineHeight = 0.5f * (text.textInfo.lineCount + maxVisibleLines * 1.5f);
+            var currentOffset = -Mathf.Repeat(Time.time * scrollSpeed, lineHeight) + 6.5f + maxVisibleLines / 2f;
+            text.transform.position = new Vector3(text.transform.position.x, -currentOffset, text.transform.position.z);
+        }
 
-private static float CalculateAlpha(float worldY)
-{
-    const float fadeRange = 0.1f;
-    return worldY switch
-    {
-        < -4 - fadeRange => 0f,
-        < -4 => Mathf.SmoothStep(0f, 1f, (worldY + 4 + fadeRange) / fadeRange),
-        > -2.5f + fadeRange => 0f,
-        > -2.5f => Mathf.SmoothStep(1f, 0f, (worldY + 2.5f) / fadeRange),
-        _ => 1f
-    };
-}
+        private static void ApplyLineTransparency(TextMeshPro text)
+        {
+            for (var lineIndex = 0; lineIndex < text.textInfo.lineCount; lineIndex++)
+            {
+                var lineInfo = text.textInfo.lineInfo[lineIndex];
+                var firstVisibleCharIndex =
+                    GetFirstVisibleCharIndex(text, lineInfo.firstCharacterIndex, lineInfo.lastCharacterIndex);
+                if (firstVisibleCharIndex == -1)
+                {
+                    continue;
+                }
+
+                var firstCharInfo = text.textInfo.characterInfo[firstVisibleCharIndex];
+                var worldY = GetCharacterWorldY(text, firstCharInfo);
+                var alpha = CalculateAlpha(worldY);
+                var newColor = new Color32(255, 255, 255, (byte)(alpha * 255));
+                for (var i = lineInfo.firstCharacterIndex; i <= lineInfo.lastCharacterIndex; i++)
+                {
+                    if (!text.textInfo.characterInfo[i].isVisible)
+                    {
+                        continue;
+                    }
+
+                    var charInfo = text.textInfo.characterInfo[i];
+                    var matIndex = charInfo.materialReferenceIndex;
+                    var vertexIndex = charInfo.vertexIndex;
+                    var colors = text.textInfo.meshInfo[matIndex].colors32;
+                    colors[vertexIndex] = newColor;
+                    colors[vertexIndex + 1] = newColor;
+                    colors[vertexIndex + 2] = newColor;
+                    colors[vertexIndex + 3] = newColor;
+                }
+            }
+
+            text.UpdateVertexData(TMP_VertexDataUpdateFlags.Colors32);
+        }
+
+        private static int GetFirstVisibleCharIndex(TextMeshPro text, int firstCharIndex, int lastCharIndex)
+        {
+            for (var i = firstCharIndex; i <= lastCharIndex; i++)
+            {
+                if (text.textInfo.characterInfo[i].isVisible)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        private static float GetCharacterWorldY(TextMeshPro text, TMP_CharacterInfo charInfo)
+        {
+            var matIndex = charInfo.materialReferenceIndex;
+            var vertexIndex = charInfo.vertexIndex;
+            var vertices = text.textInfo.meshInfo[matIndex].vertices;
+            if (vertexIndex + 3 >= vertices.Length)
+            {
+                return text.transform.TransformPoint(Vector3.zero).y;
+            }
+
+            var avgY = (vertices[vertexIndex].y + vertices[vertexIndex + 1].y + vertices[vertexIndex + 2].y +
+                        vertices[vertexIndex + 3].y) / 4f;
+            return text.transform.TransformPoint(new Vector3(0, avgY, 0)).y;
+        }
+
+        private static float CalculateAlpha(float worldY)
+        {
+            const float fadeRange = 0.1f;
+            return worldY switch
+            {
+                < -4 - fadeRange => 0f,
+                < -4 => Mathf.SmoothStep(0f, 1f, (worldY + 4 + fadeRange) / fadeRange),
+                > -2.5f + fadeRange => 0f,
+                > -2.5f => Mathf.SmoothStep(1f, 0f, (worldY + 2.5f) / fadeRange),
+                _ => 1f
+            };
+        }
 
 
         private enum SortMode
