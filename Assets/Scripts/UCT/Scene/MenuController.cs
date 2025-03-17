@@ -159,7 +159,7 @@ namespace UCT.Scene
 
                 case 1:
                 {
-                    LoadRenameScene();
+                    GameUtilityService.FadeOutAndSwitchScene("Rename", Color.black, null, true);
                     break;
                 }
 
@@ -171,7 +171,7 @@ namespace UCT.Scene
 
                 case 3:
                 {
-                    SettingsController.Instance.OpenSetting("SettingLanguagePackageLayer");
+                    GameUtilityService.FadeOutAndSwitchScene("MusicRoom", Color.black, null, true);
                     break;
                 }
                 case 4:

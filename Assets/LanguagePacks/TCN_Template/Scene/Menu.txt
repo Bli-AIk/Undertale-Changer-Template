@@ -14,7 +14,7 @@ RenameSp\name|true|true|text;
 Menu0\繼續;
 Menu1\重設;
 Menu2\設定;
-Menu3\語言;
+Menu3\音樂;
 Menu4\存檔;
 Menu5\退出;
 Menu6\上頁;

@@ -94,6 +94,17 @@ namespace UCT.Scene
                 _musicDataIndentTmpTweenList.Add(null);
             }
 
+            for (var i = 0; i < _musicDataTmpList.Count; i++)
+            {
+                
+                var distance = i - musicDataIndex;
+                
+                var factor = Mathf.Pow(Mathf.Abs(distance / 5f), 0.5f);
+                var newA = Mathf.Clamp01(1 - factor);
+                _musicDataTmpList[i].color = new Color(1, 1, 1, newA);
+            }
+            
+
             SortList();
         }
 
@@ -187,6 +198,7 @@ namespace UCT.Scene
                 }
                 case SortOption.Back:
                 {
+                    GameUtilityService.FadeOutAndSwitchScene("Menu", Color.black, null, true);
                     return shouldUpdateSortText;
                 }
                 default:

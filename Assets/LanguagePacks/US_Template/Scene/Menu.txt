@@ -23,7 +23,7 @@ In particular, if the text is<gaster>, the game will crash.
 Menu0\Continue;
 Menu1\Reset;
 Menu2\Settings;
-Menu3\Language;
+Menu3\MusicRoom;
 Menu4\GameSave;
 Menu5\Exit;
 Menu6\PageUp;
