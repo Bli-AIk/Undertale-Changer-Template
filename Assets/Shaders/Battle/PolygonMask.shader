@@ -3,7 +3,6 @@ Shader "Custom/PolygonMask"
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-        _VerticesTex ("Vertices Texture", 2D) = "white" {}
         [KeywordEnum(None, Visible Inside Mask, Visible Outside Mask)] _Mode ("Mask Interaction", Float) = 0
         _Color ("Tint Color", Color) = (1,1,1,1)
     }
@@ -23,10 +22,20 @@ Shader "Custom/PolygonMask"
             #include "UnityCG.cginc"
 
             sampler2D _MainTex;
-            sampler2D _VerticesTex;
             float _Mode;
             fixed4 _Color;
 
+            // 新的结构体用于存储多边形信息
+            struct PolygonInfo
+            {
+                float vertexCount; // 多边形顶点数
+                int startIndex;    // 对应顶点数组中的起始索引
+            };
+
+            // 结构化缓冲区传递多边形数据和顶点数据
+            StructuredBuffer<PolygonInfo> _PolygonInfos;
+            StructuredBuffer<float2> _PolygonVertices;
+            int _PolygonCount;
 
             struct appdata_t
             {
@@ -53,37 +62,32 @@ Shader "Custom/PolygonMask"
                 return o;
             }
 
-
             bool PointInPolygon(float2 p)
             {
-                float polygonCount = tex2D(_VerticesTex, float2(0, 0)).g;
-                int count = 0;
                 bool isInside = false;
-                for (int i = 0; i < (int)polygonCount; i++)
+                // 遍历所有多边形
+                for (int i = 0; i < _PolygonCount; i++)
                 {
-                    float vertexCount = tex2D(_VerticesTex, float2(0, i / polygonCount)).r;
-
-                    for (int j = 0; j < (int)vertexCount; j++)
+                    PolygonInfo info = _PolygonInfos[i];
+                    int vertexCount = (int)info.vertexCount;
+                    int hitCount = 0;
+                    // 逐边检测射线与多边形各边的交点
+                    for (int j = 0; j < vertexCount; j++)
                     {
-                        float2 v1 = tex2D(_VerticesTex, float2((j + 1) / (vertexCount + 1), i / polygonCount)).xy;
-                        int nextIndex = (j + 1) % (int)vertexCount;
-                        float2 v2 = tex2D(_VerticesTex,
-                  float2((nextIndex + 1) / (vertexCount + 1), i / polygonCount)).xy;
-
-                        if (v1.y > p.y != v2.y > p.y)
+                        int nextIndex = (j + 1) % vertexCount;
+                        float2 v1 = _PolygonVertices[info.startIndex + j];
+                        float2 v2 = _PolygonVertices[info.startIndex + nextIndex];
+                        if ((v1.y > p.y) != (v2.y > p.y))
                         {
                             float intersectX = (v2.x - v1.x) * (p.y - v1.y) / (v2.y - v1.y) + v1.x;
                             if (p.x < intersectX)
                             {
-                                count++;
+                                hitCount++;
                             }
                         }
                     }
-
-                    if (count % 2 == 1)
-                    {
-                        isInside = true;
-                    }
+                    // 累计判断是否在任一多边形内
+                    isInside = isInside || ((hitCount & 1) == 1);
                 }
                 return isInside;
             }
