@@ -24,6 +24,7 @@ namespace UCT.Core
     {
         public enum TypeMode
         {
+            // ReSharper disable once UnusedMember.Global
             Default,
             IgnorePlayerInput
         }
@@ -92,6 +93,7 @@ namespace UCT.Core
         private ItemScroller _itemScroller;
 
         private TMP_Text _tmpText;
+        private bool _canPassText;
 
         /// <summary>
         ///     打字机关闭时调用
@@ -145,11 +147,18 @@ namespace UCT.Core
             {
                 overworldSpriteChanger.spriteExpressionCollection = null;
                 overworldSpriteChanger.UpdateSpriteDisplay();
+
             }
 
             if (passText && InputService.GetKeyDown(KeyCode.Z) && typeMode != TypeMode.IgnorePlayerInput)
             {
+                if (!_canPassText)
+                {
+                    return;
+                }
+
                 PassText(WaitForUpdate);
+                _canPassText = false;
             }
             else if (!(isSkip || isJumpingText) &&
                      !cantSkip && InputService.GetKeyDown(KeyCode.X) &&
@@ -196,6 +205,7 @@ namespace UCT.Core
             if (_itemScroller && SelectController.IsSelecting && SelectController.Story.currentChoices.Count > 0 &&
                 InputService.GetKeyDown(KeyCode.Z))
             {
+                Debug.Log(1);
                 SelectController.IsSelecting = false;
                 SelectController.Story.ChooseChoiceIndex(SelectController.GlobalItemIndex);
                 var dialogue = SelectController.GetStoryDialogue();
@@ -374,6 +384,7 @@ namespace UCT.Core
             else
             {
                 originString = originString[passTextString.Length..];
+                _canPassText = true;
                 return true;
             }
 

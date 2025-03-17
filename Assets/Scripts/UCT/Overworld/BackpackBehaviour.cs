@@ -1,4 +1,5 @@
 using System;
+using Plugins.Timer.Source;
 using TMPro;
 using UCT.Audio;
 using UCT.Core;
@@ -72,6 +73,7 @@ namespace UCT.Overworld
                 if (IsOpenBackPack)
                 {
                     BackpackExit();
+                    OffTalkBoxController();
                 }
                 else if (InputService.GetKeyDown(KeyCode.C)) //开启
                 {
@@ -244,6 +246,7 @@ namespace UCT.Overworld
                 if (string.IsNullOrEmpty(dataName))
                 {
                     BackpackExit();
+                    OffTalkBoxController();
                     return true;
                 }
 
@@ -308,6 +311,7 @@ namespace UCT.Overworld
             if (!typeWritter.isTyping)
             {
                 BackpackExit();
+                OffTalkBoxController();
                 return;
             }
 
@@ -455,7 +459,7 @@ namespace UCT.Overworld
                 return false;
             }
 
-            if (IsOpenBackPack)
+            if (IsOpenBackPack || (select != 0 && typeWritter.isTyping))
             {
                 BackpackExit();
             }
@@ -597,18 +601,25 @@ namespace UCT.Overworld
 
         private void BackpackExit()
         {
-            MainControl.Instance.playerControl.canMove = true;
             sonSelect = 0;
             select = 0;
-            IsOpenBackPack = false;
             optionsBox.localPosition.z = BoxZAxisInvisible;
             Heart.transform.localPosition = new Vector3(Heart.transform.localPosition.x,
                 Heart.transform.localPosition.y, BoxZAxisInvisible);
             _overviewBox.localPosition.z = BoxZAxisInvisible;
-            typeWritter.TypeStop();
-            TalkBoxController.Instance.boxDrawer.localPosition.z = BoxZAxisInvisible;
             sonUse = 0;
             sonSelect = 0;
+            Timer.Register(0.1f, () =>
+            {
+                MainControl.Instance.playerControl.canMove = true;
+                IsOpenBackPack = false;
+            });
+        }
+
+        private void OffTalkBoxController()
+        {
+            typeWritter.TypeStop();
+            TalkBoxController.Instance.boxDrawer.localPosition.z = BoxZAxisInvisible;
         }
     }
 }
