@@ -323,7 +323,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_enableExtraPadding: 0
+  m_enableExtraPadding: 1
   checkPaddingRequired: 0
   m_isRichText: 1
   m_parseCtrlCharacters: 1
@@ -496,7 +496,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_enableExtraPadding: 0
+  m_enableExtraPadding: 1
   checkPaddingRequired: 0
   m_isRichText: 1
   m_parseCtrlCharacters: 1
@@ -669,7 +669,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_enableExtraPadding: 0
+  m_enableExtraPadding: 1
   checkPaddingRequired: 0
   m_isRichText: 1
   m_parseCtrlCharacters: 1
@@ -926,7 +926,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_enableExtraPadding: 0
+  m_enableExtraPadding: 1
   checkPaddingRequired: 0
   m_isRichText: 1
   m_parseCtrlCharacters: 1
@@ -1099,7 +1099,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_enableExtraPadding: 0
+  m_enableExtraPadding: 1
   checkPaddingRequired: 0
   m_isRichText: 1
   m_parseCtrlCharacters: 1
@@ -1505,7 +1505,6 @@ MonoBehaviour:
   maxX: 0
   maxY: 0
   player: {fileID: 0}
-  followPosition: {x: 0, y: 0, z: 0}
 --- !u!81 &4615378955106348895
 AudioListener:
   m_ObjectHideFlags: 0
@@ -1605,8 +1604,8 @@ MonoBehaviour:
   clockTime: 0
   passText: 0
   overworldSpriteChanger: {fileID: 0}
-  fx: 0
-  fxRandomPitch: 0
+  fxClip: {fileID: 0}
+  characterSpriteManager: {fileID: 0}
   pitch: 1
   volume: 0.5
   speed: 0.075
@@ -1632,18 +1631,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spritePath: BackpackCamera/TalkBox/HeadSculpture
-  hasSecondSprite: 1
-  frameInterval: 10
-  isIgnoreConditions: 0
-  sprites:
-  - {fileID: 21300000, guid: edcd3c8788d15544b834f9d27e35b59c, type: 3}
-  - {fileID: 21300000, guid: 0df3ef1c43b48b343b02b2dd0db17211, type: 3}
-  - {fileID: 21300000, guid: f1f3d253285f2e041b844c426a3398e5, type: 3}
-  spritesSecond:
-  - {fileID: 21300000, guid: 13bca871bd21da7438797259259e22a4, type: 3}
-  - {fileID: 21300000, guid: fc47fc5086b603d4b9fd96f547620f4d, type: 3}
-  - {fileID: 21300000, guid: 8145e977d88a1da40a668cf3cd4b3033, type: 3}
-  isBackState: 0
+  spriteExpressionCollection: {fileID: 0}
+  state: 0
 --- !u!1 &4615378955608716333
 GameObject:
   m_ObjectHideFlags: 0

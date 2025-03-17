@@ -147,7 +147,7 @@ namespace Editor.Default
             pageZone.Add(introductionInformation);
         }
 
-        [MenuItem("UCT/Welcome")]
+        [MenuItem("Window/UCT/Welcome")]
         public static void ShowExample()
         {
             var window = GetWindow<WelcomeToUctWindow>();

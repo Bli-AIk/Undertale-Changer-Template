@@ -174,11 +174,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a3ecd31ce8ed72499cbcef45da89694, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 0
+  isUseWidth: 0
   options:
   - {x: -10, y: -30, z: 40, w: 0}
   - {x: 0, y: 0, z: 50, w: 0}
-  fontSize: []
+  fontSizes: []
+  positions:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
 --- !u!114 &240730040
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -249,7 +252,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_enableExtraPadding: 0
+  m_enableExtraPadding: 1
   checkPaddingRequired: 0
   m_isRichText: 1
   m_parseCtrlCharacters: 1
@@ -422,7 +425,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_enableExtraPadding: 0
+  m_enableExtraPadding: 1
   checkPaddingRequired: 0
   m_isRichText: 1
   m_parseCtrlCharacters: 1
@@ -655,11 +658,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a3ecd31ce8ed72499cbcef45da89694, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 0
+  isUseWidth: 0
   options:
   - {x: -7.5, y: 67, z: -14, w: 0}
   - {x: -2.5, y: 45, z: -14, w: 0}
-  fontSize: []
+  fontSizes: []
+  positions:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
 --- !u!114 &794660770
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -730,7 +736,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_enableExtraPadding: 0
+  m_enableExtraPadding: 1
   checkPaddingRequired: 0
   m_isRichText: 1
   m_parseCtrlCharacters: 1
@@ -846,7 +852,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 004b7bcff67749046bb833215590b08e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dynamicMode: 0
+  effectType: 0
 --- !u!114 &857195715
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -917,7 +923,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_enableExtraPadding: 0
+  m_enableExtraPadding: 1
   checkPaddingRequired: 0
   m_isRichText: 1
   m_parseCtrlCharacters: 1
@@ -1090,7 +1096,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_enableExtraPadding: 0
+  m_enableExtraPadding: 1
   checkPaddingRequired: 0
   m_isRichText: 1
   m_parseCtrlCharacters: 1
@@ -1206,7 +1212,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 004b7bcff67749046bb833215590b08e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dynamicMode: 1
+  effectType: 1
 --- !u!114 &1426846107
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1277,7 +1283,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_enableExtraPadding: 0
+  m_enableExtraPadding: 1
   checkPaddingRequired: 0
   m_isRichText: 1
   m_parseCtrlCharacters: 1
@@ -1581,13 +1587,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a3ecd31ce8ed72499cbcef45da89694, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 0
+  isUseWidth: 0
   options:
   - {x: -2.5, y: -35, z: 0, w: 0}
   - {x: 5.5, y: -22.5, z: 0, w: 0}
-  fontSize:
+  fontSizes:
   - 6
   - 6.15
+  positions:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
 --- !u!114 &1895138381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1658,7 +1667,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_enableExtraPadding: 0
+  m_enableExtraPadding: 1
   checkPaddingRequired: 0
   m_isRichText: 1
   m_parseCtrlCharacters: 1
@@ -1774,11 +1783,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a3ecd31ce8ed72499cbcef45da89694, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 0
+  isUseWidth: 0
   options:
   - {x: -0.5, y: 0, z: 0, w: 0}
   - {x: -0.5, y: 0, z: 0, w: 0}
-  fontSize: []
+  fontSizes: []
+  positions:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
 --- !u!114 &1912210587
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1850,7 +1862,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_enableExtraPadding: 0
+  m_enableExtraPadding: 1
   checkPaddingRequired: 0
   m_isRichText: 1
   m_parseCtrlCharacters: 1
@@ -1966,7 +1978,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 004b7bcff67749046bb833215590b08e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dynamicMode: 0
+  effectType: 0
 --- !u!114 &1953821032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2037,7 +2049,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_enableExtraPadding: 0
+  m_enableExtraPadding: 1
   checkPaddingRequired: 0
   m_isRichText: 1
   m_parseCtrlCharacters: 1
