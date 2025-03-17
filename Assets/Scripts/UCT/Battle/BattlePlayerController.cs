@@ -128,8 +128,7 @@ namespace UCT.Battle
         /// <summary>
         ///     圆形碰撞体
         /// </summary>
-        [HideInInspector]
-        public CircleCollider2D collideCollider;
+        [HideInInspector] public CircleCollider2D collideCollider;
 
         [HideInInspector] public Animator animator;
 
@@ -138,8 +137,8 @@ namespace UCT.Battle
         /// </summary>
         public BattleControl.PlayerColor playerColor;
 
-        [HideInInspector]
-        public UnityEngine.Rendering.Volume hitVolume;
+        [HideInInspector] public UnityEngine.Rendering.Volume hitVolume;
+
         private Tween _missAnim, _changeColor, _changeDingColor, _changeDingScale;
 
         private Rigidbody2D _rigidBody;
@@ -223,7 +222,7 @@ namespace UCT.Battle
             if (collision.transform.CompareTag(Board) && playerColor == BattleControl.PlayerColor.Blue &&
                 !isJump)
             {
-                BlueDown();
+                BlueDown(0, playerDir);
             }
         }
 
@@ -346,12 +345,13 @@ namespace UCT.Battle
             Debug.DrawRay(ray.origin, ray.direction, Color.blue);
             var info = Physics2D.Raycast(transform.position, dirReal, jumpRayDistance);
 
-            Ray2D rayF = new(transform.position, dirReal * -1);
-            Debug.DrawRay(rayF.origin, rayF.direction, Color.red);
-            var infoF = Physics2D.Raycast(transform.position, dirReal * -1, jumpRayDistance); //反向检测(顶头)
+            Ray2D rayHead = new(transform.position, dirReal * -1);
+            Debug.DrawRay(rayHead.origin, rayHead.direction, Color.red);
+            var infoHead = Physics2D.Raycast(transform.position, dirReal * -1, jumpRayDistance); //反向检测(顶头)
+
 
             //------------------------移动------------------------
-            PlayerColorMoving(dirReal, infoF, info);
+            PlayerColorMoving(dirReal, infoHead, info);
 
 
             isMoving = IsReallyMoving();
@@ -491,7 +491,7 @@ namespace UCT.Battle
             return (dirMoveY, isMoveY, dirMoveX, isMoveX);
         }
 
-        private void PlayerColorMoving(Vector2 dirReal, RaycastHit2D infoF, RaycastHit2D info)
+        private void PlayerColorMoving(Vector2 dirReal, RaycastHit2D infoHead, RaycastHit2D info)
         {
             switch (playerColor)
             {
@@ -535,7 +535,7 @@ namespace UCT.Battle
 
                 case BattleControl.PlayerColor.Blue:
                 {
-                    PlayerWithGravity(dirReal, infoF, info);
+                    PlayerWithGravity(dirReal, infoHead, info);
                     break;
                 }
 
@@ -592,23 +592,23 @@ namespace UCT.Battle
             }
         }
 
-        private void PlayerWithGravity(Vector2 dirReal, RaycastHit2D infoF, RaycastHit2D info)
+        private void PlayerWithGravity(Vector2 dirReal, RaycastHit2D infoHead, RaycastHit2D info)
         {
             HandleBoardInteraction(dirReal);
 
             switch (playerDir)
             {
                 case PlayerDirection.Up:
-                    ProcessVerticalMovement(true, infoF, info);
+                    ProcessVerticalMovement(true, infoHead, info);
                     break;
                 case PlayerDirection.Down:
-                    ProcessVerticalMovement(false, infoF, info);
+                    ProcessVerticalMovement(false, infoHead, info);
                     break;
                 case PlayerDirection.Left:
-                    ProcessHorizontalMovement(true, infoF, info);
+                    ProcessHorizontalMovement(true, infoHead, info);
                     break;
                 case PlayerDirection.Right:
-                    ProcessHorizontalMovement(false, infoF, info);
+                    ProcessHorizontalMovement(false, infoHead, info);
                     break;
                 case PlayerDirection.NullDir:
                     break;
@@ -648,22 +648,22 @@ namespace UCT.Battle
             transform.SetParent(null);
         }
 
-        private void ProcessVerticalMovement(bool isGravityUp, RaycastHit2D infoF, RaycastHit2D info)
+        private void ProcessVerticalMovement(bool isGravityUp, RaycastHit2D infoHead, RaycastHit2D info)
         {
             speedWeightX = InputService.GetKey(KeyCode.X) ? SpeedWeight : 1;
             SetGravityAndRotation(isGravityUp, true);
             var moveX = GetMoveAxis(KeyCode.RightArrow, KeyCode.LeftArrow);
             moving = new Vector3(moveX, moving.y, moving.z);
-            HandleJump(isGravityUp ? KeyCode.DownArrow : KeyCode.UpArrow, isGravityUp, infoF, info, true);
+            HandleJump(isGravityUp ? KeyCode.DownArrow : KeyCode.UpArrow, isGravityUp, infoHead, info, true);
         }
 
-        private void ProcessHorizontalMovement(bool isGravityLeft, RaycastHit2D infoF, RaycastHit2D info)
+        private void ProcessHorizontalMovement(bool isGravityLeft, RaycastHit2D infoHead, RaycastHit2D info)
         {
             speedWeightY = InputService.GetKey(KeyCode.X) ? SpeedWeight : 1;
             SetGravityAndRotation(isGravityLeft, false);
             var moveY = GetMoveAxis(KeyCode.UpArrow, KeyCode.DownArrow);
             moving = new Vector3(moving.x, moveY, moving.z);
-            HandleJump(isGravityLeft ? KeyCode.RightArrow : KeyCode.LeftArrow, isGravityLeft, infoF, info, false);
+            HandleJump(isGravityLeft ? KeyCode.RightArrow : KeyCode.LeftArrow, isGravityLeft, infoHead, info, false);
         }
 
         private void SetGravityAndRotation(bool isGravityPositive, bool isVertical)
@@ -702,16 +702,25 @@ namespace UCT.Battle
 
         private void HandleJump(KeyCode jumpKey,
             bool isGravityPositive,
-            RaycastHit2D infoF,
+            RaycastHit2D infoHead,
             RaycastHit2D info,
             bool isVertical)
         {
             UpdateJumpRayDistance(jumpKey);
             TryStartJump(jumpKey, isGravityPositive, isVertical);
-            TryStopJump(jumpKey, infoF, isGravityPositive, isVertical);
+            TryStopJump(jumpKey, infoHead, isGravityPositive, isVertical);
             ApplyJumpAcceleration(isGravityPositive, isVertical);
             CheckJumpCollision(info);
             ResetJump(isVertical);
+            HandleDown(jumpKey, info);
+        }
+
+        private void HandleDown(KeyCode jumpKey, RaycastHit2D info)
+        {
+            if (!info.collider && !isJump && !InputService.GetKey(jumpKey))
+            {
+                BlueDown(0, playerDir);
+            }
         }
 
         private void UpdateJumpRayDistance(KeyCode jumpKey)
@@ -744,13 +753,13 @@ namespace UCT.Battle
             jumpRayDistanceForBoard = 0;
         }
 
-        private void TryStopJump(KeyCode jumpKey, RaycastHit2D infoF, bool isGravityPositive, bool isVertical)
+        private void TryStopJump(KeyCode jumpKey, RaycastHit2D infoHead, bool isGravityPositive, bool isVertical)
         {
             if (!isJump || (InputService.GetKey(jumpKey) &&
-                            (!infoF.collider || !infoF.collider.gameObject.CompareTag("Box"))) ||
+                            (!infoHead.collider || !infoHead.collider.gameObject.CompareTag("Box"))) ||
                 ((!isGravityPositive || (isVertical ? moving.y >= 0 : moving.x <= 0)) &&
                  (isGravityPositive || (isVertical ? moving.y <= 0 : moving.x >= 0))) ||
-                !infoF.collider || !Mathf.Approximately(infoF.transform.position.z, transform.position.z))
+                !infoHead.collider || !Mathf.Approximately(infoHead.transform.position.z, transform.position.z))
             {
                 return;
             }
@@ -1001,24 +1010,14 @@ namespace UCT.Battle
 
             jumpRayDistance = 0.2f;
             isJump = true;
-            switch (playerDir)
+            moving = playerDir switch
             {
-                case PlayerDirection.Up:
-                    moving = new Vector3(moving.x, startForce);
-                    break;
-
-                case PlayerDirection.Down:
-                    moving = new Vector3(moving.x, -startForce);
-                    break;
-
-                case PlayerDirection.Left:
-                    moving = new Vector3(-startForce, moving.y);
-                    break;
-
-                case PlayerDirection.Right:
-                    moving = new Vector3(startForce, moving.y);
-                    break;
-            }
+                PlayerDirection.Up => new Vector3(moving.x, startForce),
+                PlayerDirection.Down => new Vector3(moving.x, -startForce),
+                PlayerDirection.Left => new Vector3(-startForce, moving.y),
+                PlayerDirection.Right => new Vector3(startForce, moving.y),
+                _ => moving
+            };
         }
 
         /// <summary>

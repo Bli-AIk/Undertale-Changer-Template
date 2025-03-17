@@ -2255,6 +2255,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: CheckCollider
       objectReference: {fileID: 0}
+    - target: {fileID: 7465371120991486083, guid: af8bf2352843fe54885f5f962cd3c133,
+        type: 3}
+      propertyPath: m_Layer
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: af8bf2352843fe54885f5f962cd3c133, type: 3}
 --- !u!4 &1113298357 stripped

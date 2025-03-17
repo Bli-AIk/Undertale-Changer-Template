@@ -131,7 +131,7 @@ namespace UCT.Battle.BattleConfigs
                         (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
 
 
-                    for (var i = 10; i > 0; i--)
+                    for (var i = 120; i > 0; i--)
                     {
                         if (i % 5 == 0)
                         {

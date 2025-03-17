@@ -13,7 +13,6 @@ namespace UCT.Battle
         private static readonly int VerticesTex = Shader.PropertyToID("_VerticesTex");
         private Material _material;
         private GameObject _projectionBoxes;
-        private List<List<Vector2>> Polygons { get; set; } = new();
 
         private void Awake()
         {
@@ -22,25 +21,71 @@ namespace UCT.Battle
             _projectionBoxes = MainControl.Instance.selectUIController.projectionBoxes;
         }
 
+        private Texture2D _vertexTexture;
+
         private void OnEnable()
         {
-            UpdateVertexTexture();
+            InitializeTexture();
+            UpdateTexture();
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
-            UpdateVertexTexture();
+            UpdateTexture();
         }
 
-        private void SetPolygons()
+        private void InitializeTexture()
         {
-            if (!BoxController.Instance || BoxController.Instance.boxes == null)
+            var polygons = SetPolygons();
+            if (polygons == null || polygons.Count == 0)
             {
                 return;
             }
 
-            Polygons ??= new List<List<Vector2>>();
-            Polygons.Clear();
+            var textureWidth = polygons.Max(p => p.Count) + 1;
+            var textureHeight = polygons.Count;
+
+            _vertexTexture = new Texture2D(textureWidth, textureHeight, TextureFormat.RGFloat, false)
+            {
+                filterMode = FilterMode.Point,
+                wrapMode = TextureWrapMode.Clamp
+            };
+
+            _material.SetTexture(VerticesTex, _vertexTexture);
+        }
+
+        private void UpdateTexture()
+        {
+            var polygons = SetPolygons();
+            if (polygons == null || polygons.Count == 0 || !_vertexTexture)
+            {
+                return;
+            }
+
+            for (var y = 0; y < polygons.Count; y++)
+            {
+                var polygon = polygons[y];
+
+                _vertexTexture.SetPixel(0, y, new Color(polygon.Count, polygons.Count, 0f, 1f));
+
+                for (var x = 0; x < polygon.Count; x++)
+                {
+                    _vertexTexture.SetPixel(x + 1, y, new Color(polygon[x].x, polygon[x].y, 0f, 1f));
+                }
+            }
+
+            _vertexTexture.Apply();
+        }
+
+
+        private List<List<Vector2>> SetPolygons()
+        {
+            if (!BoxController.Instance || BoxController.Instance.boxes == null)
+            {
+                return new List<List<Vector2>>();
+            }
+
+            var polygons = new List<List<Vector2>>();
             const float offset = -0.075f;
             foreach (var boxDrawer in BoxController.Instance.boxes)
             {
@@ -49,50 +94,23 @@ namespace UCT.Battle
                     continue;
                 }
 
-                var points = boxDrawer.realPoints.Select(p => p + (Vector2)boxDrawer.transform.position).ToList();
-                Polygons.Add(MathUtilityService.CalculateInwardOffset(points, offset));
+                var points = boxDrawer.realPoints
+                    .Select(p => p + (Vector2)boxDrawer.transform.position).ToList();
+                polygons.Add(MathUtilityService.CalculateInwardOffset(points, offset));
 
                 for (var i = 0; i < _projectionBoxes.transform.childCount; i++)
                 {
                     points = boxDrawer.realPoints
-                        .Select(p => p + (Vector2)_projectionBoxes.transform.GetChild(i).transform.position).ToList();
-                    Polygons.Add(MathUtilityService.CalculateInwardOffset(points, offset));
-                }
-            }
-        }
-
-
-        private void UpdateVertexTexture()
-        {
-            SetPolygons();
-            if (Polygons == null || Polygons.Count == 0)
-            {
-                return;
-            }
-
-            var textureWidth = Polygons.Max(p => p.Count) + 1;
-            var textureHeight = Polygons.Count;
-
-            var vertexTexture = new Texture2D(textureWidth, textureHeight, TextureFormat.RGFloat, false)
-            {
-                filterMode = FilterMode.Point,
-                wrapMode = TextureWrapMode.Clamp
-            };
-
-            for (var y = 0; y < Polygons.Count; y++)
-            {
-                var polygon = Polygons[y];
-
-                vertexTexture.SetPixel(0, y, new Color(polygon.Count, Polygons.Count, 0f, 1f));
-
-                for (var x = 0; x < polygon.Count; x++)
-                {
-                    vertexTexture.SetPixel(x + 1, y, new Color(polygon[x].x, polygon[x].y, 0f, 1f));
+                        .Select(p =>
+                            p + (Vector2)boxDrawer.localPosition +
+                            (Vector2)_projectionBoxes.transform.GetChild(i).transform.position).ToList();
+                    polygons.Add(MathUtilityService.CalculateInwardOffset(points, offset));
                 }
             }
 
-            vertexTexture.Apply();
-            _material.SetTexture(VerticesTex, vertexTexture);
+            return polygons;
         }
+
+
     }
 }
