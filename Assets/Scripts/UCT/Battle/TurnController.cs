@@ -58,7 +58,7 @@ namespace UCT.Battle
             _yellowBulletPool.parent = saveBullet.transform;
             _yellowBulletPool.count = yellowBulletPoolCount;
             _yellowBulletPool.poolObject = Resources.Load<GameObject>("Template/YellowBullet Template");
-            _yellowBulletPool.FillPool<BoardController>();
+            _yellowBulletPool.FillPool<YellowBulletController>();
         }
 
         /// <summary>
