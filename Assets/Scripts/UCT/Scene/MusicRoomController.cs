@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using Alchemy.Inspector;
@@ -158,7 +157,7 @@ namespace UCT.Scene
             {
                 OutSettingMusic();
             }
-            
+
             if (!InputService.GetKeyDown(KeyCode.Z))
             {
                 return shouldUpdateSortText;
@@ -192,53 +191,63 @@ namespace UCT.Scene
                 }
                 default:
                     throw new ArgumentOutOfRangeException($"Unexpected sortIndex value: {sortIndex}");
-
             }
 
             SortList();
-            
+
 
             return shouldUpdateSortText;
         }
 
         private void SortList()
         {
-            Func<MusicData, string> stringSelector = _sortMode switch
+            if (_sortMode == SortMode.Length)
             {
-                SortMode.Title => data => TextProcessingService.GetFirstChildStringByPrefix(
-                    MainControl.Instance.LanguagePackControl.sceneTexts, data.musicDataName),
-                SortMode.Author => data => TextProcessingService.GetFirstChildStringByPrefix(
-                    MainControl.Instance.LanguagePackControl.sceneTexts, data.authorDataName),
-                _ => null
-            };
+                var indexedItems = musicData
+                    .Select((data, index) => new
+                    {
+                        Index = index,
+                        Value = data.clip ? data.clip.length : 0f
+                    })
+                    .OrderBy(item => item.Value) // 数值排序
+                    .Select(item => item.Index)
+                    .ToList();
 
-            Func<MusicData, float> floatSelector = _sortMode switch
-            {
-                SortMode.Length => data => data.clip ? data.clip.length : 0f,
-                _ => null
-            };
-
-            if (stringSelector == null && floatSelector == null)
-            {
-                throw new ArgumentOutOfRangeException($"{_sortMode} unexpected stringSelector value and floatSelector value");
-            }
-
-            var indexedItems = musicData
-                .Select((data, index) => new
+                if (_orderMode == OrderMode.Descending)
                 {
-                    Index = index,
-                    Value = stringSelector != null ? stringSelector(data) : floatSelector?.Invoke(data).ToString(CultureInfo.InvariantCulture)
-                })
-                .OrderBy(item => item.Value, StringComparer.OrdinalIgnoreCase)
-                .Select(item => item.Index)
-                .ToList();
+                    indexedItems.Reverse();
+                }
 
-            if (_orderMode == OrderMode.Descending)
-            {
-                indexedItems.Reverse();
+                ApplySortedIndices(indexedItems);
             }
+            else
+            {
+                Func<MusicData, string> stringSelector = _sortMode switch
+                {
+                    SortMode.Title => data => TextProcessingService.GetFirstChildStringByPrefix(
+                        MainControl.Instance.LanguagePackControl.sceneTexts, data.musicDataName),
+                    SortMode.Author => data => TextProcessingService.GetFirstChildStringByPrefix(
+                        MainControl.Instance.LanguagePackControl.sceneTexts, data.authorDataName),
+                    _ => throw new ArgumentOutOfRangeException($"{_sortMode} unexpected stringSelector value")
+                };
 
-            ApplySortedIndices(indexedItems);
+                var indexedItems = musicData
+                    .Select((data, index) => new
+                    {
+                        Index = index,
+                        Value = stringSelector(data)
+                    })
+                    .OrderBy(item => item.Value, StringComparer.OrdinalIgnoreCase)
+                    .Select(item => item.Index)
+                    .ToList();
+
+                if (_orderMode == OrderMode.Descending)
+                {
+                    indexedItems.Reverse();
+                }
+
+                ApplySortedIndices(indexedItems);
+            }
         }
 
         private void ApplySortedIndices(List<int> sortedIndices)

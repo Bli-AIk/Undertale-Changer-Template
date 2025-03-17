@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47bd981a951e42eaa900ef634301c0f7, type: 3}
+  m_Name: BitLove
+  m_EditorClassIdentifier: 
+  clip: {fileID: 8300000, guid: 1416a80501439de4784414eef3c57f53, type: 3}
+  cover: {fileID: 21300000, guid: 2a52aeb572222614d8d40086246a721c, type: 3}
+  bpm: 0
+  musicDataName: BitLove
+  authorDataName: AIk
+  informationDataName: BitLoveInfo
