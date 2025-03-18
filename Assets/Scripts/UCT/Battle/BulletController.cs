@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using DG.Tweening;
-using Plugins.Timer.Source;
 using UCT.Audio;
 using UCT.Control;
 using UCT.Core;

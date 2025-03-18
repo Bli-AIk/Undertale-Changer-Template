@@ -84,10 +84,10 @@ namespace UCT.Battle
                     }
 
                     var obj = GetFromPool();
-                    var spriteRenderer = obj.GetComponent<SpriteRenderer>();
-                    spriteRenderer.color = color;
+                    var objSpriteRenderer = obj.GetComponent<SpriteRenderer>();
+                    objSpriteRenderer.color = color;
 
-                    spriteRenderer.sortingOrder = this.spriteRenderer.sortingOrder + 1;
+                    objSpriteRenderer.sortingOrder = spriteRenderer.sortingOrder + 1;
 
                     obj.transform.localPosition = startPos + new Vector2(x * 0.05f, -(_map.height - y - 1) * 0.05f);
                 }
