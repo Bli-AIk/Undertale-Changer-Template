@@ -45,19 +45,19 @@ namespace UCT.Battle
             _bulletPool = gameObject.AddComponent<ObjectPool>();
             _bulletPool.parent = saveBullet.transform;
             _bulletPool.count = bulletPoolCount;
-            _bulletPool.poolObject = Resources.Load<GameObject>("Template/Bullet Template");
+            _bulletPool.poolObject = Resources.Load<GameObject>("Prefabs/Template/Bullet Template");
             _bulletPool.FillPool<BulletController>();
 
             _boardPool = gameObject.AddComponent<ObjectPool>();
             _boardPool.parent = saveBullet.transform;
             _boardPool.count = boardPoolCount;
-            _boardPool.poolObject = Resources.Load<GameObject>("Template/Board Template");
+            _boardPool.poolObject = Resources.Load<GameObject>("Prefabs/Template/Board Template");
             _boardPool.FillPool<BoardController>();
 
             _yellowBulletPool = gameObject.AddComponent<ObjectPool>();
             _yellowBulletPool.parent = saveBullet.transform;
             _yellowBulletPool.count = yellowBulletPoolCount;
-            _yellowBulletPool.poolObject = Resources.Load<GameObject>("Template/YellowBullet Template");
+            _yellowBulletPool.poolObject = Resources.Load<GameObject>("Prefabs/Template/YellowBullet Template");
             _yellowBulletPool.FillPool<YellowBulletController>();
         }
 

@@ -159,7 +159,7 @@ namespace UCT.Battle
         {
             for (var i = 0; i < poolCount; i++)
             {
-                var newObj = Instantiate(Resources.Load<GameObject>("Template/Square Template"), transform);
+                var newObj = Instantiate(Resources.Load<GameObject>("Prefabs/Template/Square Template"), transform);
                 ReturnPool(newObj);
             }
         }

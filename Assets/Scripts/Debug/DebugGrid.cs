@@ -34,7 +34,7 @@ namespace Debug
 
         private void Start()
         {
-            poolObject = Resources.Load<GameObject>("Template/Grid Template");
+            poolObject = Resources.Load<GameObject>("Prefabs/Template/Grid Template");
             FillPool<Transform>();
 
             SummonGrid();
