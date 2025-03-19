@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
+using DG.Tweening.Core;
+using DG.Tweening.Plugins.Options;
 using MEC;
 using UCT.Audio;
 using UCT.Control;
@@ -145,6 +147,10 @@ namespace UCT.Battle
         private SpriteRenderer _spriteRenderer, _dingSpriteRenderer;
         private float _yellowTimer;
 
+
+        private float _currentT;
+        private TweenerCore<Vector3, Vector3, VectorOptions> _purpleSwitchTween;
+
         private void Start()
         {
             speedWeightX = 1;
@@ -191,26 +197,6 @@ namespace UCT.Battle
             }
         }
 
-        private void PurpleSwitchLineInput()
-        {
-            if (playerColor != BattleControl.PlayerColor.Purple || TurnController.Instance.isMyTurn)
-            {
-                return;
-            }
-
-            var playerLineController = MainControl.Instance.selectUIController.PlayerLineController;
-
-            if (InputService.GetKeyDown(KeyCode.UpArrow) && _currentLineIndex > 0)
-            {
-                _currentLineIndex -= 1;
-            }
-
-            if (InputService.GetKeyDown(KeyCode.DownArrow) && _currentLineIndex < playerLineController.lines.Count - 1)
-            {
-                _currentLineIndex += 1;
-            }
-        }
-
         private void FixedUpdate()
         {
             if (GameUtilityService.IsGamePausedOrSetting())
@@ -245,6 +231,33 @@ namespace UCT.Battle
                 !isJump)
             {
                 BlueDown(0, playerDir);
+            }
+        }
+
+        private void PurpleSwitchLineInput()
+        {
+            if (playerColor != BattleControl.PlayerColor.Purple || TurnController.Instance.isMyTurn)
+            {
+                return;
+            }
+
+            var playerLineController = MainControl.Instance.selectUIController.PlayerLineController;
+            var isKeyDown = false;
+            if (InputService.GetKeyDown(KeyCode.UpArrow) && _currentLineIndex > 0)
+            {
+                _currentLineIndex -= 1;
+                isKeyDown = true;
+            }
+
+            if (InputService.GetKeyDown(KeyCode.DownArrow) && _currentLineIndex < playerLineController.lines.Count - 1)
+            {
+                _currentLineIndex += 1;
+                isKeyDown = true;
+            }
+
+            if (isKeyDown)
+            {
+                SwitchLine(_currentLineIndex);
             }
         }
 
@@ -408,6 +421,7 @@ namespace UCT.Battle
             else
             {
                 transform.position = checkPos;
+                _purpleSwitchTween.Kill(true);
             }
 
 
@@ -847,7 +861,6 @@ namespace UCT.Battle
             jumpAcceleration += Time.deltaTime * timeInterpolation;
         }
 
-
         private void PlayerMoveWithLine()
         {
             var playerLineController = MainControl.Instance.selectUIController.PlayerLineController;
@@ -859,7 +872,7 @@ namespace UCT.Battle
             speedWeightY = weight;
 
             var playerPos = transform.position;
-            var tangent = ComputeTangentAndProjection(lineRenderer, playerPos, out var projection);
+            var tangent = ComputeTangentAndProjection(lineRenderer, playerPos, out var projection, out _currentT);
 
             const float tolerance = 0.01f;
             if (Vector3.Distance(playerPos, projection) > tolerance)
@@ -887,24 +900,63 @@ namespace UCT.Battle
             }
         }
 
+        private void SwitchLine(int newLineIndex)
+        {
+            var playerLineController = MainControl.Instance.selectUIController.PlayerLineController;
+            if (newLineIndex < 0 || newLineIndex >= playerLineController.lines.Count)
+            {
+                return;
+            }
+
+            _currentLineIndex = newLineIndex;
+            var newLine = playerLineController.lines[newLineIndex];
+
+            // 根据 currentT 计算新位置
+            var posCount = newLine.positionCount;
+            if (posCount < 2)
+            {
+                return;
+            }
+
+            var segmentIndex = Mathf.FloorToInt(_currentT * (posCount - 1));
+            var segmentT = _currentT * (posCount - 1) - segmentIndex;
+
+            var p0 = newLine.GetPosition(segmentIndex);
+            var p1 = newLine.GetPosition(Mathf.Min(segmentIndex + 1, posCount - 1));
+            if (!newLine.useWorldSpace)
+            {
+                p0 += newLine.transform.position;
+                p1 += newLine.transform.position;
+            }
+
+            var newPosition = Vector3.Lerp(p0, p1, segmentT);
+            _purpleSwitchTween.Kill();
+            _purpleSwitchTween = transform.DOMove(newPosition,0.1f);
+        }
+
+
         /// <summary>
         ///     根据玩家当前所在的位置，在LineRenderer构成的路径上找到最近的线段，
         ///     返回该段的归一化切线方向，并通过out参数返回在该线段上的投影点。
         /// </summary>
-        private static Vector3 ComputeTangentAndProjection(LineRenderer lineRenderer,
+        private static Vector3 ComputeTangentAndProjection(
+            LineRenderer lineRenderer,
             Vector3 playerPos,
-            out Vector3 projectionResult)
+            out Vector3 projectionResult,
+            out float tResult)
         {
             var posCount = lineRenderer.positionCount;
             if (posCount < 2)
             {
                 projectionResult = playerPos;
+                tResult = 0f;
                 return Vector3.right;
             }
 
             var closestTangent = Vector3.zero;
             var closestDistance = float.MaxValue;
             var closestProjection = playerPos;
+            var closestT = 0f;
 
             for (var i = 0; i < posCount - 1; i++)
             {
@@ -915,6 +967,7 @@ namespace UCT.Battle
                     p0 += lineRenderer.transform.position;
                     p1 += lineRenderer.transform.position;
                 }
+
                 var segment = p1 - p0;
                 var segSqrLen = segment.sqrMagnitude;
                 if (Mathf.Approximately(segSqrLen, 0))
@@ -927,17 +980,17 @@ namespace UCT.Battle
                 var projection = p0 + t * segment;
                 var distance = (playerPos - projection).sqrMagnitude;
 
-                if (distance >= closestDistance)
+                if (distance < closestDistance)
                 {
-                    continue;
+                    closestDistance = distance;
+                    closestTangent = segment.normalized;
+                    closestProjection = projection;
+                    closestT = (i + t) / (posCount - 1); // 归一化到整条路径
                 }
-
-                closestDistance = distance;
-                closestTangent = segment.normalized;
-                closestProjection = projection;
             }
 
             projectionResult = closestProjection;
+            tResult = closestT;
             return closestTangent;
         }
 
