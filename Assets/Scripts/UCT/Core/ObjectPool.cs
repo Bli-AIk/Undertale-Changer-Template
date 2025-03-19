@@ -57,7 +57,7 @@ namespace UCT.Core
         /// <summary>
         ///     返回对象池
         /// </summary>
-        public void ReturnPool<T>(GameObject inputGameObject, T script) where T : Component
+        public virtual void ReturnPool<T>(GameObject inputGameObject, T script) where T : Component
         {
             if (!parent)
             {
@@ -78,7 +78,7 @@ namespace UCT.Core
         /// <summary>
         ///     获取对象池中的物体或脚本
         /// </summary>
-        public T GetFromPool<T>() where T : Component
+        public virtual T GetFromPool<T>() where T : Component
         {
             if (_availableObj.Count == 0)
             {

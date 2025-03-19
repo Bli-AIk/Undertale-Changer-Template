@@ -3635,7 +3635,7 @@ MonoBehaviour:
   angle: 0
   isRotate: 0
   currentAngle: 0
-  currentLine: 2
+  currentLineIndex: 2
   arrowPosition: {fileID: 1465907442}
   orangeDash: {fileID: 1972919378}
   moving: {x: 0, y: 0, z: 0}
@@ -4275,6 +4275,7 @@ Transform:
   - {fileID: 692501850}
   - {fileID: 1744743238}
   - {fileID: 14899177}
+  - {fileID: 2078558776}
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4293,27 +4294,18 @@ MonoBehaviour:
   hpColorUnder: {r: 1, g: 0, b: 0, a: 1}
   hpColorOn: {r: 1, g: 1, b: 0, a: 1}
   hpColorHit: {r: 1, g: 1, b: 1, a: 1}
-  numberDialog: 0
-  isDialog: 0
   spriteUI:
   - {fileID: 21300000, guid: f4350d8ad983d4e419cf36a71cd8fb14, type: 3}
   - {fileID: 21300000, guid: 4b08e1d59842e1d4b819cd361bbcc1bb, type: 3}
   - {fileID: 21300000, guid: 574580a9d73c68a49bc227c0cec65d8b, type: 3}
   - {fileID: 21300000, guid: b46d8f9ea77ee3d44a475a0736b92162, type: 3}
   buttons: []
-  playerUIPos:
-  - {x: -5.65, y: -4.45}
-  - {x: -2.435, y: -4.45}
-  - {x: 0.865, y: -4.45}
-  - {x: 4.025, y: -4.45}
   selectedButton: 0
   selectedLayer: 0
   nameLayerIndex: 0
   optionLayerIndex: 0
   optionsSave: []
   enemiesControllers: []
-  firstIn: 0
-  firstInDiy: -1
   projectionBoxes: {fileID: 0}
 --- !u!114 &1724226492
 MonoBehaviour:
@@ -10105,6 +10097,54 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &2078558775
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2078558776}
+  - component: {fileID: 2078558777}
+  m_Layer: 5
+  m_Name: PlayerLineController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2078558776
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2078558775}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1724226490}
+  m_RootOrder: 13
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2078558777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2078558775}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ff141bcc5f74e1ba0b458b14d727cb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isStartFillPool: 0
+  count: 10
+  poolObject: {fileID: 0}
+  parent: {fileID: 0}
 --- !u!1 &2100705080
 GameObject:
   m_ObjectHideFlags: 0

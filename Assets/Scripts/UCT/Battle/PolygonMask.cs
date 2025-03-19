@@ -13,19 +13,29 @@ namespace UCT.Battle
         private static readonly int PolygonInfos = Shader.PropertyToID("_PolygonInfos");
 
         private static readonly int PolygonVertices = Shader.PropertyToID("_PolygonVertices");
+        private static readonly int Mode = Shader.PropertyToID("_Mode");
 
         private int _currentPolygonInfoCount;
         private int _currentPolygonVertexCount;
-        private Material _material;
 
         private ComputeBuffer _polygonInfoBuffer;
         private ComputeBuffer _polygonVerticesBuffer;
         private GameObject _projectionBoxes;
+        private Renderer _targetRenderer;
 
         private void Awake()
         {
-            _material = Instantiate(Resources.Load<Material>("Materials/PolygonMask"));
-            GetComponent<SpriteRenderer>().material = _material;
+            _targetRenderer = GetComponent<Renderer>();
+            var material = Instantiate(Resources.Load<Material>("Materials/PolygonMask"));
+
+            if (!_targetRenderer)
+            {
+                Debug.LogError("PolygonMask 需要一个 Renderer 组件（SpriteRenderer 或 LineRenderer）！");
+                enabled = false;
+                return;
+            }
+
+            _targetRenderer.material = material;
             _projectionBoxes = MainControl.Instance.selectUIController.projectionBoxes;
         }
 
@@ -37,6 +47,10 @@ namespace UCT.Battle
         private void OnEnable()
         {
             UpdateBuffers();
+            if (_targetRenderer is LineRenderer)
+            {
+                _targetRenderer.material.SetFloat(Mode, 1);
+            }
         }
 
 
@@ -84,7 +98,7 @@ namespace UCT.Battle
             UpdateComputeBuffer(ref _polygonVerticesBuffer, verticesList, sizeof(float) * 2, PolygonVertices,
                 verticesList.Count, ref _currentPolygonVertexCount);
 
-            _material.SetInt(PolygonCount, polygonInfos.Count);
+            _targetRenderer.material.SetInt(PolygonCount, polygonInfos.Count);
         }
 
         private (List<PolygonInfo>, List<Vector2>) ProcessPolygons(List<List<Vector2>> polygons)
@@ -112,7 +126,7 @@ namespace UCT.Battle
 
         private void HandleEmptyPolygons()
         {
-            _material.SetInt(PolygonCount, 0);
+            _targetRenderer.material.SetInt(PolygonCount, 0);
             EnsureBufferInitialized(ref _polygonInfoBuffer, 1, sizeof(float) + sizeof(int), PolygonInfos,
                 ref _currentPolygonInfoCount, new PolygonInfo { VertexCount = 0, StartIndex = 0 });
             EnsureBufferInitialized(ref _polygonVerticesBuffer, 1, sizeof(float) * 2, PolygonVertices,
@@ -129,7 +143,7 @@ namespace UCT.Battle
             if (buffer == null)
             {
                 buffer = new ComputeBuffer(size, stride);
-                _material.SetBuffer(shaderProperty, buffer);
+                _targetRenderer.material.SetBuffer(shaderProperty, buffer);
                 currentCount = size;
             }
 
@@ -147,7 +161,7 @@ namespace UCT.Battle
             {
                 buffer?.Release();
                 buffer = new ComputeBuffer(newSize, stride);
-                _material.SetBuffer(shaderProperty, buffer);
+                _targetRenderer.material.SetBuffer(shaderProperty, buffer);
                 currentSize = newSize;
             }
 

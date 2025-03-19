@@ -88,7 +88,7 @@ namespace UCT.Battle
         /// <summary>
         ///     当前行
         /// </summary>
-        public int currentLine = 2;
+        public int currentLineIndex = 2;
 
         /// <summary>
         ///     箭头位置
@@ -828,35 +828,55 @@ namespace UCT.Battle
 
         private void PlayerMoveWithLine()
         {
-            if (InputService.GetKey(KeyCode.RightArrow))
+            var playerLineController = MainControl.Instance.selectUIController.PlayerLineController;
+            
+            var isChangeLine = false;
+            if (InputService.GetKeyDown(KeyCode.UpArrow) && currentLineIndex > 0)
             {
-                moving = new Vector3(1, moving.y);
-            }
-            else if (InputService.GetKey(KeyCode.LeftArrow))
-            {
-                moving = new Vector3(-1, moving.y);
-            }
-            else
-            {
-                moving = new Vector3(0, moving.y);
+                currentLineIndex -= 1;
+                isChangeLine = true;
             }
 
-            if (InputService.GetKey(KeyCode.RightArrow) &&
-                InputService.GetKey(KeyCode.LeftArrow))
+            if (InputService.GetKeyDown(KeyCode.DownArrow) && currentLineIndex < playerLineController.lines.Count)
             {
-                moving = new Vector3(0, moving.y);
+                currentLineIndex += 1;
+                isChangeLine = true;
+            }
+            var lineRenderer = playerLineController.lines[currentLineIndex];
+            
+            var weight = InputService.GetKey(KeyCode.X) ? SpeedWeight : 1;
+            speedWeightX = weight;
+            speedWeightY = weight;
+
+            var up = InputService.GetKey(KeyCode.UpArrow);
+            var down = InputService.GetKey(KeyCode.DownArrow);
+            var vertical = 0;
+            if (up && !down)
+            {
+                vertical = 1;
+            }
+            else if (down && !up)
+            {
+                vertical = -1;
             }
 
-            if (InputService.GetKeyDown(KeyCode.UpArrow) && currentLine > 1)
+            var right = InputService.GetKey(KeyCode.RightArrow);
+            var left = InputService.GetKey(KeyCode.LeftArrow);
+            var horizontal = 0;
+            if (right && !left)
             {
-                currentLine -= 1;
-                ChangeLine();
+                horizontal = 1;
+            }
+            else if (left && !right)
+            {
+                horizontal = -1;
             }
 
-            if (InputService.GetKeyDown(KeyCode.DownArrow) && currentLine < 3)
+            moving = new Vector3(horizontal, vertical);
+            
+            if (isChangeLine)
             {
-                currentLine += 1;
-                ChangeLine();
+                
             }
         }
 
@@ -1106,65 +1126,35 @@ namespace UCT.Battle
 
         private void PlayerCommonMove()
         {
-            if (InputService.GetKey(KeyCode.X))
+            var weight = InputService.GetKey(KeyCode.X) ? SpeedWeight : 1;
+            speedWeightX = weight;
+            speedWeightY = weight;
+
+            var up = InputService.GetKey(KeyCode.UpArrow);
+            var down = InputService.GetKey(KeyCode.DownArrow);
+            var vertical = 0;
+            if (up && !down)
             {
-                speedWeightX = SpeedWeight;
-                speedWeightY = SpeedWeight;
+                vertical = 1;
             }
-            else
+            else if (down && !up)
             {
-                speedWeightX = 1;
-                speedWeightY = 1;
+                vertical = -1;
             }
 
-            if (InputService.GetKey(KeyCode.UpArrow))
+            var right = InputService.GetKey(KeyCode.RightArrow);
+            var left = InputService.GetKey(KeyCode.LeftArrow);
+            var horizontal = 0;
+            if (right && !left)
             {
-                moving = new Vector3(moving.x, 1);
+                horizontal = 1;
             }
-            else if (InputService.GetKey(KeyCode.DownArrow))
+            else if (left && !right)
             {
-                moving = new Vector3(moving.x, -1);
-            }
-            else
-            {
-                moving = new Vector3(moving.x, 0);
-            }
-
-            if (InputService.GetKey(KeyCode.UpArrow) &&
-                InputService.GetKey(KeyCode.DownArrow))
-            {
-                moving = new Vector3(moving.x, 0);
+                horizontal = -1;
             }
 
-            if (InputService.GetKey(KeyCode.RightArrow))
-            {
-                moving = new Vector3(1, moving.y);
-            }
-            else if (InputService.GetKey(KeyCode.LeftArrow))
-            {
-                moving = new Vector3(-1, moving.y);
-            }
-            else
-            {
-                moving = new Vector3(0, moving.y);
-            }
-
-            if (InputService.GetKey(KeyCode.RightArrow) &&
-                InputService.GetKey(KeyCode.LeftArrow))
-            {
-                moving = new Vector3(0, moving.y);
-            }
-        }
-
-        private void ChangeLine()
-        {
-            transform.position = currentLine switch
-            {
-                1 => new Vector3(moving.x, -1.3f, 0),
-                2 => new Vector3(moving.x, -1.6f, 0),
-                3 => new Vector3(moving.x, -1.9f, 0),
-                _ => transform.position
-            };
+            moving = new Vector3(horizontal, vertical);
         }
     }
 }

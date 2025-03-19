@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Alchemy.Inspector;
 using DG.Tweening;
 using TMPro;
 using UCT.Audio;
@@ -11,7 +12,6 @@ using UCT.Control;
 using UCT.Core;
 using UCT.Service;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 using Timer = Plugins.Timer.Source.Timer;
 
@@ -79,46 +79,33 @@ namespace UCT.Battle
         private static readonly int Flash = Shader.PropertyToID("_Flash");
         private static readonly int IsFlee = Animator.StringToHash("IsFlee");
 
-        [Header("HP条配色")]
-        public Color hpColorUnder;
+        [TabGroup("Config")] public Color hpColorUnder;
 
-        public Color hpColorOn;
-        public Color hpColorHit;
+        [TabGroup("Config")] public Color hpColorOn;
 
-        [Header("对话气泡载入数")]
-        public int numberDialog;
-
-        public bool isDialog;
+        [TabGroup("Config")] public Color hpColorHit;
 
         [Header("暂存未使用的Sprite")]
         public List<Sprite> spriteUI;
 
         [HideInInspector] public List<SpriteRenderer> buttons;
 
-        public List<Vector2> playerUIPos;
 
-        [Header("选择的按钮")]
+        [TabGroup("State (ReadOnly)")] [ReadOnly]
         public SelectedButton selectedButton;
 
-        [Header("目前的UI层级")]
+        [TabGroup("State (ReadOnly)")] [ReadOnly]
         public SelectedLayer selectedLayer;
 
-        [Header("选择的名称编号")]
+        [TabGroup("State (ReadOnly)")] [ReadOnly]
         public int nameLayerIndex;
 
-        [Header("选择的选项")]
+        [TabGroup("State (ReadOnly)")] [ReadOnly]
         public int optionLayerIndex;
 
-        [FormerlySerializedAs("actSave")] [Header("暂存ACT选项以便调用")]
-        public List<string> optionsSave;
+        [HideInInspector] public List<string> optionsSave;
 
-        [Header("怪物清单")]
-        public List<EnemiesController> enemiesControllers;
-
-        [Header("首次进入回合的时候播放自定义的回合文本")]
-        public bool firstIn;
-
-        public int firstInDiy = -1;
+        [HideInInspector] public List<EnemiesController> enemiesControllers;
 
         [HideInInspector] public GameObject projectionBoxes;
 
@@ -128,11 +115,16 @@ namespace UCT.Battle
         private int _hpFood;
         private Tween _hpFoodTween;
         private SpriteRenderer _hpSpr;
+
+        private bool _isDialog;
         private bool _isEndBattle;
 
         private ItemScroller _itemScroller;
 
         private TextMeshPro _nameUI, _hpUI, _textUI, _textUIBack;
+
+        private int _numberDialog;
+        public PlayerLineController PlayerLineController { get; private set; }
 
         private int _saveTurn = -1;
         private string _saveTurnText = "";
@@ -148,7 +140,7 @@ namespace UCT.Battle
         private void Start()
         {
             GetComponent();
-            TurnTextLoad(true);
+            TurnTextLoad();
             _enemiesHpLine.SetActive(false);
             UITextUpdate();
             _hpFood = MainControl.Instance.playerControl.hp;
@@ -192,7 +184,7 @@ namespace UCT.Battle
                 return;
             }
 
-            _dialog.gameObject.SetActive(isDialog);
+            _dialog.gameObject.SetActive(_isDialog);
 
 
             var canEndBattle = MainControl.Instance.selectUIController.enemiesControllers.All(enemiesController =>
@@ -200,18 +192,18 @@ namespace UCT.Battle
 
             if (!canEndBattle)
             {
-                if (!isDialog)
+                if (!_isDialog)
                 {
                     return;
                 }
 
                 if ((_dialog.typeWritter.isTyping || !InputService.GetKeyDown(KeyCode.Z)) &&
-                    ((selectedButton != SelectedButton.Fight && _textUI.text != "") || numberDialog != 0))
+                    ((selectedButton != SelectedButton.Fight && _textUI.text != "") || _numberDialog != 0))
                 {
                     return;
                 }
 
-                if (numberDialog < optionsSave.Count)
+                if (_numberDialog < optionsSave.Count)
                 {
                     KeepDialogBubble();
                 }
@@ -279,7 +271,7 @@ namespace UCT.Battle
 
         private void EnterTurnLayer()
         {
-            isDialog = false;
+            _isDialog = false;
             _itemScroller.gameObject.SetActive(false);
             optionsSave = new List<string>();
             selectedLayer = SelectedLayer.TurnLayer;
@@ -299,6 +291,7 @@ namespace UCT.Battle
             _dialog = GameObject.Find("DialogBubble").GetComponent<DialogBubbleBehaviour>();
             _dialog.gameObject.SetActive(false);
             _typeWritter = GetComponent<TypeWritter>();
+            PlayerLineController = transform.Find("PlayerLineController").GetComponent<PlayerLineController>();
             foreach (var t in new[] { "FIGHT", "ACT", "ITEM", "MERCY" })
             {
                 buttons.Add(transform.Find(t).GetComponent<SpriteRenderer>());
@@ -468,6 +461,13 @@ namespace UCT.Battle
 
         private void UpdateButtonLayer()
         {
+            List<Vector2> playerUIPos = new()
+            {
+                new Vector2(-5.65f, -4.45f),
+                new Vector2(-2.435f, -4.45f),
+                new Vector2(0.865f, -4.45f),
+                new Vector2(4.025f, -4.45f)
+            };
             MainControl.Instance.battlePlayerController.transform.position =
                 (Vector3)playerUIPos[(int)selectedButton] + new Vector3(0, 0,
                     MainControl.Instance.battlePlayerController.transform.position.z);
@@ -838,14 +838,8 @@ namespace UCT.Battle
 
             selectedLayer = SelectedLayer.ButtonLayer;
             nameLayerIndex = 0;
-            if (!firstIn)
-            {
-                TurnTextLoad();
-            }
-            else
-            {
-                TurnTextLoad(true, firstInDiy);
-            }
+
+            TurnTextLoad();
 
             _enemiesHpLine.SetActive(false);
             return true;
@@ -1159,11 +1153,9 @@ namespace UCT.Battle
 
         private void UpdateNarratorLayer()
         {
-            firstIn = false;
-
             if (selectedButton == SelectedButton.Fight && !_target.gameObject.activeSelf)
             {
-                if (isDialog)
+                if (_isDialog)
                 {
                     return;
                 }
@@ -1183,7 +1175,7 @@ namespace UCT.Battle
         private void ContinueNarratorLayer()
         {
             MainControl.Instance.battlePlayerController.collideCollider.enabled = true;
-            if (isDialog)
+            if (_isDialog)
             {
                 return;
             }
@@ -1232,14 +1224,9 @@ namespace UCT.Battle
             {
                 selectedLayer = SelectedLayer.ButtonLayer;
                 globalItemIndex = 0;
-                if (!firstIn)
-                {
-                    TurnTextLoad();
-                }
-                else
-                {
-                    TurnTextLoad(true, firstInDiy);
-                }
+
+                TurnTextLoad();
+
 
                 _itemScroller.Close();
 
@@ -1358,8 +1345,8 @@ namespace UCT.Battle
                 if (fixedList.Count > 0 && fixedList.All(f => f))
                 {
                     optionsSave = null;
-                    isDialog = true;
-                    numberDialog = 0;
+                    _isDialog = true;
+                    _numberDialog = 0;
                     return;
                 }
 
@@ -1373,22 +1360,22 @@ namespace UCT.Battle
 
             optionsSave = DataHandlerService.LoadItemData(textAsset);
             optionsSave = DataHandlerService.ChangeItemData(optionsSave, true, new List<string>());
-            isDialog = true;
-            numberDialog = 0;
+            _isDialog = true;
+            _numberDialog = 0;
         }
 
         private void KeepDialogBubble()
         {
             //TODO: 允许怪物同时说话
             var save = new List<string>();
-            if (optionsSave[numberDialog][..4] == "Type")
+            if (optionsSave[_numberDialog][..4] == "Type")
             {
-                numberDialog++;
+                _numberDialog++;
             }
 
-            while (numberDialog < optionsSave.Count)
+            while (_numberDialog < optionsSave.Count)
             {
-                save = TextProcessingService.SplitStringToListWithDelimiter(optionsSave[numberDialog]);
+                save = TextProcessingService.SplitStringToListWithDelimiter(optionsSave[_numberDialog]);
 
                 var isBreak = !enemiesControllers.Any(enemiesController =>
                     enemiesController.name == save[2] &&
@@ -1398,8 +1385,8 @@ namespace UCT.Battle
                     break;
                 }
 
-                numberDialog++;
-                if (numberDialog < optionsSave.Count)
+                _numberDialog++;
+                if (_numberDialog < optionsSave.Count)
                 {
                     continue;
                 }
@@ -1442,7 +1429,7 @@ namespace UCT.Battle
             }
 
             _dialog.typeWritter.StartTypeWritter(text, _dialog.tmp);
-            numberDialog++;
+            _numberDialog++;
             _dialog.tmp.text = "";
             _dialog.PositionChange();
         }
@@ -1468,21 +1455,13 @@ namespace UCT.Battle
             return false;
         }
 
-        private void TurnTextLoad(bool useTurn = false, int turn = 0)
+        private void TurnTextLoad()
         {
             if (TurnController.Instance.turn != _saveTurn || _saveTurnText == "")
             {
-                List<string> load;
                 _saveTurn = TurnController.Instance.turn;
-                if (useTurn)
-                {
-                    load = TurnTextLoad(MainControl.Instance.BattleControl.turnTextSave, turn);
-                    firstIn = false;
-                }
-                else
-                {
-                    load = TurnTextLoad(MainControl.Instance.BattleControl.turnTextSave, _saveTurn);
-                }
+
+                var load = TurnTextLoad(MainControl.Instance.BattleControl.turnTextSave, _saveTurn);
 
                 _saveTurnText = load != null && load.Count != 0
                     ? load[Random.Range(0, load.Count)]
