@@ -86,11 +86,6 @@ namespace UCT.Battle
         public float currentAngle;
 
         /// <summary>
-        ///     当前行
-        /// </summary>
-        public int currentLineIndex = 2;
-
-        /// <summary>
         ///     箭头位置
         /// </summary>
         public Transform arrowPosition;
@@ -139,6 +134,11 @@ namespace UCT.Battle
 
         [HideInInspector] public UnityEngine.Rendering.Volume hitVolume;
 
+        /// <summary>
+        ///     当前行
+        /// </summary>
+        private int _currentLineIndex;
+
         private Tween _missAnim, _changeColor, _changeDingColor, _changeDingScale;
 
         private Rigidbody2D _rigidBody;
@@ -171,6 +171,8 @@ namespace UCT.Battle
         {
             UpdateHitVolume();
 
+            PurpleSwitchLineInput();
+
             if (MainControl.Instance.playerControl.hp <= 0)
             {
                 PlayerDead();
@@ -186,6 +188,26 @@ namespace UCT.Battle
             if (MainControl.Instance.playerControl.isDebug)
             {
                 DebugInput();
+            }
+        }
+
+        private void PurpleSwitchLineInput()
+        {
+            if (playerColor != BattleControl.PlayerColor.Purple || TurnController.Instance.isMyTurn)
+            {
+                return;
+            }
+
+            var playerLineController = MainControl.Instance.selectUIController.PlayerLineController;
+
+            if (InputService.GetKeyDown(KeyCode.UpArrow) && _currentLineIndex > 0)
+            {
+                _currentLineIndex -= 1;
+            }
+
+            if (InputService.GetKeyDown(KeyCode.DownArrow) && _currentLineIndex < playerLineController.lines.Count - 1)
+            {
+                _currentLineIndex += 1;
             }
         }
 
@@ -829,56 +851,96 @@ namespace UCT.Battle
         private void PlayerMoveWithLine()
         {
             var playerLineController = MainControl.Instance.selectUIController.PlayerLineController;
-            
-            var isChangeLine = false;
-            if (InputService.GetKeyDown(KeyCode.UpArrow) && currentLineIndex > 0)
-            {
-                currentLineIndex -= 1;
-                isChangeLine = true;
-            }
+            _currentLineIndex = Mathf.Clamp(_currentLineIndex, 0, playerLineController.lines.Count - 1);
 
-            if (InputService.GetKeyDown(KeyCode.DownArrow) && currentLineIndex < playerLineController.lines.Count)
-            {
-                currentLineIndex += 1;
-                isChangeLine = true;
-            }
-            var lineRenderer = playerLineController.lines[currentLineIndex];
-            
+            var lineRenderer = playerLineController.lines[_currentLineIndex];
             var weight = InputService.GetKey(KeyCode.X) ? SpeedWeight : 1;
             speedWeightX = weight;
             speedWeightY = weight;
 
-            var up = InputService.GetKey(KeyCode.UpArrow);
-            var down = InputService.GetKey(KeyCode.DownArrow);
-            var vertical = 0;
-            if (up && !down)
+            var playerPos = transform.position;
+            var tangent = ComputeTangentAndProjection(lineRenderer, playerPos, out var projection);
+
+            const float tolerance = 0.01f;
+            if (Vector3.Distance(playerPos, projection) > tolerance)
             {
-                vertical = 1;
-            }
-            else if (down && !up)
-            {
-                vertical = -1;
+                transform.position = Vector3.Lerp(playerPos, projection, 0.5f);
             }
 
-            var right = InputService.GetKey(KeyCode.RightArrow);
-            var left = InputService.GetKey(KeyCode.LeftArrow);
             var horizontal = 0;
-            if (right && !left)
+            if (InputService.GetKey(KeyCode.RightArrow) && !InputService.GetKey(KeyCode.LeftArrow))
             {
                 horizontal = 1;
             }
-            else if (left && !right)
+            else if (InputService.GetKey(KeyCode.LeftArrow) && !InputService.GetKey(KeyCode.RightArrow))
             {
                 horizontal = -1;
             }
 
-            moving = new Vector3(horizontal, vertical);
-            
-            if (isChangeLine)
+            if (horizontal != 0)
             {
-                
+                moving = horizontal * tangent;
+            }
+            else
+            {
+                moving = Vector3.zero;
             }
         }
+
+        /// <summary>
+        ///     根据玩家当前所在的位置，在LineRenderer构成的路径上找到最近的线段，
+        ///     返回该段的归一化切线方向，并通过out参数返回在该线段上的投影点。
+        /// </summary>
+        private static Vector3 ComputeTangentAndProjection(LineRenderer lineRenderer,
+            Vector3 playerPos,
+            out Vector3 projectionResult)
+        {
+            var posCount = lineRenderer.positionCount;
+            if (posCount < 2)
+            {
+                projectionResult = playerPos;
+                return Vector3.right;
+            }
+
+            var closestTangent = Vector3.zero;
+            var closestDistance = float.MaxValue;
+            var closestProjection = playerPos;
+
+            for (var i = 0; i < posCount - 1; i++)
+            {
+                var p0 = lineRenderer.GetPosition(i);
+                var p1 = lineRenderer.GetPosition(i + 1);
+                if (!lineRenderer.useWorldSpace)
+                {
+                    p0 += lineRenderer.transform.position;
+                    p1 += lineRenderer.transform.position;
+                }
+                var segment = p1 - p0;
+                var segSqrLen = segment.sqrMagnitude;
+                if (Mathf.Approximately(segSqrLen, 0))
+                {
+                    continue;
+                }
+
+                var t = Vector3.Dot(playerPos - p0, segment) / segSqrLen;
+                t = Mathf.Clamp01(t);
+                var projection = p0 + t * segment;
+                var distance = (playerPos - projection).sqrMagnitude;
+
+                if (distance >= closestDistance)
+                {
+                    continue;
+                }
+
+                closestDistance = distance;
+                closestTangent = segment.normalized;
+                closestProjection = projection;
+            }
+
+            projectionResult = closestProjection;
+            return closestTangent;
+        }
+
 
         private void PlayerContinuouslyMove()
         {

@@ -22,7 +22,7 @@ namespace UCT.Battle
             lineRenderer.startColor = color;
             lineRenderer.endColor = color;
             lineRenderer.sortingOrder = 40;
-
+            lineRenderer.useWorldSpace = false;
             poolObject.AddComponent<PolygonMask>();
 
             poolObject.gameObject.name = "PlayerLine";
@@ -35,8 +35,28 @@ namespace UCT.Battle
 
         private void Test()
         {
-            var lineRenderer = GetFromPool<LineRenderer>();
-            lineRenderer.SetPositions(new[] { new Vector3(-5, -2), new Vector3(5, -2) });
+            var curveRenderer = GetFromPool<LineRenderer>();
+            curveRenderer.positionCount = 10;
+            var curvePoints = new Vector3[10];
+            for (var i = 0; i < 10; i++)
+            {
+                var x = Mathf.Lerp(-5, 5, i / 9f);
+                var y = Mathf.Sin(x) * 1.5f - 2;
+                curvePoints[i] = new Vector3(x, y, 0);
+            }
+            curveRenderer.SetPositions(curvePoints);
+    
+            var polylineRenderer = GetFromPool<LineRenderer>();
+            var polylinePoints = new[]
+            {
+                new Vector3(-5, -1, 0),
+                new Vector3(-2, -0.5f, 0),
+                new Vector3(1, -1.5f, 0),
+                new Vector3(4, -1, 0),
+                new Vector3(5, -1.2f, 0)
+            };
+            polylineRenderer.positionCount = polylinePoints.Length;
+            polylineRenderer.SetPositions(polylinePoints);
         }
 
         public override T GetFromPool<T>()
