@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using UCT.Audio;
 using UCT.Control;
@@ -39,6 +40,7 @@ namespace UCT.Battle
 
         public FollowMode followMode;
         private Action _onYellowBulletHit;
+        private Action _onGreenArrowHit;
 
         private void Awake()
         {
@@ -48,6 +50,7 @@ namespace UCT.Battle
         private void Update()
         {
             DetectingYellowBullet();
+            DetectingGreenArrow();
 
             if (followMode == FollowMode.NoFollow)
             {
@@ -108,8 +111,7 @@ namespace UCT.Battle
             string objName = null,
             InitialTransform? initialTransform = null,
             BattleControl.BulletColor? inputBulletColor = null,
-            SpriteMaskInteraction? initialMask = null,
-            Action onYellowBulletHit = null)
+            SpriteMaskInteraction? initialMask = null)
         {
             var bullet = BulletResourceManager.LoadBullet(bulletPathName);
             if (!bullet)
@@ -117,7 +119,7 @@ namespace UCT.Battle
                 return;
             }
 
-            SetBullet(bullet, objName, initialTransform, inputBulletColor, initialMask, onYellowBulletHit);
+            SetBullet(bullet, objName, initialTransform, inputBulletColor, initialMask);
         }
 
 
@@ -125,8 +127,7 @@ namespace UCT.Battle
             string objName = null,
             InitialTransform? initialTransform = null,
             BattleControl.BulletColor? inputBulletColor = null,
-            SpriteMaskInteraction? initialMask = null,
-            Action onYellowBulletHit = null)
+            SpriteMaskInteraction? initialMask = null)
         {
             objName ??= bulletControl.objName;
 
@@ -201,8 +202,16 @@ namespace UCT.Battle
 
             //循环生成box碰撞
             SetBulletBoxCollider2D(bulletControl);
+        }
 
+        public void SetYellowBulletHit(Action onYellowBulletHit)
+        {
             _onYellowBulletHit = onYellowBulletHit;
+        }
+
+        public void SetGreenArrowHit(Action onGreenArrowHit)
+        {
+            _onGreenArrowHit = onGreenArrowHit;
         }
 
         private void SetBulletBoxCollider2D(BulletControl bulletControl)
@@ -264,31 +273,39 @@ namespace UCT.Battle
             spriteRenderer.material.SetFloat(Mode, (int)spriteMaskInteraction);
         }
 
-        private void DetectingYellowBullet()
+        private void DetectCollision(string inputTag, Action onHitAction)
         {
-            if (_onYellowBulletHit == null)
+            if (onHitAction == null)
             {
                 return;
             }
 
             var results = new Collider2D[10];
-            var filter = new ContactFilter2D
-            {
-                useTriggers = true
-            };
+            var filter = new ContactFilter2D { useTriggers = true };
 
-            var count = GetComponent<Collider2D>().OverlapCollider(filter, results);
-            for (var i = 0; i < count; i++)
+            foreach (var count in boxColliderList.Select(item => item.OverlapCollider(filter, results)))
             {
-                if (!results[i].CompareTag("SoulsBullet"))
+                for (var i = 0; i < count; i++)
                 {
-                    continue;
-                }
+                    if (!results[i].CompareTag(inputTag))
+                    {
+                        continue;
+                    }
 
-                _onYellowBulletHit.Invoke();
-                _onYellowBulletHit = null;
-                break;
+                    onHitAction.Invoke();
+                }
             }
         }
+
+        private void DetectingYellowBullet()
+        {
+            DetectCollision("SoulsBullet", _onYellowBulletHit);
+        }
+
+        private void DetectingGreenArrow()
+        {
+            DetectCollision("PlayerArrow", _onGreenArrowHit);
+        }
+
     }
 }

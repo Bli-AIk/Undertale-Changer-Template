@@ -124,13 +124,15 @@ namespace UCT.Battle.BattleConfigs
 
                     var obj = bulletPool.GetFromPool<BulletController>();
                     obj.SetBullet(cupCake, cupCake, new InitialTransform(new Vector3(1, -1.6f)),
-                        (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask,
-                        ()=>{Debug.Log("被射击辣！");});
-
+                        (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
+                    obj.SetYellowBulletHit(() => Debug.Log("被射击辣！"));
+                    obj.SetGreenArrowHit(() => Debug.Log("碰到Arrow辣！"));
+                    
                     var obj2 = bulletPool.GetFromPool<BulletController>();
                     obj2.SetBullet(cupCake, cupCake, new InitialTransform(new Vector3(-1, -1.6f)),
-                        (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask,
-                        ()=>{Debug.Log("被射击辣！");});
+                        (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
+                    obj2.SetYellowBulletHit(() => Debug.Log("被射击辣！"));
+                    obj2.SetGreenArrowHit(() => Debug.Log("碰到Arrow辣！"));
 
 
                     for (var i = 120; i > 0; i--)

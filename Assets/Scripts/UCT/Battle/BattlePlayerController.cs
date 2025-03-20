@@ -76,21 +76,9 @@ namespace UCT.Battle
         ///     玩家移动方向，用于橙心和绿心判断
         /// </summary>
         public float angle;
-
-        /// <summary>
-        ///     用于判断绿魂旋转角度
-        /// </summary>
-        public bool isRotate;
-
-        /// <summary>
-        ///     当前角度
-        /// </summary>
-        public float currentAngle;
-
-        /// <summary>
-        ///     箭头位置
-        /// </summary>
-        public Transform arrowPosition;
+        
+        private GameObject _greenAdditional;
+        private GameObject _greenArrow;
 
         /// <summary>
         ///     橙魂移动残影开关
@@ -136,20 +124,22 @@ namespace UCT.Battle
 
         [HideInInspector] public UnityEngine.Rendering.Volume hitVolume;
 
+        private Tween _arrowRotationTween;
+
         /// <summary>
         ///     当前行
         /// </summary>
         private int _currentLineIndex;
 
+
+        private float _currentT;
+
         private Tween _missAnim, _changeColor, _changeDingColor, _changeDingScale;
+        private TweenerCore<Vector3, Vector3, VectorOptions> _purpleSwitchTween;
 
         private Rigidbody2D _rigidBody;
         private SpriteRenderer _spriteRenderer, _dingSpriteRenderer;
         private float _yellowTimer;
-
-
-        private float _currentT;
-        private TweenerCore<Vector3, Vector3, VectorOptions> _purpleSwitchTween;
 
         private void Start()
         {
@@ -170,14 +160,20 @@ namespace UCT.Battle
             hitVolume.weight = 0;
             MainControl.Instance.playerControl.missTime = 0;
             orangeDash.Stop();
-            arrowPosition.GetComponent<SpriteRenderer>().enabled = false;
+            _greenAdditional = transform.Find("GreenAdditional").gameObject;
+            _greenArrow = _greenAdditional.transform.Find("GreenArrow").gameObject;
+            _greenAdditional.gameObject.SetActive(false);
         }
 
         private void Update()
         {
             UpdateHitVolume();
 
-            PurpleSwitchLineInput();
+            if(!TurnController.Instance.isMyTurn)
+            {
+                UpdatePlayer();
+            }
+
 
             if (MainControl.Instance.playerControl.hp <= 0)
             {
@@ -197,6 +193,39 @@ namespace UCT.Battle
             }
         }
 
+        private void UpdatePlayer()
+        {
+            switch (playerColor)
+            {
+                case BattleControl.PlayerColor.Red:
+                case BattleControl.PlayerColor.Orange:
+                case BattleControl.PlayerColor.Yellow:
+                {
+                    break;
+                }
+                case BattleControl.PlayerColor.Green:
+                {
+                    PlayerFixedDefense();
+                    break;
+                }
+                case BattleControl.PlayerColor.Cyan:
+                case BattleControl.PlayerColor.Blue:
+                {
+                    break;
+                }
+                case BattleControl.PlayerColor.Purple:
+                {
+                    PurpleSwitchLineInput();
+                    break;
+                }
+                
+                default:
+                {
+                    throw new ArgumentOutOfRangeException($"Unexpected playerColor value: {playerColor}");
+                }
+            }
+        }
+
         private void FixedUpdate()
         {
             if (GameUtilityService.IsGamePausedOrSetting())
@@ -206,7 +235,11 @@ namespace UCT.Battle
 
             if (!TurnController.Instance.isMyTurn)
             {
-                PlayerMoving();
+                FixedUpdatePlayer();
+            }
+            else
+            {
+                _greenAdditional.gameObject.SetActive(false);
             }
         }
 
@@ -236,11 +269,6 @@ namespace UCT.Battle
 
         private void PurpleSwitchLineInput()
         {
-            if (playerColor != BattleControl.PlayerColor.Purple || TurnController.Instance.isMyTurn)
-            {
-                return;
-            }
-
             var playerLineController = MainControl.Instance.selectUIController.PlayerLineController;
             var isKeyDown = false;
             if (InputService.GetKeyDown(KeyCode.UpArrow) && _currentLineIndex > 0)
@@ -365,7 +393,7 @@ namespace UCT.Battle
             }
         }
 
-        private void PlayerMoving()
+        private void FixedUpdatePlayer()
         {
             var dirReal = playerDir switch
             {
@@ -529,6 +557,7 @@ namespace UCT.Battle
 
         private void PlayerColorMoving(Vector2 dirReal, RaycastHit2D infoHead, RaycastHit2D info)
         {
+            _greenAdditional.gameObject.SetActive(playerColor == BattleControl.PlayerColor.Green);
             switch (playerColor)
             {
                 case BattleControl.PlayerColor.Red:
@@ -560,7 +589,7 @@ namespace UCT.Battle
 
                 case BattleControl.PlayerColor.Green:
                 {
-                    PlayerFixedDefense();
+                    //在Update中实现
                     break;
                 }
 
@@ -589,43 +618,31 @@ namespace UCT.Battle
 
         private void PlayerFixedDefense()
         {
-            arrowPosition.GetComponent<SpriteRenderer>().enabled = true;
             if (InputService.GetKeyDown(KeyCode.UpArrow))
             {
-                angle = 0;
-                isRotate = true;
-            }
-
-            if (InputService.GetKeyDown(KeyCode.DownArrow))
-            {
-                angle = 90;
-                isRotate = true;
+                RotateArrow(0);
             }
 
             if (InputService.GetKeyDown(KeyCode.LeftArrow))
             {
-                angle = 180;
-                isRotate = true;
+                RotateArrow(90);
+            }
+
+            if (InputService.GetKeyDown(KeyCode.DownArrow))
+            {
+                RotateArrow(180);
             }
 
             if (InputService.GetKeyDown(KeyCode.RightArrow))
             {
-                angle = 270;
-                isRotate = true;
+                RotateArrow(270);
             }
+        }
 
-            if (!isRotate)
-            {
-                return;
-            }
-
-            var step = Mathf.Min(90f * Time.deltaTime, angle - currentAngle);
-            arrowPosition.RotateAround(transform.position, Vector3.forward, step);
-            currentAngle += step;
-            if (currentAngle >= angle)
-            {
-                isRotate = false;
-            }
+        private void RotateArrow(float targetAngle)
+        {
+            _arrowRotationTween?.Kill();
+            _arrowRotationTween = _greenArrow.transform.DORotate(new Vector3(0, 0, targetAngle), 0.25f);
         }
 
         private void PlayerWithGravity(Vector2 dirReal, RaycastHit2D infoHead, RaycastHit2D info)
@@ -931,7 +948,7 @@ namespace UCT.Battle
 
             var newPosition = Vector3.Lerp(p0, p1, segmentT);
             _purpleSwitchTween.Kill();
-            _purpleSwitchTween = transform.DOMove(newPosition,0.1f);
+            _purpleSwitchTween = transform.DOMove(newPosition, 0.1f);
         }
 
 

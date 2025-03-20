@@ -10,6 +10,7 @@ TagManager:
   - Box
   - PlayerTrigger
   - SoulsBullet
+  - PlayerArrow
   layers:
   - Default
   - TransparentFX
