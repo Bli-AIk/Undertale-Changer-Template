@@ -124,11 +124,13 @@ namespace UCT.Battle.BattleConfigs
 
                     var obj = bulletPool.GetFromPool<BulletController>();
                     obj.SetBullet(cupCake, cupCake, new InitialTransform(new Vector3(1, -1.6f)),
-                        (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
+                        (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask,
+                        ()=>{Debug.Log("被射击辣！");});
 
                     var obj2 = bulletPool.GetFromPool<BulletController>();
                     obj2.SetBullet(cupCake, cupCake, new InitialTransform(new Vector3(-1, -1.6f)),
-                        (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
+                        (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask,
+                        ()=>{Debug.Log("被射击辣！");});
 
 
                     for (var i = 120; i > 0; i--)

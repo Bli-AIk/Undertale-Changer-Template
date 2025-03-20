@@ -31,7 +31,7 @@ namespace UCT.Battle
 
         private const float SpeedWeight = 0.5f;
         private const string Board = "board";
-        private const float YellowTimerMax = 0.5f;
+        private const float YellowTimerMax = 0.4f;
 
         [Header("心变色时的ding动画速度，0为关")]
         public float dingTime;

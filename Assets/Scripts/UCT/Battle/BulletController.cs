@@ -38,6 +38,7 @@ namespace UCT.Battle
         public BattleControl.BulletColor bulletColor;
 
         public FollowMode followMode;
+        private Action _onYellowBulletHit;
 
         private void Awake()
         {
@@ -46,6 +47,8 @@ namespace UCT.Battle
 
         private void Update()
         {
+            DetectingYellowBullet();
+
             if (followMode == FollowMode.NoFollow)
             {
                 return;
@@ -75,6 +78,7 @@ namespace UCT.Battle
         private void OnTriggerStay2D(Collider2D collision)
         {
             if (!collision.transform.CompareTag("Player") ||
+                collision.name.Length < "CheckCollider".Length ||
                 collision.name[.."CheckCollider".Length] != "CheckCollider")
             {
                 return;
@@ -104,7 +108,8 @@ namespace UCT.Battle
             string objName = null,
             InitialTransform? initialTransform = null,
             BattleControl.BulletColor? inputBulletColor = null,
-            SpriteMaskInteraction? initialMask = null)
+            SpriteMaskInteraction? initialMask = null,
+            Action onYellowBulletHit = null)
         {
             var bullet = BulletResourceManager.LoadBullet(bulletPathName);
             if (!bullet)
@@ -112,7 +117,7 @@ namespace UCT.Battle
                 return;
             }
 
-            SetBullet(bullet, objName, initialTransform, inputBulletColor, initialMask);
+            SetBullet(bullet, objName, initialTransform, inputBulletColor, initialMask, onYellowBulletHit);
         }
 
 
@@ -120,7 +125,8 @@ namespace UCT.Battle
             string objName = null,
             InitialTransform? initialTransform = null,
             BattleControl.BulletColor? inputBulletColor = null,
-            SpriteMaskInteraction? initialMask = null)
+            SpriteMaskInteraction? initialMask = null,
+            Action onYellowBulletHit = null)
         {
             objName ??= bulletControl.objName;
 
@@ -166,7 +172,7 @@ namespace UCT.Battle
             transform.localScale = startScale;
 
             SetMask(initialMask.Value);
-            
+
             spriteRenderer.sprite = bulletControl.sprite;
 
             if (typeName != bulletControl.typeName)
@@ -194,6 +200,13 @@ namespace UCT.Battle
             followMode = bulletControl.triggerFollowMode;
 
             //循环生成box碰撞
+            SetBulletBoxCollider2D(bulletControl);
+
+            _onYellowBulletHit = onYellowBulletHit;
+        }
+
+        private void SetBulletBoxCollider2D(BulletControl bulletControl)
+        {
             for (var i = 0; i < bulletControl.triggerSize.Count; i++)
             {
                 var save = gameObject.AddComponent<BoxCollider2D>();
@@ -211,7 +224,6 @@ namespace UCT.Battle
 
                 boxColliderList.Add(save);
             }
-
         }
 
         private void HitPlayer(int i)
@@ -250,6 +262,33 @@ namespace UCT.Battle
         public void SetMask(SpriteMaskInteraction spriteMaskInteraction)
         {
             spriteRenderer.material.SetFloat(Mode, (int)spriteMaskInteraction);
+        }
+
+        private void DetectingYellowBullet()
+        {
+            if (_onYellowBulletHit == null)
+            {
+                return;
+            }
+
+            var results = new Collider2D[10];
+            var filter = new ContactFilter2D
+            {
+                useTriggers = true
+            };
+
+            var count = GetComponent<Collider2D>().OverlapCollider(filter, results);
+            for (var i = 0; i < count; i++)
+            {
+                if (!results[i].CompareTag("SoulsBullet"))
+                {
+                    continue;
+                }
+
+                _onYellowBulletHit.Invoke();
+                _onYellowBulletHit = null;
+                break;
+            }
         }
     }
 }
