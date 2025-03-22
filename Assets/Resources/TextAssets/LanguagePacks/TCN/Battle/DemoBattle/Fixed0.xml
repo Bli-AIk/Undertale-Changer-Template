@@ -1,0 +1,22 @@
+<Dialog name="Fixed0" type="Fixed" turn="0">
+    <Message name="default" mode="Confirm" target="second">
+        <Bubble character="NPC1" sizeX="4" sizeY="3" offsetX="2" offsetY="1.5" arrowOffset="-1.5"
+                direction="left">
+            <![CDATA[<font=3>你好！]]>
+        </Bubble>
+    </Message>
+
+    <Message name="second" mode="Confirm" target="third">
+        <Bubble character="NPC1" sizeX="4" sizeY="3" offsetX="2" offsetY="1.5" arrowOffset="-1.5"
+                direction="left">
+            <![CDATA[<font=3>咱們開第一回合吧？？？]]>
+        </Bubble>
+    </Message>
+
+    <Message name="third" mode="Confirm" target="END">
+        <Bubble character="NPC2" sizeX="4" sizeY="3" offsetX="-6" offsetY="1.5" arrowOffset="-1.5"
+                direction="right">
+            <![CDATA[<font=3>啊。]]>
+        </Bubble>
+    </Message>
+</Dialog>

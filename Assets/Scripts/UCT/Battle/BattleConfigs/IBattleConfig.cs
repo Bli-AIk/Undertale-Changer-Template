@@ -13,6 +13,7 @@ namespace UCT.Battle.BattleConfigs
     public interface IBattleConfig
     {
         GameObject[] enemies { get; }
+        Vector3?[] enemiesStartPosition { get; }
         GameObject backGroundModel { get; }
         Material skyBox { get; }
         VolumeProfile volumeProfile { get; }

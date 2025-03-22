@@ -1,0 +1,37 @@
+<Dialog name="Fixed1" type="Fixed" turn="1">
+    <Message name="default" mode="Delay" autoDelay="2" target="second">
+        <Bubble character="NPC1" sizeX="4" sizeY="3" offsetX="2" offsetY="1.5" arrowOffset="-1.5"
+                direction="left">
+            <![CDATA[<font=3>自動啟動中。(1)]]>
+        </Bubble>
+    </Message>
+
+    <Message name="second" mode="Confirm" target="third">
+        <Bubble character="NPC2" sizeX="4" sizeY="3" offsetX="-6" offsetY="1.5" arrowOffset="-1.5"
+                direction="right">
+            <![CDATA[<font=3>現在該你確認了。(2.1)]]>
+        </Bubble>
+        <Bubble character="NPC1" sizeX="4" sizeY="3" offsetX="2" offsetY="1.5" arrowOffset="-1.5"
+                direction="left">
+            <![CDATA[<font=3>好吧，輪到你了。(2.2)]]>
+        </Bubble>
+    </Message>
+
+    <Message name="third" mode="Delay" autoDelay="2.5" target="fourth">
+        <Bubble character="NPC1" sizeX="4" sizeY="3" offsetX="2" offsetY="1.5" arrowOffset="-1.5"
+                direction="left">
+            <![CDATA[<font=3>回到自動模式！(3)]]>
+        </Bubble>
+    </Message>
+
+    <Message name="fourth" mode="Confirm" target="END">
+        <Bubble character="NPC2" sizeX="4" sizeY="3" offsetX="-6" offsetY="1.5" arrowOffset="-1.5"
+                direction="right">
+            <![CDATA[<font=3>最終確認。(4.1)]]>
+        </Bubble>
+        <Bubble character="NPC1" sizeX="4" sizeY="3" offsetX="2" offsetY="1.5" arrowOffset="-1.5"
+                direction="left">
+            <![CDATA[<font=3>這就是最後一句話啦。(4.2)]]>
+        </Bubble>
+    </Message>
+</Dialog>

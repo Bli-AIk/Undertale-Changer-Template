@@ -1,5 +1,7 @@
+using Alchemy.Inspector;
 using TMPro;
 using UCT.Core;
+using UCT.Service;
 using UnityEngine;
 
 namespace UCT.Battle
@@ -9,24 +11,31 @@ namespace UCT.Battle
     /// </summary>
     public class DialogBubbleBehaviour : MonoBehaviour
     {
+        [ReadOnly]
         public Vector2 position, size;
+        [ReadOnly]
         public bool isBackRight;
+        [ReadOnly]
         public float backY;
+        [HideInInspector]
         public TypeWritter typeWritter;
+        [HideInInspector]
         public TextMeshPro tmp;
+
+        public float delay;
+        public EnemiesXmlDialogParser.Message Message;
         private SpriteRenderer _sprite, _spriteBack;
 
         private void Awake()
         {
             typeWritter = transform.Find("Text").GetComponent<TypeWritter>();
             tmp = transform.Find("Text").GetComponent<TextMeshPro>();
+            _sprite = GetComponent<SpriteRenderer>();
+            _spriteBack = transform.Find("DialogBubbleBack").GetComponent<SpriteRenderer>();
         }
 
         private void Start()
         {
-            _sprite = GetComponent<SpriteRenderer>();
-            _spriteBack = transform.Find("DialogBubbleBack").GetComponent<SpriteRenderer>();
-
             PositionChange();
         }
 

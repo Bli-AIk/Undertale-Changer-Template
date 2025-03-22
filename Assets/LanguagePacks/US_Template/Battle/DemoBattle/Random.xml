@@ -1,0 +1,43 @@
+<Dialog name="Random" type="Random" turn="0">
+    <Message name="default" mode="Confirm" target="second">
+        <Bubble character="NPC1" sizeX="4" sizeY="3" offsetX="2" offsetY="1.5" arrowOffset="-1.5"
+                direction="left">
+            <![CDATA[<font=3>Okay, okay.]]>
+        </Bubble>
+    </Message>
+
+    <Message name="second" mode="Confirm" target="third">
+        <Bubble character="NPC2" sizeX="4" sizeY="3" offsetX="-6" offsetY="1.5" arrowOffset="-1.5"
+                direction="right">
+            <![CDATA[<font=3>Okay, okay, okay.]]>
+        </Bubble>
+    </Message>
+
+    <Message name="third" mode="Confirm" target="fourth">
+        <Bubble character="NPC1" sizeX="4" sizeY="3" offsetX="2" offsetY="1.5" arrowOffset="-1.5"
+                direction="left">
+            <![CDATA[<font=3>Okay, okay.]]>
+        </Bubble>
+    </Message>
+
+    <Message name="fourth" mode="Confirm" target="fifth">
+        <Bubble character="NPC2" sizeX="4" sizeY="3" offsetX="-6" offsetY="1.5" arrowOffset="-1.5"
+                direction="right">
+            <![CDATA[<font=3>Okay, okay, okay.]]>
+        </Bubble>
+    </Message>
+
+    <Message name="fifth" mode="Confirm" target="sixth">
+        <Bubble character="NPC1" sizeX="4" sizeY="3" offsetX="2" offsetY="1.5" arrowOffset="-1.5"
+                direction="left">
+            <![CDATA[<font=3>Okay, okay.]]>
+        </Bubble>
+    </Message>
+
+    <Message name="sixth" mode="Confirm" target="END">
+        <Bubble character="NPC2" sizeX="4" sizeY="3" offsetX="-6" offsetY="1.5" arrowOffset="-1.5"
+                direction="right">
+            <![CDATA[<font=3>Okay, okay, okay.]]>
+        </Bubble>
+    </Message>
+</Dialog>

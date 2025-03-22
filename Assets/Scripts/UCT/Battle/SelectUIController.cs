@@ -108,8 +108,12 @@ namespace UCT.Battle
         [HideInInspector] public List<EnemiesController> enemiesControllers;
 
         [HideInInspector] public GameObject projectionBoxes;
+        private List<EnemiesXmlDialogParser.Message> _currentMessages;
 
-        private DialogBubbleBehaviour _dialog;
+        private List<DialogBubbleBehaviour> _dialogBubbleBehaviours;
+
+        private List<EnemiesXmlDialogParser.Message> _dialogMessages;
+        private string _dialogText;
         private GameObject _enemiesHpLine;
         private bool _haveRandomTurnDialog;
         private int _hpFood;
@@ -123,14 +127,12 @@ namespace UCT.Battle
 
         private TextMeshPro _nameUI, _hpUI, _textUI, _textUIBack;
 
-        private int _numberDialog;
-        public PlayerLineController PlayerLineController { get; private set; }
-
         private int _saveTurn = -1;
         private string _saveTurnText = "";
 
         private TargetController _target;
         private TypeWritter _typeWritter;
+        public PlayerLineController PlayerLineController { get; private set; }
 
         private void Awake()
         {
@@ -171,10 +173,9 @@ namespace UCT.Battle
         private void GetHaveRandomTurnDialog()
         {
             var textAssets = MainControl.Instance.BattleControl.turnDialogAsset;
-            var types = textAssets.Select(DataHandlerService.LoadItemData)
-                .Select(save => TextProcessingService.GetFirstChildStringByPrefix(save, "Type", true))
-                .ToList();
-            _haveRandomTurnDialog = !(types.Any(t => t.StartsWith("Fixed")) && !types.Contains("Random"));
+            var types = textAssets.Select(textAsset => EnemiesXmlDialogParser.GetDialogInfo(textAsset).Type).ToList();
+            _haveRandomTurnDialog = !(types.Any(t => t == EnemiesXmlDialogParser.DialogType.Fixed) &&
+                                      !types.Contains(EnemiesXmlDialogParser.DialogType.Random));
         }
 
         private void UpdateDialog()
@@ -183,9 +184,6 @@ namespace UCT.Battle
             {
                 return;
             }
-
-            _dialog.gameObject.SetActive(_isDialog);
-
 
             var canEndBattle = MainControl.Instance.selectUIController.enemiesControllers.All(enemiesController =>
                 enemiesController.Enemy.state is not (EnemyState.Default or EnemyState.CanSpace));
@@ -197,26 +195,100 @@ namespace UCT.Battle
                     return;
                 }
 
-                if ((_dialog.typeWritter.isTyping || !InputService.GetKeyDown(KeyCode.Z)) &&
-                    ((selectedButton != SelectedButton.Fight && _textUI.text != "") || _numberDialog != 0))
-                {
-                    return;
-                }
+                ProcessDelayedDialogMessages();
+                
+                var isEndBubble = _dialogBubbleBehaviours.All(bubble => !bubble.gameObject.activeSelf);
 
-                if (_numberDialog < optionsSave.Count)
+                if (isEndBubble)
                 {
-                    KeepDialogBubble();
-                }
-                else
-                {
+                    _isDialog = false;
                     EnterTurnLayer();
                     TurnController.Instance.EnterEnemyTurn();
+                    return;
+                }
+                var isTyping = _dialogBubbleBehaviours.Any(dialog => dialog.typeWritter.isTyping);
+
+                if (!isTyping && InputService.GetKeyDown(KeyCode.Z))
+                {
+                    KeepDialogBubble();
                 }
             }
             else
             {
                 EndBattle();
             }
+        }
+
+        private void ProcessDelayedDialogMessages()
+        {
+            foreach (var bubbleBehaviour in _dialogBubbleBehaviours.Where(dialog =>
+                         dialog.Message.Mode == EnemiesXmlDialogParser.MessageMode.Delay))
+            {
+                if (PassDelayedDialogMessages(bubbleBehaviour))
+                {
+                    continue;
+                }
+
+
+                for (var index = _currentMessages.Count - 1; index >= 0; index--)
+                {
+                    var message = _currentMessages[index];
+                    if (message.Name != bubbleBehaviour.Message.Name)
+                    {
+                        continue;
+                    }
+                    var changedItems = (from item in _dialogMessages
+                        from targetItem in message.Target
+                        where targetItem == item.Name
+                        select item).ToList();
+
+                    _currentMessages.RemoveAt(index);
+                    _currentMessages.InsertRange(index, changedItems);
+                    
+
+                    bubbleBehaviour.gameObject.SetActive(false);
+                    foreach (var t in changedItems)
+                    {
+                        AnalyzeMessage(t);
+                    }
+                    if (HideDialogBubblesOnEnd(message))
+                    {
+                        return;
+                    }
+                    break;
+                }
+            }
+        }
+
+        private bool PassDelayedDialogMessages(DialogBubbleBehaviour bubbleBehaviour)
+        {
+            if (bubbleBehaviour.delay > 0)
+            {
+                bubbleBehaviour.delay -= Time.deltaTime;
+                return true;
+            }
+
+            var isNotDelaying = false;
+            for (var index = 0; index < _currentMessages.Count; index++)
+            {
+                if (_currentMessages[index].Name != bubbleBehaviour.Message.Name)
+                {
+                    continue;
+                }
+
+                if (_currentMessages[index].IsDelaying)
+                {
+                    var temp = _currentMessages[index];
+                    temp.IsDelaying = false;
+                    _currentMessages[index] = temp;
+                }
+                else
+                {
+                    isNotDelaying = true;
+                    break;
+                }
+            }
+            return isNotDelaying;
         }
 
         private void EndBattle()
@@ -288,8 +360,6 @@ namespace UCT.Battle
             _hpSpr = transform.Find("HP").GetComponent<SpriteRenderer>();
             _itemScroller = transform.Find("ItemSelect").GetComponent<ItemScroller>();
             _enemiesHpLine = transform.Find("EnemiesHpLine").gameObject;
-            _dialog = GameObject.Find("DialogBubble").GetComponent<DialogBubbleBehaviour>();
-            _dialog.gameObject.SetActive(false);
             _typeWritter = GetComponent<TypeWritter>();
             PlayerLineController = transform.Find("PlayerLineController").GetComponent<PlayerLineController>();
             foreach (var t in new[] { "FIGHT", "ACT", "ITEM", "MERCY" })
@@ -298,14 +368,30 @@ namespace UCT.Battle
             }
 
             SetBattleConfig(MainControl.Instance.BattleControl.BattleConfig);
+            _dialogBubbleBehaviours = new List<DialogBubbleBehaviour>();
+            for (var i = 0; i < enemiesControllers.Count; i++)
+            {
+                var dialogBubble = Instantiate(Resources.Load<GameObject>("Prefabs/DialogBubble"));
+                var dialogBubbleBehaviour = dialogBubble.GetComponent<DialogBubbleBehaviour>();
+                _dialogBubbleBehaviours.Add(dialogBubbleBehaviour);
+                dialogBubble.SetActive(false);
+            }
         }
 
         private void SetBattleConfig(IBattleConfig config)
         {
-            foreach (var enemy in config.enemies)
+            for (var index = 0; index < config.enemies.Length; index++)
             {
+                var enemy = config.enemies[index];
                 var obj = Instantiate(enemy);
                 obj.name = enemy.name;
+
+                var startPosition = config.enemiesStartPosition[index];
+                if (startPosition != null)
+                {
+                    obj.transform.position = startPosition.Value;
+                }
+
                 enemiesControllers.Add(obj.transform.GetComponent<EnemiesController>());
             }
 
@@ -1313,147 +1399,195 @@ namespace UCT.Battle
 
         private void OpenDialogBubble()
         {
-            string textAsset = null;
-            var textAssets = MainControl.Instance.BattleControl.turnDialogAsset;
-            var fixedList = new List<bool>();
-            var types = textAssets.Select(DataHandlerService.LoadItemData)
-                .Select(save => TextProcessingService.GetFirstChildStringByPrefix(save, "Type", true))
+            _dialogText = null;
+            var sortedTexts = MainControl.Instance.BattleControl.turnDialogAsset
+                .Select(text => new { Text = text, Dialog = EnemiesXmlDialogParser.GetDialogInfo(text) })
+                .OrderBy(item => item.Dialog.Type != EnemiesXmlDialogParser.DialogType.Fixed)
+                .ThenBy(item => item.Dialog.Turn)
                 .ToList();
 
+            var fixedTexts = sortedTexts
+                .Where(item => item.Dialog.Type == EnemiesXmlDialogParser.DialogType.Fixed)
+                .OrderBy(item => item.Dialog.Turn)
+                .Select(item => item.Text)
+                .ToList();
 
-            foreach (var type in types)
+            var randomTexts = sortedTexts
+                .Where(item => item.Dialog.Type == EnemiesXmlDialogParser.DialogType.Random)
+                .Select(item => item.Text)
+                .ToList();
+
+            var fixedDialogs = fixedTexts.Select(EnemiesXmlDialogParser.GetDialogInfo).ToList();
+
+            var isFixed = false;
+            for (var index = 0; index < fixedDialogs.Count; index++)
             {
-                if (type == null)
+                if (fixedDialogs[index].Turn != TurnController.Instance.turn)
                 {
                     continue;
                 }
 
-                var isFixed = type[..5] == "Fixed";
-                fixedList.Add(isFixed);
+                _dialogText = fixedTexts[index];
+                _dialogMessages = EnemiesXmlDialogParser.GetMessagesInDialog(_dialogText, fixedDialogs[index].Name);
+                isFixed = true;
+            }
 
-                if (!isFixed || !int.TryParse(type[6..], out var turn) || turn != TurnController.Instance.turn)
+            if (!isFixed)
+            {
+                var randomDialogs = randomTexts.Select(EnemiesXmlDialogParser.GetDialogInfo).ToList();
+
+                var index = Random.Range(0, randomTexts.Count);
+                _dialogText = randomTexts[index];
+                _dialogMessages = EnemiesXmlDialogParser.GetMessagesInDialog(_dialogText, randomDialogs[index].Name);
+            }
+
+            _currentMessages = new List<EnemiesXmlDialogParser.Message>();
+            for (var i = 0; i < _dialogMessages.Count; i++)
+            {
+                if (_dialogMessages[i].Name != "default")
                 {
                     continue;
                 }
 
-                textAsset = textAssets[turn];
-                break;
+                _currentMessages.Add(_dialogMessages[i]);
+                AnalyzeMessage(_dialogMessages[i]);
             }
 
-            if (string.IsNullOrEmpty(textAsset))
-            {
-                if (fixedList.Count > 0 && fixedList.All(f => f))
-                {
-                    optionsSave = null;
-                    _isDialog = true;
-                    _numberDialog = 0;
-                    return;
-                }
 
-                var filteredTextAssets = textAssets
-                    .Where((_, index) => index >= fixedList.Count || !fixedList[index])
-                    .ToList();
-
-
-                textAsset = filteredTextAssets[Random.Range(0, filteredTextAssets.Count)];
-            }
-
-            optionsSave = DataHandlerService.LoadItemData(textAsset);
-            optionsSave = DataHandlerService.ChangeItemData(optionsSave, true, new List<string>());
             _isDialog = true;
-            _numberDialog = 0;
         }
 
-        private void KeepDialogBubble()
+        private void AnalyzeMessage(EnemiesXmlDialogParser.Message message)
         {
-            //TODO: 允许怪物同时说话
-            var save = new List<string>();
-            if (optionsSave[_numberDialog][..4] == "Type")
+            var bubbles = EnemiesXmlDialogParser.GetBubbles(_dialogText, message.Name);
+            foreach (var bubble in bubbles)
             {
-                _numberDialog++;
-            }
-
-            while (_numberDialog < optionsSave.Count)
-            {
-                save = TextProcessingService.SplitStringToListWithDelimiter(optionsSave[_numberDialog]);
-
-                var isBreak = !enemiesControllers.Any(enemiesController =>
-                    enemiesController.name == save[2] &&
-                    enemiesController.Enemy.state is EnemyState.Dead or EnemyState.Spaced);
-                if (isBreak)
+                var enemyControllerIndex = enemiesControllers.FindIndex(t => bubble.Character == t.name);
+                if (enemyControllerIndex == -1)
                 {
-                    break;
+                    throw new ArgumentOutOfRangeException($"{enemyControllerIndex} not found.");
                 }
 
-                _numberDialog++;
-                if (_numberDialog < optionsSave.Count)
-                {
-                    continue;
-                }
-
-                EnterTurnLayer();
-                TurnController.Instance.EnterEnemyTurn();
-                return;
+                SetBubbleBehaviour(message, enemyControllerIndex, bubble);
             }
 
-            var size = save[0];
-            var position = save[1];
-            var character = save[2];
+        }
 
+        private void SetBubbleBehaviour(EnemiesXmlDialogParser.Message message, int enemyControllerIndex, EnemiesXmlDialogParser.Bubble bubble)
+        {
+            var enemyController = enemiesControllers[enemyControllerIndex];
 
-            var direction = save[3];
-            var arrowY = save[4];
-            var text = save[5];
-
-            var enemyController = enemiesControllers.FirstOrDefault(t => character == t.name);
+            var bubbleBehaviours = _dialogBubbleBehaviours[enemyControllerIndex];
             if (enemyController)
             {
-                _dialog.transform.SetParent(enemyController.transform);
+                if (enemyController.Enemy.state is EnemyState.Spaced or EnemyState.Dead)
+                {
+                    return;
+                }
+                bubbleBehaviours.transform.SetParent(enemyController.transform);
             }
             else
             {
                 Debug.LogError("enemyController is empty!");
             }
 
-            _dialog.size = TextProcessingService.StringVector2ToRealVector2(size, _dialog.size);
-            _dialog.position = TextProcessingService.StringVector2ToRealVector2(position, _dialog.position);
+            bubbleBehaviours.gameObject.SetActive(true);
 
-            if (TryParseDirection(direction, out var resultDirection))
+            bubbleBehaviours.size = bubble.Size;
+            bubbleBehaviours.position = bubble.Offset;
+
+            bubbleBehaviours.isBackRight = bubble.Direction;
+            bubbleBehaviours.backY = bubble.ArrowOffset;
+
+            bubbleBehaviours.typeWritter.StartTypeWritter(bubble.Text, bubbleBehaviours.tmp);
+            bubbleBehaviours.tmp.text = "";
+            bubbleBehaviours.PositionChange();
+
+            if (message.Mode != EnemiesXmlDialogParser.MessageMode.Delay)
             {
-                _dialog.isBackRight = resultDirection;
+                return;
             }
 
-            if (!float.TryParse(arrowY, out _dialog.backY))
-            {
-                Debug.LogError($"Failed to parse arrowY: {arrowY}");
-            }
 
-            _dialog.typeWritter.StartTypeWritter(text, _dialog.tmp);
-            _numberDialog++;
-            _dialog.tmp.text = "";
-            _dialog.PositionChange();
+            bubbleBehaviours.Message = message;
+            bubbleBehaviours.delay = message.AutoDelay;
+            for (var index = 0; index < _currentMessages.Count; index++)
+            {
+                if (message.Name != _currentMessages[index].Name)
+                {
+                    continue;
+                }
+
+                var temp = _currentMessages[index]; 
+                temp.IsDelaying = true;          
+                _currentMessages[index] = temp;
+            }
         }
 
-        private static bool TryParseDirection(string direction, out bool result)
+        private void KeepDialogBubble()
         {
-            if (string.Equals(direction, "right", StringComparison.OrdinalIgnoreCase) ||
-                string.Equals(direction, "true", StringComparison.OrdinalIgnoreCase))
+            foreach (var bubble in _currentMessages.Where(currentMessage => !currentMessage.IsDelaying)
+                         .Select(currentMessage => EnemiesXmlDialogParser.GetBubbles(_dialogText, currentMessage.Name))
+                         .SelectMany(bubbles => bubbles))
             {
-                result = true;
-                return true;
+                for (var index = 0; index < enemiesControllers.Count; index++)
+                {
+                    var enemiesController = enemiesControllers[index];
+                    if (bubble.Character == enemiesController.name)
+                    {
+                        _dialogBubbleBehaviours[index].gameObject.SetActive(false);
+                    }
+                }
             }
+            
+            var messagesToRemove = _currentMessages
+                .Where(m => m.Mode == EnemiesXmlDialogParser.MessageMode.Confirm)
+                .ToList();
 
-            if (string.Equals(direction, "left", StringComparison.OrdinalIgnoreCase) ||
-                string.Equals(direction, "false", StringComparison.OrdinalIgnoreCase))
+            foreach (var message in messagesToRemove)
             {
-                result = false;
-                return true;
-            }
+                _currentMessages.Remove(message);
 
-            Debug.LogError($"Invalid direction value: {direction}");
-            result = false;
-            return false;
+                var newItems = (from item in _dialogMessages
+                    from targetItem in message.Target
+                    where item.Name == targetItem
+                    select item).ToList();
+
+                if (HideDialogBubblesOnEnd(message))
+                {
+                    return;
+                }
+
+                _currentMessages.AddRange(newItems);
+            }
+            
+
+            for (var i = 0; i < _currentMessages.Count; i++)
+            {
+                if (!_currentMessages[i].IsDelaying)
+                {
+                    AnalyzeMessage(_currentMessages[i]);
+                }
+            }
         }
+
+        private bool HideDialogBubblesOnEnd(EnemiesXmlDialogParser.Message message)
+        {
+            if (!message.Target.Contains("END"))
+            {
+                return false;
+            }
+
+            var bubbles = EnemiesXmlDialogParser.GetBubbles(_dialogText, message.Name);
+            foreach (var enemyControllerIndex in bubbles.Select(item =>
+                         enemiesControllers.FindIndex(t => item.Character == t.name)))
+            {
+                _dialogBubbleBehaviours[enemyControllerIndex].gameObject.SetActive(false);
+            }
+
+            return true;
+        }
+
 
         private void TurnTextLoad()
         {

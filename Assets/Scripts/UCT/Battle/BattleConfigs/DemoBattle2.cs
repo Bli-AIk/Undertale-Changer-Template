@@ -11,7 +11,14 @@ namespace UCT.Battle.BattleConfigs
     {
         public GameObject[] enemies { get; } =
         {
-            Resources.Load<GameObject>("Prefabs/Enemies/NPC1")
+            Resources.Load<GameObject>("Prefabs/Enemies/NPC1"),
+            Resources.Load<GameObject>("Prefabs/Enemies/NPC2")
+        };
+
+        public Vector3?[] enemiesStartPosition { get; } =
+        {
+            new Vector3(0.5f, 1),
+            new Vector3(-0.75f, 1.5f)
         };
 
         public GameObject backGroundModel => Resources.Load<GameObject>("Prefabs/BackGround/Vaporwave");

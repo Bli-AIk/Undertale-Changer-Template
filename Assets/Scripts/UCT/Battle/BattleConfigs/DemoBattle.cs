@@ -17,6 +17,12 @@ namespace UCT.Battle.BattleConfigs
             Resources.Load<GameObject>("Prefabs/Enemies/NPC2")
         };
 
+        public Vector3?[] enemiesStartPosition { get; } =
+        {
+            null,
+            null
+        };
+
         public GameObject backGroundModel => Resources.Load<GameObject>("Prefabs/BackGround/Vaporwave");
 
         public Material skyBox => Resources.Load<Material>("SkyBox/Vaporwave");
@@ -127,7 +133,7 @@ namespace UCT.Battle.BattleConfigs
                         (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
                     obj.SetYellowBulletHit(() => Debug.Log("被射击辣！"));
                     obj.SetGreenArrowHit(() => Debug.Log("碰到Arrow辣！"));
-                    
+
                     var obj2 = bulletPool.GetFromPool<BulletController>();
                     obj2.SetBullet(cupCake, cupCake, new InitialTransform(new Vector3(-1, -1.6f)),
                         (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
