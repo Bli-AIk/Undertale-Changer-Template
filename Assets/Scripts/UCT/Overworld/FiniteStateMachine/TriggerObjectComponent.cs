@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Alchemy.Inspector;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace UCT.Overworld.FiniteStateMachine
 {
@@ -13,13 +14,15 @@ namespace UCT.Overworld.FiniteStateMachine
         public List<Vector2> colliderSizesList = new();
         public List<Vector3> localPositionsList = new();
         public List<Vector3> localRotationsList = new();
-
+        [FormerlySerializedAs("playerHeartPos")] [FormerlySerializedAs("playerHeartOffset")] public List<Vector3> playerHeartLocalPosition = new();
+        
         private BoxCollider2D _triggerCollider;
+        private SpriteRenderer _heart;
 
         private void Start()
         {
             fsm = transform.GetComponent<FiniteStateMachine>();
-
+            _heart = transform.GetComponent<OverworldPlayerBehaviour>().heart;
             var triggerTransform = transform.Find("Trigger");
             if (triggerTransform)
             {
@@ -97,6 +100,8 @@ namespace UCT.Overworld.FiniteStateMachine
 
             _triggerCollider.offset = new Vector3(colliderOffsetsList[index].x, colliderOffsetsList[index].y);
             _triggerCollider.size = new Vector3(colliderSizesList[index].x, colliderSizesList[index].y);
+            
+            _heart.transform.localPosition = playerHeartLocalPosition[index];
         }
     }
 }

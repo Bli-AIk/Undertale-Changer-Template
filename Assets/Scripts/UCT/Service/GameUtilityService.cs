@@ -363,5 +363,13 @@ namespace UCT.Service
         {
             return MainControl.Instance.overworldControl.isSetting || SettingsStorage.Pause;
         }
+
+        /// <summary>
+        ///     将数字格式化为两位数（前导零）显示，例如将 1 显示为 01。
+        /// </summary>
+        public static string FormatWithLeadingZero(int i)
+        {
+            return i.ToString("D2");
+        }
     }
 }

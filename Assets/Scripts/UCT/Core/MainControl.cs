@@ -5,6 +5,9 @@ using System.Linq;
 using Alchemy.Inspector;
 using Debug;
 using DG.Tweening;
+using DG.Tweening.Core;
+using DG.Tweening.Plugins.Options;
+using JetBrains.Annotations;
 using UCT.Audio;
 using UCT.Battle;
 using UCT.Battle.BattleConfigs;
@@ -15,6 +18,7 @@ using UCT.Service;
 using UCT.Settings;
 using UCT.UI;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -82,9 +86,24 @@ namespace UCT.Core
         public EventController eventController;
 
         public readonly ItemController ItemController = new();
+        private TweenerCore<float, float, FloatOptions> _chaseGlobalLightTween;
+        private TweenerCore<Color, Color, ColorOptions> _chaseLineRendererEndColorTween;
+        private Tweener _chaseLineRendererStartColorTween;
+        private TweenerCore<Color, Color, ColorOptions> _chasePlayerHeartTween;
+        private TweenerCore<Color, Color, ColorOptions> _chasePlayerHpSprTween;
+        private TweenerCore<Color, Color, ColorOptions> _chasePlayerHpTween;
+        private TweenerCore<Color, Color, ColorOptions> _chasePlayerHpUITween;
+        private TweenerCore<Color, Color, ColorOptions> _chasePlayerOutlineTween;
 
         private DebugStringGradient _debugStringGradient = new("Debug");
+
+        [CanBeNull] private Light2D _globalLight;
+        private float _globalLightIntensity;
+        [CanBeNull] private OverworldChaseLineDrawer _overworldChaseLineDrawer;
         public static OverworldPlayerBehaviour OverworldPlayerBehaviour { get; private set; }
+        private OverworldChaseUIController _chaseUIController;
+        private TweenerCore<Color, Color, ColorOptions> _chaseGradientUpTween;
+        private TweenerCore<Color, Color, ColorOptions> _chaseGradientDownTween;
 
         public static MainControl Instance { get; private set; }
 
@@ -138,34 +157,7 @@ namespace UCT.Core
 
             DataHandlerService.InitializationLanguagePackFullWidth();
 
-            switch (sceneState)
-            {
-                case SceneState.Normal:
-                    if (OverworldPlayerBehaviour)
-                    {
-                        Destroy(OverworldPlayerBehaviour.gameObject);
-                        OverworldPlayerBehaviour = null;
-                    }
-
-                    break;
-                case SceneState.Overworld:
-                {
-                    if (!eventController)
-                    {
-                        eventController = GetComponent<EventController>();
-                    }
-
-                    GetOverworldPlayerBehaviour();
-
-                    OverworldPlayerBehaviour.transform.position = playerControl.playerLastPos;
-                    break;
-                }
-                case SceneState.Battle:
-                    InitializationBattle();
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException($"Unexpected sceneState value: {sceneState}");
-            }
+            StartWithSceneState();
 
             if (isFadeTransitionEnabled)
             {
@@ -196,6 +188,47 @@ namespace UCT.Core
             _debugStringGradient = new DebugStringGradient("Debug");
 
             EventController.LoadTables();
+        }
+
+        private void StartWithSceneState()
+        {
+            switch (sceneState)
+            {
+                case SceneState.Normal:
+                    if (OverworldPlayerBehaviour)
+                    {
+                        Destroy(OverworldPlayerBehaviour.gameObject);
+                        OverworldPlayerBehaviour = null;
+                    }
+
+                    break;
+                case SceneState.Overworld:
+                {
+                    if (!eventController)
+                    {
+                        eventController = GetComponent<EventController>();
+                    }
+
+                    GetOverworldPlayerBehaviour();
+
+                    OverworldPlayerBehaviour.transform.position = playerControl.playerLastPos;
+                    _globalLight = GameObject.Find("Global Light 2D").GetComponent<Light2D>();
+                    if (_globalLight)
+                    {
+                        _globalLightIntensity = _globalLight.intensity;
+                    }
+
+                    _overworldChaseLineDrawer = GameObject.Find("Grid").GetComponent<OverworldChaseLineDrawer>();
+                    
+                    _chaseUIController = mainCamera.transform.Find("ChaseUI").GetComponent<OverworldChaseUIController>();
+                    break;
+                }
+                case SceneState.Battle:
+                    InitializationBattle();
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException($"Unexpected sceneState value: {sceneState}");
+            }
         }
 
         private void Update()
@@ -372,8 +405,9 @@ namespace UCT.Core
                 var textAssets = Resources.LoadAll<TextAsset>(
                     $"TextAssets/LanguagePacks/{DataHandlerService.GetLanguageInsideId(languagePackId)}/Battle/{BattleControl.BattleConfig.GetType().Name}");
 
-                textAssets = textAssets.Where(asset => asset.name != BattleControl.BattleConfig.GetType().Name).ToArray();
-                
+                textAssets = textAssets.Where(asset => asset.name != BattleControl.BattleConfig.GetType().Name)
+                    .ToArray();
+
                 turnSave = new string[textAssets.Length];
                 for (var i = 0; i < textAssets.Length; i++)
                 {
@@ -506,6 +540,119 @@ namespace UCT.Core
             {
                 armor.OnDamageTaken(0);
             }
+        }
+
+        public void EnterChase()
+        {
+            const float duration = 0.5f;
+            if (_globalLight)
+            {
+                _chaseGlobalLightTween.Kill();
+                _chaseGlobalLightTween = DOTween.To(() => _globalLight.intensity, x => _globalLight.intensity = x,
+                    0.75f * _globalLightIntensity, duration);
+            }
+
+            if (_overworldChaseLineDrawer)
+            {
+                _chaseLineRendererStartColorTween.Kill();
+                _chaseLineRendererStartColorTween =
+                    DOTween.To(() => _overworldChaseLineDrawer.lineRenderer.startColor,
+                        x => _overworldChaseLineDrawer.lineRenderer.startColor = x,
+                        Color.red, duration);
+
+                _chaseLineRendererEndColorTween.Kill();
+                _chaseLineRendererEndColorTween =
+                    DOTween.To(() => _overworldChaseLineDrawer.lineRenderer.endColor,
+                        x => _overworldChaseLineDrawer.lineRenderer.endColor = x,
+                        Color.red, duration);
+            }
+
+            _chasePlayerOutlineTween.Kill();
+            OverworldPlayerBehaviour.outline.gameObject.SetActive(true);
+            OverworldPlayerBehaviour.outline.color = ColorEx.WhiteClear;
+            _chasePlayerOutlineTween = OverworldPlayerBehaviour.outline.DOColor(Color.white, duration);
+
+            _chasePlayerHeartTween.Kill();
+            OverworldPlayerBehaviour.heart.gameObject.SetActive(true);
+            OverworldPlayerBehaviour.heart.color = ColorEx.RedClear;
+            _chasePlayerHeartTween = OverworldPlayerBehaviour.heart.DOColor(Color.red, duration);
+
+            _chaseUIController.gameObject.SetActive(true);
+
+            _chasePlayerHpUITween.Kill();
+            _chaseUIController.hpUI.color = ColorEx.WhiteClear;
+            _chasePlayerHpUITween = _chaseUIController.hpUI.DOColor(Color.white, duration);
+
+            _chasePlayerHpTween.Kill();
+            _chaseUIController.hp.color = ColorEx.WhiteClear;
+            _chasePlayerHpTween = _chaseUIController.hp.DOColor(Color.white, duration);
+
+            _chasePlayerHpSprTween.Kill();
+            _chaseUIController.hpSpr.color = ColorEx.WhiteClear;
+            _chasePlayerHpSprTween = _chaseUIController.hpSpr.DOColor(Color.white, duration);
+
+            _chaseGradientUpTween.Kill();
+            _chaseUIController.gradientUp.color = Color.clear;
+            _chaseGradientUpTween = _chaseUIController.gradientUp.DOColor(Color.black, duration);
+
+            _chaseGradientDownTween.Kill();
+            _chaseUIController.gradientDown.color = Color.clear;
+            _chaseGradientDownTween = _chaseUIController.gradientDown.DOColor(Color.black, duration);
+        }
+
+        public void ExitChase()
+        {
+            const float duration = 0.5f;
+            if (_globalLight)
+            {
+                _chaseGlobalLightTween.Kill();
+                _chaseGlobalLightTween = DOTween.To(() => _globalLight.intensity, x => _globalLight.intensity = x,
+                    _globalLightIntensity, duration);
+            }
+
+            if (_overworldChaseLineDrawer)
+            {
+                _chaseLineRendererStartColorTween.Kill();
+                _chaseLineRendererStartColorTween =
+                    DOTween.To(() => _overworldChaseLineDrawer.lineRenderer.startColor,
+                        x => _overworldChaseLineDrawer.lineRenderer.startColor = x,
+                        ColorEx.RedClear, duration);
+
+                _chaseLineRendererEndColorTween.Kill();
+                _chaseLineRendererEndColorTween =
+                    DOTween.To(() => _overworldChaseLineDrawer.lineRenderer.endColor,
+                        x => _overworldChaseLineDrawer.lineRenderer.endColor = x,
+                        ColorEx.RedClear, duration);
+            }
+
+            _chasePlayerOutlineTween.Kill();
+            _chasePlayerOutlineTween = OverworldPlayerBehaviour.outline.DOColor(ColorEx.WhiteClear, duration)
+                .OnKill(() => OverworldPlayerBehaviour.outline.gameObject.SetActive(true));
+
+            _chasePlayerHeartTween.Kill();
+            _chasePlayerHeartTween = OverworldPlayerBehaviour.heart.DOColor(ColorEx.RedClear, duration)
+                .OnKill(() => OverworldPlayerBehaviour.heart.gameObject.SetActive(true));
+
+            _chasePlayerHpUITween.Kill();
+            _chaseUIController.hpUI.color = Color.white;
+            _chasePlayerHpUITween = _chaseUIController.hpUI.DOColor(ColorEx.WhiteClear, duration);
+
+            _chasePlayerHpTween.Kill();
+            _chaseUIController.hp.color = Color.white;
+            _chasePlayerHpTween = _chaseUIController.hp.DOColor(ColorEx.WhiteClear, duration);
+
+            _chasePlayerHpSprTween.Kill();
+            _chaseUIController.hpSpr.color = Color.white;
+            _chasePlayerHpSprTween = _chaseUIController.hpSpr.DOColor(ColorEx.WhiteClear, duration);
+            
+            _chaseGradientUpTween.Kill();
+            _chaseUIController.gradientUp.color = Color.black;
+            _chaseGradientUpTween = _chaseUIController.gradientUp.DOColor(Color.clear, duration);
+
+            _chaseGradientDownTween.Kill();
+            _chaseUIController.gradientDown.color = Color.black;
+            _chaseGradientDownTween = _chaseUIController.gradientDown.DOColor(Color.clear, duration)
+                .OnKill(() => _chaseUIController.gameObject.SetActive(false));
         }
     }
 }

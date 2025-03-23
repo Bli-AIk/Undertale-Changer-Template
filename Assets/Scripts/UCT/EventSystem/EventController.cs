@@ -116,6 +116,16 @@ namespace UCT.EventSystem
                     GetPooledObjectAtPlayer((bool)args[0], (string)args[1]))
             },
             {
+                new MethodNameData("null:EnterChase", Global),
+                new MethodWrapper(args =>
+                    EnterChase((bool)args[0], (string)args[1]))
+            },
+            {
+                new MethodNameData("null:ExitChase", Global),
+                new MethodWrapper(args =>
+                    ExitChase((bool)args[0], (string)args[1]))
+            },
+            {
                 new MethodNameData("float:BannedBGM", Audio),
                 new MethodWrapper(args =>
                     BannedBGM((float)args[0], (bool)args[1], (string)args[2]))
@@ -656,6 +666,22 @@ namespace UCT.EventSystem
         {
             var obj = GameObject.Find("ObjectPool").GetComponent<ObjectPool>().GetFromPool<Transform>();
             obj.transform.position = MainControl.OverworldPlayerBehaviour.transform.position;
+            if (useEvent)
+            {
+                SetTriggering(eventName);
+            }
+        }
+        private static void EnterChase(bool useEvent, string eventName)
+        {
+            MainControl.Instance.EnterChase();
+            if (useEvent)
+            {
+                SetTriggering(eventName);
+            }
+        }
+        private static void ExitChase(bool useEvent, string eventName)
+        {
+            MainControl.Instance.ExitChase();
             if (useEvent)
             {
                 SetTriggering(eventName);

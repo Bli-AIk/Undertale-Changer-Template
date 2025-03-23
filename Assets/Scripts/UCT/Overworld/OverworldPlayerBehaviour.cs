@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Alchemy.Inspector;
+using TMPro;
 using UCT.Core;
 using UCT.Overworld.FiniteStateMachine;
 using UCT.Service;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace UCT.Overworld
 {
@@ -17,18 +17,22 @@ namespace UCT.Overworld
         public StateType stateType;
 
         [Title("开启倒影")] public bool isShadow;
-
-        [FormerlySerializedAs("_spriteRenderer")]
-        public SpriteRenderer spriteRenderer;
-
-        [FormerlySerializedAs("_shadowSpriteRenderer")]
-        public SpriteRenderer shadowSpriteRenderer;
+        [HideInInspector] public SpriteRenderer spriteRenderer;
+        [HideInInspector] public SpriteRenderer shadowSpriteRenderer;
+        [HideInInspector] public SpriteRenderer outline, heart;
 
         private void Start()
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
             shadowSpriteRenderer = transform.Find("BottomAxis/Shadow").GetComponent<SpriteRenderer>();
+            outline = transform.Find("Outline").GetComponent<SpriteRenderer>();
+
+            heart = transform.Find("Heart").GetComponent<SpriteRenderer>();
+
+            outline.gameObject.SetActive(false);
+            heart.gameObject.SetActive(false);
         }
+
 
         private void Update()
         {
@@ -61,6 +65,7 @@ namespace UCT.Overworld
             InputPlayerMove();
             SetShadow();
         }
+
 
         private bool IsSpecialState()
         {

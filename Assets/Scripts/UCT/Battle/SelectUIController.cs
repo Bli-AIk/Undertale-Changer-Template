@@ -196,7 +196,7 @@ namespace UCT.Battle
                 }
 
                 ProcessDelayedDialogMessages();
-                
+
                 var isEndBubble = _dialogBubbleBehaviours.All(bubble => !bubble.gameObject.activeSelf);
 
                 if (isEndBubble)
@@ -206,6 +206,7 @@ namespace UCT.Battle
                     TurnController.Instance.EnterEnemyTurn();
                     return;
                 }
+
                 var isTyping = _dialogBubbleBehaviours.Any(dialog => dialog.typeWritter.isTyping);
 
                 if (!isTyping && InputService.GetKeyDown(KeyCode.Z))
@@ -237,6 +238,7 @@ namespace UCT.Battle
                     {
                         continue;
                     }
+
                     var changedItems = (from item in _dialogMessages
                         from targetItem in message.Target
                         where targetItem == item.Name
@@ -244,17 +246,19 @@ namespace UCT.Battle
 
                     _currentMessages.RemoveAt(index);
                     _currentMessages.InsertRange(index, changedItems);
-                    
+
 
                     bubbleBehaviour.gameObject.SetActive(false);
                     foreach (var t in changedItems)
                     {
                         AnalyzeMessage(t);
                     }
+
                     if (HideDialogBubblesOnEnd(message))
                     {
                         return;
                     }
+
                     break;
                 }
             }
@@ -288,6 +292,7 @@ namespace UCT.Battle
                     break;
                 }
             }
+
             return isNotDelaying;
         }
 
@@ -559,8 +564,8 @@ namespace UCT.Battle
                     MainControl.Instance.battlePlayerController.transform.position.z);
             ButtonLayerInput();
 
-            _hpUI.text = FormatWithLeadingZero(_hpFood) + " / " +
-                         FormatWithLeadingZero(MainControl.Instance.playerControl.hpMax);
+            _hpUI.text = GameUtilityService.FormatWithLeadingZero(_hpFood) + " / " +
+                         GameUtilityService.FormatWithLeadingZero(MainControl.Instance.playerControl.hpMax);
         }
 
         private void ButtonLayerInput()
@@ -1377,8 +1382,8 @@ namespace UCT.Battle
             globalItemIndex = updateHandleItemInput.globalItemIndex;
             visibleItemIndex = updateHandleItemInput.visibleItemIndex;
 
-            _hpUI.text = FormatWithLeadingZero(_hpFood) + " / " +
-                         FormatWithLeadingZero(MainControl.Instance.playerControl.hpMax);
+            _hpUI.text = GameUtilityService.FormatWithLeadingZero(_hpFood) + " / " +
+                         GameUtilityService.FormatWithLeadingZero(MainControl.Instance.playerControl.hpMax);
         }
 
 
@@ -1470,10 +1475,11 @@ namespace UCT.Battle
 
                 SetBubbleBehaviour(message, enemyControllerIndex, bubble);
             }
-
         }
 
-        private void SetBubbleBehaviour(EnemiesXmlDialogParser.Message message, int enemyControllerIndex, EnemiesXmlDialogParser.Bubble bubble)
+        private void SetBubbleBehaviour(EnemiesXmlDialogParser.Message message,
+            int enemyControllerIndex,
+            EnemiesXmlDialogParser.Bubble bubble)
         {
             var enemyController = enemiesControllers[enemyControllerIndex];
 
@@ -1484,6 +1490,7 @@ namespace UCT.Battle
                 {
                     return;
                 }
+
                 bubbleBehaviours.transform.SetParent(enemyController.transform);
             }
             else
@@ -1518,8 +1525,8 @@ namespace UCT.Battle
                     continue;
                 }
 
-                var temp = _currentMessages[index]; 
-                temp.IsDelaying = true;          
+                var temp = _currentMessages[index];
+                temp.IsDelaying = true;
                 _currentMessages[index] = temp;
             }
         }
@@ -1539,7 +1546,7 @@ namespace UCT.Battle
                     }
                 }
             }
-            
+
             var messagesToRemove = _currentMessages
                 .Where(m => m.Mode == EnemiesXmlDialogParser.MessageMode.Confirm)
                 .ToList();
@@ -1560,7 +1567,7 @@ namespace UCT.Battle
 
                 _currentMessages.AddRange(newItems);
             }
-            
+
 
             for (var i = 0; i < _currentMessages.Count; i++)
             {
@@ -1678,8 +1685,8 @@ namespace UCT.Battle
 
             if (uiTextMode != UITextMode.Food)
             {
-                _hpUI.text = FormatWithLeadingZero(MainControl.Instance.playerControl.hp) + " / " +
-                             FormatWithLeadingZero(MainControl.Instance.playerControl.hpMax);
+                _hpUI.text = GameUtilityService.FormatWithLeadingZero(MainControl.Instance.playerControl.hp) + " / " +
+                             GameUtilityService.FormatWithLeadingZero(MainControl.Instance.playerControl.hpMax);
             }
             else
             {
@@ -1699,14 +1706,6 @@ namespace UCT.Battle
             _nameUI.text = MainControl.Instance.playerControl.playerName +
                            " lv<indent=29.5>" +
                            MainControl.Instance.playerControl.lv;
-        }
-
-        /// <summary>
-        ///     将数字格式化为两位数（前导零）显示，例如将 1 显示为 01。
-        /// </summary>
-        private static string FormatWithLeadingZero(int i)
-        {
-            return i.ToString("D2");
         }
 
 
