@@ -1626,8 +1626,6 @@ namespace Editor.Inspector.EventSystem
             {
                 name = fact.FindPropertyRelative("name").stringValue,
                 value = fact.FindPropertyRelative("value").intValue,
-                area = (Area)fact.FindPropertyRelative("area").enumValueIndex,
-                scene = fact.FindPropertyRelative("scene").stringValue
             };
             return factEntry;
         }

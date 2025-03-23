@@ -117,9 +117,6 @@ namespace Editor.Inspector.EventSystem
                 fact.FindPropertyRelative("value").intValue = facts[popup].value;
             }
 
-            fact.FindPropertyRelative("area").enumValueIndex = (int)facts[popup].area;
-            fact.FindPropertyRelative("scene").stringValue = facts[popup].scene;
-
             if (!isDisplayValue)
             {
                 return changedIsGlobal;

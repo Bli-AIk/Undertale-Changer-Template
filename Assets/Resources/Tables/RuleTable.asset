@@ -42,8 +42,6 @@ MonoBehaviour:
       fact:
         name: 
         value: 0
-        area: 0
-        scene: 
       compare: 0
       detection: 0
       operation: 1
@@ -51,10 +49,8 @@ MonoBehaviour:
       - isResultReversed: 0
         isGlobal: 0
         fact:
-          name: Fact1
+          name: Test
           value: 0
-          area: 0
-          scene: 
         compare: 2
         detection: 0
         operation: 0

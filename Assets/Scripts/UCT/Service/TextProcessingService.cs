@@ -223,8 +223,8 @@ namespace UCT.Service
                 totalSeconds = 0;
             }
 
-            int minutes = totalSeconds / 60;
-            int seconds = totalSeconds % 60;
+            var minutes = totalSeconds / 60;
+            var seconds = totalSeconds % 60;
 
             return $"{minutes:D2}:{seconds:D2}";
         }

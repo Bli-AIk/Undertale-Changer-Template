@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 using UCT.Control;
+using UCT.EventSystem;
 using UnityEngine;
 
 namespace UCT.Core
@@ -29,13 +32,15 @@ namespace UCT.Core
             };
             var jsonData = JsonConvert.SerializeObject(data, settings);
 
-            File.WriteAllText(Application.dataPath + $"/Data/{dataName}.json", jsonData);
+            File.WriteAllText($"{Application.dataPath}/Data/{dataName}.json", jsonData);
+            SaveFactTablesToJson($"{dataName}Table");
         }
 
         public static PlayerControl LoadData(string dataName)
         {
-            SortAndRenameData();
-            var path = Application.dataPath + $"/Data/{dataName}.json";
+            SortAndRenameData(@"^Data(\d+)$", "Data{0}.json");
+            SortAndRenameData(@"^Data(\d+)Table$", "Data{0}Table.json");
+            var path = $"{Application.dataPath}/Data/{dataName}.json";
             if (!File.Exists(path))
             {
                 return null;
@@ -45,6 +50,7 @@ namespace UCT.Core
             var userData = ScriptableObject.CreateInstance<PlayerControl>();
             JsonConvert.PopulateObject(jsonData, userData);
             UsersData[dataName] = userData;
+            LoadFactTablesFromJson($"{dataName}Table");
             return userData;
         }
 
@@ -70,7 +76,7 @@ namespace UCT.Core
 
         public static void DeleteData(string dataName)
         {
-            var path = Application.dataPath + $"/Data/{dataName}.json";
+            var path = $"{Application.dataPath}/Data/{dataName}.json";
 
             if (File.Exists(path))
             {
@@ -85,11 +91,11 @@ namespace UCT.Core
             {
                 Debug.Log($"存档{dataName}不存在，无法删除。");
             }
-
-            SortAndRenameData();
+            SortAndRenameData(@"^Data(\d+)$", "Data{0}.json");
+            SortAndRenameData(@"^Data(\d+)Table$", "Data{0}Table.json");
         }
 
-        private static void SortAndRenameData()
+        private static void SortAndRenameData(string regexPattern, string renameFormat)
         {
             var dataPath = Application.dataPath + "/Data";
 
@@ -99,27 +105,116 @@ namespace UCT.Core
                 return;
             }
 
-            var files = Directory.GetFiles(dataPath, "*.json");
+            // 获取所有 JSON 文件，并筛选出符合正则表达式的文件
+            var regex = new Regex(regexPattern);
+            var files = Directory.GetFiles(dataPath, "*.json")
+                .Where(file =>
+                {
+                    var fileName = Path.GetFileNameWithoutExtension(file);
+                    return regex.IsMatch(fileName);
+                })
+                .ToArray();
 
+            // 根据文件名中匹配到的数字部分进行排序
             Array.Sort(files, (a, b) =>
             {
                 var fileNameA = Path.GetFileNameWithoutExtension(a);
                 var fileNameB = Path.GetFileNameWithoutExtension(b);
 
-                if (int.TryParse(fileNameA[4..], out var numberA) && int.TryParse(fileNameB[4..], out var numberB))
-                {
-                    return numberA.CompareTo(numberB);
-                }
+                var matchA = regex.Match(fileNameA);
+                var matchB = regex.Match(fileNameB);
 
+                // 如果两个文件都匹配成功，并且正则中第一个捕获组是数字，则按数字大小排序
+                if (matchA.Success && matchB.Success && matchA.Groups.Count > 1 && matchB.Groups.Count > 1)
+                {
+                    if (int.TryParse(matchA.Groups[1].Value, out var numberA) &&
+                        int.TryParse(matchB.Groups[1].Value, out var numberB))
+                    {
+                        return numberA.CompareTo(numberB);
+                    }
+                }
+                // 否则退回使用字符串的字典序排序
                 return string.Compare(fileNameA, fileNameB, StringComparison.Ordinal);
             });
 
+            // 遍历排序后的文件，使用传入的格式重新命名
             for (var i = 0; i < files.Length; i++)
             {
-                var newFileName = $"Data{i}.json";
+                var newFileName = string.Format(renameFormat, i);
                 var newPath = Path.Combine(dataPath, newFileName);
                 File.Move(files[i], newPath);
             }
+        }
+
+
+        private static void SaveFactTablesToJson(string dataName)
+        {
+            var jsonDir = Path.Combine(Application.dataPath, "Data");
+            if (!Directory.Exists(jsonDir))
+            {
+                Directory.CreateDirectory(jsonDir);
+            }
+
+            var path = Path.Combine(jsonDir, $"{dataName}.json");
+
+            var tablesRoot = Path.Combine(Application.dataPath, "Resources", "Tables");
+            if (!Directory.Exists(tablesRoot))
+            {
+                Debug.LogError($"资源目录不存在：{tablesRoot}");
+                return;
+            }
+
+            var dict = new Dictionary<string, List<FactEntry>>();
+
+            var assetFiles = Directory.GetFiles(tablesRoot, "*.asset", SearchOption.AllDirectories);
+            foreach (var filePath in assetFiles)
+            {
+                var relativePath =
+                    filePath.Replace(Path.Combine(Application.dataPath, "Resources") + Path.DirectorySeparatorChar, "");
+                relativePath = Path.ChangeExtension(relativePath, null);
+                relativePath = relativePath.Replace(Path.DirectorySeparatorChar, '/');
+
+                var scriptableObject = Resources.Load<ScriptableObject>(relativePath);
+                if (scriptableObject is FactTable factTable)
+                {
+                    dict[relativePath] = factTable.facts;
+                }
+            }
+
+            var json = JsonConvert.SerializeObject(dict, Formatting.Indented);
+            File.WriteAllText(path, json);
+        }
+
+        private static void LoadFactTablesFromJson(string dataName)
+        {
+            var path = Path.Combine(Application.dataPath, "Data", $"{dataName}.json");
+            if (!File.Exists(path))
+            {
+                Debug.LogError($"JSON 文件不存在：{path}");
+                return;
+            }
+
+            var json = File.ReadAllText(path);
+            var dict = JsonConvert.DeserializeObject<Dictionary<string, List<FactEntry>>>(json);
+            if (dict == null)
+            {
+                Debug.LogError("反序列化 JSON 数据失败！");
+                return;
+            }
+
+            foreach (var (resourcePath, value) in dict)
+            {
+                var factTable = Resources.Load<FactTable>(resourcePath);
+                if (factTable)
+                {
+                    factTable.facts = value;
+                }
+                else
+                {
+                    Debug.LogWarning($"加载 FactTable 失败：{resourcePath}");
+                }
+            }
+
         }
     }
 }
