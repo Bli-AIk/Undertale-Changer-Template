@@ -121,9 +121,7 @@ namespace UCT.Battle
         ///     含有属性的颜色，读取 <see cref="BattleControl.PlayerColor" />，颜色变换通过具体变换的函数来执行
         /// </summary>
         public BattleControl.PlayerColor playerColor;
-
-        [HideInInspector] public UnityEngine.Rendering.Volume hitVolume;
-
+        
         private Tween _arrowRotationTween;
 
         /// <summary>
@@ -156,8 +154,6 @@ namespace UCT.Battle
             animator = GetComponent<Animator>();
             _dingSpriteRenderer = transform.Find("Ding").GetComponent<SpriteRenderer>();
             _dingSpriteRenderer.color = Color.clear;
-            hitVolume = GetComponent<UnityEngine.Rendering.Volume>();
-            hitVolume.weight = 0;
             MainControl.Instance.playerControl.missTime = 0;
             orangeDash.Stop();
             _greenAdditional = transform.Find("GreenAdditional").gameObject;
@@ -167,8 +163,6 @@ namespace UCT.Battle
 
         private void Update()
         {
-            UpdateHitVolume();
-
             if(!TurnController.Instance.isMyTurn)
             {
                 UpdatePlayer();
@@ -329,14 +323,6 @@ namespace UCT.Battle
             else
             {
                 MainControl.Instance.selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
-            }
-        }
-
-        private void UpdateHitVolume()
-        {
-            if (!SettingsStorage.IsSimplifySfx && hitVolume.weight > 0)
-            {
-                hitVolume.weight -= Time.deltaTime;
             }
         }
 

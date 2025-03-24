@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
-using UCT.Audio;
 using UCT.Control;
 using UCT.Core;
+using UCT.Overworld;
 using UCT.Service;
-using UCT.Settings;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -39,8 +38,8 @@ namespace UCT.Battle
         public BattleControl.BulletColor bulletColor;
 
         public FollowMode followMode;
-        private Action _onYellowBulletHit;
         private Action _onGreenArrowHit;
+        private Action _onYellowBulletHit;
 
         private void Awake()
         {
@@ -80,9 +79,17 @@ namespace UCT.Battle
 
         private void OnTriggerStay2D(Collider2D collision)
         {
-            if (!collision.transform.CompareTag("Player") ||
-                collision.name.Length < "CheckCollider".Length ||
-                collision.name[.."CheckCollider".Length] != "CheckCollider")
+            var isPassInBattle = collision.transform.CompareTag("Player") &&
+                                 (collision.name.Length < "CheckCollider".Length ||
+                                  collision.name[.."CheckCollider".Length] == "CheckCollider");
+
+            var isPassInOverworld = collision.transform.CompareTag("Player") &&
+                                    collision.gameObject.name.Length >= "Heart".Length &&
+                                    collision.gameObject.name[.."Heart".Length] == "Heart" &&
+                                    collision.gameObject.activeSelf;
+
+            if ((!isPassInBattle || MainControl.Instance.sceneState != MainControl.SceneState.Battle) &&
+                (!isPassInOverworld || MainControl.Instance.sceneState != MainControl.SceneState.Overworld))
             {
                 return;
             }
@@ -94,16 +101,50 @@ namespace UCT.Battle
                     continue;
                 }
 
-                if (bulletColor == BattleControl.BulletColor.White
-                    || (bulletColor == BattleControl.BulletColor.Orange &&
-                        !MainControl.Instance.battlePlayerController.isMoving)
-                    || (bulletColor == BattleControl.BulletColor.Blue &&
-                        MainControl.Instance.battlePlayerController.isMoving))
+                HitPlayerCheckState(i);
+                break;
+            }
+        }
+
+        private void HitPlayerCheckState(int i)
+        {
+            switch (MainControl.Instance.sceneState)
+            {
+                case MainControl.SceneState.Normal:
                 {
-                    HitPlayer(i);
+                    break;
+                }
+                case MainControl.SceneState.Overworld:
+                {
+                    if (MainControl.Instance.playerControl.missTime <= 0)
+                    {
+                        CameraFollowPlayer.Instance.ShakeCamera();
+                    }
+
+                    MainControl.Instance.HitPlayer(boxHitList[i]);
+
+
+                    break;
+                }
+                case MainControl.SceneState.Battle:
+                {
+                    if (bulletColor == BattleControl.BulletColor.White
+                        || (bulletColor == BattleControl.BulletColor.Orange &&
+                            !MainControl.Instance.battlePlayerController.isMoving)
+                        || (bulletColor == BattleControl.BulletColor.Blue &&
+                            MainControl.Instance.battlePlayerController.isMoving))
+                    {
+                        HitPlayerInBattle(i);
+                    }
+
+                    break;
                 }
 
-                break;
+                default:
+                {
+                    throw new ArgumentOutOfRangeException(
+                        $"Unexpected sceneState value: {MainControl.Instance.sceneState}");
+                }
             }
         }
 
@@ -235,9 +276,9 @@ namespace UCT.Battle
             }
         }
 
-        private void HitPlayer(int i)
+        private void HitPlayerInBattle(int i)
         {
-            if (MainControl.Instance.playerControl.missTime >= 0)
+            if (!MainControl.Instance.HitPlayer(boxHitList[i]))
             {
                 return;
             }
@@ -254,17 +295,10 @@ namespace UCT.Battle
                 4,
                 1f / 60f * 4f * 1.5f, "3D CameraPoint", Ease.OutElastic);
 
-            AudioController.Instance.PlayFx(5, MainControl.Instance.AudioControl.fxClipUI);
-            MainControl.HitPlayer(boxHitList[i]);
 
             if (MainControl.Instance.playerControl.hp <= 0)
             {
                 MainControl.Instance.battlePlayerController.KillPlayer(MainControl.Instance);
-            }
-
-            if (!SettingsStorage.IsSimplifySfx)
-            {
-                MainControl.Instance.battlePlayerController.hitVolume.weight = 1;
             }
         }
 
@@ -306,6 +340,5 @@ namespace UCT.Battle
         {
             DetectCollision("PlayerArrow", _onGreenArrowHit);
         }
-
     }
 }

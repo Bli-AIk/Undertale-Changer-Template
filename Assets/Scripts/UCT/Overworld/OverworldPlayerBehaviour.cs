@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Alchemy.Inspector;
-using TMPro;
 using UCT.Core;
 using UCT.Overworld.FiniteStateMachine;
 using UCT.Service;
+using UCT.Settings;
 using UnityEngine;
 
 namespace UCT.Overworld
@@ -21,6 +21,7 @@ namespace UCT.Overworld
         [HideInInspector] public SpriteRenderer shadowSpriteRenderer;
         [HideInInspector] public SpriteRenderer outline, heart;
 
+        
         private void Start()
         {
             spriteRenderer = GetComponent<SpriteRenderer>();

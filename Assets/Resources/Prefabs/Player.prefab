@@ -50,6 +50,7 @@ GameObject:
   - component: {fileID: 1235076164231593177}
   - component: {fileID: 1446864346}
   - component: {fileID: 4581185708071440011}
+  - component: {fileID: 3604519188408683770}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -150,10 +151,6 @@ MonoBehaviour:
   shadowSpriteRenderer: {fileID: 0}
   outline: {fileID: 0}
   heart: {fileID: 0}
-  chaseUI: {fileID: 0}
-  hpUI: {fileID: 0}
-  hp: {fileID: 0}
-  hpSpr: {fileID: 0}
 --- !u!95 &1235076164231593180
 Animator:
   serializedVersion: 4
@@ -247,7 +244,7 @@ MonoBehaviour:
   - {x: -0.1, y: 0, z: 0}
   m_ShapePathHash: -96867770
   m_Mesh: {fileID: 0}
-  m_InstanceId: 42854
+  m_InstanceId: 45736
 --- !u!114 &1235076164231593177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -329,6 +326,23 @@ MonoBehaviour:
   - {x: 0, y: -0.3, z: 0}
   - {x: -0.05, y: -0.3, z: 0}
   - {x: -0.05, y: -0.3, z: 0}
+--- !u!114 &3604519188408683770
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1235076164231592995}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsGlobal: 1
+  priority: 0
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: 89fe337953681774cb00b35f53380799, type: 2}
 --- !u!1 &1235076164573053479
 GameObject:
   m_ObjectHideFlags: 0
@@ -568,7 +582,7 @@ GameObject:
   - component: {fileID: 3200779917457423270}
   m_Layer: 0
   m_Name: Heart
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

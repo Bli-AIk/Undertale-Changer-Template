@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using UCT.Core;
 using UCT.Service;
 using UCT.UI;
@@ -20,7 +21,7 @@ namespace UCT.Battle
 
         private ComputeBuffer _polygonInfoBuffer;
         private ComputeBuffer _polygonVerticesBuffer;
-        private GameObject _projectionBoxes;
+        [CanBeNull] private GameObject _projectionBoxes;
         private Renderer _targetRenderer;
 
         private void Awake()
@@ -36,7 +37,10 @@ namespace UCT.Battle
             }
 
             _targetRenderer.material = material;
-            _projectionBoxes = MainControl.Instance.selectUIController.projectionBoxes;
+            if (MainControl.Instance.sceneState == MainControl.SceneState.Battle)
+            {
+                _projectionBoxes = MainControl.Instance.selectUIController.projectionBoxes;
+            }
         }
 
         private void Update()
@@ -190,19 +194,26 @@ namespace UCT.Battle
                     .ToList();
                 polygons.Add(MathUtilityService.CalculateInwardOffset(points, offset));
 
-                for (var i = 0; i < _projectionBoxes.transform.childCount; i++)
+                if (!_projectionBoxes)
                 {
-                    points = boxDrawer.realPoints
-                        .Select(p =>
-                        {
-                            var projectionBoxes = _projectionBoxes.transform.GetChild(i);
-                            return RotatePoint(Vector2.zero, p,
-                                       boxDrawer.rotation.eulerAngles.z + projectionBoxes.eulerAngles.z) +
-                                   (Vector2)boxDrawer.localPosition +
-                                   (Vector2)projectionBoxes.transform.position;
-                        })
-                        .ToList();
-                    polygons.Add(MathUtilityService.CalculateInwardOffset(points, offset));
+                    continue;
+                }
+
+                {
+                    for (var i = 0; i < _projectionBoxes.transform.childCount; i++)
+                    {
+                        points = boxDrawer.realPoints
+                            .Select(p =>
+                            {
+                                var projectionBoxes = _projectionBoxes.transform.GetChild(i);
+                                return RotatePoint(Vector2.zero, p,
+                                           boxDrawer.rotation.eulerAngles.z + projectionBoxes.eulerAngles.z) +
+                                       (Vector2)boxDrawer.localPosition +
+                                       (Vector2)projectionBoxes.transform.position;
+                            })
+                            .ToList();
+                        polygons.Add(MathUtilityService.CalculateInwardOffset(points, offset));
+                    }
                 }
             }
 

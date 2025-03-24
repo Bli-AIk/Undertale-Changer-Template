@@ -5,6 +5,7 @@ using System.Reflection;
 using DG.Tweening;
 using Plugins.Timer.Source;
 using UCT.Audio;
+using UCT.Battle;
 using UCT.Battle.BattleConfigs;
 using UCT.Core;
 using UCT.Overworld;
@@ -27,6 +28,7 @@ namespace UCT.EventSystem
         private const string Position = "Position";
         private const string Special = "Special";
         private const string Audio = "Audio";
+        private const string Bullet = "Bullet";
 
 
         private static TypeWritter _overworldTypeWritter;
@@ -56,7 +58,8 @@ namespace UCT.EventSystem
             },
             {
                 new MethodNameData("IBattleConfig:EnterBattleScene", Global),
-                new MethodWrapper(args => EnterBattleScene(GetIBattleConfig((string)args[0]), (bool)args[1], (string)args[2]))
+                new MethodWrapper(args =>
+                    EnterBattleScene(GetIBattleConfig((string)args[0]), (bool)args[1], (string)args[2]))
             },
             {
                 new MethodNameData("float:WaitingForSecond", Global),
@@ -134,6 +137,11 @@ namespace UCT.EventSystem
                 new MethodNameData("int:PlayUIFx", Audio),
                 new MethodWrapper(args =>
                     PlayUIFx((int)args[0], (bool)args[1], (string)args[2]))
+            },
+            {
+                new MethodNameData("null:TestBullet", Bullet),
+                new MethodWrapper(args =>
+                    TestBullet((bool)args[0], (string)args[1]))
             }
         };
 
@@ -352,13 +360,13 @@ namespace UCT.EventSystem
                 if (rule.methodEvents.Count <= k)
                 {
                     rule.methodEvents.AddRange(Enumerable.Repeat<string>(null, k + 1 - rule.methodEvents.Count));
-                }  
-                
+                }
+
                 if (rule.objectParams.Count <= k)
                 {
                     rule.objectParams.AddRange(Enumerable.Repeat<Object>(null, k + 1 - rule.objectParams.Count));
                 }
-                
+
                 InvokeMethodByName(rule.methodNames[k], rule.firstStringParams[k], rule.secondStringParams[k],
                     rule.thirdStringParams[k], rule.useMethodEvents[k], rule.methodEvents[k], rule.objectParams[k]);
             }
@@ -671,6 +679,7 @@ namespace UCT.EventSystem
                 SetTriggering(eventName);
             }
         }
+
         private static void EnterChase(bool useEvent, string eventName)
         {
             MainControl.Instance.EnterChase();
@@ -679,6 +688,7 @@ namespace UCT.EventSystem
                 SetTriggering(eventName);
             }
         }
+
         private static void ExitChase(bool useEvent, string eventName)
         {
             MainControl.Instance.ExitChase();
@@ -686,6 +696,35 @@ namespace UCT.EventSystem
             {
                 SetTriggering(eventName);
             }
+        }
+
+        private static void TestBullet(bool useEvent, string eventName)
+        {
+            for (var x = -3; x <= 3; x++)
+            {
+                const string cupCake = "CupCake";
+                var bullet = MainControl.OverworldBulletPool.GetFromPool<BulletController>();
+                bullet.SetBullet(cupCake, cupCake, new InitialTransform(new Vector3(x, -7)));
+
+                var x1 = x;
+                var duration = Mathf.Lerp(2.5f, 5, Mathf.Abs(x) / 3f);
+                bullet.spriteRenderer.color = ColorEx.WhiteClear;
+                bullet.spriteRenderer.DOColor(Color.white, duration / 2)
+                    .SetEase(Ease.InBounce);
+                
+                bullet.transform.DOMoveY(7, duration)
+                    .SetEase(Ease.InBounce)
+                    .OnComplete(() =>
+                    {
+                        MainControl.OverworldBulletPool.ReturnPool(bullet);
+
+                        if (x1 == 3 && useEvent)
+                        {
+                            SetTriggering(eventName);
+                        }
+                    });
+            }
+
         }
 
         private static void WaitingForSecond(float duration, bool useEvent, string eventName)

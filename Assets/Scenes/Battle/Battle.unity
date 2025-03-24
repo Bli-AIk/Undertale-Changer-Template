@@ -1285,8 +1285,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2735931670647202130, guid: 85a3edc090f79fb4780a6e2f72de7957,
         type: 3}
+      propertyPath: frameSpriteIndex
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2735931670647202130, guid: 85a3edc090f79fb4780a6e2f72de7957,
+        type: 3}
+      propertyPath: isFadeInUnpaused
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2735931670647202130, guid: 85a3edc090f79fb4780a6e2f72de7957,
+        type: 3}
       propertyPath: poolCount.Array.size
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2735931670647202130, guid: 85a3edc090f79fb4780a6e2f72de7957,
+        type: 3}
+      propertyPath: isFadeTransitionEnabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2735931670647202130, guid: 85a3edc090f79fb4780a6e2f72de7957,
         type: 3}
@@ -3466,7 +3481,6 @@ MonoBehaviour:
   collideCollider: {fileID: 0}
   animator: {fileID: 0}
   playerColor: 0
-  hitVolume: {fileID: 0}
 --- !u!114 &1570390502
 MonoBehaviour:
   m_ObjectHideFlags: 0

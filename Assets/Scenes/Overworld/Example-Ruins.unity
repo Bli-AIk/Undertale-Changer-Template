@@ -4419,7 +4419,57 @@ MonoBehaviour:
         criteria: []
     isGlobalFactModifications: 
     factModifications: []
-  isExecuteAllRules: 0
+  - name: Rule2
+    isGlobalTriggeredBy: 0
+    triggeredBy: []
+    isGlobalTriggers: 0
+    triggers: []
+    methodNames:
+    - null:TestBullet
+    firstStringParams:
+    - InkExample
+    secondStringParams:
+    - False
+    - 0
+    - 0
+    - 0
+    thirdStringParams:
+    - (0,0)
+    - 0
+    - 0
+    - 0
+    objectParams:
+    - {fileID: 0}
+    isGlobalMethodEvents: 00
+    useMethodEvents: 00000000
+    methodEvents:
+    - SwitchPullDown
+    - SaveGame
+    - SaveGame
+    - SaveGame
+    useRuleCriterion: 0
+    ruleCriterion:
+      isResultReversed: 0
+      isGlobal: 0
+      fact:
+        name: 
+        value: 0
+      compare: 0
+      detection: 0
+      operation: 0
+      criteria:
+      - isResultReversed: 0
+        isGlobal: 0
+        fact:
+          name: Button1
+          value: 0
+        compare: 0
+        detection: 0
+        operation: 0
+        criteria: []
+    isGlobalFactModifications: 
+    factModifications: []
+  isExecuteAllRules: 1
   clarity: 0.5
 --- !u!1 &874975492
 GameObject:
@@ -9120,6 +9170,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1eb082ff11014fb78efe22cc64f77c3a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lineRenderer: {fileID: 0}
 --- !u!120 &1815970488
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -9819,6 +9870,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1160519120937654907, guid: 85a3edc090f79fb4780a6e2f72de7957,
+        type: 3}
+      propertyPath: weight
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2735931670647202130, guid: 85a3edc090f79fb4780a6e2f72de7957,
         type: 3}

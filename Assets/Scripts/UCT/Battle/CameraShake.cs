@@ -17,6 +17,11 @@ namespace UCT.Battle
 
         private void Update()
         {
+            if (MainControl.Instance.sceneState != MainControl.SceneState.Battle)
+            {
+                return;
+            }
+            
             if (moveWithHeart && !TurnController.Instance.isMyTurn)
             {
                 transform.position = new Vector3(

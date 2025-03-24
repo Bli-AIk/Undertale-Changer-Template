@@ -97,10 +97,19 @@ namespace UCT.Core
         {
             object[] args = { typeWritter, tmpText, spText, index, yieldNum, startPassText };
 
-            return TryGetHalfValue(spText, HalfTagHandlers, out var handler)
-                ? handler.Invoke(args)
-                : TypeWritterExecuteFullTag(typeWritter, tmpText, spText, index, ref yieldNum, ref yieldString,
+            if (!TryGetHalfValue(spText, HalfTagHandlers, out var handler))
+            {
+                return TypeWritterExecuteFullTag(typeWritter, tmpText, spText, index, ref yieldNum, ref yieldString,
                     ref startPassText);
+            }
+
+            if (spText.StartsWith("<waitForTime="))
+            {
+                startPassText = true;
+            }
+                
+            return handler.Invoke(args);
+
         }
 
         private static bool TryGetHalfValue<T>(string spText,
@@ -139,7 +148,7 @@ namespace UCT.Core
 
         private static void PassTextWithDelay(TypeWritter typeWritter, string spText)
         {
-            var delay = float.Parse(spText[10..^1]);
+            var delay = float.Parse(spText[13..^1]);
             typeWritter.passText = true;
             typeWritter.passTextString = typeWritter.passTextString[..^spText.Length];
             typeWritter.PassTextWithDelay(spText, delay);

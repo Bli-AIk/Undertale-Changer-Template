@@ -8,7 +8,7 @@
 */
 
 Text\<changeSkip><fx=monster>Because it's there.
-<waitForTime=2.5><fx=-1>
+<waitForTime=2.5><fx=null>
 <storyFade=6>
 <waitForTime=1><changeSkip><fx=monster>Indeed, it is.
 <waitForTime=2.5>

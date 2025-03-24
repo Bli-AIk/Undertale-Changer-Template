@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UCT.Control;
 using UCT.Core;
 using UnityEngine;
@@ -100,30 +101,25 @@ namespace UCT.Audio
                 key = $"{key}>";
             }
 
+            var defaultManager = MainControl.Instance.CharacterSpriteManagers.FirstOrDefault(manager =>
+                string.Equals(manager.name, "Default", StringComparison.CurrentCultureIgnoreCase));
+
+            if (!string.Equals(key, "null", StringComparison.CurrentCultureIgnoreCase))
+            {
+                return (null, defaultManager);
+            }
+            
             var standardizedKey = CharacterSpriteManager.StandardizeCharacterKey(key).result;
             var parsedKey = CharacterSpriteManager.ParseTernary(standardizedKey);
+            
             if (parsedKey == null)
             {
-                Debug.LogError($"{key} is null!");
-                return (null, null);
+                Debug.LogError($"{key} is missing!");
+                return (null, defaultManager);
             }
 
-            CharacterSpriteManager characterSpriteManager = null;
-            CharacterSpriteManager defaultManager = null;
-
-            foreach (var manager in MainControl.Instance.CharacterSpriteManagers)
-            {
-                if (string.Equals(manager.name, parsedKey.Value.Manager, StringComparison.CurrentCultureIgnoreCase))
-                {
-                    characterSpriteManager = manager;
-                    break;
-                }
-
-                if (string.Equals(manager.name, "Default", StringComparison.CurrentCultureIgnoreCase))
-                {
-                    defaultManager = manager;
-                }
-            }
+            var characterSpriteManager = MainControl.Instance.CharacterSpriteManagers.FirstOrDefault(manager =>
+                string.Equals(manager.name, parsedKey.Value.Manager, StringComparison.CurrentCultureIgnoreCase));
 
             characterSpriteManager ??= defaultManager;
 

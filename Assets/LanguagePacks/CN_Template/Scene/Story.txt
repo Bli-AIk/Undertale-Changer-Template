@@ -8,7 +8,7 @@
 */
 
 Text\<changeSkip><fx=monster>因为山就在那里。
-<waitForTime=2.5><fx=-1>
+<waitForTime=2.5><fx=null>
 <storyFade=6>
 <waitForTime=1><changeSkip><fx=monster>还真是。
 <waitForTime=2.5>

@@ -30,6 +30,12 @@ namespace UCT.Overworld
         
         private void Update()
         {
+
+            if (MainControl.Instance.playerControl.missTime >= 0)
+            {
+                MainControl.Instance.playerControl.missTime -= Time.deltaTime;
+            }
+
             if (!gameObject.activeSelf)
             {
                 return;

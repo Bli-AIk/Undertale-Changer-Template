@@ -1,6 +1,7 @@
 using System;
 using Alchemy.Inspector;
 using DG.Tweening;
+using JetBrains.Annotations;
 using UCT.Audio;
 using UCT.Overworld;
 using UCT.Service;
@@ -89,7 +90,8 @@ namespace UCT.Core
         {
             if (sceneState == MainControl.SceneState.Overworld)
             {
-                SetupController(MainControl.OverworldPlayerBehaviour, ExistingPlayerSetup, NonexistentPlayerSetup);
+                SetupController(MainControl.OverworldPlayerBehaviour, PlayerSetup, NonexistentOverworldPlayerSetup);
+                SetupController(MainControl.OverworldBulletPool, null, NonexistentOverworldBulletPoolSetup);
             }
 
             SetupController(Camera.main, ExistingCameraSetup, NonexistentCameraSetup);
@@ -99,16 +101,18 @@ namespace UCT.Core
         }
 
 
-        private static void SetupController<T>(T instance, Action existingSetup, Action nonexistentSetup)
+        private static void SetupController<T>(T instance,
+            [CanBeNull] Action existingSetup,
+            [CanBeNull] Action nonexistentSetup)
             where T : class
         {
             if (instance != null)
             {
-                existingSetup();
+                existingSetup?.Invoke();
             }
             else
             {
-                nonexistentSetup();
+                nonexistentSetup?.Invoke();
             }
         }
 
@@ -154,12 +158,7 @@ namespace UCT.Core
             cameraFollowPlayer.maxY = cameraMaxY;
         }
 
-        private void ExistingPlayerSetup()
-        {
-            PlayerSetup();
-        }
-
-        private void NonexistentPlayerSetup()
+        private void NonexistentOverworldPlayerSetup()
         {
             var player = Instantiate(Resources.Load<GameObject>("Prefabs/Player"));
             player.name = "Player";
@@ -172,6 +171,19 @@ namespace UCT.Core
         {
             MainControl.OverworldPlayerBehaviour.walkFxRange = walkFxRange;
             MainControl.OverworldPlayerBehaviour.isShadow = isShadow;
+        }
+
+        private static void NonexistentOverworldBulletPoolSetup()
+        {
+            var overworldBulletPool = new GameObject
+            {
+                name = "OverworldBulletPool"
+            };
+            var bulletPool = overworldBulletPool.AddComponent<ObjectPool>();
+            bulletPool.poolObject = Resources.Load<GameObject>("Prefabs/Template/Bullet Template");
+
+            MainControl.SetOverworldBulletPool(bulletPool);
+            DontDestroyOnLoad(overworldBulletPool);
         }
 
 
