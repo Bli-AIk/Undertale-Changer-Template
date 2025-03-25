@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2bf6e8be6b8f4ae5ae4978980eb9eaf3, type: 3}
+  m_Name: Toriel
+  m_EditorClassIdentifier: 
+  fxKeys:
+  - Toriel
+  fxValues:
+  - {fileID: 8300000, guid: 280701f4643d1ba438ed2d5f19c49096, type: 3}
+  spriteKeys:
+  - Default
+  - Happy
+  - Side
+  spriteValues:
+  - {fileID: 11400000, guid: 4e2c5ce13a4f31546a718990d4a6c34e, type: 2}
+  - {fileID: 11400000, guid: b195921371fed624e89c057a5404b05f, type: 2}
+  - {fileID: 11400000, guid: b384a80b4e889c340bf8dd1ab4ba45ba, type: 2}

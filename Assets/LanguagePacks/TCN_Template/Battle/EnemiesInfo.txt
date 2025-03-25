@@ -1,0 +1,20 @@
+Enemy\NPC1\敵人1;
+
+Act\NPC1\查看\<markPoint><getEnemiesName> <stop>-<stop> 攻擊<stop> <getEnemiesATK><stop> 防禦<stop> <getEnemiesDEF><stop><markEnter>這是啥啊？;
+Act\NPC1\摸摸\<markPoint>你摸了摸<getEnemiesName>。 <stop><markEnter>它發出了「嗷」的聲音。;
+Act\NPC1\瞪眼\<markPoint>你狠狠的瞪了它一眼。 <stop><markEnter>當你凝視深淵的時候<stop><stop...>;
+Act\NPC1\無視\<markPoint>你沒在看它<stop...>大概<stop...>;
+
+Enemy\NPC2\敵人2;
+
+Mercy\NPC1\饒恕\Null;
+Mercy\NPC1\逃跑\<markPoint>你跑不了。;
+
+Act\NPC2\查看\<markPoint><getEnemiesName> <stop>-<stop> 攻擊<stop> <getEnemiesATK><stop> 防禦<stop> <getEnemiesDEF><stop><markEnter>這又啥啊？;
+Act\NPC2\誇誇\<markPoint>你對<getEnemiesName>說它長得很別緻。 <stop><markEnter><getEnemiesName>感到非常懷疑。;
+Act\NPC2\抱抱\<markPoint>你一把抱起了<getEnemiesName>。 <stop><markEnter><getEnemiesName>似乎被嚇到了<stop><stop...><waitForUpdate><markPoint>不過它感到很開心。;
+Act\NPC2\壞笑\<markPoint>你發出了一聲壞笑。 <stop><enter><getEnemiesName>搞不懂你在幹啥。;
+
+Mercy\NPC2\饒恕\Null;
+Mercy\NPC2\逃跑\<markPoint>你跑不了。;
+Mercy\NPC2\讓它走\<markPoint>你想得美。;

@@ -1,0 +1,89 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6df06c9cc6c2324428586fbc07a9f007, type: 3}
+  m_Name: LanguagePackControl
+  m_EditorClassIdentifier: 
+  itemTextMaxItemSon:
+  - TwoServings
+  - Two servings
+  - '*< >You ate Two servings.<stop>
+
+    <autoFood>
+
+    *< >Another test, ahhhhh<stop>.<stop>.<stop>.<stop><passText>*<
+    >But it went well.'
+  - '*< >"Two servings" - Heals <itemValue> HP<stop>
+
+    *< >An indescribable gadget<stop>.<stop>.<stop>.<stop><passText><color=yellow>*<
+    >Oh, my God, the test was successful!!!'
+  - '* Two servings was thrown away.<stop>'
+  - Serving
+  - A serving of food
+  - '*< >You tasted the rest of this stuff.<stop>
+
+    <autoFood>'
+  - '*< >"A serving of food" - Heals <itemValue> HP<stop>
+
+    *< >Still nameless<stop>.<stop>.<stop>.<stop>'
+  - '* A serving of food was thrown away.<stop>'
+  - TKnife
+  - Broken t.knife
+  - '*< >You equipped Broken t.knife.<stop>'
+  - '* "Broken t.knife" - Weapon <stop>AT <itemValue><stop>'
+  - '* Broken t.knife was thrown away.<stop>'
+  - PSword
+  - <color=yellow>Golden Sword PLUS</color>
+  - '*< >You equipped <color=yellow>Golden Sword PLUS</color>.<stop>
+
+    *< >Golden
+    Legend This is.'
+  - '* "<color=yellow>Golden Sword PLUS</color>" - Weapon <stop>AT <itemValue><stop>
+
+    *<
+    >Um... wtf is that('
+  - '*< ><color=red>You just throw it away?<stop>?<stop>?</color>'
+  - TPS
+  - T.P.S
+  - '* You equipped T.P.S.<stop>'
+  - '* "T.P.S" - Armor <stop>DF <itemValue><stop>'
+  - '* T.P.S was thrown away.<stop>'
+  - WearableSth
+  - Wearable sth
+  - '* You equipped Wearable sth.<stop>'
+  - '* "Wearable sth" - Armor <stop>DF <itemValue><stop>'
+  - '* Wearable sth was thrown away.<stop>'
+  itemTextMaxData:
+  - 'ITEM
+
+    </color>STAT;'
+  - AT;
+  - DF;
+  - ' NEXT;'
+  - WEAPON:;
+  - ARMOR:;
+  - GOLD:;
+  - CAO;
+  - USE<indent=27.5>;
+  - INFO<indent=56.5>;
+  - DROP;
+  - '*< >You ate <itemNameFood>.<stop>;'
+  - '*< >You recovered <itemValue> HP!<stop>;'
+  - '*< >"<itemNameFood>" - Heals <itemValue> HP<stop>;'
+  - '*< >You equipped <itemNameWeapon>.<stop>;'
+  - '* You equipped <itemNameArmor>.<stop>;'
+  - '* "<itemNameWeapon>" - Weapon <stop>AT <itemValue><stop>;'
+  - '* "<itemNameArmor>" - Armor <stop>DF <itemValue><stop>;'
+  - '* <itemNameFood> was thrown away.<stop>;'
+  - '* <itemNameWeapon> was thrown away.<stop>;'
+  - '* <itemNameArmor> was thrown away.<stop>;'
+  - '* <itemNameOther> was thrown away.<stop>;'
+  - '* Your HP was maxed out.<stop>;'

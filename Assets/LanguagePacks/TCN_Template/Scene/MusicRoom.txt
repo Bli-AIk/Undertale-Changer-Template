@@ -1,0 +1,104 @@
+SortBy\排序方式：;
+Title\按標題;
+Author\按作者;
+Length\按時長;
+Order\順序：;
+Ascending\正序;
+Descending\倒序;
+Back\返回;
+
+NowPlaying\正在播放;
+NothingIsPlaying\未播放;
+Paused\暫停;
+
+MusicUnlimited\Music Unlimited;
+
+StrangerThings\Stranger Things;
+StrangerThingsInfo\本音樂來自 pixabay.com, 在DemoBattle中使用。 <enter>
+不管怎麼樣，這首曲子找的還是非常適合的。 <enter>給了我一種需要的那種感覺－迷幻感。;
+
+FarAway\Far Away;
+FarAwayInfo\本音樂來自 pixabay.com, 在DemoBattle2中使用。 <enter>
+我只是想找到些輕鬆的感覺，正如我剛做完多戰鬥重構時所感受到的。;
+
+TobyFox\Toby fox;
+
+StartMenu\Start Menu;
+StartMenuInfo\選單頁面的音樂。 <enter>
+簡潔、輕快，配上熟悉的旋律。 <enter>
+極簡主義的作風，也許有人會喜歡。;
+
+AIk\AIk;
+
+GoodNews\Good News;
+GoodNewsInfo\愚人節時播放的Gameover音樂。 <enter>
+我本來尋思用《春節序曲》的，<enter>但防止侵權，自己糊了一個曲子。 <enter>
+這玩意兒是套midi整的，別問了。小孩子不懂事做著玩的。;
+
+BitLove\BitLove;
+BitLoveInfo\來自舊範本的音樂，曾用於設定頁面。現允許任何人無償使用。 <enter>
+寫於2021年6月15日。我還有音樂創作力的時候。 <enter>
+這便是我對過去的一廂情願了。;
+
+GoodNight\Good Night;
+GoodNightInfo\選單頁面的音樂，儘管它不應該是。 <enter>
+這聲晚安已經過多少年了...<enter>
+但結束不也正是新的開始？;
+
+OnceUponATime\Once Upon a Time;
+OnceUponATimeInfo\故事場景的音樂。 <enter>
+很久很久以前，有個理想主義的笨蛋，<enter>
+為了自己的一些痴心妄想，於是轉身走向山裡。;
+
+Ruins\Ruins;
+RuinsInfo\Ruins的音樂。 <enter>
+鋼琴曲永遠是最好的。和Ruins的氛圍也最搭。 <enter>
+如果全世界只能留下一種樂器的話，如果是鋼琴就好了。 <enter>
+<enter>
+……但我還是把它換了，為什麼呢。 <enter>
+我不記得了。 <enter>
+<enter>
+..也許人是會變的吧。;
+
+Determination\Determination;
+DeterminationInfo\GameOver場景的音樂。 <enter>
+過去這麼多年了，我快忘卻了－－<enter>
+Undertale的主題是決心麼...？;
+
+Leave\Leave;
+LeaveInfo\長廊場景的音樂。 <enter>
+這是Toby沒有實裝的一首曲子，但放在這兒意外的合適。 <enter>
+聽到它的時候，我就會回想起那個在URP異端帶領下的，<enter>
+我剛剛把這個長廊場景的2d光調好的，陽光明媚的<enter>
+那個清晨...或是黃昏...或是後半夜...管他呢。;
+
+JustRuins\Just Ruins;
+JustRuinsInfo\Ruins的音樂...在UCT中的。 <enter>
+反正哪天我腦子一抽，我就尋思，要不不用原作的曲子，<enter>
+找個midi瞎塞點樂器然後調調變速得了。 <enter>
+於是這玩意兒就誕生了。 <enter>
+<enter>
+<enter>
+好吧，我已經沒有作曲的天份了。;
+
+BitBone\BitBone;
+BitBoneInfo\舊模板的Debug音樂之一。 <enter>
+幾年前我就是瞎做玩的，自然沒什麼滿意的。 <enter>
+但我現在聽著感覺很不錯。不錯...<enter>
+都說人過一段時間看自己以前做的會覺得可笑，<enter>
+但對我來說——至少對我的曲子而言，是完全相反的。 <enter>
+<enter>
+畢竟我已經失去創造力了。
+<enter>
+<enter>
+這曲子除了名字裡面帶個Bone和骨頭架子八竿子打不著，<enter>
+我的問題，我的問題。下次我會注意規避的。 <enter>
+雖然這也是好些年前寫的曲子了。;
+
+BitCrazy\BitCrazy;
+BitCrazyInfo\舊模板的Debug音樂之一。 <enter>
+至少我在抽風方面很有天份。 <enter>
+<color=#ff6347><size=6>對</size></color><color=#ffb6c1><size=5>吧</size></color><color=#7fffd4><size=6>？ </size></color><color=#f0e68c><size=4.5>對</size></color><color=#ff1493><size=5>吧</size></color><color=#adff2f><size=7>？ </size></color><color=#ff4500><size=5.5>對</size></color><color=#ffff00><size=6>吧</size></color><color=#dda0dd><size=4>？ </size></color><color=#ff1493><size=5>對</size></color><color=#32cd32><size=6>吧</size></color><color=#00ced1><size=5>？ </size></color><color=#8a2be2><size=5.5>對</size></color><color=#ff6347><size=6>吧</size></color>？;
+
+BitInside\BitInside;
+BitInsideInfo\我還寫過這首曲子麼？;

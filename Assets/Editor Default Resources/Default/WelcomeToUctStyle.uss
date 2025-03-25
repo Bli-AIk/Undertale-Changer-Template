@@ -1,0 +1,55 @@
+.TitleZone {
+    background-color: #3c3c3c;
+    width: 100%;
+    height: 59px;
+    border-bottom-color: #1a1a1a;
+    border-bottom-width: 0.5px;
+}
+
+.TitleLabel {
+    font-size: 20px;
+    width: 100%;
+    height: 100%;
+    -unity-font-style: bold;
+    align-self: center;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    -unity-text-align: middle-center;
+}
+
+.UctImage {
+    height: 100px;
+    width: 400px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.MainZone {
+    background-color: #383838;
+    width: 100%;
+    height: 100%;
+}
+
+.ButtonZone {
+    margin: 5px;
+    align-self: center;
+    width: 75%;
+    height: 22px;
+    display: flex;
+    flex-direction: row;
+
+}
+
+.ButtonZone > * {
+    flex-grow: 1;
+    flex-shrink: 0;
+    align-self: center;
+    -unity-text-align: middle-center;
+}
+
+Label {
+    font-size: 14px;
+
+}

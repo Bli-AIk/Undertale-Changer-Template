@@ -1,26 +1,32 @@
+using System;
 using System.Collections.Generic;
-using DG.Tweening;
+using System.Linq;
 using MEC;
-using UCT.Control;
-using UCT.Global.Core;
-using UCT.Service;
+using UCT.Battle.MultiEnemiesConfigs;
+using UCT.Core;
 using UnityEngine;
 
 namespace UCT.Battle
 {
     /// <summary>
-    /// 回合控制，同时也是弹幕的对象池
+    ///     回合控制，同时也是弹幕的对象池
     /// </summary>
     public class TurnController : MonoBehaviour
     {
-        public static TurnController Instance;
         public int turn;
         public bool isMyTurn;
 
-        public List<int> poolCount;
+        [SerializeField] private int bulletPoolCount = 25;
 
-        //public List<string> inheritList = new List<string>();
-        public List<ObjectPool> objectPools = new List<ObjectPool>();
+        [SerializeField] private int boardPoolCount = 5;
+
+        [SerializeField] private int yellowBulletPoolCount = 5;
+        private readonly HashSet<int> _overlapTurns = new() { 0, 1 };
+
+        private ObjectPool _boardPool;
+        private ObjectPool _bulletPool;
+        private ObjectPool _yellowBulletPool;
+        public static TurnController Instance { get; private set; }
 
         private void Awake()
         {
@@ -30,156 +36,123 @@ namespace UCT.Battle
         private void Start()
         {
             var saveBullet = GameObject.Find("SaveBullet");
-            //OutYourTurn();
-            //弹幕
-            objectPools.Add(gameObject.AddComponent<ObjectPool>());
-            objectPools[^1].parent = saveBullet.transform;
-            objectPools[^1].count = poolCount[0];
-            objectPools[^1].obj = Resources.Load<GameObject>("Template/Bullet Template");
-            objectPools[^1].FillPool();
 
-            //挡板
-            objectPools.Add(gameObject.AddComponent<ObjectPool>());
-            objectPools[^1].parent = saveBullet.transform;
-            objectPools[^1].count = poolCount[1];
-            objectPools[^1].obj = Resources.Load<GameObject>("Template/Board Template");
-            objectPools[^1].FillPool();
+            SetUpObjectPools(saveBullet);
         }
 
-        public void KillIEnumerator()
+        private void SetUpObjectPools(GameObject saveBullet)
         {
-            Timing.KillCoroutines();
+            _bulletPool = gameObject.AddComponent<ObjectPool>();
+            _bulletPool.parent = saveBullet.transform;
+            _bulletPool.count = bulletPoolCount;
+            _bulletPool.poolObject = Resources.Load<GameObject>("Prefabs/Template/Bullet Template");
+            _bulletPool.FillPool<BulletController>();
+
+            _boardPool = gameObject.AddComponent<ObjectPool>();
+            _boardPool.parent = saveBullet.transform;
+            _boardPool.count = boardPoolCount;
+            _boardPool.poolObject = Resources.Load<GameObject>("Prefabs/Template/Board Template");
+            _boardPool.FillPool<BoardController>();
+
+            _yellowBulletPool = gameObject.AddComponent<ObjectPool>();
+            _yellowBulletPool.parent = saveBullet.transform;
+            _yellowBulletPool.count = yellowBulletPoolCount;
+            _yellowBulletPool.poolObject = Resources.Load<GameObject>("Prefabs/Template/YellowBullet Template");
+            _yellowBulletPool.FillPool<YellowBulletController>();
         }
 
         /// <summary>
-        /// 进入敌方回合
+        ///     进入敌方回合
         /// </summary>
-        public void OutYourTurn()
+        public void EnterEnemyTurn()
         {
             isMyTurn = false;
             Timing.RunCoroutine(_TurnExecute(turn));
         }
 
         /// <summary>
-        /// 回合执行系统
-        /// 根据回合编号进行相应的执行
+        ///     回合执行系统
+        ///     根据回合编号进行相应的执行
         /// </summary>
         private IEnumerator<float> _TurnExecute(int turnNumber)
         {
-            switch (turnNumber)
+            if (_overlapTurns.Contains(turnNumber))
             {
-                case 1:
-                    Global.Other.Debug.Log("这是个摆烂回合……也许吧。");
-           
-                    var obj = objectPools[0].GetFromPool().GetComponent<BulletController>();
-                    obj.SetBullet("CupCake", "CupCake", new Vector3(1, -1.6f), (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
-
-                    var obj2 = objectPools[0].GetFromPool().GetComponent<BulletController>();
-                    obj2.SetBullet("CupCake", "CupCake", new Vector3(-1, -1.6f), (BattleControl.BulletColor)Random.Range(0, 3), SpriteMaskInteraction.VisibleInsideMask);
-
-
-                    for (var i = 600; i > 0; i--)
-                    {
-                        Global.Other.Debug.Log($"你先别急，先摆{TextProcessingService.RandomStringColor(i.ToString())}秒");
-                        yield return Timing.WaitForSeconds(1f);
-                    }
-
-                    objectPools[0].ReturnPool(obj.gameObject);
-
-                    objectPools[0].ReturnPool(obj2.gameObject);
-                    break;
-
-                case 0://示例回合
-                    Global.Other.Debug.Log("这是一个示例回合");
-                    yield return Timing.WaitForSeconds(0.5f);
-                    Global.Other.Debug.Log("请注意查看控制台发出的Debug文本介绍");
-                    yield return Timing.WaitForSeconds(1.5f);
-
-                    Global.Other.Debug.Log("战斗框缩放：更改四个点的坐标");
-
-                    DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[0], x => MainControl.Instance.mainBox.vertexPoints[0] = x, new Vector2(1.4f, MainControl.Instance.mainBox.vertexPoints[0].y), 0.5f).SetEase(Ease.InOutSine);
-                    DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[1], x => MainControl.Instance.mainBox.vertexPoints[1] = x, new Vector2(1.4f, MainControl.Instance.mainBox.vertexPoints[1].y), 0.5f).SetEase(Ease.InOutSine);
-                    DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[2], x => MainControl.Instance.mainBox.vertexPoints[2] = x, new Vector2(-1.4f, MainControl.Instance.mainBox.vertexPoints[2].y), 0.5f).SetEase(Ease.InOutSine);
-                    DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[3], x => MainControl.Instance.mainBox.vertexPoints[3] = x, new Vector2(-1.4f, MainControl.Instance.mainBox.vertexPoints[3].y), 0.5f).SetEase(Ease.InOutSine);
-
-
-                    yield return Timing.WaitForSeconds(1);
-
-                    Global.Other.Debug.Log("通过更改点坐标实现的战斗框轴点旋转");
-                    for (var i = 0; i < 4; i++)
-                    {
-
-                        DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[0], x => MainControl.Instance.mainBox.vertexPoints[0] = x, MainControl.Instance.mainBox.vertexPoints[3], 0.5f).SetEase(Ease.InOutSine);
-                        DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[1], x => MainControl.Instance.mainBox.vertexPoints[1] = x, MainControl.Instance.mainBox.vertexPoints[0], 0.5f).SetEase(Ease.InOutSine);
-                        DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[2], x => MainControl.Instance.mainBox.vertexPoints[2] = x, MainControl.Instance.mainBox.vertexPoints[1], 0.5f).SetEase(Ease.InOutSine);
-                        DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[3], x => MainControl.Instance.mainBox.vertexPoints[3] = x, MainControl.Instance.mainBox.vertexPoints[2], 0.5f).SetEase(Ease.InOutSine);
-
-                        yield return Timing.WaitForSeconds(0.5f);
-                    }
-
-                    Global.Other.Debug.Log("简单嵌套弹幕编写示例");
-                    for (var i = 0; i < 5 * 20; i++)
-                    {
-                        Timing.RunCoroutine(_TurnNest(Nest.SimpleNestBullet));
-                        yield return Timing.WaitForSeconds(0.2f);
-                    }
-
-                    Global.Other.Debug.Log("战斗框缩放回初始坐标以结束回合");
-                    yield return Timing.WaitForSeconds(1f);
-                    DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[0], x => MainControl.Instance.mainBox.vertexPoints[0] = x, new Vector2(5.93f, MainControl.Instance.mainBox.vertexPoints[0].y), 0.5f).SetEase(Ease.InOutSine);
-                    DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[1], x => MainControl.Instance.mainBox.vertexPoints[1] = x, new Vector2(5.93f, MainControl.Instance.mainBox.vertexPoints[1].y), 0.5f).SetEase(Ease.InOutSine);
-                    DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[2], x => MainControl.Instance.mainBox.vertexPoints[2] = x, new Vector2(-5.93f, MainControl.Instance.mainBox.vertexPoints[2].y), 0.5f).SetEase(Ease.InOutSine);
-                    DOTween.To(() => MainControl.Instance.mainBox.vertexPoints[3], x => MainControl.Instance.mainBox.vertexPoints[3] = x, new Vector2(-5.93f, MainControl.Instance.mainBox.vertexPoints[3].y), 0.5f).SetEase(Ease.InOutSine);
-                    yield return Timing.WaitForSeconds(0.5f);
-
-                    break;
+                if (MainControl.Instance.selectUIController.enemiesControllers.Count == 1)
+                {
+                    var enemy = MainControl.Instance.selectUIController.enemiesControllers[0].Enemy;
+                    Timing.RunCoroutine(enemy
+                        ._EnemyTurns(enemy.TurnGenerator.GetNextValue(), _bulletPool, _boardPool));
+                }
+                else
+                {
+                    GetEnemiesTurn();
+                }
             }
+
+            yield return Timing.WaitUntilDone(
+                Timing.RunCoroutine(MainControl.Instance.BattleControl.BattleConfig.Turn(turnNumber, _bulletPool)));
 
             turn++;
-            MainControl.Instance.selectUIController.InTurn();
-            yield return 0;
+            MainControl.Instance.selectUIController.EnterPlayerTurn();
         }
 
-        /// <summary>
-        /// 回合嵌套
-        /// 首先在枚举Nest中定义嵌套名称，然后在此编写嵌套内容
-        /// 用于重复复杂弹幕的嵌套使用
-        /// </summary>
-        private IEnumerator<float> _TurnNest(Nest nest)
+        private void GetEnemiesTurn()
         {
-            switch (nest)
+            var multiEnemiesConfigs = GetAllImplementationsOf<IMultiEnemiesConfig>();
+            var enemyNames = MainControl.Instance.selectUIController.enemiesControllers
+                .Select(item => item.name).ToArray();
+            foreach (var item in MainControl.Instance.selectUIController.enemiesControllers)
             {
-                case Nest.SimpleNestBullet:
-                    var obj = objectPools[0].GetFromPool().GetComponent<BulletController>();
+                item.Enemy.TurnGenerator.GetNextValue();
+            }
 
-                    obj.SetBullet("CupCake", "CupCake", new Vector3(0, -3.35f), (BattleControl.BulletColor)Random.Range(0,3), SpriteMaskInteraction.VisibleInsideMask);
+            var isMultiEnemiesTurn = false;
+            foreach (var enemiesConfig in from config in multiEnemiesConfigs
+                     where typeof(IMultiEnemiesConfig).IsAssignableFrom(config)
+                     select (IMultiEnemiesConfig)Activator.CreateInstance(config))
+            {
+                var allContained = enemiesConfig.EnemyNames.All(enemyNames.Contains);
+                if (!allContained)
+                {
+                    continue;
+                }
 
-                    obj.transform.localPosition += new Vector3(Random.Range(-0.5f, 0.5f), 0);
+                var indices = MainControl.Instance.selectUIController.enemiesControllers
+                    .Select(item => item.Enemy.TurnGenerator.value).ToArray();
 
-                    obj.transform.DOMoveY(0, 1).SetEase(Ease.OutSine).SetLoops(2, LoopType.Yoyo);
+                if (enemiesConfig.validIndicesList.Any(arr => arr.SequenceEqual(indices)))
+                {
+                    Timing.RunCoroutine(enemiesConfig._EnemyTurns(indices, _bulletPool, _boardPool));
+                    isMultiEnemiesTurn = true;
+                }
 
-                    obj.transform.DORotate(new Vector3(0, 0, 360), 2, RotateMode.WorldAxisAdd).SetEase(Ease.InOutSine);
-                    yield return Timing.WaitForSeconds(0.5f);
+                break;
+            }
 
-                    obj.spriteRenderer.sortingOrder = 60;
-                    obj.SetMask(SpriteMaskInteraction.None);
-
-                    yield return Timing.WaitForSeconds(1f);
-
-                    obj.spriteRenderer.sortingOrder = 40;
-                    obj.SetMask(SpriteMaskInteraction.VisibleInsideMask);
-
-                    yield return Timing.WaitForSeconds(1f);
-
-                    objectPools[0].ReturnPool(obj.gameObject);
-
-                    break;
+            if (!isMultiEnemiesTurn)
+            {
+                MainControl.Instance.selectUIController.enemiesControllers
+                    .ToList()
+                    .ForEach(item =>
+                        Timing.RunCoroutine(item.Enemy._EnemyTurns(item.Enemy.TurnGenerator.value,
+                            _bulletPool, _boardPool)));
             }
         }
 
-        private enum Nest
+        private static List<Type> GetAllImplementationsOf<T>()
         {
-            SimpleNestBullet
+            return AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(assembly => assembly.GetTypes())
+                .Where(type => typeof(T).IsAssignableFrom(type) && !type.IsInterface && !type.IsAbstract)
+                .ToList();
+        }
+
+        public void GetYellowBullet(Vector3 playerPosition)
+        {
+            var obj = _yellowBulletPool.GetFromPool<YellowBulletController>();
+            obj.transform.position = playerPosition + Vector3.up * 0.25f;
+            obj.OnKill = () => _yellowBulletPool.ReturnPool(obj);
         }
     }
 }

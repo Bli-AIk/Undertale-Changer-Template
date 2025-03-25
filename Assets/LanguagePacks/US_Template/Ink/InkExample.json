@@ -1,0 +1,530 @@
+﻿{
+  "inkVersion": 21,
+  "root": [
+    [
+      "^<Toriel><markPoint><stop...>Oh?<stop><stop> Hello, <stop>child.<stop><stop>",
+      "\n",
+      "^<markEnter>You look quite <blankEnter>confused<stop...>",
+      "\n",
+      "^<waitForUpdate><Toriel>",
+      "\n",
+      "^<markPoint>You don’t know why <blankEnter>I’m standing here?<stop><stop><stop><stop>",
+      "\n",
+      "^<markEnter>Because<stop...>",
+      "\n",
+      "^<waitForUpdate><Toriel><markPoint>I was placed here to",
+      "\n",
+      "^<blankEnter>test the Ink language.",
+      "\n",
+      "^<waitForUpdate><Toriel><markPoint>However<stop...><blankEnter>since you’re here,",
+      "\n",
+      "^<waitForUpdate><Toriel><markPoint>Why don’t we make this <blankEnter>test <Toriel, Happy>a little <blankEnter>more interesting?<stop>",
+      "\n",
+      "^<waitForUpdate><Toriel><markPoint>Tell me,<stop><blankEnter>what brings you here?",
+      "\n",
+      "ev",
+      "str",
+      "^How does this work?",
+      "/str",
+      "/ev",
+      {
+        "*": "0.c-0",
+        "flg": 20
+      },
+      "ev",
+      "str",
+      "^I’m just looking around.",
+      "/str",
+      "/ev",
+      {
+        "*": "0.c-1",
+        "flg": 20
+      },
+      "ev",
+      "str",
+      "^...Can I not answer?",
+      "/str",
+      "/ev",
+      {
+        "*": "0.c-2",
+        "flg": 20
+      },
+      {
+        "c-0": [
+          "^ ",
+          {
+            "->": "Clever"
+          },
+          "\n",
+          {
+            "->": "0.g-0"
+          },
+          {
+            "#f": 5
+          }
+        ],
+        "c-1": [
+          "^ ",
+          {
+            "->": "Casual"
+          },
+          "\n",
+          {
+            "->": "0.g-0"
+          },
+          {
+            "#f": 5
+          }
+        ],
+        "c-2": [
+          "^ ",
+          {
+            "->": "Shy"
+          },
+          "\n",
+          {
+            "->": "0.g-0"
+          },
+          {
+            "#f": 5
+          }
+        ],
+        "g-0": [
+          "done",
+          {
+            "#f": 5
+          }
+        ]
+      }
+    ],
+    "done",
+    {
+      "Clever": [
+        "^<Toriel, Happy><markPoint>Oh oh! <stop><Toriel, Side>You are full of",
+        "\n",
+        "^<blankEnter>curiosity about this <blankEnter>world, <stop>aren’t you?<stop><stop>",
+        "\n",
+        "^<waitForUpdate><markPoint><Toriel, Happy>Very well, very well.",
+        "\n",
+        "^<waitForUpdate><Toriel><markPoint>However<stop...><blankEnter>even if you’re clever,<stop>",
+        "\n",
+        "^<waitForUpdate><Toriel><markPoint>You may not be able <blankEnter>to guess what <blankEnter>happens next.",
+        "\n",
+        {
+          "->": "Choice"
+        },
+        {
+          "#f": 1
+        }
+      ],
+      "Casual": [
+        "^<Toriel><markPoint>Hmm<stop...> <stop>It’s fine to <blankEnter>just look around.",
+        "\n",
+        "^<waitForUpdate><Toriel><markPoint>Sometimes, <blankEnter>taking it easy<blankEnter>is a good choice too.",
+        "\n",
+        {
+          "->": "Choice"
+        },
+        {
+          "#f": 1
+        }
+      ],
+      "Shy": [
+        "^<Toriel, Side><markPoint><stop...>Oh, child.<stop><markEnter>I’m not forcing you <blankEnter>to answer<stop...>",
+        "\n",
+        "^<waitForUpdate><markPoint><Toriel>If you don’t want <blankEnter>to speak, <stop>then don’t <blankEnter>force yourself.",
+        "\n",
+        {
+          "->": "Choice"
+        },
+        {
+          "#f": 1
+        }
+      ],
+      "Choice": [
+        [
+          "^<waitForUpdate><Toriel><markPoint>Then<stop...> let’s continue.",
+          "\n",
+          "ev",
+          "str",
+          "^What happens next?",
+          "/str",
+          "/ev",
+          {
+            "*": ".^.c-0",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^When will this test end?",
+          "/str",
+          "/ev",
+          {
+            "*": ".^.c-1",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^...Can I leave?",
+          "/str",
+          "/ev",
+          {
+            "*": ".^.c-2",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "^ ",
+              {
+                "->": "Continue"
+              },
+              "\n",
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "^ ",
+              {
+                "->": "Question"
+              },
+              "\n",
+              {
+                "#f": 5
+              }
+            ],
+            "c-2": [
+              "^ ",
+              {
+                "->": "Leave"
+              },
+              "\n",
+              {
+                "#f": 5
+              }
+            ]
+          }
+        ],
+        {
+          "#f": 1
+        }
+      ],
+      "Continue": [
+        "^<Toriel><markPoint>Alright then<stop...><waitForUpdate>",
+        "\n",
+        {
+          "->": "MoreChoices"
+        },
+        {
+          "#f": 1
+        }
+      ],
+      "Question": [
+        "^<Toriel, Side><markPoint>Oh<stop...>are you already <blankEnter>eager to finish?<stop>",
+        "\n",
+        "^<waitForUpdate><Toriel><markPoint>Don’t worry, the end <blankEnter>will come eventually.<stop>",
+        "\n",
+        "^<waitForUpdate><Toriel, Side><markPoint>But at least, <blankEnter>stay and chat with me <blankEnter>for a while?  <waitForUpdate>",
+        "\n",
+        {
+          "->": "MoreChoices"
+        },
+        {
+          "#f": 1
+        }
+      ],
+      "Leave": [
+        [
+          "^<Toriel, Side><markPoint>Oh, <stop>child<stop...>",
+          "\n",
+          "^<markEnter>Are you sure you want <blankEnter>to leave?",
+          "\n",
+          "^<waitForUpdate><markPoint><Toriel>This place <blankEnter>won’t trap you<stop...>",
+          "\n",
+          "^<waitForUpdate><markPoint><stop...>But once you leave, <blankEnter>",
+          "\n",
+          "^<Toriel, Side>you won’t be able to<blankEnter>see what happens next.",
+          "\n",
+          "ev",
+          "str",
+          "^...I think I’ll stay.",
+          "/str",
+          "/ev",
+          {
+            "*": ".^.c-0",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^No, I’m leaving.",
+          "/str",
+          "/ev",
+          {
+            "*": ".^.c-1",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "^ ",
+              {
+                "->": "MoreChoices"
+              },
+              "\n",
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "^ ",
+              {
+                "->": "EndEarly"
+              },
+              "\n",
+              {
+                "#f": 5
+              }
+            ]
+          }
+        ],
+        {
+          "#f": 1
+        }
+      ],
+      "MoreChoices": [
+        [
+          "^<Toriel><markPoint>What do you <blankEnter>want to do next?",
+          "\n",
+          "ev",
+          "str",
+          "^Tell me a story.",
+          "/str",
+          "/ev",
+          {
+            "*": ".^.c-0",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^I like choices.",
+          "/str",
+          "/ev",
+          {
+            "*": ".^.c-1",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^...what you can say?",
+          "/str",
+          "/ev",
+          {
+            "*": ".^.c-2",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "^ ",
+              {
+                "->": "Story"
+              },
+              "\n",
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "^ ",
+              {
+                "->": "MoreOptions"
+              },
+              "\n",
+              {
+                "#f": 5
+              }
+            ],
+            "c-2": [
+              "^ ",
+              {
+                "->": "Meta"
+              },
+              "\n",
+              {
+                "#f": 5
+              }
+            ]
+          }
+        ],
+        {
+          "#f": 1
+        }
+      ],
+      "Story": [
+        "^<Toriel><markPoint>A story?<stop><markEnter>Alright, let me think<stop...>",
+        "\n",
+        "^<waitForUpdate><markPoint>Once upon a time<stop...>",
+        "\n",
+        "^<Toriel, Side><waitForUpdate><markPoint>Hmm<stop...>uh<stop...>ah<stop...><stop><stop><stop>",
+        "\n",
+        "^<markEnter>Or perhaps<stop...> we should <blankEnter>try something else?<waitForUpdate>",
+        "\n",
+        {
+          "->": "MoreOptions"
+        },
+        {
+          "#f": 1
+        }
+      ],
+      "MoreOptions": [
+        [
+          "^<Toriel><markPoint><stop...>Here, <blankEnter>have a few more choices!",
+          "\n",
+          "ev",
+          "str",
+          "^Is the world a loop?",
+          "/str",
+          "/ev",
+          {
+            "*": ".^.c-0",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^About the template?",
+          "/str",
+          "/ev",
+          {
+            "*": ".^.c-1",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^I still want to hear a story.",
+          "/str",
+          "/ev",
+          {
+            "*": ".^.c-2",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^I’m done choosing.",
+          "/str",
+          "/ev",
+          {
+            "*": ".^.c-3",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "^ ",
+              {
+                "->": "Loop"
+              },
+              "\n",
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "^ ",
+              {
+                "->": "About"
+              },
+              "\n",
+              {
+                "#f": 5
+              }
+            ],
+            "c-2": [
+              "^ ",
+              {
+                "->": "Story"
+              },
+              "\n",
+              {
+                "#f": 5
+              }
+            ],
+            "c-3": [
+              "^ ",
+              {
+                "->": "EndEarly"
+              },
+              "\n",
+              {
+                "#f": 5
+              }
+            ]
+          }
+        ],
+        {
+          "#f": 1
+        }
+      ],
+      "Loop": [
+        "^<Toriel, Side><markPoint>A loop, huh?",
+        "\n",
+        "^<waitForUpdate><markPoint><Toriel>If the world is a loop,",
+        "\n",
+        "^<blankEnter>then everything returns <blankEnter>to the beginning.",
+        "\n",
+        "^<waitForUpdate><Toriel, Side><markPoint>We would start over,<stop>",
+        "\n",
+        "^<blankEnter>make the same choices,<stop>",
+        "\n",
+        "^<blankEnter>say the same words.<stop...>",
+        "\n",
+        "^<waitForUpdate><Toriel><markPoint>But does that really <blankEnter>mean nothing changes?<stop>",
+        "\n",
+        "^<Toriel, Happy><markEnter>Hehe<stop...>who knows?<waitForUpdate>",
+        "\n",
+        {
+          "->": "MoreOptions"
+        },
+        {
+          "#f": 1
+        }
+      ],
+      "About": [
+        "^<Toriel, Side><markPoint>The template?<stop>",
+        "\n",
+        "^<markEnter>I don’t really <blankEnter>know much either.<stop...>",
+        "\n",
+        "^<waitForUpdate><Toriel><markPoint>After all, <blankEnter>you can't see the forest <blankEnter>for the trees.<waitForUpdate>",
+        "\n",
+        {
+          "->": "MoreOptions"
+        },
+        {
+          "#f": 1
+        }
+      ],
+      "Meta": [
+        "^<Toriel, Happy><markPoint>Haha<stop...> you’re quite <blankEnter>straightforward.<stop>",
+        "\n",
+        "^<waitForUpdate><Toriel, Happy><markPoint>Alright, <stop>how much I <blankEnter>can say,<stop> depends on <blankEnter>how much you can do.<waitForUpdate>",
+        "\n",
+        {
+          "->": "MoreOptions"
+        },
+        {
+          "#f": 1
+        }
+      ],
+      "EndEarly": [
+        "^<Toriel><markPoint>Then<stop...>this is it.<stop>",
+        "\n",
+        "^<markEnter>May your journey ahead,<stop><blankEnter>be smooth and safe.",
+        "\n",
+        "^<waitForUpdate><markPoint>Farewell, <stop>my child.",
+        "\n",
+        "end",
+        {
+          "#f": 1
+        }
+      ],
+      "#f": 1
+    }
+  ],
+  "listDefs": {}
+}

@@ -1,0 +1,106 @@
+SortBy\Sort by: ;
+Title\Title;
+Author\Author;
+Length\Length;
+Order\Order: ;
+Ascending\Ascending;
+Descending\Descending;
+Back\Back;
+
+NowPlaying\Now Playing;
+NothingIsPlaying\Nothing is Playing;
+Paused\Paused;
+
+MusicUnlimited\Music Unlimited;
+
+StrangerThings\Stranger Things;
+StrangerThingsInfo\Music from pixabay.com, Used for DemoBattle.<enter>
+No matter what, this track is really well-chosen.<enter>
+It gives me the exact feeling I need — a dreamy vibe.;
+
+FarAway\Far Away;
+FarAwayInfo\Music from pixabay.com, Used for DemoBattle2.<enter>
+I just want to find some sense of relaxation, just like what I felt after finishing the multi-battle refactor.;
+
+TobyFox\Toby fox;
+
+StartMenu\Start Menu;
+StartMenuInfo\The music of the menu.<enter>
+Simple and light, accompanied by a familiar melody.<enter>
+A minimalist style — perhaps some will like it.;
+
+AIk\AIk;
+
+GoodNews\Good News;
+GoodNewsInfo\The Game Over music for April Fools' Day.<enter>
+I originally thought about using Spring Festival Overture, but to avoid copyright issues, I threw together my own track.<enter>
+Just a quick MIDI edit, don’t ask. It’s just for fun.;
+
+BitLove\BitLove;
+BitLoveInfo\Music from the old template, once used for the settings page. Now available for anyone to use freely.<enter>
+Written on June 15, 2021. Back when I still had the ability to compose music.<enter>
+This is just my wishful thinking about the past.;
+
+GoodNight\Good Night;
+GoodNightInfo\Music for the menu page, though it shouldn't have been.<enter>
+How many years have passed since this "Good Night"...<enter>
+But isn't an ending just the beginning of something new?;
+
+OnceUponATime\Once Upon a Time;
+OnceUponATimeInfo\Music for story scenes.<enter>
+Once upon a time, there was an idealistic fool,<enter>
+who, driven by their own naive dreams,<enter>
+turned and walked into the mountains.;
+
+Ruins\Ruins;
+RuinsInfo\Music for Ruins.<enter>
+Piano pieces are always the best. They fit the atmosphere of Ruins perfectly.<enter>
+If the world could only keep one instrument, I wish it would be the piano.<enter>
+<enter>
+...But I still replaced it. Why?<enter>
+I don't remember.<enter>
+<enter>
+...Maybe people do change.;
+
+Determination\Determination;
+DeterminationInfo\Music for the Game Over scene.<enter>
+After all these years, I had almost forgotten—<enter>
+Was the theme of Undertale really "Determination"?;
+
+Leave\Leave;
+LeaveInfo\Music for the corridor scene.<enter>
+This was a track Toby never implemented, yet it fits here surprisingly well.<enter>
+Hearing it always brings me back to that time under URP Heresy’s guidance,<enter>
+when I had just finished adjusting the 2D lighting in this corridor scene,<enter>
+that bright morning... or evening... or late night... whatever.;
+
+JustRuins\Just Ruins;
+JustRuinsInfo\Music for Ruins... in UCT.<enter>
+One day, on a whim, I thought, why not skip using the original track?<enter>
+I grabbed a MIDI, threw in some random instruments, tweaked the tempo a bit, and called it a day.<enter>
+And so, this thing was born.<enter>
+<enter>
+<enter>
+Alright, I’ve completely lost my talent for composition.;
+
+BitBone\BitBone;
+BitBoneInfo\One of the debug tracks from the old template.<enter>
+A few years ago, I made this just for fun, so naturally, I wasn’t too satisfied with it.<enter>
+But now, listening to it, I actually think it sounds pretty good. Pretty good...<enter>
+They say that when people look back on their past work, they find it laughable.<enter>
+But for me—at least when it comes to my music—it’s the exact opposite.<enter>
+<enter>
+After all, I’ve already lost my creativity.
+<enter>
+<enter>
+This track has nothing to do with skeletons besides the word "Bone" in its name.<enter>
+That’s on me, my bad. I’ll be more careful next time.<enter>
+Though this track was written quite a few years ago as well.;
+
+BitCrazy\BitCrazy;
+BitCrazyInfo\One of the debug tracks from the old template.<enter>
+At the very least, I have a talent for going crazy.<enter>
+<color=#ff6347><size=6>Right</size></color><color=#ffb6c1><size=5>?</size></color><color=#7fffd4><size=6>Right</size></color><color=#f0e68c><size=4.5>?</size></color><color=#ff1493><size=5>Right</size></color><color=#adff2f><size=7>?</size></color><color=#ff4500><size=5.5>Right</size></color><color=#ffff00><size=6>?</size></color><color=#dda0dd><size=4>Right</size></color><color=#ff1493><size=5>?</size></color><color=#32cd32><size=6>Right</size></color><color=#00ced1><size=5>?</size></color><color=#8a2be2><size=5.5>Right</size></color><color=#ff6347><size=6>?</size></color>?;
+
+BitInside\BitInside;
+BitInsideInfo\Did I really write this track?;

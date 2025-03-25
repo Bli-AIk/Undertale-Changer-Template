@@ -5,22 +5,23 @@ using UnityEngine;
 namespace Debug
 {
     /// <summary>
-    /// 用于Debug时的文本渐变
+    ///     用于Debug时的文本渐变
     /// </summary>
     public class DebugStringGradient
     {
-        private readonly List<int> _gradientNumberList = new();
         private const int GradientNumberMax = 60;
-        private readonly string _gradientString;
         private readonly List<Color> _colorList = new();
+        private readonly List<int> _gradientNumberList = new();
+        private readonly string _gradientString;
         private readonly List<Color> _targetColorList = new();
         private Color _newColor;
+
         public DebugStringGradient(string text)
         {
-            var defaultColor =GameUtilityService.GetRandomColor();
-             var targetColor = GameUtilityService.GetSimilarButDifferentColor(defaultColor);
+            var defaultColor = GameUtilityService.GetRandomColor();
+            var targetColor = GameUtilityService.GetSimilarButDifferentColor(defaultColor);
             _gradientString = text;
-            
+
             for (var i = 0; i < text.Length; i++)
             {
                 _colorList.Add(defaultColor);
@@ -29,7 +30,7 @@ namespace Debug
             }
         }
 
-        
+
         public string UpdateStringGradient()
         {
             string result = null;
@@ -40,10 +41,12 @@ namespace Debug
                 if (_gradientNumberList[i] >= GradientNumberMax)
                 {
                     _gradientNumberList[i] = 0; // 重置为0
-                    
+
                     if (i == 0)
+                    {
                         _newColor = GameUtilityService.GetSimilarButDifferentColor(_colorList[i]);
-                    
+                    }
+
                     _colorList[i] = _targetColorList[i];
                     _targetColorList[i] = _newColor;
                 }
@@ -57,9 +60,10 @@ namespace Debug
                     // 插值计算
                     _colorList[i] = Color.Lerp(_colorList[i], _targetColorList[i], t);
                 }
-                
+
                 result += TextProcessingService.StringColor(_colorList[i], _gradientString[i].ToString());
             }
+
             return result;
         }
     }

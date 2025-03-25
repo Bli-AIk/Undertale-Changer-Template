@@ -1,0 +1,56 @@
+/* 
+战斗外场景的所有对话文本。
+格式为：
+读取名称\文本;
+
+<image=x>  设定显示的表情编码，特别地，在此x若为负数则设定为无人发出对话（旁白）。
+表情编码一般来说是游戏内定的，要改的话就挨个测试吧(
+
+打字机特殊字符(通用)输入：
+<stop> 字符会使打字机经过此字符时会短暂停顿。
+(该字符不会被打出 一般用于标点符号前/后。原理为使用预设的“停顿打字速度”打出一个空字符，从而实现停顿。
+在旧模板中，打字机经过标点符号就会停顿，但这也导致了一些特殊情况无法解决。因此，修改为必须手动添加该字符。
+请注意，按下X后不会在此字符处停顿。该字符可叠加使用。停顿速度根据打字机的设置而定——简单来说就是你改不了)
+
+<enter>回车符 
+<x>直接输入字符x。x只能是一个字符，这个字符会跳过打字机直接输入。
+<fx=x>  将打字机的音效换为第x位音效。
+
+
+
+
+如果你需要输入很长的一段文字或单纯想要玩家多按那么一下子Z键，你可以在一段文本内插入 <waitForUpdate>
+打字机检测该字符后会停止打字，玩家若按下Z键将会清空当前文本并继续打字状态。
+此前的富文本将失效，因为此前的文本都清空了。
+
+富文本输入部分示意：
+<color=#00000000>颜色符 支持RGBA 十六进制
+</color>去除颜色
+
+<b>粗体
+</b>去除粗体
+
+<i>斜体
+</i>去除斜体
+
+<size=50>更改字体大小
+</size>去除更改
+
+<color=red>颜色符 具体支持名称可参考TMP文档http://digitalnativestudios.com/textmeshpro/docs/
+</color>去除颜色
+*/
+
+DemoBox1\<default><fx=flowey, evil><markPoint>啥<stop*10>呢。<waitForUpdate><default><markPoint>这是个<gradient="White to Yellow - UTC">破箱子</gradient><stop...><stop...><markEnter>哈哈，咱没做界面。
+<waitForUpdate><Flowey><fx=flowey, evil><markPoint><gradient="White to Red - UTC">啊？？？</gradient><fx=flowey><stop*3>怎么说，<stop><Flowey, Menace><fx=flowey, evil><enter><-  ->你<stop>先<stop>别<stop>急<stop>。
+<waitForUpdate><Flowey, Side><markPoint>现在捏，<stop>这个对话是测试<gradient="White to Yellow - UTC"><enter><-  ->打字机</gradient>来的，<fx=flowey, evil><stop><Flowey><-就像这样->。
+<waitForUpdate><Flowey><-* 啪的一下就说完了一句话。-><enter><-  -><stop*3><gradient="White to Red - UTC">炫炫炫炫炫炫炫炫炫炫。</gradient>
+<waitForUpdate><Flowey, Side><markPoint>啥？<stop>你没看清？<stop><enter><-  ->那我慢点？<stop*5><enter><-* -><stop><-啪的-><stop><-一下-><stop><-就说-><stop><-完了-><stop><-。-><stop*3>蛤？;
+
+Plot\<default><markPoint><stop......>
+<waitForUpdate><markPoint>啊<stop><stop...>没有人？<stop>？
+<waitForUpdate><Flowey><markPoint>你好。
+<waitForUpdate><default><markPoint>啊？<stop>Flowey！<stop><markEnter>你这家伙躲哪去了？
+<waitForUpdate><Flowey, Side><markPoint>要你管。<stop*5><Flowey, Menace>现在该对战辣！;
+
+Save\<default><markPoint>(长廊的地板上铺满了金色的光芒，<enter><-  ->这使你充满了<gradient="White to Red - UTC">决心</gradient>。);
+

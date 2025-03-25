@@ -1,0 +1,528 @@
+﻿{
+  "inkVersion": 21,
+  "root": [
+    [
+      "^<Toriel><markPoint><stop...>哦？<stop><stop>你好，<stop>孩子。<stop><stop>",
+      "\n",
+      "^<markEnter>你看起来很困惑呢<stop...>",
+      "\n",
+      "^<waitForUpdate>",
+      "\n",
+      "^<markPoint>不知道我为什么站在这么？<stop><stop><stop><stop>",
+      "\n",
+      "^<markEnter>因为<stop...>我被安排在此测试",
+      "\n",
+      "^<blankEnter>Ink语言能否在模板中使用。",
+      "\n",
+      "^<waitForUpdate><markPoint>不过<stop...>既然你来了，",
+      "\n",
+      "^<blankEnter><stop>我们不妨让这个测试，<blankEnter><Toriel, Happy>变得稍微有趣一点吧？<stop>",
+      "\n",
+      "^<waitForUpdate><markPoint>告诉我，你来这里想干什么？",
+      "\n",
+      "ev",
+      "str",
+      "^我想知道这儿是怎么运作的！",
+      "/str",
+      "/ev",
+      {
+        "*": "0.c-0",
+        "flg": 20
+      },
+      "ev",
+      "str",
+      "^我只是随便看看。",
+      "/str",
+      "/ev",
+      {
+        "*": "0.c-1",
+        "flg": 20
+      },
+      "ev",
+      "str",
+      "^...我可以不回答吗？",
+      "/str",
+      "/ev",
+      {
+        "*": "0.c-2",
+        "flg": 20
+      },
+      {
+        "c-0": [
+          "^ ",
+          {
+            "->": "Clever"
+          },
+          "\n",
+          {
+            "->": "0.g-0"
+          },
+          {
+            "#f": 5
+          }
+        ],
+        "c-1": [
+          "^ ",
+          {
+            "->": "Casual"
+          },
+          "\n",
+          {
+            "->": "0.g-0"
+          },
+          {
+            "#f": 5
+          }
+        ],
+        "c-2": [
+          "^ ",
+          {
+            "->": "Shy"
+          },
+          "\n",
+          {
+            "->": "0.g-0"
+          },
+          {
+            "#f": 5
+          }
+        ],
+        "g-0": [
+          "done",
+          {
+            "#f": 5
+          }
+        ]
+      }
+    ],
+    "done",
+    {
+      "Clever": [
+        "^<Toriel, Happy><markPoint>哦哦！<stop><Toriel, Side>你对这个世界",
+        "\n",
+        "^<blankEnter>充满了好奇，<stop>对吧？<stop><stop>",
+        "\n",
+        "^<markEnter><Toriel, Happy>很好很好。",
+        "\n",
+        "^<waitForUpdate><Toriel><markPoint>不过<stop...>就算你聪明，<stop>",
+        "\n",
+        "^<blankEnter>也未必能猜到<blankEnter>接下来会发生什么。",
+        "\n",
+        {
+          "->": "Choice"
+        },
+        {
+          "#f": 1
+        }
+      ],
+      "Casual": [
+        "^<Toriel><markPoint>嗯<stop...><stop>随意看看也没关系。",
+        "\n",
+        "^<markEnter>有时候，放松一下<blankEnter>也是不错的选择。",
+        "\n",
+        {
+          "->": "Choice"
+        },
+        {
+          "#f": 1
+        }
+      ],
+      "Shy": [
+        "^<Toriel, Side><markPoint><stop...>哦，孩子。<stop><blankEnter>我不是要逼你回答什么<stop...>",
+        "\n",
+        "^<waitForUpdate><markPoint>如果你不想说，<blankEnter><stop>那就不用勉强自己了。",
+        "\n",
+        {
+          "->": "Choice"
+        },
+        {
+          "#f": 1
+        }
+      ],
+      "Choice": [
+        [
+          "^<waitForUpdate><Toriel><markPoint>那么<stop...>让我们继续吧。",
+          "\n",
+          "ev",
+          "str",
+          "^我想看看接下来会发生什么。",
+          "/str",
+          "/ev",
+          {
+            "*": ".^.c-0",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^这段测试要到什么时候才会结束？",
+          "/str",
+          "/ev",
+          {
+            "*": ".^.c-1",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^...我可以离开吗？",
+          "/str",
+          "/ev",
+          {
+            "*": ".^.c-2",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "^ ",
+              {
+                "->": "Continue"
+              },
+              "\n",
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "^ ",
+              {
+                "->": "Question"
+              },
+              "\n",
+              {
+                "#f": 5
+              }
+            ],
+            "c-2": [
+              "^ ",
+              {
+                "->": "Leave"
+              },
+              "\n",
+              {
+                "#f": 5
+              }
+            ]
+          }
+        ],
+        {
+          "#f": 1
+        }
+      ],
+      "Continue": [
+        "^<Toriel><markPoint>那么好<stop...><waitForUpdate>",
+        "\n",
+        {
+          "->": "MoreChoices"
+        },
+        {
+          "#f": 1
+        }
+      ],
+      "Question": [
+        "^<Toriel, Side><markPoint>哦<stop...>已经等不及想结束了？<stop>",
+        "\n",
+        "^<Toriel><markEnter>放心，终点总会到来的。<stop>",
+        "\n",
+        "^<Toriel, Side><markEnter>但至少，先陪我聊一会儿吧？  <waitForUpdate>",
+        "\n",
+        {
+          "->": "MoreChoices"
+        },
+        {
+          "#f": 1
+        }
+      ],
+      "Leave": [
+        [
+          "^<Toriel, Side><markPoint>哦，<stop>孩子<stop...>",
+          "\n",
+          "^<markEnter>你确定要离开吗？",
+          "\n",
+          "^<Toriel><markEnter>这里并不会困住你<stop...>",
+          "\n",
+          "^<waitForUpdate><markPoint><stop...>但一旦离开，",
+          "\n",
+          "^<Toriel, Side>你就无法<blankEnter>看到后面会发生什么了哦？",
+          "\n",
+          "ev",
+          "str",
+          "^...我还是留下吧。",
+          "/str",
+          "/ev",
+          {
+            "*": ".^.c-0",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^不，我还是走了。",
+          "/str",
+          "/ev",
+          {
+            "*": ".^.c-1",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "^ ",
+              {
+                "->": "MoreChoices"
+              },
+              "\n",
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "^ ",
+              {
+                "->": "EndEarly"
+              },
+              "\n",
+              {
+                "#f": 5
+              }
+            ]
+          }
+        ],
+        {
+          "#f": 1
+        }
+      ],
+      "MoreChoices": [
+        [
+          "^<Toriel><markPoint>接下来，你想做什么呢？",
+          "\n",
+          "ev",
+          "str",
+          "^告诉我一个故事吧。",
+          "/str",
+          "/ev",
+          {
+            "*": ".^.c-0",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^再给我一个选择，我喜欢选择。",
+          "/str",
+          "/ev",
+          {
+            "*": ".^.c-1",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^...我只想知道你都能说什么。",
+          "/str",
+          "/ev",
+          {
+            "*": ".^.c-2",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "^ ",
+              {
+                "->": "Story"
+              },
+              "\n",
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "^ ",
+              {
+                "->": "MoreOptions"
+              },
+              "\n",
+              {
+                "#f": 5
+              }
+            ],
+            "c-2": [
+              "^ ",
+              {
+                "->": "Meta"
+              },
+              "\n",
+              {
+                "#f": 5
+              }
+            ]
+          }
+        ],
+        {
+          "#f": 1
+        }
+      ],
+      "Story": [
+        "^<Toriel><markPoint>故事吗<stop...>好吧，我想想<stop...>",
+        "\n",
+        "^<waitForUpdate><markPoint>很久很久以前——",
+        "\n",
+        "^<Toriel, Side><waitForUpdate><markPoint>嗯<stop...>额<stop...>啊<stop...><stop><stop><stop>",
+        "\n",
+        "^<markEnter>要不然<stop...>我们换个方式？",
+        "\n",
+        {
+          "->": "MoreOptions"
+        },
+        {
+          "#f": 1
+        }
+      ],
+      "MoreOptions": [
+        [
+          "^<waitForUpdate><Toriel><markPoint><stop...>再给你几个选项吧！",
+          "\n",
+          "ev",
+          "str",
+          "^世界是一个循环么？",
+          "/str",
+          "/ev",
+          {
+            "*": ".^.c-0",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^你能告诉我一些关于模板的事吗？",
+          "/str",
+          "/ev",
+          {
+            "*": ".^.c-1",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^我还是想听个故事。",
+          "/str",
+          "/ev",
+          {
+            "*": ".^.c-2",
+            "flg": 20
+          },
+          "ev",
+          "str",
+          "^我不想再选什么了。",
+          "/str",
+          "/ev",
+          {
+            "*": ".^.c-3",
+            "flg": 20
+          },
+          {
+            "c-0": [
+              "^ ",
+              {
+                "->": "Loop"
+              },
+              "\n",
+              {
+                "#f": 5
+              }
+            ],
+            "c-1": [
+              "^ ",
+              {
+                "->": "About"
+              },
+              "\n",
+              {
+                "#f": 5
+              }
+            ],
+            "c-2": [
+              "^ ",
+              {
+                "->": "Story"
+              },
+              "\n",
+              {
+                "#f": 5
+              }
+            ],
+            "c-3": [
+              "^ ",
+              {
+                "->": "EndEarly"
+              },
+              "\n",
+              {
+                "#f": 5
+              }
+            ]
+          }
+        ],
+        {
+          "#f": 1
+        }
+      ],
+      "Loop": [
+        "^<Toriel, Side><markPoint>循环啊<stop...><stop>",
+        "\n",
+        "^<Toriel><markEnter>如果世界是个循环，",
+        "\n",
+        "^<blankEnter>那么一切都会回到原点。",
+        "\n",
+        "^<waitForUpdate><Toriel, Side><markPoint>我们会重新开始，<stop>",
+        "\n",
+        "^<blankEnter>做出相同的选择，<stop>",
+        "\n",
+        "^<blankEnter>说出相同的话<stop...>",
+        "\n",
+        "^<waitForUpdate><Toriel><markPoint>但这真的意味着<blankEnter>什么都不会改变吗？<stop>",
+        "\n",
+        "^<Toriel, Happy><markEnter>呵呵<stop...>谁知道呢？",
+        "\n",
+        {
+          "->": "MoreOptions"
+        },
+        {
+          "#f": 1
+        }
+      ],
+      "About": [
+        "^<Toriel, Side><markPoint>模板吗？<stop>我也不太清楚<stop...>",
+        "\n",
+        "^<Toriel><markEnter>毕竟，<stop>不识庐山真面目，<blankEnter><stop>只缘身在此山中嘛。",
+        "\n",
+        {
+          "->": "MoreOptions"
+        },
+        {
+          "#f": 1
+        }
+      ],
+      "Meta": [
+        "^<Toriel, Happy><markPoint>哈哈<stop...>你倒是很坦率呢。<stop>",
+        "\n",
+        "^<markEnter>好吧，<stop>我能说多少话，<stop>",
+        "\n",
+        "^<blankEnter>取决于你能做多少事。",
+        "\n",
+        {
+          "->": "MoreOptions"
+        },
+        {
+          "#f": 1
+        }
+      ],
+      "EndEarly": [
+        "^<Toriel><markPoint>那么<stop...>就到这里吧。<stop>",
+        "\n",
+        "^<markEnter>愿你在接下来的旅程中，<stop><blankEnter>一切顺利。",
+        "\n",
+        "^<waitForUpdate><markPoint>再见了，<stop>孩子。",
+        "\n",
+        "end",
+        {
+          "#f": 1
+        }
+      ],
+      "#f": 1
+    }
+  ],
+  "listDefs": {}
+}

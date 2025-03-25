@@ -12,18 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8af6835af6fd18e45b8cff33dfa3d893, type: 3}
   m_Name: CupCake
   m_EditorClassIdentifier: 
-  objName: DemoBullet
   typeName: CupCake
+  objName: DemoBullet
   layer: 40
   sprite: {fileID: 21300000, guid: a55224a9007c69a4e97f55b16a124d64, type: 3}
-  triggerOffset:
-  - {x: 0, y: 0}
   triggerSize:
   - {x: 1, y: 1}
+  triggerOffset:
+  - {x: 0, y: 0}
   triggerHit: 01000000
-  startPosition: {x: 1, y: -1.6, z: 0}
-  startRotation: {x: 0, y: 0, z: 0}
-  startScale: {x: 0, y: 0, z: 0}
   bulletColor: 0
   startMask: 0
   triggerFollowMode: 1

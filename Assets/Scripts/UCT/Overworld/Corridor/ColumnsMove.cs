@@ -3,29 +3,35 @@ using UnityEngine;
 namespace UCT.Overworld.Corridor
 {
     /// <summary>
-    /// 长廊柱子移动
+    ///     长廊柱子移动
     /// </summary>
     public class ColumnsMove : MonoBehaviour
     {
+        public float speed = -1.381f; //包括方向(正负)
         private CameraFollowPlayer _parentCamera;
-        public float speed;//包括方向(正负)
 
         private void Start()
         {
-            if (Camera.main == null)
+            if (!_parentCamera)
             {
-                Global.Other.Debug.LogError("未找到主摄像机");
-                return;
+                _parentCamera = CameraFollowPlayer.Instance;
             }
-            _parentCamera = Camera.main.GetComponent<CameraFollowPlayer>();
+
             transform.position = _parentCamera.transform.position + _parentCamera.transform.position * speed;
         }
 
         private void Update()
         {
-            if (_parentCamera.transform.position.x >= _parentCamera.limitX.x ||
-                _parentCamera.transform.position.x <= _parentCamera.limitY.y) 
-                transform.position = _parentCamera.followPosition * speed;
+            if (!_parentCamera)
+            {
+                _parentCamera = CameraFollowPlayer.Instance;
+            }
+
+            if (_parentCamera.transform.position.x >= _parentCamera.minX ||
+                _parentCamera.transform.position.x <= _parentCamera.maxX)
+            {
+                transform.position = _parentCamera.transform.position * speed;
+            }
         }
     }
 }

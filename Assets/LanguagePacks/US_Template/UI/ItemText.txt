@@ -34,20 +34,20 @@ Please note that this character can only be placed in Text for USE, otherwise, t
 
 
 <autoCheckFood>Automatically detect the food and display * "Name" - Heals XX HP
--Subitem<itemHp>Get food supplement hp 
--Subitem<itemNameFood>Get the name of the item, in which Food can be changed to Arm/Armor/Other
+-Subitem<itemValue>Get food supplement hp 
+-Subitem<itemNameFood>Get the name of the item, in which Food can be changed to Weapon/Armor/Other
 
-<autoArm>Automatically detect the Weapon and display * You equipped XX.
+<autoWeapon>Automatically detect the Weapon and display * You equipped XX.
 <autoArmor>Automatically detect the Armor and display * You equipped XX.
 
-<autoCheckArm>Automatically detect the Weapon and display * "Name" - WEAPON AT XX
--Subitem<itemAtk>get ATK
+<autoCheckWeapon>Automatically detect the Weapon and display * "Name" - WEAPON AT XX
+-Subitem<itemValue>get ATK
 <autoCheckArmor>Automatically detect the Armor and display * "Name" - ARMOR DF XX
--Subitem<itemDef>get DEF
+-Subitem<itemValue>get DEF
 
 <autoLoseFood>Automatically detects the item name and displays "* XX was thrown away."
 
-Food can be changed to Arm/Armor/Other
+Food can be changed to Weapon/Armor/Other
 
 The above principle is to call data.
 
@@ -61,7 +61,7 @@ Typewriter special characters (general) input:
 
 -In general, the probability of occurrence of each text display is equal. (WIP, please do not use)
 
-If you need to input a long text or simply want the player to press the Z key more often, you can insert<passText> into a text
+If you need to input a long text or simply want the player to press the Z key more often, you can insert<waitForUpdate> into a text
 
 After the typewriter detects the character, it will stop typing. If the player presses the Z key, it will clear the current text and continue typing.
 
@@ -93,15 +93,15 @@ In addition, do not write two comments consecutively at least 3 characters apart
 */
 
 /* I T E M */
-Item\baaaaaaaaaaaaaaaa\Two servings\<autoFoodFull><enter>* Another test, ahhhhh<stop><stop...><passText>* But it went well.\<autoCheckFood><enter>* An indescribable gadget<stop><stop...><passText><color=yellow>* Oh, my God, the test was successful!!!\<autoLoseFood>;
-Item\bang\A serving of food\* You tasted the rest of this stuff.<stop><enter><autoFood>\<autoCheckFood><enter>* Still nameless<stop><stop...>\<autoLoseFood>;
+Item\TwoServings\Two servings\<autoFoodFull><markEnter>Another test, ahhhhh<stop><stop...><waitForUpdate>* But it went well.\<autoCheckFood><markEnter>An indescribable gadget<stop><stop...><waitForUpdate><color=yellow>* Oh, my God, the test was successful!!!\<autoLoseFood>;
+Item\Serving\A serving of food\* You tasted the rest of this stuff.<stop><enter><autoFood>\<autoCheckFood><markEnter>Still nameless<stop><stop...>\<autoLoseFood>;
 
-Item\pia1\Broken t.knife\<autoArm>\<autoCheckArm>\<autoLoseArm>;
-Item\pia2\<color=yellow>Golden Sword PLUS</color>\<autoArm><enter>* Golden Legend This is.\<autoCheckArm><enter>* Um... wtf is that(\* <color=red>You just throw it away?<stop>?<stop>?</color>;
+Item\TKnife\Broken t.knife\<autoWeapon>\<autoCheckWeapon>\<autoLoseWeapon>;
+Item\PSword\<color=yellow>Golden Sword PLUS</color>\<autoWeapon><markEnter>Golden Legend This is.\<autoCheckWeapon><markEnter>Um... wtf is that(\* <color=red>You just throw it away?<stop>?<stop>?</color>;
 
 
-Item\tatata1\T.P.S\<autoArmor>\<autoCheckArmor>\<autoLoseArmor>;
-Item\tatata2\Wearable sth\<autoArmor>\<autoCheckArmor>\<autoLoseArmor>;
+Item\TPS\T.P.S\<autoArmor>\<autoCheckArmor>\<autoLoseArmor>;
+Item\WearableSth\Wearable sth\<autoArmor>\<autoCheckArmor>\<autoLoseArmor>;
 
 
 /* D A T A */
@@ -124,14 +124,14 @@ item use/info/drop
 */
 
 Data\* You ate <itemNameFood>.<stop>;
-Data\* You recovered <itemHp> HP!<stop>;
-Data\* "<itemNameFood>" - Heals <itemHp> HP<stop>;
-Data\* You equipped <itemNameArm>.<stop>;
+Data\* You recovered <itemValue> HP!<stop>;
+Data\* "<itemNameFood>" - Heals <itemValue> HP<stop>;
+Data\* You equipped <itemNameWeapon>.<stop>;
 Data\* You equipped <itemNameArmor>.<stop>;
-Data\* "<itemNameArm>" - Weapon <stop>AT <itemAtk><stop>;
-Data\* "<itemNameArmor>" - Armor <stop>DF <itemDef><stop>;
+Data\* "<itemNameWeapon>" - Weapon <stop>AT <itemValue><stop>;
+Data\* "<itemNameArmor>" - Armor <stop>DF <itemValue><stop>;
 Data\* <itemNameFood> was thrown away.<stop>;
-Data\* <itemNameArm> was thrown away.<stop>;
+Data\* <itemNameWeapon> was thrown away.<stop>;
 Data\* <itemNameArmor> was thrown away.<stop>;/*20*/
 Data\* <itemNameOther> was thrown away.<stop>;
 Data\* Your HP was maxed out.<stop>;

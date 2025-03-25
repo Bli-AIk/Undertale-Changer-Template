@@ -1,0 +1,33 @@
+<Dialog name="Random" type="Random">
+    <Message name="default" mode="Confirm" target="second,third">
+        <Bubble character="NPC1" sizeX="4" sizeY="3" offsetX="2" offsetY="1.5" arrowOffset="-1.5"
+                direction="left">
+            <![CDATA[<font=3>进入对话！(1.1)]]>
+        </Bubble>
+        <Bubble character="NPC2" sizeX="4" sizeY="3" offsetX="-6" offsetY="1.5" arrowOffset="-1.5"
+                direction="right">
+            <![CDATA[<font=3>我也进入对话了！(1.2)]]>
+        </Bubble>
+    </Message>
+
+    <Message name="second" mode="Delay" autoDelay="3" target="fourth">
+        <Bubble character="NPC2" sizeX="4" sizeY="3" offsetX="-6" offsetY="1.5" arrowOffset="-1.5"
+                direction="right">
+            <![CDATA[<font=3>自动对话示例。(2)]]>
+        </Bubble>
+    </Message>
+
+    <Message name="third" mode="Confirm" target="END">
+        <Bubble character="NPC1" sizeX="4" sizeY="3" offsetX="2" offsetY="1.5" arrowOffset="-1.5"
+                direction="left">
+            <![CDATA[<font=3>你可以手动取消这个。(3)]]>
+        </Bubble>
+    </Message>
+
+    <Message name="fourth" mode="Confirm" target="END">
+        <Bubble character="NPC2" sizeX="4" sizeY="3" offsetX="-6" offsetY="1.5" arrowOffset="-1.5"
+                direction="right">
+            <![CDATA[<font=3>哇。<stop>塞。(4)]]>
+        </Bubble>
+    </Message>
+</Dialog>

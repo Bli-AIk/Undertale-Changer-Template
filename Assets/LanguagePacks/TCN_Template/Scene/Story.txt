@@ -1,0 +1,16 @@
+/*
+
+<waitForTime=x>x秒後跳字，若要之後沒有任何文字，輸<- ->。
+<storyFade=x>漸出然後漸入到第X張圖。具體ID內建在遊戲內。負數為漸入到沒有圖
+<storyMove=(x,y,z)>移動圖片到某位置，z軸填移動時間，負數會取絕對值。
+<storyMask=true><storyMask=false>開/關背景遮罩（用於背景圖移動時只顯示一個區域）
+<storyExit>漸出結束並退出到Start
+*/
+
+Text\<changeSkip><fx=monster>因為山就在那裡。
+<waitForTime=2.5><fx=null>
+<storyFade=6>
+<waitForTime=1><changeSkip><fx=monster>還真是。
+<waitForTime=2.5>
+<storyExit>
+;

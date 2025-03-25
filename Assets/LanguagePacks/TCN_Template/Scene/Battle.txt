@@ -1,0 +1,13 @@
+Won\<markPoint>你胜利了！<stop><markEnter>你获得了 {0} XP 和 {1} 金钱。;
+
+Flee\* 先走一步。;
+Flee\* 我還有別的事要做。;
+Flee\* 逃跑了...;
+Flee\* 別拖我後腿。;
+
+Flee\* 不要停下來啊。;
+Flee\* 哥我錯啦－;
+Flee\* 你幫路打油！;
+Flee\* 衝！衝刺！衝！;
+
+FleeWithSpoil\* 你逃走了，得到 {0} EXP 和 {1} 金錢。;

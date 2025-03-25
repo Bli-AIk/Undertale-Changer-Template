@@ -1,0 +1,28 @@
+/*
+MENU与设置内的文本存储。
+格式：
+读取名称\文本;
+
+一般来说 读取名称是固定的。
+特殊地，
+RenameSp\name|true|true|text;
+格式为试图给特殊名称起名时的设定，其中以第一个true或false判断是否允许重命名为此名称，第二个true或false判断name内的文本检测时是否分大小写。
+特别地，如果text文本为</gester>，则将崩溃游戏。
+
+<playerName>获取玩家名称
+*/
+Menu0\继续;
+Menu1\重置;
+Menu2\设置;
+Menu3\音乐;
+Menu4\存档;
+Menu5\退出;
+Menu6\上页;
+Menu7\下页;
+Menu8\返回;
+Menu9\确定;
+Menu10\新建;
+Menu11\删除;
+Menu12\存档;
+
+MenuUnder\Undertale (c)  toby fox 2015<enter>undertale changer template V;

@@ -1,712 +1,361 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
+using System.Reflection;
+using System.Text;
 using UCT.Control;
-using UCT.Global.Core;
-using UCT.Global.UI;
+using UCT.Core;
+using UCT.Settings;
+using UCT.UI;
 using UnityEngine;
 
 namespace UCT.Service
 {
     /// <summary>
-    /// 数据处理相关函数
+    ///     数据处理相关函数
     /// </summary>
     public static class DataHandlerService
     {
-        /// <summary>
-        /// 分配Item数据
-        /// </summary>
-        public static void ClassifyItemsData(ItemControl itemControl)
+        public static GameItem GetItemFormDataName(string dataName)
         {
-            itemControl.itemFoods.Clear();
-            itemControl.itemArms.Clear();
-            itemControl.itemArmors.Clear();
-            itemControl.itemOthers.Clear();
-            foreach (var countText in itemControl.itemMax)
-            {
-                var text = new string[4];
-                var i = 0;
-                foreach (var t in countText)
-                {
-                    if (t == '\\')
-                        i++;
-                    else if (t != ';')
-                        text[i] += t.ToString();
+            return MainControl.Instance.ItemController.ItemDictionary[dataName];
+        }
 
-                    if (i != 3 || t != ';') continue;
-                    for (var j = 0; j < text.Length; j++)
-                    {
-                        if (j != 1)
-                            AddItemToClassification(itemControl, text[1], text[j]);
-                    }
-                    i = 0;
+
+        /// <summary>
+        ///     通过DataName获取Item语言包名称
+        /// </summary>
+        public static string ItemDataNameGetLanguagePackName(string dataName)
+        {
+            return GetItemTextValue(dataName, 1);
+        }
+
+        /// <summary>
+        ///     通过DataName获取Item UseText
+        /// </summary>
+        public static string ItemDataNameGetLanguagePackUseText(string dataName)
+        {
+            return GetItemTextValue(dataName, 2);
+        }
+
+        /// <summary>
+        ///     通过DataName获取Item InfoText
+        /// </summary>
+        public static string ItemDataNameGetLanguagePackInfoText(string dataName)
+        {
+            return GetItemTextValue(dataName, 3);
+        }
+
+        /// <summary>
+        ///     通过DataName获取Item DropText
+        /// </summary>
+        public static string ItemDataNameGetLanguagePackDropText(string dataName)
+        {
+            return GetItemTextValue(dataName, 4);
+        }
+
+        private static string GetItemTextValue(string dataName, int valueOffset)
+        {
+            var languagePackControl = MainControl.Instance.LanguagePackControl;
+            for (var i = 0; i < languagePackControl.itemTexts.Count; i += 5)
+            {
+                var sonItem = languagePackControl.itemTexts[i];
+                if (sonItem == dataName)
+                {
+                    return languagePackControl.itemTexts[i + valueOffset];
                 }
             }
+
+            return "";
         }
 
         /// <summary>
-        /// ItemClassification的一个子void
-        /// </summary>
-        private static void AddItemToClassification(ItemControl itemControl, string i, string origin)
-        {
-            if (origin == "null") return;
-            switch (i)
-            {
-                case "Foods":
-                    itemControl.itemFoods.Add(origin);
-                    break;
-                case "Arms":
-                    itemControl.itemArms.Add(origin);
-                    break;
-                case "Armors":
-                    itemControl.itemArmors.Add(origin);
-                    break;
-                case "Others":
-                    itemControl.itemOthers.Add(origin);
-                    break;
-                default:
-                    itemControl.itemOthers.Add(origin);
-                    break;
-            }
-        }
-
-        /// <summary>
-        /// 通过Id获取Item信息：
-        /// type：Foods Arms Armors Others Auto
-        /// number：0语言包名称
-        ///     1/2：data1/2.
-        ///     请勿多输.
-        ///     Arm和Armor只有1
-        /// </summary>
-        public static string ItemIdGetName(ItemControl itemControl, int id, string type, int number)
-        {
-            int realId;
-            List<string> list;
-            string idName;//获取编号名称
-            switch (type)
-            {
-                case "Foods":
-                    list = itemControl.itemFoods;
-                    realId = id * 3 - 3;
-                    idName = list[realId];
-                    break;
-
-                case "Arms":
-                    list = itemControl.itemArms;
-                    realId = id * 2 - 2;
-                    idName = list[realId];
-                    break;
-
-                case "Armors":
-                    list = itemControl.itemArmors;
-                    realId = id * 2 - 2;
-                    idName = list[realId];
-                    break;
-
-                case "Others":
-                    list = itemControl.itemOthers;
-                    realId = id * 3 - 3;
-                    idName = list[realId];
-                    break;
-
-                case "Auto":
-                    switch (id)
-                    {
-                        case <= 0:
-                            list = null;
-                            realId = 0;
-                            idName = "null";
-                            break;
-                        case < 10000:
-                            list = itemControl.itemFoods;
-                            realId = id * 3 - 3;
-                            idName = list[realId];
-                            break;
-                        case < 20000:
-                            list = itemControl.itemArms;
-                            realId = (id - 10000) * 2 - 2;
-                            idName = list[realId];
-                            break;
-                        case < 30000:
-                            list = itemControl.itemArmors;
-                            realId = (id - 20000) * 2 - 2;
-                            idName = list[realId];
-                            break;
-                        default:
-                            list = itemControl.itemOthers;
-                            realId = (id - 30000) * 3 - 3;
-                            idName = list[realId];
-                            break;
-                    }
-                    break;
-
-                default:
-                    goto case "Others";
-            }
-
-            var subText = "";
-            if (number == 0)//获取语言包内的名称
-            {
-                foreach (var t in itemControl.itemTextMaxItem.Where(t => t[..idName.Length] == idName))
-                {
-                    idName = t[(idName.Length + 1)..];
-                    break;
-                }
-
-                subText = idName.TakeWhile(t => t != '\\').Aggregate(subText, (current, t) => current + t);
-            }
-            else
-            {
-                if (list != null) 
-                    subText = list[realId + number];
-            }
-            return subText;
-        }
-
-        /// <summary>
-        /// 通过Id获取Item的数据（HP，ATK等）：
-        /// type：Foods Arms Armors Others Auto
-        /// justId:勾的话会加上 +xxHP/AT/DF等信息
-        /// </summary>
-        public static string ItemIdGetData(ItemControl itemControl, int id, string type, bool notJustId = false)
-        {
-            int realId;
-            List<string> list;
-            string idData;//获取编号名称
-            switch (type)
-            {
-                case "Foods":
-                    list = itemControl.itemFoods;
-                    realId = id * 3 - 1;
-
-                    if (notJustId)
-                    {
-                        idData = list[realId] + "HP";
-                        if (int.Parse(list[realId]) > 0)
-                            idData = $"+{idData}";
-                    }
-                    else
-                        idData = list[realId];
-                    break;
-
-                case "Arms":
-                    list = itemControl.itemArms;
-                    realId = id * 2 - 1;
-
-                    if (notJustId)
-                    {
-                        idData = list[realId] + "AT";
-                        if (int.Parse(list[realId]) > 0)
-                            idData = $"+{idData}";
-                    }
-                    else
-                        idData = list[realId];
-                    break;
-
-                case "Armors":
-                    list = itemControl.itemArmors;
-                    realId = id * 2 - 1;
-
-                    if (notJustId)
-                    {
-                        idData = list[realId] + "DF";
-                        if (int.Parse(list[realId]) > 0)
-                            idData = $"+{idData}";
-                    }
-                    else
-                        idData = list[realId];
-                    break;
-
-                case "Others":
-                    list = itemControl.itemOthers;
-                    realId = id * 3 - 1;
-                    idData = list[realId];
-                    break;
-
-                case "Auto":
-                    switch (id)
-                    {
-                        case < 10000:
-                        {
-                            list = itemControl.itemFoods;
-                            realId = id * 3 - 1;
-
-                            if (notJustId)
-                            {
-                                idData = list[realId] + "HP";
-                                if (int.Parse(list[realId]) > 0)
-                                    idData = $"+{idData}";
-                            }
-                            else
-                                idData = list[realId];
-
-                            break;
-                        }
-                        case < 20000:
-                        {
-                            list = itemControl.itemArms;
-                            realId = (id - 10000) * 2 - 1;
-
-                            if (notJustId)
-                            {
-                                idData = list[realId] + "AT";
-                                if (int.Parse(list[realId]) > 0)
-                                    idData = $"+{idData}";
-                            }
-                            else
-                                idData = list[realId];
-
-                            break;
-                        }
-                        case < 30000:
-                        {
-                            list = itemControl.itemArmors;
-                            realId = (id - 20000) * 2 - 1;
-
-                            if (notJustId)
-                            {
-                                idData = list[realId] + "DF";
-                                if (int.Parse(list[realId]) > 0)
-                                    idData = $"+{idData}";
-                            }
-                            else
-                                idData = list[realId];
-
-                            break;
-                        }
-                        default:
-                            list = itemControl.itemOthers;
-                            realId = (id - 30000) * 3 - 1;
-                            idData = list[realId];
-                            break;
-                    }
-                    break;
-
-                default:
-                    goto case "Others";
-            }
-            return idData;
-        }
-
-        /// <summary>
-        /// 通过物品数据名称获取其ID。
-        /// type：Foods Arms Armors Others
-        /// </summary>
-        public static int ItemNameGetId(ItemControl itemControl, string itemName, string type)
-        {
-            int id = 0, listInt;
-            List<string> list;
-            switch (type)
-            {
-                case "Foods":
-                    list = itemControl.itemFoods;
-                    listInt = 3;
-                    break;
-
-                case "Arms":
-                    list = itemControl.itemArms;
-                    listInt = 2;
-                    id += 10000;
-                    break;
-
-                case "Armors":
-                    list = itemControl.itemArmors;
-                    listInt = 2;
-                    id += 20000;
-                    break;
-
-                case "Others":
-                    list = itemControl.itemOthers;
-                    listInt = 3;
-                    id += 30000;
-                    break;
-
-                default:
-                    return 0;
-            }
-
-            if (list == null) return id;
-            for (var i = 0; i < list.Count / listInt; i++)
-            {
-                if (list[i * listInt] != itemName) continue;
-                id += i + 1;
-                break;
-            }
-            return id;
-        }
-        
-        
-        /// <summary>
-        /// 从 TextAsset 加载并解析数据，返回新列表
-        /// </summary>
-        /// <param name="inputText">输入的 TextAsset 数据</param>
-        /// <returns>解析后的列表</returns>
-        public static List<string> LoadItemData(TextAsset inputText)
-        {
-            var resultList = new List<string>();
-            var text = "";
-            for (var i = 0; i < inputText.text.Length; i++)
-            {
-                if (inputText.text[i] == '/' && inputText.text[i + 1] == '*')
-                {
-                    i++;
-                    while (!(inputText.text[i] == '/' && inputText.text[i - 1] == '*'))
-                    {
-                        i++;
-                    }
-                    i += 2;
-                }
-
-                if (inputText.text[i] != '\n' && inputText.text[i] != '\r' && inputText.text[i] != ';')
-                    text += inputText.text[i];
-                if (inputText.text[i] != ';') continue;
-                resultList.Add(text + ";");
-                text = "";
-            }
-            return resultList;
-        }
-
-
-        /// <summary>
-        /// 从 string 加载并解析数据，返回新列表
+        ///     从 string 加载并解析数据，返回新列表
         /// </summary>
         public static List<string> LoadItemData(string inputText)
         {
             var resultList = new List<string>();
-            var text = "";
-            for (var i = 0; i < inputText.Length; i++)
+            var text = new StringBuilder();
+            var i = 0;
+            while (i < inputText.Length)
             {
-                if (inputText[i] == '/' && inputText[i + 1] == '*')
+                if (i < inputText.Length - 1 && inputText[i] == '/' && inputText[i + 1] == '*')
                 {
-                    i++;
-                    while (!(inputText[i] == '/' && inputText[i - 1] == '*'))
+                    i += 2;
+                    while (i < inputText.Length - 1 && !(inputText[i] == '*' && inputText[i + 1] == '/'))
                     {
                         i++;
                     }
+
                     i += 2;
+                    continue;
                 }
-                if (inputText[i] != '\n' && inputText[i] != '\r' && inputText[i] != ';')
-                    text += inputText[i];
-                if (inputText[i] != ';') continue;
-                resultList.Add(text + ";");
-                text = "";
+
+                if (i < inputText.Length && inputText[i] != '\n' && inputText[i] != '\r' && inputText[i] != ';')
+                {
+                    text.Append(inputText[i]);
+                }
+
+                if (i < inputText.Length && inputText[i] == ';')
+                {
+                    resultList.Add($"{text};");
+                    text.Clear();
+                }
+
+                i++;
             }
+
             return resultList;
         }
 
+
+        private static int ChangeItemRichText(string input,
+            bool isData,
+            List<string> ex,
+            int j,
+            StringBuilder empty,
+            ref StringBuilder text)
+        {
+            var isLoopSpecialCharsRequired = false;
+            while (j < input.Length && input[j] == '<')
+            {
+                var inputText = new StringBuilder();
+                while ((j != 0 && input[j - 1] != '>' && !isLoopSpecialCharsRequired) || isLoopSpecialCharsRequired)
+                {
+                    inputText.Append(input[j]);
+                    j++;
+                    if (j >= input.Length)
+                    {
+                        break;
+                    }
+
+                    isLoopSpecialCharsRequired = false;
+                }
+
+                isLoopSpecialCharsRequired = true;
+                text = new StringBuilder(TypeWritterTagProcessor.ConvertStaticTagHandlers(text.ToString(),
+                    inputText.ToString(), isData, empty.ToString(), ex));
+            }
+
+            return j;
+        }
+
         /// <summary>
-        /// 转换特殊字符
+        ///     转换单个字符串中的特殊字符
+        /// </summary>
+        public static string ChangeItemData(string input, bool isData, List<string> ex)
+        {
+            var text = new StringBuilder();
+            var empty = new StringBuilder();
+            var j = 0;
+
+            while (j < input.Length)
+            {
+                if (empty.Length == 0 && !isData)
+                {
+                    var k = j;
+                    while (j < input.Length && input[j] != '\\')
+                    {
+                        empty.Append(input[j]);
+                        j++;
+                    }
+
+                    j = k;
+                }
+
+                j = ChangeItemRichText(input, isData, ex, j, empty, ref text);
+
+
+                if (j < input.Length)
+                {
+                    text.Append(input[j] == ';' ? ';' : input[j]);
+                }
+
+                j++;
+            }
+
+            return text.ToString();
+        }
+
+        /// <summary>
+        ///     转换特殊字符
         /// </summary>
         public static List<string> ChangeItemData(List<string> list, bool isData, List<string> ex)
         {
-            var newList = new List<string>();
-            var text = "";
-            var isXh = false;//检测是否有多个需要循环调用的特殊字符
+            var result = new List<string>();
 
             foreach (var t in list)
             {
-                var empty = "";
-                for (var j = 0; j < t.Length; j++)
+                result.AddRange(ProcessString(t, isData, ex));
+            }
+
+            return result;
+        }
+
+        private static List<string> ProcessString(string t, bool isData, List<string> ex)
+        {
+            var text = new StringBuilder();
+            var empty = new StringBuilder();
+            var isLoopSpecialCharsRequired = false;
+            var result = new List<string>();
+            var j = 0;
+
+            while (j < t.Length)
+            {
+                ExtractEmptyString(t, ref j, isData, empty);
+                ProcessSpecialTags(t, ref j, ref text, ref isLoopSpecialCharsRequired, isData, empty, ex);
+
+                if (j < t.Length)
                 {
-                    if (empty == "" && !isData)
-                    {
-                        var k = j;
-                        while (t[j] != '\\')
-                        {
-                            empty += t[j];
-                            j++;
-                            if (j >= t.Length)
-                                break;
-                        }
-                        j = k;
-                        //Debug.Log(list[i] +"/"+ name);
-                    }
-
-                    while (t[j] == '<')
-                    {
-                        var inputText = "";
-                        while ((j != 0 && t[j - 1] != '>' && !isXh) || isXh)
-                        {
-                            inputText += t[j];
-                            j++;
-                            if (j >= t.Length)
-                            {
-                                break;
-                            }
-                            isXh = false;
-                        }
-                        isXh = true;
-                        text = ChangeItemDataSwitch(text, inputText, isData, empty, ex);
-                    }
-                    isXh = false;
-
                     if (t[j] == ';')
                     {
-                        newList.Add(text + ";");
-                        text = "";
+                        result.Add(text + ";");
+                        text.Clear();
                     }
                     else
                     {
-                        text += t[j];
+                        text.Append(t[j]);
                     }
                 }
+
+                j++;
             }
-            return newList;
+
+            return result;
         }
 
-        /// <summary>
-        /// ReSharper disable once InvalidXmlDocComment
-        /// ChangeItemData中检测'<''>'符号的Switch语句
-        /// </summary>
-        private static string ChangeItemDataSwitch(string text, string inputText, bool isData, 
-            string inputName, List<string> ex)
+        private static void ExtractEmptyString(string t, ref int j, bool isData, StringBuilder empty)
         {
-            switch (inputText)
+            if (empty.Length != 0 || isData)
             {
-                case "<playerName>":
-                    text += MainControl.Instance.playerControl.playerName;
-                    break;
-
-                case "<enter>"://回车
-                    text += "\n";
-                    break;
-
-                case "<stop...>":
-                    text += ".<stop>.<stop>.<stop>";
-                    break;
-
-                case "<stop......>":
-                    text += ".<stop>.<stop>.<stop>.<stop>.<stop>.<stop>";
-                    break;
-
-                case "<autoFoodFull>":
-                    text += MainControl.Instance.ItemControl.itemTextMaxData[11][..^1] + "\n";
-                    text += "<autoFood>";
-                    break;
-
-                case "<autoCheckFood>":
-                    inputText = "<data13>";
-                    goto default;
-
-                case "<autoArm>":
-                    inputText = "<data14>";
-                    goto default;
-                case "<autoArmor>":
-                    inputText = "<data15>";
-                    goto default;
-
-                case "<autoCheckArm>":
-                    inputText = "<data16>";
-                    goto default;
-
-                case "<autoCheckArmor>":
-                    inputText = "<data17>";
-                    goto default;
-
-                case "<autoLoseFood>":
-                    inputText = "<data18>";
-                    goto default;
-                case "<autoLoseArm>":
-                    inputText = "<data19>";
-                    goto default;
-                case "<autoLoseArmor>":
-                    inputText = "<data20>";
-                    goto default;
-                case "<autoLoseOther>":
-                    inputText = "<data21>";
-                    goto default;
-
-                case "<itemHp>":
-                    if (inputName != "" && !isData)
-                    {
-                        text += ItemIdGetName(MainControl.Instance.ItemControl, ItemNameGetId(MainControl.Instance.ItemControl, inputName, "Foods"), "Auto", 2);
-                        break;
-                    }
-
-                    goto default;
-
-                case "<itemAtk>":
-                    if (inputName != "" && !isData)
-                    {
-                        text += ItemIdGetName(MainControl.Instance.ItemControl, ItemNameGetId(MainControl.Instance.ItemControl, inputName, "Arms"), "Auto", 1);
-                        break;
-                    }
-
-                    goto default;
-
-                case "<itemDef>":
-                    if (inputName != "" && !isData)
-                    {
-                        text += ItemIdGetName(MainControl.Instance.ItemControl, ItemNameGetId(MainControl.Instance.ItemControl, inputName, "Armors"), "Auto", 1);
-                        break;
-                    }
-
-                    goto default;
-
-                case "<getEnemiesName>":
-                    if (inputName != "" && !isData)
-                    {
-                        text += ex[0];
-                        break;
-                    }
-
-                    goto default;
-                case "<getEnemiesATK>":
-                    if (inputName != "" && !isData)
-                    {
-                        text += ex[1];
-                        break;
-                    }
-
-                    goto default;
-                case "<getEnemiesDEF>":
-                    if (inputName != "" && !isData)
-                    {
-                        text += ex[2];
-                        break;
-                    }
-
-                    goto default;
-
-                default:
-                    if (TextProcessingService.IsSameFrontTexts(inputText, "<data"))
-                    {
-                        text += MainControl.Instance.ItemControl.itemTextMaxData[int.Parse(inputText.Substring(5, inputText.Length - 6))][..(MainControl.Instance.ItemControl.itemTextMaxData[int.Parse(inputText.Substring(5, inputText.Length - 6))].Length - 1)];
-                    }
-                    else if (inputText.Length > 9)
-                    {
-                        switch (inputText[..9])
-                        {
-                            case "<itemName" when !isData:
-                            {
-                                if (inputName != "")
-                                {
-                                    if (ItemNameGetId(MainControl.Instance.ItemControl, inputName, inputText.Substring(9, inputText.Length - 10) + 's') < 10000)
-                                        text += ItemIdGetName(MainControl.Instance.ItemControl, ItemNameGetId(MainControl.Instance.ItemControl, inputName, inputText.Substring(9, inputText.Length - 10) + 's'), inputText.Substring(9, inputText.Length - 10) + 's', 0);
-                                    else text += ItemIdGetName(MainControl.Instance.ItemControl, ItemNameGetId(MainControl.Instance.ItemControl, inputName, inputText.Substring(9, inputText.Length - 10) + 's'), "Auto", 0);
-                                }
-
-                                break;
-                            }
-                            case "<autoLose":
-                                switch (inputText.Substring(9, inputText.Length - 10) + 's')
-                                {
-                                    case "Food":
-                                        text += MainControl.Instance.ItemControl.itemTextMaxData[18];
-                                        break;
-
-                                    case "Arm":
-                                        text += MainControl.Instance.ItemControl.itemTextMaxData[19];
-                                        break;
-
-                                    case "Armor":
-                                        text += MainControl.Instance.ItemControl.itemTextMaxData[20];
-                                        break;
-
-                                    case "Other":
-                                        text += MainControl.Instance.ItemControl.itemTextMaxData[21];
-                                        break;
-                                }
-
-                                break;
-                            default:
-                                text += inputText;
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        text += inputText;
-                    }
-                    break;
+                return;
             }
-            return text;
+
+            var k = j;
+            while (j < t.Length && t[j] != '\\')
+            {
+                empty.Append(t[j]);
+                j++;
+            }
+
+            j = k;
+        }
+
+        private static void ProcessSpecialTags(string t,
+            ref int j,
+            ref StringBuilder text,
+            ref bool isLoopSpecialCharsRequired,
+            bool isData,
+            StringBuilder empty,
+            List<string> ex)
+        {
+            while (j < t.Length && t[j] == '<')
+            {
+                var inputText = new StringBuilder();
+                while ((j != 0 && t[j - 1] != '>' && !isLoopSpecialCharsRequired) || isLoopSpecialCharsRequired)
+                {
+                    inputText.Append(t[j]);
+                    j++;
+                    if (j >= t.Length)
+                    {
+                        break;
+                    }
+
+                    isLoopSpecialCharsRequired = false;
+                }
+
+                isLoopSpecialCharsRequired = true;
+                text = new StringBuilder(TypeWritterTagProcessor.ConvertStaticTagHandlers(text.ToString(),
+                    inputText.ToString(), isData, empty.ToString(), ex));
+            }
+
+            isLoopSpecialCharsRequired = false;
         }
 
         /// <summary>
-        /// 获取内置语言包ID
+        ///     获取内置语言包ID
         /// </summary>
-        public static string GetLanguageInsideId(int id) =>
-            id switch
+        public static string GetLanguageInsideId(int id)
+        {
+            return id switch
             {
                 0 => "CN",
                 1 => "TCN",
                 _ => "US"
             };
+        }
 
         /// <summary>
-        /// 检测当前语言包ID是否在有效范围内。如果不在有效范围内，
-        /// 则将语言包ID设置为默认值2。
+        ///     检测当前语言包ID是否在有效范围内。如果不在有效范围内，
+        ///     则将语言包ID设置为默认值2。
         /// </summary>
         /// <param name="id">语言包ID</param>
         public static int LanguagePackDetection(int id)
         {
-            if (id < 0 || id >= Directory.GetDirectories(Application.dataPath + "\\LanguagePacks").Length + MainControl.LanguagePackInsideNumber)
+            if (id < 0 || id >= Directory.GetDirectories(Application.dataPath + "\\LanguagePacks").Length +
+                MainControl.LanguagePackageInternalNumber)
+            {
                 return 2;
+            }
+
             return id;
         }
 
         /// <summary>
-        /// 加载对应语言包的数据
+        ///     加载对应语言包的数据
         /// </summary>
         public static string LoadLanguageData(string path, int id)
         {
-            return id < MainControl.LanguagePackInsideNumber 
-                ? Resources.Load<TextAsset>($"TextAssets/LanguagePacks/{DataHandlerService.GetLanguageInsideId(id)}/{path}").text 
-                : File.ReadAllText($"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[id - MainControl.LanguagePackInsideNumber]}\\{path}.txt");
+            return id < MainControl.LanguagePackageInternalNumber
+                ? Resources.Load<TextAsset>($"TextAssets/LanguagePacks/{GetLanguageInsideId(id)}/{path}").text
+                : File.ReadAllText(
+                    $"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[id - MainControl.LanguagePackageInternalNumber]}\\{path}.txt");
         }
 
         /// <summary>
-        /// 检测语言包全半角
+        ///     检测语言包全半角
         /// </summary>
         public static void InitializationLanguagePackFullWidth()
         {
-            if (MainControl.Instance.overworldControl.textWidth != bool.Parse(TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave, "LanguagePackFullWidth")))
+            if (SettingsStorage.TextWidth != bool.Parse(
+                    TextProcessingService.GetFirstChildStringByPrefix(
+                        MainControl.Instance.LanguagePackControl.settingTexts,
+                        "LanguagePackFullWidth")))
             {
-                MainControl.Instance.overworldControl.textWidth = bool.Parse(TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave, "LanguagePackFullWidth"));
+                SettingsStorage.TextWidth = bool.Parse(
+                    TextProcessingService.GetFirstChildStringByPrefix(
+                        MainControl.Instance.LanguagePackControl.settingTexts,
+                        "LanguagePackFullWidth"));
                 foreach (var obj in Resources.FindObjectsOfTypeAll(typeof(TextChanger)))
                 {
                     var textChanger = (TextChanger)obj;
-                    textChanger.isUseWidth = MainControl.Instance.overworldControl.textWidth;
+                    textChanger.isUseWidth = SettingsStorage.TextWidth;
                     textChanger.Set();
                     textChanger.Change();
                 }
             }
 
-            CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture(TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.overworldControl.settingSave, "CultureInfo"));
+            CultureInfo.CurrentCulture = CultureInfo.CreateSpecificCulture(
+                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.LanguagePackControl.settingTexts,
+                    "CultureInfo"));
         }
 
         /// <summary>
-        /// 设置PlayerControl
+        ///     设置PlayerControl
         /// </summary>
-        /// <param name="inputPlayerControl"></param>
         public static PlayerControl SetPlayerControl(PlayerControl inputPlayerControl)
         {
             var playerControl = ScriptableObject.CreateInstance<PlayerControl>();
-            playerControl.hp = inputPlayerControl.hp;
-            playerControl.hpMax = inputPlayerControl.hpMax;
-            playerControl.lv = inputPlayerControl.lv;
-            playerControl.exp = inputPlayerControl.exp;
-            playerControl.gold = inputPlayerControl.gold;
-            playerControl.wearAtk = inputPlayerControl.wearAtk;
-            playerControl.wearDef = inputPlayerControl.wearDef;
-            playerControl.nextExp = inputPlayerControl.nextExp;
-            playerControl.missTime = inputPlayerControl.missTime;
-            playerControl.missTimeMax = inputPlayerControl.missTimeMax;
-            playerControl.atk = inputPlayerControl.atk;
-            playerControl.def = inputPlayerControl.def;
-            playerControl.playerName = inputPlayerControl.playerName;
-            playerControl.myItems = inputPlayerControl.myItems;
-            playerControl.wearArm = inputPlayerControl.wearArm;
-            playerControl.wearArmor = inputPlayerControl.wearArmor;
-            playerControl.canMove = inputPlayerControl.canMove;
-            playerControl.gameTime = inputPlayerControl.gameTime;
-            playerControl.lastScene = inputPlayerControl.lastScene;
-            playerControl.saveScene = inputPlayerControl.saveScene;
-            playerControl.isDebug = inputPlayerControl.isDebug;
-            playerControl.invincible = inputPlayerControl.invincible;
+
+            var fields = typeof(PlayerControl).GetFields(BindingFlags.Public | BindingFlags.Instance);
+
+            foreach (var field in fields)
+            {
+                field.SetValue(playerControl, field.GetValue(inputPlayerControl));
+            }
+
             return playerControl;
         }
+
     }
 }

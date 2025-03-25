@@ -123,7 +123,11 @@ AudioMixerController:
   m_SuspendThreshold: -80
   m_EnableSuspend: 1
   m_UpdateMode: 0
-  m_ExposedParameters: []
+  m_ExposedParameters:
+  - guid: 8542838ac72c9994e90a92dfebcb7997
+    name: BgmVolume
+  - guid: f5e10ac32eba35f418efbd332fef9028
+    name: FxVolume
   m_AudioMixerGroupViews:
   - guids:
     - 0b7c208ada7de5b4092168dfb8f64c1f
@@ -183,7 +187,7 @@ AudioMixerSnapshotController:
   m_FloatValues:
     c0fcc95225d4e5949937a80561289a77: 0.371
     f5e10ac32eba35f418efbd332fef9028: 0
-    639d0944bc24fb04ab2140db3688cdde: 0
+    639d0944bc24fb04ab2140db3688cdde: 0.04171297
     64bbbc05a0557fa4b907a3fe5974cbd7: 2283
     1a20b437ed6de7f43ad4cdd57c5f734f: 12.2
     2ba8e12a7ba93e34f9aacc88d7fff19e: 0

@@ -1,64 +1,83 @@
+using System;
 using UnityEngine;
-using UnityEngine.Serialization;
+using DG.Tweening;
+using Random = UnityEngine.Random;
 
 namespace UCT.Overworld
 {
     /// <summary>
-    /// Overworld摄像机跟随
+    ///     Overworld摄像机跟随
     /// </summary>
     public class CameraFollowPlayer : MonoBehaviour
     {
-        [FormerlySerializedAs("limit")] public bool isLimit = true;
+        public bool isLimit = true;
         public bool isFollow;
-        public Vector2 limitX;//限制摄像机最大XY范围 0则不动
-        public Vector2 limitY;//限制摄像机最大XY范围 0则不动
-        public GameObject player;
-        public Vector3 followPosition;
 
-        private void Update()
+        public float minX;
+        public float minY;
+        public float maxX;
+        public float maxY;
+
+        public GameObject player;
+        public static CameraFollowPlayer Instance { get; private set; }
+
+        private Tween _shakeTween; 
+        private Vector3 _shakeOffset; 
+
+        private void Awake()
         {
+            Instance = this;
+        }
+
+        private void Start()
+        {
+            player = GameObject.Find("Player");
+        }
+
+        private void LateUpdate()
+        {
+            var saveZ = transform.position.z;
+            var targetPosition = player.transform.position;
+
+            if (isLimit)
+            {
+                targetPosition = GetLimitedPosition(targetPosition);
+            }
+
             if (!isFollow)
             {
                 return;
             }
 
-            if (!player)
-                player = GameObject.Find("Player");
-            
-            followPosition = transform.position;
-            //跟随玩家
-            if (isLimit)
+            transform.position = targetPosition + _shakeOffset;
+            transform.position = new Vector3(transform.position.x,transform.position.y,saveZ);
+        }
+
+        public Vector3 GetLimitedPosition(Vector3 pos)
+        {
+            pos.x = Mathf.Clamp(pos.x, minX, maxX);
+            pos.y = Mathf.Clamp(pos.y, minY, maxY);
+            return pos;
+        }
+
+        /// <summary>
+        /// 使摄像机抖动（不会影响跟随）
+        /// </summary>
+        /// <param name="duration">抖动持续时间</param>
+        /// <param name="strength">抖动幅度</param>
+        /// <param name="vibrato">振动频率</param>
+        public void ShakeCamera(float duration = 0.1f, float strength = 0.5f, int vibrato = 5)
+        {
+            if (_shakeTween != null && _shakeTween.IsPlaying())
             {
-                if (player.transform.position.x >= limitX.x || player.transform.position.x <= limitX.y)
-                {
-                    transform.position = new Vector3(player.transform.position.x, transform.position.y, transform.position.z);
-                }
-
-                if (player.transform.position.y >= limitY.x || player.transform.position.y <= limitY.y)
-                {
-                    transform.position = new Vector3(transform.position.x, player.transform.position.y, transform.position.z);
-                }
-
-                //限制范围
-                if (transform.position.x <= limitX.x)
-                {
-                    transform.position = new Vector3(limitX.x, transform.position.y, transform.position.z);
-                }
-                else if (transform.position.x >= limitX.y)
-                {
-                    transform.position = new Vector3(limitX.y, transform.position.y, transform.position.z);
-                }
-                if (transform.position.y <= limitY.x)
-                {
-                    transform.position = new Vector3(transform.position.x, limitY.x, transform.position.z);
-                }
-                else if (transform.position.y >= limitY.y)
-                {
-                    transform.position = new Vector3(transform.position.x, limitY.y, transform.position.z);
-                }
+                return;
             }
-            else
-                transform.position = new Vector3(player.transform.position.x, player.transform.position.y, transform.position.z);
+
+            _shakeTween = DOTween.To(() => _shakeOffset, x => _shakeOffset = new Vector3(x.x, x.y, 0), 
+                Random.insideUnitSphere * strength, duration)
+                .SetEase(Ease.OutQuad)
+                .SetLoops(vibrato, LoopType.Yoyo)
+                .OnComplete(() => _shakeOffset = Vector3.zero); 
         }
     }
 }

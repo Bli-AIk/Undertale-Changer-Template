@@ -1,0 +1,29 @@
+<Dialog name="Fixed1" type="Fixed" turn="1">
+    <Message name="default" mode="Confirm" target="second">
+        <Bubble character="NPC1" sizeX="4" sizeY="3" offsetX="2" offsetY="1.5" arrowOffset="-1.5"
+                direction="left">
+            <![CDATA[<font=3>你好。]]>
+        </Bubble>
+    </Message>
+
+    <Message name="second" mode="Confirm" target="third">
+        <Bubble character="NPC1" sizeX="4" sizeY="3" offsetX="2" offsetY="1.5" arrowOffset="-1.5"
+                direction="left">
+            <![CDATA[<font=3>你好你好。]]>
+        </Bubble>
+    </Message>
+
+    <Message name="third" mode="Confirm" target="fourth">
+        <Bubble character="NPC2" sizeX="4" sizeY="3" offsetX="-6" offsetY="1.5" arrowOffset="-1.5"
+                direction="right">
+            <![CDATA[<font=3>好好。]]>
+        </Bubble>
+    </Message>
+
+    <Message name="fourth" mode="Confirm" target="END">
+        <Bubble character="NPC2" sizeX="4" sizeY="3" offsetX="-6" offsetY="1.5" arrowOffset="-1.5"
+                direction="right">
+            <![CDATA[<font=3>下一回合，<stop>开始！]]>
+        </Bubble>
+    </Message>
+</Dialog>

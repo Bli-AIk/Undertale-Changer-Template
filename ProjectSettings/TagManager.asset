@@ -8,6 +8,9 @@ TagManager:
   - board
   - owObjTrigger
   - Box
+  - PlayerTrigger
+  - SoulsBullet
+  - PlayerArrow
   layers:
   - Default
   - TransparentFX
@@ -16,8 +19,8 @@ TagManager:
   - Water
   - UI
   - BulletInside
-  - 
-  - 
+  - Player
+  - NPC
   - 
   - 
   - 

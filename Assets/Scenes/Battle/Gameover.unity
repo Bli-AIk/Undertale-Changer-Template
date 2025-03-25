@@ -235,7 +235,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_enableExtraPadding: 0
+  m_enableExtraPadding: 1
   checkPaddingRequired: 0
   m_isRichText: 1
   m_parseCtrlCharacters: 1
@@ -430,7 +430,7 @@ MonoBehaviour:
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 1
-  m_enableExtraPadding: 0
+  m_enableExtraPadding: 1
   checkPaddingRequired: 0
   m_isRichText: 1
   m_parseCtrlCharacters: 1
@@ -814,26 +814,26 @@ MonoBehaviour:
   passTextString: 0
   isRunning: 0
   isTyping: 0
-  hpIn: 0
   hpSave: 0
-  canNotX: 0
-  pressX: 0
+  cantSkip: 0
+  isSkip: 0
   clockTime: 0
-  isStop: 0
-  fx: 0
-  fxRandomPitch: 0
-  speed: 0.075
-  speedSlow: 0.15
-  clock: 0.01
   passText: 0
-  spriteChanger: {fileID: 0}
-  isOverworld: 0
+  overworldSpriteChanger: {fileID: 0}
+  fxClip: {fileID: 0}
+  characterSpriteManager: {fileID: 0}
   pitch: 1
   volume: 0.5
+  speed: 0.075
+  currentSpeed: 0
+  speedSlow: 0.15
+  skipClock: 0.01
   audioMixerGroup: {fileID: 0}
-  useFont: 0
+  fontIndex: 0
   dynamicType: 0
-  forceReturn: 0
+  isJumpingText: 0
+  isUsedFx: 0
+  typeMode: 0
 --- !u!1 &888686029
 GameObject:
   m_ObjectHideFlags: 0

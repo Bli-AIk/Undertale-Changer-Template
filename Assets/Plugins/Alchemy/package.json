@@ -1,0 +1,18 @@
+{
+  "name": "com.annulusgames.alchemy",
+  "version": "2.0.0",
+  "displayName": "Alchemy",
+  "description": "Provides a rich set of editor and serialization extensions for Unity.",
+  "unity": "2021.2",
+  "author": {
+    "name": "Annulus Games",
+    "url": "https://github.com/AnnulusGames"
+  },
+  "samples": [
+    {
+      "displayName": "Alchemy Samples",
+      "description": "Sample inspector extension using Alchemy attributes.",
+      "path": "Samples~/Samples"
+    }
+  ]
+}

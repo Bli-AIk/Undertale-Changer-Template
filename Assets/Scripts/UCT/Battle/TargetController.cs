@@ -1,25 +1,25 @@
 using DG.Tweening;
 using TMPro;
-using UCT.Global.Audio;
-using UCT.Global.Core;
+using UCT.Audio;
+using UCT.Control;
+using UCT.Core;
 using UCT.Service;
 using UnityEngine;
+using DataHandlerService = UCT.Service.DataHandlerService;
 
 namespace UCT.Battle
 {
     /// <summary>
-    /// 控制Target
+    ///     控制Target
     /// </summary>
     public class TargetController : MonoBehaviour
     {
-        private Animator _anim;
-        private bool _pressZ;
+        private static readonly int Hit = Animator.StringToHash("Hit");
+        private static readonly int MoveSpeed = Animator.StringToHash("MoveSpeed");
 
         [Header("攻击造成的伤害")]
         public int hitDamage;
 
-        private TextMeshPro _hitUI, _hitUIb;
-        private GameObject _bar;
         public GameObject hpBar;
 
         [Header("父级传入")]
@@ -27,6 +27,12 @@ namespace UCT.Battle
 
         [Header("父级传入 要击打的怪物")]
         public EnemiesController hitMonster;
+
+        private Animator _anim;
+        private GameObject _bar;
+
+        private TextMeshPro _hitUI, _hitUIb;
+        private bool _pressZ;
 
         private void Start()
         {
@@ -37,47 +43,58 @@ namespace UCT.Battle
             hpBar = transform.Find("Move/EnemiesHp/EnemiesHpOn").gameObject;
         }
 
+        private void Update()
+        {
+            if (_pressZ)
+            {
+                return;
+            }
+
+            if (!InputService.GetKeyDown(KeyCode.Z))
+            {
+                return;
+            }
+
+            _pressZ = true;
+            _anim.SetBool(Hit, true);
+            _anim.SetFloat(MoveSpeed, 0);
+            AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipBattle);
+            HitEnemy();
+        }
+
         private void OnEnable()
         {
-            if (_anim == null)
+            if (!_anim)
+            {
                 _anim = GetComponent<Animator>();
+            }
 
-            //anim.enabled = true;
-            _anim.SetBool("Hit", false);
-            _anim.SetFloat("MoveSpeed", 1);
+            _anim.SetBool(Hit, false);
+            _anim.SetFloat(MoveSpeed, 1);
             _pressZ = true;
         }
 
-        private void Update()
-        {
-            if (!_pressZ)
-            {
-                if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
-                {
-                    _pressZ = true;
-                    _anim.SetBool("Hit", true);
-                    _anim.SetFloat("MoveSpeed", 0);
-                    AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipBattle);
-                    Hit();
-                }
-            }
-        }
-
         /// <summary>
-        /// 攻击敌人时进行的计算
+        ///     攻击敌人时进行的计算
         /// </summary>
-        private void Hit()
+        private void HitEnemy()
         {
-            if (Mathf.Abs(_bar.transform.localPosition.x) > 0.8f)
-                hitDamage = (int)
-                    (2.2f / 13.2f * (14 - Mathf.Abs(_bar.transform.localPosition.x))//准确度系数
-                                  * (MainControl.Instance.playerControl.atk + MainControl.Instance.playerControl.wearAtk
-                                      - MainControl.Instance.BattleControl.enemiesDef[select] + Random.Range(0, 2)));
-            else
-                hitDamage = (int)
-                    (2.2f / 13.2f * (14 - 0.8f)//准确度系数
-                                  * (MainControl.Instance.playerControl.atk + MainControl.Instance.playerControl.wearAtk
-                                      - MainControl.Instance.BattleControl.enemiesDef[select] + Random.Range(0, 2)));
+            var accuracyFactor = 2.2f / 13.2f * (14 - Mathf.Abs(_bar.transform.localPosition.x));
+            hitDamage = Mathf.FloorToInt(accuracyFactor *
+                                         (MainControl.Instance.playerControl.atk + DataHandlerService
+                                              .GetItemFormDataName(MainControl.Instance.playerControl
+                                                  .wearWeapon).Data.Value
+                                          - MainControl.Instance.selectUIController
+                                              .enemiesControllers[select].def +
+                                          Random.Range(0, 2)));
+
+            WeaponItem weaponItem = null;
+            if (DataHandlerService.GetItemFormDataName(MainControl.Instance.playerControl.wearArmor) is WeaponItem
+                weapon)
+            {
+                weaponItem = weapon;
+                weaponItem.OnAttack(0);
+            }
 
             if (hitDamage <= 0)
             {
@@ -85,22 +102,43 @@ namespace UCT.Battle
 
                 _hitUI.text = "<color=grey>MISS";
                 _hitUIb.text = "MISS";
+                weaponItem?.OnMiss(0);
             }
             else
             {
-                _hitUI.text = "<color=red>" + hitDamage;
+                _hitUI.text = $"<color=red>{hitDamage}";
                 _hitUIb.text = hitDamage.ToString();
+                weaponItem?.OnHit(0);
             }
         }
 
         //以下皆用于anim
         private void HitAnim()
         {
-            hitMonster.anim.SetBool("Hit", true);
-            hpBar.transform.localScale = new Vector3((float)MainControl.Instance.BattleControl.enemiesHp[select * 2] / MainControl.Instance.BattleControl.enemiesHp[select * 2 + 1], 1);
-            MainControl.Instance.BattleControl.enemiesHp[select * 2] -= hitDamage;
-            DOTween.To(() => hpBar.transform.localScale, x => hpBar.transform.localScale = x, new Vector3((float)MainControl.Instance.BattleControl.enemiesHp[select * 2] / MainControl.Instance.BattleControl.enemiesHp[select * 2 + 1], 1),
-                0.75f).SetEase(Ease.OutSine);
+            hitMonster.anim.SetBool(Hit, true);
+            var enemiesController = MainControl.Instance.selectUIController.enemiesControllers[select];
+            hpBar.transform.localScale =
+                new Vector3(
+                    Mathf.Clamp(enemiesController.hp / (float)enemiesController.hpMax, 0, Mathf.Infinity), 1);
+
+            enemiesController.hp -= hitDamage;
+
+            DOTween.To(() => hpBar.transform.localScale, x => hpBar.transform.localScale = x,
+                    new Vector3(Mathf.Clamp(enemiesController.hp / (float)enemiesController.hpMax, 0, Mathf.Infinity),
+                        1), 0.75f)
+                .SetEase(Ease.OutSine);
+        }
+
+        private void CheckDeath()
+        {
+            var enemiesController = MainControl.Instance.selectUIController.enemiesControllers[select];
+            if (enemiesController.hp >= 0)
+            {
+                return;
+            }
+
+            enemiesController.Enemy.state = EnemyState.Dead;
+            enemiesController.spriteSplitController.enabled = true;
         }
 
         private void OpenPressZ()
@@ -115,7 +153,6 @@ namespace UCT.Battle
 
         private void NotActive()
         {
-            //anim.enabled = false;
             gameObject.SetActive(false);
         }
     }

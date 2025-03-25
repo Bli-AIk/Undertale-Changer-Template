@@ -4,17 +4,17 @@ using UnityEngine;
 namespace UCT.Battle
 {
     /// <summary>
-    /// SpriteSplitController的子级控制器
+    ///     SpriteSplitController的子级控制器
     /// </summary>
     public class SpriteSplitFly : MonoBehaviour
     {
+        private Rigidbody2D _rBody;
         private SpriteRenderer _spriteRenderer;
-        private Rigidbody2D _rbody;
 
         private void Awake()
         {
             _spriteRenderer = transform.GetComponent<SpriteRenderer>();
-            _rbody = GetComponent<Rigidbody2D>();
+            _rBody = GetComponent<Rigidbody2D>();
         }
 
         private void Update()
@@ -24,7 +24,7 @@ namespace UCT.Battle
 
         private void OnEnable()
         {
-            _rbody.AddForce(new Vector2(Random.Range(-1f, 1) * 1, 0), ForceMode2D.Impulse);
+            _rBody.AddForce(new Vector2(Random.Range(-1f, 1) * 1, 0), ForceMode2D.Impulse);
             StartCoroutine(ReturnThis());
         }
 

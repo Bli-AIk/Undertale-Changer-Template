@@ -7,12 +7,6 @@ namespace Volume
 {
     public class GlitchArtRendererFeature : ScriptableRendererFeature
     {
-        [Serializable]
-        public class Settings
-        {
-            public Shader shader;
-        }
-
         public Settings settings = new();
         private GlitchArtPass _pass;
 
@@ -27,12 +21,18 @@ namespace Volume
             _pass.Setup(renderer.cameraColorTarget);
             renderer.EnqueuePass(_pass);
         }
+
+        [Serializable]
+        public class Settings
+        {
+            public Shader shader;
+        }
     }
 
     [Serializable]
     public class GlitchArtPass : ScriptableRenderPass
     {
-        private static readonly string RenderTag = "GlitchArt Effects";
+        private const string RenderTag = "GlitchArt Effects";
         private static readonly int MainTexId = Shader.PropertyToID("_MainTex");
         private static readonly int TempTargetId = Shader.PropertyToID("_TempTargetColorTint");
         private static readonly int AnalogGlitchMode = Shader.PropertyToID("_AnalogGlitchMode");
@@ -43,19 +43,20 @@ namespace Volume
         private static readonly int ColorDrift = Shader.PropertyToID("_ColorDrift");
         private static readonly int VerticalJumpMode = Shader.PropertyToID("_VerticalJumpMode");
         private static readonly int VerticalJump = Shader.PropertyToID("_VerticalJump");
+        private RenderTargetIdentifier _currentTarget;
 
         private GlitchArtComponent _glitchArtVolume;
         private Material _mat;
-        private RenderTargetIdentifier _currentTarget;
 
         public GlitchArtPass(RenderPassEvent passEvent, Shader glitchArtShader)
         {
             renderPassEvent = passEvent;
-            if (glitchArtShader == null)
+            if (!glitchArtShader)
             {
-                UCT.Global.Other.Debug.Log("Shader不存在");
+                UCT.Debug.Log("Shader不存在");
                 return;
             }
+
             _mat = CoreUtils.CreateEngineMaterial(glitchArtShader);
         }
 
@@ -66,24 +67,28 @@ namespace Volume
 
         public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
         {
-            if (_mat == null)
+            if (!_mat)
             {
                 return;
             }
+
             if (!renderingData.cameraData.postProcessEnabled)
             {
                 return;
             }
+
             var stack = VolumeManager.instance.stack;
             _glitchArtVolume = stack.GetComponent<GlitchArtComponent>();
-            if (_glitchArtVolume == null)
+            if (!_glitchArtVolume)
             {
                 return;
             }
-            if (_glitchArtVolume.isShow.value == false)
+
+            if (!_glitchArtVolume.isShow.value)
             {
                 return;
             }
+
             var cmd = CommandBufferPool.Get(RenderTag);
             Render(cmd, ref renderingData);
             context.ExecuteCommandBuffer(cmd);
@@ -93,7 +98,6 @@ namespace Volume
         private void Render(CommandBuffer cmd, ref RenderingData renderingData)
         {
             ref var cameraData = ref renderingData.cameraData;
-            var camera = cameraData.camera;
             var source = _currentTarget;
             var destination = TempTargetId;
 
@@ -107,7 +111,8 @@ namespace Volume
             _mat.SetFloat(VerticalJump, _glitchArtVolume.verticalJump.value);
 
             cmd.SetGlobalTexture(MainTexId, source);
-            cmd.GetTemporaryRT(destination, cameraData.camera.scaledPixelWidth, cameraData.camera.scaledPixelHeight, 0, FilterMode.Trilinear, RenderTextureFormat.Default);
+            cmd.GetTemporaryRT(destination, cameraData.camera.scaledPixelWidth, cameraData.camera.scaledPixelHeight, 0,
+                FilterMode.Trilinear, RenderTextureFormat.Default);
             cmd.Blit(source, destination);
             cmd.Blit(destination, source, _mat, 0);
         }

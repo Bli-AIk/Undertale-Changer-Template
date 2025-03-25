@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 833677141888568880}
   - component: {fileID: 2735931670647202130}
+  - component: {fileID: 660563456186100067}
+  - component: {fileID: 1160519120937654907}
   m_Layer: 0
   m_Name: MainControlSummon
   m_TagString: Untagged
@@ -44,13 +46,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5490c4644a0d1a04f9a05bf9b0daa074, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isCameraLimit: 0
+  isCameraFollow: 0
+  cameraMinX: 0
+  cameraMinY: 0
+  cameraMaxX: 0
+  cameraMaxY: 0
+  walkFxRange: {x: 0, y: 9}
+  isShadow: 0
   renderMode: 0
-  framePic: 2
+  frameSpriteIndex: 2
   bgmClip: {fileID: 0}
   volume: 0.5
   pitch: 0.5
   loop: 1
+  fadeIn: 0
   sceneState: 0
-  haveInOutBlack: 0
-  noInBlack: 0
-  notPauseIn: 0
+  isFadeTransitionEnabled: 0
+  isFadeInDisabled: 0
+  isFadeInUnpaused: 0
+--- !u!114 &660563456186100067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 833677141888568882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67f4d6a9ff8a4963a07b8cf270b8091f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1160519120937654907
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 833677141888568882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IsGlobal: 1
+  priority: 0
+  blendDistance: 0
+  weight: 0
+  sharedProfile: {fileID: 11400000, guid: 89fe337953681774cb00b35f53380799, type: 2}

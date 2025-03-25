@@ -27,18 +27,18 @@ Data\显示名称;   用于其余显示
 请注意，该字符只能放在 食用显示 内，在别的位置上时，程序会无视掉它。
 
 <autoCheckFood>自动检测该食物并显示 * “名称”-治愈 XX HP
--子项<itemHp>获取食物补充的hp 
--子项<itemNameFood>获取物品名称。其中的 Food 可以改为 Arm/Armor/Other
+-子项<itemValue>获取食物补充的hp 
+-子项<itemNameFood>获取物品名称。其中的 Food 可以改为 Weapon/Armor/Other
 
-<autoArm>自动检测该武器并显示 * 你装备了XX。
+<autoWeapon>自动检测该武器并显示 * 你装备了XX。
 <autoArmor>自动检测该防具并显示 * 你装备了XX。
 
-<autoCheckArm>自动检测该武器并显示 * “名称”-武器 AT XX
--字项<itemAtk>获取ATK
+<autoCheckWeapon>自动检测该武器并显示 * “名称”-武器 AT XX
+-字项<itemValue>获取ATK
 <autoCheckArmor>自动检测该防具并显示 * “名称”-防具 DF XX
--字项<itemDef>获取DEF
+-字项<itemValue>获取DEF
 
-<autoLoseFood>自动检测物品名称并显示 * XX被你扔掉了。其中的 Food 可以改为 Arm/Armor/Other
+<autoLoseFood>自动检测物品名称并显示 * XX被你扔掉了。其中的 Food 可以改为 Weapon/Armor/Other
 以上原理均为调用data。
 
 打字机特殊字符(通用)输入：
@@ -52,7 +52,7 @@ Data\显示名称;   用于其余显示
 </else>显示分隔符，如果若食物有多种显示文本，使用该符号分割。
 -一般情况下，各个文本显示出现的概率均等。(WIP 未完成 勿用)
 
-如果你需要输入很长的一段文字或单纯想要玩家多按那么一下子Z键，你可以在一段文本内插入 <passText>字符
+如果你需要输入很长的一段文字或单纯想要玩家多按那么一下子Z键，你可以在一段文本内插入 <waitForUpdate>字符
 打字机检测该字符后会停止打字，玩家若按下Z键将会清空当前文本并继续打字状态。
 此前的富文本将失效，因为此前的文本都清空了。
 
@@ -80,15 +80,15 @@ Data\显示名称;   用于其余显示
 */
 
 /* I T E M */
-Item\baaaaaaaaaaaaaaaa\两份吃的\<autoFoodFull><enter>* 又得测试，寄了<stop><stop...><passText>* 不过还是蛮顺利的嘛。\<autoCheckFood><enter>* 不可名状的玩意儿<stop><stop...><passText><color=yellow>* 草测试成功了我操！！！\<autoLoseFood>;
-Item\bang\一份吃的\* 你尝了一口这剩下的玩意儿。<stop><enter><autoFood>\<autoCheckFood><enter>* 仍旧是不可名状<stop><stop...>\<autoLoseFood>;
+Item\TwoServings\两份吃的\<autoFoodFull><markEnter>又得测试，寄了<stop><stop...><waitForUpdate><markPoint>不过还是蛮顺利的嘛。\<autoCheckFood><markEnter>不可名状的玩意儿<stop><stop...><waitForUpdate><color=yellow><markPoint>草测试成功了我操！！！\<autoLoseFood>;
+Item\Serving\一份吃的\<markPoint>你尝了一口这剩下的玩意儿。<stop><enter><autoFood>\<autoCheckFood><markEnter>仍旧是不可名状<stop><stop...>\<autoLoseFood>;
 
-Item\pia1\破烂玩具刀\<autoArm>\<autoCheckArm>\<autoLoseArm>;
-Item\pia2\<color=yellow>黄金圣剑普拉斯</color>\<autoArm><enter>* 金色传说了属于是。\<autoCheckArm><enter>* 嗯...你妈的什么玩意(\* <color=red>你就这么丢了？<stop>？<stop>？</color>;
+Item\TKnife\破烂玩具刀\<autoWeapon>\<autoCheckWeapon>\<autoLoseWeapon>;
+Item\PSword\<color=yellow>黄金圣剑普拉斯</color>\<autoWeapon><markEnter>金色传说了属于是。\<autoCheckWeapon><markEnter>嗯...你妈的什么玩意(\* <color=red>你就这么丢了？<stop>？<stop>？</color>;
 
 
-Item\tatata1\测试用纸壳子\<autoArmor>\<autoCheckArmor>\<autoLoseArmor>;
-Item\tatata2\能穿的玩意儿\<autoArmor>\<autoCheckArmor>\<autoLoseArmor>;
+Item\TPS\测试用纸壳子\<autoArmor>\<autoCheckArmor>\<autoLoseArmor>;
+Item\WearableSth\能穿的玩意儿\<autoArmor>\<autoCheckArmor>\<autoLoseArmor>;
 
 
 /* D A T A */
@@ -111,14 +111,14 @@ Data\丢弃;/*编号：10*/
 */
 
 Data\* 你吃掉了<itemNameFood>。<stop>;
-Data\* 你回复了 <itemHp> HP！<stop>;
-Data\* “<itemNameFood>” - 治愈 <itemHp> HP<stop>;
-Data\* 你装备了<itemNameArm>。<stop>;
+Data\* 你回复了 <itemValue> HP！<stop>;
+Data\* “<itemNameFood>” - 治愈 <itemValue> HP<stop>;
+Data\* 你装备了<itemNameWeapon>。<stop>;
 Data\* 你装备了<itemNameArmor>。<stop>;
-Data\* “<itemNameArm>” - 武器 <stop>AT <itemAtk><stop>;
-Data\* “<itemNameArmor>” - 防具 <stop>DF <itemDef><stop>;
+Data\* “<itemNameWeapon>” - 武器 <stop>AT <itemValue><stop>;
+Data\* “<itemNameArmor>” - 防具 <stop>DF <itemValue><stop>;
 Data\* <itemNameFood>被你扔掉了。<stop>;
-Data\* <itemNameArm>被你扔掉了。<stop>;
+Data\* <itemNameWeapon>被你扔掉了。<stop>;
 Data\* <itemNameArmor>被你扔掉了。<stop>;/*20*/
 Data\* <itemNameOther>被你扔掉了。<stop>;
 Data\* 你的HP已满。<stop>;

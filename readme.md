@@ -18,15 +18,27 @@ You can view the current change log of UCT through [**CHANGELOG.md**](CHANGELOG.
 
 An [**UNDERTALE**](https://undertale.com/) fan game template based on [**unity engine**](https://unity.com).
 
+![](https://img.shields.io/badge/C%23-239120?style=for-the-badge&logo=csharp&logoColor=white)
+![](https://img.shields.io/badge/Rider-000000?style=for-the-badge&logo=Rider&logoColor=white)
+![](https://img.shields.io/badge/Unity-100000?style=for-the-badge&logo=unity&logoColor=white)
+
 [![license](https://img.shields.io/github/license/Bli-AIk/Undertale-Changer-Template
 )](LICENSE)
 <img src="https://img.shields.io/github/repo-size/Bli-AIk/Undertale-Changer-Template.svg"/>
 <img src="https://img.shields.io/github/last-commit/Bli-AIk/Undertale-Changer-Template.svg"/>
 [![standard-readme compliant](https://img.shields.io/badge/readme%20style-standard-brightgreen.svg?style=flat-square)](https://github.com/RichardLitt/standard-readme)
 
-- en [English](readme.md)
-- zh_CN [简体中文](README.zh_CN.md)
-- zh_TW [繁體中文](README.zh_TW.md)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/898e9474ef654b3481178c2cf75bb774)](https://app.codacy.com/gh/Bli-AIk/Undertale-Changer-Template/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+
+[![](https://img.shields.io/badge/Tencent_QQ-EB1923?style=for-the-badge&logo=TencentQQ&logoColor=white)](http://qm.qq.com/cgi-bin/qm/qr?_wv=1027&k=wK7VVbI0VU8mPpG94nDLsHaLRbky5cMT&authKey=LQfQsHtXTqbrRdmhSgUtxesNz9UmiETjymrhJF%2BFT1pAiEy0HUxSfM%2Fx%2FsTdOUC%2F&noverify=0&group_code=289694657)
+[![](https://dcbadge.limes.pink/api/server/xvYKa2pSN6)](https://discord.gg/xvYKa2pSN6)
+[![](https://img.shields.io/badge/Game%20Jolt-CCFF00?style=for-the-badge&logo=Game%20Jolt&logoColor=black)](https://gamejolt.com/games/undertale_changer_template/771575)
+
+
+| English | [简体中文](README_zh-CN.md) | [繁體中文](README_zh-TW.md) |
+|:---------------------:|:---------------------------:|:---------------------------:|
+
+
 
 ## Table of Contents
 
@@ -35,6 +47,7 @@ An [**UNDERTALE**](https://undertale.com/) fan game template based on [**unity e
 - [Usage](#usage)
 - [Wiki](#wiki)
 - [Dependencies](#Dependencies)
+- [Contributors](#Contributors)
 - [License](#license)
 
 
@@ -48,7 +61,7 @@ However, I was unsatisfied with the results of the old template. As a result, I 
 This marks the first step of the long journey for this project.
 
 ## Synopsis
-### Undetale Changer Template made by Bli_AIk.
+### Undertale Changer Template made by Bli_AIk.
 
 The project has used URP.
 
@@ -95,8 +108,23 @@ But it is not recommended to use the 2022 version, otherwise the template may ha
 - [NuGetForUnity](https://github.com/GlitchEnzo/NuGetForUnity)
 - [chineseStroke](https://github.com/WTree/chineseStroke)
 - [Alchemy](https://github.com/AnnulusGames/Alchemy)
+- [UnityTimer](https://github.com/akbiggs/UnityTimer)
+- [ink-unity-integration](https://github.com/inkle/ink-unity-integration)
 
 Thank you very much to the contributors of the above libraries/plugins for providing excellent tools and technical support for this project!
+
+*Another note: Since the project development took a long time and dependencies were not recorded from the beginning, there may be omissions. No infringement is intended. If there are any omissions, please inform us through Issue, thank you!*
+
+## Contributors
+The following individuals have contributed to this project.
+
+<a href = "https://github.com/Bli-AIk/Undertale-Changer-Template/Python/graphs/contributors">
+  <img src = "https://contrib.rocks/image?repo=Bli-AIk/Undertale-Changer-Template"/>
+</a>
+
+**A huge, heartfelt thank you to each and every one of you! 🎔**
+
+If you find a bug, want to fix an issue, or want to improve the project, please read **[the Contributing Guide](CONTRIBUTING.md)**.
 
 ## License
 

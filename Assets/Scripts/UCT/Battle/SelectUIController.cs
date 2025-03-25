@@ -1,50 +1,28 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using Alchemy.Inspector;
 using DG.Tweening;
 using TMPro;
-using UCT.Global.Audio;
-using UCT.Global.Core;
-using UCT.Global.UI;
+using UCT.Audio;
+using UCT.Battle.BattleConfigs;
+using UCT.Battle.Enemies;
+using UCT.Control;
+using UCT.Core;
 using UCT.Service;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using Timer = Plugins.Timer.Source.Timer;
 
 namespace UCT.Battle
 {
     /// <summary>
-    /// Battle场景中的UI控制器
-    /// 也负责玩家回合的控制
+    ///     Battle场景中的UI控制器
+    ///     也负责玩家回合的控制
     /// </summary>
     public class SelectUIController : MonoBehaviour
     {
-        private static readonly int IsFlashing = Shader.PropertyToID("_IsFlashing");
-        private static readonly int ColorFlash = Shader.PropertyToID("_ColorFlash");
-        private static readonly int ColorOn = Shader.PropertyToID("_ColorOn");
-        private static readonly int ColorUnder = Shader.PropertyToID("_ColorUnder");
-        private static readonly int Crop = Shader.PropertyToID("_Crop");
-        private static readonly int Flash = Shader.PropertyToID("_Flash");
-        
-        private TextMeshPro _nameUI, _hpUI, _textUI, _textUIBack;
-        private SpriteRenderer _hpSpr;
-
-        [Header("HP条配色")]
-        public Color hpColorUnder;
-
-        public Color hpColorOn;
-        public Color hpColorHit;
-
-        [Header("对话气泡载入数")]//载入actSave
-        public int numberDialog;
-
-        public bool isDialog;
-
-        [Header("暂存未使用的Sprite")]
-        public List<Sprite> spriteUI;
-
-        public List<SpriteRenderer> buttons;
-        public List<Vector2> playerUIPos;
-
         public enum SelectedButton
         {
             Fight,
@@ -52,754 +30,36 @@ namespace UCT.Battle
             Item,
             Mercy
         }
-        [Header("选择的按钮")]
-        public SelectedButton selectedButton;
 
+        /// <summary>
+        ///     表示当前选择的界面层。
+        /// </summary>
         public enum SelectedLayer
         {
-            ButtonLayer,//按钮层，仅能选择按钮
-            NameLayer,//名称层，用于显示、选择怪物名称
-            OptionLayer,//选项层，用于选择选项
-            NarratorLayer,//对话层，用于显示对话
-            TurnLayer//回合层，在此层时进入敌方回合
-        }
-        
-        [Header("目前的UI层级")]
-        public SelectedLayer selectedLayer;
-
-        [Header("选择的名称编号")] 
-        public int selectedName;
-        
-        [Header("选择的选项")]
-        public int selectedOption;
-        
-        private ItemSelectController _itemSelectController;
-        private TypeWritter _typeWritter;
-        private GameObject _enemiesHpLine;
-
-        [Header("暂存ACT选项以便调用")]
-        public List<string> actSave;
-
-        [Header("自动寻找战斗总控的怪物 需保证名称一致")]
-        public List<EnemiesController> enemiesControllers;
-
-        private TargetController _target;
-        private DialogBubbleBehaviour _dialog;
-
-        private int _saveTurn = -1;
-        private string _saveTurnText = "";
-
-        [Header("首次进入回合的时候播放自定义的回合文本")]
-        public bool firstIn;
-
-        public int firstInDiy = -1;
-
-        private void Start()
-        {
-            _target = transform.Find("Target").GetComponent<TargetController>();
-            _target.gameObject.SetActive(false);
-            _nameUI = transform.Find("Name UI").GetComponent<TextMeshPro>();
-            _hpUI = transform.Find("HP UI").GetComponent<TextMeshPro>();
-            _textUI = transform.Find("Text UI").GetComponent<TextMeshPro>();
-            _textUIBack = transform.Find("Text UI Back").GetComponent<TextMeshPro>();
-            _hpSpr = transform.Find("HP").GetComponent<SpriteRenderer>();
-            _itemSelectController = transform.Find("ItemSelect").GetComponent<ItemSelectController>();
-            _enemiesHpLine = transform.Find("EnemiesHpLine").gameObject;
-            _dialog = GameObject.Find("DialogBubble").GetComponent<DialogBubbleBehaviour>();
-            _dialog.gameObject.SetActive(false);
-            _typeWritter = GetComponent<TypeWritter>();
-            string[] loadButton = {
-                "FIGHT",
-                "ACT",
-                "ITEM",
-                "MERCY"};
-            foreach (var t in loadButton)
-            {
-                buttons.Add(transform.Find(t).GetComponent<SpriteRenderer>());
-            }
-
-            for (var i = 0; i < MainControl.Instance.BattleControl.enemies.Count; i++)
-            {
-                var enemies = GameObject.Find(MainControl.Instance.BattleControl.enemies[i].name).GetComponent<EnemiesController>();
-                if (enemies == null) continue;
-                enemiesControllers.Add(enemies);
-                enemiesControllers[i].atk = MainControl.Instance.BattleControl.enemiesAtk[i];
-                enemiesControllers[i].def = MainControl.Instance.BattleControl.enemiesDef[i];
-            }
-            selectedButton = EnumService.GetMinEnumValue<SelectedButton>();
-            TurnTextLoad(true);
-            _enemiesHpLine.SetActive(false);
-
-            UITextUpdate();
-
-            _hpFood = MainControl.Instance.playerControl.hp;
-
-            InTurn();
-        }
-
-        private void Update()
-        {
-            if (MainControl.Instance.overworldControl.isSetting || MainControl.Instance.overworldControl.pause)
-                return;
-            
-            if (MainControl.Instance.playerControl.isDebug)
-                NameUIUpdate();
-
-            if (TurnController.Instance.isMyTurn)
-                MyTurn();
-
-            _dialog.gameObject.SetActive(isDialog);
-
-            if (!isDialog) return;
-            if ((_dialog.typeWritter.isTyping || !GameUtilityService.ConvertKeyDownToControl(KeyCode.Z)) &&
-                (selectedButton != SelectedButton.Fight && _textUI.text != "" || numberDialog != 0)) return;
-            if (numberDialog < actSave.Count)
-                KeepDialogBubble();
-            else//敌方回合：开！
-            {
-                isDialog = false;
-
-                TurnController.Instance.OutYourTurn();
-
-                _itemSelectController.gameObject.SetActive(false);
-                actSave = new List<string>();
-                selectedLayer = SelectedLayer.TurnLayer;
-            }
-        }
-
-        /// <summary>
-        /// UI打字 打字完成后不会强制控死文本
-        /// </summary>
-        private void Type(string text)
-        {
-            _typeWritter.TypeOpen(text, false, 0, 0, _textUI);
-        }
-
-        /// <summary>
-        /// 战术互换
-        /// </summary>
-        private void SpriteChange()
-        {
-            (buttons[(int)selectedButton].sprite, spriteUI[(int)selectedButton]) = (
-                spriteUI[(int)selectedButton], buttons[(int)selectedButton].sprite);
-        }
-
-        /// <summary>
-        /// selectUI=1时的设定
-        /// 主要为选定怪物
-        /// </summary>
-        private void LayerOneSet()
-        {
-            MainControl.Instance.battlePlayerController.transform.position = new Vector3(-5.175f, -0.96f - selectedName * 0.66f, MainControl.Instance.battlePlayerController.transform.position.z);
-            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.DownArrow) && selectedName < MainControl.Instance.BattleControl.enemies.Count - 1)
-            {
-                selectedName++;
-                AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
-            }
-
-            if (!GameUtilityService.ConvertKeyDownToControl(KeyCode.UpArrow) || selectedName <= 0) return;
-            selectedName--;
-            AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
-        }
-
-        /// <summary>
-        ///进我方回合
-        /// </summary>
-        public void InTurn()
-        {
-            TurnController.Instance.isMyTurn = true;
-            selectedLayer = SelectedLayer.ButtonLayer;
-            selectedButton = EnumService.GetMinEnumValue<SelectedButton>();
-            selectedName = 0;
-            selectedOption = 0;
-            SpriteChange();
-            TurnTextLoad();
-            _itemSelectController.gameObject.SetActive(true);
-
-            MainControl.Instance.battlePlayerController.collideCollider.enabled = false;
-        }
-
-        /// <summary>
-        /// 我的回合！抽卡)
-        /// </summary>
-        private void MyTurn()
-        {
-            switch (selectedLayer)
-            {
-                case SelectedLayer.ButtonLayer:
-
-                    MainControl.Instance.battlePlayerController.transform.position =
-                        (Vector3)playerUIPos[(int)selectedButton] + new Vector3(0, 0,
-                            MainControl.Instance.battlePlayerController.transform.position.z);
-                    if (GameUtilityService.ConvertKeyDownToControl(KeyCode.LeftArrow))
-                    {
-                        AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
-                        if (selectedButton >= EnumService.GetMinEnumValue<SelectedButton>())
-                        {
-                            SpriteChange();
-                            if (selectedButton == EnumService.GetMinEnumValue<SelectedButton>())
-                                selectedButton = EnumService.GetMaxEnumValue<SelectedButton>();
-                            else
-                                selectedButton -= 1;
-                            SpriteChange();
-                        }
-                    }
-                    else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.RightArrow))
-                    {
-                        AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
-                        if (selectedButton <= EnumService.GetMaxEnumValue<SelectedButton>()) 
-                        {
-                            SpriteChange();
-                            if (selectedButton == EnumService.GetMaxEnumValue<SelectedButton>())
-                                selectedButton = EnumService.GetMinEnumValue<SelectedButton>();
-                            else
-                                selectedButton += 1;
-                            SpriteChange();
-                        }
-                    }
-                    if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
-                    {
-                        selectedLayer = SelectedLayer.NameLayer;
-                        selectedOption = 0;
-                        AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
-                        _typeWritter.TypeStop();
-                        _textUI.text = "";
-                        
-                        if (selectedButton != SelectedButton.Item)
-                            foreach (var t in MainControl.Instance.BattleControl.enemies)
-                            {
-                                _textUI.text += "<indent=10></indent>* " + t.name + "\n";
-                            }
-                        else
-                        {
-                            MainControl.Instance.playerControl.myItems = ListManipulationService.MoveZerosToEnd(MainControl.Instance.playerControl.myItems);
-
-                            _textUIBack.rectTransform.anchoredPosition = new Vector2(-5, -3.3f);
-                            _textUIBack.alignment = TextAlignmentOptions.TopRight;
-                            _hpSpr.material.SetFloat(IsFlashing, 1);
-                            _hpSpr.material.SetColor(ColorFlash, hpColorOn);
-
-                            _hpFood = MainControl.Instance.playerControl.hp;
-
-                        }
-
-                        if (MainControl.Instance.playerControl.myItems[0] == 0 && selectedButton == SelectedButton.Item)
-                            selectedLayer = SelectedLayer.ButtonLayer;
-                    }
-
-                    //if (hpFood != MainControl.instance.PlayerControl.hp)
-                    _hpUI.text = FormatWithLeadingZero(_hpFood) + " / " + FormatWithLeadingZero(MainControl.Instance.playerControl.hpMax);
-                    break;
-
-                case SelectedLayer.NameLayer:
-                    if (GameUtilityService.ConvertKeyDownToControl(KeyCode.X))
-                    {
-                        selectedLayer = SelectedLayer.ButtonLayer;
-                        selectedName = 0;
-                        if (!firstIn)
-                            TurnTextLoad();
-                        else
-                            TurnTextLoad(true, firstInDiy);
-                        _enemiesHpLine.SetActive(false);
-                        break;
-                    }
-
-                    if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z) && selectedButton != SelectedButton.Item)
-                    {
-                        if (selectedButton != SelectedButton.Fight)
-                            selectedLayer = SelectedLayer.OptionLayer;
-                        else
-                        {
-                            selectedLayer = SelectedLayer.NarratorLayer;
-                            SpriteChange();
-                        }
-
-                        selectedOption = 0;
-                        _textUI.text = "";
-                        AudioController.Instance.GetFx(1, MainControl.Instance.AudioControl.fxClipUI);
-                    }
-                    switch (selectedButton)
-                    {
-                        case SelectedButton.Fight://FIGHT：选择敌人
-                            _enemiesHpLine.SetActive(true);
-                            LayerOneSet();
-                            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
-                            {
-                                _enemiesHpLine.SetActive(false);
-                                _target.gameObject.SetActive(true);
-                                _target.select = selectedName;
-                                _target.transform.Find("Move").transform.position = new Vector3(MainControl.Instance.BattleControl.enemies[selectedName].transform.position.x, _target.transform.Find("Move").transform.position.y);
-                                _target.hitMonster = enemiesControllers[selectedName];
-                                MainControl.Instance.battlePlayerController.transform.position = (Vector3)(Vector2.one * 10000) + new Vector3(0, 0, MainControl.Instance.battlePlayerController.transform.position.z); 
-                            }
-                            break;
-
-                        case SelectedButton.Act://ACT：选择敌人
-                            LayerOneSet();
-                            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
-                            {
-                                var save = new List<string>();
-                                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.BattleControl.actSave, save, MainControl.Instance.BattleControl.enemies[selectedName].name + "\\");
-                                TextProcessingService.SplitStringToListWithDelimiter(save, actSave);
-
-                                _textUI.text = "<indent=10></indent>* " + actSave[0];
-                                _textUIBack.text = "";
-                                if (actSave.Count > MainControl.Instance.BattleControl.enemies.Count)
-                                    _textUIBack.text += "* " + actSave[2];
-                                if (actSave.Count > 2 * MainControl.Instance.BattleControl.enemies.Count)
-                                    _textUI.text += "\n<indent=10></indent>* " + actSave[4];
-                                if (actSave.Count > 3 * MainControl.Instance.BattleControl.enemies.Count)
-                                    _textUIBack.text += "\n* " + actSave[6];
-                                for (var i = 0; i < actSave.Count; i++)
-                                {
-                                    actSave[i] += ';';
-                                }
-
-                                actSave = DataHandlerService.ChangeItemData(actSave, false, new List<string> { enemiesControllers[selectedName].name, enemiesControllers[selectedName].atk.ToString(), enemiesControllers[selectedName].def.ToString() });
-
-                                for (var i = 0; i < actSave.Count; i++)
-                                {
-                                    actSave[i] = actSave[i][..(actSave[i].Length - 1)];
-                                }
-
-                                _textUIBack.rectTransform.anchoredPosition = new Vector2(10.75f, -3.3f);
-                                _textUIBack.alignment = TextAlignmentOptions.TopLeft;
-                            }
-                            break;
-
-                        case SelectedButton.Item://ITEM：跳2
-                            _itemSelectController.myItemMax = ListManipulationService.FindFirstZeroIndex(MainControl.Instance.playerControl.myItems);
-                            _itemSelectController.Open();
-                            selectedLayer = SelectedLayer.OptionLayer;
-
-                            if (MainControl.Instance.playerControl.myItems[selectedName] < 10000)
-                                UITextUpdate(UITextMode.Food, int.Parse(DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectedName], "Auto")));
-                            else
-                                UITextUpdate(UITextMode.Food);
-                            break;
-
-                        case SelectedButton.Mercy://MERCY：选择敌人
-                            LayerOneSet();
-                            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
-                            {
-                                var save = new List<string>();
-                                TextProcessingService.GetFirstChildStringByPrefix(MainControl.Instance.BattleControl.mercySave, save, MainControl.Instance.BattleControl.enemies[selectedName].name + "\\");
-                                TextProcessingService.SplitStringToListWithDelimiter(save, actSave);
-
-                                _textUI.text = "<indent=10></indent>* " + actSave[0];
-                                if (actSave.Count > MainControl.Instance.BattleControl.enemies.Count)
-                                    _textUI.text += "\n<indent=10></indent>* " + actSave[2];
-                                if (actSave.Count > 4 * MainControl.Instance.BattleControl.enemies.Count)
-                                    _textUI.text += "\n<indent=10></indent>* " + actSave[4];
-                            }
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
-                    break;
-
-                case SelectedLayer.OptionLayer:
-                    switch (selectedButton)
-                    {
-                        
-                        case SelectedButton.Fight:
-                            break;
-                        case SelectedButton.Act:
-                            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.UpArrow) && selectedOption - 2 >= 0)
-                            {
-                                AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
-                                selectedOption -= 2;
-                            }
-                            else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.DownArrow) && selectedOption + 2 <= actSave.Count / 2 - 1)
-                            {
-                                AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
-                                selectedOption += 2;
-                            }
-                            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.LeftArrow) && selectedOption - 1 >= 0)
-                            {
-                                AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
-                                selectedOption--;
-                            }
-                            else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.RightArrow) && selectedOption + 1 <= actSave.Count / 2 - 1)
-                            {
-                                AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
-                                selectedOption++;
-                            }
-
-                            float playerPosX, playerPosY;
-                            if ((selectedOption - 1) % 2 == 0)
-                            {
-                                playerPosX = 0.25f;
-                            }
-                            else
-                            {
-                                playerPosX = -5.175f;
-                            }
-                            if (selectedOption < 2)
-                            {
-                                playerPosY = -0.96f - 0 * 0.66f;
-                            }
-                            else
-                            {
-                                playerPosY = -0.96f - 1 * 0.66f;
-                            }
-                            MainControl.Instance.battlePlayerController.transform.position = new Vector3(playerPosX, playerPosY, MainControl.Instance.battlePlayerController.transform.position.z);
-                            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.X))
-                            {
-                                selectedLayer = SelectedLayer.NameLayer;
-                                selectedOption = 0;
-                                _textUI.text = "";
-                                _textUIBack.text = "";
-                                foreach (var t in MainControl.Instance.BattleControl.enemies)
-                                {
-                                    _textUI.text += "<indent=10></indent>* " + t.name + "\n";
-                                }
-                            }
-                            else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
-                            {
-                                switch (selectedName)//在这里写ACT的相关触发代码
-                                {
-                                    case 0://怪物0
-                                        switch (selectedOption)//选项
-                                        {
-                                            case 0:
-
-                                                break;
-
-                                            case 1:
-
-                                                Global.Other.Debug.Log(1);
-                                                AudioController.Instance.GetFx(3, MainControl.Instance.AudioControl.fxClipBattle);
-
-                                                break;
-
-                                            case 2:
-
-                                                break;
-
-                                            case 3:
-
-                                                break;
-                                        }
-                                        break;
-
-                                    case 1://怪物1
-                                        switch (selectedOption)//选项
-                                        {
-                                            case 0:
-
-                                                break;
-
-                                            case 1:
-
-                                                break;
-
-                                            case 2:
-
-                                                break;
-
-                                            case 3:
-
-                                                break;
-                                        }
-                                        break;
-
-                                    case 2://怪物2
-                                        switch (selectedOption)//选项
-                                        {
-                                            case 0:
-
-                                                break;
-
-                                            case 1:
-
-                                                break;
-
-                                            case 2:
-
-                                                break;
-
-                                            case 3:
-
-                                                break;
-                                        }
-                                        break;
-                                }
-
-                                _textUIBack.text = "";
-                                selectedLayer = SelectedLayer.NarratorLayer;
-                                MainControl.Instance.battlePlayerController.transform.position = (Vector3)(Vector2.one * 10000) + new Vector3(0, 0, MainControl.Instance.battlePlayerController.transform.position.z);
-                                Type(actSave[2 * (selectedOption + 1) - 1]);
-                                SpriteChange();
-                                _itemSelectController.Close();
-                            }
-
-                            break;
-
-                        case SelectedButton.Item:
-                            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.X))
-                            {
-                                selectedLayer = SelectedLayer.ButtonLayer;
-                                selectedName = 0;
-                                if (!firstIn)
-                                    TurnTextLoad();
-                                else
-                                    TurnTextLoad(true, firstInDiy);
-                                _itemSelectController.Close();
-
-                                _textUIBack.rectTransform.anchoredPosition = new Vector2(10.75f, -3.3f);
-                                _textUIBack.alignment = TextAlignmentOptions.TopLeft;
-                                _textUIBack.text = "";
-
-                                UITextUpdate(UITextMode.Food);
-                                break;
-                            }
-
-                            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
-                            {
-                                selectedLayer = SelectedLayer.NarratorLayer;
-                                MainControl.Instance.battlePlayerController.transform.position =
-                                    (Vector3)(Vector2.one * 10000) + new Vector3(0, 0,
-                                        MainControl.Instance.battlePlayerController.transform.position.z);
-                                GameUtilityService.UseItem(_typeWritter, _textUI, selectedName + 1);
-                                SpriteChange();
-                                _itemSelectController.Close();
-
-                                _textUIBack.rectTransform.anchoredPosition = new Vector2(10.75f, -3.3f);
-                                _textUIBack.alignment = TextAlignmentOptions.TopLeft;
-                                _textUIBack.text = "";
-
-                                UITextUpdate(UITextMode.Food);
-                                break;
-                            }
-
-                            var textUITextChanger1 = "";
-                            var textUITextChanger2 = "";
-
-                            var textUIDataChanger1 = "";
-                            var textUIDataChanger2 = "";
-
-                            var myItemMax = ListManipulationService.FindFirstZeroIndex(MainControl.Instance.playerControl.myItems);
-
-                            if (myItemMax > 1)
-                            {
-                                textUITextChanger1 = "<indent=10></indent>* " + DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectedName + 1 - selectedOption], "Auto", 0) + "\n";
-                                textUIDataChanger1 = DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectedName + 1 - selectedOption], "Auto", true) + "\n";
-                            }
-                            if (myItemMax > 2)
-                            {
-                                textUITextChanger2 = "<indent=10></indent>* " + DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectedName + 2 - selectedOption], "Auto", 0) + "\n";
-                                textUIDataChanger2 = DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectedName + 2 - selectedOption], "Auto", true) + "\n";
-                            }
-                            var number = 8;
-
-                            if (myItemMax >= 8)
-                            {
-                                _itemSelectController.myItemSelect = selectedName;
-                            }
-                            else //if (myItemMax < number)
-                            {
-                                number = myItemMax switch
-                                {
-                                    >= 6 => 8,
-                                    >= 4 => 7,
-                                    >= 2 => 6,
-                                    >= 1 => 5,
-                                    _ => number
-                                };
-                                if (myItemMax % 2 == 0)
-                                {
-                                    _itemSelectController.myItemSelect = selectedName + (number - 1 - myItemMax);
-                                }
-                                else
-                                    _itemSelectController.myItemSelect = selectedName + (number - myItemMax);
-                            }
-                            _itemSelectController.myItemRealSelect = selectedName;
-                            MainControl.Instance.battlePlayerController.transform.position = new Vector3(-5.175f, -0.96f - selectedOption * 0.66f, MainControl.Instance.battlePlayerController.transform.position.z);
-
-                            _textUI.text = "<indent=10></indent>* " + DataHandlerService.ItemIdGetName(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectedName - selectedOption], "Auto", 0) + "\n" +
-                                          textUITextChanger1 + textUITextChanger2;
-                            _textUIBack.text = DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectedName - selectedOption], "Auto", true) + "\n" + textUIDataChanger1 + textUIDataChanger2;
-
-                            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.UpArrow) && selectedName > 0)
-                            {
-                                if (selectedOption > 0)
-                                    selectedOption--;
-                                _itemSelectController.PressDown(true);
-                                selectedName--;
-                                AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
-
-                                if (MainControl.Instance.playerControl.myItems[selectedName] < 10000)
-                                    UITextUpdate(UITextMode.Food, int.Parse(DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectedName], "Auto")));
-                                else
-                                    UITextUpdate(UITextMode.Food);
-                            }
-                            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.DownArrow) && selectedName < myItemMax - 1)
-                            {
-                                if (selectedOption < 2)
-                                    selectedOption++;
-                                _itemSelectController.PressDown(false);
-                                selectedName++;
-                                AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
-
-                                if (MainControl.Instance.playerControl.myItems[selectedName] < 10000)
-                                    UITextUpdate(UITextMode.Food, int.Parse(DataHandlerService.ItemIdGetData(MainControl.Instance.ItemControl, MainControl.Instance.playerControl.myItems[selectedName], "Auto")));
-                                else
-                                    UITextUpdate(UITextMode.Food);
-                            }
-
-                            _hpUI.text = FormatWithLeadingZero(_hpFood) + " / " + FormatWithLeadingZero(MainControl.Instance.playerControl.hpMax);
-                            break;
-
-                        case SelectedButton.Mercy:
-                            MainControl.Instance.battlePlayerController.transform.position = new Vector3(-5.175f, -0.96f - selectedOption * 0.66f, MainControl.Instance.battlePlayerController.transform.position.z);
-                            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.X))
-                            {
-                                selectedLayer = SelectedLayer.NameLayer;
-                                selectedOption = 0;
-                                _textUI.text = "";
-                                foreach (var t in MainControl.Instance.BattleControl.enemies)
-                                {
-                                    _textUI.text += "<indent=10></indent>* " + t.name + "\n";
-                                }
-                            }
-                            else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
-                            {
-                                selectedLayer = SelectedLayer.NarratorLayer;
-                                MainControl.Instance.battlePlayerController.transform.position = (Vector3)(Vector2.one * 10000) + new Vector3(0, 0, MainControl.Instance.battlePlayerController.transform.position.z);
-                                if (actSave[2 * selectedOption - 3] != "Null")
-                                    Type(actSave[2 * selectedOption - 3]);
-                                else
-                                {
-                                    _textUI.text = "";
-                                    MainControl.Instance.battlePlayerController.transform.position = (Vector3)MainControl.Instance.battlePlayerController.sceneDrift + new Vector3(0, 0, MainControl.Instance.battlePlayerController.transform.position.z);
-                                    OpenDialogBubble(MainControl.Instance.BattleControl.turnDialogAsset[TurnController.Instance.turn]);
-                                }
-                                SpriteChange();
-                                _itemSelectController.Close();
-                            }
-
-                            if (GameUtilityService.ConvertKeyDownToControl(KeyCode.UpArrow) && selectedOption - 1 >= 0)
-                            {
-                                AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
-                                selectedOption--;
-                            }
-                            else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.DownArrow) && selectedOption + 1 <= actSave.Count / 2 - 1)
-                            {
-                                AudioController.Instance.GetFx(0, MainControl.Instance.AudioControl.fxClipUI);
-                                selectedOption++;
-                            }
-
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
-                    break;
-
-                case SelectedLayer.NarratorLayer:
-                    //DataHandlerService.ForceJumpLoadTurn  = true;
-                    firstIn = false;
-
-                    if (selectedButton == SelectedButton.Fight && !_target.gameObject.activeSelf)
-                    {
-                        if (!isDialog) 
-                        {
-                            _textUI.text = "";
-                            MainControl.Instance.battlePlayerController.transform.position =
-                                (Vector3)MainControl.Instance.battlePlayerController.sceneDrift + new Vector3(0, 0,
-                                    MainControl.Instance.battlePlayerController.transform.position.z);
-                            OpenDialogBubble(MainControl.Instance.BattleControl.turnDialogAsset[TurnController.Instance.turn]);
-                        }
-                    }
-                    else if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
-                    {
-                        MainControl.Instance.battlePlayerController.collideCollider.enabled = true;
-                        if (!isDialog)
-                        {
-                            if (selectedButton != SelectedButton.Fight && _textUI.text == "")
-                            {
-                                OpenDialogBubble(MainControl.Instance.BattleControl.turnDialogAsset[TurnController.Instance.turn]);
-                                MainControl.Instance.battlePlayerController.transform.position = (Vector3)MainControl.Instance.battlePlayerController.sceneDrift + new Vector3(0, 0, MainControl.Instance.battlePlayerController.transform.position.z);
-                                break;
-                            }
-                            if (selectedButton != SelectedButton.Fight && !_typeWritter.isTyping)
-                            {
-                                if (GameUtilityService.ConvertKeyDownToControl(KeyCode.Z))
-                                {
-                                    _textUI.text = "";
-                                    MainControl.Instance.battlePlayerController.transform.position = (Vector3)MainControl.Instance.battlePlayerController.sceneDrift + new Vector3(0, 0, MainControl.Instance.battlePlayerController.transform.position.z);
-                                    OpenDialogBubble(MainControl.Instance.BattleControl.turnDialogAsset[TurnController.Instance.turn]);
-                                }
-                            }
-                        }
-                    }
-
-                    break;
-                case SelectedLayer.TurnLayer:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-
-        private void OpenDialogBubble(string textAsset)
-        {
-            MainControl.Instance.BattleControl.randomTurnDir = MathUtilityService.Get1Or_1();
-            actSave = DataHandlerService.LoadItemData(textAsset);
-            actSave = DataHandlerService.ChangeItemData(actSave, true, new List<string>());
-            isDialog = true;
-            numberDialog = 0;
-        }
-
-        private void KeepDialogBubble()
-        {
-            var save = new List<string>();
-            TextProcessingService.SplitStringToListWithDelimiter(actSave[numberDialog], save);
-            foreach (var t in enemiesControllers.Where(t => save[2] == t.name))
-            {
-                _dialog.transform.SetParent(t.transform);
-                break;
-            }
-
-            _dialog.size = TextProcessingService.StringVector2ToRealVector2(save[0], _dialog.size);
-            _dialog.position = TextProcessingService.StringVector2ToRealVector2(save[1], _dialog.position);
-
-            _dialog.isBackRight = Convert.ToBoolean(save[3]);
-            _dialog.backY = float.Parse(save[4]);
-            _dialog.typeWritter.TypeOpen(save[5], false, 0, 1, _dialog.tmp);
-            numberDialog++;
-            _dialog.tmp.text = "";
-            _dialog.PositionChange();
-        }
-
-        private void TurnTextLoad(bool isDiy = false, int diy = 0)
-        {
-            if (TurnController.Instance.turn != _saveTurn || _saveTurnText == "")
-            {
-                List<string> load;
-                _saveTurn = TurnController.Instance.turn;
-                if (isDiy)
-                {
-                    load = TurnTextLoad(MainControl.Instance.BattleControl.turnTextSave, diy);
-                    firstIn = false;
-                }
-                else
-                {
-                    load = TurnTextLoad(MainControl.Instance.BattleControl.turnTextSave, _saveTurn);
-                }
-
-                _saveTurnText = load[Random.Range(0, load.Count)];
-            }
-
-            Type(_saveTurnText);
-        }
-
-        private static List<string> TurnTextLoad(List<string> turnTextSave, int turn)
-        {
-            var turnTextSaveChanged = (from t in turnTextSave where t[..turn.ToString().Length] == turn.ToString() select t[(turn.ToString().Length + 1)..]).ToList();
-            var saves = new List<string>();
-            TextProcessingService.SplitStringToListWithDelimiter(turnTextSaveChanged, saves);
-            return saves;
+            /// <summary>
+            ///     按钮层，仅能选择按钮。
+            /// </summary>
+            ButtonLayer,
+
+            /// <summary>
+            ///     名称层，用于显示、选择怪物名称。
+            /// </summary>
+            NameLayer,
+
+            /// <summary>
+            ///     选项层，用于选择选项。
+            /// </summary>
+            OptionLayer,
+
+            /// <summary>
+            ///     对话层，用于显示对话。
+            /// </summary>
+            NarratorLayer,
+
+            /// <summary>
+            ///     回合层，在此层时进入敌方回合。
+            /// </summary>
+            TurnLayer
         }
 
         public enum UITextMode
@@ -809,13 +69,1564 @@ namespace UCT.Battle
             Food
         }
 
-        private Tween _hpFoodTween;
+        private const string UITextPrefix = "<indent=10></indent>* ";
+
+        private static readonly int IsFlashing = Shader.PropertyToID("_IsFlashing");
+        private static readonly int ColorFlash = Shader.PropertyToID("_ColorFlash");
+        private static readonly int ColorOn = Shader.PropertyToID("_ColorOn");
+        private static readonly int ColorUnder = Shader.PropertyToID("_ColorUnder");
+        private static readonly int Crop = Shader.PropertyToID("_Crop");
+        private static readonly int Flash = Shader.PropertyToID("_Flash");
+        private static readonly int IsFlee = Animator.StringToHash("IsFlee");
+
+        [TabGroup("Config")] public Color hpColorUnder;
+
+        [TabGroup("Config")] public Color hpColorOn;
+
+        [TabGroup("Config")] public Color hpColorHit;
+
+        [Header("暂存未使用的Sprite")]
+        public List<Sprite> spriteUI;
+
+        [HideInInspector] public List<SpriteRenderer> buttons;
+
+
+        [TabGroup("State (ReadOnly)")] [ReadOnly]
+        public SelectedButton selectedButton;
+
+        [TabGroup("State (ReadOnly)")] [ReadOnly]
+        public SelectedLayer selectedLayer;
+
+        [TabGroup("State (ReadOnly)")] [ReadOnly]
+        public int nameLayerIndex;
+
+        [TabGroup("State (ReadOnly)")] [ReadOnly]
+        public int optionLayerIndex;
+
+        [HideInInspector] public List<string> optionsSave;
+
+        [HideInInspector] public List<EnemiesController> enemiesControllers;
+
+        [HideInInspector] public GameObject projectionBoxes;
+        private List<EnemiesXmlDialogParser.Message> _currentMessages;
+
+        private List<DialogBubbleBehaviour> _dialogBubbleBehaviours;
+
+        private List<EnemiesXmlDialogParser.Message> _dialogMessages;
+        private string _dialogText;
+        private GameObject _enemiesHpLine;
+        private bool _haveRandomTurnDialog;
         private int _hpFood;
+        private Tween _hpFoodTween;
+        private SpriteRenderer _hpSpr;
+
+        private bool _isDialog;
+        private bool _isEndBattle;
+
+        private ItemScroller _itemScroller;
+
+        private TextMeshPro _nameUI, _hpUI, _textUI, _textUIBack;
+
+        private int _saveTurn = -1;
+        private string _saveTurnText = "";
+
+        private TargetController _target;
+        private TypeWritter _typeWritter;
+        public PlayerLineController PlayerLineController { get; private set; }
+
+        private void Awake()
+        {
+            projectionBoxes = GameObject.Find("ProjectionBoxes");
+        }
+
+        private void Start()
+        {
+            GetComponent();
+            TurnTextLoad();
+            _enemiesHpLine.SetActive(false);
+            UITextUpdate();
+            _hpFood = MainControl.Instance.playerControl.hp;
+            EnterPlayerTurn();
+            GetHaveRandomTurnDialog();
+        }
+
+        private void Update()
+        {
+            if (GameUtilityService.IsGamePausedOrSetting() || _isEndBattle)
+            {
+                return;
+            }
+
+            if (MainControl.Instance.playerControl.isDebug)
+            {
+                NameUIUpdate();
+            }
+
+            if (TurnController.Instance.isMyTurn)
+            {
+                PlayerTurn();
+            }
+
+            UpdateDialog();
+        }
+
+        private void GetHaveRandomTurnDialog()
+        {
+            var textAssets = MainControl.Instance.BattleControl.turnDialogAsset;
+            var types = textAssets.Select(textAsset => EnemiesXmlDialogParser.GetDialogInfo(textAsset).Type).ToList();
+            _haveRandomTurnDialog = !(types.Any(t => t == EnemiesXmlDialogParser.DialogType.Fixed) &&
+                                      !types.Contains(EnemiesXmlDialogParser.DialogType.Random));
+        }
+
+        private void UpdateDialog()
+        {
+            if (MainControl.Instance.selectUIController.enemiesControllers == null)
+            {
+                return;
+            }
+
+            var canEndBattle = MainControl.Instance.selectUIController.enemiesControllers.All(enemiesController =>
+                enemiesController.Enemy.state is not (EnemyState.Default or EnemyState.CanSpace));
+
+            if (!canEndBattle)
+            {
+                if (!_isDialog)
+                {
+                    return;
+                }
+
+                ProcessDelayedDialogMessages();
+
+                var isEndBubble = _dialogBubbleBehaviours.All(bubble => !bubble.gameObject.activeSelf);
+
+                if (isEndBubble)
+                {
+                    _isDialog = false;
+                    EnterTurnLayer();
+                    TurnController.Instance.EnterEnemyTurn();
+                    return;
+                }
+
+                var isTyping = _dialogBubbleBehaviours.Any(dialog => dialog.typeWritter.isTyping);
+
+                if (!isTyping && InputService.GetKeyDown(KeyCode.Z))
+                {
+                    KeepDialogBubble();
+                }
+            }
+            else
+            {
+                EndBattle();
+            }
+        }
+
+        private void ProcessDelayedDialogMessages()
+        {
+            foreach (var bubbleBehaviour in _dialogBubbleBehaviours.Where(dialog =>
+                         dialog.Message.Mode == EnemiesXmlDialogParser.MessageMode.Delay))
+            {
+                if (PassDelayedDialogMessages(bubbleBehaviour))
+                {
+                    continue;
+                }
+
+
+                for (var index = _currentMessages.Count - 1; index >= 0; index--)
+                {
+                    var message = _currentMessages[index];
+                    if (message.Name != bubbleBehaviour.Message.Name)
+                    {
+                        continue;
+                    }
+
+                    var changedItems = (from item in _dialogMessages
+                        from targetItem in message.Target
+                        where targetItem == item.Name
+                        select item).ToList();
+
+                    _currentMessages.RemoveAt(index);
+                    _currentMessages.InsertRange(index, changedItems);
+
+
+                    bubbleBehaviour.gameObject.SetActive(false);
+                    foreach (var t in changedItems)
+                    {
+                        AnalyzeMessage(t);
+                    }
+
+                    if (HideDialogBubblesOnEnd(message))
+                    {
+                        return;
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        private bool PassDelayedDialogMessages(DialogBubbleBehaviour bubbleBehaviour)
+        {
+            if (bubbleBehaviour.delay > 0)
+            {
+                bubbleBehaviour.delay -= Time.deltaTime;
+                return true;
+            }
+
+            var isNotDelaying = false;
+            for (var index = 0; index < _currentMessages.Count; index++)
+            {
+                if (_currentMessages[index].Name != bubbleBehaviour.Message.Name)
+                {
+                    continue;
+                }
+
+                if (_currentMessages[index].IsDelaying)
+                {
+                    var temp = _currentMessages[index];
+                    temp.IsDelaying = false;
+                    _currentMessages[index] = temp;
+                }
+                else
+                {
+                    isNotDelaying = true;
+                    break;
+                }
+            }
+
+            return isNotDelaying;
+        }
+
+        private void EndBattle()
+        {
+            if (_isEndBattle)
+            {
+                return;
+            }
+
+            EnterTurnLayer();
+            _isEndBattle = true;
+            Timer.Register(1, ExitBattleScene);
+        }
+
+        private void ExitBattleScene()
+        {
+            _isEndBattle = true;
+            AudioController.Instance.audioSource.DOFade(0, 0.5f);
+            var (exp, gold) = GetEnemiesExpAndGold();
+
+            StartTypeWritter(string.Format(TextProcessingService.GetFirstChildStringByPrefix(
+                MainControl.Instance.LanguagePackControl.sceneTexts,
+                "Won"), exp, gold));
+            MainControl.Instance.playerControl.exp += exp;
+            MainControl.Instance.playerControl.gold += gold;
+            _typeWritter.OnClose = () =>
+            {
+                GameUtilityService.FadeOutAndSwitchScene(MainControl.Instance.playerControl.lastScene,
+                    Color.black);
+            };
+        }
+
+        private (int exp, int gold) GetEnemiesExpAndGold()
+        {
+            var exp = 0;
+            var gold = 0;
+            foreach (var enemy in enemiesControllers.Select(enemiesController => enemiesController.Enemy))
+            {
+                if (enemy.state is EnemyState.Dead)
+                {
+                    exp += enemy.exp;
+                }
+
+                if (enemy.state is EnemyState.Dead or EnemyState.Spaced)
+                {
+                    gold += enemy.gold;
+                }
+            }
+
+            return (exp, gold);
+        }
+
+        private void EnterTurnLayer()
+        {
+            _isDialog = false;
+            _itemScroller.gameObject.SetActive(false);
+            optionsSave = new List<string>();
+            selectedLayer = SelectedLayer.TurnLayer;
+        }
+
+        private void GetComponent()
+        {
+            _target = transform.Find("Target").GetComponent<TargetController>();
+            _target.gameObject.SetActive(false);
+            _nameUI = transform.Find("Name UI").GetComponent<TextMeshPro>();
+            _hpUI = transform.Find("HP UI").GetComponent<TextMeshPro>();
+            _textUI = transform.Find("Text UI").GetComponent<TextMeshPro>();
+            _textUIBack = transform.Find("Text UI Back").GetComponent<TextMeshPro>();
+            _hpSpr = transform.Find("HP").GetComponent<SpriteRenderer>();
+            _itemScroller = transform.Find("ItemSelect").GetComponent<ItemScroller>();
+            _enemiesHpLine = transform.Find("EnemiesHpLine").gameObject;
+            _typeWritter = GetComponent<TypeWritter>();
+            PlayerLineController = transform.Find("PlayerLineController").GetComponent<PlayerLineController>();
+            foreach (var t in new[] { "FIGHT", "ACT", "ITEM", "MERCY" })
+            {
+                buttons.Add(transform.Find(t).GetComponent<SpriteRenderer>());
+            }
+
+            SetBattleConfig(MainControl.Instance.BattleControl.BattleConfig);
+            _dialogBubbleBehaviours = new List<DialogBubbleBehaviour>();
+            for (var i = 0; i < enemiesControllers.Count; i++)
+            {
+                var dialogBubble = Instantiate(Resources.Load<GameObject>("Prefabs/DialogBubble"));
+                var dialogBubbleBehaviour = dialogBubble.GetComponent<DialogBubbleBehaviour>();
+                _dialogBubbleBehaviours.Add(dialogBubbleBehaviour);
+                dialogBubble.SetActive(false);
+            }
+        }
+
+        private void SetBattleConfig(IBattleConfig config)
+        {
+            for (var index = 0; index < config.enemies.Length; index++)
+            {
+                var enemy = config.enemies[index];
+                var obj = Instantiate(enemy);
+                obj.name = enemy.name;
+
+                var startPosition = config.enemiesStartPosition[index];
+                if (startPosition != null)
+                {
+                    obj.transform.position = startPosition.Value;
+                }
+
+                enemiesControllers.Add(obj.transform.GetComponent<EnemiesController>());
+            }
+
+            selectedButton = EnumService.GetMinEnumValue<SelectedButton>();
+
+            Instantiate(config.backGroundModel);
+            RenderSettings.skybox = config.skyBox;
+
+            var volume = GameObject.Find("Global Volume").GetComponent<UnityEngine.Rendering.Volume>();
+            volume.profile = config.volumeProfile;
+        }
 
         /// <summary>
-        /// 更新UI文字与血条
+        ///     UI打字 打字完成后不会强制控死文本
         /// </summary>
-        public void UITextUpdate(UITextMode uiTextMode = 0, int foodNumber = 0)
+        private void StartTypeWritter(string text)
+        {
+            _typeWritter.StartTypeWritter(text, _textUI);
+        }
+
+        /// <summary>
+        ///     战术互换
+        /// </summary>
+        private void SpriteChange()
+        {
+            (buttons[(int)selectedButton].sprite, spriteUI[(int)selectedButton]) = (
+                spriteUI[(int)selectedButton], buttons[(int)selectedButton].sprite);
+        }
+
+        /// <summary>
+        ///     selectUI=1时的设定
+        ///     主要为选定怪物
+        /// </summary>
+        private void LayerOneSet()
+        {
+            while (nameLayerIndex < enemiesControllers.Count - 1 && nameLayerIndex + 1 < enemiesControllers.Count &&
+                   enemiesControllers[nameLayerIndex].Enemy.state is not (EnemyState.Default or EnemyState.CanSpace) &&
+                   enemiesControllers[nameLayerIndex + 1].Enemy.state is EnemyState.Default or EnemyState.CanSpace)
+            {
+                nameLayerIndex++;
+            }
+
+            if (InputService.GetKeyDown(KeyCode.DownArrow))
+            {
+                LayerOneSetKeyDown();
+            }
+
+            if (InputService.GetKeyDown(KeyCode.UpArrow))
+            {
+                LayerOneSetKeyUp();
+            }
+
+            MainControl.Instance.battlePlayerController.transform.position = new Vector3(
+                -5.175f, -0.96f - nameLayerIndex * 0.66f,
+                MainControl.Instance.battlePlayerController.transform.position.z);
+        }
+
+        private void LayerOneSetKeyUp()
+        {
+            var isPlayFx = false;
+            while (nameLayerIndex > 0 &&
+                   enemiesControllers[nameLayerIndex - 1].Enemy.state is EnemyState.Default or EnemyState.CanSpace)
+            {
+                nameLayerIndex--;
+                if (isPlayFx)
+                {
+                    continue;
+                }
+
+                AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                isPlayFx = true;
+            }
+        }
+
+        private void LayerOneSetKeyDown()
+        {
+            var isPlayFx = false;
+            while (nameLayerIndex < enemiesControllers.Count - 1 && nameLayerIndex + 1 < enemiesControllers.Count &&
+                   enemiesControllers[nameLayerIndex + 1].Enemy.state is EnemyState.Default or EnemyState.CanSpace)
+            {
+                nameLayerIndex++;
+                if (isPlayFx)
+                {
+                    continue;
+                }
+
+                AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                isPlayFx = true;
+            }
+        }
+
+
+        /// <summary>
+        ///     进我方回合
+        /// </summary>
+        public void EnterPlayerTurn()
+        {
+            TurnController.Instance.isMyTurn = true;
+            selectedLayer = SelectedLayer.ButtonLayer;
+            selectedButton = EnumService.GetMinEnumValue<SelectedButton>();
+            nameLayerIndex = 0;
+            optionLayerIndex = 0;
+            SpriteChange();
+            TurnTextLoad();
+            _itemScroller.gameObject.SetActive(true);
+
+            if (MainControl.Instance.battlePlayerController)
+            {
+                MainControl.Instance.battlePlayerController.collideCollider.enabled = false;
+            }
+        }
+
+        /// <summary>
+        ///     玩家回合
+        /// </summary>
+        private void PlayerTurn()
+        {
+            switch (selectedLayer)
+            {
+                case SelectedLayer.ButtonLayer:
+                {
+                    UpdateButtonLayer();
+                    break;
+                }
+
+                case SelectedLayer.NameLayer:
+                {
+                    UpdateNameLayer();
+                    break;
+                }
+
+                case SelectedLayer.OptionLayer:
+                {
+                    UpdateOptionLayer();
+                    break;
+                }
+
+                case SelectedLayer.NarratorLayer:
+                {
+                    UpdateNarratorLayer();
+                    break;
+                }
+                case SelectedLayer.TurnLayer:
+                {
+                    break;
+                }
+                default:
+                {
+                    throw new ArgumentOutOfRangeException($"Unexpected selectedLayer value: {selectedLayer}");
+                }
+            }
+        }
+
+        private void UpdateButtonLayer()
+        {
+            List<Vector2> playerUIPos = new()
+            {
+                new Vector2(-5.65f, -4.45f),
+                new Vector2(-2.435f, -4.45f),
+                new Vector2(0.865f, -4.45f),
+                new Vector2(4.025f, -4.45f)
+            };
+            MainControl.Instance.battlePlayerController.transform.position =
+                (Vector3)playerUIPos[(int)selectedButton] + new Vector3(0, 0,
+                    MainControl.Instance.battlePlayerController.transform.position.z);
+            ButtonLayerInput();
+
+            _hpUI.text = GameUtilityService.FormatWithLeadingZero(_hpFood) + " / " +
+                         GameUtilityService.FormatWithLeadingZero(MainControl.Instance.playerControl.hpMax);
+        }
+
+        private void ButtonLayerInput()
+        {
+            if (InputService.GetKeyDown(KeyCode.LeftArrow))
+            {
+                AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                if (selectedButton >= EnumService.GetMinEnumValue<SelectedButton>())
+                {
+                    SpriteChange();
+                    if (selectedButton == EnumService.GetMinEnumValue<SelectedButton>())
+                    {
+                        selectedButton = EnumService.GetMaxEnumValue<SelectedButton>();
+                    }
+                    else
+                    {
+                        selectedButton -= 1;
+                    }
+
+                    SpriteChange();
+                }
+            }
+            else if (InputService.GetKeyDown(KeyCode.RightArrow))
+            {
+                AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                if (selectedButton <= EnumService.GetMaxEnumValue<SelectedButton>())
+                {
+                    SpriteChange();
+                    if (selectedButton == EnumService.GetMaxEnumValue<SelectedButton>())
+                    {
+                        selectedButton = EnumService.GetMinEnumValue<SelectedButton>();
+                    }
+                    else
+                    {
+                        selectedButton += 1;
+                    }
+
+                    SpriteChange();
+                }
+            }
+
+            ButtonLayerConfirm();
+        }
+
+        private void ButtonLayerConfirm()
+        {
+            if (!InputService.GetKeyDown(KeyCode.Z))
+            {
+                return;
+            }
+
+            selectedLayer = SelectedLayer.NameLayer;
+            optionLayerIndex = 0;
+            AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
+            _typeWritter.TypeStop();
+            _textUI.text = "";
+
+            if (selectedButton != SelectedButton.Item)
+            {
+                SetEnemiesName();
+            }
+            else
+            {
+                MainControl.Instance.playerControl.items =
+                    ListManipulationService.CheckAllDataNamesInItemList(MainControl.Instance.playerControl
+                        .items);
+                MainControl.Instance.playerControl.items =
+                    ListManipulationService.MoveNullOrEmptyToEnd(MainControl.Instance.playerControl.items);
+
+                _textUIBack.rectTransform.anchoredPosition = new Vector2(-5, -3.3f);
+                _textUIBack.alignment = TextAlignmentOptions.TopRight;
+                _hpSpr.material.SetFloat(IsFlashing, 1);
+                _hpSpr.material.SetColor(ColorFlash, hpColorOn);
+
+                _hpFood = MainControl.Instance.playerControl.hp;
+            }
+
+            if (string.IsNullOrEmpty(MainControl.Instance.playerControl.items[0]) &&
+                selectedButton == SelectedButton.Item)
+            {
+                selectedLayer = SelectedLayer.ButtonLayer;
+            }
+        }
+
+        private void SetEnemiesName()
+        {
+            foreach (var enemy in enemiesControllers)
+            {
+                if (enemy.Enemy.state is not (EnemyState.Default or EnemyState.CanSpace))
+                {
+                    _textUI.text += "\n";
+                    continue;
+                }
+
+                var save = TextProcessingService.GetFirstChildStringByPrefix(
+                    MainControl.Instance.BattleControl.enemiesNameSave, enemy.gameObject.name);
+                if (enemy.Enemy.state == EnemyState.CanSpace)
+                {
+                    _textUI.text += "<color=yellow>";
+                }
+
+                _textUI.text += $"{UITextPrefix}{save}\n</color>";
+            }
+        }
+
+        private void UpdateNameLayer()
+        {
+            if (NameLayerCancel())
+            {
+                return;
+            }
+
+            NameLayerConfirmCommon();
+
+            switch (selectedButton)
+            {
+                case SelectedButton.Fight:
+                {
+                    NameLayerConfirmFight();
+                    break;
+                }
+
+                case SelectedButton.Act:
+                {
+                    NameLayerConfirmAct();
+                    break;
+                }
+
+                case SelectedButton.Item:
+                {
+                    NameLayerConfirmItem();
+                    break;
+                }
+
+                case SelectedButton.Mercy:
+                {
+                    NameLayerConfirmMercy();
+                    break;
+                }
+                default:
+                {
+                    throw new ArgumentOutOfRangeException($"Unexpected selectedButton value: {selectedButton}");
+                }
+            }
+        }
+
+        /// <summary>
+        ///     MERCY：选择敌人
+        /// </summary>
+        private void NameLayerConfirmMercy()
+        {
+            LayerOneSet();
+            if (!InputService.GetKeyDown(KeyCode.Z))
+            {
+                return;
+            }
+
+            var save = TextProcessingService.BatchGetFirstChildStringByPrefix(
+                MainControl.Instance.BattleControl.mercySave,
+                enemiesControllers[nameLayerIndex].name + "\\");
+            TextProcessingService.SplitStringToListWithDelimiter(save, optionsSave);
+
+            _textUI.text = NameLayerSetMercyText(0);
+            _textUI.text += NameLayerSetMercyText(1);
+            _textUI.text += NameLayerSetMercyText(2);
+        }
+
+        private string NameLayerSetMercyText(int index)
+        {
+            var result = new StringBuilder();
+            if (enemiesControllers[nameLayerIndex].Enemy.state == EnemyState.CanSpace &&
+                index < enemiesControllers[nameLayerIndex].Enemy.MercyTypes.Length &&
+                enemiesControllers[nameLayerIndex].Enemy.MercyTypes[index] == MercyType.Mercy)
+            {
+                result.Append("<color=yellow>");
+            }
+
+            index *= 2;
+            if (optionsSave.Count <= index)
+            {
+                return null;
+            }
+
+            result.Append($"{UITextPrefix}{optionsSave[index]}</color>\n");
+            return result.ToString();
+        }
+
+        /// <summary>
+        ///     ITEM：跳2
+        /// </summary>
+        private void NameLayerConfirmItem()
+        {
+            _itemScroller.Open(ListManipulationService.FindFirstNullOrEmptyIndex(MainControl.Instance
+                .playerControl
+                .items), 0);
+            selectedLayer = SelectedLayer.OptionLayer;
+
+            var item = DataHandlerService.GetItemFormDataName(
+                MainControl.Instance.playerControl.items[nameLayerIndex]);
+            if (item is FoodItem or ParentFoodItem)
+            {
+                UITextUpdate(UITextMode.Food, item.Data.Value);
+            }
+            else
+            {
+                UITextUpdate(UITextMode.Food);
+            }
+        }
+
+        /// <summary>
+        ///     ACT：选择敌人
+        /// </summary>
+        private void NameLayerConfirmAct()
+        {
+            LayerOneSet();
+            if (!InputService.GetKeyDown(KeyCode.Z))
+            {
+                return;
+            }
+
+            var save = TextProcessingService.BatchGetFirstChildStringByPrefix(
+                MainControl.Instance.BattleControl.actSave,
+                enemiesControllers[nameLayerIndex].name + "\\");
+            TextProcessingService.SplitStringToListWithDelimiter(save, optionsSave);
+            SetActTexts();
+
+            for (var i = 0; i < optionsSave.Count; i++)
+            {
+                optionsSave[i] += ';';
+            }
+
+            optionsSave = DataHandlerService.ChangeItemData(optionsSave, false,
+                new List<string>
+                {
+                    enemiesControllers[nameLayerIndex].name,
+                    enemiesControllers[nameLayerIndex].atk.ToString(),
+                    enemiesControllers[nameLayerIndex].def.ToString()
+                });
+
+            for (var i = 0; i < optionsSave.Count; i++)
+            {
+                optionsSave[i] = optionsSave[i][..(optionsSave[i].Length - 1)];
+            }
+
+            _textUIBack.rectTransform.anchoredPosition = new Vector2(10.75f, -3.3f);
+            _textUIBack.alignment = TextAlignmentOptions.TopLeft;
+        }
+
+        private void SetActTexts()
+        {
+            var options = enemiesControllers[nameLayerIndex].OnOptions;
+            var enemyCount = enemiesControllers.Count;
+
+            if (options == null || options.Length == 0)
+            {
+                return;
+            }
+
+            const string noLPack = "No L-Pack!";
+            const string noLanguagePack = "No Language Pack!";
+            EnsureActSaveSize(2, noLPack);
+            _textUI.text = new StringBuilder().Append(UITextPrefix).Append(optionsSave[0]).ToString();
+            _textUIBack.text = "";
+
+            for (var i = 0; i < options.Length; i++)
+            {
+                var index = i * 2;
+                EnsureActSaveSize(index + 2, noLPack);
+
+                if (optionsSave.Count > i * enemyCount)
+                {
+                    if (i % 2 == 1)
+                    {
+                        _textUIBack.text += $"* {optionsSave[index]}\n";
+                    }
+                    else
+                    {
+                        _textUI.text += $"{UITextPrefix}{optionsSave[index]}\n";
+                    }
+                }
+                else
+                {
+                    if (i % 2 == 1)
+                    {
+                        _textUIBack.text += $"* {noLPack}\n";
+                    }
+                    else
+                    {
+                        _textUI.text += $"{UITextPrefix}{noLPack}\n";
+                    }
+
+                    Debug.LogError(noLanguagePack);
+                }
+            }
+        }
+
+        private void EnsureActSaveSize(int size, string defaultValue)
+        {
+            while (optionsSave.Count < size)
+            {
+                optionsSave.Add(defaultValue);
+            }
+        }
+
+
+        /// <summary>
+        ///     FIGHT：选择敌人
+        /// </summary>
+        private void NameLayerConfirmFight()
+        {
+            _enemiesHpLine.SetActive(true);
+            LayerOneSet();
+            if (!InputService.GetKeyDown(KeyCode.Z))
+            {
+                return;
+            }
+
+            _enemiesHpLine.SetActive(false);
+            _target.gameObject.SetActive(true);
+            _target.select = nameLayerIndex;
+
+            var move = _target.transform.Find("Move");
+            move.transform.position = new Vector3(
+                enemiesControllers[nameLayerIndex].transform.position.x,
+                move.transform.position.y);
+
+            _target.hitMonster = enemiesControllers[nameLayerIndex];
+            MainControl.Instance.battlePlayerController.transform.position =
+                (Vector3)(Vector2.one * 10000) + new Vector3(0, 0,
+                    MainControl.Instance.battlePlayerController.transform.position.z);
+        }
+
+        private void NameLayerConfirmCommon()
+        {
+            if (!InputService.GetKeyDown(KeyCode.Z) || selectedButton == SelectedButton.Item)
+            {
+                return;
+            }
+
+            if (selectedButton != SelectedButton.Fight)
+            {
+                selectedLayer = SelectedLayer.OptionLayer;
+            }
+            else
+            {
+                selectedLayer = SelectedLayer.NarratorLayer;
+                SpriteChange();
+            }
+
+            optionLayerIndex = 0;
+            _textUI.text = "";
+            AudioController.Instance.PlayFx(1, MainControl.Instance.AudioControl.fxClipUI);
+        }
+
+        private bool NameLayerCancel()
+        {
+            if (!InputService.GetKeyDown(KeyCode.X))
+            {
+                return false;
+            }
+
+            selectedLayer = SelectedLayer.ButtonLayer;
+            nameLayerIndex = 0;
+
+            TurnTextLoad();
+
+            _enemiesHpLine.SetActive(false);
+            return true;
+        }
+
+        private void UpdateOptionLayer()
+        {
+            switch (selectedButton)
+            {
+                case SelectedButton.Fight:
+                {
+                    break;
+                }
+                case SelectedButton.Act:
+                {
+                    ActOptionLayer();
+                    break;
+                }
+
+                case SelectedButton.Item:
+                {
+                    ItemOptionLayer(ref nameLayerIndex, ref optionLayerIndex);
+                    break;
+                }
+
+                case SelectedButton.Mercy:
+                {
+                    MercyOptionLayer();
+                    break;
+                }
+                default:
+                {
+                    throw new ArgumentOutOfRangeException($"Unexpected selectedButton value: {selectedButton}");
+                }
+            }
+        }
+
+        private void MercyOptionLayer()
+        {
+            MainControl.Instance.battlePlayerController.transform.position = new Vector3(-5.175f,
+                -0.96f - optionLayerIndex * 0.66f,
+                MainControl.Instance.battlePlayerController.transform.position.z);
+            if (InputService.GetKeyDown(KeyCode.X))
+            {
+                selectedLayer = SelectedLayer.NameLayer;
+                optionLayerIndex = 0;
+                _textUI.text = "";
+                SetEnemiesName();
+            }
+            else if (InputService.GetKeyDown(KeyCode.Z))
+            {
+                selectedLayer = SelectedLayer.NarratorLayer;
+
+                SpriteChange();
+                _itemScroller.Close();
+
+                if (ExecuteMercy())
+                {
+                    return;
+                }
+
+                MainControl.Instance.battlePlayerController.transform.position =
+                    (Vector3)(Vector2.one * 10000) + new Vector3(0, 0,
+                        MainControl.Instance.battlePlayerController.transform.position.z);
+
+                if (optionsSave[2 * (optionLayerIndex + 1) - 1] != "Null")
+                {
+                    StartTypeWritter(optionsSave[2 * (optionLayerIndex + 1) - 1]);
+                }
+                else
+                {
+                    _textUI.text = "";
+                    MainControl.Instance.battlePlayerController.transform.position =
+                        (Vector3)MainControl.Instance.battlePlayerController.sceneDrift + new Vector3(0,
+                            0, MainControl.Instance.battlePlayerController.transform.position.z);
+                    TryOpenDialogBubble();
+                }
+            }
+
+            if (InputService.GetKeyDown(KeyCode.UpArrow) && optionLayerIndex - 1 >= 0)
+            {
+                AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                optionLayerIndex--;
+            }
+            else if (InputService.GetKeyDown(KeyCode.DownArrow) &&
+                     optionLayerIndex + 1 <= optionsSave.Count / 2 - 1)
+            {
+                AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                optionLayerIndex++;
+            }
+        }
+
+        private bool ExecuteMercy()
+        {
+            var enemiesController = enemiesControllers[nameLayerIndex];
+            var enemy = enemiesController.Enemy;
+            var enemyMercyType = enemy.MercyTypes[optionLayerIndex];
+            switch (enemyMercyType)
+            {
+                case MercyType.Null:
+                {
+                    break;
+                }
+                case MercyType.Mercy:
+                {
+                    if (Mercy(enemy, enemiesController))
+                    {
+                        return true;
+                    }
+
+                    break;
+                }
+                case MercyType.Flee:
+                {
+                    if (Flee())
+                    {
+                        return true;
+                    }
+
+                    break;
+                }
+                case MercyType.ActLike:
+                {
+                    var realIndex = enemy.MercyTypes.TakeWhile((_, index) => index != optionLayerIndex)
+                        .Count(mercyType => mercyType == MercyType.ActLike);
+                    var options = enemy.GetActLikeOptions();
+                    options[realIndex]?.Invoke();
+                    break;
+                }
+                default:
+                {
+                    throw new ArgumentOutOfRangeException($"Unexpected enemyMercyType value: {enemyMercyType}");
+                }
+            }
+
+            return false;
+        }
+
+        private bool Mercy(IEnemy enemy, EnemiesController enemiesController)
+        {
+            if (enemy.state != EnemyState.CanSpace)
+            {
+                return false;
+            }
+
+            enemy.state = EnemyState.Spaced;
+            enemiesController.dustCloud.SetActive(true);
+            enemiesController.spriteSplitController.spriteRenderer.color = Color.gray;
+
+            foreach (Transform child in enemiesController.spriteSplitController.transform)
+            {
+                child.gameObject.SetActive(false);
+            }
+
+            AudioController.Instance.PlayFx(5, MainControl.Instance.AudioControl.fxClipBattle);
+
+
+            if (!enemiesControllers.All(item => item.Enemy.state is EnemyState.Spaced or EnemyState.Dead))
+            {
+                return false;
+            }
+
+            MainControl.Instance.battlePlayerController.transform.position =
+                (Vector3)(Vector2.one * 10000) + new Vector3(0, 0,
+                    MainControl.Instance.battlePlayerController.transform.position.z);
+            ExitBattleScene();
+            return true;
+        }
+
+        private bool Flee()
+        {
+            var isFlee = MathUtilityService.WeightedRandom(0.5f);
+
+            if (!isFlee)
+            {
+                return false;
+            }
+
+            MainControl.Instance.battlePlayerController.animator.SetBool(IsFlee, true);
+            MainControl.Instance.battlePlayerController.transform.DOMoveX(
+                    MainControl.Instance.battlePlayerController.transform.position.x - 5, 3.75f)
+                .SetEase(Ease.Linear);
+
+            var (exp, gold) = GetEnemiesExpAndGold();
+            if (exp == 0 && gold == 0)
+            {
+                _textUI.text = TextProcessingService.GetFirstChildStringByPrefix(
+                    MainControl.Instance.LanguagePackControl.sceneTexts, "Flee");
+            }
+            else
+            {
+                _textUI.text = string.Format(TextProcessingService.GetFirstChildStringByPrefix(
+                    MainControl.Instance.LanguagePackControl.sceneTexts, "FleeWithSpoil"), exp, gold);
+            }
+
+            MainControl.Instance.playerControl.exp += exp;
+            MainControl.Instance.playerControl.gold += gold;
+
+            GameUtilityService.FadeOutAndSwitchScene(MainControl.Instance.playerControl.lastScene,
+                Color.black, null, true, 2);
+            return true;
+        }
+
+        private void ActOptionLayer()
+        {
+            ActOptionLayerSelect();
+
+            if (InputService.GetKeyDown(KeyCode.X))
+            {
+                selectedLayer = SelectedLayer.NameLayer;
+                optionLayerIndex = 0;
+                _textUI.text = "";
+                _textUIBack.text = "";
+                SetEnemiesName();
+            }
+            else if (InputService.GetKeyDown(KeyCode.Z))
+            {
+                ActOptionLayerOptions();
+
+                _textUIBack.text = "";
+                selectedLayer = SelectedLayer.NarratorLayer;
+                MainControl.Instance.battlePlayerController.transform.position =
+                    (Vector3)(Vector2.one * 10000) + new Vector3(0, 0,
+                        MainControl.Instance.battlePlayerController.transform.position.z);
+                StartTypeWritter(optionsSave[2 * (optionLayerIndex + 1) - 1]);
+                SpriteChange();
+                _itemScroller.Close();
+            }
+        }
+
+        /// <summary>
+        ///     ACT触发选项
+        /// </summary>
+        private void ActOptionLayerOptions()
+        {
+            var options = enemiesControllers[nameLayerIndex].OnOptions;
+            options?[optionLayerIndex]();
+        }
+
+        private void ActOptionLayerSelect()
+        {
+            var count = ActOptionLayerGetCount();
+
+            if (InputService.GetKeyDown(KeyCode.UpArrow) && optionLayerIndex - 2 >= 0)
+            {
+                AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                optionLayerIndex -= 2;
+            }
+            else if (InputService.GetKeyDown(KeyCode.DownArrow) &&
+                     optionLayerIndex + 2 <= count)
+            {
+                AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                optionLayerIndex += 2;
+            }
+
+            if (InputService.GetKeyDown(KeyCode.LeftArrow) &&
+                optionLayerIndex - 1 >= 0)
+            {
+                AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                optionLayerIndex--;
+            }
+            else if (InputService.GetKeyDown(KeyCode.RightArrow) &&
+                     optionLayerIndex + 1 <= count)
+            {
+                AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
+                optionLayerIndex++;
+            }
+
+            float playerPosX, playerPosY;
+            if ((optionLayerIndex - 1) % 2 == 0)
+            {
+                playerPosX = 0.25f;
+            }
+            else
+            {
+                playerPosX = -5.175f;
+            }
+
+            if (optionLayerIndex < 2)
+            {
+                playerPosY = -0.96f - 0 * 0.66f;
+            }
+            else
+            {
+                playerPosY = -0.96f - 1 * 0.66f;
+            }
+
+            MainControl.Instance.battlePlayerController.transform.position = new Vector3(playerPosX,
+                playerPosY, MainControl.Instance.battlePlayerController.transform.position.z);
+        }
+
+        private int ActOptionLayerGetCount()
+        {
+            var count = optionsSave.Count / 2 - 1;
+            var options = enemiesControllers[nameLayerIndex].OnOptions;
+            if (options != null)
+            {
+                if (count > options.Length - 1)
+                {
+                    count = options.Length - 1;
+                }
+            }
+            else
+            {
+                throw new ArgumentNullException($"No {enemiesControllers[nameLayerIndex].OnOptions}!");
+            }
+
+            return count;
+        }
+
+
+        private void UpdateNarratorLayer()
+        {
+            if (selectedButton == SelectedButton.Fight && !_target.gameObject.activeSelf)
+            {
+                if (_isDialog)
+                {
+                    return;
+                }
+
+                _textUI.text = "";
+                MainControl.Instance.battlePlayerController.transform.position =
+                    (Vector3)MainControl.Instance.battlePlayerController.sceneDrift + new Vector3(0, 0,
+                        MainControl.Instance.battlePlayerController.transform.position.z);
+                TryOpenDialogBubble();
+            }
+            else if (InputService.GetKeyDown(KeyCode.Z))
+            {
+                ContinueNarratorLayer();
+            }
+        }
+
+        private void ContinueNarratorLayer()
+        {
+            MainControl.Instance.battlePlayerController.collideCollider.enabled = true;
+            if (_isDialog)
+            {
+                return;
+            }
+
+            if (selectedButton != SelectedButton.Fight && _textUI.text == "")
+            {
+                OpenDialogBubble();
+                MainControl.Instance.battlePlayerController.transform.position =
+                    (Vector3)MainControl.Instance.battlePlayerController.sceneDrift + new Vector3(0, 0,
+                        MainControl.Instance.battlePlayerController.transform.position.z);
+                return;
+            }
+
+            if (selectedButton == SelectedButton.Fight || _typeWritter.isTyping ||
+                !InputService.GetKeyDown(KeyCode.Z))
+            {
+                return;
+            }
+
+            _textUI.text = "";
+            MainControl.Instance.battlePlayerController.transform.position =
+                (Vector3)MainControl.Instance.battlePlayerController.sceneDrift + new Vector3(0,
+                    0, MainControl.Instance.battlePlayerController.transform.position.z);
+
+            TryOpenDialogBubble();
+        }
+
+        private void TryOpenDialogBubble()
+        {
+            if (TurnController.Instance.turn < MainControl.Instance.BattleControl.turnDialogAsset.Count ||
+                _haveRandomTurnDialog)
+            {
+                OpenDialogBubble();
+            }
+            else
+            {
+                EnterTurnLayer();
+                TurnController.Instance.EnterEnemyTurn();
+            }
+        }
+
+
+        private void ItemOptionLayer(ref int globalItemIndex, ref int visibleItemIndex)
+        {
+            if (InputService.GetKeyDown(KeyCode.X))
+            {
+                selectedLayer = SelectedLayer.ButtonLayer;
+                globalItemIndex = 0;
+
+                TurnTextLoad();
+
+
+                _itemScroller.Close();
+
+                _textUIBack.rectTransform.anchoredPosition = new Vector2(10.75f, -3.3f);
+                _textUIBack.alignment = TextAlignmentOptions.TopLeft;
+                _textUIBack.text = "";
+
+                UITextUpdate(UITextMode.Food);
+                return;
+            }
+
+            if (InputService.GetKeyDown(KeyCode.Z))
+            {
+                selectedLayer = SelectedLayer.NarratorLayer;
+                MainControl.Instance.battlePlayerController.transform.position =
+                    (Vector3)(Vector2.one * 10000) + new Vector3(0, 0,
+                        MainControl.Instance.battlePlayerController.transform.position.z);
+                var dataName = MainControl.Instance.playerControl.items[globalItemIndex + 1];
+
+                TypeWritterTagProcessor.SetItemDataName(dataName);
+                _typeWritter.StartTypeWritter(
+                    DataHandlerService.ItemDataNameGetLanguagePackUseText(dataName), _textUI);
+                var item = DataHandlerService.GetItemFormDataName(dataName);
+                item.OnUse(globalItemIndex + 1);
+
+                SpriteChange();
+                _itemScroller.Close();
+
+                _textUIBack.rectTransform.anchoredPosition = new Vector2(10.75f, -3.3f);
+                _textUIBack.alignment = TextAlignmentOptions.TopLeft;
+                _textUIBack.text = "";
+
+                UITextUpdate(UITextMode.Food);
+                return;
+            }
+
+            var myItemMax = ListManipulationService.FindFirstNullOrEmptyIndex(
+                MainControl.Instance.playerControl.items);
+
+            var (itemLine0, itemDataText0) =
+                GenerateItemDisplayText(globalItemIndex - visibleItemIndex);
+
+            var (itemLine1, itemDataText1) = myItemMax > 1
+                ? GenerateItemDisplayText(globalItemIndex - visibleItemIndex + 1)
+                : ("", "");
+
+            var (itemLine2, itemDataText2) = myItemMax > 2
+                ? GenerateItemDisplayText(globalItemIndex - visibleItemIndex + 2)
+                : ("", "");
+
+            MainControl.Instance.battlePlayerController.transform.position = new Vector3(-5.175f,
+                -0.96f - visibleItemIndex * 0.66f,
+                MainControl.Instance.battlePlayerController.transform.position.z);
+
+            _textUI.text = itemLine0 + itemLine1 + itemLine2;
+
+            _textUIBack.text = itemDataText0 + "\n" + itemDataText1 + "\n" + itemDataText2;
+
+            var updateHandleItemInput =
+                _itemScroller.UpdateHandleItemInput(globalItemIndex, visibleItemIndex, myItemMax,
+                    CommonItemNavigationLogic);
+            globalItemIndex = updateHandleItemInput.globalItemIndex;
+            visibleItemIndex = updateHandleItemInput.visibleItemIndex;
+
+            _hpUI.text = GameUtilityService.FormatWithLeadingZero(_hpFood) + " / " +
+                         GameUtilityService.FormatWithLeadingZero(MainControl.Instance.playerControl.hpMax);
+        }
+
+
+        private void CommonItemNavigationLogic(int globalItemIndex)
+        {
+            AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
+            var dataName = MainControl.Instance.playerControl.items[globalItemIndex];
+            var item = DataHandlerService.GetItemFormDataName(dataName);
+            if (item is FoodItem or ParentFoodItem)
+            {
+                UITextUpdate(UITextMode.Food, item.Data.Value);
+            }
+            else
+            {
+                UITextUpdate(UITextMode.Food);
+            }
+        }
+
+        private void OpenDialogBubble()
+        {
+            _dialogText = null;
+            var sortedTexts = MainControl.Instance.BattleControl.turnDialogAsset
+                .Select(text => new { Text = text, Dialog = EnemiesXmlDialogParser.GetDialogInfo(text) })
+                .OrderBy(item => item.Dialog.Type != EnemiesXmlDialogParser.DialogType.Fixed)
+                .ThenBy(item => item.Dialog.Turn)
+                .ToList();
+
+            var fixedTexts = sortedTexts
+                .Where(item => item.Dialog.Type == EnemiesXmlDialogParser.DialogType.Fixed)
+                .OrderBy(item => item.Dialog.Turn)
+                .Select(item => item.Text)
+                .ToList();
+
+            var randomTexts = sortedTexts
+                .Where(item => item.Dialog.Type == EnemiesXmlDialogParser.DialogType.Random)
+                .Select(item => item.Text)
+                .ToList();
+
+            var fixedDialogs = fixedTexts.Select(EnemiesXmlDialogParser.GetDialogInfo).ToList();
+
+            var isFixed = false;
+            for (var index = 0; index < fixedDialogs.Count; index++)
+            {
+                if (fixedDialogs[index].Turn != TurnController.Instance.turn)
+                {
+                    continue;
+                }
+
+                _dialogText = fixedTexts[index];
+                _dialogMessages = EnemiesXmlDialogParser.GetMessagesInDialog(_dialogText, fixedDialogs[index].Name);
+                isFixed = true;
+            }
+
+            if (!isFixed)
+            {
+                var randomDialogs = randomTexts.Select(EnemiesXmlDialogParser.GetDialogInfo).ToList();
+
+                var index = Random.Range(0, randomTexts.Count);
+                _dialogText = randomTexts[index];
+                _dialogMessages = EnemiesXmlDialogParser.GetMessagesInDialog(_dialogText, randomDialogs[index].Name);
+            }
+
+            _currentMessages = new List<EnemiesXmlDialogParser.Message>();
+            for (var i = 0; i < _dialogMessages.Count; i++)
+            {
+                if (_dialogMessages[i].Name != "default")
+                {
+                    continue;
+                }
+
+                _currentMessages.Add(_dialogMessages[i]);
+                AnalyzeMessage(_dialogMessages[i]);
+            }
+
+
+            _isDialog = true;
+        }
+
+        private void AnalyzeMessage(EnemiesXmlDialogParser.Message message)
+        {
+            var bubbles = EnemiesXmlDialogParser.GetBubbles(_dialogText, message.Name);
+            foreach (var bubble in bubbles)
+            {
+                var enemyControllerIndex = enemiesControllers.FindIndex(t => bubble.Character == t.name);
+                if (enemyControllerIndex == -1)
+                {
+                    throw new ArgumentOutOfRangeException($"{enemyControllerIndex} not found.");
+                }
+
+                SetBubbleBehaviour(message, enemyControllerIndex, bubble);
+            }
+        }
+
+        private void SetBubbleBehaviour(EnemiesXmlDialogParser.Message message,
+            int enemyControllerIndex,
+            EnemiesXmlDialogParser.Bubble bubble)
+        {
+            var enemyController = enemiesControllers[enemyControllerIndex];
+
+            var bubbleBehaviours = _dialogBubbleBehaviours[enemyControllerIndex];
+            if (enemyController)
+            {
+                if (enemyController.Enemy.state is EnemyState.Spaced or EnemyState.Dead)
+                {
+                    return;
+                }
+
+                bubbleBehaviours.transform.SetParent(enemyController.transform);
+            }
+            else
+            {
+                Debug.LogError("enemyController is empty!");
+            }
+
+            bubbleBehaviours.gameObject.SetActive(true);
+
+            bubbleBehaviours.size = bubble.Size;
+            bubbleBehaviours.position = bubble.Offset;
+
+            bubbleBehaviours.isBackRight = bubble.Direction;
+            bubbleBehaviours.backY = bubble.ArrowOffset;
+
+            bubbleBehaviours.typeWritter.StartTypeWritter(bubble.Text, bubbleBehaviours.tmp);
+            bubbleBehaviours.tmp.text = "";
+            bubbleBehaviours.PositionChange();
+
+            if (message.Mode != EnemiesXmlDialogParser.MessageMode.Delay)
+            {
+                return;
+            }
+
+
+            bubbleBehaviours.Message = message;
+            bubbleBehaviours.delay = message.AutoDelay;
+            for (var index = 0; index < _currentMessages.Count; index++)
+            {
+                if (message.Name != _currentMessages[index].Name)
+                {
+                    continue;
+                }
+
+                var temp = _currentMessages[index];
+                temp.IsDelaying = true;
+                _currentMessages[index] = temp;
+            }
+        }
+
+        private void KeepDialogBubble()
+        {
+            foreach (var bubble in _currentMessages.Where(currentMessage => !currentMessage.IsDelaying)
+                         .Select(currentMessage => EnemiesXmlDialogParser.GetBubbles(_dialogText, currentMessage.Name))
+                         .SelectMany(bubbles => bubbles))
+            {
+                for (var index = 0; index < enemiesControllers.Count; index++)
+                {
+                    var enemiesController = enemiesControllers[index];
+                    if (bubble.Character == enemiesController.name)
+                    {
+                        _dialogBubbleBehaviours[index].gameObject.SetActive(false);
+                    }
+                }
+            }
+
+            var messagesToRemove = _currentMessages
+                .Where(m => m.Mode == EnemiesXmlDialogParser.MessageMode.Confirm)
+                .ToList();
+
+            foreach (var message in messagesToRemove)
+            {
+                _currentMessages.Remove(message);
+
+                var newItems = (from item in _dialogMessages
+                    from targetItem in message.Target
+                    where item.Name == targetItem
+                    select item).ToList();
+
+                if (HideDialogBubblesOnEnd(message))
+                {
+                    return;
+                }
+
+                _currentMessages.AddRange(newItems);
+            }
+
+
+            for (var i = 0; i < _currentMessages.Count; i++)
+            {
+                if (!_currentMessages[i].IsDelaying)
+                {
+                    AnalyzeMessage(_currentMessages[i]);
+                }
+            }
+        }
+
+        private bool HideDialogBubblesOnEnd(EnemiesXmlDialogParser.Message message)
+        {
+            if (!message.Target.Contains("END"))
+            {
+                return false;
+            }
+
+            var bubbles = EnemiesXmlDialogParser.GetBubbles(_dialogText, message.Name);
+            foreach (var enemyControllerIndex in bubbles.Select(item =>
+                         enemiesControllers.FindIndex(t => item.Character == t.name)))
+            {
+                _dialogBubbleBehaviours[enemyControllerIndex].gameObject.SetActive(false);
+            }
+
+            return true;
+        }
+
+
+        private void TurnTextLoad()
+        {
+            if (TurnController.Instance.turn != _saveTurn || _saveTurnText == "")
+            {
+                _saveTurn = TurnController.Instance.turn;
+
+                var load = TurnTextLoad(MainControl.Instance.BattleControl.turnTextSave, _saveTurn);
+
+                _saveTurnText = load != null && load.Count != 0
+                    ? load[Random.Range(0, load.Count)]
+                    : "* No Language Pack.";
+            }
+
+            StartTypeWritter(_saveTurnText);
+        }
+
+        private static List<string> TurnTextLoad(List<string> turnTextSave, int turn)
+        {
+            var turnTextSaveChanged =
+                (from t in turnTextSave
+                    where t[..turn.ToString().Length] == turn.ToString()
+                    select t[(turn.ToString().Length + 1)..]).ToList();
+            var saves = new List<string>();
+            TextProcessingService.SplitStringToListWithDelimiter(turnTextSaveChanged, saves);
+            return saves;
+        }
+
+        /// <summary>
+        ///     更新UI文字与血条
+        /// </summary>
+        public void UITextUpdate(UITextMode uiTextMode = 0, int foodValue = 0)
         {
             _hpSpr.transform.localScale = new Vector3(0.525f * MainControl.Instance.playerControl.hpMax, 8.5f);
             _hpSpr.material.SetColor(ColorUnder, hpColorUnder);
@@ -823,63 +1634,104 @@ namespace UCT.Battle
 
             switch (uiTextMode)
             {
-                case UITextMode.None:
-                    goto default;
-                default:
-                    _hpSpr.material.SetFloat(Crop, (float)MainControl.Instance.playerControl.hp / MainControl.Instance.playerControl.hpMax);
-                    _hpSpr.material.SetFloat(Flash, (float)MainControl.Instance.playerControl.hp / MainControl.Instance.playerControl.hpMax);
-                    break;
-
                 case UITextMode.Hit:
+                {
                     _hpSpr.material.DOKill();
 
                     _hpSpr.material.SetFloat(IsFlashing, 0);
                     _hpSpr.material.SetColor(ColorFlash, hpColorHit);
-                    _hpSpr.material.SetFloat(Crop, (float)MainControl.Instance.playerControl.hp / MainControl.Instance.playerControl.hpMax);
-                    _hpSpr.material.DOFloat((float)MainControl.Instance.playerControl.hp / MainControl.Instance.playerControl.hpMax, "_Flash", 0.5f).SetEase(Ease.OutCirc);
+                    _hpSpr.material.SetFloat(Crop,
+                        (float)MainControl.Instance.playerControl.hp / MainControl.Instance.playerControl.hpMax);
+                    _hpSpr.material
+                        .DOFloat(
+                            (float)MainControl.Instance.playerControl.hp / MainControl.Instance.playerControl.hpMax,
+                            "_Flash", 0.5f).SetEase(Ease.OutCirc);
 
                     break;
+                }
 
                 case UITextMode.Food:
+                {
                     _hpSpr.material.DOKill();
 
                     _hpSpr.material.SetFloat(IsFlashing, 1);
-                    _hpSpr.material.SetFloat(Crop, (float)MainControl.Instance.playerControl.hp / MainControl.Instance.playerControl.hpMax);
-                    float addNumber = MainControl.Instance.playerControl.hp + foodNumber;
+                    _hpSpr.material.SetFloat(Crop,
+                        (float)MainControl.Instance.playerControl.hp / MainControl.Instance.playerControl.hpMax);
+                    float addNumber = MainControl.Instance.playerControl.hp + foodValue;
                     if (addNumber > MainControl.Instance.playerControl.hpMax)
+                    {
                         addNumber = MainControl.Instance.playerControl.hpMax;
-                    _hpSpr.material.DOFloat(addNumber / MainControl.Instance.playerControl.hpMax, "_Flash", 0.5f).SetEase(Ease.OutCirc);
+                    }
+
+                    _hpSpr.material.DOFloat(addNumber / MainControl.Instance.playerControl.hpMax, "_Flash", 0.5f)
+                        .SetEase(Ease.OutCirc);
                     break;
+                }
+
+                case UITextMode.None:
+                default:
+                {
+                    _hpSpr.material.SetFloat(Crop,
+                        (float)MainControl.Instance.playerControl.hp / MainControl.Instance.playerControl.hpMax);
+                    _hpSpr.material.SetFloat(Flash,
+                        (float)MainControl.Instance.playerControl.hp / MainControl.Instance.playerControl.hpMax);
+                    break;
+                }
             }
 
-            _hpUI.transform.localPosition = new Vector3(9.85f + 0.0265f * (MainControl.Instance.playerControl.hpMax - 20), -5.825f);
+            _hpUI.transform.localPosition =
+                new Vector3(9.85f + 0.0265f * (MainControl.Instance.playerControl.hpMax - 20), -5.825f);
             NameUIUpdate();
 
             if (uiTextMode != UITextMode.Food)
-                _hpUI.text = FormatWithLeadingZero(MainControl.Instance.playerControl.hp) + " / " + FormatWithLeadingZero(MainControl.Instance.playerControl.hpMax);
+            {
+                _hpUI.text = GameUtilityService.FormatWithLeadingZero(MainControl.Instance.playerControl.hp) + " / " +
+                             GameUtilityService.FormatWithLeadingZero(MainControl.Instance.playerControl.hpMax);
+            }
             else
             {
                 _hpFoodTween.Kill();
-                var addNumber = MainControl.Instance.playerControl.hp + foodNumber;
+                var addNumber = MainControl.Instance.playerControl.hp + foodValue;
                 if (addNumber > MainControl.Instance.playerControl.hpMax)
+                {
                     addNumber = MainControl.Instance.playerControl.hpMax;
+                }
+
                 _hpFoodTween = DOTween.To(() => _hpFood, x => _hpFood = x, addNumber, 0.5f);
             }
         }
 
         private void NameUIUpdate()
         {
-            _nameUI.text = MainControl.Instance.playerControl.playerName + 
-                           " lv<indent=29.5>" + 
+            _nameUI.text = MainControl.Instance.playerControl.playerName +
+                           " lv<indent=29.5>" +
                            MainControl.Instance.playerControl.lv;
         }
 
-        /// <summary>
-        /// 将数字格式化为两位数（前导零）显示，例如将 1 显示为 01。
-        /// </summary>
-        private static string FormatWithLeadingZero(int i)
+
+        private static (string text, string data) GenerateItemDisplayText(int layerIndex)
         {
-            return i.ToString("D2");
+            var dataName = MainControl.Instance.playerControl.items[layerIndex];
+
+            var text = UITextPrefix +
+                       DataHandlerService.ItemDataNameGetLanguagePackName(dataName) + "\n";
+
+            var item = DataHandlerService.GetItemFormDataName(dataName);
+            var data = GenerateItemStatText(item);
+
+            return (text, data);
+        }
+
+        private static string GenerateItemStatText(GameItem item)
+        {
+            var result = item switch
+            {
+                FoodItem or ParentFoodItem => "HP " + (item.Data.Value > 0 ? "+" : ""),
+                WeaponItem => "ATK ",
+                ArmorItem => "DEF ",
+                _ => "Value "
+            };
+            return result + item.Data.Value;
         }
     }
 }

@@ -27,13 +27,16 @@ Example-Corridor\最後的長廊;
 
 Setting\<align=center>設定</align>;
 SettingMainVolume\主音量;
-SettingControl\控制;
+SettingBgmVolume\音樂音量;
+SettingFxVolume\音效音量;
+SettingKeyControlLayer\控制;
 SettingFullScreen\全螢幕;
 SettingResolving\解析度設定;
 SettingSFX\簡化視覺效果;
 SettingFPS\顯示FPS;
+SettingTypingSpeed\打字機速度;
 SettingBackMenu\返回選單介面;
-SettingBackGame\返回遊戲;
+SettingBack\回傳;
 Open\開;
 Close\關;
 Save\儲存;
@@ -41,37 +44,65 @@ Back\返回;
 PageDown\下一頁;
 PageUp\上一頁;
 
+LanguageBack\退出此介面時，如果語言已更改，場景將會被強制重新載入！ <enter>請記得儲存你的遊戲。 ;
+
+VideoSettingsLayer\影片設定;
+AudioSettingsLayer\音訊設定;
+LockFrameRate\最大幀率;
+GraphicSettingsLayer\圖形設定;
+InputSettingsLayer\輸入設定;
+SettingLanguagePackageLayer\語言設定;
+SubtitleSettingsLayer\文字設定;
+
+SettingVSync\垂直同步;
+
 SettingMainVolumeTip\調整全域音量大小。 ;
-SettingControlTip\按鍵設定。 ;
+SettingBgmVolumeTip\調整音樂音量大小。;
+SettingFxVolumeTip\調整音效音量大小。;
+SettingKeyControlLayerTip\按鍵設定。 ;
 SettingFullScreenTipOpen\開啟全螢幕模式。 ;
 SettingFullScreenTipClose\在全螢幕狀態下，建議將解析度調高。 ;
-VSyncNone\(垂直同步未開啟，按C設定);
-VSyncFull\(垂直同步：全部，按C設定);
-VSyncHalf\(垂直同步：一半，按C設定);
-SettingResolvingTip\設定遊戲視窗大小。 (按C切換為16:9);
-SettingResolvingTipHD\設定遊戲視窗大小。 (按C切換為4:3);
+SettingResolvingTip\設定遊戲視窗大小。 ;
 SettingSFXTip\設定遊戲內的光效與特效是否開啟。 ;
 SettingFPSTip\設定幀率是否顯示。 ;
+SettingTypingSpeedTip\調整遊戲內文字顯示速度。;
 SettingBackMenuTip\未儲存的資料將會遺失。 ;
-SettingBackGameTip\返回並繼續遊戲。 ;
+SettingBackTip\返回並繼續遊戲。 ;
+
+VideoSettingsLayerTip\調整影片設定。 ;
+AudioSettingsLayerTip\調整音訊設定。 ;
+LockFrameRateTip\設定遊戲最大幀率。 ;
+SettingVSyncTip\調整垂直同步。 ;
+NoSync\關閉;
+Sync\完全;
+HalfSync\一半;
+GraphicSettingsLayerTip\調整圖形設定。 ;
+InputSettingsLayerTip\調整輸入設定。 ;
+SettingLanguagePackageLayerTip\調整語言設定。 ;
+SubtitleSettingsLayerTip\調整文字設定。 ;
+Slow\慢;
+Medium\正常;
+Fast\快;
+
+UnlimitedFrameRate\無限制;
 
 Control\<align=center>控制</align>;
-ControlDown\下;
-ControlRight\右;
-ControlUp\上;
-ControlLeft\左;
-ControlZ\確認;
-ControlX\取消;
-ControlC\選單;
-ControlV\設定;
-ControlF4\全螢幕;
-ControlTab\更改解析度;
-ControlSemicolon\更改視覺效果;
-ControlEsc\退出遊戲;
-ControlDefault\恢復預設設定;
+MoveDown\下;
+MoveRight\右邊;
+MoveUp\上;
+MoveLeft\左;
+Confirm\確認;
+Cancel\取消;
+Backpack\菜單;
+Settings\設定;
+FullScreen\全螢幕;
+Resolution\更改解析度;
+Sfx\更改視覺效果;
+ExitGame\退出遊戲;
+KeyBindingsReset\恢復預設值;
 
-ControlEggshell\~大家好啊，我是設定~;
+ControlCommonDescriptionText\~大家好啊，我是設定~;
 
-ControlUnder0\主鍵位設定中。按C設定輔助鍵位。 ;
-ControlUnder1\輔助鍵位1設定中。按C設定輔助鍵位2。 ;
-ControlUnder2\輔助鍵位2設定中。按C設定主鍵位。 ;
+OptionTip0\主鍵位設定中。按C設定輔助鍵位。 ;
+OptionTip1\輔助鍵位1設定中。按C設定輔助鍵位2。 ;
+OptionTip2\輔助鍵位2設定中。按C設定主鍵位。 ;

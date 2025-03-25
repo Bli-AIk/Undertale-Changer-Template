@@ -1,0 +1,59 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faa34550e4fc4146a12aaf0b1183b1f6, type: 3}
+  m_Name: RuleTable
+  m_EditorClassIdentifier: 
+  rules:
+  - name: SaveGame
+    isGlobalTriggeredBy: 1
+    triggeredBy:
+    - SaveGame
+    isGlobalTriggers: 0
+    triggers: []
+    methodNames:
+    - null:OpenSaveBox
+    firstStringParams:
+    - (0,0)
+    secondStringParams:
+    - 
+    thirdStringParams:
+    - 
+    objectParams:
+    - {fileID: 0}
+    isGlobalMethodEvents: 00
+    useMethodEvents: 000101
+    methodEvents:
+    - SaveGame
+    - TestEvent
+    - TestEvent
+    useRuleCriterion: 0
+    ruleCriterion:
+      isResultReversed: 0
+      isGlobal: 0
+      fact:
+        name: 
+        value: 0
+      compare: 0
+      detection: 0
+      operation: 1
+      criteria:
+      - isResultReversed: 0
+        isGlobal: 0
+        fact:
+          name: Test
+          value: 0
+        compare: 2
+        detection: 0
+        operation: 0
+        criteria: []
+    isGlobalFactModifications: 
+    factModifications: []
