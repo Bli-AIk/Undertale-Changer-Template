@@ -91,7 +91,6 @@ namespace UCT.Core
             if (sceneState == MainControl.SceneState.Overworld)
             {
                 SetupController(MainControl.OverworldPlayerBehaviour, PlayerSetup, NonexistentOverworldPlayerSetup);
-                SetupController(MainControl.OverworldBulletPool, null, NonexistentOverworldBulletPoolSetup);
             }
 
             SetupController(Camera.main, ExistingCameraSetup, NonexistentCameraSetup);
@@ -173,18 +172,6 @@ namespace UCT.Core
             MainControl.OverworldPlayerBehaviour.isShadow = isShadow;
         }
 
-        private static void NonexistentOverworldBulletPoolSetup()
-        {
-            var overworldBulletPool = new GameObject
-            {
-                name = "OverworldBulletPool"
-            };
-            var bulletPool = overworldBulletPool.AddComponent<ObjectPool>();
-            bulletPool.poolObject = Resources.Load<GameObject>("Prefabs/Template/Bullet Template");
-
-            MainControl.SetOverworldBulletPool(bulletPool);
-            DontDestroyOnLoad(overworldBulletPool);
-        }
 
 
         private void ExistingCanvasSetup()

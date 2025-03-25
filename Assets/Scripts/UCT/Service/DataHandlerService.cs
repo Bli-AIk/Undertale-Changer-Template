@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using UCT.Control;
 using UCT.Core;
@@ -342,31 +343,19 @@ namespace UCT.Service
         /// <summary>
         ///     设置PlayerControl
         /// </summary>
-        /// <param name="inputPlayerControl"></param>
         public static PlayerControl SetPlayerControl(PlayerControl inputPlayerControl)
         {
             var playerControl = ScriptableObject.CreateInstance<PlayerControl>();
-            playerControl.hp = inputPlayerControl.hp;
-            playerControl.hpMax = inputPlayerControl.hpMax;
-            playerControl.lv = inputPlayerControl.lv;
-            playerControl.exp = inputPlayerControl.exp;
-            playerControl.gold = inputPlayerControl.gold;
-            playerControl.nextExp = inputPlayerControl.nextExp;
-            playerControl.missTime = inputPlayerControl.missTime;
-            playerControl.missTimeMax = inputPlayerControl.missTimeMax;
-            playerControl.atk = inputPlayerControl.atk;
-            playerControl.def = inputPlayerControl.def;
-            playerControl.playerName = inputPlayerControl.playerName;
-            playerControl.items = inputPlayerControl.items;
-            playerControl.wearWeapon = inputPlayerControl.wearWeapon;
-            playerControl.wearArmor = inputPlayerControl.wearArmor;
-            playerControl.canMove = inputPlayerControl.canMove;
-            playerControl.gameTime = inputPlayerControl.gameTime;
-            playerControl.lastScene = inputPlayerControl.lastScene;
-            playerControl.saveScene = inputPlayerControl.saveScene;
-            playerControl.isDebug = inputPlayerControl.isDebug;
-            playerControl.invincible = inputPlayerControl.invincible;
+
+            var fields = typeof(PlayerControl).GetFields(BindingFlags.Public | BindingFlags.Instance);
+
+            foreach (var field in fields)
+            {
+                field.SetValue(playerControl, field.GetValue(inputPlayerControl));
+            }
+
             return playerControl;
         }
+
     }
 }

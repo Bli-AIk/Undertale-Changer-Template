@@ -207,9 +207,9 @@ namespace UCT.Overworld
             SaveController.SaveData(MainControl.Instance.playerControl,
                 $"Data{MainControl.Instance.saveDataId}");
 
-            var player = MainControl.Instance.playerControl;
-            player.saveScene = SceneManager.GetActiveScene().name;
-
+            var playerControl = MainControl.Instance.playerControl;
+            playerControl.saveScene = SceneManager.GetActiveScene().name;
+            playerControl.playerLastSavePos = playerControl.playerLastPos;
             SavePlayerPreferences();
         }
 

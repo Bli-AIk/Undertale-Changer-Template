@@ -168,17 +168,16 @@ namespace UCT.Battle
                 UpdatePlayer();
             }
 
-
-            if (MainControl.Instance.playerControl.hp <= 0)
-            {
-                PlayerDead();
-            }
-
             if (GameUtilityService.IsGamePausedOrSetting())
             {
                 return;
             }
-
+            
+            if (MainControl.Instance.playerControl.hp <= 0)
+            {
+                MainControl.Instance.KillPlayer(transform.position - (Vector3)sceneDrift);
+            }
+            
             UpdatePlayerMissTime();
 
             if (MainControl.Instance.playerControl.isDebug)
@@ -305,24 +304,6 @@ namespace UCT.Battle
                 _missAnim.Kill();
                 _missAnim = null;
                 _spriteRenderer.color = MainControl.Instance.BattleControl.playerColorList[(int)playerColor];
-            }
-        }
-
-        private void PlayerDead()
-        {
-            MainControl.Instance.playerControl.hp = MainControl.Instance.playerControl.hpMax;
-
-            if (!(MainControl.Instance.playerControl.isDebug && MainControl.Instance.playerControl.invincible))
-            {
-                _spriteRenderer.color = Color.red;
-                MainControl.Instance.playerControl.playerLastPosInBattle = transform.position - (Vector3)sceneDrift;
-                SettingsStorage.Pause = true;
-                Timing.KillCoroutines();
-                GameUtilityService.SwitchScene("GameOver", false);
-            }
-            else
-            {
-                MainControl.Instance.selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
             }
         }
 
@@ -1223,25 +1204,7 @@ namespace UCT.Battle
                 ? newCheck
                 : moved;
         }
-
-        public void KillPlayer(MainControl mainControl)
-        {
-            mainControl.playerControl.hp = mainControl.playerControl.hpMax;
-
-            if (!(mainControl.playerControl.isDebug && mainControl.playerControl.invincible))
-            {
-                mainControl.playerControl.playerLastPosInBattle = transform.position - (Vector3)sceneDrift;
-                SettingsStorage.Pause = true;
-                Timing.KillCoroutines();
-                GameUtilityService.SwitchScene("GameOver", false);
-            }
-            else
-            {
-                mainControl.selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
-                Debug.Log("Debug无敌模式已将血量恢复", "#FF0000");
-            }
-        }
-
+        
         private void PlayerCommonMove()
         {
             var weight = InputService.GetKey(KeyCode.X) ? SpeedWeight : 1;

@@ -42,7 +42,12 @@ namespace UCT.Overworld
             {
                 return;
             }
-
+            
+            if (MainControl.Instance.playerControl.hp <= 0)
+            {
+                MainControl.Instance.KillPlayer(transform.position - MainControl.Instance.mainCamera.transform.position);
+            }
+            
             if (!MainControl.Instance.isSceneSwitching)
             {
                 MainControl.Instance.playerControl.playerLastPos = transform.position;

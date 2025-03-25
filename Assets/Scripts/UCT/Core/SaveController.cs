@@ -105,7 +105,6 @@ namespace UCT.Core
                 return;
             }
 
-            // 获取所有 JSON 文件，并筛选出符合正则表达式的文件
             var regex = new Regex(regexPattern);
             var files = Directory.GetFiles(dataPath, "*.json")
                 .Where(file =>
@@ -115,7 +114,6 @@ namespace UCT.Core
                 })
                 .ToArray();
 
-            // 根据文件名中匹配到的数字部分进行排序
             Array.Sort(files, (a, b) =>
             {
                 var fileNameA = Path.GetFileNameWithoutExtension(a);
@@ -124,20 +122,15 @@ namespace UCT.Core
                 var matchA = regex.Match(fileNameA);
                 var matchB = regex.Match(fileNameB);
 
-                // 如果两个文件都匹配成功，并且正则中第一个捕获组是数字，则按数字大小排序
-                if (matchA.Success && matchB.Success && matchA.Groups.Count > 1 && matchB.Groups.Count > 1)
+                if (matchA.Success && matchB.Success && matchA.Groups.Count > 1 && matchB.Groups.Count > 1 &&
+                    int.TryParse(matchA.Groups[1].Value, out var numberA) &&
+                    int.TryParse(matchB.Groups[1].Value, out var numberB))
                 {
-                    if (int.TryParse(matchA.Groups[1].Value, out var numberA) &&
-                        int.TryParse(matchB.Groups[1].Value, out var numberB))
-                    {
-                        return numberA.CompareTo(numberB);
-                    }
+                    return numberA.CompareTo(numberB);
                 }
-                // 否则退回使用字符串的字典序排序
                 return string.Compare(fileNameA, fileNameB, StringComparison.Ordinal);
             });
 
-            // 遍历排序后的文件，使用传入的格式重新命名
             for (var i = 0; i < files.Length; i++)
             {
                 var newFileName = string.Format(renameFormat, i);

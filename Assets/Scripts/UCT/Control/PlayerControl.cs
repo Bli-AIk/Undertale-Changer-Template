@@ -30,6 +30,7 @@ namespace UCT.Control
 
         [Header("玩家相关")]
         public Vector3 playerLastPos;
+        public Vector3 playerLastSavePos;
 
         public Vector3 playerLastPosInBattle;
 

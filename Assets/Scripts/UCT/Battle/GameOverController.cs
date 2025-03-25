@@ -51,8 +51,10 @@ namespace UCT.Battle
             if (!_typeWritter.isTyping && InputService.GetKeyDown(KeyCode.Z) && canChangeScene)
             {
                 _textOptions.text = "";
-                GameUtilityService.FadeOutAndSwitchScene("Example-Corridor", Color.black, null, true, 2);
+                GameUtilityService.FadeOutAndSwitchScene(MainControl.Instance.playerControl.saveScene, Color.black,
+                    null, true, 2);
                 canChangeScene = false;
+                MainControl.Instance.playerControl.playerLastPos = MainControl.Instance.playerControl.playerLastSavePos;
             }
 
             if (!InputService.GetKeyDown(KeyCode.C) || !canChangeSceneForC)
@@ -60,12 +62,14 @@ namespace UCT.Battle
                 return;
             }
 
-            GameUtilityService.FadeOutAndSwitchScene("Example-Corridor", Color.black, null, true);
+            GameUtilityService.FadeOutAndSwitchScene(MainControl.Instance.playerControl.saveScene, Color.black, null,
+                true);
             _typeWritter.TypeStop();
             canChangeSceneForC = false;
+            MainControl.Instance.playerControl.playerLastPos = MainControl.Instance.playerControl.playerLastSavePos;
         }
 
-        //接下来交给Animator表演
+        // Animator相关
         public void PlayFX(int i)
         {
             if (i < 0)

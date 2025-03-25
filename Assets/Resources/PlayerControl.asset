@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd233730508f81c4e9962afa5c5f5269, type: 3}
   m_Name: PlayerControl
   m_EditorClassIdentifier: 
-  hp: 34
+  hp: 92
   hpMax: 92
   lv: 19
   exp: 0
   gold: 1000
   nextExp: 0
-  missTime: 0.11320457
+  missTime: 0.9923669
   missTimeMax: 1
   atk: 10
   def: 10
-  playerName: <color=#3FAE93FF>D</color><color=#3FAE94FF>e</color><color=#40B5A6FF>b</color><color=#41BDBEFF>u</color><color=#41BDBEFF>g</color>
+  playerName: <color=#42AB8DFF>D</color><color=#4AB389FF>e</color><color=#4AB389FF>b</color><color=#4AB389FF>u</color><color=#4AB389FF>g</color>
   items:
   - Serving
   - Serving
@@ -35,11 +35,11 @@ MonoBehaviour:
   wearWeapon: PSword
   wearArmor: TPS
   canMove: 1
-  gameTime: 9967.866
-  playerLastPos: {x: -1.0774093, y: -3.3349993, z: 0}
-  playerLastPosInBattle: {x: 0, y: 0, z: 0}
+  gameTime: 10091.904
+  playerLastPos: {x: -1.9972852, y: -2.5226157, z: 0}
+  playerLastPosInBattle: {x: 0, y: -3.4000013, z: 10}
   lastScene: Example-Ruins
   saveScene: Example-Corridor
   isDebug: 1
-  invincible: 1
+  invincible: 0
   keepInvincible: 0

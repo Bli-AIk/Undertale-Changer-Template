@@ -122,8 +122,6 @@ namespace UCT.Battle
                     }
 
                     MainControl.Instance.HitPlayer(boxHitList[i]);
-
-
                     break;
                 }
                 case MainControl.SceneState.Battle:
@@ -294,12 +292,6 @@ namespace UCT.Battle
                 new Vector3(r * MathUtilityService.GetRandomUnit(), 0, r * MathUtilityService.GetRandomUnit()), v3Spin,
                 4,
                 1f / 60f * 4f * 1.5f, "3D CameraPoint", Ease.OutElastic);
-
-
-            if (MainControl.Instance.playerControl.hp <= 0)
-            {
-                MainControl.Instance.battlePlayerController.KillPlayer(MainControl.Instance);
-            }
         }
 
         public void SetMask(SpriteMaskInteraction spriteMaskInteraction)

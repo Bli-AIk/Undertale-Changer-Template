@@ -8,6 +8,7 @@ using DG.Tweening;
 using DG.Tweening.Core;
 using DG.Tweening.Plugins.Options;
 using JetBrains.Annotations;
+using MEC;
 using UCT.Audio;
 using UCT.Battle;
 using UCT.Battle.BattleConfigs;
@@ -151,6 +152,18 @@ namespace UCT.Core
             }
         }
 
+        private static void OverworldBulletPoolSetup()
+        {
+            var overworldBulletPool = new GameObject
+            {
+                name = "OverworldBulletPool"
+            };
+            var bulletPool = overworldBulletPool.AddComponent<ObjectPool>();
+            bulletPool.poolObject = Resources.Load<GameObject>("Prefabs/Template/Bullet Template");
+
+            SetOverworldBulletPool(bulletPool);
+            DontDestroyOnLoad(overworldBulletPool);
+        }
         public void Start()
         {
             hitVolume = GetComponent<UnityEngine.Rendering.Volume>();
@@ -261,6 +274,7 @@ namespace UCT.Core
                         }
 
                         GetOverworldPlayerBehaviour();
+                        OverworldBulletPoolSetup();
 
                         OverworldPlayerBehaviour.transform.position = playerControl.playerLastPos;
                         _globalLight = GameObject.Find("Global Light 2D").GetComponent<Light2D>();
@@ -273,6 +287,7 @@ namespace UCT.Core
 
                         _chaseUIController = mainCamera.transform.Find("ChaseUI")
                             .GetComponent<OverworldChaseUIController>();
+
                         break;
                     }
                     case SceneState.Battle:
@@ -695,6 +710,28 @@ namespace UCT.Core
         public static void SetOverworldBulletPool(ObjectPool objectPool)
         {
             OverworldBulletPool = objectPool;
+        }
+        
+        
+        public void KillPlayer(Vector3 lastPosition)
+        {
+            playerControl.hp = playerControl.hpMax;
+
+            if (!(playerControl.isDebug && playerControl.invincible))
+            {
+                playerControl.playerLastPosInBattle = lastPosition;
+                SettingsStorage.Pause = true;
+                Timing.KillCoroutines();
+                GameUtilityService.SwitchScene("GameOver", false);
+            }
+            else
+            {
+                if (sceneState == SceneState.Battle)
+                {
+                    selectUIController.UITextUpdate(SelectUIController.UITextMode.Hit);
+                }
+                Debug.Log("Debug无敌模式已将血量恢复", "#FF0000");
+            }
         }
     }
 }
