@@ -56,22 +56,16 @@ namespace UCT.Core
 
         public static int GetDataNumber()
         {
-            if (!Directory.Exists($"{Application.dataPath}/Data"))
+            var dataPath = Path.Combine(Application.dataPath, "Data");
+            if (!Directory.Exists(dataPath))
             {
                 return 0;
             }
 
-            var returnNumber = 0;
-            for (var i = 0; i < Directory.GetFiles($"{Application.dataPath}/Data").Length; i++)
-            {
-                var text = Directory.GetFiles($"{Application.dataPath}/Data")[i];
-                if (text[^5..] == ".json")
-                {
-                    returnNumber++;
-                }
-            }
+            var files = Directory.GetFiles(dataPath);
+            var regex = new Regex(@"^Data\d+\.json$", RegexOptions.Compiled);
 
-            return returnNumber;
+            return files.Select(Path.GetFileName).Count(fileName => regex.IsMatch(fileName));
         }
 
         public static void DeleteData(string dataName)

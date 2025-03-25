@@ -161,8 +161,7 @@ namespace UCT.Core
             var bulletPool = overworldBulletPool.AddComponent<ObjectPool>();
             bulletPool.poolObject = Resources.Load<GameObject>("Prefabs/Template/Bullet Template");
 
-            SetOverworldBulletPool(bulletPool);
-            DontDestroyOnLoad(overworldBulletPool);
+            OverworldBulletPool = bulletPool;
         }
         public void Start()
         {
@@ -254,12 +253,6 @@ namespace UCT.Core
                 {
                     Destroy(OverworldPlayerBehaviour.gameObject);
                     OverworldPlayerBehaviour = null;
-                }
-
-                if (OverworldBulletPool)
-                {
-                    Destroy(OverworldBulletPool.gameObject);
-                    OverworldBulletPool = null;
                 }
             }
             else
@@ -707,12 +700,7 @@ namespace UCT.Core
                 .OnComplete(() => _chaseUIController.gameObject.SetActive(false));
         }
 
-        public static void SetOverworldBulletPool(ObjectPool objectPool)
-        {
-            OverworldBulletPool = objectPool;
-        }
-        
-        
+
         public void KillPlayer(Vector3 lastPosition)
         {
             playerControl.hp = playerControl.hpMax;

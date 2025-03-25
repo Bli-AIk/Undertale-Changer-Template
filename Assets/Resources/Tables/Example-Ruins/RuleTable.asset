@@ -20,7 +20,6 @@ MonoBehaviour:
     isGlobalTriggers: 0
     triggers:
     - SwingCamera
-    rulePriority: 0
     methodNames:
     - float:SwingMainCamera
     - int:PlayUIFx
@@ -35,6 +34,9 @@ MonoBehaviour:
     - 
     - 
     - 
+    objectParams:
+    - {fileID: 0}
+    - {fileID: 0}
     isGlobalMethodEvents: 000000
     useMethodEvents: 000000
     methodEvents:
@@ -47,10 +49,7 @@ MonoBehaviour:
       isGlobal: 0
       fact:
         name: 
-        scope: 0
         value: 0
-        area: 0
-        scene: 
       compare: 0
       detection: 0
       operation: 0
@@ -59,10 +58,7 @@ MonoBehaviour:
         isGlobal: 0
         fact:
           name: Button1
-          scope: 0
           value: 0
-          area: 0
-          scene: 
         compare: 2
         detection: 1
         operation: 1
@@ -71,10 +67,7 @@ MonoBehaviour:
         isGlobal: 0
         fact:
           name: Button2
-          scope: 0
           value: 0
-          area: 0
-          scene: 
         compare: 2
         detection: 1
         operation: 0
