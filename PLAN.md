@@ -1,137 +1,140 @@
-# UCT Update Plan
+# UCT更新计划
 
-This document outlines the long-term update plan for UCT.
+本文档所写的是UCT长期的更新计划。
 
-Note that these update plans are not arranged in any particular order and may change, be put on hold, or be abandoned.
+注意，这些更新计划并没有任何排列顺序，且有可能变动、搁置或废弃。
 
-For the long-term update plan of UCT, please refer to [PLAN.md](PLAN.md), [PLAN_zh-CN.md](PLAN_zh-CN.md), or [PLAN_zh-TW.md](PLAN_zh-TW.md).
+关于UCT的长期更新计划，请查阅[PLAN.md](PLAN.md)、[PLAN_zh-CN.md](PLAN_zh-CN.md)或[PLAN_zh-TW.md](PLAN_zh-TW.md)。
 
-For specific update content regarding UCT, please refer to [CHANGELOG.md](CHANGELOG.md), [CHANGELOG_zh-CN.md](CHANGELOG_zh-CN.md), or [CHANGELOG_zh-TW.md](CHANGELOG_zh-TW.md).
+关于UCT的具体更新内容，请查阅[CHANGELOG.md](CHANGELOG.md)、[CHANGELOG_zh-CN.md](CHANGELOG_zh-CN.md)或[CHANGELOG_zh-TW.md](CHANGELOG_zh-TW.md)。
 
-The update plans/change logs in Simplified Chinese will be updated first, while other languages will use GPT for translation upon **version number changes**.
+简体中文的更新计划/更新日志优先更新，其他语言会在**版本号变更**时使用GPT进行翻译。
 
-## Directory
+## 目录
 
-[General](#General): Includes improvement plans for basic/general functions within the template.
+[通用类](#通用类)：包含对模板内基础/通用功能的改进计划。
 
-[OW Class](#OW Class): Includes plans for the redo of various systems related to the Overworld scene.
+[OW 类](#OW 类)：包含对 Overworld 场景涉及的各系统的重做计划。
 
-[Combat Class](#Combat Class): Includes plans for the expansion and reconstruction of the combat system.
+[战斗类](#战斗类)：包含对战斗系统的拓展和重构计划。
 
-[New Class](#New Class): Includes plans for newly added scenes and functions.
+[新增类](#新增类)：包含对新增场景、功能的计划。
 
-[Other Class](#Other Class): Includes plans outside of the four categories above.
+[其他类](#其他类)：包含以上四类之外的计划。
 
-[On Hold Class](#On Hold Class): Includes plans that have been previously scheduled but are now on hold for various reasons.
+[搁置类](#搁置类)：包含一些曾被计划，但因种种原因现已搁置的计划。
 
-## General
-### Existing System Refinement
-- [x] Refine BGM controller[^1]
-- [x] Use Builder to restructure item system
+## 通用类
+### 现有系统细化
+- [x] 细化BGM 控制器[^1]
+- [x] 使用Builder重构物品系统
 
-### UI Optimization and Refinement
-- [ ] Add low-resolution magnification display function[^2]
-- [ ] Separate the UI rendering logic and specific execution logic of the MENU interface, settings interface, and OW save interface
-- [ ] Refine the functions of the MENU interface, settings interface, and OW save interface
 
-### Performance Optimization
-- [x] Add DebugLogger script[^3]
-- [ ] Use coroutines to call language packs instead of calling them all at once
+### UI优化与细化
+- [ ] 添加低分辨率放大显示功能[^2]
+- [ ] 分离 MENU 界面、设置界面 与 OW 存档界面 的 UI 绘制逻辑与具体执行逻辑
+- [ ] 细化 MENU 界面、设置界面 与 OW 存档界面 功能
 
-## OW Class
-### Event System
-- [x] Redo OW event system
-- [ ] Add Dr-style chase system
-- [ ] Save event system data
+### 性能优化
+- [x] 添加DebugLogger脚本[^3]
+- [ ] 使用协程调用语言包，而非同时全部调用
 
-### Story System
-- [x] Enrich dialogue system[^4]
-- [ ] Add proofreading scene for all text[^5]
+## OW 类
+### 事件系统
+- [x] 重做 OW 事件系统
+- [ ] 添加 Dr 风格的追逐战系统
+- [ ] 将事件系统数据存档
 
-## Combat Class
-### Data Storage
-- [x] Store bullet data to ScriptableObject
-- [ ] Read Json round data
+### 剧情系统
+- [x] 丰富对话系统[^4]
+- [ ] 添加所有文本的校对场景[^5]
 
-### Round System Redo
-- [ ] Add visual round system editor (set up as a separate project) to generate Json round data
-- [ ] Add path bullet generator
+## 战斗类
+### 数据存储
+- [x] 存储弹幕数据至 ScriptableObject
+- [ ] 读取Json回合数据
 
-### Combat System Expansion
-- [ ] Add the ability to insert subtitles/dialogues during rounds
-- [ ] Add multiple battles[^6]
+### 回合系统重做
+- [ ] 添加可视化回合系统编辑器（另设项目），生成Json回合数据
+- [ ] 添加路径弹幕生成器
 
-### Fixes and Optimizations
-- [x] Optimize 3D background
-- [x] Fix blue heart
+### 战斗系统扩展
+- [ ] 添加在回合中插入字幕 / 对话的功能
+- [ ] 添加多战斗[^6]
 
-### Irregular Frame
-- [ ] Fix irregular frames
-- [ ] Redo collision system to accommodate irregular frames
+### 修复与优化
+- [x] 优化3D 背景
+- [x] 修复蓝心
 
-### Judgement and Collision
-- [ ] Refine FIGHT related judgments
-- [ ] Add monster death judgment
-- [ ] Complete seven colors for player souls
+### 异形框
+- [ ] 修复异形框
+- [x] 重做碰撞系统以适配异形框
 
-## New Class
-### Scene Expansion
-- [x] Add multilingual expansion in naming scene
-- [ ] Add battle settlement scene
-- [ ] Add BGM broadcast scene
-- [ ] Add staff credits/thank you scene
-- [ ] Add shop scene
+### 判定与碰撞
+- [x] 添加怪物死亡判定
+- [x] 补全玩家魂色
 
-### Rendering Expansion
-- [x] Add built-in projection frame
-- [x] Add 3D renderer
 
-### Function Expansion
-- [ ] Add MIDI detection system
-- [ ] Add historical text system
-- [ ] Add storage system/extra backpack
-- [ ] Add CC subtitle system[^7]
-- [ ] Add achievement system
-- [ ] Add Buff system[^8]
-- [ ] Add UI manager
-- [x] Add custom expansion support for weapons/armor
-- [ ] Read original saved data
+## 新增类
+### 场景拓展
+- [x] 添加起名场景中的多语言拓展
+- [ ] 添加战斗结算场景
+- [x] 添加BGM场景
+- [ ] 添加制作人员名单/致谢场景
+- [ ] 添加商店场景
 
-### Accessibility
-- [ ] Add narrator
-- [ ] Add colorblind filter
+### 渲染拓展
+- [x] 添加内置投影框
+- [x] 添加3D 渲染器
 
-## Other Class
-### Project Localization
-- [x] Merge Chinese and English branches
-- [ ] Replace comment text through scripts
+### 功能扩展
+- [ ] 添加midi检测系统
+- [ ] 添加历史文本系统
+- [ ] 添加存储系统/额外背包
+- [ ] 添加CC字幕系统[^7]
+- [ ] 添加成就系统
+- [ ] 添加Buff系统[^8]
+- [ ] 添加 UI 管理器
+- [x] 添加武器/防具的自定义拓展支持
+- [ ] 读取原作存档数据
 
-### Rich Text
+### 无障碍
+- [ ] 添加讲述人
+- [ ] 添加色盲滤镜
 
-- [ ] Add rich text TAG - customizable optional translation names (for selective translation of names, etc.)
-- [ ] Add rich text <waitForConfirm> - pause, press Z to continue but do not clear the screen
-- [ ] Add rich text <directUpdate> - clear the screen directly and play without pressing Z
+## 其他类
+### 项目本地化
+- [x] 合并中英文分支
+- [ ] 通过脚本替换注释文本
 
-### Cleanup and Maintenance
-- [x] Remove redundant original textures
+### 富文本
 
-### Tutorials
-- [ ] New wiki and video tutorials
+- [ ] 添加富文本TAG - 自定义可选译名（用于人名选择性翻译等）
+- [ ] 添加富文本\<waitForConfirm\> - 暂停，按Z继续但不清屏
+- [ ] 添加富文本\<directUpdate\> - 不按Z直接清屏并播放
 
-## On Hold Class
+### 清理与维护
+- [x] 删除多余的原作贴图
 
-- [ ] Add pixel-perfect post-processing
-- [ ] Introduce online library
-- [ ] Add team system
-- [ ] Add task system
+### 教程
+- [ ] 新的wiki与视频教程
+
+
+
+## 搁置类
+
+- [ ] 添加像素完美后处理
+- [ ] 引入联机库
+- [ ] 添加多主角团队系统
 
 ---
 
-[^1]: Mainly will add functions such as calculating beat counts.
-[^2]: Will attempt to add an option in settings to allow the game display to be set to low resolution while magnifying the display resolution. This is more friendly for computers with lower performance.
-[^3]: This script will encapsulate all Unity's Debug related functions inside for calling, these functions will only execute within the editor.
-[^4]: Achieved by integrating Ink language.
-[^5]: This scene will list all text, consistent with in-game display methods, making it easy for quick proofreading.
-[^6]: Allowing multiple battles and battles within the game.
-[^7]: Localization personnel can provide localized support to players in advance by releasing a CC subtitle preview version after translation is completed but not yet formally embedded.
-[^8]: The KR system is realized through Buff.
+[^1]: 主要会为它添加计算节拍数等功能。
+[^2]: 会尝试在设置选项中额外添加一项，允许将游戏画面设为低分辨率的同时，对显示分辨率进行放大处理。这对性能较差的电脑比较友好。
+[^3]: 该脚本会将所有 Unity 的 Debug 相关函数封装至 其中来调用，这些函数仅在编辑器内执行。
+[^4]: 通过接入Ink语言而实现。
+[^5]: 该场景内会列出所有文本，与游戏内显示方式一致，便于快速校对。
+[^6]: 即允许游戏内多次战斗和多个战斗。
+[^7]: 本地化人员可以在翻译完成但未正式嵌入的阶段，通过发布CC字幕预览版本，提前为玩家提供本地化支持。
+[^8]: KR系统通过Buff实现。
+
