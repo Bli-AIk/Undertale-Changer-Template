@@ -247,50 +247,45 @@ namespace UCT.Core
 
         private void StartWithSceneState()
         {
-            if (sceneState != SceneState.Overworld)
+            if (sceneState != SceneState.Overworld && OverworldPlayerBehaviour)
             {
-                if (OverworldPlayerBehaviour)
-                {
-                    Destroy(OverworldPlayerBehaviour.gameObject);
-                    OverworldPlayerBehaviour = null;
-                }
+                Destroy(OverworldPlayerBehaviour.gameObject);
+                OverworldPlayerBehaviour = null;
             }
-            else
+            
+            switch (sceneState)
             {
-                switch (sceneState)
+                case SceneState.Overworld:
                 {
-                    case SceneState.Overworld:
+                    if (!eventController)
                     {
-                        if (!eventController)
-                        {
-                            eventController = GetComponent<EventController>();
-                        }
-
-                        GetOverworldPlayerBehaviour();
-                        OverworldBulletPoolSetup();
-
-                        OverworldPlayerBehaviour.transform.position = playerControl.playerLastPos;
-                        _globalLight = GameObject.Find("Global Light 2D").GetComponent<Light2D>();
-                        if (_globalLight)
-                        {
-                            _globalLightIntensity = _globalLight.intensity;
-                        }
-
-                        _overworldChaseLineDrawer = GameObject.Find("Grid").GetComponent<OverworldChaseLineDrawer>();
-
-                        _chaseUIController = mainCamera.transform.Find("ChaseUI")
-                            .GetComponent<OverworldChaseUIController>();
-
-                        break;
+                        eventController = GetComponent<EventController>();
                     }
-                    case SceneState.Battle:
-                        InitializationBattle();
-                        break;
-                    case SceneState.Normal:
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException($"Unexpected sceneState value: {sceneState}");
+
+                    GetOverworldPlayerBehaviour();
+                    OverworldBulletPoolSetup();
+
+                    OverworldPlayerBehaviour.transform.position = playerControl.playerLastPos;
+                    _globalLight = GameObject.Find("Global Light 2D").GetComponent<Light2D>();
+                    if (_globalLight)
+                    {
+                        _globalLightIntensity = _globalLight.intensity;
+                    }
+
+                    _overworldChaseLineDrawer = GameObject.Find("Grid").GetComponent<OverworldChaseLineDrawer>();
+
+                    _chaseUIController = mainCamera.transform.Find("ChaseUI")
+                        .GetComponent<OverworldChaseUIController>();
+
+                    break;
                 }
+                case SceneState.Battle:
+                    InitializationBattle();
+                    break;
+                case SceneState.Normal:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException($"Unexpected sceneState value: {sceneState}");
             }
         }
 
