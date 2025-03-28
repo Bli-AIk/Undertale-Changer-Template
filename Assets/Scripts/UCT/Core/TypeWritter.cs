@@ -123,10 +123,10 @@ namespace UCT.Core
                 var updateHandleItemInput =
                     _itemScroller.UpdateHandleItemInput(SelectController.GlobalItemIndex,
                         SelectController.VisibleItemIndex,
-                        SelectController.Story.currentChoices.Count, _ =>
+                        SelectController.Story.currentChoices.Count, (global,visible) =>
                         {
                             AudioController.Instance.PlayFx(0, MainControl.Instance.AudioControl.fxClipUI);
-                            UpdateChoiceText();
+                            UpdateChoiceText(global, visible);
                         });
                 SelectController.GlobalItemIndex = updateHandleItemInput.globalItemIndex;
                 SelectController.VisibleItemIndex = updateHandleItemInput.visibleItemIndex;
@@ -169,10 +169,10 @@ namespace UCT.Core
             }
         }
 
-        private void UpdateChoiceText()
+        private void UpdateChoiceText(int globalItemIndex, int visibleItemIndex)
         {
             var choices = SelectController.Story.currentChoices;
-            var baseIndex = SelectController.GlobalItemIndex - SelectController.VisibleItemIndex;
+            var baseIndex = globalItemIndex - visibleItemIndex;
             var result = new StringBuilder();
 
             for (var i = 0; i < 3 && baseIndex + i < choices.Count; i++)
@@ -190,7 +190,7 @@ namespace UCT.Core
             if (MainControl.Instance.sceneState == MainControl.SceneState.Overworld)
             {
                 BackpackBehaviour.Instance.Heart.transform.localPosition = new Vector3(-6.2f,
-                    (TalkBoxController.Instance.isUp ? 4.85f : -2.95f) - 0.9f * SelectController.VisibleItemIndex, 5);
+                    (TalkBoxController.Instance.isUp ? 4.85f : -2.95f) - 0.9f * visibleItemIndex, 5);
             }
         }
 
@@ -228,7 +228,7 @@ namespace UCT.Core
                 }
 
                 SelectController.IsSelecting = true;
-                UpdateChoiceText();
+                UpdateChoiceText(SelectController.GlobalItemIndex, SelectController.VisibleItemIndex);
                 _itemScroller.Open(SelectController.Story.currentChoices.Count, 1.175f);
             }
             else
