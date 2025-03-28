@@ -1378,7 +1378,7 @@ namespace UCT.Battle
 
             var updateHandleItemInput =
                 _itemScroller.UpdateHandleItemInput(globalItemIndex, visibleItemIndex, myItemMax,
-                    CommonItemNavigationLogic);
+                    (i, _) => CommonItemNavigationLogic(i));
             globalItemIndex = updateHandleItemInput.globalItemIndex;
             visibleItemIndex = updateHandleItemInput.visibleItemIndex;
 

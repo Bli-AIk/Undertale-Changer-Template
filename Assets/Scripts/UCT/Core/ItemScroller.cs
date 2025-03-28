@@ -164,7 +164,7 @@ namespace UCT.Core
             int globalItemIndex,
             int visibleItemIndex,
             int count,
-            Action<int> onKeyDown)
+            Action<int, int> onKeyDown)
         {
             _highlightedIndex = globalItemIndex;
             CalculateAndSetCurrentSelectionIndex(globalItemIndex, count);
@@ -178,7 +178,7 @@ namespace UCT.Core
 
                 PressUp();
                 globalItemIndex--;
-                onKeyDown.Invoke(globalItemIndex);
+                onKeyDown.Invoke(globalItemIndex, visibleItemIndex);
             }
             else if (InputService.GetKeyDown(KeyCode.DownArrow) && globalItemIndex < count - 1)
             {
@@ -188,8 +188,8 @@ namespace UCT.Core
                 }
 
                 PressDown();
-                globalItemIndex++;
-                onKeyDown.Invoke(globalItemIndex);
+                globalItemIndex++;               
+                onKeyDown.Invoke(globalItemIndex, visibleItemIndex);
             }
 
             return (globalItemIndex, visibleItemIndex);
