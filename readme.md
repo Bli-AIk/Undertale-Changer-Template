@@ -1,4 +1,6 @@
 # Look at me before downloading!!
+**Before using UCT, please make sure to read and understand the [License, Commercial Use, and Copyright Notice](LICENSE_MONETIZATION_AND_COPYRIGHT_NOTICE.md). By using UCT, you agree to comply with all related terms.**
+
 You are currently browsing the **[Develop](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/develop)** branch of **Undertale-Changer-Template (UCT)**. The latest updates for UCT will be prioritized in this branch.
 
 The stable version **UCT v1.0.7** is stored in the **[Main](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/main)** branch. If you need a stable version, it is recommended to switch to that branch.
@@ -6,6 +8,8 @@ The stable version **UCT v1.0.7** is stored in the **[Main](https://github.com/B
 If you would like to participate in testing new versions of UCT or contribute code to the project, please develop based on the **Develop** branch!
 
 If you encounter any issues with the template, feel free to submit an issue or contact me!
+
+If you want to participate in testing new versions of UCT or contribute to its development, please check out the **[Develop](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/develop)** branch.
 
 You can view the current change log of UCT through [**CHANGELOG.md**](CHANGELOG.md), and you can also check **[PLAN.md](PLAN.md)** to understand the update plan of UCT.
 
