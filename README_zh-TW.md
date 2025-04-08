@@ -1,4 +1,7 @@
 # 下載前先看看我！！！！
+**在使用 UCT 之前，請務必閱讀並理解 [使用許可、商業用途與版權須知](LICENSE_MONETIZATION_AND_COPYRIGHT_NOTICE_zh-TW.md)。使用 UCT 即表示您已同意並將遵守所有相關規定。**
+
+
 你正在瀏覽的是 **Undertale-Changer-Template (UCT)** 的 **[Main](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/main)** 分支。
 
 本分支目前的 UCT 版本為 **v1.0.7**。
