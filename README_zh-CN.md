@@ -13,6 +13,8 @@
 
 你可以通过[**CHANGELOG_zh-CN.md**](CHANGELOG_zh-CN.md)查看UCT目前的更新日志，也可以查阅[**PLAN_zh-CN.md**](PLAN_zh-CN.md)来了解UCT的更新计划。
 
+想学习如何使用UCT么？在这里查阅 [**UCT教学文档**](https://bli-aik.github.io/UCT-Tutorials/zh_CN/)！（文档尚未撰写完毕）
+
 # Undertale-Changer-Template
 
 <p align="center">
@@ -46,7 +48,6 @@
 - [背景](#背景)
 - [简介](#简介)
 - [使用方法](#使用方法)
-- [Wiki](#Wiki)
 - [依赖项](#依赖项)
 - [贡献者](#贡献者)
 - [许可证](#许可证)
@@ -87,12 +88,6 @@
 建议使用此版本或更高版本以获得最佳体验。
 
 但不建议使用2022版本，否则模板可能会出现问题。
-
-## Wiki
-
-[Wiki](https://github.com/Bli-AIk/Undertale-Changer-Template/wiki/Home%E2%80%90zh_CN)
-
-（请注意，此Wiki是根据旧版的UCT而编写的，它可能与当前版本的部分内容存在差异）
 
 ## 依赖项
 - [Clipper2](https://github.com/AngusJohnson/Clipper2)
