@@ -13,6 +13,8 @@ If you want to participate in testing new versions of UCT or contribute to its d
 
 You can view the current change log of UCT through [**CHANGELOG.md**](CHANGELOG.md), and you can also check **[PLAN.md](PLAN.md)** to understand the update plan of UCT.
 
+Want to learn how to use UCT? Check out the [**UCT tutorials**](https://bli-aik.github.io/UCT-Tutorials/) here! (The document is not yet finished)
+
 # Undertale-Changer-Template
 
 <p align="center">
@@ -49,7 +51,6 @@ An [**UNDERTALE**](https://undertale.com/) fan game template based on [**unity e
 - [Background](#background)
 - [Synopsis](#synopsis)
 - [Usage](#usage)
-- [Wiki](#wiki)
 - [Dependencies](#Dependencies)
 - [Contributors](#Contributors)
 - [License](#license)
@@ -91,13 +92,6 @@ Currently compatible with Unity Editor version: 2021.3.15f1 LTS
 I recommend using this version or a higher one for the best experience.
 
 But it is not recommended to use the 2022 version, otherwise the template may have issues.
-
-
-## Wiki
-
-[Wiki](https://github.com/Bli-AIk/Undertale-Changer-Template/wiki)
-
-(Please note that this wiki is written based on an old version of UCT, and it may have some differences with the current version)
 
 ## Dependencies
 - [Clipper2](https://github.com/AngusJohnson/Clipper2)
