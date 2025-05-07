@@ -11,7 +11,7 @@
 
 你可以透過[**CHANGELOG_zh-TW.md**](CHANGELOG_zh-TW.md)查看UCT目前的更新日誌，也可以查閱[**PLAN_zh-TW.md**](PLAN_zh-TW.md)來了解UCT的更新計劃。
 
-想學習如何使用UCT麼？在這裡查閱 [**UCT教學檔案**](https://bli-aik.github.io/UCT-Tutorials/zh_TW/)！ （檔案尚未撰寫完畢）
+想學習如何使用UCT麼？在這裡查閱 [**UCT教學檔案**](https://bli-aik.github.io/UCT-Tutorials/zh_TW/) 或  [**DeepWiki**](https://deepwiki.com/Bli-AIk/Undertale-Changer-Template) ！ （檔案尚未撰寫完畢）
 
 # Undertale-Changer-Template
 

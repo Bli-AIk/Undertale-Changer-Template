@@ -13,7 +13,7 @@ If you want to participate in testing new versions of UCT or contribute to its d
 
 You can view the current change log of UCT through [**CHANGELOG.md**](CHANGELOG.md), and you can also check **[PLAN.md](PLAN.md)** to understand the update plan of UCT.
 
-Want to learn how to use UCT? Check out the [**UCT tutorials**](https://bli-aik.github.io/UCT-Tutorials/) here! (The document is not yet finished)
+Want to learn how to use UCT? Check out the [**UCT tutorials (WIP)**](https://bli-aik.github.io/UCT-Tutorials/) or  [**DeepWiki**](https://deepwiki.com/Bli-AIk/Undertale-Changer-Template) !
 
 # Undertale-Changer-Template
 

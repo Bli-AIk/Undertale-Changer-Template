@@ -11,7 +11,7 @@
 
 你可以通过[**CHANGELOG_zh-CN.md**](https://github.com/Bli-AIk/Undertale-Changer-Template/blob/main/CHANGELOG_zh-CN.md)查看UCT目前的更新日志，也可以查阅[**PLAN_zh-CN.md**](https://github.com/Bli-AIk/Undertale-Changer-Template/blob/main/PLAN_zh-CN.md)来了解UCT的更新计划。
 
-想学习如何使用UCT么？在这里查阅 [**UCT教学文档**](https://bli-aik.github.io/UCT-Tutorials/zh_CN/)！（文档尚未撰写完毕）
+想学习如何使用UCT么？在这里查阅 [**UCT教学文档**](https://bli-aik.github.io/UCT-Tutorials/zh_CN/) 或  [**DeepWiki**](https://deepwiki.com/Bli-AIk/Undertale-Changer-Template) ！（文档尚未撰写完毕）
 
 # Undertale-Changer-Template
 
