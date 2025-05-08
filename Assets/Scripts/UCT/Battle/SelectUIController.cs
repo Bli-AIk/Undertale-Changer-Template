@@ -186,7 +186,7 @@ namespace UCT.Battle
             }
 
             var canEndBattle = MainControl.Instance.selectUIController.enemiesControllers.All(enemiesController =>
-                enemiesController.Enemy.state is not (EnemyState.Default or EnemyState.CanSpace));
+                enemiesController.Enemy.state is not (EnemyState.Default or EnemyState.CanSpare));
 
             if (!canEndBattle)
             {
@@ -337,7 +337,7 @@ namespace UCT.Battle
                     exp += enemy.exp;
                 }
 
-                if (enemy.state is EnemyState.Dead or EnemyState.Spaced)
+                if (enemy.state is EnemyState.Dead or EnemyState.Spared)
                 {
                     gold += enemy.gold;
                 }
@@ -433,8 +433,8 @@ namespace UCT.Battle
         private void LayerOneSet()
         {
             while (nameLayerIndex < enemiesControllers.Count - 1 && nameLayerIndex + 1 < enemiesControllers.Count &&
-                   enemiesControllers[nameLayerIndex].Enemy.state is not (EnemyState.Default or EnemyState.CanSpace) &&
-                   enemiesControllers[nameLayerIndex + 1].Enemy.state is EnemyState.Default or EnemyState.CanSpace)
+                   enemiesControllers[nameLayerIndex].Enemy.state is not (EnemyState.Default or EnemyState.CanSpare) &&
+                   enemiesControllers[nameLayerIndex + 1].Enemy.state is EnemyState.Default or EnemyState.CanSpare)
             {
                 nameLayerIndex++;
             }
@@ -458,7 +458,7 @@ namespace UCT.Battle
         {
             var isPlayFx = false;
             while (nameLayerIndex > 0 &&
-                   enemiesControllers[nameLayerIndex - 1].Enemy.state is EnemyState.Default or EnemyState.CanSpace)
+                   enemiesControllers[nameLayerIndex - 1].Enemy.state is EnemyState.Default or EnemyState.CanSpare)
             {
                 nameLayerIndex--;
                 if (isPlayFx)
@@ -475,7 +475,7 @@ namespace UCT.Battle
         {
             var isPlayFx = false;
             while (nameLayerIndex < enemiesControllers.Count - 1 && nameLayerIndex + 1 < enemiesControllers.Count &&
-                   enemiesControllers[nameLayerIndex + 1].Enemy.state is EnemyState.Default or EnemyState.CanSpace)
+                   enemiesControllers[nameLayerIndex + 1].Enemy.state is EnemyState.Default or EnemyState.CanSpare)
             {
                 nameLayerIndex++;
                 if (isPlayFx)
@@ -654,7 +654,7 @@ namespace UCT.Battle
         {
             foreach (var enemy in enemiesControllers)
             {
-                if (enemy.Enemy.state is not (EnemyState.Default or EnemyState.CanSpace))
+                if (enemy.Enemy.state is not (EnemyState.Default or EnemyState.CanSpare))
                 {
                     _textUI.text += "\n";
                     continue;
@@ -662,7 +662,7 @@ namespace UCT.Battle
 
                 var save = TextProcessingService.GetFirstChildStringByPrefix(
                     MainControl.Instance.BattleControl.enemiesNameSave, enemy.gameObject.name);
-                if (enemy.Enemy.state == EnemyState.CanSpace)
+                if (enemy.Enemy.state == EnemyState.CanSpare)
                 {
                     _textUI.text += "<color=yellow>";
                 }
@@ -736,7 +736,7 @@ namespace UCT.Battle
         private string NameLayerSetMercyText(int index)
         {
             var result = new StringBuilder();
-            if (enemiesControllers[nameLayerIndex].Enemy.state == EnemyState.CanSpace &&
+            if (enemiesControllers[nameLayerIndex].Enemy.state == EnemyState.CanSpare &&
                 index < enemiesControllers[nameLayerIndex].Enemy.MercyTypes.Length &&
                 enemiesControllers[nameLayerIndex].Enemy.MercyTypes[index] == MercyType.Mercy)
             {
@@ -1071,12 +1071,12 @@ namespace UCT.Battle
 
         private bool Mercy(IEnemy enemy, EnemiesController enemiesController)
         {
-            if (enemy.state != EnemyState.CanSpace)
+            if (enemy.state != EnemyState.CanSpare)
             {
                 return false;
             }
 
-            enemy.state = EnemyState.Spaced;
+            enemy.state = EnemyState.Spared;
             enemiesController.dustCloud.SetActive(true);
             enemiesController.spriteSplitController.spriteRenderer.color = Color.gray;
 
@@ -1088,7 +1088,7 @@ namespace UCT.Battle
             AudioController.Instance.PlayFx(5, MainControl.Instance.AudioControl.fxClipBattle);
 
 
-            if (!enemiesControllers.All(item => item.Enemy.state is EnemyState.Spaced or EnemyState.Dead))
+            if (!enemiesControllers.All(item => item.Enemy.state is EnemyState.Spared or EnemyState.Dead))
             {
                 return false;
             }
@@ -1486,7 +1486,7 @@ namespace UCT.Battle
             var bubbleBehaviours = _dialogBubbleBehaviours[enemyControllerIndex];
             if (enemyController)
             {
-                if (enemyController.Enemy.state is EnemyState.Spaced or EnemyState.Dead)
+                if (enemyController.Enemy.state is EnemyState.Spared or EnemyState.Dead)
                 {
                     return;
                 }

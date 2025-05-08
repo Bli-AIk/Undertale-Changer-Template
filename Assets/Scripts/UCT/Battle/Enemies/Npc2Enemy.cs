@@ -27,7 +27,7 @@ namespace UCT.Battle.Enemies
                 () =>
                 {
                     Debug.Log("NPC2选项3");
-                    state = EnemyState.CanSpace;
+                    state = EnemyState.CanSpare;
                 },
                 () => Debug.Log("NPC2选项4")
             };
@@ -47,7 +47,7 @@ namespace UCT.Battle.Enemies
 
         public IEnumerator<float> _EnemyTurns(int index, ObjectPool bulletPool, ObjectPool boardPool)
         {
-            if (state is not (EnemyState.Default or EnemyState.CanSpace))
+            if (state is not (EnemyState.Default or EnemyState.CanSpare))
             {
                 yield break;
             }

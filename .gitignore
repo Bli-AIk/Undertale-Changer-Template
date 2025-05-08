@@ -28,9 +28,6 @@
 # Visual Studio cache directory
 .vs/
 
-# Rider cache directory
-.idea/
-
 # Gradle cache directory
 .gradle/
 
@@ -79,8 +76,12 @@ crashlytics-build.properties
 /[Aa]ssets/[Pp]lugins/[Ii]gnore[Pp]aid[Pp]lugins/
 /[Aa]ssets/[Pp]lugins/[Ii]gnore[Pp]aid[Pp]lugins.meta
 
-
-# IDE
-**/.idea
-
 /[Aa]ssets/Z_Waste/
+
+# JetBrains Rider
+!.idea/vcs.xml
+!.idea/.name
+
+.idea/workspace.xml
+.idea/aws.xml
+.idea/.idea.Undertale-Changer-Template/

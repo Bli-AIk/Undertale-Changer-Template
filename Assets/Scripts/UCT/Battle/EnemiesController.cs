@@ -73,8 +73,8 @@ namespace UCT.Battle
     public enum EnemyState
     {
         Default,
-        CanSpace,
-        Spaced,
+        CanSpare,
+        Spared,
         Dead
     }
 }
