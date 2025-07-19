@@ -7,11 +7,9 @@
 
 当前 **UCT** 的功能**基本齐全**，你可以尝试使用它进行游戏开发。
 
-若模板内出现任何问题，欢迎随时来提Issue，或者联系我！
+本项目目前处于归档状态，暂时不再维护。如果你想改进此项目，可自行fork。
 
-如果你想参与UCT的新版本测试，或者为UCT进行贡献，请查阅 **[Develop](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/develop)** 分支。
-
-你可以通过[**CHANGELOG_zh-CN.md**](CHANGELOG_zh-CN.md)查看UCT目前的更新日志，也可以查阅[**PLAN_zh-CN.md**](PLAN_zh-CN.md)来了解UCT的更新计划。
+你可以通过[**CHANGELOG_zh-CN.md**](CHANGELOG_zh-CN.md)查看UCT的更新日志，也可以查阅[**PLAN_zh-CN.md**](PLAN_zh-CN.md)来了解UCT的更新计划。
 
 想学习如何使用UCT么？在这里查阅 [**UCT教学文档**](https://bli-aik.github.io/UCT-Tutorials/zh_CN/) 或  [**DeepWiki**](https://deepwiki.com/Bli-AIk/Undertale-Changer-Template) ！（文档尚未撰写完毕）
 

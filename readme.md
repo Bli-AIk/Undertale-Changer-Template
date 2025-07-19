@@ -7,9 +7,7 @@ The current version of UCT in this branch is **v1.0.7**.
 
 The functionality of **UCT** is **mostly complete**, and you can try using it for game development.
 
-If you encounter any issues with the template, feel free to submit an issue or contact me!
-
-If you want to participate in testing new versions of UCT or contribute to its development, please check out the **[Develop](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/develop)** branch.
+The project is currently archived and no longer maintained. If you'd like to improve it, feel free to fork it.
 
 You can view the current change log of UCT through [**CHANGELOG.md**](CHANGELOG.md), and you can also check **[PLAN.md](PLAN.md)** to understand the update plan of UCT.
 
