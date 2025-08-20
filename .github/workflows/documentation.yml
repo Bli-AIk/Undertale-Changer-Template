@@ -15,8 +15,13 @@ jobs:
         # with:
         #   submodules: true
 
-      - name: Install DocFX
-        run: choco install -y docfx --version 2.61.0
+      - name: Dotnet Setup
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.x
+
+      - name: Install docfx
+        run: dotnet tool update -g docfx
 
       - name: Use README.md as index.md
         run: cp readme.md Documentation/index.md
