@@ -1,0 +1,10 @@
+apiRules:
+- include:
+    uidRegex: ^UCT
+    type: Namespace
+- include:
+    uidRegex: ^Editor
+    type: Namespace
+- exclude:
+    uidRegex: .*
+    type: Namespace
