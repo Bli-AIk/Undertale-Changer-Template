@@ -32,8 +32,8 @@ jobs:
       - name: Install DocFX
         run: dotnet tool update -g docfx
 
-      - name: Use README.md as index.md
-        run: cp README.md Documentation/index.md 
+      - name: Use readme.md as index.md
+        run: cp readme.md Documentation/index.md 
 
       - name: Build
         run: docfx Documentation/docfx.json 
