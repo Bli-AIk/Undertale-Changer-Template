@@ -599,7 +599,7 @@ namespace UCT.Core
                     else
                     {
                         pathPrefix =
-                            $@"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[languagePackId - MainControl.LanguagePackageInternalNumber]}\Ink\";
+                            $@"{Directory.GetDirectories(Application.dataPath + "/LanguagePacks")[languagePackId - MainControl.LanguagePackageInternalNumber]}\Ink\";
                         story = InkService.ReadInkJsonFileFromLocalPath(pathPrefix + spText[9..^1]);
                     }
 

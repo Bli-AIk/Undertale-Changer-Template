@@ -443,7 +443,7 @@ namespace UCT.Core
             else
             {
                 turnSave = Directory.GetFiles(
-                    $@"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[languagePackId - LanguagePackageInternalNumber]}\Battle\{BattleControl.BattleConfig.GetType().Name}");
+                    $@"{Directory.GetDirectories(Application.dataPath + "/LanguagePacks")[languagePackId - LanguagePackageInternalNumber]}\Battle\{BattleControl.BattleConfig.GetType().Name}");
             }
 
             foreach (var t in turnSave)

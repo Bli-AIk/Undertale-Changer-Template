@@ -292,7 +292,7 @@ namespace UCT.Service
         /// <param name="id">语言包ID</param>
         public static int LanguagePackDetection(int id)
         {
-            if (id < 0 || id >= Directory.GetDirectories(Application.dataPath + "\\LanguagePacks").Length +
+            if (id < 0 || id >= Directory.GetDirectories(Application.dataPath + "/LanguagePacks").Length +
                 MainControl.LanguagePackageInternalNumber)
             {
                 return 2;
@@ -309,7 +309,7 @@ namespace UCT.Service
             return id < MainControl.LanguagePackageInternalNumber
                 ? Resources.Load<TextAsset>($"TextAssets/LanguagePacks/{GetLanguageInsideId(id)}/{path}").text
                 : File.ReadAllText(
-                    $"{Directory.GetDirectories(Application.dataPath + "\\LanguagePacks")[id - MainControl.LanguagePackageInternalNumber]}\\{path}.txt");
+                    $"{Directory.GetDirectories(Application.dataPath + "/LanguagePacks")[id - MainControl.LanguagePackageInternalNumber]}\\{path}.txt");
         }
 
         /// <summary>

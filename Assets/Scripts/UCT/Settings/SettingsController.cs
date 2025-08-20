@@ -856,7 +856,7 @@ namespace UCT.Settings
 
         private string TraverseLanguagePackages(string pathStringSaver, bool isExternal)
         {
-            var basePath = isExternal ? Application.dataPath + "\\LanguagePacks" : "TextAssets/LanguagePacks/";
+            var basePath = isExternal ? Application.dataPath + "/LanguagePacks" : "TextAssets/LanguagePacks/";
             var languagePackCount = isExternal
                 ? Directory.GetDirectories(basePath).Length
                 : MainControl.LanguagePackageInternalNumber;
@@ -913,7 +913,7 @@ namespace UCT.Settings
             }
 
             var strings =
-                DataHandlerService.LoadItemData(ReadFile(pathString + "\\LanguagePackInformation", isExternal));
+                DataHandlerService.LoadItemData(ReadFile(pathString + "/LanguagePackInformation", isExternal));
             strings = DataHandlerService.ChangeItemData(strings, true, new List<string>());
             return TextProcessingService.GetFirstChildStringByPrefix(strings, returnString);
         }
