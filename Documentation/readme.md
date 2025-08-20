@@ -106,7 +106,6 @@ But it is not recommended to use the 2022 version, otherwise the template may ha
 - [Alchemy](https://github.com/AnnulusGames/Alchemy)
 - [UnityTimer](https://github.com/akbiggs/UnityTimer)
 - [ink-unity-integration](https://github.com/inkle/ink-unity-integration)
-- [DocFxForUnity](https://github.com/NormandErwan/DocFxForUnity)
 
 Thank you very much to the contributors of the above libraries/plugins for providing excellent tools and technical support for this project!
 

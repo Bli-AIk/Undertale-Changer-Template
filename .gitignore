@@ -85,3 +85,6 @@ crashlytics-build.properties
 .idea/workspace.xml
 .idea/aws.xml
 .idea/.idea.Undertale-Changer-Template/
+
+/Documentation/obj/
+/Documentation/api/

@@ -105,6 +105,7 @@
 - [Alchemy](https://github.com/AnnulusGames/Alchemy)
 - [UnityTimer](https://github.com/akbiggs/UnityTimer)
 - [ink-unity-integration](https://github.com/inkle/ink-unity-integration)
+- [DocFxForUnity](https://github.com/NormandErwan/DocFxForUnity)
 
 以上函式庫/插件的貢獻者們為本計畫提供了優秀的工具和技術支持，衷心感謝你們！
 
