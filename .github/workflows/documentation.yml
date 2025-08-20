@@ -30,7 +30,7 @@ jobs:
           dotnet-version: 8.x 
 
       - name: Install DocFX
-        run: dotnet tool update -g docfx
+        run: dotnet tool update -g docfx --version 2.61.0
 
       - name: Use readme.md as index.md
         run: cp readme.md Documentation/index.md 
