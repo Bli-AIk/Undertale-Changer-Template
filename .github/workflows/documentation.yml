@@ -5,56 +5,44 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
-  # Build the documentation
-  build:
-    runs-on: windows-latest # Required by DocFX
+  publish-docs:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest 
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-        # with:
-        #   submodules: true
+        uses: actions/checkout@v4 
 
-      - name: Dotnet Setup
-        uses: actions/setup-dotnet@v3
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4 
         with:
-          dotnet-version: 8.x
+          dotnet-version: 8.x 
 
-      - name: Install docfx
+      - name: Install DocFX
         run: dotnet tool update -g docfx
 
       - name: Use README.md as index.md
-        run: cp readme.md Documentation/index.md
+        run: cp README.md Documentation/index.md 
 
       - name: Build
-        run: docfx Documentation/docfx.json
+        run: docfx Documentation/docfx.json 
 
-      # Upload the generated documentation
-      - name: Upload site artifact
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          name: _site
-          path: _site # Must equals the 'build.dest' value on your docfx.json
+          path: '_site' 
 
-  # Deploy the generated documentation to the gh-pages branch
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        # with:
-        #   submodules: true
-
-      # Download the generated documentation
-      - name: Download site artifact
-        uses: actions/download-artifact@v1
-        with:
-          name: _site
-
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_branch: gh-pages
-          publish_dir: _site
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4 
