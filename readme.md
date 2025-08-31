@@ -1,5 +1,5 @@
 # Look at me before downloading!!
-**Before using UCT, please make sure to read and understand the [License, Commercial Use, and Copyright Notice](LICENSE_MONETIZATION_AND_COPYRIGHT_NOTICE.md). By using UCT, you agree to comply with all related terms.**
+**Before using UCT, please make sure to read and understand the [License, Monetization, and Copyright Notices](LICENSE_MONETIZATION_AND_COPYRIGHT_NOTICE.md). By using UCT, you agree to comply with all related terms.**
 
 You are currently browsing the **[Main](https://github.com/Bli-AIk/Undertale-Changer-Template/tree/main)** branch of **Undertale-Changer-Template (UCT)**.
 
@@ -125,5 +125,5 @@ If you find a bug, want to fix an issue, or want to improve the project, please 
 
 ## License
 
-[GNU General Public License v3.0](../main/LICENSE)
+[Apache 2.0](../main/LICENSE)
 

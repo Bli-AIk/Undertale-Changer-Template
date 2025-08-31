@@ -121,4 +121,4 @@
 
 ## 许可证
 
-[GNU通用公共许可证 v3.0(GNU General Public License v3.0)](../main/LICENSE)
+[Apache 2.0](../main/LICENSE)
